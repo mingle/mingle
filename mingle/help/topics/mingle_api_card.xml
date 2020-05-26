@@ -1,0 +1,784 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Card API">
+  <section title="Cards">
+    <p>Card resources are located by issuing a GET request to the server with the card's number as a parameter.</p>
+
+		<note><p>Please note:</p>
+			<bullets>
+				<item>Since Mingle 3.0, the Card API always uses card number to identify a card. <strong>Card id is no longer used</strong>. If you wish to upgrade to use the latest version of the API (v2) with Mingle 3.0, please ensure you change all requests to <strong>use card number</strong>, not card id, before upgrading. It is important to make this change because if you do not specify the correct card number you may unintentionally update the wrong card and damage your data.</item>
+				<item>All the API resources and examples refer to <strong>v2 of the API</strong>. Support for v1 of the API was deprecated in fall 2012. Please refer to this <exref url="http://support.thoughtworks.com/entries/22029412-End-of-life-for-Version-1-of-the-Mingle-API">announcement</exref> in our Mingle community for more information about this deprecation.</item>
+				<item>Please note that all POST and PUT requests must be in XML format by default. This is not illustrated in the examples here. To specify parameters as shown in the examples you will have to set the request header for Content-Type to "application/xml".</item>
+				<item>Deleted cards via the API is currently not supported. Read more on how to <exref url="@tw_mingle_help_base_url@deleting_a_card.html">delete cards</exref> from the UI.</item>
+			</bullets>
+		</note>
+
+    <p>Before you manipulate cards using the API, we recommend that you familiarize yourself with some key concepts related to cards like <cref topic="card_types">card types</cref> and <cref topic="card_properties">card properties</cref>.</p>
+  </section>
+
+  <section title="Examples using Javascript">
+    <p>The following examples use curl.  If you want to interact with the Mingle API using javascript, ThoughtWorks Studios maintains a <exref url="https://github.com/mingle/mingle-api-js-demo">sample app here</exref>.</p>
+  </section>
+
+  <section title="Structure of a card resource">
+
+    <p>The structure of a card will completely depend on your project and how you have configured your properties. That said, all cards in all projects in Mingle have a few default attributes. In addition to these you will have an attribute for each property definition that you define for your project.</p>
+    <p>The default attributes are described below, along with their data type.  Also included with each attribute is whether you are allowed to update the value. System generated fields like <strong>id</strong>, <strong>number</strong>, <strong>created_on</strong> etc. are provided only as information about the card and cannot be updated through the API.</p>
+
+    <api_attributes title="card resource xml - attributes">
+  		<api_attribute name ="name" type="String" /> 
+  		<api_attribute name ="description" type="String">the HTML that Mingle renders for the card description. </api_attribute>
+  		<api_attribute name ="card type" type="Resource"><strong>name</strong> of the card type for each card; string.</api_attribute>
+  		<api_attribute name ="id" type="Integer" readonly="true">system assigned unique identifier for a card.</api_attribute>
+  		<api_attribute name ="number" type="Integer" readonly="true">unique identifier of a card within a project - Use this for both GET and PUT.</api_attribute>
+  		<api_attribute name ="project" type="Resource"><strong>name</strong> and <strong>identifier</strong> of a project a card belongs to; both strings.</api_attribute>
+  		<api_attribute name ="version" type="Integer" readonly="true">current card version. You can specify the version to get history version of the card.</api_attribute>
+  		<api_attribute name ="project_card_rank" type="Integer" readonly="true">the rank of the card in a project.</api_attribute>
+  		<api_attribute name ="created_on" type="Datetime" readonly="true">date and time of creating card.</api_attribute>
+  		<api_attribute name ="modified_on" type="Datetime" readonly="true">date and time of last modification.</api_attribute>
+  		<api_attribute name ="modified_by" type="Resource"><strong>name</strong> and <strong>login id</strong> of user who is the last to modify the card; both String, read only.</api_attribute>
+  		<api_attribute name ="created_by" type="Resource"><strong>name</strong> and <strong>login id</strong> of user who created the card; both String, read only.</api_attribute>
+  		<api_attribute name ="properties" type="Array"><strong>property</strong>: Resource; <strong>name</strong> and a current <strong>value</strong> for each card property defined for current card's card type are listed; Data type will depend on the property while property name is always String. The <strong>property</strong> also includes attributes about the property <strong>type_description</strong> and whether or not it is <strong>hidden</strong>.</api_attribute>
+  		<api_attribute name="tags" type="String"> read only, comma-delimited list of tags associated with the card.</api_attribute>
+  		<api_attribute name="rendered_description" type="Resource">Link to rendered card description as HTML.</api_attribute>
+    </api_attributes>
+  </section>  
+  <section title="Locating a card">
+    <api_reference>
+      <p><strong>Reference</strong></p>
+      <code>
+    Request Method: GET
+    URL: /api/v2/projects/<subst>project_identifier</subst>/cards/<subst>card_number</subst>.xml
+    Parameters: NA
+      </code>
+
+      <p><strong>Example</strong></p>
+      <code>
+    GET
+
+    http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/cards/42.xml
+      </code>
+
+      <p><strong>Explanation</strong></p>
+      <p>The above is an example of a GET request to a Mingle server running at your.mingle.server, port 8080. The request is made with the authorization credentials of yourname/password. The URL of api/v2/projects/test_project/cards/42.xml represents the card resource for the card numbered 42 in project with identifier test_project.</p>
+    
+      <p><strong>Result</strong></p>
+      If you were authorized to perform the operation, and the resource was available, you should get an xml document that looks something like the following.
+      <code>
+        <![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<card>
+  <name>As an API user, I would like to lookup a card in Mingle, given that I know the card number.</name>
+  <description>
+  </description>
+  <card_type>
+    <name>Story</name>
+  </card_type>
+  <id type="integer">409</id>
+  <number type="integer">42</number>
+  <project url="http://localhost:8080/api/v2/projects/test_project.xml">
+    <name>test project</name>
+    <identifier>test_project</identifier>
+  </project>
+  <version type="integer">1</version>
+  <project_card_rank type="integer">1</project_card_rank>
+  <created_on type="datetime">2009-10-14T09:14:54Z</created_on>
+  <modified_on type="datetime">2009-10-14T09:14:54Z</modified_on>
+  <modified_by url="http://localhost:8080/api/v2/users/1.xml">
+    <name>anne</name>
+    <login>anne</login>
+  </modified_by>
+  <created_by url="http://localhost:8080/api/v2/users/2.xml">
+    <name>jane</name>
+    <login>jane</login>
+  </created_by>
+  <properties type="array">
+    <property type_description="Managed text list" hidden="false">
+      <name>Status</name>
+      <value>Closed</value>
+    </property>
+    <property type_description="Managed number list" hidden="false">
+      <name>Estimate</name>
+      <value>4</value>
+    </property>
+    <property type_description="Managed text list" hidden="false">
+      <name>Priority</name>
+      <value nil="true"/>
+    </property>
+  </properties>
+</card>
+        ]]>
+      </code>  
+    </api_reference>
+  </section>  
+  
+  <section title="Update a card by the card number">
+	<p>You can update different attributes on a card such as card name, card description, card type or properties that are available on card via card resource API.</p>
+	<subsection title="How to update different kinds of properties">
+	  <bullets>
+      <item><strong>Managed/Unmanaged text</strong>: Use the text value of the value you would like to update the value to</item>
+      <item><strong>Managed/Unmanaged numbers</strong>: Use the numeric value you would like to set the property to</item>
+      <item><strong>Date</strong>: Use the date string in the project date format</item>
+      <item><strong>Team member</strong>: Use the <strong>id</strong> or <strong>sign-in name</strong> of the user you would like to update the value to. You can obtain the user id by looking up the user using the API.</item>
+      <item><strong>Card</strong>: Use the <strong>card number</strong> of the card you would like to update the value to. </item>
+	  </bullets>
+	</subsection>  
+	
+	<api_reference>
+      <p><strong>Reference</strong></p>
+      <code>
+    Request Method: PUT
+    URL: /api/v2/projects/<subst>project_identifier</subst>/cards/<subst>card_number</subst>.xml
+    Parameters: all card attributes that can be updated
+
+    card[name] : The card name
+    card[card_type_name] : The name of the card type
+    card[description] : The card description
+    card[properties][][name] : The name of a property you want to set
+    card[properties][][value] : The value of the property named above
+      </code>
+
+      <p><strong>Example</strong></p>
+      <code>
+		PUT
+      
+		http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/cards/42.xml
+      
+		card[name]=new name
+		card[card_type_name]=story
+		card[description]=description
+		card[properties][][name]=status
+		card[properties][][value]=open
+      </code>
+    
+      <p><strong>Explanation</strong></p>
+      <p>The above is an example of a PUT request to a Mingle server running at your.mingle.server, port 8080. The request is made with the authorization credentials of yourname/password. The URL of api/v2/projects/test_project/cards/42.xml represents the card resource for the card with a <strong>card number</strong> of 42 in project with identifier test_project.  Please note that this is <strong>not</strong> the card id. The value of the name and card_type_name attributes will get changed to the newly specified values of "new name" and "story" and the a card property called "status" will get a new value of "open".</p>
+    
+      <note>
+        <bullets>
+          <p/>
+          <item>Please keep in mind that this URL uses the <strong>card number</strong>, not the card id. The card id is no longer used to identify a card with the latest version of the API (v2) in Mingle 3.0. So please ensure you specify the correct card number, otherwise you may unintentionally update the wrong card and damage your data.</item>
+          <item>If you are injecting a macro into a card description via the API, you must open and close the macro markup with {{ }}.</item>
+          <item>If you are a Mingle or a project admin, you can update hidden properties as well.</item>
+        </bullets>
+      </note>
+      <p><strong>Result</strong></p>
+      <p>If you were authorized to perform the operation, and the operation succeeded, you will be returned with the XML output of the card.</p>
+
+	</api_reference>
+  </section>  
+  
+  <section title="Create a card">  
+    <api_reference>     
+      <p><strong>Reference</strong></p>
+      <code>
+    Request Method: POST
+    URL: /api/v2/projects/<subst>project_identifier</subst>/cards.xml
+    Parameters: all card attributes that can be updated
+      </code>
+
+      <p><strong>Example</strong></p>
+      <code>
+    POST
+
+    http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/cards.xml
+
+    card[name]=testing card creation
+    card[card_type_name]=story
+      </code>
+  
+      <p><strong>Explanation</strong></p>
+      <p>The above is an example of a POST request to a Mingle server running at your.mingle.server, port 8080. The request is made with the authorization credentials of yourname/password. Upon execution of this request, the post parameters will be used to create a card on the project with identifier "test_project". The value of the name and card_type_name attributes will be set to the specified values of "testing card creation" and "story".
+      </p>
+
+      <p><strong>Result</strong></p>
+      <p>If you were authorized to perform the operation, and the operation succeeded, you will be returned a location attribute in the http header of the response, which is a url from which you can get the card resource that was created.</p>
+    </api_reference>
+  </section>  
+  
+  <section title="Get a set of cards for a project">
+    <api_reference>     
+      <p><strong>Reference</strong></p>
+      <code>
+    Request Method: GET
+    URL: /api/v2/projects/<subst>project_identifier</subst>/cards.xml
+    Parameters: 
+
+    view : The name of a saved view, whose cards are to be returned back
+    page : A specific set of 25 results, if the list contains more than 25 results. The first 25 results are page 1. The next 25 are page 2, and so on. Requesting the contents of a page of data that is past the last valid page, returns the data on the last valid page and not an empty array. If it is not supplied, the default value is "1".
+    filters[] : Each value for this parameter represents a filter applied to the list of cards. You can also use a standard filter or a MQL filter with this parameter.
+    sort : The property whose value will be used to sort the cards returned
+    order : ASC/DESC, whether the cards will be returned in Ascending or Descending order of the sort property 
+    tagged_with : A comma separated list of tags that will be used to further filter the list of cards in addition to the filters
+      </code>
+
+      <p><strong>Example 1 - Using a standard filter</strong></p>
+      <code>
+    GET
+
+    http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/cards.xml
+
+    filters[]=[Type][is][story]
+    filters[]=[Status][is not][accepted]
+    sort=status
+    order=ASC
+      </code>
+  
+      <p><strong>Explanation</strong></p>
+      <p>The above is an example of a GET request to retrieve a filtered set of cards from the project with identifier "test_project". The cards returned will all be of type "Story" and will have a status other than "accepted". They will be returned in the ascending order of their status values, as configured on the property management page in Mingle.
+      </p>
+
+      <p><strong>Result</strong></p>
+      <p>If you were authorized to perform the operation, and the operation succeeded, you will be returned an array of card resources. The structure of each card resource is the same as would be obtained if you had issued a GET to obtain a single resource.
+        <code>
+          <![CDATA[
+  <?xml version="1.0" encoding="UTF-8"?>
+  <cards type="array">
+    <card>
+      <name>Automatically update event status when event date has passed</name>
+      <description>
+      </description>
+      <card_type>
+        <name>Story</name>
+      </card_type>
+      <id type="integer">419</id>
+      <number type="integer">11</number>
+    ...
+      <properties type="array">
+        <property type_description="Managed text list" hidden="false">
+          <name>Status</name>
+          <value>New</value>
+        </property>
+      ...
+      </properties>
+    </card>
+    <card>
+      <name>Add details to event</name>
+      <description>
+      </description>
+      <card_type>
+        <name>Story</name>
+      </card_type>
+      <id type="integer">424</id>
+      <number type="integer">16</number>
+    ...
+      <properties type="array">
+        <property type_description="Managed text list" hidden="false">
+          <name>Status</name>
+          <value>Open</value>
+        </property>
+      ...
+      </properties>
+    </card>
+  </cards>
+      ]]>
+        </code>    
+      </p>  
+      <p><strong>Example 2 - Using a MQL filter</strong></p>
+      <code>
+    GET
+
+    http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/cards.xml
+
+    filters[mql]=Type is story AND Status is not accepted
+    sort=status
+    order=ASC
+      </code>
+  
+      <p><strong>Explanation</strong></p>
+      <p>The above is an example of a GET request to retrieve a set of cards filtered using MQL from the project with identifier "test_project". The cards returned will all be of type "Story" and will have a status other than "accepted". They will be returned in the ascending order of their status values, as configured on the property management page in Mingle. This example is functionally equivalent to Example 1 above.
+      </p>
+
+      <p><strong>Result</strong></p>
+      <p>If you were authorized to perform the operation, and the operation succeeded, you will be returned an array of card resources. The structure of each card resource is the same as would be obtained if you had issued a GET to obtain a single resource.
+        <code>
+          <![CDATA[
+  <?xml version="1.0" encoding="UTF-8"?>
+  <cards type="array">
+    <card>
+      <name>Automatically update event status when event date has passed</name>
+      <description>
+      </description>
+      <card_type>
+        <name>Story</name>
+      </card_type>
+      <id type="integer">419</id>
+      <number type="integer">11</number>
+    ...
+      <properties type="array">
+        <property type_description="Managed text list" hidden="false">
+          <name>Status</name>
+          <value>New</value>
+        </property>
+      ...
+      </properties>
+    </card>
+    <card>
+      <name>Add details to event</name>
+      <description>
+      </description>
+      <card_type>
+        <name>Story</name>
+      </card_type>
+      <id type="integer">424</id>
+      <number type="integer">16</number>
+    ...
+      <properties type="array">
+        <property type_description="Managed text list" hidden="false">
+          <name>Status</name>
+          <value>Open</value>
+        </property>
+      ...
+      </properties>
+    </card>
+  </cards>
+      ]]>
+        </code>    
+      </p>  
+      <p><strong>Example 3 - Using a saved view</strong></p>
+      <code>
+    GET
+
+    http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/cards.xml
+
+    view=Open Stories
+      </code>
+
+      <p><strong>Explanation</strong></p>
+      <p>The above is an example of a GET request to retrieve all cards in the saved view called "Open Stories" in the project with identifier "test_project".</p>
+
+      <p><strong>Result</strong></p>
+      <p>If you were authorized to perform the operation, and the operation succeeded, you will be returned an array of card resources, in which each card resource would be a card in the "Open Stories" view. The structure of each card resource is the same as would be obtained if you had issued a GET to obtain a single resource.
+        <code>
+          <![CDATA[
+  <?xml version="1.0" encoding="UTF-8"?>
+  <cards type="array">
+    <card>
+      <name>Show event details in event list</name>
+      <description>
+      </description>
+      <card_type>
+        <name>Story</name>
+      </card_type>
+      <id type="integer">410</id>
+      <number type="integer">2</number>
+  	...
+      <properties type="array">
+        <property type_description="Managed text list" hidden="false">
+          <name>Status</name>
+          <value>Open</value>
+        </property>
+  	  ...
+      </properties>
+    </card>
+    <card>
+      <name>Create event and view event in an event list</name>
+      <description>
+      </description>
+      <card_type>
+        <name>Story</name>
+      </card_type>
+      <id type="integer">409</id>
+      <number type="integer">1</number>
+  	...
+      <properties type="array">
+        <property type_description="Managed text list" hidden="false">
+          <name>Status</name>
+          <value>Open</value>
+        </property>
+  	  ...
+      </properties>
+    </card>
+  </cards>
+      ]]>
+        </code>    
+      </p>  
+    </api_reference>
+  </section>	
+  <section title="Get all cards that belong to a tree">
+    <api_reference title="Get all cards that belongs to a tree">
+    
+    <p><strong>Reference</strong></p>
+    <code>
+    Request Method: GET
+    URL: /api/v2/projects/project_identifier/cards.xml
+    Parameters:
+
+    tree_name: The name of a tree, whose cards are to be returned back
+    </code>
+    
+    <p><strong>Example</strong></p>
+      <code>
+    GET
+
+    http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/cards.xml
+
+    tree_name=Planning Tree
+     </code>
+     
+     <p><strong>Explanation</strong></p>
+     <p>The above is an example of a GET request to a Mingle server running at your.mingle.server, port 8080. This request will return all  cards that belong to a 'Planning Tree'.</p>
+     <p><strong>Result</strong></p>
+     <p>If you have sufficient permissions to perform the action and the action was successful, you will be returned an array of card resources. The structure of each card resource is the same as would be obtained if you had issued a GET to obtain a single resource.
+     
+     <code><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<cards type="array">
+  <card>
+    <name>Story 1</name>
+    <description nil="true"></description>
+    <card_type>
+      <name>Story</name>
+    </card_type>
+    <id type="integer">431</id>
+    <number type="integer">4</number>
+	...
+    <properties type="array">
+      <property type_description="Any card used in tree" hidden="false">
+        <name>Release</name>
+        <value url="http://localhost:8080/api/v2/projects/test_project/cards/1.xml">
+          <number type="integer">1</number>
+        </value>
+      </property>
+      <property type_description="Any card used in tree" hidden="false">
+        <name>Iteration</name>
+        <value nil="true"></value>
+      </property>
+    </properties>
+  </card>
+  <card>
+    <name>Iteration 1</name>
+    <description nil="true"></description>
+    <card_type>
+      <name>Iteration</name>
+    </card_type>
+    <id type="integer">430</id>
+    <number type="integer">3</number>
+	...
+    <properties type="array">
+      <property type_description="Any card used in tree" hidden="false">
+        <name>Release</name>
+        <value url="http://localhost:8080/api/v2/projects/test_project/cards/1.xml">
+          <number type="integer">1</number>
+        </value>
+      </property>
+    </properties>
+  </card>
+  <card>
+    <name>Release 1</name>
+    <description nil="true"></description>
+    <card_type>
+      <name>Release</name>
+    </card_type>
+    <id type="integer">428</id>
+    <number type="integer">1</number>
+	...
+    <properties type="array">
+    </properties>
+  </card>
+</cards>
+            ]]></code> </p>
+    </api_reference>
+  </section>
+
+  <section title="Get a set of cards in a tree">
+    <api_reference>
+      <p><strong>Reference</strong></p>
+      <code>
+      Request Method: GET
+      URL: /api/v2/projects/project_identifier/cards.xml
+      Parameters:
+
+      tree_name: The name of a tree, whose cards are to be returned back
+      excluded[]: Any card type that is not wished to be returned back
+      tf_card_type[] : A tree filter for the specified card type.
+      tagged_with : A comma separated list of tags that will be used to further filter the list of cards in addition to the filters
+      all tree properties               
+      </code>
+      <p><strong>Example</strong></p>
+      <code>
+GET
+
+http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/cards.xml
+
+tree_name=Planning Tree
+excluded[]=Defect
+tf_release[]=[Release][is][1]
+      </code>
+      <p><strong>Explanation</strong></p>
+      <p>The above is an example of a GET request to a Mingle server running at your.mingle.server, port 8080. This request will return all cards that belong to the Release card numbered 1 in the 'Planning Tree', while excluding the Defect card types. For example, let's say you have two Defects and one Story that belong to Release card numbered 1. This request will only return one story card since the Defect card type is excluded.</p>
+      <p><strong>Result</strong></p>
+      <p>If you have sufficient permissions to perform the action and the action was successful, you will be returned an array of card resources. The structure of each card resource is the same as would be obtained if you had issued a GET to obtain a single resource.
+     <code><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<cards type="array">
+  <card>
+    <name>Story 1</name>
+    <description nil="true"></description>
+    <card_type>
+      <name>Story</name>
+    </card_type>
+    <id type="integer">431</id>
+    <number type="integer">4</number>
+	...
+    <properties type="array">
+      <property type_description="Any card used in tree" hidden="false">
+        <name>Release</name>
+        <value url="http://localhost:8080/api/v2/projects/test_project/cards/1.xml">
+          <number type="integer">2</number>
+        </value>
+      </property>
+      <property type_description="Any card used in tree" hidden="false">
+        <name>Iteration</name>
+        <value nil="true"></value>
+      </property>
+    </properties>
+  </card>
+  <card>
+    <name>Iteration 1</name>
+    <description nil="true"></description>
+    <card_type>
+      <name>Iteration</name>
+    </card_type>
+    <id type="integer">430</id>
+    <number type="integer">3</number>
+	...
+    <properties type="array">
+      <property type_description="Any card used in tree" hidden="false">
+        <name>Release</name>
+        <value url="http://localhost:8080/api/v2/projects/test_project/cards/1.xml">
+          <number type="integer">2</number>
+        </value>
+      </property>
+    </properties>
+  </card>
+  <card>
+    <name>Release 1</name>
+    <description nil="true"></description>
+    <card_type>
+      <name>Release</name>
+    </card_type>
+    <id type="integer">428</id>
+    <number type="integer">1</number>
+	...
+    <properties type="array">
+    </properties>
+  </card>
+</cards>
+                  ]]>
+        </code>
+      </p>
+    </api_reference>
+  </section>
+  <section title="Get rendered card description as HTML" id="rendered_description">
+      <p>From a card resource, follow the <link>rendered_description</link> resource to retrieve the rendered description for a card as HTML.</p>
+      <note>Starting with <cref topic="whats_new_in_release_13_2">release 13.2</cref>, Mingle will use a WYSIWYG editor for cards and pages. Both the <link>description</link> element and the <link>rendered_description</link> will show HTML code of your card description.</note>
+      <p>For example: suppose you have a card with the following description:</p>
+          <screenshot alttext="description rendered in Mingle" src="resources/images/card_api_description_on_card.png" />  
+          <p>The card resource and rendered description  will show the following:
+          <code>
+            <![CDATA[
+<h3>Steps to reproduce</h3>
+
+<ol>
+  <li>Navigate to login page</li>
+  <li>Enter incorrect name and password</li>
+</ol>
+
+<h3>Behavior</h3>
+
+<p>Login fails, but there is no error message.</p>
+
+<h3>Expected behavior</h3>
+
+<p>Provide an error message the login failed.</p>
+            ]]>
+          </code>
+        </p>
+        <p>Notice that rendered_description does not contain any styling information. If you view the card description in Mingle, the description will be styled according to Mingle's style:</p>
+        <screenshot alttext="description rendered in Mingle" src="resources/images/card_api_description_on_card.png" />
+        <p>In comparison, viewing rendered_description in a browser will not style the description:</p>
+        <screenshot alttext="rendered_description in browser" src="resources/images/rendered_description_in_browser.png" />
+        <p>You may reference the Mingle stylesheet, found on every Mingle page, when displaying rendered_description if you would like it to be styled as is in Mingle. If you would like it styled a different way, you can do that as well.</p>
+      <subsection title="Macros in rendered_description">
+        <p>In the previous section, the card description didn't contain any macros. If there are macros in the description, the macros will be rendered as part of the <link>rendered_description</link>. In the following example, the card contains two macros, table and pie-chart:</p>
+        <screenshot alttext="rendered_description with macro" src="resources/images/rendered_description_with_macro.png" />
+<p>When you get the card resource, the description and rendered_description are provided as follows:</p>
+        <code>
+          <![CDATA[
+<card>
+  <name>Release 1</name>
+  <description>
+
+{{
+  table 
+    view: "story backlog"
+}}
+
+
+{{
+  pie-chart
+    data: SELECT status, count(*) WHERE type = story and priority = must
+}}</description>
+  ...
+  <rendered_description url="http://localhost:8080/api/v2/projects/test_project/render?content_provider%5Bid%5D=990&amp;content_provider%5Btype%5D=card">
+  </rendered_description>
+</card>
+          ]]>
+        </code>
+        <p>If you access the <link>rendered_description</link> it will render these macros:
+          <code>
+            <![CDATA[
+
+<table>
+  <tr>
+    <th>Number</th>
+    <th>Name</th>
+    <th>Status</th>
+    <th>Priority</th>
+    <th>Estimate</th>
+  </tr>
+  <tr>
+    <td>
+      <a href="http://localhost:8080/projects/test_project/cards/17">17</a>
+    </td>
+    <td>
+      <a href="http://localhost:8080/projects/test_project/cards/17">Sort event list</a>
+    </td>
+    <td>New</td>
+    <td>Could</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>
+      <a href="http://localhost:8080/mingle/projects/test_project/cards/11">11</a>
+    </td>
+    <td><a href="http://localhost:8080/mingle/projects/test_project/cards/11">Automatically update event status when event date has passed</a></td>
+    <td>New</td>
+    <td>Could</td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+
+
+<img alt="pie-chart" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAbgAAAEsCAMAAACG41bUAAACTFBMVEX////6
++v/r6//i4v/Pz//Fxf+ysv+oqP+Vlf+Li/+Cgv94eP9vb/9mZv//Pz//S0v/
+WFj/ZWX/cnL/cXH/i4v/mJj/srL/v7//2Nj/5eX/+Pitrf+Jif9xcf9sbP9r
+a/9oaP//MzP/Njb/Ojr/PDz/QkL/YmL/kpL/2dn/WVnv7/+kpP//hob/6ur/
+5ub/TEz19f95ef9paf9ubv//Pj7/ODj/8fH/jIwAAADq6v+7u///paX/5ORt
+bf+MjP//Zmbm5v9qav//OTn/3t7m5ubT0///xMQ/Pz+Pj4+PY2PmLi7mRETE
+xP//sbGUlP//cHDOzv//vr6goP//gIC/v///qqqBgf/Y2P//y8vJyf//t7f/
+pKSjo//TdUl1vTQ69zSG4mnyPzNmzjU+9jUz/zM+/z6x/7HLZjNC8DPY/9iy
+fzNM/0yGrTQ+9DQ8/zyG/4a+/75C/0Lx//GXl/83/zd0/3SY/5iljDPe/96T
+k/9v/2/lTDNY2zU8+DXL/8tY/1g4+TM//z9m/2Y4/zjk/+R1vjU5/zm/czM5
++DO3/7c/9DWk/6TYWTNM5jSYmTM89jM4+zU841dUoLJka/g29T9mbfhMsplJ
+u4xicfBmbvZGxX9geebs7P9lb/Spqf9Dz3NegttkbvQ/2GbZ/9lZ/1lbjM7m
+/+ZkbPaM/4xiYvc84lkx9zH39/efn58yMk9Yl74pTylPT0+AgJ9qavdkafk8
+9zx2n3Y560xSpK1mafuSkv+q/6qA/4Bw/3DE/8RkbfVN2HOy/7K73tzw8P+R
+qgeVAAANTElEQVR4nO2diX9cVRXH084kTSd5IS5QNEnTZ1OWppJkmspNsCEV
+Cy4VI2JjNe6JS6OjsVUQlRILruCGKChUEQTUoqK44L78Y868fZKZN/e+d8+5
+b3J/38+nM0MyTN6738+55y7nvenpAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANLBrd6nc27env39vZWBg
+0Bm64orhl738Fa+88qp9V7/q1aYPDrSkVB4ZHXP2jx9wYtyI1xyccA9dc+2+
+q40c23XXuxq4/jojB0/I4fJkxRkfd7ax7dwPHnSHj+x7LfPx3TClw5vrTt3A
+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
+KcI1tuwQcmsYT6rCdNeh9Hr0Lrh7UPE4wyIuvTgW6yVZWGZZcU6pR9/A+mQ2
+5k4fZzDXLuRqF7AfkJlJhiFKm3p0TLtzcSe9uDb16H8zfepdTmmAvrvcHnK1
+ddQF5WaSel6wvR4d5SVaWBqjvq6guTj24gbqlfUwfQdt0L3UVBxb+zuuD9DG
+Em2mS9Sj19YRblrpoxSXqEfH2qRuFm8n7C8fDsLtH7i+m4CTFbLpuFePvnnh
+n6ZPcadyamCQyNyjq5vr2DElpJdI3b/+/R/Tp7bT6SXoMI9W/mv6tGzg5EJV
+54y8Wl04afqUbGFx5ISuHnPwxMii6dOxivJCNf+c/Hh1oWz6ROzjf/OVXO6O
+Vyvzh02fhKXMzY862frMQWd0fs704VvNdHlypqo2zjxanZksT5s+cFDvNMuT
+FWd8XMJZ/U2VyTI6yCJRKo+Mjjn7xw+0NHZgfL8zNjpSVvlyO8DHrt2lcm/f
+nv7+vZWBgUFncGCgsre/f09fb7m0e5fpgwMAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAZv4Pehjjppw2F8cA
+AAAASUVORK5CYII=
+" />
+            ]]>
+          </code>
+          In this example, the table macro is rendered as HTML, so it is simple to include the markup for the rendered table. The pie chart is an image, so the image is also included in the rendered_description. Here is the rendered_description as seen in a browser:</p>
+        <screenshot alttext="rendered_description with macro" src="resources/images/rendered_description_with_macro.png" />
+        <p>Any JavaScript in the rendered description will be removed from rendered_description. For example, the following Mingle macros use JavaScript:</p>
+        <bullets>
+          <item><cref topic="macro_reference#daily_history_chart">Daily history chart</cref></item>
+          <item><cref topic="markup_opensocial_gadget">Generic gadget</cref></item>
+          <item><cref topic="markup_go_pipeline_status">Go pipeline gadget</cref></item>
+        </bullets>
+      </subsection>
+    </section>
+</topic>

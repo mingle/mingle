@@ -1,0 +1,137 @@
+; TextPad syntax definitions for Sahi script
+
+C=1
+
+[Syntax]
+Namespace1 = 6
+IgnoreCase = No
+KeyWordLength =
+BracketChars = {[()]}
+OperatorChars = -+*/<>!~%^&|=
+PreprocStart = #
+SyntaxStart =
+SyntaxEnd =
+HexPrefix = 0x
+CommentStart = /*
+CommentEnd = */
+CommentStartAlt =
+CommentEndAlt =
+SingleComment = //
+SingleCommentCol =
+SingleCommentAlt =
+SingleCommentColAlt =
+SingleCommentEsc =
+StringsSpanLines = No
+StringStart = "
+StringEnd = "
+StringAlt =
+StringEsc = \
+CharStart = '
+CharEnd = '
+CharEsc = \
+
+[Keywords 1]
+break
+case
+catch
+class
+continue
+default
+do
+else
+false
+for
+function
+if
+new
+null
+return
+switch
+this
+throw
+true
+try
+typeof
+while
+undefined
+var
+
+
+[Keywords 2]
+_include
+_button
+_submit
+_textbox
+_password
+_checkbox
+_textarea
+_accessor
+_byId
+_select
+_radio
+_image
+_imageSubmitButton
+_link
+_getSelectedText
+_getCellText
+_random
+_savedRandom
+_cell
+_table
+_containsHTML
+_containsText
+_popup
+_event
+
+[Keywords 3]
+_click
+_highlight
+_setValue
+_setSelected
+_check
+_wait
+_simulateEvent
+_setGlobal
+_getGlobal
+_assertNotNull
+_assertNull
+_assertTrue
+_assertNotTrue
+_assertEqual
+_assertNotEqual
+_alert
+_eval
+_call
+_confirm
+_prompt
+_log
+_navigateTo
+_dragDrop
+
+[Keywords 4]
+__click
+__highlight
+__setValue
+__setSelected
+__check
+__wait
+__simulateEvent
+__setGlobal
+__getGlobal
+__assertNotNull
+__assertNull
+__assertTrue
+__assertNotTrue
+__assertEqual
+__assertNotEqual
+__alert
+__eval
+__call
+__confirm
+__prompt
+__log
+__navigateTo
+__dragDrop
+
+[Preprocessor keywords]
+

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="com.thoughtworks.twist.driver.core.driver">
+      <driver
+            beanId="browser"
+            category="Web"
+            class="net.sf.sahi.client.Browser"
+            configurationClass="com.thoughtworks.twist.driver.sahi.SahiDriverInitializer"
+            defaultFieldName="browser"
+            driverContainerInitailizer="com.thoughtworks.twist.driver.sahi.SahiClasspathContainerInitializer"
+            driverContainerInitializer="com.thoughtworks.twist.driver.sahi.SahiClasspathContainerInitializer"
+            driverOptions="com.thoughtworks.twist.driver.sahi.SahiDriverOptions"
+            driverQuery="com.thoughtworks.twist.driver.sahi.SahiDriverQuery"
+            id="com.thoughtworks.twist.driver.sahi"
+            label="Sa&amp;hi (for web apps)"
+            launchConfigurationFactory="com.thoughtworks.twist.eclipse.core.projectsetup.JavaLaunchConfigurationFactory"
+            name="Sahi"
+            optionsUI="com.thoughtworks.twist.driver.sahi.SahiDriverOptionsComposite">
+      </driver>
+   </extension>
+
+
+   <extension
+         point="org.eclipse.jdt.ui.classpathContainerPage">
+      <classpathContainerPage
+            name="Sahi"
+			class="com.thoughtworks.twist.driver.sahi.ClasspathContainerPage"
+            id="com.thoughtworks.twist.driver.SAHI">
+      </classpathContainerPage>
+   </extension>
+
+   <extension
+         point="org.eclipse.jdt.core.classpathContainerInitializer">
+      <classpathContainerInitializer
+			class="com.thoughtworks.twist.driver.sahi.SahiClasspathContainerInitializer"
+            id="com.thoughtworks.twist.driver.SAHI">
+      </classpathContainerInitializer>
+   </extension>
+   <extension
+         id="com.thoughtworks.twist.eclipse.ui.configurationEditor"
+         name="name"
+         point="com.thoughtworks.twist.eclipse.ui.configurationEditor">
+      <TwistPropertySource
+            class="com.thoughtworks.twist.driver.sahi.SahiPropertySource"
+            id="com.thoughtworks.twist.driver.sahi.SahiPropertySource"
+            name="Sahi">
+      </TwistPropertySource>
+   </extension>
+
+</plugin>

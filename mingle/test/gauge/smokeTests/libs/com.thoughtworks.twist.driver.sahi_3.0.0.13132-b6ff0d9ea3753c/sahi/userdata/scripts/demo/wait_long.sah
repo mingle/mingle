@@ -1,0 +1,7 @@
+_navigateTo("waitCondition1.htm");
+_debug(new Date());
+_wait(10000);
+_assertEqual("", _textbox("t1").value);
+_debug(new Date());
+//_wait(130000);
+//_navigateTo("/demo/");

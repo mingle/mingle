@@ -1,0 +1,57 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="projects-data" class="export-checklist-section">
+  <h2>
+    Projects
+  </h2>
+  <p class="section-description">
+    Data for all projects in this instance – including teams, pages, cards, card types and properties, murmurs, trees,
+    transitions and integrations. More details of the data are available in our Help documentation. You can optionally
+    export the history of all events in the project. <span id="history-warning">Exporting history will increase the size of your export and it may
+        take longer to complete.</span> </p>
+  <div class="select-all-for-export">
+    <div class="export-data-type">
+    </div>
+    <div class="select-all-data">
+      <%= check_box_tag "select-all-projects-data", nil, false, :id => "all-projects-data-checkbox" %>
+      <%= label_tag "export-all-projects-data", "Select all" %>
+    </div>
+    <div class="select-all-history">
+      <%= check_box_tag "select-all-projects-history", nil, false, :id => "all-projects-history-checkbox", :disabled => true %>
+      <%= label_tag "export-all-projects-history", "Include all history" %>
+    </div>
+  </div>
+  <% if !projects.empty? -%>
+    <% projects.each_with_index do |project, index| -%>
+      <div class="<%= "project-data project-data-#{index.next}" %>" >
+        <div class="export-data-type">
+          <p class="data-type-name"><%= project.name %></p>
+          <p class="data-type-info" style="color:#bbb">Last
+            activity: <%= Date.parse(project.last_activity_on).strftime('%e %b %Y') if project.respond_to?(:last_activity_on) && (!project.last_activity_on.nil?) %></p>
+        </div>
+        <div class="export-checkbox">
+          <%= check_box_tag "projects[#{project.identifier}][data]", nil, (@export_config[:projects][project.identifier.to_sym][:data] rescue false), :id => "#{project.identifier}_checkbox", :class => 'project-checkbox project-data-checkbox' %>
+          <%= label_tag "export-project-data", "Export" %>
+        </div>
+        <div class="history-checkbox">
+          <%= check_box_tag "projects[#{project.identifier}][history]", nil, (@export_config[:projects][project.identifier.to_sym][:history] rescue false), :id => "#{project.identifier}_checkbox_for_history", :class => "project-checkbox project-history-checkbox", :disabled => true %>
+          <%= label_tag "export-history", "Include history" %>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+</div>

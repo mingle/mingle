@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE section SYSTEM "mingle_help.dtd">
+<section title="Create cards with the Quick Add Card" id="create_cards_using_quick_add_card">
+	<p>
+		The Quick Add Card appears on all <cref topic="grid_view">grid views</cref> and can be found on the bottom left of your browser window in the task tray.
+		The Quick Add allows you to quickly create a new card that will appear on the current grid view.
+		To create a new card using the Quick Add Card simply drag and drop the Quick Add Card onto the grid view. 
+		Once dropped the Quick Add Card gives you pop-up to enter the card title. 
+		Property values are preset to allow the card to appear on the grid view once the card is saved.
+	</p>
+	<p><screenshot src="resources/images/quick_add_card.png"/></p>
+			
+	<subsection title="How property values are set using the Quick Add Card" id="how_the_quick_add_card_sets_values">
+		<p>
+			The Quick Add Card makes it easy to create cards that will appear on the current grid view by pre-setting the new card's properties to values that match
+			the current grid view <cref topic="filter_list_by_component">filters</cref> and grid cell.
+		</p>
+		<p><screenshot src="resources/images/add_new_card_with_quick_add_card.png"/></p>
+		<steps title="The following rules are used to determine the preset values for the new Card:">
+			<item><strong>Grid view cell</strong> - Mingle will set the property values such that they match the property value of the corresponding cell on the grid view.</item>
+			<item><strong>Filters</strong> - Mingle will set property values such that they match the corresponding view filter. In cases where the property value is ambiguous (e.g. the filter specifies a "greater than" range instead of a strict "equals" comparison), Mingle will choose a property value that satisfies the filter.</item>
+			<item><strong>Card Defaults</strong> - Mingle wills set property values to match the default values configured for the designated card type.</item>
+		</steps>
+		<hint>When deciding which value to use for a card property the value determined by the grid view cell overrides the value determined by a filter and the value determined by a filter will override a default property value.</hint>
+	</subsection>
+	
+	<subsection title="Using the Quick Add Card with the Advanced (MQL) filter">
+		<p>While the Quick Add Card&apos;s behavior is consistent under most filter scenarios there are two exceptions when using the <cref topic="filter_list_by_mql">Advanced (MQL)</cref> filter that should be noted:</p>
+		<steps>
+			<item>Card property values that are specified in the Advanced filter will be displayed as (not set).</item>
+			<item>When using the 'FROM TREE' MQL statement, filter properties are ignored and the only properties displayed are the default properties for the selected card type.</item>
+		</steps>
+	</subsection>
+</section>

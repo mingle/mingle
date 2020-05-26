@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta name="generator" content="HTML Tidy, see www.w3.org">
+<title></title>
+</head>
+<body>
+<form name="f1">aaaa caaaaa<br>
+<br>
+<br>
+ <textarea name="t1"></textarea><br>
+<input type="button" value="click me" onclick="getSel()"></form>
+
+<script type="text/javascript">
+function getSel(){
+    var txt = '';
+    var foundIn = '';
+    if (window.getSelection)
+    {
+        txt = window.getSelection();
+        foundIn = 'window.getSelection()';
+    }
+    else if (document.getSelection)
+    {
+        txt = document.getSelection();
+        foundIn = 'document.getSelection()';
+    }
+    else if (document.selection)
+    {
+        txt = document.selection.createRange().text;
+        foundIn = 'document.selection.createRange()';
+    }
+    else return;
+    alert('Found in: ' + foundIn + '\n' + txt);
+}
+</script>
+</body>
+</html>
+

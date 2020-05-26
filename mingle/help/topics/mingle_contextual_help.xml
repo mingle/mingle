@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+
+<topic title="Contextual help">
+	
+	<section title="Introduction">
+		<p>Mingle 3.2 introduces view specific contextual help. This in-context help is available on a number of Mingle's major views. As well as giving in-context help about the current view, the contextual help also provides users easy access to Mingle's help and learning resources.</p>
+		<screenshot src="resources/images/mingle_contextual_help_example.png" alt="Contextual help example"/>		
+	</section>
+  <section title="Showing the contextual help tab" collapsed="true">
+		<screenshot src="resources/images/mingle_contextual_show_help.png" alt="Contextual show help example"/>	
+	
+    	<p>To show the each help section click the "Show help" link (shown above) displayed on the view's action bar. If there is no "Show help" link there is no contextual help available for that help. The "Show help" link will be replaced by a standard "Help" link (shown below) which will guide you to content in our help guide.</p>
+
+		<screenshot src="resources/images/mingle_help_link.png" alt="Help link example"/>
+	</section>
+	<section title="Hiding the contextual help" collapsed="true">
+    	<p>Although we have designed the contextual help tab to be helpful, you may decide to hide some of the help.</p>
+		<screenshot src="resources/images/mingle_contextual_hide_help.png" alt="Contextual hide help example"/>	
+		<p>To hide the help section click the close icon (shown above) displayed inside the help content. You can show the help again, as described in the previous section.</p>      
+  	</section>
+</topic>

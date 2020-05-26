@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE subsection SYSTEM "mingle_help.dtd">
+<section title="Manage existing project team members" id="manage_existing_team_members">
+  <subsection title="Change user role" collapsed = 'true'>
+    <p>From the team list, you can locate the user you want to update and select the <cref topic="user_roles">role</cref> your want him to have on your project.</p>
+    <screenshot alttext="Change role" src="resources/images/team_page_change_role.png"/>
+  </subsection>
+  <subsection title="Remove team member" collapsed = 'true' id="remove_team_members">
+    <p>To remove existing team member, select the user you want to remove and click Remove button.</p>
+    <screenshot alttext="Remove team member" src="resources/images/team_page_remove_member.png"/>
+    <note>Select <link>All</link> to select all team members on the page. Select <link>None</link> to deselect all team members on the page.</note>
+  </subsection>
+</section>

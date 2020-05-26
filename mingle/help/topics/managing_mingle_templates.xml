@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_help.dtd">
+<?xml-stylesheet type="text/css" href="../resources/stylesheets/mingle_help.css"?>
+<chapter title="Managing Mingle templates">
+  <section title="Overview">
+    <p>Templates provide a way to <cref topic="creating_mingle_projects#create_a_new_project_from_template">create projects with a pre-defined structure</cref>. This can speed up project creation significantly. For example, suppose you want your newly created projects to have "Story" and "Defect" <cref topic="card_types">card types</cref>. You can create a new template with those card types. Any projects created based on that template will be created with the "Story" and "Defect" cards types.</p>
+  </section>
+  
+	<section title="How to create a new template" >
+		<subsection title="create new template from existing template" file="creating_new_template_from_existing_projects" collapsed="true" />
+		<subsection title="create new template from importing project as template" file="creating_new_template_from_importing_projects" collapsed="true" />
+	</section>	
+	<note>Mingle provides <cref topic="standard_mingle_templates">standard templates</cref>.</note>
+	
+	<section title ="How to update existing templates">
+		<p>You can modify and update existing templates just like how you would use Mingle projects. Any changes you made will be saved in templates.</p>
+		<hint>You can create any customize templates by updating any of existing templates.</hint>
+	</section>
+	<section title ="How to delete an existing template">
+		<subsection title="delete a project or a template" file="deleting_project_or_template" />
+	</section>
+</chapter>

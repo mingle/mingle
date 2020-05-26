@@ -1,0 +1,85 @@
+#  Copyright 2020 ThoughtWorks, Inc.
+#  
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Affero General Public License as
+#  published by the Free Software Foundation, either version 3 of the
+#  License, or (at your option) any later version.
+#  
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Affero General Public License for more details.
+#  
+#  You should have received a copy of the GNU Affero General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+daily_history_processing:
+  command: DailyHistoryChart.process_asynch
+  interval: 5
+  minIdle: 2
+take_objective_snapshots:
+  command: ObjectiveSnapshot.take_all
+  interval: 3600
+  minIdle: 2
+sync_objective_work:
+  command: SyncObjectiveWorkProcessor.run_once(:batch_size => 1000)
+  interval: 120
+  minIdle: 2
+rebuild_objective_snapshots:
+  command: ObjectiveSnapshotProcessor.run_once(:batch_size => 1000)
+  interval: 30
+  minIdle: 2
+project_exports_processor:
+  command: ProjectExportProcessor.run_once(:batch_size => 1)
+  interval: 5
+  minIdle: 2
+process_project_imports:
+  command: ProjectImportProcessor.run_once(:batch_size => 1)
+  interval: 5
+  minIdle: 2
+card_importing_preview:
+  command: CardImportPreviewProcessor.run_once(:batch_size => 1)
+  interval: 5
+  minIdle: 2
+import_cards:
+  command: CardImportProcessor.run_once(:batch_size => 1)
+  interval: 5
+  minIdle: 2
+link_cards_and_murmurs:
+  command: CardMurmurLinkProcessor.run_once(:batch_size => 10)
+  interval: 10
+  minIdle: 4
+cache_revisions:
+  command: RevisionsHeaderCaching.run_once(:batch_size => 100)
+  interval: 10
+  minIdle: 4
+cache_revision_content:
+  command: RevisionsContentCaching.run_once(5, false)
+  interval: 60
+  minIdle: 4
+feeds_cache_populating:
+  command: FeedsCachePopulatingProcessor.run_once(:batch_size => 1000)
+  interval: 10
+  minIdle: 4
+full_text_search_indexing_processors:
+  command: FullTextSearch.run_once(:batch_size => 50)
+  interval: 5
+  minIdle: 4
+history_generation:
+  command: HistoryGeneration.run_once(:batch_size => 1000)
+  interval: 5
+  minIdle: 4
+compute_aggregates:
+  command: AggregateComputation.run_once(:batch_size => 10)
+  interval: 5
+  minIdle: 4
+clean_expired_sessions:
+  command: Session.clean_expired_sessions
+  interval: 28800 #8 hours, default session expires
+  minIdle: 1
+send_history_notifications:
+  command: HistoryNotifications.process_all
+  interval: 600
+  minIdle: 4
+elastic_search_reindex_verification:
+  command: FullTextSearch.rebuild_index_if_missing
+  runOnce: true

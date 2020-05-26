@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+
+<html>
+<head>
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <title><%= h page_title %></title>
+  <%= stylesheet_link_tag("sprockets_app") %>
+  <%= stylesheet_link_tag("install") %>
+  <%= stylesheet_link_tag("print", :media => 'print') %>
+  <%= raw(yield(:stylesheets)) -%>
+  <%= javascript_include_tag("sprockets_app") %>
+  <link rel="shortcut icon" href="<%= image_path('/favicon.ico') %>" />
+  <link rel="apple-touch-icon" href="<%= image_path('/apple-touch-icon.png') %>" />
+</head>
+
+<body id="page-identifier-<%= 'install-' << @controller.action_name %>">
+  <div id="doc" class="yui-t7">
+    <%= render :partial => 'layouts/application_hd', :locals => { :hide_login => true } %>
+
+    <div id="bd">
+      <div id="yui-main">
+        <div class="yui-b" id="main"><div class="main_inner">
+          <%= render :partial => 'layouts/flash' %>
+          <%= render :partial => 'shared/contextual_help' %>
+          <%= yield %>
+        </div></div>
+      </div>
+    </div>
+  </div>
+  <%= render_buffered_javascript %>
+</body>
+</html>

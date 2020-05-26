@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Show avatars on grid view">
+  <p>You can see “who’s working on what” in the grid view. If you have <cref topic="card_properties#team_member_properties">team member properties</cref> setup, Mingle will show the avatars of the first three user properties for your cards. To change who's working on what, just drag and drop the avatars on and off the cards of interest.</p>
+
+    <p>For example, if you love pair programming like us, you can follow these steps to setup your card wall with avatars:
+	</p>
+	<steps>
+	    <item><p>Create a card property for “owner” and another for “pair”. </p></item>
+	    <item><p>Drag the two properties to the top of property list of your card type.</p>
+		<screenshot alttext="drag_properties_to_the_top" src="resources/images/card_properties_top_2.png"/>
+		</item>
+		<item><p>Go to your grid view, cards with “owner” and “pair” value set will have avatars on them. To set the owner and pair, just drag the avatar in the bottom tray to the appropriate card. You can search for team members to drag by clicking the three dots on the footer and entering their user name or email in the search text box. To unset the owner and pair, just drag the avatars off.</p>
+		<screenshot alttext="avatars_on_the_wall" src="resources/images/assign_owner_from_footer.gif"/>
+		</item>
+	</steps>
+
+	<note><bullets>
+    <item>For our Mingle in the cloud customers, we will use your <strong>Gravatar image by default</strong>, but you have all the freedom to change it to a cooler one via your Mingle profile page. If you do not have a Gravatar image and have not set your avatar, it will default to the first letter of your first name. <strong>N.B. Gravatar integration will not be supported for <cref topic="mingle_onsite">Mingle onsite</cref> customers.</strong></item>
+    <item>You can <cref topic="maintaining_card_types#reorder_properties">drag-and-drop card properties to sort them on card type edit page</cref></item>
+    <item>You can <cref topic="attributes_card_properties#show_hide">hide properties on property management page</cref> to help minimize noise
+	</item>
+  </bullets></note>
+
+</topic>

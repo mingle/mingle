@@ -1,0 +1,44 @@
+<html>
+<head>
+    <title>
+
+    </title>
+</head>
+
+<body>
+
+<style>
+    span {
+        background-color: red;
+    }
+
+    a:hover {
+        background-color: green;
+    }
+
+    a:hover span {
+        background-color: green;
+    }
+</style>
+
+<a href="x"><span>
+Hi Kamlesh
+</span></a>
+<br>
+<script type="text/javascript">
+    function overme(b) {
+        var t1 = document.f1.t1;
+        t1.value = b?"Mouse moved":"";
+    }
+</script>
+
+<form name="f1">
+    <input type="button" name="b1" value="Write on hover" onmouseover="overme(true)"><br><br>
+    <input type="button" name="b1" value="Blank on hover" onmouseover="overme(false)"><br><br>
+    <input type="text" name="t1">
+</form>
+
+<a href="index.htm">Back</a>
+</body>
+
+</html>

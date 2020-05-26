@@ -1,0 +1,65 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% @sidebar = capture do %>
+  <%= render :partial => 'shared/help_panel_open' %>
+<% end %>
+
+<%= render :partial => 'form_actions',
+      :locals => {
+      :cancel_action => cancel_action
+      }
+%>
+
+<% form_tag( {:action => submit_action, :page_identifier => @page.identifier}, {:id => 'page_form', :multipart => true,  'data-editable-id' => url_for(:action => 'show', :identifier => @page.identifier )}) do -%>
+
+  <% unless @page.new_record? %>
+    <%= hidden_field 'page', 'id' %>
+  <% end %>
+
+  <% unless @page.overview_page? %>
+    <h1><%=h @page.name %></h1>
+  <% else %>
+    <h1>Your project overview page</h1>
+  <% end -%>
+
+  <% unless @page.new_record? %>
+    <p id="version-info" class="version-info"><%= render :partial => 'shared/version_info', :locals => { :versionable => @page, :show_latest_url => page_show_url(:pagename => Page.name2identifier(@page.name)) } %></p>
+  <% end %>
+
+  <%= render :partial => "renderable/wysiwyg_editor", :locals => {:renderable => @page, :field_name => 'content'} %>
+
+  <div id="attachments-container">
+    <%= render :partial => "shared/attachments", :locals => {:attachable => @page, :mode => "edit", :"authorized_to_delete" => authorized_to_delete_attachments} %>
+  </div>
+
+  <%= render :partial => 'form_actions', :locals => {:cancel_action => cancel_action} %>
+
+<% end -%>
+
+<div class="clear-both"><!--Clear floats!--></div>
+
+<div id="macro_editor_container"></div>
+
+<%= javascript_with_rescue <<-JAVASCRIPT
+  PageContentChangeCallback = function() {
+    if (Form.serialize('page_form') != this.oldValue) {
+      this.oldValue = Form.serialize('page_form');
+      $$('.preview')[0].onclick();
+    }
+  };
+JAVASCRIPT
+-%>

@@ -1,0 +1,107 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="action_panel" <%= raw("style='display: none;'") unless user_preference(:grid_settings) %>>
+  <div id="lanes-header" class="actions">
+    <div class="for-selected-actions">
+      <div class="group_by_actions">
+
+        <div class="group_rows_by_actions">
+          <% form_tag({:action => 'grid', :controller => "cards"}, {:id =>'group_by_row_form', :method => 'get', :class => 'dropdown_form'}) do -%>
+            <%= hidden_view_tags(@view, :except => [:group_by, :rows]) %>
+            <%= hidden_field_tag('group_by[lane]', @view.group_lanes.group_by_param.lane_property_name, :id =>"select_group_by_lane_hidden_field") %>
+            <span class='drop-list-panel group_by_row'>
+              <span class="inline_action_label">Group rows by:</span>
+              <%= link_to_function '', nil, :id => 'select_group_by_row_drop_link', :class => 'dropdown-arrow' %>
+              <%= hidden_field_tag('group_by[row]', @view.group_lanes.group_by_param.row_property_name, :id =>"select_group_by_row_field") %>
+            </span>
+
+            <%= javascript_with_rescue grid_action_drop_list("group_by_row",
+                                      :select_options => options_for_group_by_row(@view.group_lanes.lane_property_definition),
+                                      :initial_selected => [@view.group_lanes.group_by_param.row_property_name, @view.group_lanes.group_by_param.row_property_name]) -%>
+          <% end -%>
+
+          <%= render :partial => "cards/card_grid_aggregate_selection", :locals => {:target => "row", :aggregate_by => @view.group_lanes.row_aggregate_by} %>
+
+        </div>
+        <div class="group_columns_by_actions">
+          <% form_tag({:action => 'grid', :controller => "cards"}, {:id =>'group_by_lane_form', :method => 'get', :class => 'dropdown_form'}) do -%>
+            <%= hidden_view_tags(@view, :except => [:group_by, :lanes]) %>
+            <%= hidden_field_tag('group_by[row]', @view.group_lanes.group_by_param.row_property_name, :id =>"select_group_by_row_hidden_field") %>
+            <span class='drop-list-panel group_by_column'>
+              <span class="inline_action_label">Group columns by:</span>
+              <%= link_to_function '', nil, :id => 'select_group_by_lane_drop_link', :class => 'dropdown-arrow' %>
+              <%= hidden_field_tag('group_by[lane]', @view.group_lanes.group_by_param.lane_property_name, :id =>"select_group_by_lane_field") %>
+            </span>
+            <%= javascript_with_rescue grid_action_drop_list("group_by_lane",
+                                      :select_options => options_for_group_by_column(@view.group_lanes.row_property_definition),
+                                      :initial_selected => [@view.group_lanes.group_by_param.lane_property_name, @view.group_lanes.group_by_param.lane_property_name]) -%>
+          <% end -%>
+          <%= render :partial => "cards/card_grid_aggregate_selection", :locals => {:target => "column", :aggregate_by => @view.group_lanes.column_aggregate_by}  %>
+
+        </div>
+      </div>
+      <div class="sort_by_color_by_actions_group">
+          <div class="sort-by-actions-group">
+            <% form_tag({:action => 'grid', :controller => "cards"}, {:id => 'sort_by_form', :method => 'get', :class => 'dropdown_form'}) do -%>
+                <%= hidden_view_tags(@view, :except => [:grid_sort_by]) %>
+                <span class='inline_action_label'>Sort by:</span>
+                <span class='drop-list-panel'>
+            <%= link_to_function '', nil, :id => 'select_sort_by_drop_link', :class => 'dropdown-arrow' %>
+                  <%= hidden_field_tag('grid_sort_by', @view.group_lanes.grid_sort_by, :id =>"select_sort_by_field") %>
+                  <%= hidden_field_tag('rank_is_on') -%>
+            </span>
+
+                <%= javascript_with_rescue grid_action_drop_list("sort_by",
+                                                                 :select_options => options_for_grid_sort_by,
+                                                                 :initial_selected => [@view.group_lanes.grid_sort_by, @view.group_lanes.grid_sort_by]) -%>
+            <% end -%>
+            <%= javascript_with_rescue %Q{
+            $j("#sort_by_form").on("submit", function(e) {
+              $j(this).find("[name='rank_is_on']").val("" === $j(this).find("[name='grid_sort_by']").val());
+            });
+          } %>
+
+          </div>
+          <div class="color-by-actions-group">
+            <% form_tag({:action => 'grid', :controller => "cards"}, {:id => 'color_by_form', :method => 'get', :class => 'dropdown_form'}) do -%>
+                <%= hidden_view_tags(@view, :except => [:color_by]) %>
+                <span class='inline_action_label'>Color by:</span>
+                <span class='drop-list-panel'>
+            <%= link_to_function '', nil, :id => 'select_color_by_drop_link', :class => 'dropdown-arrow' %>
+                  <%= hidden_field_tag('color_by', @view.group_lanes.color_by, :id =>"select_color_by_field") %>
+            </span>
+
+                <%= javascript_with_rescue grid_action_drop_list("color_by",
+                                                                 :select_options => options_for_color_by,
+                                                                 :initial_selected => [@view.group_lanes.color_by, @view.group_lanes.color_by], :position => 'left') -%>
+
+          <% end -%>
+        </div>
+          <div class="wip-actions-group">
+            <label><%= check_box_tag('hide-wip-limits', '', @view.hide_wip_limits?, 'data-view-url' => hide_wip_limits_url) %>  Hide WIP limits</label>
+          </div>
+        <%= javascript_with_rescue <<-JAVASCRIPT
+          $j("#hide-wip-limits").on('click', function(e) {
+            window.location.href = $j(e.target).data('view-url');
+          });
+            JAVASCRIPT
+        -%>
+      </div>
+    </div>
+  </div>
+  <div class="clear-both"></div>
+</div>

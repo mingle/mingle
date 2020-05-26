@@ -1,0 +1,300 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+@import 'base';
+@import 'checklists';
+@import 'mingle_tageditor';
+@import 'inline-add-input';
+@import 'cards';
+@import 'murmurs_chat';
+@import 'lightbox';
+@import 'action_bar';
+@import 'editable_content';
+
+* {
+  @include box-sizing(border-box);
+}
+
+.ui-autocomplete {
+  img {
+    width: 24px;
+    height: 24px;
+    margin-right: 5px;
+  }
+  .fa {
+    margin-right: 5px;
+  }
+  vertical-align: middle;
+}
+
+.auto_complete ul,
+.slider-down,
+.widget-dropdown,
+#macro_editor .widget-dropdown,
+.chart-editor .widget-dropdown {
+  position:absolute;
+  border: 0;
+  border: 1px solid #CCC;
+  background-color: #FFF;
+  box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+    -moz-box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+    -webkit-box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+  z-index: 10100 !important;
+}
+
+.widget-dropdown.positioned,
+.properties_widget .widget-dropdown {
+  min-width: 200px;
+}
+
+.widget-dropdown ul {
+  margin: 0;
+  padding: 0;
+}
+
+.widget-dropdown li,
+.widget-dropdown .select-option {
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+  float: none;
+  font-size: 11px;
+  line-height: normal;
+  font-weight: normal;
+  list-style: none outside none;
+  padding: 5px 10px;
+  margin: 0;
+  zoom: 1;
+}
+
+.widget-dropdown .transition {
+  padding: 0px;
+}
+
+.widget-dropdown {
+  min-width: 120px;
+  width: auto;
+}
+
+.widget-dropdown li.inline-add-new-value {
+  background: url(../images/shared/icons/icon_add_shared_14.png) no-repeat 5px 6px;
+  padding: 7px 7px 7px 24px !important;
+  display: block;
+}
+
+li.inline-add-new-value
+{
+  border-bottom: 1px dotted #CCC;
+  padding-bottom: 5px !important;
+  margin-bottom: 0 !important;
+}
+
+.widget-dropdown li {
+  list-style: none;
+  float: none;
+  text-align: left;
+  margin: 0;
+  padding: 0;
+  display: block;
+}
+
+.widget-dropdown li a {
+  white-space: nowrap;
+  display: block;
+  padding: 5px 10px;
+  margin: 0;
+  color: #333;
+  background-color: #FFF;
+}
+
+.widget-dropdown ul {
+  text-align: left;
+  float: none;
+  margin: 0;
+  width: auto;
+}
+
+.select-option {
+  img {
+    margin-right: 5px;
+  }
+}
+
+.drop-list-panel .property-value-widget {
+  color: #0076ba;
+  margin-left: 5px;
+  overflow: hidden;
+  white-space: normal;
+  cursor: pointer;
+  &:after {
+    padding-left: 5px;
+    color: black;
+    vertical-align: top;
+    @include fa_icon($fa-var-sort-desc);
+  }
+}
+
+div.auto_complete ul li.selected,
+.slider-down li:hover,
+.column-selector-operations-top:hover,
+.widget-dropdown li.selected,
+.widget-dropdown div:hover.select-option,
+.widget-dropdown li a:hover {
+  background-color: #ffec80;
+}
+
+.dropdown-filter-container {
+  position: relative;
+  overflow: hidden;
+  padding: 5px;
+  width: auto !important;
+
+  background: #eee url(../images/shared/backgrounds/bg_gradient_50.png) repeat-x;
+  border-bottom: 1px solid #CCC;
+}
+
+.dropdown-filter-container .indicator {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  width: 12px;
+  height: 12px;
+  padding: 0;
+}
+
+.dropdown-filter-container .dropdown-options-filter {
+  width: 100%;
+  border: 1px solid #CCC;
+  padding: 3px;
+  font-size: 11px;
+  margin: 0 !important;
+}
+
+.dropdown-panel ul {
+  float: none;
+}
+
+.lightbox {
+  .lightbox_content_wrapper {
+    .lightbox_content {
+
+      .inline-edit-form {
+        p {
+          padding-bottom: 0;
+          overflow: inherit;
+        }
+
+        &.edit-mode {
+          .view-mode-only {
+            display:none;
+          }
+        }
+
+        &.view-mode {
+          .edit-mode-only {
+            display:none;
+          }
+        }
+      }
+    }
+  }
+}
+
+ul.change {
+  margin: 0.5em 0;
+}
+
+.change li {
+  color: #555555;
+    font-size: 11px;
+  margin: 0.2em 0 !important;
+  list-style: none;
+  list-style-position: outside;
+}
+
+.event,
+.comment-item,
+.murmur-item {
+  margin: 5px 0 0 0;
+  padding: 5px 0;
+  border-top: 1px dotted #CCC;
+}
+
+.event h3 {
+  border-bottom: none;
+  color: #000000;
+  display: inline;
+  font-size: 12px;
+  font-weight: normal;
+  margin: 0;
+  padding: 0;
+}
+
+.event h3 a {
+  text-decoration: none;
+}
+
+
+.event p {
+  color: #555555;
+  font-size: 11px;
+  margin: 0em;
+}
+
+.event .user-icon {
+  display: block;
+  width: 32px;
+  height: 32px;
+  margin-right: 1em;
+  position: relative;
+  float: left;
+}
+
+.event .user-icon img {
+  border-radius: 30px;
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  top: 8px;
+  left: 8px;
+}
+
+.event .event-type {
+  display: block;
+  width: 32px;
+  height: 32px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1;
+}
+
+.event .event-content,
+.comment_content_wrapper {
+  margin-left: 50px;
+  margin-bottom: 10px;
+}
+
+textarea {
+  width: 100%;
+  overflow: auto;
+  padding: 0 0 0 4px;
+  border: 1px solid #CCC;
+  font-size: 12px;
+  outline:none;
+  resize: none;
+  -webkit-appearance: none;
+}

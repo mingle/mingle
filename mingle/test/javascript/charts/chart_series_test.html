@@ -1,0 +1,1235 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>Chart Series Test</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js"
+            type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery.tag-it.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/thirdparty/tinycolor.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+    <script src="../../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+    <script src="../../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+
+    <script src="../../../public/javascripts/application.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery.scrollintoview.js"
+            type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/color_picker.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/color_selector.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/drop_down.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/text_box.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/mingle_tageditor.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/tags_filter.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/mingle_tag_storage.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/url_helper.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/project_data_store.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/single_checkbox.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/easy_charts/group_parameter.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/easy_charts/parameter.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/easy_charts/pair_parameter.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/easy_charts/trend_line_parameter.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/easy_charts/section_helpers.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/easy_charts/card_filter_value_wrapper.js"
+            type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/easy_charts/card_filter.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/easy_charts/property_definition_filter.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/easy_charts/card_type_filter.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/easy_charts/card_filters.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/easy_charts/mql_builder.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/easy_charts/series.js"
+            type="text/javascript"></script>
+
+    <script src="../test_assets/sinon-2.3.6.js" type="text/javascript"></script>
+    <script src="../test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+    <script src="../test_assets/qunit-phantom.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="../test_assets/qunit-1.21.0.css" type="text/css"/>
+
+</head>
+<body>
+<div id="qunit">
+</div>
+<div id="chart_series"></div>
+<script type="application/javascript">
+  var sandbox = sinon.sandbox.create(sinon.defaultConfig),
+      propDef1 = {
+        name: 'prop1',
+        isNumeric: true,
+        isManaged: true,
+        dataType: 'numeric',
+        operatorOptions: [['is not', 'is not']],
+        propertyValueDetails: [{value: 'p1v2', position: 2}, {value: 'p1v1', position: 1}, {value: 'p1v3', position: 3}]
+      },
+      propDef2 = {
+        name: 'Release',
+        dataType: 'card'
+      },
+      propDef3 = {
+        name: 'prop3',
+        isManaged: false,
+        dataType: 'string',
+        operatorOptions: [['is', 'is']],
+        propertyValueDetails: [{value: 'p3v1', position: 2}, {value: 'p3v2', position: 1}]
+      },
+      propDef4 = {
+        name: 'prop4',
+        dataType: 'date',
+        operatorOptions: [['is', 'is']]
+      },
+      propDef5 = {
+        name: 'Iteration',
+        operatorOptions: [['is', 'is']],
+        dataType: 'card'
+      },
+      propDef6 = {
+        name: 'Sprint',
+        operatorOptions: [['is', 'is']],
+        dataType: 'card'
+      },
+      expectedParamDefs = {
+        label: {
+          name: 'label',
+          initial_value: 'Series 1',
+          input_type: 'textbox',
+          label: 'What is this series called?'
+        }, project: {
+          name: 'project',
+          input_type: 'dropdown',
+          initial_value: 'initial project',
+          label: 'Which project does data for this series come from?',
+          options: {disabled: true}
+        },
+        filters: {
+          name: 'filters',
+          input_type: 'card-filters',
+          label: 'Which cards make up the series data?',
+          allowed_values: []
+        },
+        tagsFilter: {
+          name: 'tags-filter',
+          input_type: 'tags-filter',
+          label: 'Tagged with:'
+        },
+        property: {
+          name: 'property',
+          input_type: 'dropdown',
+          initial_value: 'property 1',
+          label: 'Which property should this series be based on?',
+          allowedValues: []
+        }, aggregatePair: {
+          input_type: 'pair-parameter',
+          label: 'What determines the actual height of the bars?',
+          connecting_text: 'of',
+          name: 'aggregate-pair',
+          param_defs: [
+            {
+              name: 'aggregate',
+              initial_value: 'count',
+              allowed_values: [['Number of cards', 'count'], ['Sum', 'sum'], ['Average', 'avg']],
+              multiple_values_allowed: false,
+              input_type: 'dropdown'
+            }, {
+              name: 'aggregate-property',
+              initial_value: null,
+              allowed_values: [],
+              multiple_values_allowed: false,
+              input_type: 'dropdown'
+            }
+          ]
+        },
+        seriesType: {
+          name: 'series-type',
+          input_type: 'dropdown',
+          initial_value: 'Bar',
+          allowed_values: ['Bar', 'Line', 'Area'],
+          label: 'Type of series'
+        },
+        combine: {
+          name: 'combine',
+          input_type: 'dropdown',
+          initial_value: 'overlay-bottom',
+          allowed_values: [['Overlay bottom', 'overlay-bottom'], ['Overlay top', 'overlay-top'], ['Total', 'total']],
+          label: 'Combine'
+        },
+        color: {
+          name: 'color',
+          input_type: 'color-picker',
+          label: 'Color',
+          initialColor: '#0B8ABA' //Default C3 js ratio bar color
+        },
+        hidden: {
+          name: 'hidden',
+          input_type: 'single-checkbox',
+          label: 'Hide this series?',
+          displayProperty: 'inline-parameter'
+        },
+        trendLine: {
+          name: 'trend-line',
+          label: '',
+          input_type: 'trend-line-parameter',
+          param_defs: [
+            {
+              name: 'trend-customization',
+              label: '',
+              input_type: 'group-parameter',
+              vertical: true,
+              displayProperty:'left-padded-parameter',
+              param_defs: [
+
+                {
+                  name: 'scope',
+                  input_type: 'dropdown',
+                  initial_value: 'All',
+                  allowed_values: ['All',2,3,4,5,6,7,8,9,10],
+                  label: 'Trend scope',
+                  displayProperty: 'inline-parameter'
+                },
+                {
+                  name: 'ignore',
+                  input_type: 'dropdown',
+                  initial_value: 'zeroes-at-end-and-last-value',
+                  allowed_values: [['None','none'], ['Zeroes at end','zeroes-at-end'], ['Zeroes at end and last value','zeroes-at-end-and-last-value']],
+                  label: 'Ignore',
+                  displayProperty: 'inline-parameter'
+                },
+                {
+                  name: 'style',
+                  input_type: 'dropdown',
+                  initial_value: 'Dash',
+                  allowed_values: [{text:'Solid',value:'solid', styleClass:'prepend-solid'}, {text:'Dashed',value:'dash', styleClass:'prepend-dashed'}],
+                  label: 'Style',
+                  displayProperty: 'inline-parameter'
+                },
+                {
+                  name: 'color',
+                  input_type: 'color-picker',
+                  label: 'Color',
+                  initialColor: '#55EB7D',
+                  displayProperty: 'inline-parameter'
+                }
+              ]
+            }
+
+          ]
+        }
+      },
+      projectData = {
+        identifier: 'sample_project',
+        dateFormat: '%Y/%m/%d',
+        cardTypes: [
+          {
+            id: 1,
+            name: "Story",
+            propertyDefinitions: [propDef1, propDef2, propDef3, propDef5, propDef6]
+          },
+          {
+            id: 2,
+            name: "Work",
+            propertyDefinitions: [propDef1, propDef3, propDef4, propDef5, propDef6]
+          },
+          {
+            id: 3,
+            name: "Release",
+            propertyDefinitions: [propDef3, propDef4, propDef5, propDef6]
+          }
+        ],
+        cardTypeNames: [
+          "Story",
+          "Work",
+          "Release"
+        ],
+        team: [
+          {name: 'User1', login: 'user1'},
+          {name: 'User2', login: 'user2'}
+        ],
+        tags: [{name: 'tag1', color: 'red'}, {name: 'tag2', color: 'green'}],
+      }, projectDataStore = new ProjectDataStore(projectData), accessibleProjects = [
+        {name: 'Sample Project', identifier: 'sample_project'},
+        {name: 'Sample Project 2', identifier: 'sample_project2'}
+      ];
+
+  QUnit.module('Chart Series', {
+    beforeEach: function () {
+      this.container = $j('#chart_series');
+      sandbox.stub(Math, 'random').returns(0.672984112);
+      var data = {
+        config:{'trend-line':{isRequired:false},'burn-down':{isRequired:false}},
+        number: 1,
+        currentProject: 'sample_project',
+        projectDataStore: projectDataStore,
+        cardFilters: [
+          {
+            property: 'Type', values: ['Story', 'Work'], operator: 'is'
+          }
+        ],
+        property: propDef5.name,
+        colors: ["#3D8F84", "#19A657", "#55EB7D"]
+      };
+      this.colorPickerSpy = sandbox.spy(MingleUI, 'ColorPicker');
+      this.callBacks = {onUpdate: sandbox.spy()};
+      sandbox.stub(projectDataStore, 'accessibleProjects').returns(accessibleProjects);
+      this.series = new MingleUI.EasyCharts.Series(data, this.callBacks);
+      this.seriesParameterContainer = this.series.htmlContainer.find('div.series-params-container');
+      this.container.append(this.series.htmlContainer);
+    },
+    afterEach: function () {
+      this.container.empty();
+      sandbox.restore();
+    }
+
+  }, function () {
+    QUnit.module('Common Test');
+
+    QUnit.test('testShouldNotHaveRemoveButton', function (assert) {
+      assert.equal(this.container.find('#series_1 .series-title-container .delete-series').length, 0);
+    });
+
+    QUnit.test('testShouldAddTitle', function (assert) {
+      var titleContainer = this.series.htmlContainer.find('div.series-title-container');
+
+      assert.equal(titleContainer.find('span.series-title').text(), 'Series 1');
+    });
+
+    QUnit.test('testCustomizeThisSeriesSectionLabelShouldHavBoldClass', function (assert) {
+      var parameterLabel = this.container.find('#series_1_group_1_parameter .parameter-label');
+
+      assert.ok(parameterLabel.hasClass('bold'));
+    });
+
+    QUnit.test('testShouldAddSeriesLabel', function (assert) {
+      var labelContainer = this.seriesParameterContainer.find('div#series_1_label_parameter');
+
+      assert.equal(labelContainer.find('.parameter-label').text(), expectedParamDefs.label.label);
+      assert.equal(labelContainer.find('.parameter input').val(), 'Series 1');
+    });
+
+    QUnit.test('testShouldAddProjectParameterAndNotShowInValues', function (assert) {
+      var projectContainer = this.seriesParameterContainer.find('div#series_1_project_parameter');
+
+      assert.equal(projectContainer.find('.parameter-label').text(), expectedParamDefs.project.label);
+      assert.equal(projectContainer.find('.parameter .selected-value').text(), 'Sample Project');
+
+      var options = projectContainer.find('.parameter.drop-down .options-container li span');
+
+      assert.equal(options.get(0).innerText, 'Sample Project');
+      assert.notOk(this.series.value().project);
+    });
+
+    QUnit.test('testShouldAddSeriesFilters', function (assert) {
+      var projectContainer = this.seriesParameterContainer.find('div#series_1_filters_parameter');
+
+      assert.equal(projectContainer.find('.parameter-label').text(), expectedParamDefs.filters.label);
+
+      assert.equal(projectContainer.find('#card_filter_1 .property .selected-value').text(), 'Type');
+      assert.equal(projectContainer.find('#card_filter_1 .operator .selected-value').text(), 'is');
+      assert.equal(projectContainer.find('#card_filter_1 .property-value .selected-value').text(), 'Story, Work');
+
+      var options = projectContainer.find('#card_filter_1 .property-value .options-container li span');
+
+      assert.equal($j(options.get(0)).text(), 'Story');
+      assert.equal($j(options.get(1)).text(), 'Work');
+      assert.equal(options.length, 2);
+    });
+
+    QUnit.test('testShouldAddSeriesProperty', function (assert) {
+      var propertyParameterContainer = this.seriesParameterContainer.find('div#series_1_property_parameter');
+
+      assert.equal(propertyParameterContainer.find('.parameter-label').text(), expectedParamDefs.property.label);
+
+      var options = propertyParameterContainer.find('.drop-down .options-container li span');
+
+      assert.equal(propertyParameterContainer.find('.drop-down .selected-value').text(), '(not set)');
+      assert.equal($j(options.get(0)).text(), 'Iteration');
+      assert.equal($j(options.get(1)).text(), 'Sprint');
+    });
+
+    QUnit.test('testShouldAddAggregateParameter', function (assert) {
+      var propertyParameterContainer = this.seriesParameterContainer.find('div#series_1_aggregate_pair_parameter');
+
+      assert.equal(propertyParameterContainer.find('.parameter-label').text(), expectedParamDefs.aggregatePair.label);
+
+      var options = propertyParameterContainer.find('#aggregate_pair_series_1_aggregate_parameter .options-container li span');
+
+      assert.equal(propertyParameterContainer.find('#aggregate_pair_series_1_aggregate_parameter .selected-value').text(), 'Number of cards');
+      assert.equal($j(options.get(0)).text(), 'Number of cards');
+      assert.equal($j(options.get(1)).text(), 'Sum');
+      assert.equal($j(options.get(2)).text(), 'Average');
+
+      assert.notOk(propertyParameterContainer.find('#aggregate_pair_series_1_aggregate_property_parameter').is(':visible'));
+      assert.notOk(propertyParameterContainer.find('.pair-connector').is(':visible'));
+    });
+
+    QUnit.test('testShouldAddTagsParameter', function (assert) {
+      var tagsContainer = this.seriesParameterContainer.find('div#series_1_tags_filter_parameter');
+      var tagsLabel = tagsContainer.find('.parameter-label');
+
+      assert.equal(tagsLabel.text(), 'Tagged with:');
+    });
+
+    QUnit.test('testShouldAddAggregatePropertyParameterWhenAggregateIsSumOrAverage', function (assert) {
+      var propertyParameterContainer = this.seriesParameterContainer.find('div#series_1_aggregate_pair_parameter');
+      propertyParameterContainer.find('#aggregate_pair_series_1_aggregate_parameter .drop-down-toggle').click();
+      propertyParameterContainer.find('#aggregate_pair_series_1_aggregate_parameter .options-container li span[title="sum"]').click();
+
+      assert.ok(propertyParameterContainer.find('#aggregate_pair_series_1_aggregate_property_parameter').is(':visible'));
+      assert.ok(propertyParameterContainer.find('.pair-connector').is(':visible'));
+    });
+
+    QUnit.test('testShouldAddSeriesTypeParameter', function (assert) {
+      var seriesGroupParamContainer = this.seriesParameterContainer.find('div#series_1_group_1_parameter');
+      var seriesTypeParameterContainer = seriesGroupParamContainer.find('div#group1_series_type_parameter');
+      assert.equal(seriesTypeParameterContainer.find('.parameter-label').text(), 'Type of series');
+
+      var options = seriesTypeParameterContainer.find('.drop-down .options-container li span');
+
+      assert.equal(seriesTypeParameterContainer.find('.drop-down .selected-value').text(), 'Bar');
+
+      assert.equal($j(options.get(0)).text(), 'Bar');
+      assert.equal($j(options.get(1)).text(), 'Line');
+      assert.equal($j(options.get(2)).text(), 'Area');
+    });
+
+    QUnit.test('testShouldNotHaveSeriesCustomizationParametersWhenEnableSeriesTypeCustomizationIsFalse', function (assert) {
+      var typeParameterContainer = this.container.find('div#group1_series_type_parameter');
+
+      assert.equal(typeParameterContainer.find('.selected-value').text(), 'Bar');
+      assert.notOk(this.container.find('.series-type-customization-params-container').length);
+
+      typeParameterContainer.find('.drop-down .drop-down-toggle').click();
+      typeParameterContainer.find('.drop-down .options-container li span[title="Line"]').click();
+
+      assert.notOk(this.container.find('.series-type-customization-params-container').length);
+    });
+
+    QUnit.test('testShouldAddCombineParameter', function (assert) {
+      var seriesGroupParamContainer = this.seriesParameterContainer.find('div#series_1_group_1_parameter');
+      var combineParameterContainer = seriesGroupParamContainer.find('div#group1_combine_parameter');
+      assert.equal(combineParameterContainer.find('.parameter-label').text(), 'Combine');
+
+      var options = combineParameterContainer.find('.drop-down .options-container li span');
+
+      assert.equal(combineParameterContainer.find('.drop-down .selected-value').text(), 'Overlay bottom');
+
+      assert.equal($j(options.get(0)).text(), 'Overlay bottom');
+      assert.equal($j(options.get(1)).text(), 'Overlay top');
+      assert.equal($j(options.get(2)).text(), 'Total');
+    });
+
+    QUnit.test('testShouldAddColorParameter', function (assert) {
+      var seriesGroupParamContainer = this.seriesParameterContainer.find('div#series_1_group_1_parameter');
+      var colorParameterContainer = seriesGroupParamContainer.find('div#group1_color_parameter');
+
+      assert.equal(colorParameterContainer.find('.parameter-label').text(), 'Color');
+      var actualOptions = this.colorPickerSpy.args[0][1];
+      assert.deepEqual(actualOptions.initialColor, '#55EB7D');
+    });
+
+    QUnit.test('testShouldAddHiddenParameter', function (assert) {
+      var hiddenParameterContainer = this.seriesParameterContainer.find('div#series_1_hidden_parameter');
+
+      assert.equal(hiddenParameterContainer.find('.parameter-label').text(), 'Hide this series?');
+      assert.notOk(hiddenParameterContainer.find('.single-checkbox input').is(':checked'));
+
+    });
+
+    QUnit.test('testValueShouldReturnInitialValues', function (assert) {
+      var actualValues = this.series.value();
+
+      assert.equal(actualValues.label, 'Series 1');
+      assert.equal(actualValues.seriesType, 'Bar');
+      assert.equal(actualValues.combine, 'overlay-bottom');
+      assert.notOk(actualValues.hidden);
+      assert.notOk(actualValues.property);
+      assert.notOk(actualValues.project);
+      assert.equal(actualValues.series1Aggregate, 'count');
+      assert.equal(actualValues.filters.length, 1);
+      assert.equal(actualValues.filters[0].getMql(), '"Type" IN ("Story","Work")');
+
+    });
+
+    QUnit.test('testSeriesShouldBeValidWhenPropertySet', function (assert) {
+      var propertyParameterContainer = this.seriesParameterContainer.find('div#series_1_property_parameter');
+
+      assert.notOk(this.series.isValid());
+
+      propertyParameterContainer.find('.drop-down .drop-down-toggle').click();
+      propertyParameterContainer.find('.drop-down .options-container li span[title="Sprint"]').click();
+
+      assert.ok(this.series.isValid());
+    });
+
+    QUnit.test('testSeriesShouldBeInValidWhenPropertySetAndAggregateTypeIsSumOrAverageAndAggregatePropertyIsNOtSet', function (assert) {
+      var propertyParameterContainer = this.seriesParameterContainer.find('div#series_1_property_parameter');
+      var aggregatePairParameterContainer = this.seriesParameterContainer.find('div#series_1_aggregate_pair_parameter');
+      propertyParameterContainer.find('.drop-down .drop-down-toggle').click();
+      propertyParameterContainer.find('.drop-down .options-container li span[title="Sprint"]').click();
+      assert.equal(aggregatePairParameterContainer.find('#aggregate_pair_series_1_aggregate_parameter .selected-value').text(),'Number of cards');
+
+      assert.ok(this.series.isValid());
+
+      aggregatePairParameterContainer.find('#aggregate_pair_series_1_aggregate_parameter .options-container li span[title="sum"]').click();
+
+      assert.notOk(this.series.isValid());
+
+      aggregatePairParameterContainer.find('#aggregate_pair_series_1_aggregate_parameter .options-container li span[title="average"]').click();
+
+      assert.notOk(this.series.isValid());
+    });
+
+    QUnit.test('testSeriesShouldBeInValidWhenPropertySetAndAggregateTypeIsSumAndAggregatePropertyIsSet', function (assert) {
+      var propertyParameterContainer = this.seriesParameterContainer.find('div#series_1_property_parameter');
+      var aggregatePairParameterContainer = this.seriesParameterContainer.find('div#series_1_aggregate_pair_parameter');
+      propertyParameterContainer.find('.drop-down .drop-down-toggle').click();
+      propertyParameterContainer.find('.drop-down .options-container li span[title="Sprint"]').click();
+      assert.equal(aggregatePairParameterContainer.find('#aggregate_pair_series_1_aggregate_parameter .selected-value').text(),'Number of cards');
+      aggregatePairParameterContainer.find('#aggregate_pair_series_1_aggregate_parameter .options-container li span[title="sum"]').click();
+
+      assert.notOk(this.series.isValid());
+
+      aggregatePairParameterContainer.find('#aggregate_pair_series_1_aggregate_property_parameter .options-container li span[title="prop1"]').click();
+
+      assert.ok(this.series.isValid());
+    });
+
+    QUnit.test('testValueShouldReturnSelectedValues', function (assert) {
+      var expectedParams = ["label",'property', "project", "filters", "tagsFilter", "series1Aggregate", "seriesType", "combine", "color", "hidden"];
+
+      var propertyParameterContainer = this.seriesParameterContainer.find('div#series_1_property_parameter');
+      var filterParameterContainer = this.seriesParameterContainer.find('div#series_1_filters_parameter');
+
+      propertyParameterContainer.find('.drop-down .drop-down-toggle').click();
+      propertyParameterContainer.find('.drop-down .options-container li span[title="Sprint"]').click();
+      var actualValues = this.series.value();
+
+      assert.equal(actualValues.label, 'Series 1');
+      assert.equal(actualValues.seriesType, 'Bar');
+      assert.equal(actualValues.combine, 'overlay-bottom');
+      assert.notOk(actualValues.hidden);
+      assert.equal(actualValues.property, 'Sprint');
+      assert.notOk(actualValues.project);
+      assert.equal(actualValues.series1Aggregate, 'count');
+      assert.equal(actualValues.filters.length, 1);
+      assert.deepEqual(actualValues.tagsFilter, []);
+      assert.equal(actualValues.filters[0].getMql(), '"Type" IN ("Story","Work")');
+
+      Object.keys(actualValues).forEach(function (value) {
+        assert.ok(expectedParams.include(value));
+      });
+
+      assert.equal(Object.keys(actualValues).length, 9);
+
+      filterParameterContainer.find('#card_filter_1 .property-value .drop-down-toggle').click();
+      filterParameterContainer.find('#card_filter_1 .property-value .options-container li span[title="Work"]').click();
+
+      assert.equal(actualValues.label, 'Series 1');
+      assert.equal(actualValues.seriesType, 'Bar');
+      assert.equal(actualValues.combine, 'overlay-bottom');
+      assert.notOk(actualValues.hidden);
+      assert.notOk(actualValues.property);
+      assert.notOk(actualValues.project);
+      assert.equal(actualValues.series1Aggregate, 'count');
+      assert.equal(actualValues.filters.length, 1);
+      assert.equal(actualValues.filters[0].getMql(), '"Type" = "Story"');
+
+
+      Object.keys(actualValues).forEach(function (value) {
+        assert.ok(expectedParams.include(value));
+      });
+
+      assert.equal(Object.keys(actualValues).length, 8);
+
+    });
+
+    QUnit.test('testShouldUnsetPropertyParameterOnCardTypeFilterChange', function (assert) {
+      var propertyParameterContainer = this.seriesParameterContainer.find('div#series_1_property_parameter');
+      var filterParameterContainer = this.seriesParameterContainer.find('div#series_1_filters_parameter');
+
+      var options = propertyParameterContainer.find('.drop-down .options-container li span');
+
+      assert.equal(propertyParameterContainer.find('.drop-down .selected-value').text(), '(not set)');
+      assert.equal($j(options.get(0)).text(), 'Iteration');
+      assert.equal($j(options.get(1)).text(), 'Sprint');
+
+      propertyParameterContainer.find('.drop-down .drop-down-toggle').click();
+      propertyParameterContainer.find('.drop-down .options-container li span[title="Sprint"]').click();
+
+      assert.equal(propertyParameterContainer.find('.drop-down .selected-value').text(), 'Sprint');
+      assert.equal(this.callBacks.onUpdate.callCount, 1);
+
+      filterParameterContainer.find('#card_filter_1 .property-value .drop-down-toggle').click();
+      filterParameterContainer.find('#card_filter_1 .property-value .options-container li span[title="Work"]').click();
+
+      assert.equal(filterParameterContainer.find('#card_filter_1 .property-value .selected-value').text(), 'Story');
+
+      options = propertyParameterContainer.find('.drop-down .options-container li span');
+
+      assert.notOk(this.series.value().property);
+      assert.equal(propertyParameterContainer.find('.drop-down .selected-value').text(), '(not set)');
+      assert.equal($j(options.get(0)).text(), 'Release');
+      assert.equal($j(options.get(1)).text(), 'Iteration');
+      assert.equal($j(options.get(2)).text(), 'Sprint');
+      assert.equal(options.length, 3);
+      assert.equal(this.callBacks.onUpdate.callCount, 2);
+
+    });
+
+    QUnit.test('testShouldResetSeriesProperty', function (assert) {
+      var propertyParameterContainer = this.seriesParameterContainer.find('div#series_1_property_parameter');
+
+      propertyParameterContainer.find('.drop-down .drop-down-toggle').click();
+      propertyParameterContainer.find('.drop-down .options-container li span[title="Sprint"]').click();
+
+      var options = propertyParameterContainer.find('.drop-down .options-container li span');
+
+      assert.equal(propertyParameterContainer.find('.drop-down .selected-value').text(), 'Sprint');
+      assert.equal($j(options.get(0)).text(), 'Iteration');
+      assert.equal($j(options.get(1)).text(), 'Sprint');
+      assert.equal(options.length, 2);
+      assert.equal(this.series.value().property, 'Sprint');
+
+      this.series.updateProperty('prop3');
+
+      options = propertyParameterContainer.find('.drop-down .options-container li span');
+
+      assert.notOk(this.series.value().property);
+      assert.equal(propertyParameterContainer.find('.drop-down .selected-value').text(), '(not set)');
+      assert.equal($j(options.get(0)).text(), 'prop3');
+      assert.equal(options.length, 1);
+    });
+
+    QUnit.module('With property value not set', {}, function () {
+
+      QUnit.test('testShouldNotTriggerOnUpdateCallBackWhenAggregateAndAggregatePropertyChangesButUpdateValues', function (assert) {
+        var aggregatePairParameterContainer = this.seriesParameterContainer.find('div#series_1_aggregate_pair_parameter');
+        var aggregateParameterContainer = aggregatePairParameterContainer.find('#aggregate_pair_series_1_aggregate_parameter');
+        var aggregatePropertyParameterContainer = aggregatePairParameterContainer.find('#aggregate_pair_series_1_aggregate_property_parameter');
+
+        aggregateParameterContainer.find('.drop-down .drop-down-toggle').click();
+        aggregateParameterContainer.find('.drop-down .options-container li span[title="sum"]').click();
+
+        assert.equal(this.callBacks.onUpdate.callCount, 0);
+
+        aggregatePropertyParameterContainer.find('.drop-down .drop-down-toggle').click();
+        aggregatePropertyParameterContainer.find('.drop-down .options-container li span[title="prop1"]').click();
+
+        assert.equal(this.callBacks.onUpdate.callCount, 0);
+        var seriesValue = this.series.value();
+        assert.equal(seriesValue.series1Aggregate, 'sum');
+        assert.equal(seriesValue.series1AggregateProperty, 'prop1');
+      });
+
+      QUnit.test('testShouldNotTriggerOnUpdateCallBackWhenTypeOfSeriesChangedButUpdateValues', function (assert) {
+        var typeParameterContainer = this.seriesParameterContainer.find('div#group1_series_type_parameter');
+
+        typeParameterContainer.find('.drop-down .drop-down-toggle').click();
+        typeParameterContainer.find('.drop-down .options-container li span[title="Line"]').click();
+
+        assert.equal(this.callBacks.onUpdate.callCount, 0);
+        assert.equal(this.series.value().seriesType, 'Line');
+      });
+
+      QUnit.test('testShouldNotTriggerOnUpdateCallBackWhenCombineValueChangesButUpdateValues', function (assert) {
+        var combineParameterContainer = this.seriesParameterContainer.find('div#group1_combine_parameter');
+
+        combineParameterContainer.find('.drop-down .drop-down-toggle').click();
+        combineParameterContainer.find('.drop-down .options-container li span[title="total"]').click();
+
+        assert.equal(this.callBacks.onUpdate.callCount, 0);
+        assert.equal(this.series.value().combine, 'total');
+      });
+
+      QUnit.test('testShouldNotTriggerOnUpdateCallBackWhenColorPropertyIsChangedButUpdateValues', function (assert) {
+        var expectedColor = '#234fff';
+        this.colorPickerSpy.args[0][1].onValueChange({
+          name: 'color', value: function () {
+            return expectedColor;
+          }
+        });
+
+        assert.equal(this.callBacks.onUpdate.callCount, 0);
+        assert.equal(this.series.value().color, expectedColor);
+      });
+
+      QUnit.test('testShouldNotTriggerOnUpdateCallBackWhenHiddenPropertyIsChangedButUpdatedValues', function (assert) {
+        var hiddenParameterContainer = this.seriesParameterContainer.find('div#series_1_hidden_parameter');
+        hiddenParameterContainer.find('input').click();
+
+        assert.equal(this.callBacks.onUpdate.callCount, 0);
+        assert.ok(this.series.value().hidden);
+      });
+
+
+      QUnit.test('testShouldNotTriggerOnUpdateCallBackWhenSeriesLabelIsChanged', function (assert) {
+        var seriesLabelTextBox = this.seriesParameterContainer.find('div#series_1_label_parameter').find('input');
+        seriesLabelTextBox.val('new name');
+
+        var keyUpEvent = $j.Event('keyup');
+        keyUpEvent.keyCode = 13;
+        seriesLabelTextBox.trigger(keyUpEvent);
+
+        assert.equal(this.callBacks.onUpdate.callCount, 0);
+        assert.equal(this.series.value().label, 'new name');
+      });
+
+      QUnit.test('testShouldNotTriggerOnUpdateCallbackWhenATagIsAdded', function (assert) {
+        var tagsFilterWidget = this.seriesParameterContainer.find('div#series_1_tags_filter_parameter .parameter ul.tags-filter');
+        addAndAssertTag.call(assert, tagsFilterWidget, 'tag1');
+
+        assert.equal(this.callBacks.onUpdate.callCount, 0);
+        assert.deepEqual(this.series.value().tagsFilter, ['tag1']);
+      });
+
+      function addAndAssertTag(tagEditorWidget, tag) {
+        tagEditorWidget.find('input.ui-autocomplete-input[type=text]').val(tag).blur();
+        this.ok(tagEditorWidget.find('span.tagit-label:contains("' + tag + '")')[0]);
+      }
+    });
+
+    QUnit.module('With property value set', {
+      beforeEach: function () {
+        this.seriesParameterContainer.find('div#series_1_property_parameter .options-container li:contains("Sprint")').click();
+        this.callBacks.onUpdate.reset();
+      }
+    }, function () {
+
+      QUnit.test('testShouldTriggerOnUpdateCallBackWhenAggregateAndAggregatePropertyChanges', function (assert) {
+        var aggregatePairParameterContainer = this.seriesParameterContainer.find('div#series_1_aggregate_pair_parameter');
+        var aggregateParameterContainer = aggregatePairParameterContainer.find('#aggregate_pair_series_1_aggregate_parameter');
+        var aggregatePropertyParameterContainer = aggregatePairParameterContainer.find('#aggregate_pair_series_1_aggregate_property_parameter');
+
+        aggregateParameterContainer.find('.drop-down .drop-down-toggle').click();
+        aggregateParameterContainer.find('.drop-down .options-container li span[title="sum"]').click();
+
+        assert.equal(this.callBacks.onUpdate.callCount, 1);
+
+        aggregatePropertyParameterContainer.find('.drop-down .drop-down-toggle').click();
+        aggregatePropertyParameterContainer.find('.drop-down .options-container li span[title="prop1"]').click();
+
+        assert.equal(this.callBacks.onUpdate.callCount, 2);
+        var seriesValue = this.series.value();
+        assert.equal(seriesValue.series1Aggregate, 'sum');
+        assert.equal(seriesValue.series1AggregateProperty, 'prop1');
+      });
+
+      QUnit.test('testShouldTriggerOnUpdateCallBackWhenTypeOfSeriesOrCombinePropertyChanges', function (assert) {
+        var combineParameterContainer = this.seriesParameterContainer.find('div#group1_combine_parameter');
+        var typeParameterContainer = this.seriesParameterContainer.find('div#group1_series_type_parameter');
+
+        typeParameterContainer.find('.drop-down .drop-down-toggle').click();
+        typeParameterContainer.find('.drop-down .options-container li span[title="Line"]').click();
+
+        assert.equal(this.callBacks.onUpdate.callCount, 1);
+        assert.equal(this.series.value().seriesType, 'Line');
+
+        combineParameterContainer.find('.drop-down .drop-down-toggle').click();
+        combineParameterContainer.find('.drop-down .options-container li span[title="total"]').click();
+
+        assert.equal(this.callBacks.onUpdate.callCount, 2);
+        assert.equal(this.series.value().combine, 'total');
+      });
+
+      QUnit.test('testShouldTriggerOnUpdateCallBackWhenColorOrHiddenPropertyIsChanged', function (assert) {
+        var expectedColor = '#234fff',
+            hiddenParameterContainer = this.seriesParameterContainer.find('div#series_1_hidden_parameter');
+        hiddenParameterContainer.find('input').click();
+
+        assert.equal(this.callBacks.onUpdate.callCount, 1);
+        assert.ok(this.series.value().hidden);
+
+        this.colorPickerSpy.args[0][1].onValueChange({
+          name: 'color', value: function () {
+            return expectedColor;
+          }
+        });
+
+        assert.equal(this.callBacks.onUpdate.callCount, 2);
+        assert.equal(this.series.value().color, expectedColor);
+      });
+
+      QUnit.test('testShouldTriggerOnUpdateCallBackWhenSeriesLabelIsChanged', function (assert) {
+
+        var seriesLabelTextBox = this.seriesParameterContainer.find('div#series_1_label_parameter').find('input');
+        seriesLabelTextBox.val('new name');
+
+        var keyUpEvent = $j.Event('keyup');
+        keyUpEvent.keyCode = 13;
+        seriesLabelTextBox.trigger(keyUpEvent);
+
+        assert.equal(this.callBacks.onUpdate.callCount, 1);
+        assert.equal(this.series.value().label, 'new name');
+      });
+
+      QUnit.test('testShouldTriggerOnUpdateCallbackWhenATagIsAdded', function (assert) {
+        var tagsFilterWidget = this.seriesParameterContainer.find('div#series_1_tags_filter_parameter .parameter ul.tags-filter');
+        addAndAssertTag.call(assert, tagsFilterWidget, 'tag1');
+
+        assert.equal(this.callBacks.onUpdate.callCount, 1);
+        assert.deepEqual(this.series.value().tagsFilter, ['tag1']);
+      });
+
+      function addAndAssertTag(tagEditorWidget, tag) {
+        tagEditorWidget.find('input.ui-autocomplete-input[type=text]').val(tag).blur();
+        this.ok(tagEditorWidget.find('span.tagit-label:contains("' + tag + '")')[0]);
+      }
+    });
+
+    QUnit.module('Removable Series',{
+      beforeEach: function () {
+        var data = {
+          config:{'trend-line':{isRequired:false}},
+          number: 1,
+          currentProject: 'sample_project',
+          projectDataStore: projectDataStore,
+          cardFilters: [
+            {
+              property: 'Type', values: ['Story', 'Work'], operator: 'is'
+            }
+          ],
+          property: propDef5.name,
+          colors: ["#3D8F84", "#19A657", "#55EB7D"]
+        };
+        this.container.empty();
+        this.callBacks.onDelete = sandbox.spy();
+        this.series = new MingleUI.EasyCharts.Series(data, this.callBacks, true);
+        this.seriesParameterContainer = this.series.htmlContainer.find('div.series-params-container');
+        this.container.append(this.series.htmlContainer);
+      },
+      afterEach: function () {
+
+      }
+    },function(){
+
+      QUnit.test('testShouldHaveRemoveButton', function (assert) {
+        assert.ok(this.container.find('#series_1 .series-title-container .delete-series').is(':visible'));
+      });
+
+      QUnit.test('testAddDeleteButtonShouldNotAddDeleteButtonIfItAllReadyExist', function (assert) {
+        assert.equal(this.container.find('#series_1 .series-title-container .delete-series').length, 1);
+
+        this.series.addDeleteButton();
+
+        assert.equal(this.container.find('#series_1 .series-title-container .delete-series').length, 1);
+      });
+
+      QUnit.test('testRemoveDeleteSeriesButtonShouldRemoveDeleteButton', function (assert) {
+        assert.ok(this.container.find('#series_1 .series-title-container .delete-series').is(':visible'));
+
+        this.series.removeDeleteButton();
+        assert.equal(this.container.find('#series_1 .series-title-container .delete-series').length, 0);
+      });
+
+      QUnit.test('testShouldRemoveSeriesWhenDeleteSeriesButtonIsClicked', function (assert) {
+        assert.equal(this.container.find('.series').length, 1);
+
+        this.container.find('#series_1 .series-title-container .delete-series-icon').click();
+
+        assert.equal(this.container.find('.series').length, 0);
+      });
+
+      QUnit.test('testShouldInvokeRemoveSeriesCallBackWhenDeleteSeriesButtonIsClicked', function (assert) {
+        assert.equal(this.callBacks.onDelete.callCount, 0);
+
+        this.container.find('#series_1 .series-title-container .delete-series-icon').click();
+
+        assert.equal(this.callBacks.onDelete.callCount, 1);
+        assert.equal(this.callBacks.onDelete.args[0][0], this.series);
+      });
+    });
+
+    QUnit.module('Series with series type customization', {
+      beforeEach: function () {
+        var data = {
+          config:{'trend-line':{isRequired:false},enableSeriesTypeCustomization:true},
+          number: 1,
+          currentProject: 'sample_project',
+          projectDataStore: projectDataStore,
+          cardFilters: [
+            {
+              property: 'Type', values: ['Story', 'Work'], operator: 'is'
+            }
+          ],
+          property: propDef5.name,
+          colors: ["#3D8F84", "#19A657", "#55EB7D"]
+        };
+        this.container.empty();
+        this.callBacks.onDelete = sandbox.spy();
+        this.series = new MingleUI.EasyCharts.Series(data, this.callBacks, true);
+        this.seriesParameterContainer = this.series.htmlContainer.find('div.series-params-container');
+        this.container.append(this.series.htmlContainer);
+      },
+      afterEach: function () {
+
+      }
+    }, function () {
+
+      QUnit.test('testShouldHaveSeriesTypeCustomizationParametersWhenSeriesTypeIsLine', function (assert) {
+        var typeParameterContainer = this.container.find('div#group1_series_type_parameter');
+
+        assert.equal(typeParameterContainer.find('.selected-value').text(), 'Bar');
+        assert.notOk(this.container.find('.series-type-customization-params-container').length);
+
+        typeParameterContainer.find('.drop-down .drop-down-toggle').click();
+        typeParameterContainer.find('.drop-down .options-container li span[title="Line"]').click();
+
+        assert.equal(this.container.find('.series-type-customization-params-container').length, 1);
+
+        var seriesTypeCustomizationParameter = this.container.find('.series-type-customization-params-container');
+        assert.equal(seriesTypeCustomizationParameter.find('#series_1_line_style_parameter .selected-value').text(), 'Solid');
+        assert.equal(seriesTypeCustomizationParameter.find('#series_1_data_point_symbol_parameter .selected-value').text(), 'None');
+        assert.notOk(seriesTypeCustomizationParameter.find('#series_1_data_labels_parameter input').is(':checked'));
+
+        typeParameterContainer.find('.drop-down .options-container li span[title="Bar"]').click();
+
+        assert.notOk(this.container.find('.series-type-customization-params-container').length);
+      });
+
+      QUnit.test('testShouldHaveSeriesTypeCustomizationParametersWhenSeriesTypeIsArea', function (assert) {
+        var typeParameterContainer = this.container.find('div#group1_series_type_parameter');
+
+        assert.equal(typeParameterContainer.find('.selected-value').text(), 'Bar');
+        assert.notOk(this.container.find('.series-type-customization-params-container').length);
+
+        typeParameterContainer.find('.drop-down .drop-down-toggle').click();
+        typeParameterContainer.find('.drop-down .options-container li span[title="Area"]').click();
+
+        assert.equal(this.container.find('.series-type-customization-params-container').length, 1);
+
+        var seriesTypeCustomizationParameter = this.container.find('.series-type-customization-params-container');
+        assert.equal(seriesTypeCustomizationParameter.find('#series_1_data_point_symbol_parameter .selected-value').text(), 'None');
+        assert.notOk(seriesTypeCustomizationParameter.find('#series_1_data_labels_parameter input').is(':checked'));
+
+        typeParameterContainer.find('.drop-down .options-container li span[title="Bar"]').click();
+
+        assert.notOk(this.container.find('.series-type-customization-params-container').length);
+      });
+
+
+      QUnit.test('testShouldNotHaveSeriesTypeCustomizationLineStyleParameterWhenSeriesTypeIsChangedFromLineToArea', function (assert) {
+        var typeParameterContainer = this.container.find('div#group1_series_type_parameter');
+        typeParameterContainer.find('.drop-down .drop-down-toggle').click();
+        typeParameterContainer.find('.drop-down .options-container li span[title="Line"]').click();
+
+        var seriesTypeCustomizationParameter = this.container.find('.series-type-customization-params-container');
+
+        assert.equal(typeParameterContainer.find('.selected-value').text(), 'Line');
+        assert.equal(seriesTypeCustomizationParameter.find('#series_1_line_style_parameter').length, 1);
+        assert.equal(seriesTypeCustomizationParameter.find('#series_1_line_style_parameter .selected-value').text(), 'Solid');
+
+        typeParameterContainer.find('.drop-down .drop-down-toggle').click();
+        typeParameterContainer.find('.drop-down .options-container li span[title="Area"]').click();
+
+        seriesTypeCustomizationParameter = this.container.find('.series-type-customization-params-container');
+        assert.notOk(seriesTypeCustomizationParameter.find('#series_1_line_style_parameter').length);
+
+      });
+
+      QUnit.test('testSeriesValuesShouldHaveSeriesTypeCustomizationValues', function (assert) {
+        var propertyParameterContainer = this.container.find('div#series_1_property_parameter');
+
+        propertyParameterContainer.find('.drop-down .drop-down-toggle').click();
+        propertyParameterContainer.find('.drop-down .options-container li span[title="Sprint"]').click();
+
+        var typeParameterContainer = this.container.find('div#group1_series_type_parameter');
+
+        typeParameterContainer.find('.drop-down .drop-down-toggle').click();
+        typeParameterContainer.find('.drop-down .options-container li span[title="Line"]').click();
+        var seriesTypeCustomizationParameter = this.container.find('.series-type-customization-params-container');
+
+        var values = this.series.value();
+
+        assert.equal(values.lineStyle, 'solid');
+        assert.equal(values.dataPointSymbol, 'None');
+        assert.equal(values.dataLabels, false);
+
+        seriesTypeCustomizationParameter.find('#series_1_line_style_parameter .drop-down .drop-down-toggle').click();
+        seriesTypeCustomizationParameter.find('#series_1_line_style_parameter .drop-down .options-container li span[title="dash"]').click();
+
+        assert.equal(values.lineStyle, 'dash');
+
+        seriesTypeCustomizationParameter.find('#series_1_data_point_symbol_parameter .drop-down .drop-down-toggle').click();
+        seriesTypeCustomizationParameter.find('#series_1_data_point_symbol_parameter .drop-down .options-container li span[title="Circle"]').click();
+
+        assert.equal(values.dataPointSymbol, 'Circle');
+
+        seriesTypeCustomizationParameter.find('#series_1_data_labels_parameter input').click();
+
+        assert.equal(values.dataLabels, true);
+      });
+
+      QUnit.test('testSeriesValuesShouldNotHaveSeriesTypeCustomizationLineStyleParameterWhenSeriesTypeIsChangedFromLineToArea', function (assert) {
+        var typeParameterContainer = this.container.find('div#group1_series_type_parameter');
+        typeParameterContainer.find('.drop-down .drop-down-toggle').click();
+        typeParameterContainer.find('.drop-down .options-container li span[title="Line"]').click();
+
+        var seriesTypeCustomizationParameter = this.container.find('.series-type-customization-params-container');
+
+        assert.equal(typeParameterContainer.find('.selected-value').text(), 'Line');
+        assert.equal(seriesTypeCustomizationParameter.find('#series_1_line_style_parameter').length, 1);
+
+        assert.equal(this.series.value().lineStyle, 'solid');
+
+        typeParameterContainer.find('.drop-down .drop-down-toggle').click();
+        typeParameterContainer.find('.drop-down .options-container li span[title="Area"]').click();
+
+        assert.equal(this.series.value().lineStyle, null);
+
+      });
+
+      QUnit.test('testSeriesTypeCustomizationDropDownOptionDiamondShouldHavePrependDiamondClass', function (assert) {
+        var typeParameterContainer = this.container.find('div#group1_series_type_parameter');
+        typeParameterContainer.find('.drop-down .drop-down-toggle').click();
+        typeParameterContainer.find('.drop-down .options-container li span[title="Line"]').click();
+        var seriesTypeCustomizationParameter = this.container.find('.series-type-customization-params-container');
+
+        assert.equal(seriesTypeCustomizationParameter.find('.options-container .prepend-diamond').text(), 'Diamond');
+      });
+
+      QUnit.test('testSeriesTypeCustomizationDropDownOptionCircleShouldHaveFaCircleClass', function (assert) {
+        var typeParameterContainer = this.container.find('div#group1_series_type_parameter');
+        typeParameterContainer.find('.drop-down .drop-down-toggle').click();
+        typeParameterContainer.find('.drop-down .options-container li span[title="Line"]').click();
+        var seriesTypeCustomizationParameter = this.container.find('.series-type-customization-params-container');
+
+        assert.equal(seriesTypeCustomizationParameter.find('.options-container .fa.fa-circle').text(), 'Circle');
+      });
+
+      QUnit.test('testSeriesTypeCustomizationDropDownOptionSquareShouldHaveFaSquareClass', function (assert) {
+        var typeParameterContainer = this.container.find('div#group1_series_type_parameter');
+        typeParameterContainer.find('.drop-down .drop-down-toggle').click();
+        typeParameterContainer.find('.drop-down .options-container li span[title="Line"]').click();
+        var seriesTypeCustomizationParameter = this.container.find('.series-type-customization-params-container');
+
+        assert.equal(seriesTypeCustomizationParameter.find('.options-container .fa.fa-square').text(), 'Square');
+      });
+    });
+
+    QUnit.module('Series with trend line', {
+      beforeEach: function () {
+        var data = {
+          number: 1,
+          currentProject: 'sample_project',
+          projectDataStore: projectDataStore,
+          cardFilters: [
+            {
+              property: 'Type', values: ['Story', 'Work'], operator: 'is'
+            }
+          ],
+          property: propDef5.name,
+          colors: ["#3D8F84", "#19A657", "#55EB7D"]
+        };
+        this.container.empty();
+        this.callBacks.onDelete = sandbox.spy();
+        this.trendLineParameterSpy = sandbox.spy(MingleUI.EasyCharts, 'TrendLineParameter');
+        this.series = new MingleUI.EasyCharts.Series(data, this.callBacks, true);
+        this.seriesParameterContainer = this.series.htmlContainer.find('div.series-params-container');
+        this.container.append(this.series.htmlContainer);
+      },
+      afterEach: function () {
+
+      }
+    }, function () {
+
+      QUnit.test('testShouldHaveAddTrendLineParameters', function (assert) {
+        var seriesTrendLineParameter = this.container.find('#trend_line_add_trend_line_parameter');
+
+        assert.equal(seriesTrendLineParameter.length, 1);
+        assert.equal(seriesTrendLineParameter.find('.parameter-label').text(), 'Add a trend line');
+        assert.equal(seriesTrendLineParameter.find('input').is(':checked'), false);
+
+      });
+
+      QUnit.test('testShouldInvokeTrendLIneParameterWithCorrectParamDefinitions', function (assert) {
+
+        assert.equal(this.trendLineParameterSpy.callCount, 1);
+        assert.deepEqual(this.trendLineParameterSpy.args[0][1], expectedParamDefs.trendLine);
+      });
+
+      QUnit.test('testTrendLineStyleCustomizationDropDownOptionSolidShouldHavePrependSolidClass', function (assert) {
+        this.container.find('input[name="add-trend-line"]').click();
+        var trendLineCustomizationParameter = this.container.find('.trend-line-customization-params-container');
+        
+        assert.equal(trendLineCustomizationParameter.find('.options-container .prepend-dashed').text(), 'Dashed');
+      });
+
+      QUnit.test('testTrendLineStyleCustomizationDropDownOptionDashedShouldHavePrependDashedClass', function (assert) {
+        this.container.find('input[name="add-trend-line"]').click();
+        var trendLineCustomizationParameter = this.container.find('.trend-line-customization-params-container');
+
+        assert.equal(trendLineCustomizationParameter.find('.options-container .prepend-solid').text(), 'Solid');
+      });
+    });
+
+    QUnit.module('Series With Different Config', {
+      beforeEach: function () {
+        var data = {
+          config: {
+            'aggregate-pair':{isRequired:true,label:'What determines the Y-axis values?'},
+            group: {
+              isRequired: true,
+              values: {
+                combine: {
+                  isRequired: false
+                },
+                'series-type':{
+                  isRequired: true,
+                  initialValue:'Line'
+                }
+              }
+            },
+            filters: {
+              isRequired: true,
+              disableProjectVariables: true,
+              propertyDefinitionFilters: ['aggregate']
+            }
+          },
+          number: 1,
+          currentProject: 'sample_project',
+          projectDataStore: projectDataStore,
+          cardFilters: [
+            {
+              property: 'Type', values: ['Story', 'Work'], operator: 'is'
+            }
+          ],
+          property: propDef5.name,
+          colors: ["#3D8F84", "#19A657", "#55EB7D"]
+        };
+        this.container.empty();
+        this.callBacks.onDelete = sandbox.spy();
+        this.trendLineParameterSpy = sandbox.spy(MingleUI.EasyCharts, 'TrendLineParameter');
+        this.cardFiltersSpy = sandbox.spy(MingleUI.EasyCharts, 'CardFilters');
+        this.series = new MingleUI.EasyCharts.Series(data, this.callBacks, true);
+        this.seriesParameterContainer = this.series.htmlContainer.find('div.series-params-container');
+        this.container.append(this.series.htmlContainer);
+      },
+      afterEach: function () {
+
+      }
+    }, function () {
+
+      QUnit.test('testShouldNotAddCombineParameter', function (assert) {
+        var seriesGroupParamContainer = this.seriesParameterContainer.find('div#series_1_group_1_parameter');
+        assert.notOk(seriesGroupParamContainer.find('div#group1_combine_parameter').length);
+      });
+
+      QUnit.test('testShouldAddAdditionalConfigToCardFilters', function (assert) {
+        assert.equal(this.cardFiltersSpy.callCount, 1);
+        assert.equal(this.cardFiltersSpy.args[0].length, 3);
+        assert.equal(this.cardFiltersSpy.args[0][2].disableProjectVariables, true);
+        assert.deepEqual(this.cardFiltersSpy.args[0][2].propertyDefinitionFilters, ['aggregate']);
+      });
+
+
+      QUnit.test('testAggregatePairShouldHaveLabelAsDefinedInSeriesConfig', function (assert) {
+        var seriesTypeParameterContainer = this.container.find('div#series_1_aggregate_pair_parameter');
+        assert.equal(seriesTypeParameterContainer.find('.parameter-label').text(), 'What determines the Y-axis values?');
+      });
+
+      QUnit.test('testShouldHaveDefaultSeriesTypeAsLine', function (assert) {
+        var seriesTypeParameterContainer = this.container.find('div#group1_series_type_parameter');
+        assert.equal(seriesTypeParameterContainer.find('.drop-down .selected-value').text(), 'Line');
+      });
+    });
+
+    QUnit.module('Series with burn down', {
+      beforeEach: function () {
+        var data = {
+          number: 1,
+          currentProject: 'sample_project',
+          projectDataStore: projectDataStore,
+          cardFilters: [
+            {
+              property: 'Type', values: ['Story', 'Work'], operator: 'is'
+            }
+          ],
+          property: propDef5.name,
+          colors: ["#3D8F84", "#19A657", "#55EB7D"]
+        };
+        this.container.empty();
+        this.callBacks.onDelete = sandbox.spy();
+        this.series = new MingleUI.EasyCharts.Series(data, this.callBacks, true);
+        this.container.append(this.series.htmlContainer);
+      },
+      afterEach: function () {
+
+      }
+    }, function () {
+
+      QUnit.test('testShouldAddBurnDownCheckbox', function (assert) {
+        var seriesBurnDownParameter = this.container.find('#series_1_burn_down_parameter');
+        assert.equal(seriesBurnDownParameter.length, 1);
+        assert.equal(seriesBurnDownParameter.find('.parameter-label').text(), 'Make this a burn-down series');
+        assert.equal(seriesBurnDownParameter.find('input').is(':checked'), false);
+
+      });
+
+    });
+
+    QUnit.module('Series without property and aggregate', {
+      beforeEach: function () {
+        var data = {
+          config: {
+            'aggregate-pair': {isRequired: false},
+            'property'      : {isRequired: false},
+
+            group: {
+              isRequired: true,
+              values: {
+                combine: {
+                  isRequired: false
+                },
+                'series-type':{
+                  isRequired: false,
+                }
+              }
+            }
+          },
+          number: 1,
+          currentProject: 'sample_project',
+          projectDataStore: projectDataStore,
+          cardFilters: [
+            {
+              property: 'Type', values: ['Story', 'Work'], operator: 'is'
+            }
+          ],
+          property: propDef5.name,
+          colors: ["#3D8F84", "#19A657", "#55EB7D"]
+        };
+        this.container.empty();
+        this.callBacks.onDelete = sandbox.spy();
+        this.trendLineParameterSpy = sandbox.spy(MingleUI.EasyCharts, 'TrendLineParameter');
+        this.series = new MingleUI.EasyCharts.Series(data, this.callBacks, true);
+        this.seriesParameterContainer = this.series.htmlContainer.find('div.series-params-container');
+        this.container.append(this.series.htmlContainer);
+      }
+    }, function () {
+
+      QUnit.test('testShouldBeValidIfPropertyDoesAndAggregateDoesNotExist', function (assert) {
+        assert.ok(this.series.isValid());
+      });
+
+    });
+
+    });
+</script>
+</body>
+</html>

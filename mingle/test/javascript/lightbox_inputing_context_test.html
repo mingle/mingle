@@ -1,0 +1,276 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>JavaScript unit test file</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+
+  <script src="test_assets/unittest.js" type="text/javascript"></script>
+  <script src="test_assets/unittest_ext.js" type="text/javascript"></script>
+
+
+  <script src="../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/controls.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/builder.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+
+  <script src="../../public/javascripts/module.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/application.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/lightbox.js" type="text/javascript"></script>
+
+
+  <link rel="stylesheet" href="test_assets/unittest.css" type="text/css" />
+
+  <style type="text/css">
+
+    .lightbox {
+        display: none;
+        position: absolute;
+        top: 180px;
+        left: 50%;
+        width: 660px;
+        height: 22em;
+        margin: -120px 0 0 -330px;
+        padding: 0;
+        background: #fff;
+        text-align: left;
+        position: fixed;
+    }
+
+  </style>
+
+</head>
+<body>
+
+<div id="content" >
+  <div id="header">
+    <h1>JavaScript unit test file</h1>
+    <p>
+      This file tests <strong>NewLightbox</strong> class in <strong>new_lightbox.js</strong>.
+    </p>
+  </div>
+
+  <div style ='width:600px; height:200px; border:solid 1px' id='sandbox'>
+    <h3> sandbox: </h3>
+  </div>
+
+
+  <!-- Log output -->
+  <div id="testlog"> </div>
+</div>
+
+
+<script type="text/javascript">
+// <![CDATA[
+  NewLightbox.SHIFTING_DURATION = 0;
+
+  new Test.Unit.Runner({
+
+    setup: function() {
+    },
+
+    teardown: function() {
+      InputingContexts.clear();
+      NewLightbox.last.clearAllUnder();
+    },
+
+    testShouldLightboxCreatedShouldLinkedTogether: function() {with(this){
+        var lb1 = NewLightbox.create();
+        var lb2 = NewLightbox.create();
+        assertEqual(lb1, lb2.lightboxUnder);
+    }},
+
+    testShouldShowAndDestroyOverlayAndContent: function() {with(this) {
+      assertEqual(0, $$('.lightbox').size());
+      var lb1 = NewLightbox.create();
+      assertEqual(1, $$('.lightbox').size());
+      var lb2 = NewLightbox.create();
+      assertEqual(2, $$('.lightbox').size());
+
+      lb2.destroy();
+      lb1.destroy();
+
+      assertEqual(0, $$('.lightbox').size());
+    }},
+
+    testCreateOnTopShouldCreateNewLightboxAboveTheOldOne: function() {with(this){
+      var lb1 = NewLightbox.create();
+      var lb2 = lb1.createOnTop();
+      assert(lb2.isAbove(lb1));
+      lb2.destroy();
+      lb1.destroy();
+    }},
+
+    testPopupDoingNothingWhenThereIsNoLightBox: function() { with(this) {
+      assertEqual(null, InputingContexts.pop());
+    }},
+
+    testPushAndFeedContinuation: function() { with(this) {
+      var waiter1 = function(value){this.waiter1Value = value}.bind(this);
+      var waiter2 = function(value){this.waiter2Value = value}.bind(this);
+      InputingContexts.push(new LightboxInputingContext(waiter1));
+      InputingContexts.push(new LightboxInputingContext(waiter2));
+
+      assert(!this.waiter1Value);
+      assert(!this.waiter2Value);
+
+      InputingContexts.feed(2);
+
+      assertEqual(2, this.waiter2Value);
+      assert(!this.waiter1Value);
+
+      InputingContexts.feed(1);
+      assertEqual(1, this.waiter1Value);
+      assertEqual(2, this.waiter2Value);
+    }},
+
+    testPopShouldSkipCallingWaiter: function() { with(this) {
+      var waiter = function(value){this.waiterValue = value}.bind(this)
+      InputingContexts.push(new LightboxInputingContext(waiter));
+      InputingContexts.pop();
+      assert(!this.waiterValue);
+    }},
+
+    testShouldOpenLightboxWhenPushingAWaiter: function() { with(this) {
+      assertEqual(0, $$('.lightbox').size());
+      InputingContexts.push(new LightboxInputingContext(Prototype.emptyFunction));
+      assertEqual(1, $$('.lightbox').size());
+    }},
+
+    testShouldDestroyLightboxWhenPopAWaiter: function() { with(this) {
+      InputingContexts.push(new LightboxInputingContext(Prototype.emptyFunction));
+      InputingContexts.pop();
+      assertEqual(0, $$('.lightbox').size());
+    }},
+
+    testShouldCreateNewLightboxOnTopWhenPushedMultiContexts: function() { with(this) {
+      var context1 = new LightboxInputingContext(Prototype.emptyFunction)
+      var context2 = new LightboxInputingContext(Prototype.emptyFunction)
+      InputingContexts.push(context1);
+      InputingContexts.push(context2);
+      assert(context2.lightbox.isAbove(context1.lightbox));
+    }},
+
+    testShouldUpdateLightboxContentWhenUpdateContext: function() {with(this){
+      InputingContexts.push(new LightboxInputingContext(Prototype.emptyFunction));
+      InputingContexts.top().update('<div id="insideTheContent"></div>')
+      assertEqual(InputingContexts.top().lightbox.content, $('insideTheContent').parentNode)
+    }},
+
+    testShouldBeAbleToUpdateElementInsideLightboxByElementId: function() {with(this){
+      InputingContexts.push(new LightboxInputingContext(Prototype.emptyFunction));
+      InputingContexts.top().update('<div id="insideTheContent"></div>')
+      InputingContexts.top().update('insideTheContent', '<div id="insideTheInsideTheContent"></div>')
+
+      assertEqual($('insideTheContent'), $('insideTheInsideTheContent').parentNode)
+    }},
+
+    testShouldOnlyUpdateElementInTopContextWhenThereAreMultipuleContext: function() { with(this) {
+      var context1 = new LightboxInputingContext(Prototype.emptyFunction);
+      var context2 = new LightboxInputingContext(Prototype.emptyFunction);
+      InputingContexts.push(context1);
+      InputingContexts.top().update('<div id="insideTheContent" class="context1"></div>');
+      InputingContexts.push(context2);
+      InputingContexts.top().update('<div id="insideTheContent" class="context2"></div>');
+      InputingContexts.top().update('insideTheContent', '<div id="insideTheInsideTheContent"></div>');
+
+      assertEqual(0, $$('.context1 #insideTheInsideTheContent').size());
+      assertEqual(1, $$('.context2 #insideTheInsideTheContent').size());
+    }},
+
+    testShouldFindElementByIdWithinTopContextIfExists: function() {with(this) {
+      var context1 = new LightboxInputingContext(Prototype.emptyFunction);
+      var context2 = new LightboxInputingContext(Prototype.emptyFunction);
+      InputingContexts.push(context1);
+      InputingContexts.top().update('<div id="insideTheContent" class="context1"></div>');
+      InputingContexts.push(context2);
+      InputingContexts.top().update('<div id="insideTheContent" class="context2"></div>');
+
+      assertEqual('context2', $('insideTheContent').className);
+      InputingContexts.pop();
+      assertEqual('context1', $('insideTheContent').className);
+    }},
+
+    testShouldFindElementByIdOutsideOfTopContextIfCouldntFindInsideContext: function() {with(this) {
+      var context1 = new LightboxInputingContext(Prototype.emptyFunction);
+      var context2 = new LightboxInputingContext(Prototype.emptyFunction);
+      InputingContexts.push(context1);
+      InputingContexts.top().update('<div id="insideTheContent" class="context1"></div>');
+      InputingContexts.push(context2);
+
+      assert($('insideTheContent'))
+    }},
+
+    testShouldShiftOldLightBoxWhenPushNewContext: function() {with(this) {
+      var context1 = new LightboxInputingContext(Prototype.emptyFunction);
+      var context2 = new LightboxInputingContext(Prototype.emptyFunction);
+      InputingContexts.push(context1);
+      InputingContexts.push(context2);
+      wait(100, function() {
+        assert(Math.abs(context2.lightbox.content.offsetTop - context1.lightbox.content.offsetTop) > 100);
+      }.bind(this))
+    }},
+
+    testShouldSUnshiftLightBoxShiftedWhenAboveContextPop: function() {with(this) {
+      var context1 = new LightboxInputingContext(Prototype.emptyFunction);
+      var context2 = new LightboxInputingContext(Prototype.emptyFunction);
+      InputingContexts.push(context1);
+      var orignOffsetLeft = context1.lightbox.content.offsetLeft;
+      var orignOffsetTop = context1.lightbox.content.offsetTop;
+      InputingContexts.push(context2);
+      InputingContexts.pop();
+      wait(100, function() {
+        assertEqual(orignOffsetLeft, context1.lightbox.content.offsetLeft);
+        assertEqual(orignOffsetTop, context1.lightbox.content.offsetTop);
+      }.bind(this))
+    }},
+
+    testShouldPopupTheCurrentContextWhenClickOnOverlay: function() {with(this) {
+      var context1 = new LightboxInputingContext(null, {closeOnBlur: true});
+      var context2 = new LightboxInputingContext(null, {closeOnBlur: true});
+      InputingContexts.push(context1);
+      InputingContexts.push(context2);
+
+      Event.trigger(context2.lightbox.overlay, 'click');
+      assertEqual(context1, InputingContexts.top())
+      Event.trigger(context1.lightbox.overlay, 'click');
+      assertEqual(null, InputingContexts.top())
+    }},
+
+    testCanTurnOffAndOnBlurClick: function() {with(this) {
+      var context1 = new LightboxInputingContext(null, {closeOnBlur: true});
+      InputingContexts.push(context1);
+      context1.lightbox.disableBlurClick();
+      Event.trigger(context1.lightbox.overlay, 'click');
+      assertEqual(context1, InputingContexts.top())
+      context1.lightbox.enableBlurClick();
+      Event.trigger(context1.lightbox.overlay, 'click');
+      assertEqual(null, InputingContexts.top())
+    }}
+
+
+  }, { testLog: "testlog", test: "" }).run;
+// ]]>
+</script>
+</body>
+</html>

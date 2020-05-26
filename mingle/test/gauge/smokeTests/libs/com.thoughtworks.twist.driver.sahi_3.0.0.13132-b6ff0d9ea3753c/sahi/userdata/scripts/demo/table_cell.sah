@@ -1,0 +1,9 @@
+_click(_link("Table Test"));
+_assertEqual("Rs. 20", _getText(_cell(_table("t2"), "Tooth brush", "Price")));
+_assertEqual("Rs. 20", _getText(_cell(_table("t2"), /Tooth/, "Price")));
+_assertEqual("Rs. 20", _getText(_cell(_table("t2"), /Tooth/, /Pri/)));
+_assertEqual("Rs. 20", _getText(_cell("Rs. 20")));
+_assertEqual("Rs. 20", _getText(_cell(/Rs. 20/)));
+_assertEqual("tableWithId", _parentTable(_cell("0-0[1]")).id);
+_assertEqual("tableWithId", _parentTable(_cell("/0-0/[1]")).id);
+

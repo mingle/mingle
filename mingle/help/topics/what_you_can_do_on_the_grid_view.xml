@@ -1,0 +1,200 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+	<section title="What can you do on the Grid view?" collapsed="false">
+		<subsection title="Filter cards" id="filter" collapsed="true">
+		<cref topic="filter_list_by_component">Filter the card grid</cref> to isolate the cards you want to work with.
+		</subsection>
+		<subsection title="View and edit cards" collapsed="true" id ="view_cards">
+			<p>You can see a full preview of any card, including properties, directly on your card wall. And, even better, you can double click anywhere in the card title or body to start editing. (For Mingle onsite customers, full card preview and edit is available starting with <cref topic="whats_new_in_release_14_1">Mingle 14.1</cref>.)</p>
+			<screenshot src="resources/images/live_board_edit.png" />
+			<p>You can also see all card properties on the card preview. Just expand the property drop-down arrow to see all of your card’s property values. And collapse it to return to the single line of properties so you can refocus on your discussion on your card’s content. You can edit properties inline from the card preview as well.</p>
+			<screenshot src="resources/images/expand_properties_preview.gif" />
+		</subsection>
+		<subsection file="creating_cards_with_quick_add" id="create_cards_using_quick_add" collapsed="true"/>
+		<subsection file="creating_cards_with_quick_add_card" collapsed="true" />
+		<subsection title="Update cards" collapsed="true" id="update_cards">
+			<bullets title="There are a number of ways you can update cards within the Grid view">
+				<item>by clicking on a card and quick edit card descriptions without leaving your grid view.</item>
+				<item>by clicking the card number to dive into full view to edit all details for a card including <cref topic="card_properties">properties</cref>, description and <cref topic="working_with_tags">tags</cref>.</item>
+				<item>by dragging cards to other lanes. This lets you update the card property that is represented within the grouped lanes.</item>
+			</bullets>
+			<hint> If the cards are grouped by a <cref topic="transition_only_properties">transition only property</cref> and <cref topic="card_transitions">transitions</cref> have been created for that property, dragging and dropping cards in the grid view will trigger <cref topic="automated_transitions">automated transitions</cref>.</hint>
+		</subsection>
+		<subsection title="Rank cards" collapsed="true" id="card_ranking">
+			<p><cref topic="card_rankings">Card ranking</cref> on the grid view allows users to move individual cards and use card position as a way of ranking cards.</p>
+		</subsection>
+
+		<subsection title="Group cards" collapsed="true" id="group_cards">
+			<p>When you first open a card grid view, Mingle displays all cards on the page without any grouping. To change the card layout, you can group cards by rows and columns according to a selected card property. You can group rows and columns by the following property types: <cref topic="card_types">card type</cref>, <cref topic="card_properties#managed_list_properties">managed text</cref>, <cref topic="card_properties#managed_list_properties">managed numeric</cref>, <cref topic="card_properties#team_member_properties">user</cref> and <cref topic="relationship_properties">tree relationship</cref> properties.</p>
+		  <p>Grouping by column only will produce a view where cards are displayed vertically by the selected property.</p>
+		  <screenshot alttext="Column layout" src="resources/images/group_by_column.png" />
+		  <p>Grouping by row only will produce a view where cards are displayed horizontally by the selected property.</p>
+		  <hint>What's the difference between grouping by column only and grouping by row only? Other than the difference in layout, cards cannot be dragged between rows but they can be dragged between columns. Also aggregate headers and the ability to add or remove a group only apply to columns.</hint>
+		  <screenshot alttext="Row layout" src="resources/images/group_by_row.png" />
+		  <p>Grouping by column and row will produce a grid view with cards showing at the intersection of rows and columns.</p>
+		  <screenshot alttext="Grid layout" src="resources/images/group_by_row_and_column.png" />
+		</subsection>
+
+		<subsection title="Sort cards" collapsed="true" id="sort_cards">
+			<p>By default cards will be sorted by rank (if you have not ranked any cards this rank will be the same as card number). Users can change the sort order and view the cards sorted by other properties.</p>
+
+		<p>You can <strong>Sort by</strong> the following property types: rank, card number, card type, managed text, managed numeric, user and tree relationship properties which are available for selected card type
+		</p>
+		</subsection>
+		<subsection title="Color cards" collapsed="true" id="color_cards">
+			<p>Mingle lets you further refine the Grid view by coloring cards according to a property value. If you have already assigned colors to card property values,
+			Mingle displays colors for cards immediately and shows a Color legend in the bottom-right of the page to explain the colors. You can update these colors directly by clicking on the square next to the property value.</p>
+
+					<screenshot alttext="Grid view - color legend" src="resources/images/grid_view_color_picker.png"></screenshot>
+			<p>Mingle displays the cards by color in the same order as in the Color legend. Setup the order from <tab>Project admin</tab> tab, <link>Card properties</link> link. </p>
+		<screenshot alttext="Grid view - color legend" src="resources/images/grid_view_color_sort_by.png"></screenshot>
+
+			<p>You can <strong>Color by</strong> the following property types: card type, managed text and managed numeric properties which are available for selected card type
+		</p>
+		</subsection>
+		<subsection title="Show column headings" collapsed="true" id="show_lane_headings">
+			<p>You can modify your row and column headings via two heading dropdowns; select an aggregation and then a numeric property you want to apply the aggregation to. </p>
+			<p>
+				<bullets title="Available aggregations">
+					<item><strong>SUM</strong> - add all cards' selected numeric property values in each lane. If that property has a value of (not set), then it's considered as 0.</item>
+					<item><strong>Average</strong> - divide the sum of all cards' selected numeric property by the number of cards in each lane. If that property has a value of (not set) then that card is not counted as total number of cards. For example, if 1 of 3 cards has (not set) value the sum will be divided by 2, not 3. </item>
+					<item><strong>Minimum</strong> - returns the minimum value of the selected property amongst all cards in each lane.</item>
+					<item><strong>Maximum</strong> - returns the maximum value of the selected property amongst all cards in each lane.</item>
+					<item><strong>Count</strong> - returns the number of cards in each lane. No property selection will be offered.</item>
+				</bullets>
+			</p>
+			<screenshot alttext="Grid view - choose column heading aggregation" src="resources/images/grid_view_select_aggregation.png"/>
+			<hint>This feature is useful for planning, as you can show the sum of the estimates in the <cref topic="tip_lane_headings">column headings</cref>.</hint>
+		</subsection>
+		<subsection title="Update columns and rows" collapsed="true" id="update_columns">
+			<p>On the grid view, you can redefine your workflow easily by adding, removing and reordering status.</p>
+		  <bullets>
+          <item><p>Add a new column</p>
+          <screenshot alttext="Grid view - redefine workflow" src="resources/images/redefine_workflow_add_a_new_column.png"></screenshot>
+    			</item>
+          <item><p>Show an existing column</p>
+          <screenshot alttext="Grid view - redefine workflow" src="resources/images/redefine_workflow_show_a_column.png"></screenshot>
+    			</item><item><p>Hide a column</p>
+          <screenshot alttext="Grid view - redefine workflow" src="resources/images/redefine_workflow_hide_a_column.png"></screenshot>
+    			</item>
+    			<item><p>Rename a column</p>
+          <screenshot alttext="Grid view - redefine workflow" src="resources/images/redefine_workflow_rename_a_column.png"></screenshot>
+          <hint>After you are done with editing, hit Enter to save your change. </hint>
+    			</item>
+    			<item><p>Reorder columns</p>
+          <screenshot alttext="Grid view - redefine workflow" src="resources/images/redefine_workflow_reorder_columns.gif"></screenshot>
+    			</item>
+    			<item><p>Show an existing row</p>
+          <screenshot alttext="Grid view - redefine workflow" src="resources/images/redefine_workflow_show_a_row.gif"></screenshot>
+          		</item>
+          		<item><p>Hide a row</p>
+          <screenshot alttext="Grid view - redefine workflow" src="resources/images/redefine_workflow_hide_a_row.gif"></screenshot>
+          		</item>
+      </bullets>
+			<p>If your grid view is grouped by other types of properties, there are some limitations:</p>
+			<table>
+        <header-row>
+          <col-header></col-header>
+          <col-header>Add a new column</col-header>
+          <col-header>Show an existing column</col-header>
+          <col-header>Hide a column</col-header>
+          <col-header>Rename a column</col-header>
+          <col-header>Reorder columns</col-header>
+          <col-header>Show an existing row</col-header>
+          <col-header>Hide a row</col-header>
+        </header-row>
+        <row>
+          <col>Manged text property (e.g. "Status")</col>
+          <col>Yes</col>
+          <col>Yes</col>
+          <col>Yes</col>
+          <col>Yes</col>
+          <col>Yes</col>
+          <col>Yes</col>
+          <col>Yes</col>
+        </row>
+        <row>
+          <col>Manged number property (e.g. "Estimate")</col>
+          <col>Yes</col>
+          <col>Yes</col>
+          <col>Yes</col>
+          <col>No</col>
+          <col>No</col>
+          <col>Yes</col>
+          <col>Yes</col>
+        </row>
+        <row>
+          <col>User property (e.g. "Owner")</col>
+          <col>No</col>
+          <col>Yes</col>
+          <col>Yes</col>
+          <col>No</col>
+          <col>No</col>
+          <col>Yes</col>
+          <col>Yes</col>
+        </row>
+        <row>
+          <col>Tree property (e.g. "Iteration")</col>
+          <col>No</col>
+          <col>Yes</col>
+          <col>Yes</col>
+          <col>No</col>
+          <col>No</col>
+          <col>Yes</col>
+          <col>Yes</col>
+        </row>
+		  </table>
+
+		  <hint>Both  <cref topic="user_roles#project_administrator">Admins</cref> and <cref topic="user_roles#project_member">project team members</cref> can add new columns. If you have concerns about your team members adding a new column by mistake, you can <cref topic="attributes_card_properties#lock">lock the property</cref>.</hint>
+			<hint> Only <cref topic="user_roles#project_administrator">project admins</cref> and <cref topic="user_roles#mingle_administrator">Mingle admins</cref> can edit column names and reorder them. Please note this action may impact your project reports. Make sure you update your MQL report with the right name after you redefine your workflow. </hint>
+
+		</subsection>
+		<subsection title="Update URL" collapsed="true" id="link_to_this_page">
+			<p>Each card view has a link called <link>Update URL</link>. This is identical to the browser address (URL), but gives you a quick way to create links to the current card view.
+				You can use these links to send to people via email or instant messaging (IM), or to place on a website, blog or Mingle wiki page. In Windows, right-click on this link to bring up options for copying or sending.</p>
+		</subsection>
+		<subsection title="Maximize the view" collapsed="true" id="maximizing_card_views">
+
+			<p>The card grid can be viewed in the <cref topic="maximizing_card_views">maximized mode</cref>. This will allow for cleaner, more useful views when working with your Mingle cards.
+		</p>
+					</subsection>
+		<subsection title="Create favorites and tabs" collapsed="true" id="create_favorites">
+				<p>If you've found a card Grid view that your team will use regularly, e.g. for allocating new user stories to an iteration,
+					you can <cref topic="creating_a_favorite_card_view">save this view</cref> by clicking the <link>Favorites</link> link on the right.
+					You can then <cref topic="creating_tabs_from_favorites">turn this into a tab</cref>.</p>
+		</subsection>
+
+		<subsection title="Show avatars on cards" collapsed="true" id="show_avatars_on_grid_view" file="show_avatars_on_grid_view">
+		</subsection>
+		<subsection title="Set WIP limits " collapsed="true" id="set_wip_limits">
+			<p>Project admins can set a limit on every column in a grid view. You could either set a cap on the number of cards allowed in a column, or a limit on the sum of a numeric property (like Estimate) on all cards in the column. </p>
+			<p>To do this:</p>
+			<bullets>
+				
+					<item>Project admins may hover over a column header to see the Edit icon next to the WIP limit. Click on the icon to bring up an overlay.</item>
+					<item>To set a limit on the maximum number of cards to allow in the column, select Count and set a number. </item>
+					<item>To set a limit on the maximum of a numeric value on the cards, select Sum, the name of the numeric property, and set a number. </item>
+					<item>Click on Set. </item>
+					<item>To save this setting to the grid view, click on Save to update the tab or team favourite, or save this view as a new tab or team favourite for easy recall.</item>
+
+			</bullets>
+			<p>When the WIP limit is exceeded by any member of the project, the column is highlighted and a warning is displayed. </p>
+			<p>You may choose to hide the WIP limits using the Hide WIP Limits checkbox. </p>
+		</subsection>
+	</section>

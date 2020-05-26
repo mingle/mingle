@@ -1,0 +1,66 @@
+A macro that aggregates property values across multiple projects. 
+
+Support for this macro begins with Mingle 3.0. 
+
+The cross-project-rollup macro will work using the following markup: 
+
+{{
+   cross-project-rollup
+   project-group:  < project >, < project >
+   rows: < property name >
+   columns:
+   -     label: < text for label >
+         aggregate: < aggregate >
+         conditions: < condition >
+   total: true
+   sub-totals:
+   -     label: < text for label >
+         conditions: < condition >
+}}
+
+The following is a list of parameters and how they should be used with this macro: 
+
+project-group - not required. List of project identifiers. Defaults to current project. 
+
+rows -	required. A property. Each row is a property value. The order of the rows property values is alphabetically by card name if a card or tree 
+relationship property, by number if they are numeric properties, by display name if they are team properties, by date if they are date properties, by the bespoke order of the first project if they are text properties.
+
+rows-conditions - not required. MQL where condition to restrict the rows shown in the table.
+
+zero-value-rows - not required. True or false. Determines whether rows with no value will be shown or not. Defaults to true. 
+
+column - at least one is required. Can have many columns. Shown in the order given in the macro markup.
+
+column level parameters
+
+label - not required. Label for the column. Label will default to the column aggregate if not specified.
+aggregate - required. Can be Count, Sum(property), Min, Max. Can not be average. Date properties can not to be aggregated. 
+conditions - not required. MQL where condition to restrict the column aggregation.
+
+total - not required. True or false. Sums the column and shown as row if true. True is the default. Always shown as the bottom row.
+
+sub-totals - not required. Only applicable when the column aggregation is count or sum. Calculates a sum of the rows in the column restricted by the subtotal condition. Can have many subtotals. Shown in order given in macro markup. 
+
+sub totals level parameters
+
+conditions - not required if sub- total is specified. MQL where clause. Defaults to sum total of the column.
+label - not required. Label for the sub-totals. Label will default to the condition of the subtotal if not specified and if no conditions, empty.
+
+Example use
+
+{{
+   cross-project-rollup
+   project-group:  mingle, cruise
+   rows: Feature
+   rows-conditions: Type = Feature
+   columns:
+   -     label: Story Planning Estimate
+         aggregate: sum('planning estimate')
+         conditions: Type = Story
+   -     label: Number of bugs
+         aggregate: count(*)
+         conditions: Type = Bug
+   sub-totals:
+   -     label: Total completed
+         conditions: Status > Closed
+}}

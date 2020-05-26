@@ -1,0 +1,181 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+
+  .wiki {
+    font-size: 14px;
+    font-family: "Helvetica Neue", Arial, Helvetica;
+    color: #000;
+    margin-bottom: 10px;
+    #tags-container {
+      margin-bottom: 10px;
+    }
+    h2, h3 {
+      font-weight: 700;
+    }
+    h2 em, h3 {
+      font-style: normal !important;
+    }
+    p, ul, ol {
+      line-height: 140%;
+    }
+    p {
+      margin-bottom: 10px;
+    }
+    ul, ol {
+      margin: 0 0 10px 10px;
+    }
+    a.error_link {
+      color: #CC2200;
+    }
+  }
+  
+  /* error classes */
+  
+  a.non-existent-wiki-page-link {
+    color: #CC2200;
+    &:link {
+      color: #CC2200;
+    }
+  }
+  
+  .wiki {
+    ul, ol {
+      padding-left: 20px;
+    }
+    ul {
+      list-style-type: disc;
+    }
+    ol {
+      list-style-type: decimal;
+    }
+    strong {
+      font-weight: bold;
+    }
+    em, cite {
+      font-style: italic;
+    }
+    table {
+      margin-bottom: 10px;
+      width: auto;
+      border: 1px solid #CCC;
+    }
+    tbody {
+      border: none !important;
+    }
+    td {
+      border: 1px solid #CCC;
+      background-color: #FFF;
+    }
+    th {
+      background: #EEE;
+      border: 1px solid #CCC;
+    }
+  }
+  
+  #main #content.wiki .to-be-scrolled {
+    overflow-x: auto;
+  }
+  
+  .first .dashboard-half-panel {
+    margin-left: 0;
+    margin-right: 5px;
+  }
+    
+  /* Page editing */
+  
+  #content-nav {
+    background-color: #F0F0EE;
+    li {
+      a {
+        display: block;
+        float: left;
+        padding: 0.3em 1em;
+      }
+      &.menu-item a.plain {
+        background: none;
+        margin-right: -1.25em;
+      }
+    }
+  }
+  
+  /* preview list in editor page */
+  
+  #content-panel-container {
+    margin-bottom: 10px;
+  }
+  
+  .preview-panel-container fieldset, #content-panel-container fieldset {
+    padding: 0;
+    clear: both;
+    margin-bottom: 0;
+  }
+  
+  #page_form textarea {
+    padding: 0 0 0 4px;
+    width: 100%;
+    font-family: monaco, "Consolas", "Courier New", courier, monospace;
+    font-size: 11px;
+  }
+  
+  #page_content {
+    border: 1px solid #ccc;
+    border-top: 0;
+  }
+  
+  .preview-panel-container {
+    overflow: auto;
+  }
+  
+  /* Attachments */
+  
+  #attachments {
+    margin: 10px 0;
+    ul {
+      margin: 5px 10px 10px 10px;
+    }
+  }
+  
+  .macro-placeholder {
+    border: solid 1px black;
+    width: 400px;
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+  }
+  
+  .editor {
+    margin: 0;
+    padding: 10px 8px;
+  }
+  
+  .cke_panel_listItem {
+     font-size: 14px;
+     list-style: none;
+     font-family: "Helvetica Neue", Arial, Helvetica;
+     color: #000;
+     h2, h3 {
+       font-weight: 700;
+     }
+     h3 {
+       font-style: normal !important;
+     }
+     h1 {
+       border-bottom: 0px;
+       padding-bottom: 0px;
+     }
+  }
+  

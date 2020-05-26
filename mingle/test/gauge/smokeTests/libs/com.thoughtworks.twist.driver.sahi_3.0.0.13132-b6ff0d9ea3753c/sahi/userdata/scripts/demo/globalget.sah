@@ -1,0 +1,1 @@
+_assertEqual("hahaha", _getGlobal("gl1"));

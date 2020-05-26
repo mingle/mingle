@@ -1,0 +1,35 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+
+<h1>Install template</h1>
+
+<% form_tag({:action => 'import'}, {:multipart => true, :id => 'install-form'}) do -%>
+  <p><label for="project_identifier">Template file:</label>
+  <%= file_field_tag 'import' %></p>
+  
+  <p><label for="project_name">Template Name:</label>
+  <%= text_field('project', 'name') %></p>
+
+  <p><label for="project_identifier">Template Identifier:</label>
+  <%= text_field 'project', 'identifier', :maxlength => Identifiable::IDENTIFIER_MAX_LEN %></p>
+<% end %>
+<% action_bar do %>
+	<%= link_to_function 'Install', "$('install-form').submit()", {:class => 'project-import'}%>
+	<%= link_to 'Cancel', {:action => 'list_templates'}, {:id => 'cancel', :class => 'cancel'}%>
+<% end %>
+
+<%= synchronized_inputs "#project_name", "#project_identifier" %>

@@ -1,0 +1,41 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% if authorized?(action: :create)%>
+  <% form_for :github, :url => {:action => :create} do |form| %>
+    <h1>GitHub</h1>
+    <p>Mingle allows you to connect GitHub repo(s) to your project. Once connected, activity from your repo(s) will be visible in project and card Murmurs. </p>
+    <h2>Connect a repo</h2>
+    <p>
+      <label for="github_username">GitHub username and repo name:</label>
+        <%= form.text_field :username, :size => '40', :placeholder => "github username" %> / <%= form.text_field :repository, :size => '40', :placeholder => "github repo name" %>
+    </p>
+    <p>
+      <label for="github_secret">GitHub repo owner's <%= link_to "personal API token", "https://github.com/blog/1509-personal-api-tokens", :class => 'text-link'  %>:</label>
+        <%= form.text_field :secret, {:type => 'password', :class => 'width-large'}%>
+    </p>
+      <div class="github button-prefix">
+        <%= submit_tag 'Create a Webhook', :tabindex => '4'%>
+      </div>
+      <% unless User.current.api_key? %>
+        We will automatically generate a <a href="http://www.thoughtworks.com/mingle/docs/mingle_api_features.html">HMAC auth key</a> to connect to GitHub.
+      <% end %>
+  <% end %>
+<% end %>
+
+<div class="github-integrations">
+  <%= render :partial => 'list' %>
+</div>

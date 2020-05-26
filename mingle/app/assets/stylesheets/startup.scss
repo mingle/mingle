@@ -1,0 +1,67 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+/* used by the startup message */
+
+.startup {
+
+    #starting-message {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
+    #graphic-dialog h2.login_header {
+        margin-bottom: 10px;
+    }
+
+    #graphic-dialog-input {
+
+        p {
+            width: auto;
+            margin-bottom: 10px;
+        }
+
+        label {
+            text-align: center;
+            text-transform: uppercase;
+            font-size: 11px;
+        }
+        label.for-checkbox {
+            text-transform: capitalize;
+            margin: 0 0 0 5px;
+            font-size: 12px;
+        }
+
+        #bootstrap_message {
+            width: auto;
+            font-size: 12px;
+            line-height: 130%;
+            margin-top: 10px;
+
+            p {
+                margin: 15px;
+                text-align: left;
+            }
+        }
+    }
+
+    #page-identifier-startup #graphic-dialog-input p
+    {
+        margin: 0.5em 1.5em 0.5em 1em;
+    }
+
+
+}

@@ -1,0 +1,59 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%
+  html_classes = []
+  html_classes << "paginated" if dependencies.size > 10
+-%>
+<% content_tag :table, :class => html_classes.join(" ") do -%>
+  <thead>
+    <tr>
+      <th>Original Dependency # <span class="cooltips-bottom" data-tooltip="Note that the dependency number may change when importing in order to avoid overwriting existing dependencies."><i class="fa fa-question-circle"></i></span></th>
+      <th>Name</th>
+      <th>Raising Project</th>
+      <th>Raising Card</th>
+      <th>Resolving Project</th>
+      <th>Resolving Cards</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% dependencies.each do |dependency_hash| -%>
+      <tr>
+        <td><%= dependency_prefixed_number(dependency_hash) -%></td>
+        <td><%= dependency_hash["name"] -%></td>
+        <td><%= dependency_raising_project(dependency_hash) -%></td>
+        <td><%= render :partial => 'dependencies_import_export/raising_card_selector', :locals => {:dependency_hash => dependency_hash, :allow_raising_card_edit => allow_raising_card_edit } -%></td>
+        <td><%= dependency_resolving_project(dependency_hash) -%></td>
+        <td>
+          <ul>
+            <% dependency_resolving_cards(dependency_hash) do |data, summary| -%>
+              <li><%= summary -%></li>
+            <% end -%>
+          </ul>
+        </td>
+      </tr>
+    <% end -%>
+  </tbody>
+  <% if dependencies.size > 10 -%>
+  <tfoot>
+    <tr>
+      <td colspan="6">
+        <a href="#">View All Dependencies (<%= dependencies.size %> total)</a>
+      </td>
+    </tr>
+  </tfoot>
+  <% end -%>
+<% end -%>

@@ -1,0 +1,38 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div class="aggregate-popup-outer">
+  <% lightbox = Lightbox.with_close_link(self, 'Close', "aggregatePopupHandler.removePopup()", :id => 'close-aggregate-popup-button', :class => 'remove-button popup-close')
+     lightbox.header 'Aggregate Properties' 
+     lightbox.body do %>
+      <div class="aggregate-popup-content">
+        <% form_remote_tag(:url => {:action => 'update_aggregate_property_definition', :id => @aggregate_property_definition.id},
+                           :before => show_spinner("update-aggregate-property"),
+                           :complete => "aggregatePopupHandler.popup($('node-#{@aggregate_property_definition.aggregate_card_type.id}'), $('edit-aggregate-popup'));
+                                        #{hide_spinner("update-aggregate-property")}",
+                           :html => {:id => 'update_aggregate_form'}) do %>
+          <%= render :partial => 'aggregate_form', :locals => {:child_type => child_type, :descendant_types => descendant_types, :fire_onchanges => true} %>
+          <%= submit_tag 'Update', :class => "submit primary" %>
+          <%= button_to_function 'Cancel', "$('edit-aggregates-link-#{@aggregate_property_definition.aggregate_card_type.id}').onclick();", :class => "cancel" %>
+          <%= spinner(:id => "update-aggregate-property") %>
+       <% end %>
+      <div id="aggregate_list">
+        <h3>Current aggregate properties</h3>
+        <%= render :partial => "aggregate_list", :locals => {:aggregates => aggregates} %>
+      </div>
+  <% end %> 
+  </div>
+</div>

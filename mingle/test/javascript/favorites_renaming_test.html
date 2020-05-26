@@ -1,0 +1,394 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>Favorites Renaming Test</title>
+    <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js"
+            type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/mingle_ui.js" type="text/javascript"></script>
+
+    <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+    <script src="test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+
+    <script src="../../public/javascripts/module.js" type="text/javascript"></script>
+    <script src="../../public/javascripts/card_list_view/params_change_listener.js" type="text/javascript"></script>
+    <script src="../../public/javascripts/card_list_view/params_controller.js" type="text/javascript"></script>
+    <script src="../../public/javascripts/card_list_view/card_list_view_link.js" type="text/javascript"></script>
+
+    <script src="../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/controls.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/builder.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/jquery/jquery.caret-1.5.2.js" type="text/javascript"></script>
+    <script src="../../public/javascripts/application.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/favorites.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/with_progress_bar.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/ajax_error_handler.js" type="text/javascript"></script>
+    <script src="test_assets/sinon-2.3.6.js" type="text/javascript"></script>
+    <script src="test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+    <script src="test_assets/qunit-phantom.js" type="text/javascript"></script>
+
+    <link rel="../../app/assets/style/sidebar.scss">
+    <link>
+</head>
+
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture"></div>
+<div id="favorites-container">
+    <div class="collapsible-section-default " id="favorites-container-team">
+        <div class="collapsible-header-default">
+            <h2>
+                <a href="#" id="collapsible-header-for-Team-favorites" class="section-collapse">Team favorites</a>
+            </h2>
+            <div class="clear-both">
+                <!-- Clear floats -->
+            </div>
+        </div>
+        <div class="collapsible_content_light" id="collapsible-content-for-Team-favorites" style="">
+            <div id="favorites-team" class="favorites">
+                <ul>
+                    <li id="favorite-152" class="list-favorite">
+                        <div class="favorite-item-container" data-rename-url="/projects/agile/favorites/rename"
+                             data-project-id="8" data-favorite-id="152">
+                    <span class="view-mode-only" style="float:right">
+                      <a href="/projects/agile/cards/create_view?style=list&amp;tab=All&amp;view[name]=Old%20Team%20Favorite"
+                         class="icon update-saved-view" id="cardlistview_142"
+                         title="Save current view as 'Old Favourite Name'"></a>
+                    </span>
+                    <span class="view-mode-only" style="float:right">
+                      <i class="fa fa-pencil favorites-pencil-icon"></i>
+                    </span>
+                                  <span class="view-mode-only">
+                     <a href="/projects/agile/favorites/show/152" class="favorite-link">Old Team Favorite</a>
+                    </span>
+                    <span class="edit-mode-only" style="float:left">
+                      <input type="text" value="Old Team Favorite" class="input-text">
+                      <input type="submit" value="Save" class="primary favorite-save-button">
+                    </span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $j("#favorites-container").makeFavoritesRenamable({truncationLength:35, saveTooltipPrefix: 'Save current view as'});
+    var server;
+    var teamFavoriteContainer;
+    var urlTitlePrefix = "Save current view as ";
+    var enterKeyPress = jQuery.Event("keydown");
+    enterKeyPress.which = jQuery.ui.keyCode.ENTER;
+    var escapeKeyPress = jQuery.Event("keydown");
+    escapeKeyPress.which = jQuery.ui.keyCode.ESCAPE;
+
+    var renameFavoriteWithKeyPress = function(text, input) {
+        input.val(text);
+        input.trigger(jQuery.extend({}, enterKeyPress));
+    };
+
+    var getQueryParameters = function(rawQueryString) {
+        var decodedQueryString = decodeURIComponent(rawQueryString);
+        return decodedQueryString.split("&").map(function(queryParameterString){
+            queryParameterString = queryParameterString.split("=");
+            this[queryParameterString[0]] = queryParameterString[1].replace(/\+/g, ' ');
+            return this;
+        }.bind({}))[0];
+    };
+
+
+    var doResponse = function(status, responseBody){
+        var request = server.requests.shift();
+        if (!request) {
+            throw "No request found";
+        }
+        request.respond(
+                status,
+                { "Content-Type": "application/json" },
+                responseBody
+        )
+    };
+
+    var respondToFirstRequestInQueue = function(value) {
+        doResponse(200, value);
+    };
+
+    var failFirstRequestInQueue = function(value) {
+        doResponse(422, value);
+    };
+
+    var assertNameSentToServer = function(newName, assert) {
+        assert.equal(getQueryParameters(server.requests.first().requestBody).new_name, newName);
+    };
+
+    var submitNewNameUsingFormButton = function(newName, input, submit) {
+        input.val(newName);
+        submit.trigger("click");
+    };
+
+
+
+    QUnit.module("rename_favorites", {
+        beforeEach: function (_assert) {
+            var favoritesContainer = $j("#favorites-container");
+            teamFavoriteContainer = favoritesContainer.find("#favorites-container-team");
+            server = sinon.fakeServer.create();
+            $j('.edit-mode-only').hide();
+            $j('.view-mode-only').show();
+        },
+        afterEach: function (_assert) {
+            $j('#favorites-container .favorites-error-message').remove();
+            server.restore();
+        }
+    });
+
+    QUnit.test("testShouldChangeNameUrlAndTitleWhenAjaxCallSucceeds", function (assert) {
+        var input = teamFavoriteContainer.find("span.edit-mode-only input[type=text]");
+        var submit = teamFavoriteContainer.find("span.edit-mode-only .favorite-save-button");
+        var done = assert.async(3);
+        var favoriteId = teamFavoriteContainer.find("div.favorite-item-container").data("favorite-id");
+        var newName = "New Team Favourite";
+        var newTitle = urlTitlePrefix + "'" + newName + "'";
+
+        setTimeout(function () {
+            submitNewNameUsingFormButton(newName, input, submit);
+            done();
+        });
+
+        setTimeout(function () {
+            assert.equal(server.requests.length, 1);
+            assertNameSentToServer(newName, assert);
+            respondToFirstRequestInQueue(JSON.stringify({id: favoriteId}));
+            done();
+        });
+
+        setTimeout(function () {
+            var link = teamFavoriteContainer.find('.favorite-link');
+            assert.equal(link.text(), newName);
+            var refreshLink = teamFavoriteContainer.find('.update-saved-view');
+            var latestRefershLinkUrlParams=getQueryParameters(refreshLink.attr("href").split(/\?/)[1]);
+            var latestRefershLinkTitle=refreshLink.attr("title");
+            assert.equal(latestRefershLinkUrlParams["view[name]"], newName);
+            assert.equal(latestRefershLinkTitle, newTitle);
+            done();
+        })
+    });
+
+    QUnit.test("testShouldNotChangeNameUrlAndTitleWhenAjaxCallFails", function (assert) {
+        var input = teamFavoriteContainer.find("span.edit-mode-only input[type=text]");
+        var submit = teamFavoriteContainer.find("span.edit-mode-only .favorite-save-button");
+        var link = teamFavoriteContainer.find('.favorite-link');
+        var oldName = link.text();
+        var oldTitle = teamFavoriteContainer.find('.update-saved-view').attr("title");
+        var done = assert.async(3);
+        var newName = "";
+
+        setTimeout(function () {
+            submitNewNameUsingFormButton(newName, input, submit);
+            done();
+        });
+
+        setTimeout(function () {
+            assert.equal(server.requests.length, 1);
+            assertNameSentToServer(newName, assert);
+            failFirstRequestInQueue("Name cant be blank");
+            done();
+        });
+
+        setTimeout(function () {
+            assert.equal(link.text(), oldName);
+            var refreshLink = teamFavoriteContainer.find('.update-saved-view');
+            var latestRefershLinkUrlParams=getQueryParameters(refreshLink.attr("href").split(/\?/)[1]);
+            var latestRefershLinkTitle=refreshLink.attr("title");
+            assert.equal(latestRefershLinkUrlParams["view[name]"], oldName);
+            assert.equal(latestRefershLinkTitle, oldTitle);
+            done();
+        })
+    });
+
+    QUnit.test("testShouldShowErrorMessageWhenAjaxCallFails", function (assert) {
+        var input = teamFavoriteContainer.find("span.edit-mode-only input[type=text]");
+        var submit = teamFavoriteContainer.find("span.edit-mode-only .favorite-save-button");
+        var link = teamFavoriteContainer.find('.favorite-link');
+        var oldName = link.text();
+        var done = assert.async(3);
+        var newName = "";
+
+        setTimeout(function () {
+            submitNewNameUsingFormButton(newName, input, submit);
+            done();
+        });
+
+        setTimeout(function () {
+            assert.equal(server.requests.length, 1);
+            assertNameSentToServer(newName, assert);
+            failFirstRequestInQueue("Name cant be blank");
+            done();
+        });
+
+        setTimeout(function () {
+            assert.equal(link.text(), oldName);
+            var errorText = $j('#favorites-container .favorites-error-message').text();
+            assert.equal(errorText,'Something went wrong:  Favorite item must have a name');
+            done();
+        })
+    });
+    QUnit.test("testShouldTruncateFavoriteNameOnlyWhenItIsMoreThan35CharLong", function (assert) {
+        var input = teamFavoriteContainer.find("span.edit-mode-only input[type=text]");
+        var submit = teamFavoriteContainer.find("span.edit-mode-only .favorite-save-button");
+        var favoriteId = teamFavoriteContainer.find("div.favorite-item-container").data("favorite-id");
+        var link = teamFavoriteContainer.find('.favorite-link');
+        var done = assert.async(3);
+        var newName = "Hello I am 35 char long favorite name";
+
+        var newTitle = urlTitlePrefix + "'"+newName+"'";
+        var expectedNewName = newName.slice(0,32)+'...';
+
+        setTimeout(function () {
+           submitNewNameUsingFormButton(newName, input, submit);
+            done();
+        });
+
+        setTimeout(function () {
+            assert.equal(server.requests.length, 1);
+            assertNameSentToServer(newName, assert);
+            respondToFirstRequestInQueue(JSON.stringify({id: favoriteId}));
+            done();
+        });
+
+        setTimeout(function () {
+            assert.equal(link.text(), expectedNewName);
+            var refreshLink = teamFavoriteContainer.find('.update-saved-view');
+            var latestRefershUrlParams=getQueryParameters(refreshLink.attr("href").split(/\?/)[1]);
+            var latestRefershLinkTitle=refreshLink.attr("title");
+            assert.equal(latestRefershUrlParams["view[name]"], newName);
+            assert.equal(latestRefershLinkTitle, newTitle);
+            done();
+        })
+    });
+
+    QUnit.test("testShouldSubmitNameWhenEnterKeyPressedInInputBox", function (assert) {
+        var input = teamFavoriteContainer.find("span.edit-mode-only input[type=text]");
+        var done = assert.async(2);
+        var newName = "New Team Favourite";
+
+        setTimeout(function () {
+            assert.equal(server.requests.length, 0);
+            renameFavoriteWithKeyPress(newName, input);
+            done();
+        });
+
+        setTimeout(function () {
+            assert.equal(server.requests.length, 1);
+            assertNameSentToServer(newName, assert);
+            done();
+        });
+
+    });
+
+    QUnit.test("testShouldHideRenameInputBoxOnFocusOut", function (assert) {
+        var input = teamFavoriteContainer.find("span.edit-mode-only input[type=text]");
+        done = assert.async(3);
+        $j('.favorites-pencil-icon').trigger('click');
+
+        setTimeout(function(){
+            assert.equal($j('.edit-mode-only').is(':visible'), true);
+            done();
+        });
+
+        setTimeout(function() {
+            teamFavoriteContainer.find('.favorite-item-container').trigger('clickoutside');
+            done();
+        });
+
+        setTimeout(function(){
+            assert.equal($j('.edit-mode-only').is(':visible'), false);
+            done();
+        });
+    });
+
+    QUnit.test("testShouldPositionCursorAtEndOfInput", function (assert) {
+        var input = teamFavoriteContainer.find("span.edit-mode-only input[type=text]");
+        done = assert.async(1);
+        $j('.favorites-pencil-icon').trigger('click');
+
+        setTimeout(function(){
+            assert.equal($j('.edit-mode-only').is(':visible'), true);
+            var inputElement = $j('.input-text');
+            assert.equal(inputElement.caret(), inputElement.val().length);
+            done();
+        });
+    });
+
+    QUnit.test("testShouldHideRenameInputBoxWhenEscapeButtonIsPressed", function (assert) {
+        var input = teamFavoriteContainer.find("span.edit-mode-only input[type=text]");
+        done = assert.async(3);
+        $j('.favorites-pencil-icon').trigger('click');
+
+        setTimeout(function(){
+            assert.equal($j('.edit-mode-only').is(':visible'), true);
+            done();
+        });
+
+        setTimeout(function() {
+            input.val("some text");
+            input.trigger(escapeKeyPress);
+            done();
+        });
+
+        setTimeout(function(){
+            assert.equal($j('.edit-mode-only').is(':visible'), false);
+            done();
+        });
+    });
+
+    QUnit.test("testShouldShowProgressIndicatorForAjaxCall", function (assert) {
+        var input = teamFavoriteContainer.find("span.edit-mode-only input[type=text]");
+        var submit = teamFavoriteContainer.find("span.edit-mode-only .favorite-save-button");
+        var done = assert.async(4);
+        var favoriteId = teamFavoriteContainer.find("div.favorite-item-container").data("favorite-id");
+        var newName = "New Team Favourite";
+        $j('.favorites-pencil-icon').trigger('click');
+        setTimeout(function () {
+            submitNewNameUsingFormButton(newName, input, submit);
+            done();
+        });
+
+        setTimeout(function () {
+            assert.equal(teamFavoriteContainer.find(".with-progress-bar .progress").is(":visible"), true);
+            done();
+        });
+
+        setTimeout(function () {
+            respondToFirstRequestInQueue(JSON.stringify({id: favoriteId}));
+            done();
+        });
+
+        setTimeout(function () {
+            assert.equal(teamFavoriteContainer.find(".with-progress-bar .progress").is(":visible"), false);
+            done();
+        })
+    });
+</script>
+</body>
+</html>

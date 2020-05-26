@@ -1,0 +1,201 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+/* for the card select lightbox */
+.lightbox .sidebar-tabs-content {
+  margin-bottom: 0 !important;
+}
+
+/* these lightboxes do not need to be full height */
+.change-card_type_confirmation .lightbox_content_wrapper,
+#hide_property .lightbox_content_wrapper,
+#select_transition_div .lightbox_content_wrapper,
+#csv_export_form .lightbox_content_wrapper {
+  height: auto;
+}
+
+/* overrides for the double span*/
+
+#sidebar .sidebar-tabs #filter-active-filter-wrapper,
+#sidebar .sidebar-tabs #advanced-filter-active-filter-wrapper {
+  padding: 0;
+}
+
+.sidebar-tabs {
+  background-color: $HEADER_BACKGROUND_COLOR;
+  position: relative;
+  padding: 6px 10px 0 10px;
+  overflow: hidden;
+
+  ul {
+    margin: 0;
+    overflow: hidden;
+
+    li {
+      padding: 0;
+    }
+
+    li.menu-item {
+      float: left;
+      margin: 0 5px 0 0;
+
+      a {
+        display: block;
+        float: left;
+        font-size: 11px;
+        padding: 5px 15px;
+        color: $MINGLE_SECONDARY_COLOR;
+        text-decoration: none;
+      }
+    }
+  
+    li.current-menu-item {
+      float: left;
+      margin: 0 5px 0 0;
+
+      span {
+        display: block;
+        float: left;
+        font-size: 11px;
+        padding: 5px 15px;
+        
+        background-color: #FFF;
+        color: #000;
+      }
+    }
+  }
+}
+
+
+a.section-collapse
+{
+  background: transparent url(../../../images/shared/icons/icon_triangle_down.png) no-repeat 0 50%;
+  padding: 0 0 0 20px;
+  zoom: 1;
+  color: #333;
+}
+
+#sidebar h2,
+#sidebar h3,
+#sidebar h4,
+#sidebar h5,
+#card-selector-popup-container h2,
+#card-selector-popup-container h3 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  color: #111;
+  margin: 0;
+}
+
+#card-selector-popup-container .sidebar-tabs-content {
+  font-size: 11px;
+}
+
+#card-selector-popup-container #filter-container,
+#card-selector-popup-container #search-container {
+
+}
+
+#card-selector-popup-container .info-box {
+  margin-top: 10px;
+}
+
+#card-selector-popup-container li {
+    list-style: none;
+}
+
+#card-selector-popup-container .collapsible-header-default h2 {
+    padding: 10px 0;
+}
+
+#card-selector-popup-container .search_field {
+  padding-top: 10px;
+}
+
+#card-selector-popup-container #card_selector_filter_results {
+  border-top: 1px solid #CCC;
+}
+
+#card-selector-popup-container ul {
+  margin: 0;
+  overflow: hidden;
+}
+
+#card-selector-popup-container #add_new_filter_link {
+  margin-bottom: 10px;
+}
+
+
+#card-selector-popup-container .card-explorer-search-result-text-for-tree {
+  font-size: 12px;
+  font-weight:  bold;
+  padding: 10px 0;
+}
+
+#card-selector-search-commit {
+  float: none;
+}
+
+#card-selector-q.card-explorer-search-field {
+    margin: 10px 0;
+    width: 100%;
+}
+
+a.popup-close,
+a.popup-refresh
+{
+  float: right;
+  display: block;
+}
+
+a.popup-close {
+  background: url(../../../images/shared/icons/icon_close_transparent.png) no-repeat;
+  height: 16px;
+  width: 16px;
+  text-indent: -3000px; /* hide the inline text  */
+  /* for our friend IE7 */
+  overflow:hidden;
+  line-height: 0px;
+  font-size: 0px;
+}
+
+a.section-expand {
+    background: url("../../../images/shared/icons/icon_triangle_right.png") no-repeat scroll 0 50% transparent;
+    color: #333333;
+    padding: 0 0 0 20px;
+}
+
+.search-results-container li {
+  margin: 0;
+  padding: 5px 0;
+  border-top: 1px dotted #CCC;
+}
+
+.search-results-container li a {
+  display: block;
+}
+
+p.card-explorer-search-result-text-for-tree {
+  margin-bottom: 0;
+}
+
+.properties_widget a,
+.properties_widget a:visited
+{
+  cursor: pointer;
+}
+
+/* End of need to be cleaned up */

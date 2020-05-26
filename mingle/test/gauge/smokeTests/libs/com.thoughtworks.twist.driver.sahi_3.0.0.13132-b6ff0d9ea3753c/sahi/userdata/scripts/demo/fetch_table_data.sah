@@ -1,0 +1,21 @@
+<browser>
+function getTableData(){
+  var tableData = new Array();
+  var table = _table(0);
+  for (var i=0; i< table.rows.length; i++){
+  	var row = table.rows[i];
+  	tableData[i] = new Array();
+  	for (var j=0; j< row.cells.length; j++){
+  		tableData[i][j] = _getText(row.cells[j]);
+  	}
+  }
+  return tableData;
+}
+</browser>
+_set($tableData, getTableData());
+
+for (var $i=0; $i<$tableData.length; $i++){
+	for (var $j=0; $j<$tableData[$i].length; $j++){
+		_highlight(_cell($tableData[$i][$j]));
+	}
+}

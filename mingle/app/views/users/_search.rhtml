@@ -1,0 +1,46 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id='user_search_control' class='search-container'>
+  <%- users_search_form(:controller => search_controller_name, :action => search_action_name) do |form| -%>
+    <% if local_assigns[:deactivated_users_filter] %>
+      <div class="deactivated-users-filter">
+        <%= spinner :id => 'show_deactived_spinner' %>
+        <%= form.check_box 'show_deactivated', :id => 'show_deactivated_users' %>
+        <%= form.label 'show_deactivated_users', "Show deactivated users", :for => 'show_deactivated_users', :class => "inline" %>
+        <%= observe_field :show_deactivated_users, 
+              :url => { :controller => 'user_display_preference', :action => 'update_show_deactived_users', :page => params[:page] },
+              :with => "Object.toQueryString($('user-search').serialize(true))",
+              :before => "$('search-query').value='#{@search.query}'; #{show_spinner('show_deactived_spinner')}" %>
+      </div>
+    <% end %>
+    <div class="user_text_search">
+      <%= form.text_field :query, :id => 'search-query', :class => 'text' %>
+      <%= form.hidden_field :order_by %>
+      <%= form.hidden_field :direction %>
+      <%= hidden_field_tag 'tab', tab if defined?(tab) && tab == 'users_tab' %>
+      <% if params[:back_to_team] %>
+        <input type='hidden' name='back_to_team' value="<%=params[:back_to_team]%>"/>
+      <% end %>
+
+      <%- if params[:search].blank? || params[:search][:query].blank? -%>
+        <input type='button' id='user-search-submit' onclick='this.form.submit();' class="button" title="Search"/>
+      <%- else -%>  
+        <input type="button" id="search-all-users" onclick="$('search-query').value=''; this.form.submit();" class="cancel_button button" title="Clear search"/>
+      <%- end -%>
+    </div>
+  <%- end -%>  
+</div>

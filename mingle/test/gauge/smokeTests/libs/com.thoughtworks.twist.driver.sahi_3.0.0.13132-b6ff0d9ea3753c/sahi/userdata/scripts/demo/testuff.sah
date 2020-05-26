@@ -1,0 +1,47 @@
+_navigateTo("http://sahi.co.in/demo/training/");
+_setValue(_textbox("user"), "test");
+_setValue(_password("password"), "secret");
+_click(_submit("Login"));
+_setValue(_textbox("q"), "2");
+_setValue(_textbox("q[1]"), "1");
+_setValue(_textbox("q[2]"), "1");
+_click(_button("Add"));
+_assertExists(_textbox("total"));
+_assert(_isVisible(_textbox("total")));
+_assertEqual("1150", _textbox("total").value);
+_click(_button("Logout"));
+
+// onScriptEnd is a callback called by Sahi when script finishes
+function onScriptEnd(){
+	postTestuff("atoken", "atest_id", _scriptStatus());	
+}
+
+function postTestuff(token, test_id, status, comment, tester_name, branch_name, lab_name){
+	try {
+		// comment this line later;
+		_sahi.print(status);
+		
+	    // Construct data
+	    var data = "test_id=" + encodeURIComponent(test_id);
+	    data += "&status=" + encodeURIComponent(status);
+	    if (comment) data += "&comment=" + encodeURIComponent(comment);
+	    if (tester_name) data += "&tester_name=" + encodeURIComponent(tester_name);
+	    if (branch_name) data += "&branch_name=" + encodeURIComponent(branch_name);
+	    if (lab_name) data += "&lab_name=" + encodeURIComponent(lab_name);
+
+		
+	    // Send data
+	    var url = new java.net.URL("https://service.testuff.com/abcdef/automation?token="+encodeURIComponent(token));
+	    var conn = url.openConnection();
+	    conn.setDoOutput(true);
+	    var wr = new java.io.OutputStreamWriter(conn.getOutputStream());
+	    wr.write(data);
+	    wr.flush();
+
+	    // comment this line later;
+	    _sahi.print(conn.getResponseCode());
+
+	} catch (e) {
+		_sahi.print(e);
+	}
+}

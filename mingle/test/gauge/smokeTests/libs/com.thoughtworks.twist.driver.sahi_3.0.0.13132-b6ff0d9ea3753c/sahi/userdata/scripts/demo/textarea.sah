@@ -1,0 +1,16 @@
+_navigateTo("/demo/formTest.htm");
+function checkTA($value, $expected){
+	if (!$expected) $expected = $value;
+	_setValue(_textarea("ta1"), $value);
+	_assertEqual($expected, _textarea("ta1").value);
+}
+
+checkTA("abcd");
+checkTA("ab\ncd");
+checkTA("ab\r\ncd", "ab\ncd");
+checkTA("\nabcd");
+checkTA("\r\nabcd", "\nabcd");
+checkTA("a\r\nb\r\nc\r\nd", "a\nb\nc\nd");
+checkTA("a\nb\nc\nd", "a\nb\nc\nd");
+checkTA("a\\r\\nb\\r\\nc");
+checkTA("\\r\\nb\\r\\nc");

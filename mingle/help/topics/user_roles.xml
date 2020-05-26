@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="User roles"><section title="Introduction..." collapsed = 'false'> <p> User roles
+determine what users can see and do in Mingle.</p> <hint>You must <cref
+topic="creating_user_profiles">register users in Mingle</cref> before you can
+assign any user roles. Before registered users can view projects, you must set
+them up as project team members (and/or project administrators).</hint>
+<bullets title="There are six types of user who may interact with Mingle:">
+    <item>Mingle administrator</item>
+
+    <item>Project administrator</item>
+
+    <item>Project team member</item>
+
+    <item>Read only project team member</item>
+
+    <item>Non-project member</item>
+
+    <item>Anonymous user</item>
+  </bullets> <p>At the Mingle level, users can either have a full team member role, a light team member role, 
+be a Mingle administrator or be anonymous. Mingle administrators have full,
+unrestricted access to Mingle and all Mingle projects. Mingle team members (either full or light users) must be
+granted access to specific projects (either as a project administrators or
+project team members) before they can access any Mingle data. Those users without
+any project permissions are either logged in non-project members or anonymous users. They may be able to access projects
+if <cref topic="project_settings_page">anonymous access has been enabled</cref>. </p> </section> 
+
+<section title="Mingle administrator" id="mingle_administrator" collapsed = 'true'> <p>Mingle administrators have full control over
+an installed version of Mingle. By default, the person who installs Mingle is
+the Mingle administrator. This person may add other Mingle administrators as
+required.</p> <bullets title="Mingle administrators can:">
+    <item>access all projects (regardless of whether they are project
+    members)</item>
+
+    <item>create, edit or delete projects</item>
+
+    <item>import/export projects</item>
+
+    <item>edit user details</item>
+
+    <item>create/edit/delete cards and pages</item>
+
+    <item>add, edit or delete any project properties</item>
+
+    <item>add/remove team members from project</item>
+
+    <item>manage tags</item>
+
+    <item>create/edit/delete card transitions</item>
+
+    <item>Integrate the Mingle instance with a Slack team</item>
+
+    <item>manage saved views</item>
+  </bullets> <hint>There is nothing a Mingle administrator cannot do.</hint>
+</section>
+
+<section title="Project administrator" id="project_administrator" collapsed = 'true'> <p>Project administrators
+must be setup by a Mingle administrator. Mingle administrators are usually
+also project administrators for one or more projects.</p> <bullets
+    title="Project administrators can:">
+    <item>access only those projects to which they have permission</item>
+
+    <item>import/export their projects</item>
+
+    <item>add/remove team members from his/her project(s)</item>
+
+    <item>manage tags</item>
+
+    <item>create/edit/delete cards and pages</item>
+
+    <item>set card transitions</item>
+
+    <item>manage saved views</item>
+
+    <item>add, edit or delete any project properties</item>
+
+    <item>Integrate the project with a Slack channel</item>
+
+  </bullets> <bullets title="Project administrators cannot:">
+    <item>add new users to Mingle</item>
+
+    <item>access projects where they aren't members</item>
+
+    <item>create or delete projects</item>
+  </bullets> 
+
+</section>
+
+<section title="Project team member" id="project_member" collapsed = 'true'> <p>Project
+members must be setup by Mingle administrators or project administrators.
+Project team members may be read only team members on other projects. Most Mingle users are assigned project member roles.</p> <bullets
+    title="Project team members can:">
+    <item>access only those projects to which they have permission</item>
+
+    <item>create and edit cards and pages</item>
+ 
+    <item>export projects</item>
+
+    <item>create and access saved views</item>
+
+    <item>edit their own profile</item>
+
+    <item>view, set and update property values</item>
+    
+    <item>view and use project card transitions</item>
+
+    <item>view team members</item>
+
+  </bullets> 
+
+<bullets title="Project team members cannot:">
+   
+    <item>access projects where they aren't members</item>
+
+    <item>delete cards and pages</item>
+
+    <item>add, edit or delete project properties</item>
+
+    <item>create, edit or delete card transitions</item>
+
+    <item>add or edit team members</item>
+  </bullets> </section> 
+
+<section title="Read only project team member" id="read_only_project_team_member" collapsed = 'true'>
+<p>Read only project team members must be setup by Mingle administrators or
+project administrators. Read only members are project team members who can
+view project data but cannot add, edit or delete any project data. Read only team members may be full team members or project administrators on other projects. </p>
+<bullets title="Read only project team members can:">
+    <item>access only those projects to which they have permission</item>
+
+    <item>view cards and pages</item>
+
+    <item>export projects</item>
+
+    <item>access favorite views</item>
+
+    <item>view project history</item>
+
+    <item>edit their own profile</item>
+  </bullets> <bullets title="Read only project team members cannot:">
+    <item>access projects where they aren't members</item>
+
+    <item>create/edit/delete cards and pages</item>
+
+    <item>post murmurs on cards</item>
+
+    <item>add, edit or delete project properties values</item>
+
+    <item>drag and drop cards in grid or tree views</item>
+
+    <item>create favorite views</item>
+
+</bullets> </section> 
+
+<section title="Non-project member" collapsed = 'true'> <p>A non-project
+member is anybody who is setup as a Mingle user, but who has not been given
+access to a project. They can sign in to Mingle, but cannot access any
+projects. They will see projects that have been set to allow logged in users to request membership on the all projects page and can request membership to those projects. Once they are added to a project team they will become a project team member.</p> </section>
+
+<section title="Anonymous user" collapsed = 'true'>
+<p>An
+anonymous (anon) user is a user who can access a project without logging into
+Mingle or without being a project team member. Anonymous access is enabled at
+the project level. If a project has anonymous access enabled, users may view
+the project without logging in.  </p>
+
+<note> Anonymous access to projects is only available on Mingle instances that are have anonymous access enabled <cref topic="mingle_licenses">licenses</cref>.</note>
+
+</section>
+
+<section title="Full users and light users" id="full_users_and_light_users" collapsed = 'true'>
+<p>Mingle users can be full users or light users. Full or light access must be assigned by a Mingle administrator. Full and light users can be assigned access to projects by Mingle or project administrators. Mingle administrators are full users. Full users may also be Project administrators, Project team members, Read only team members or a combination of different roles on different projects.  Light users can only be assigned a Read only project team member role on projects they are assigned to. Light users cannot be project team members, Mingle or project administrators. </p>
+
+<hint>The number of full and light users allowed per Mingle instance is determined by the registered <cref topic="mingle_licenses">license</cref>.</hint>
+
+ </section>
+
+
+<section title="Also see..."> <bullets>
+    <item><cref topic="creating_user_profiles">Creating user
+    profiles</cref></item>
+
+    <item><cref topic="managing_project_team_members">Managing project team
+    members</cref></item>
+
+    <item><cref topic="customizing_projects">Customizing projects</cref></item>
+    <item><cref topic="mingle_licenses">Mingle licenses</cref></item>
+    </bullets>
+</section></topic>

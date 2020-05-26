@@ -1,0 +1,111 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="dependency-content">
+  <div class="view-mode-only">
+    <div class="dependency-content-heading">
+      <span class="dependency-icon">
+        <%= content_tag(:i, "", :class => "fa-stack-1x mng mng-dep-raised") %>
+        <%= content_tag(:i, "", :class => "fa-stack-1x mng mng-dep-resolving-o") %>
+      </span>
+      <span class="heading-text">Raising Card (<%= @dependency.raising_project.name %>)</span>
+    </div>
+    <ul class="card-list">
+      <% if read_only || !@dependency.raising_project.member?(User.current) -%>
+        <li>
+          <span><%= @dependency.raising_card.number_and_name -%></span>
+        </li>
+      <% else -%>
+        <li>
+          <%
+            url_opts = {:controller => "cards", :action => "popup_show", :project_id => @dependency.raising_project.identifier, :number => @dependency.raising_card_number, :color_by => params[:color_by]}
+            html_attrs = {
+              :"data-card-number" => @dependency.raising_card_number,
+              :"data-all-tags" => tags_data(@dependency.raising_project),
+              :"data-tag-color-update-url" => tag_color_update_path(:project_id => @dependency.raising_project.identifier)
+            }
+          -%>
+          <%= link_to(@dependency.raising_card.number_and_name, url_opts, html_attrs) -%>
+        </li>
+      <% end -%>
+    </ul>
+  </div>
+
+  <div class="view-mode-only">
+    <div class="dependency-content-heading">
+      <span class="dependency-icon">
+        <%= content_tag(:i, "", :class => "fa-stack-1x mng mng-dep-raised-o") %>
+        <%= content_tag(:i, "", :class => "fa-stack-1x mng mng-dep-resolving") %>
+      </span>
+      <span class="heading-text">Resolving Cards <%= @dependency.resolving_project ? "(#{@dependency.resolving_project.name})" : (render :partial => 'dependencies/select_new_resolving_project', :locals => { :read_only => read_only}) %>
+        <% if @project == @dependency.resolving_project && @dependency.status != Dependency::RESOLVED && authorized?('dependencies:link_cards_popup') && !read_only && @dependency.resolving_project_id %>
+          <i class="fa fa-plus link-card-icon"></i>
+        <% end %>
+      </span>
+      <i class="fa fa-spin fa-spinner"></i>
+    </div>
+    <ul class="card-list resolving-cards-list">
+      <% @dependency.resolving_cards.each do |card| -%>
+        <% if read_only || !@dependency.resolving_project.member?(User.current) -%>
+          <li data-card-number="<%= card.number %>">
+            <span><%= card.number_and_name -%></span>
+            <% if !read_only && @project == @dependency.resolving_project && @dependency.status == Dependency::ACCEPTED -%>
+              <%= link_to("", {:controller => controller_name, :action => "unlink_card_popup", :dependency => { :number => @dependency.number, :card_number => card.number }}, :class => "fa fa-times unlink-card") -%>
+            <% end -%>
+          </li>
+        <% else -%>
+          <li data-card-number="<%= card.number %>">
+            <%
+              url_opts = {:controller => "cards", :action => "popup_show", :project_id => @dependency.resolving_project.identifier, :number => card.number, :color_by => params[:color_by]}
+              html_attrs = {
+                :"data-card-number" => card.number,
+                :"data-all-tags" => tags_data(@dependency.resolving_project),
+                :"data-tag-color-update-url" => tag_color_update_path(:project_id => @dependency.resolving_project.identifier),
+                :class => 'dependency-link'
+              }
+            -%>
+            <%= link_to(card.number_and_name, url_opts, html_attrs) -%>
+            <% if @project == @dependency.resolving_project && @dependency.status == Dependency::ACCEPTED -%>
+              <%= link_to("", {:controller => controller_name, :action => "unlink_card_popup", :dependency => { :number => @dependency.number, :card_number => card.number }}, :class => "fa fa-times unlink-card") -%>
+            <% end -%>
+          </li>
+        <% end -%>
+      <% end -%>
+    </ul>
+  </div>
+
+  <div class="dependency-description">
+    <div class="dependency-content-heading view-mode-only">
+      <i class="fa fa-file-text-o icon"></i>
+      Description
+    </div>
+
+    <div class="dependency-description-content view-mode-only wiki">
+      <%= render :partial => 'dependencies/content' -%>
+    </div>
+    <% if !read_only -%>
+    <%
+      image_upload_url = project_attachments_path(@dependency.raising_project.identifier, :attachable => { :type => "dependency", :id => @dependency.id }, :authenticity_token => form_authenticity_token)
+      editor_options = {
+        :class => "edit-mode-only ckeditor-inline-editable",
+        :"data-image-upload-url" => image_upload_url,
+        :no_macros => true,
+      }
+    -%>
+    <%= ckeditor_text_area_tag @dependency, "dependency[description]", @dependency.formatted_content_editor(self), editor_options -%>
+    <% end -%>
+  </div>
+</div>

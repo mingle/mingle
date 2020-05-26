@@ -1,0 +1,189 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_help.dtd">
+<chapter title="Mingle API">
+	<section title="Introduction" collapsed="true">
+		<p>Mingle supports RESTful APIs to offer a convenient way to integrate networked systems. You can access and manipulate various kinds of resources using our API, including cards, transitions, and users, among others (see the full list below).</p>
+		<note><p>Please note:</p>
+			<bullets>
+				<item>As of summer 2014, for our cloud customers only, we have a new endpoint for API access: https://your-org.<strong>mingle-api</strong>.thoughtworks.com/api/v2/projects/... (as compared to https://your-org.mingle.thoughtworks.com/api/v2/projects/...). Please note this change <strong>does not apply to <cref topic="mingle_onsite">Mingle onsite</cref></strong>.</item>
+				<item>Mingle offers two methods of authenticating requests to the API: <cref topic="configuring_hmac_authentication">HMAC authentication</cref> and <cref topic="configuring_basic_authentication">Basic authentication</cref>.</item>
+				<item>All the API resources and examples refer to <strong>v2 of the API</strong>. Support for v1 of the API was deprecated in fall 2012. Please refer to this <exref url="http://support.thoughtworks.com/entries/22029412-End-of-life-for-Version-1-of-the-Mingle-API">announcement</exref> in our Mingle community for more information about this deprecation.</item>
+			</bullets>
+		</note>
+	</section>
+
+	<section title="Authentication" collapsed="false">
+	  <subsection title="HMAC Authentication" file="configuring_hmac_authentication" collapsed="true" />
+	  <subsection title="Basic Authentication" file="configuring_basic_authentication" collapsed="true" />
+	</section>
+
+	<section title="Walkthrough" collapsed="true">
+		<p>The Mingle API provides access to various kinds of resources in Mingle over HTTP. These resources are available as xml documents. The standard HTTP operation of GET, POST, PUT and DELETE are used to support read, create, update and delete operations on them. Hence performing a GET operation for a card resource would be the equivalent of reading that card, performing a PUT on a user would be the equivalent of updating that user; and so on.</p>
+
+		<note>Please note: All POST and PUT requests must be in XML format by default. This is not illustrated in the examples here. To specify parameters as shown in the examples you will have to set the request header for Content-Type to "application/x-www-form-urlencoded".</note>
+
+		<p>Not all resources support all the operations, as sometimes it doesn't make sense within Mingle to allow those operations. An example is performing a DELETE on a user resource, as users in Mingle cannot be deleted.</p>
+		<p>The rest of this document is aimed at explaining the various resources, the URLs that each operation can be performed at, and the structure of the xml documents that can be exchanged at that URL.</p>
+
+	<subsection title="A simple example" collapsed="true">
+		<p>The following example might serve to explain some of the terms used in the rest of this help.</p>
+		<p>If you were to use a tool like curl, and execute the command</p>
+		<code>curl 'http://www.google.com'</code>
+		<p>to issue a "GET" request to that URL, you would get the HTML contents of the Google home page.</p>
+		<p>You can consider the Mingle REST API as an extension of that mechanism. Consider the URL "http://user:password@your.mingle.server:8080/api/v2/projects/example_project/cards/42.xml". If you were to issue a "GET" request to that URL, the Mingle server will serve up an xml documentation that is a representation of card number 42, in the project with identifier "example_project".</p>
+		<code>
+      GET
+
+      http://user:password@your.mingle.server:8080/api/v2/projects/example_project/cards/42.xml
+    </code>
+		<p>The above example, although almost trivially simple, illustrates a few basic concepts about the API.</p>
+		<bullets>
+			<item>There is a well known resource, which in this case is the Card</item>
+			<item>The resource is available at a particular location, over HTTP. This is the URL of the resource.</item>
+			<item>A GET request can be issued to a URL to obtain the contents of the resource that is available at that location.</item>
+			<item>Mingle can use either HMAC or basic authentication to authorize the operation. In this example, basic authentication is indicated by the "user:password" portion of the URL. In the sections below you will find more information on how to turn on HMAC and basic authentication for Mingle.</item>
+			<item>The resource is served up as xml in this example.</item>
+			<item>The URL to get the resource over the REST API, is the same as the URL if you were to see a card's contents using the browser</item>
+		</bullets>
+	</subsection>
+
+	<subsection title="A slightly more complex example" collapsed="true">
+		<p>What though, if you wanted to send parameters to the server to update, delete or create a new resource?</p>
+		<p>In RESTful terms these operations map onto HTTP operations as follows</p>
+		<bullets>
+			<item>POST =&gt; Create (can also be used to Update and Delete)</item>
+			<item>GET =&gt; Read (which we have already seen in the above example)</item>
+			<item>PUT =&gt; Update (can also be use to Create)</item>
+			<item>DELETE =&gt; Delete</item>
+		</bullets>
+		<p>Thus all database CRUD (create, read, update, delete) operations have a HTTP equivalent. While this is by no means what REST is about, this easy mapping means that a client can manipulate various resources just as easily as they would with a programmatic API that allowed for direct manipulation of database state.</p>
+		<p>For GET requests, parameters to the server follow the familiar "query-string" mechanism, where they can be sent appended to the URL.</p>
+		<p>For PUT/POST requests, the parameter name value pairs need to be sent to the server as follows</p>
+		<code>
+      PUT
+
+      http://user:password@your.mingle.server:8080/api/v2/projects/my_project/cards/17.xml
+
+      card[name]=some_name
+      card[card_type_name]=story
+    </code>
+		<p>If you were to issue the PUT request above to that URL, with the parameters as shown the Mingle server will update the card with the <strong>card number</strong> 17, by setting the name and card_type to "some name", and "story" respectively.</p>
+		<code>
+      POST
+
+      http://user:password@your.mingle.server:8080/api/v2/projects/my_project/cards.xml
+
+      card[name]=some_name
+      card[card_type_name]=story
+    </code>
+		<p>If you were to issue the POST request above to that URL, with the parameters as shown the Mingle server will <strong>create</strong> a card by setting the name and card_type to "some name", and "story" respectively.</p>
+		<bullets>
+			<item>The URL to POST/PUT/DELETE may be slightly different from the GET URL</item>
+			<item>To POST a resource to a URL, the resource should be sent as a parameters</item>
+			<item>Boolean values can be sent as the strings 'true' or 'false'</item>
+		</bullets>
+	</subsection>
+</section>
+
+	<section title="Code Samples">
+		<bullets>
+			<item>
+				<exref url="https://github.com/mingle/mingle_api_hmac_ruby_example">Ruby</exref>
+			</item>
+			<item>
+				<exref url="https://github.com/kornysietsma/mingle-api">Clojure</exref>
+			</item>
+		</bullets>
+	</section>
+
+	<section title="Technical notes" collapsed="true">
+		<bullets>
+			<item>The Mingle REST API can be accessed over any tool capable of making HTTP requests, including, but not restricted to command line tools like curl, and the ruby Net::HTTP library.</item>
+			<item>If you plan to use the ruby ActiveResource framework, please note that Mingle only supports ActiveResource 2.0.2 or later.</item>
+			<item>For example, user resource has attributes: login and name. The request parameter name of the user resource should be: user['login'] and user['name'].</item>
+			<item>REST resources often contain other REST resources. E.g., a card resource includes information about the project that it belongs to. When this happens, the contained resource will generally be an abbreviated version of the resource, with a "url" attribute which points to the full resource.</item>
+			<item>Please note that all POST and PUT requests must be in XML format by default. This is not illustrated in the examples above.</item>
+			<item>To specify parameters as shown in the examples above you will have to set the request header for Content-Type to "application/x-www-form-urlencoded". </item>
+		</bullets>
+	</section>
+
+	<section title="The Mingle APIs" collapsed="true">
+	<p>Mingle offers the following APIs:</p>
+
+		<bullets>
+			<item>
+				<cref topic="mingle_api_attachment">Attachment API</cref>
+			</item>
+			<item>
+				<cref topic="mingle_api_card">Card API</cref>
+			</item>
+				<item>
+					<cref topic="mingle_api_card_types">Card Types API</cref>
+				</item>
+			<item>
+				<cref topic="mingle_api_execute_mql">Execute MQL API</cref>
+			</item>
+			<item>
+			  <cref topic="mingle_api_events">Events API</cref>
+		  </item>
+
+			<item>
+				<cref topic="mingle_api_favorite">Favorite API</cref>
+			</item>
+			<item>
+				<cref topic="mingle_api_mingle_version_info">Mingle Version Info API</cref>
+			</item>
+			<item>
+				<cref topic="mingle_api_murmurs">Murmurs API</cref>
+			</item>
+
+			<item>
+				<cref topic="mingle_api_murmurs_channels">Murmurs Channels API</cref>
+			</item>
+			<item>
+				<cref topic="mingle_api_objective">Objective API</cref>
+			</item>
+			<item>
+				<cref topic="mingle_api_events#plan_objective_events">Plan objective events API</cref>
+			</item>
+			<item>
+				<cref topic="mingle_api_project">Project configuration API</cref>
+			</item>
+			<item>
+				<cref topic="mingle_api_property_definition">Property definition API</cref>
+			</item>
+			<item>
+				<cref topic="mingle_api_scm_configuration">SCM configuration API</cref>
+			</item>
+			<item>
+				<cref topic="mingle_api_transition">Transition API</cref>
+			</item>
+			<item>
+				<cref topic="mingle_api_user">User API</cref>
+			</item>
+			<item>
+				<cref topic="mingle_api_user_group">User Group API</cref>
+			</item>
+			<item>
+				<cref topic="mingle_api_wiki">Pages (wiki) API</cref>
+			</item>
+		</bullets>
+
+  </section>
+</chapter>

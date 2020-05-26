@@ -1,0 +1,40 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+
+
+
+
+<% form_tag({:action => 'import'}, {:multipart => true, :id => 'import-form'}) do -%>
+  <div class="form_item">
+  <label for="project_identifier">Exported file<span class="required">*</span>: <span class="notes">(this will have a '.mingle' extension)</span></label>
+  <%= file_field_tag 'import' %>
+  </div>
+  
+  <div class="form_item">
+  <label for="project_name">New project name<span class="required">*</span>:</label>
+  <%= text_field('project', 'name') %>
+  </div>
+
+  <div class="form_item">
+  <label for="project_identifier">New project identifier<span class="required">*</span>:</label>
+  <%= text_field 'project', 'identifier', :maxlength => Identifiable::IDENTIFIER_MAX_LEN %>
+  </div>
+
+  
+<% end %>
+
+<%= synchronized_inputs "#project_name", "#project_identifier" %>

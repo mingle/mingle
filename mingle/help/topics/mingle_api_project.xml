@@ -1,0 +1,274 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Project API">
+  <section title="Projects">
+	
+    <p>The Mingle API allows you to <cref topic="creating_mingle_projects">setup projects</cref> and setup version control system configurations. A project can have only one <cref topic="setup_source_repository_integration">source repository</cref> resource. When you create second subversion configuration resource by REST API, the previous one will be destroyed. This resource is also special in that while it cannot be directly deleted, it can be marked for deletion by setting <strong>marked_for_deletion</strong> to true in an update call. Mingle will then take care of deleting the resource.</p>
+
+	<note><p>Please note:</p>
+		<bullets>
+			<item>All the API resources and examples refer to <strong>v2 of the API</strong>. Support for v1 of the API was deprecated in fall 2012. Please refer to this <exref url="http://support.thoughtworks.com/entries/22029412-End-of-life-for-Version-1-of-the-Mingle-API">announcement</exref> in our Mingle community for more information about this deprecation.</item>
+			<item>Please note that all POST and PUT requests must be in XML format by default. This is not illustrated in the examples here. To specify parameters as shown in the examples you will have to set the request header for Content-Type to "application/x-www-form-urlencoded".</item>
+		</bullets>
+	</note>
+
+  </section>
+
+  <section title="Structure of a project resource">
+
+    <p>The structure of a project resource, and its attributes are described below, along with their data type. Also included with each attribute is whether you are allowed to update the value. System generated field like <strong>created_at</strong> are provided only as information about the project and cannot be updated through the API.</p>
+	
+	<warning>With v2 of the API, Mingle does not provide a project_id parameter as it is not used anywhere in the system. The project identifier is used to locate a project.</warning>
+
+    <api_attributes title="project resource xml - attributes">
+	  	<api_attribute name="name" type="String" />
+	  	<api_attribute name="identifier" type="String">this is used to lookup a project.</api_attribute>
+  		<api_attribute name="description" type="String" />
+  		<api_attribute name="created_at" type="Date Time" readonly="true">date and time of creating project.</api_attribute>
+  		<api_attribute name="updated_at" type="Date Time" readonly="true">date and time of last modification.</api_attribute>
+  		<api_attribute name="created_by" type="Resource">the <strong>name</strong> and <strong>login</strong> of the user who created this project info; both String, read only</api_attribute>
+  		<api_attribute name="modified_by" type="Resource">the <strong>name</strong> and <strong>login</strong> of the user who is the last one modified the project info; both String, read only</api_attribute>
+  		<api_attribute name="keywords" type="XML element">card keywords which are used in this project to reference to a card. Contains <strong>keyword</strong> XML elements, each of which is a string that is the card keyword. Examples are shown below.</api_attribute>
+  		<api_attribute name="template" type="Boolean" />
+  		<api_attribute name="email_address" type="String" />
+    	<api_attribute name="email_sender_name" type="String" />
+  		<api_attribute name="date_format" type="String" />
+  		<api_attribute name="time_zone" type="String">time zone location name, for example: 'Beijing', 'Pacific Time (US Attributes &amp; Canada)'.</api_attribute>
+  		<api_attribute name="precision" type="Integer">[0, 10]</api_attribute>
+  		<api_attribute name="anonymous_accessible" type="Boolean">whether the project allows anonymous access or not.</api_attribute>
+      <api_attribute name="auto_enroll_user_type" type="String">whether the project will have all users as team members. Users can be enrolled as full, readonly or nil.</api_attribute>
+    </api_attributes>
+  </section>  
+  
+  <section title="Find all projects">
+    <api_reference title="Find all projects">
+      <p><strong>Reference</strong></p>
+      <code>
+    Request Method: GET
+    URL: /api/v2/projects.xml
+    Parameters: NA
+      </code>
+      <warning>Making GET requests on /api/v2/projects.xml may cause performance issues in a Mingle installation with large number of projects. Please try and use the
+        name_and_id_only parameter described below.</warning>
+
+      <p><strong>Example</strong></p>
+      <code>
+    GET
+
+    http://yourname:password@your.mingle.server:8080/api/v2/projects.xml
+      </code>
+
+      <p><strong>Explanation</strong></p>
+      <p>The above is an example of a GET request to a Mingle server running at your.mingle.server, port 8080. The request locates all project resources available on this instance. If you have "Mingle administrator" permissions, you will get all projects on that instance. If not, you will get a list of all projects that you are a member of.</p>
+
+      <p><strong>Result</strong></p>
+      Upon execution, you should get an xml document that looks something like the following.
+      <code>
+          <![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<projects type="array">
+  <project>
+    <name>Test Project</name>
+    <identifier>test_project</identifier>
+    <description>
+    </description>
+    <created_at type="datetime">2009-10-20T10:37:52Z</created_at>
+    <updated_at type="datetime">2009-10-21T00:47:55Z</updated_at>
+    <created_by url="http://localhost:8080/api/v2/users/8.xml">
+      <name>anne</name>
+      <login>anne</login>
+    </created_by>
+     ...
+    <date_format>%d %b %Y</date_format>
+    <time_zone>Beijing</time_zone>
+    <precision type="integer">2</precision>
+    <anonymous_accessible type="boolean">false</anonymous_accessible>
+    <auto_enroll_user_type nil="true"></auto_enroll_user_type>
+  </project>
+  .
+  .
+  .
+  <project>
+    <name>New Api Project</name>
+    <identifier>new_api_project</identifier>
+    <description nil="true"></description>
+    <created_at type="datetime">2009-10-22T03:11:48Z</created_at>
+    <updated_at type="datetime">2009-10-22T03:11:58Z</updated_at>
+    <created_by url="http://localhost:8080/api/v2/users/1.xml">
+      <name>bonna</name>
+      <login>bonna</login>
+    </created_by>
+     ...
+    <date_format>%d %b %Y</date_format>
+    <time_zone>Beijing</time_zone>
+    <precision type="integer">2</precision>
+    <anonymous_accessible type="boolean">false</anonymous_accessible>
+    <auto_enroll_user_type nil="true"></auto_enroll_user_type>
+  </project>
+</projects>
+]]>
+      </code>  
+        </api_reference>
+      </section>
+      <section title="Find all project names and identifiers">
+            <api_reference title="Find all project names and identifiers">
+              <p><strong>Reference</strong></p>
+              <code>
+Request Method: GET
+URL: /api/v2/projects.xml?name_and_id_only
+Parameters: NA
+              </code>
+
+              <p><strong>Example</strong></p>
+              <code>
+GET
+
+http://yourname:password@your.mingle.server:8080/api/v2/projects.xml?name_and_id_only
+              </code>
+
+              <p><strong>Explanation</strong></p>
+              <p>The above is an example of a GET request to a Mingle server running at your.mingle.server, port 8080. The request returns name and identifier for all project resources 
+                available on this instance. If you have "Mingle administrator" permissions, you will get all projects on that instance. If not, you will get a list of all projects that you are a member of.</p>
+
+              <p><strong>Result</strong></p>
+              Upon execution, you should get an xml document that looks something like the following.
+              <code>
+<![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<projects type="array">
+  <project>
+    <name>test project</name>
+    <identifier>test_project</identifier>
+    <icon nil="true"></icon>
+  </project>
+  <project>
+    <identifier>new_api_project</identifier>
+    <description nil="true"></description>
+    <icon nil="true"></icon>
+  </project>
+</projects>
+]]>
+              </code>  
+    This is useful when you want to access the project name and identifier.
+    </api_reference>
+  </section>
+  
+  <section title="Locating a project by identifier">
+    <api_reference title="Locating a project by identifier">
+      <p><strong>Reference</strong></p>
+      <code>
+    Request Method: GET
+    URL: /api/v2/projects/project_identifier.xml
+    Parameters: NA
+      </code>
+
+      <p><strong>Example</strong></p>
+      <code>
+    GET
+
+    http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project.xml
+      </code>
+
+      <p><strong>Explanation</strong></p>
+      <p>The above is an example of a GET request to a Mingle server running at your.mingle.server, port 8080. The request locates a project with the identifier of "test_project". You have to either have "Mingle administrator" permissions, or be a member of the team to make this call.</p>
+
+      <p><strong>Result</strong></p>
+      Upon execution, you should get an xml document that looks something like the following.
+      <code>
+          <![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <name>test project</name>
+  <identifier>test_project</identifier>
+  <description>
+  </description>
+  <created_at type="datetime">2009-10-16T07:12:57Z</created_at>
+  <updated_at type="datetime">2009-10-19T06:42:21Z</updated_at>
+  <created_by url="http://localhost:8080/api/v2/users/1.xml">
+    <name>bonna</name>
+    <login>bonna</login>
+  </created_by>
+  <modified_by url="http://localhost:8080/api/v2/users/1.xml">
+    <name>bonna</name>
+    <login>bonna</login>
+  </modified_by>
+  <keywords>
+    <keyword>card</keyword>
+    <keyword>#</keyword>
+  </keywords>
+  <template type="boolean">false</template>
+  <email_address>
+  </email_address>
+  <email_sender_name>
+  </email_sender_name>
+  <date_format>%d %b %Y</date_format>
+  <time_zone>Beijing</time_zone>
+  <precision type="integer">2</precision>
+  <anonymous_accessible type="boolean">false</anonymous_accessible>
+  <auto_enroll_user_type nil="true"></auto_enroll_user_type>
+</project>         
+            ]]>
+      </code>  
+    </api_reference>
+  </section>
+  
+  <section title="Creating a new project">
+    <api_reference title="Creating a new project">
+      <p><strong>Reference</strong></p>
+      <code>
+    Request Method: POST
+    URL: /api/v2/projects.xml
+    Parameters:
+    project[name]: Required
+    project[identifier]: Required
+    project[description]
+    project[template]
+    project[email_address]
+    project[email_sender_name]
+    project[date_format]
+    project[time_zone]
+    project[precision]
+      </code>
+
+      <p><strong>Example</strong></p>
+      <code>
+    POST
+
+    http://yourname:password@your.mingle.server:8080/api/v2/projects.xml
+
+    project[name]=More test
+    project[identifier]=more_test
+    project[description]=A project that tests things some more
+    project[template]=false
+    project[email_address]=fred@example.com
+    project[email_sender_name]=Fred
+    project[date_format]=%d %b %Y
+    project[time_zone]=Singapore
+    project[precision]=4
+      </code>
+
+      <p><strong>Explanation</strong></p>
+      <p>The above is an example of a POST request to a Mingle server running at your.mingle.server, port 8080. The request posts a create request with the parameters as supplied. You have to have "Mingle administrator" permissions to make this call.</p>
+
+      <p><strong>Result</strong></p>
+      <p>If you have sufficient permissions to perform the action and the action was successful, you will be returned a location attribute in the header of the response, which is a url from which you can get the project resource that was created.</p>
+    </api_reference>
+  </section>  
+
+</topic>

@@ -1,0 +1,148 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Mingle Apache">
+  <p>Mingle is often fronted with an Apache server. This topic is intended to provide some tips around using Mingle with Apache.</p>
+  <note>The team that develops Mingle uses Apache for their Mingle instance.</note>
+  <section id="reverse-proxy" title="Example: Apache reverse proxy for Mingle">
+    <p>An example of how to configure an Apache instance as a reverse proxy to Mingle is shown below.</p>
+    <code>
+<![CDATA[
+Listen nnn.nnn.nnn.nnn:80
+NameVirtualHost nnn.nnn.nnn.nnn:80
+
+<VirtualHost nnn.nnn.nnn.nnn:80>
+        ServerName mingle.yourdomain.com
+        DocumentRoot /var/lib/mingle/mingle_binary/mingle/public
+
+        ExpiresActive On
+        ExpiresDefault "access plus 0 seconds"
+
+        SetOutPutFilter DEFLATE
+        SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png|rar|zip|gz|tgz|swf|flv|mov)$ no-gzip
+
+        Options FollowSymLinks
+        <Directory /var/lib/mingle/mingle_binary/mingle/public>
+                Options FollowSymLinks MultiViews
+                AllowOverride All
+                Order allow,deny
+                Allow from all
+                ExpiresByType text/html "access plus 1 month"
+                ExpiresByType text/css "access plus 1 month"
+                ExpiresByType text/js "access plus 1 month"
+                ExpiresByType application/x-javascript "access plus 1 month"
+                ExpiresByType text/javascript "access plus 1 month"
+                ExpiresByType image/gif "access plus 1 month"
+                ExpiresByType image/jpg "access plus 1 month"
+                ExpiresByType image/png "access plus 1 month"
+        </Directory>
+
+        Alias /murmur_status  /var/lib/mingle/mingle_binary/mingle/public/murmur_status
+        <Directory "/var/lib/mingle/mingle_binary/mingle/public/murmur_status">
+          Options FollowSymLinks MultiViews
+          AllowOverride All
+          Order allow,deny
+          Allow from all
+        </Directory>
+
+        RewriteEngine On
+
+        # Rewrite to check for Rails cached page
+        RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME}.html -f
+        RewriteCond %{DOCUMENT_ROOT}/startup.html !-f
+        RewriteRule ^([^.]+)$ $1.html [QSA]
+
+        # Redirect all non-static requests to cluster
+        RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-f
+        # RequestHeader set X_FORWARDED_PROTO 'http'
+        RewriteRule ^/(.*)$ http://ip.address.of.your.mingle.instance:8080/$1 [P,QSA,L]
+
+        ProxyPassReverse / http://ip.address.of.your.mingle.instance:8080/
+
+SetEnvIf User-Agent ".*MSIE.*" \
+         nokeepalive ssl-unclean-shutdown \
+         downgrade-1.0 force-response-1.0
+</VirtualHost>
+]]>
+    </code>
+    <p>
+      There are 3 points of interests in the above configuration.
+    </p>
+    <bullets>
+      <item>
+        <p>
+          configuring virtual host
+        </p>
+        <p>
+          <markup>
+            Listen nnn.nnn.nnn.nnn:80
+            NameVirtualHost nnn.nnn.nnn.nnn:80
+          </markup>
+          The Listen directive instructs Apache to listen to only specific IP addresses or ports and with the NameVirtualHost directive you specify the IP address on which the server will receive requests for the name-based virtual hosts.
+        </p>
+      </item>
+      <item>
+        <p>
+          configuring mod deflate
+        </p>
+        <p>
+          <markup>
+            SetOutPutFilter DEFLATE
+            SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png|rar|zip|gz|tgz|mov|swf|flv)$ no-gzip
+          </markup>
+          <p>
+            This directive activates DEFLATE filter which is provided by mod_deflate. It will gzip all output before it is sent to browsers.
+          </p>
+        </p>
+      </item>
+      <item>
+        <p>
+          configuring proxy pass reverse
+        </p>
+        <p>
+          <markup>
+            ProxyPassReverse / http://ip.address.of.your.mingle.instance:8080/
+          </markup>
+          This directive lets Apache adjust the URL in the Location header on HTTP redirect responses. For instance this is essential when Apache is used as a reverse proxy to avoid by-passing the reverse proxy because of HTTP redirects on the backend servers which stay behind the reverse proxy.
+        </p>
+      </item>
+    </bullets>
+    <p>
+      See <exref url="http://httpd.apache.org/docs/2.0/mod/mod_proxy.html" >Apache Mod Proxy</exref> for more details about configuring reverse proxy.
+    </p>
+  </section>
+  <section title="SSL and OAuth 2.0 with Apache" id="oauth">
+    <p>
+      If you have set up Mingle to use SSL or <cref topic="configuring_oauth_enabled_gadgets">OAuth 2.0 gadgets</cref> and Mingle is fronted with an Apache server, then you have to set X_FORWARDED_PROTO to "https" in the https virtual host configuration section.
+    </p>
+    <p>
+      <markup>
+        RequestHeader set X_FORWARDED_PROTO 'https'
+      </markup>
+    </p>
+    <p>
+      This directive can replace HTTP request headers. The header is modified just before the content handler is run, allowing incoming headers to be changed to 'https'.
+    </p>
+  </section>
+  <section title="Also see...">
+    <bullets>
+      <item><cref topic="mingle_onsite">Mingle onsite</cref></item>
+      <item><cref topic="advanced_mingle_configuration">Advanced configuration</cref></item>
+    </bullets>
+  </section>
+</topic>

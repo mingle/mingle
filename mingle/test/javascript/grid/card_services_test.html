@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>MingleUI.grid.CardServicesMixin Test</title>
+
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../test_assets/sinon-2.3.6.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/grid/card_services.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/wip_limit.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="../test_assets/qunit-1.21.0.css" type="text/css"/>
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture">
+  <table id="grid-1x1">
+    <tr>
+      <td>
+
+        <div class="card-icon" data-card-number="3">
+          <div class="card-inner-wrapper" data-tags="">
+            <span class="card-name">Card 3</span>
+            <span class="card-dependency-icon" title=""></span>
+          </div>
+        </div>
+
+      </td>
+    </tr>
+  </table>
+</div>
+
+<script src="../test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+<script src="../test_assets/qunit-phantom.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+  $.fn.tag_stripe = function stubTagStripe() {
+    var wrapper = $(this);
+    wrapper.append($("<span class='fake-tag-list'/>").text("updated tags to: " + wrapper.data("tags")));
+  };
+
+  function cardWithAncestors(cardNumber, ancestors) {
+    var card = $("<div class='card-icon'/>").attr("ancestor_numbers", ancestors.join(",")).attr("data-card-number", cardNumber);
+    card.append(
+      $("<div class='card-inner-wrapper'/>").append(
+        $("<span class='card-name'/>").text("Card " + cardNumber)
+      )
+    );
+    return card;
+  }
+
+  function getCardNumbersFromCards(cards) {
+    return $.map(cards, function (card, i) {
+      return parseInt($(card).data("card-number"), 10);
+    });
+  }
+
+  QUnit.test("cardByNumber()", function (assert) {
+    var wall = $.extend({
+      grid: $("#grid-1x1"),
+    }, MingleUI.grid.CardServicesMixin);
+
+    assert.equal(wall.cardByNumber(900).length, 0, "cardByNumber() returns empty set when card is not found on grid");
+    assert.equal(wall.cardByNumber(3).length, 1, "cardByNumber() locates a card by its number");
+    assert.equal(wall.cardByNumber(3).data("card-number"), 3, "cardByNumber() locates the correct card");
+  });
+
+  QUnit.test("findDescendantsOfCard()", function (assert) {
+    var wall = $.extend({
+      grid: $("#grid-1x1"),
+    }, MingleUI.grid.CardServicesMixin);
+    var card = wall.cardByNumber(3), descendants;
+
+    wall.grid.append(cardWithAncestors(5, [1, 3, 5, 7]));
+    wall.grid.append(cardWithAncestors(11, [5, 7]));
+    wall.grid.append(cardWithAncestors(4, [3, 2]));
+    wall.grid.append(cardWithAncestors(15, [13]));
+    wall.grid.append(cardWithAncestors(10, [2, 4, 6, 8]));
+
+    descendants = wall.findDescendantsOfCard(card);
+
+    assert.equal(descendants.length, 2, "card should pick up 2 descendants according to ancestry");
+    assert.deepEqual(getCardNumbersFromCards(descendants).sort(), [4, 5], "should locate correct descendants");
+  });
+
+  QUnit.test("onUpdateCard()", function (assert) {
+    var aggregatesUpdated = false;
+    var wall = $.extend({
+      grid: $("#grid-1x1"),
+      updateAggregates: function stubbedUpdateAggregates() { aggregatesUpdated = true; }
+    }, MingleUI.grid.CardServicesMixin);
+
+    wall.cardByNumber(3).addClass("operating");
+
+    assert.ok(wall.cardByNumber(3).is(".operating"), "baseline assertion");
+    assert.notOk(aggregatesUpdated, "baseline assertion");
+
+    wall.onUpdateCard(3);
+    assert.notOk(wall.cardByNumber(3).is(".operating"), "onUpdateCard() clears operating flag");
+    assert.ok(aggregatesUpdated, "onUpdateCard() updates aggregates");
+  });
+
+  QUnit.test("syncCardName()", function (assert) {
+    var wall = $.extend({
+      grid: $("#grid-1x1"),
+    }, MingleUI.grid.CardServicesMixin);
+
+    assert.equal(wall.cardByNumber(3).find(".card-name").text(), "Card 3", "baseline assertion");
+    wall.syncCardName(3, "Card, the third");
+    assert.equal(wall.cardByNumber(3).find(".card-name").text(), "Card, the third", "syncCardName() changes the text of a given card");
+  });
+
+  QUnit.test("syncCardTags()", function (assert) {
+    var wall = $.extend({
+      grid: $("#grid-1x1"),
+    }, MingleUI.grid.CardServicesMixin);
+
+    assert.deepEqual(wall.cardByNumber(3).find(".card-inner-wrapper").data("tags"), "", "baseline assertion");
+    wall.syncCardTags(3, ["hello", "world"]);
+    assert.deepEqual(wall.cardByNumber(3).find(".card-inner-wrapper").data("tags"), "hello,world", "syncCardTags() changes the tag data");
+    assert.deepEqual(wall.cardByNumber(3).find(".fake-tag-list").text(), "updated tags to: hello,world", "syncCardTags() updates the tag stripe");
+  });
+
+  QUnit.test("syncDependencyStatuses()", function (assert) {
+    var wall = $.extend({
+      grid: $("#grid-1x1"),
+    }, MingleUI.grid.CardServicesMixin);
+
+    assert.equal(wall.cardByNumber(3).find(".card-dependency-icon").children().length, 0, "baseline assertion");
+
+    wall.syncDependencyStatuses({"3": {raised: "new", resolving: "accepted"}});
+    assert.equal(wall.cardByNumber(3).find(".card-dependency-icon").find(".mng-dep-raised.new").length, 1, "syncDependencyStatuses() updates raised dependencies status");
+    assert.equal(wall.cardByNumber(3).find(".card-dependency-icon").find(".mng-dep-resolving.accepted").length, 1, "syncDependencyStatuses() updates resolving dependencies status");
+  });
+
+  QUnit.test("removeCard()", function (assert) {
+    var aggregatesUpdated = false;
+    var callback = sinon.spy(WipPolice, 'enforce');
+    var wall = $.extend({
+      grid: $("#grid-1x1"),
+      updateAggregates: function stubbedUpdateAggregates() { aggregatesUpdated = true; }
+    }, MingleUI.grid.CardServicesMixin);
+
+    var card = wall.cardByNumber(3);
+    assert.equal(card.length, 1, "baseline assertion");
+
+    wall.removeCard(3);
+    card.trigger("animationend"); // kind of dirty, but we rely on CSS3 animation events to remove the card after special effects finish
+
+    assert.equal(wall.cardByNumber(3).length, 0, "removeCard() removes card from grid");
+    assert.ok(aggregatesUpdated, "onUpdateCard() updates aggregates");
+    assert.ok(callback.called);
+  });
+
+</script>
+</body>
+</html>

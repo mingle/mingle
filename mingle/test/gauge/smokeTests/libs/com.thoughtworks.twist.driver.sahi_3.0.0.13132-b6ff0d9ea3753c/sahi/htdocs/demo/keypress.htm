@@ -1,0 +1,36 @@
+<html>
+<head>
+<title>
+
+</title>
+    <script type="text/javascript">
+        function f(e){
+            document.f1.t1.value = 'key pressed charCode=['+e.charCode+"] keyCode=["+e.keyCode+"] "+combo(e);
+        }
+
+        function combo(e){
+            if (e.ctrlKey) return "CTRL";
+            if (e.altKey) return "ALT";
+            if (e.shiftKey) return "SHIFT";
+            if (e.metaKey) return "META";
+            return "NONE"
+        }
+
+    </script>
+
+</head>
+
+<body>
+
+<form name="f1" method="post" onsubmit="document.f1.t3.value='submitted';return false">
+
+See result: <input type="text" name="t1" size="70" value=""><br><br>
+Enter Here: <input onkeypress="f(event)" type="text" name="t2" size="70"><br><br>
+Check submit: <input type="text" name="t3" size="70" value="Loaded" onclick="document.f1.t3.value=''"><br><br>
+<input type="submit" value="Submit">
+
+</form>
+
+</body>
+
+</html>

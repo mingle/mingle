@@ -1,0 +1,25 @@
+_navigateTo("http://www.zkoss.org/zkdemo/userguide");
+_click(_link("Master Detail"));
+_click(_div("z-detail-img[1]"));
+_assert(_isVisible(_span("Item Specifics")));
+
+_click(_link("Load On Demand"));
+_click(_link("Combobox"));
+_click(_link("Simple Combobox[1]"));
+_click(_italic("z-combobox-rounded-btn"));
+_click(_cell("Pattern Driven Accelerate your development with MVC and other ZK's best practices!"));
+_assertExists(_textbox(1));
+_assert(_isVisible(_textbox(1)));
+_assertEqual("Pattern Driven", _textbox(1).value);
+_click(_link("Composite"));
+_click(_link("Iframe[1]"));
+_domain("www.google.co.in")._setValue(_textbox("q"), "hi there");
+_domain("www.google.co.in")._click(_submit("Google Search"));
+_click(_link("Input"));
+_click(_link("Form Sample[1]"));
+_setValue(_textbox(1), "DarthOuthside");
+_setValue(_password(0), "123456789aa");
+_setValue(_password(1), "123456789aa");
+_setValue(_textbox(2), "22");
+_setValue(_textbox(3), "21212");
+_click(_link("Listbox"));

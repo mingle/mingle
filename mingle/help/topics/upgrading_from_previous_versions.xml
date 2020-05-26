@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_help.dtd">
+<chapter title="Upgrading Mingle onsite from previous versions">
+  <section title="Before you get started">
+    <bullets>
+      <p><strong>Applicability:</strong> These instructions are for upgrading <cref topic="mingle_onsite">Mingle onsite</cref> 13.3+. Upgrades and importing projects from earlier versions are not supported. (To learn more about ThoughtWorks Studios' Lifecycle Policy, please go <exref url="http://support.thoughtworks.com/entries/21512103-thoughtworks-studios-lifecycle-policy">here</exref>.)</p>
+      <fragment file="only_mingle_admin_access_during_upgrade" />
+      <fragment file="backup_before_upgrading" />
+      <fragment file="templates_replaced_on_upgrade" />
+      <fragment file="projects_available_after_upgrade" />
+      <fragment file="exports_available_after_upgrade" />
+      <fragment file="apache_config_for_static_content" />
+	  <note> Running Oracle database migrations during upgrade may cause increased disk usage for your archive log space. If archive log space is a concern, please consider temporarily disabling your archive log while upgrading Mingle. For more recommendations for running Mingle on Oracle, please go <cref topic="oracle_recommendations">here</cref>.</note> 
+    </bullets>
+  </section>
+  <section title="Installing the software">
+    <subsection title="Windows">
+      <steps>
+		<item>With the 13.3 release Mingle no longer provides out of the box support for 32-bit JVMs. If you are running Mingle on a 32-bit JVM please contact Mingle support.</item>
+        <item>Note the location of the Mingle data, swap, config directories and the port on which Mingle is currently running.  Typically, the Mingle data directory is in your home directory (C:\Documents and Settings\[username]\Mingle) and the port is 8080.</item>
+        <item>Run the Mingle uninstaller to remove your current installation. The uninstaller will stop the Mingle service if it is currently running.</item>
+        <item>Run the new installer, specifying the same data, swap, config directories and port as the previous installer. The installer will automatically start the new Mingle service when it completes.</item>
+        <item>Open your browser to any Mingle page. You will be warned to backup your data. Accept this and proceed after backing up your database.</item>
+      </steps>
+      <note> We recommend you always uninstall Mingle first and then try to install a new version. </note> 
+    </subsection>
+    
+    <subsection title="Linux/Unix/Mac OS X">
+      <note><p>As the Mac OS X installer is no longer supported, if you have previously used this installer, you will need to migrate to use the Linux/Unix installer.</p>
+	      <bullets>
+	      <item>Note the path of the data directory and the config directory from the old Mingle launch window. You can safely ignore the the values specified for port and swap directory.</item>
+	      <item>Follow the Linux/Unix installation steps below specifying your data directory and your config directory locations from your previous installation.</item>
+	      </bullets>
+	    </note>
+      <steps>
+        <item>Note the location of the Mingle data, swap, config directories and port on which Mingle is currently running. You may retrieve these locations by running "ps aux | grep MingleServer".</item>
+        <item>If the Mingle server is currently running, stop it by running './MingleServer stop' in the old Mingle installation directory.</item>
+        <item>Untar the newly downloaded archive.</item>
+        <item>Start Mingle, using './MingleServer --mingle.dataDir=/path/to/your/data start' where /path/to/your/data is the location of your data directory. Use the '--mingle.swapDir' and '--mingle.configDir' switches should you want to override the defaults.</item>
+        <item>Open your browser to any Mingle page. You will be warned to backup your data. Accept this and proceed after backing up your database.</item>
+      </steps>
+
+      <hint>See <cref topic="advanced_mingle_configuration">Advanced configuration</cref> for additional configuration options.</hint>
+    </subsection>
+ 
+  </section>
+  <section title="After installation is complete"> 
+    <subsection title="Configuring Mingle's authentication">
+      <p>The <cref topic="configuring_mingle_authentication">authentication settings</cref> for Mingle are controlled through the <path>[mingle_data_directory]/config/auth_config.yml</path> file. This file is created by default on all brand new installations.</p>
+    </subsection>
+    <subsection title="Advanced configuration">
+      <p>See <cref topic="advanced_mingle_configuration">Advanced configuration</cref> for additional configuration options.</p>
+    </subsection>
+  </section>
+</chapter>

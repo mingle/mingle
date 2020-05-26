@@ -1,0 +1,153 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+.programs {
+  * {
+    @include box-sizing(border-box);
+  }
+
+  .action-bar {
+    margin-top: 10px;
+  }
+
+  .program_list {
+    .program {
+      margin-top: 10px;
+
+      .program-title-container {
+        border-bottom: 1px solid #EEE;
+        padding-bottom: 10px;
+
+        h2 {
+          font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+          font-size: 24px;
+          margin-bottom: 10px;
+          color: #0973B6;
+          padding: 0;
+          padding-right: 8px;
+          cursor: pointer;
+        }
+
+        .program_menu {
+          .menu-icon {
+            font-size: 14px;
+            color: #999;
+            display: inline;
+            cursor: pointer;
+          }
+          &:hover {
+            .menu-icon {
+              color: #0973B6;
+            }
+          }
+          h2 {
+            display: inline;
+          }
+        }
+      }
+
+      .program-title {
+        height:25px;
+        .program_name_form {
+          margin-bottom: 10px;
+          display: none;
+          .program-name-editor {
+            font-size: 21px;
+          }
+        }
+      }
+
+      .program_menu_items {
+        display: none;
+      }
+
+      ul.program_actions li {
+        list-style-type: none;
+        float: left;
+        position: relative;
+      }
+
+      ul.program_actions {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100px;
+      }
+
+      .plan-link, .project-link, .program-wall-link, .dependencies-link {
+        height: 18px;
+        line-height: 18px;
+        font-size: 18px;
+        font-weight: normal;
+      }
+
+      .program-description-container {
+        margin-top: 15px;
+
+        h3 {
+          padding: 0;
+          margin-bottom: 10px;
+        }
+      }
+
+      .program-description {
+        float: left;
+
+        p {
+          margin-bottom: 20px;
+        }
+      }
+
+      .program-projects {
+        margin-left: 360px;
+
+        .icon {
+          img {
+            height: 24px;
+            width: 24px;
+          }
+          padding: 2px;
+          display: inline-block;
+          vertical-align: middle;
+          margin: auto 10px auto 0;
+          border: 1px solid #CCC;
+          box-shadow: 0 0 5px rgba(0,0,0,0.2);
+          -moz-box-shadow: 0 0 5px rgba(0,0,0,0.2);
+          -webkit-box-shadow: 0 0 5px rgba(0,0,0,0.2);
+        }
+
+        ul {
+          display: inline-block;
+          float: left;
+          width: 200px;
+          margin-right: 20px;
+        }
+        li {
+          line-height: 26px;
+          list-style-type: none;
+          font-size: 16px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+
+          // for IE7
+          list-style-position: outside;
+          zoom: 1;
+        }
+      }
+    }
+  }
+}

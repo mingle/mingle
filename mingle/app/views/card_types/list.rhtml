@@ -1,0 +1,82 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= render :partial => 'shared/admin_actions'%>
+
+<%= render :partial => 'shared/title_bar', :locals => { :action_partial_path => 'card_types/action_bar', :title => 'Card types', :help_link_name => 'Card Types Page'} %>
+
+<div id="content">
+  <table class='draggable-table-top'>
+    <thead>
+      <tr class="table-top">
+        <th class="col1">Name</th>
+        <th class="col2">Where used</th>
+        <th class="col3 align-center">Reporting color</th>
+        <% if allow_reorder? -%>
+          <th class="col4 align-center">Order</th>
+        <% end -%>
+        <th class="col5 last">&nbsp;</th>
+      </tr>
+    </thead>
+  </table>
+
+  <ul id='card_types_reorder_container' class='compact-list'>
+  <% @card_types.each do |card_type| -%>
+    <li id='card_type_<%= card_type.id %>'>
+      <table class="draggable-table highlightable-table">
+        <tbody>
+          <tr>
+            <td class="col1">
+              <%= h card_type.name %>
+            </td>    
+            <td name="usage" class="col2">
+              <%= h [pluralize(card_type.property_definitions.size,'property'), pluralize(card_type.card_count, 'card'), pluralize(card_type.card_tree_count, 'card tree')].join(', ') -%>
+            </td>
+            <td class="col3 align-center">
+              <%= render color_panel_for(card_type) %>
+            </td>
+            <% if allow_reorder? -%>
+              <td class="vertical-grip col4 align-center">
+                <%= link_to_function 'Drag', :id => "drag_card_type_#{card_type.id}", :class => 'link_button draggable', :accessing => ':reorder' %>
+              </td>
+            <% end -%>
+            <td class="action-column col5 standard-link-spacing last">
+              <%= link_to 'Edit', {:action => 'edit', :id => card_type} %>
+              <%= link_to 'Edit defaults', {:action => 'edit_defaults', :id => card_type} %>
+              <% if card_type.can_be_destroy? %>
+                <%= link_to('Delete', {:action => 'confirm_delete', :id => card_type}) %>
+              <% else %>
+                <span class='<%= card_type.is_dissociated? ? "last_type" : "associated_type" %> disabled'>Delete</span>
+              <% end %>
+              &nbsp;
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </li>
+  <% end -%>
+  <%= javascript_with_rescue("Tooltip($j('.associated_type'), 'Card(s) of this type exists.', {gravity: 'n'})")%>
+  <%= javascript_with_rescue("Tooltip($j('.last_type'), 'At least one card type should exist.', {gravity: 'n'})")%>
+  </ul>
+</div>
+
+<%= render :partial => 'card_types/action_bar', :locals => { :position => 'bottom' } %>
+
+<%= sortable_element("card_types_reorder_container", 
+                      :url => { :controller => 'card_types', :action => "reorder" },
+                      :before => "$('spinner').show()",
+                      :complete => "$('spinner').hide()",
+                      :handle => 'link_button') if allow_reorder? %>

@@ -1,0 +1,40 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<h1>Setting up Mingle: Step 7 - Register License</h1>
+
+<% info_box do %>
+  <p>Enter your license key and licensed to name to register Mingle.</p>
+
+  <p>Your license has been sent to the email address you registered when downloading Mingle. If you do not have a license, please contact your ThoughtWorks Studios account executive or email <a href='mailto:studios@thoughtworks.com'>studios@thoughtworks.com</a> to obtain a new license.</p>
+
+  <p>If you cannot or do not want to register your license now you can do this later from the Mingle all projects page.</p>
+
+
+<% end %>
+
+  <div class="current-register-license">
+    <%= render :partial => 'steps' %>
+  </div>
+
+<% form_tag :action => "do_register_license" do %>
+  <%= render :partial => 'license/form' %>
+
+  <% action_bar :class => "action-bar setup-pages" do %>
+    <%= submit_tag 'Finish', :class => 'primary' %> or <%= link_to "Register later", root_url %>
+    <%= render_help_link('Register Mingle', :class => 'page-help-at-action-bar') %>
+  <% end %>
+<% end -%>

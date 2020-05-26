@@ -1,0 +1,267 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>
+      JavaScript unit test file
+    </title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/mingle_ui.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/jquery/jquery.tipsy.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/jquery.tipsy-flash.js" type="text/javascript"></script>
+
+    <script src="test_assets/jquery.mockjax.js" type="text/javascript"></script>
+    <script src="test_assets/jquery.simulate.js" type="text/javascript"></script>
+    <script src="test_assets/unittest.js" type="text/javascript"></script>
+    <script src="test_assets/unittest_ext.js" type="text/javascript"></script>
+
+    <script src="../../app/assets/javascripts/dom.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/popover.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/draggable_icon.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/icon_droppable.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/jquery.invite_to_team.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/icon_assign.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/mingle_team_list.js" type="text/javascript"></script>
+
+
+    <link rel="stylesheet" href="test_assets/unittest.css" type="text/css" />
+    <style type="text/css" media="screen">
+      img{
+        width: 32px;
+        height: 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="content">
+      <div id="header">
+        <h1>
+          JavaScript unit test file
+        </h1>
+        <p>
+          This file tests <strong>mingle_team_list.js</strong>.
+        </p>
+      </div>
+
+      <div style='border:solid 1px' id='sandbox'>
+        <div class="card-icon" id="blah">
+          <div class="full-team-list" data-invites-enabled="true">
+            <a> Icon</a>
+            <div class="avatars" data-slot-ids='["Owner","Pair"]'>
+              <div class="slot" data-slot-id="Owner" title="Assign a team member"></div>
+            </div>
+            <div class="content" hidden="hidden"></div>
+          </div>
+        </div>
+        <div id="team-list-popover-content" class="card-assign" data-url="http://mock.com/team/index">
+          <div class="assign-team-member">
+            <form action="http://mock.com/team/invite" data-remote="true" method="post">
+              <input type="text" class="email" />
+              <input type="submit" class="invite-team-member" />
+              <a class="cancel" href="javascript:void(0);">cancel</a>
+            </form>
+            <div class="users"></div>
+          </div>
+          <input type="text" class="search-for-team-members"/>
+        </div>
+
+      </div>
+
+      <!-- Log output -->
+      <div id="testlog"></div>
+    </div>
+    <script type="text/javascript">
+// <![CDATA[
+
+(function($) {
+  SANDBOX_CONTENT = $('#sandbox').html();
+
+  var helpers = {
+    openPopover: function(callback) {
+      $($(".slot")[0]).simulate("click");
+      if(callback) {
+        this.wait(100, callback.bind(this));
+      }
+    },
+
+    closePopover: function() {
+      $($(".slot")[0]).simulate("click");
+    },
+
+    inviteAjax: function(teamList, callback) {
+      $.ajax({
+          url: "http://mock.com/team/invite",
+          type: 'POST',
+          success: function(data, xhr, status) {
+            teamList.find("form").trigger("ajax:success", [data, xhr, status]);
+          },
+          complete: function() {
+            if(callback) {
+              this.wait(100, callback.bind(this));
+            }
+          }
+        });
+    }
+  };
+  new Test.Unit.Runner({
+
+    setup: function() {
+      $('#sandbox').html(SANDBOX_CONTENT);
+      var users = [{name: "user1", icon: "http://upload.wikimedia.org/wikipedia/commons/c/cd/Panda_Cub_from_Wolong%2C_Sichuan%2C_China.JPG", color: "red", id: 1, label: 'user1'}, {label: 'user2', name: "user2", icon: "http://www.clipartlord.com/wp-content/uploads/2013/01/panda.png", color: "blue", id: 2}]
+      var newUser = {name: "user3", icon: "http://upload.wikimedia.org/wikipedia/commons/thumb/5/50/RedPandaFullBody.JPG/1280px-RedPandaFullBody.JPG", color: "black", id: 3};
+      $.extend(this, helpers);
+
+      $.mockjax.clear();
+
+      $(".card-icon").mingleTeamList("Assignable");
+
+      $.mockjax({
+        url: "http://mock.com/team/index",
+        responseTime: 0,
+        type: 'GET',
+        responseText: users,
+      });
+
+      $.mockjax({
+        url: "http://mock.com/team/invite",
+        responseTime: 0,
+        type: 'POST',
+        responseText: newUser,
+      });
+    },
+
+    teardown: function() {
+    },
+
+    testClickFullTeamListOpensPopover: function() { with(this) {
+      var teamList = $(".full-team-list");
+      assertEqual(0, teamList.find(".content:visible").length);
+      openPopover(function() {
+        assertEqual(1, teamList.find(".content:visible").length);
+      });
+    }},
+
+    testMingleTeamListShouldGetUsers: function() { with(this) {
+      var teamList = $(".full-team-list");
+      openPopover(function() {
+        assert("GET", $.mockjax.mockedAjaxCalls()[0].type);
+        assert($("#team-list-popover-content").data("url"), $.mockjax.mockedAjaxCalls()[0].url);
+      });
+    }},
+
+    testDisplaysAllUsersWhenPopoverOpens: function() { with(this) {
+      var teamList = $(".full-team-list");
+      openPopover(function() {
+        assertEqual(1, teamList.find(".avatar[data-name='user1']").length);
+        assertEqual(1, teamList.find(".avatar[data-name='user2']").length);
+      });
+    }},
+
+    testResetsSearchWhenReopenPopover: function() { with(this) {
+      var teamList = $(".full-team-list");
+      openPopover(function() {
+        teamList.find("input.search-for-team-members").val("person");
+        closePopover();
+
+        openPopover(function() {
+          assertEqual("", teamList.find("input.search-for-team-members").val());
+        });
+      });
+    }},
+
+    testInviteIconNotRenderedIfInvitesDisabled: function() { with(this) {
+      $(".full-team-list").data('invites-enabled', false);
+      openPopover(function() {
+        var teamList = $(".full-team-list");
+        assertEqual(0, teamList.find(".invite-avatar").length, "Invite icon should not be rendered");
+      });
+    }},
+
+    testTeamListSetsUpAutocompleteForTeamSearch: function() { with(this) {
+      var teamList = $(".full-team-list");
+      openPopover(function() {
+        assert(teamList.find("input.search-for-team-members").hasClass("ui-autocomplete-input"));
+      });
+    }},
+
+    testUserIconsAreDraggableIfDraggable: function() { with(this) {
+      $(".card-icon").mingleTeamList("Draggable");
+      var teamList = $(".full-team-list");
+      openPopover(function() {
+        assert(teamList.find(".avatar").hasClass("ui-draggable"));
+      });
+    }},
+
+    testUserIconsAreNotDraggableIfAssignable: function() { with(this) {
+      $(".card-icon").mingleTeamList("Assignable");
+      var teamList = $(".full-team-list");
+      openPopover(function() {
+        if (teamList.find(".avatar").length > 0) {
+          assert(!teamList.find(".avatar").hasClass("ui-draggable"));
+        } else {
+          assert(false);
+        }
+      });
+    }},
+
+    testInviteIconDisabledInTeamListPopover: function() { with(this) {
+      window.MingleJavascript = { metricsEnabled: false };
+      var teamList = $(".full-team-list");
+      openPopover(function() {
+        assert(teamList.find(".invite-avatar").length === 0)
+      })
+    }},
+
+    testSuccessfulInviteAddsNewUserToTeamList: function() { with(this) {
+      var teamList = $(".full-team-list");
+      window.MingleJavascript = { metricsEnabled: false };
+      openPopover(function() {
+        inviteAjax(teamList, function() {
+          assert(teamList.find(".avatar[data-name='user3']").length === 1);
+        });
+      });
+    }},
+
+    testInitializePropertyList: function() { with(this) {
+      var teamList = $(".full-team-list");
+      openPopover(function() {
+        props = teamList.find(".property-list .property-to-assign-to");
+        assertEqual(2, props.length);
+        assertEqual("Owner", teamList.find(".selected-property").text());
+        assertEqual("Owner", $(props[0]).text());
+        assertEqual("Pair", $(props[1]).text());
+      });
+    }},
+
+    testInviteFormIsNotVisibleWhenPopOverOpens: function() { with(this) {
+      var teamList = $(".full-team-list");
+      openPopover(function() {
+        assert(teamList.find(".assign-team-member form").length === 1);
+        assert(teamList.find(".assign-team-member form:visible").length === 0);
+      });
+    }}
+  }, { testLog: "testlog", test : '' }).run;
+})(jQuery);
+// ]]>
+</script>
+  </body>
+</html>

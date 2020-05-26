@@ -1,0 +1,46 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+
+package com.thoughtworks.mingle;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+public class SimpleTemplateBinding {
+
+    private static SimpleTemplateBinding BINDING = new SimpleTemplateBinding();
+
+    private Map<String, String> boundVariables = new HashMap<String, String>();
+
+    public static SimpleTemplateBinding getInstance() {
+        return BINDING;
+    }
+
+    public SimpleTemplate tokenize(String file) throws IOException {
+        SimpleTemplate template = new SimpleTemplate(file);
+        for (String key : boundVariables.keySet()) {
+            template.assign(key, boundVariables.get(key));
+        }
+        return template;
+    }
+
+    public void bind(String name, String value) {
+        boundVariables.put(name, value);
+    }
+
+}

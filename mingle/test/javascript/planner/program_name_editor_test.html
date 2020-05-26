@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Program name editor test</title>
+
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/planner/program.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/planner/program_rename_editor.js" type="text/javascript"></script>
+
+  <link rel="stylesheet" href="../test_assets/qunit-1.21.0.css" type="text/css" />
+</head>
+<body>
+  <div id="qunit"></div>
+  <div id="qunit-fixture">
+    <div class="program_list"></div>
+  </div>
+
+  <script src="../test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+  <script src="../test_assets/qunit-phantom.js" type="text/javascript"></script>
+  <script type="text/javascript">
+
+    QUnit.module("program name editor", {
+      beforeEach: function() {
+        Program.NameEditor.enableNameEditor(6, "<div class='program' id='program_details_6'>\
+          <div class='program-title'>\
+            <a class='program_menu' href='#' id='program_6_link'></a>\
+            <form class='program_name_form' id='rename_program_new_program6_form' style='display: none; '>\
+                <input name='program[name]' class='program-name-editor' type='text' value='New Program6'>\
+            </form>\
+          </div>\
+        </div>");
+      }
+    });
+
+    QUnit.test("Enables name editor when new program is added", function(assert) {
+      assert.equal($j(".program-title").length, 1);
+      assert.ok($j("#rename_program_new_program6_form").is(":visible"));
+    });
+
+    QUnit.test("Disables name editor when esc is pressed", function(assert) {
+      $j(".program-name-editor").trigger({type: "keydown", keyCode: $j.ui.keyCode.DELETE});
+      assert.ok($j("#rename_program_new_program6_form").is(":visible"));
+
+      $j(".program-name-editor").trigger({type: "keydown", keyCode: $j.ui.keyCode.ESCAPE});
+      assert.ok($j("#rename_program_new_program6_form").is(":hidden"));
+    });
+
+    QUnit.test("Disables name editor on blur", function(assert) {
+      $j(".program-name-editor").trigger({type: "blur"});
+      assert.ok($j("#rename_program_new_program6_form").is(":hidden"));
+    });
+
+    QUnit.done(function(result){console.log(result)});
+  </script>
+</body>
+</html>

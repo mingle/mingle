@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Filter history component">
+	<section title="What you can do on this page">
+		<p>The Filter history component lets you tell Mingle the exact project changes you want to see. It's split into two sections:</p>
+		<bullets title="the top section lets you select:">			
+			<item>whether you want to view only changes to specific project elements (cards, wiki pages or code revisions)</item>
+			<item>for cards, the specific properties they currently have or have acquired during the timeframe specified in the top History for: section (i.e. Today, Yesterday, Last 7 days, Last 30 days, In all history)</item>
+			<item>specific tags that cards or wiki pages currently have or have acquired during the selected timeframe</item>
+		</bullets>
+		<bullets title="the bottom section you can use in conjunction with the top section or on its own. It lets you select:">			
+			<item>specific changes made to card properties within the selected timeframe</item>
+			<item>specific tags that have been updated within the selected timeframe</item>
+			<item>cards, wiki pages or code revisions made by specific people within the selected timeframe</item>
+		</bullets>
+	</section>
+	<section title="Also see...">
+		<bullets>
+			<item><cref topic="history_tab">History tab</cref></item>
+			<item><cref topic="working_with_tags">Working with tags</cref></item>
+		</bullets>
+	</section>
+</topic>

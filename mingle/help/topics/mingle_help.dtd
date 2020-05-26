@@ -1,0 +1,166 @@
+<!--
+/*
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+			INDEX - for building the left nav control
+-->
+<!ELEMENT index (#PCDATA | entry)* >
+<!ELEMENT entry (#PCDATA | entry)* >
+<!ATTLIST entry reference CDATA #REQUIRED >
+
+<!-- 
+            TAGS WHICH ARE USED TO FORMAT THE HELP PAGES
+-->
+<!ELEMENT chapter (#PCDATA | topic | section)* >
+<!ATTLIST chapter title CDATA #REQUIRED>
+
+<!ELEMENT topic (#PCDATA | section | p | note | hint | warning | bullets | steps | markup_reference | screenshot | todo | img | example | config | code | markup | formula | api_reference | table)*>
+<!ATTLIST topic title CDATA #REQUIRED>
+<!ATTLIST topic file CDATA #IMPLIED>
+<!ATTLIST topic collapsed CDATA #IMPLIED>
+
+<!ELEMENT section (#PCDATA | subsection | p | note | hint | warning | bullets | steps | markup_reference | screenshot | todo | img | example | config | code | markup | formula | api_reference | table)*>
+<!ATTLIST section title CDATA #REQUIRED>
+<!ATTLIST section file CDATA #IMPLIED >
+<!ATTLIST section collapsed CDATA #IMPLIED>
+
+<!ELEMENT subsection (#PCDATA | p | note | hint | warning | bullets | steps | markup_reference | api_reference |screenshot | strong | cref | exref | todo | img | example | term | link | button | sidebar-button | tab | cmd | config | code | path | markup | url | subst | formula | table)*>
+<!ATTLIST subsection title CDATA #REQUIRED>
+<!ATTLIST subsection file CDATA #IMPLIED >
+<!ATTLIST subsection collapsed CDATA #IMPLIED>
+
+<!ELEMENT table (#PCDATA | group | header-row | row )* >
+<!ATTLIST table caption CDATA #REQUIRED >
+
+<!ELEMENT group (#PCDATA | row )* >
+<!ATTLIST group title CDATA #REQUIRED >
+<!ATTLIST group col-headers CDATA #IMPLIED >
+
+<!ELEMENT header-row (#PCDATA | col-header)*>
+<!ELEMENT col-header (#PCDATA) >
+
+<!ELEMENT row (#PCDATA | label | col)* >
+<!ELEMENT label (#PCDATA) >
+<!ELEMENT col (#PCDATA | p | bullets | steps | screenshot | strong | cref | exref | todo | img | example | term | link | button | sidebar-button | tab | cmd | config | code | path | markup | url | subst | formula | filter )* >
+
+<!-- markup_reference - is a reference entry to explain some markup.
+        it contains a title to explain the intent,
+        a markup element to show the markup,
+        a preview to show the outcome of the markup,
+        a note (optional),
+        an icon (optional) - e.g. the toolbar icon for example that will insert the markup -->
+<!ELEMENT markup_reference ( markup | preview | note | icon | todo)*>
+<!ATTLIST markup_reference title CDATA #REQUIRED>
+
+<!ELEMENT api_reference ( code | preview | note | bullets )* >
+<!ATTLIST api_reference title CDATA #REQUIRED>
+
+<!ELEMENT steps ( p | item+)*>
+<!ATTLIST steps title CDATA #IMPLIED>
+
+<!ELEMENT bullets ( p | item+)*>
+<!ATTLIST bullets title CDATA #IMPLIED>
+
+<!ELEMENT item (#PCDATA | p | note | hint | warning | bullets | steps | screenshot | strong | cref | exref | todo | img | example | term | link | button | sidebar-button | tab | cmd | config | code | path | markup | url | subst | formula | filter )*>
+
+<!ELEMENT screenshot (#PCDATA)>
+<!ATTLIST screenshot alttext CDATA #REQUIRED>
+<!ATTLIST screenshot src CDATA #REQUIRED>
+<!ATTLIST screenshot caption CDATA #IMPLIED>
+
+<!ELEMENT cref (#PCDATA)>
+<!ATTLIST cref topic CDATA #REQUIRED>
+
+<!ELEMENT strong (#PCDATA | todo | link | button | sidebar-button | cref | cmd)*>
+
+<!ELEMENT p (#PCDATA | exref | strong | cref | img | screenshot | video | todo | term | link | button | sidebar-button | tab | cmd | code | path | markup | url | subst | filter | formula | config | table)*>
+
+<!ELEMENT exref (#PCDATA)>
+<!ATTLIST exref url CDATA #REQUIRED>
+
+<!ELEMENT hint (#PCDATA | p | strong | cref | exref | todo | term | link | button | sidebar-button | tab | cmd | config | code | path | markup | url | subst | filter | formula | bullets)*>
+<!ELEMENT note (#PCDATA | p | strong | cref | exref | todo | example | bullets | term | link | button | sidebar-button | tab | cmd | config | code | path | markup | url | subst | filter | formula)*>
+<!ELEMENT warning (#PCDATA | p | strong | cref | exref | todo | term | link | button | sidebar-button | tab | cmd | config | code | path | markup | url | subst | filter | formula | bullets)*>
+
+<!ELEMENT example (#PCDATA | p | strong | cref | exref | todo | bullets | steps | img | screenshot | term | link | button | sidebar-button | tab | cmd | config | code | path | markup | url | subst | filter | formula)*>
+<!ATTLIST example title CDATA #IMPLIED>
+
+<!ELEMENT img (#PCDATA | clickaction)*>
+<!ATTLIST img alttext CDATA #REQUIRED>
+<!ATTLIST img src CDATA #REQUIRED>
+<!ATTLIST img url CDATA #IMPLIED>
+
+<!-- icon refers to a UI element, and holds a picture of that element -->
+<!ELEMENT icon (#PCDATA)>
+<!ATTLIST icon alttext CDATA #REQUIRED>
+<!ATTLIST icon src CDATA #REQUIRED>
+
+<!-- clickaction is used to map links to clickable areas inside an image -->
+<!ELEMENT clickaction (#PCDATA | exref | cref)*>
+<!ATTLIST clickaction align CDATA #REQUIRED>
+<!ATTLIST clickaction unit CDATA #REQUIRED>
+<!ATTLIST clickaction height CDATA #REQUIRED>
+<!ATTLIST clickaction width CDATA #REQUIRED>
+<!ATTLIST clickaction offset CDATA #IMPLIED>
+
+<!-- video refers to a link to some video content, allows decoration with an appropriate icon -->
+<!ELEMENT video (#PCDATA)*>
+<!ATTLIST video url CDATA #REQUIRED>
+
+<!-- cmd: indicates that the enclosed text is an operating system command -->
+<!ELEMENT cmd (#PCDATA | p)*>
+<!ATTLIST cmd os CDATA #IMPLIED>
+<!-- config: indicates that the enclosed text is a piece of application configuration -->
+<!ELEMENT config (#PCDATA)*>
+<!-- code: indicates that the enclosed text is a piece of programming language source code -->
+<!ELEMENT code (#PCDATA | strong | cref | subst)*>
+<!ATTLIST code lang CDATA #IMPLIED>
+<!-- path: indicates that the enclosed text is a path to a file -->
+<!ELEMENT path (#PCDATA | subst)*>
+<!-- markup: indicates that the enclosed text is markup -->
+<!ELEMENT markup (#PCDATA | subst | todo)*>
+<!-- preview: indicates that the enclosed text is preview of markup -->
+<!ELEMENT preview (#PCDATA | p | img | screenshot | todo | code)* >
+<!-- url: indicates that the enclosed text is an url - note this is a formatting tag, the url should not be navigable -->
+<!ELEMENT url (#PCDATA | subst)*>
+<!-- subst: indicates that the enclosed text should be substituted with another value (or removed) -->
+<!ELEMENT subst (#PCDATA) >
+<!-- todo - indicates that something need to be changed or added to the content at this point, should not appear in final help output -->
+<!ELEMENT todo (#PCDATA)*>
+<!-- term: indicates that the enclosed text should appear in the glossary -->
+<!ELEMENT term (#PCDATA)>
+<!-- formula: indicates that the enclosed text is a formula -->
+<!ELEMENT formula (#PCDATA | subst | todo)*>
+
+<!-- 
+        TAGS THAT REFER TO APPLICATION WIDGETS
+-->
+<!-- link: indicates that the enclosed text appears as a link in the application -->
+<!ELEMENT link (#PCDATA)>
+<!-- button: indicates that the enclosed text appears as a button in the application -->
+<!ELEMENT button (#PCDATA)>
+<!-- sidebar-button: indicates that the enclosed text appears as a sidebar button in the application -->
+<!ELEMENT sidebar-button (#PCDATA)>
+<!-- tab: indicates that the enclosed text appears as a tab in the application -->
+<!ELEMENT tab (#PCDATA)>
+<!-- filter: indicates that the enclosed text is a mingle filter condition -->
+<!ELEMENT filter (#PCDATA) >
+
+
+
+
+
+

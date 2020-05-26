@@ -1,0 +1,191 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+
+<%= javascript_with_rescue "window.droplists = $A([]);" %>
+
+<%= hidden_field :filter, :card_type_id, :value => (params[:filter] || {})[:card_type_id] %>
+<%= hidden_field :filter, :property_definition_id, :value => (params[:filter] || {})[:property_definition_id] %>
+
+<p>
+  <label for="transition_name">Name:<span class="required">*</span></label>
+  <%= text_field 'transition', 'name', :class => 'width-full', :id => 'transition_name' %>
+</p>
+
+<div id="content-simple">
+  <table class="reset-table">
+    <tr>
+      <th><label for="requires-properties-widget">If a card <b>has</b> these properties:</label></th>
+      <th>&nbsp;</th>
+      <th><label for="sets-properties-widget">Provide a transition to <b>set</b> these properties:</label></th>
+    </tr>
+  
+    <tr>
+      <td class="transition-from">
+        <div id="transition-card-type" class='transition_card_type  properties_widget'>
+          <%= render transition_prerequisite_card_type_property_editor(@transition)-%>
+        </div>
+        <%= clear_float %>
+        <div id='requires-properties-widget' class='properties_widget'>
+          <% transition_properties.each do |prop_def| -%>
+            <%= render transition_prerequisite_property_editor(prop_def, @transition)-%>
+          <% end -%>
+          <%= clear_float %>
+        </div>
+
+        <%= clear_float %>
+      </td>
+
+      <td class="align-center"><%= image_tag('transition-arrow.png', :alt => 'Transition from this to this') %></td>
+    
+      <td class="transition-to">
+        <div id = 'transition_card_type' class='transition_card_type properties_widget'>
+          <span>
+            <span><%=h Project.card_type_definition.name %>:</span>
+            <%= link_to_function PropertyValue::NO_CHANGE, :class => 'readonly-link', :id =>"sets-properties-card-type" %>
+          </span>
+        </div>
+        <%= clear_float %>
+        <div id='sets-properties-widget' class='properties_widget'>
+          <div class="none-tree-belonging-properties">
+            <% none_tree_belonging_properties.each do |prop_def| %>
+              <%= render transition_action_property_editor(prop_def, @transition)-%>
+            <% end %>
+            <%= clear_float %>
+          </div>
+          <div class="tree-belonging-properties">
+            <% tree_belonging_properties.each do |prop_def| %>
+              <%= render transition_action_property_editor(prop_def, @transition)-%>
+              <div class="tree-belonging-property-relationship">
+              <% prop_def.tree_configuration.relationship_map.each do |relationship| %>
+                <%= render transition_action_property_editor(relationship, @transition)-%>
+              <% end %>
+              <%= clear_float %>
+              </div>
+            <% end %>
+          </div>
+          <%= clear_float %>
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<div class="form_item">
+<%= check_box 'transition', 'require_comment', {}, 'true', 'false' %> Require team members to add a <%= comment_name.downcase %> when they use this transition
+</div>
+
+<div class="form_item">
+<label for="used_by">Used by:<span class="required">*</span> <span class="notes">(choose which team member will see the transition)</span></label>
+
+<ul class='toggle'>
+  <li>
+    <%= radio_button_tag 'used_by', 'all_team_member', !@transition.has_user_prerequisites?, :id => 'all_team_members' %>
+    <label for='all_team_members'>All team members</label>
+  </li>
+  <li id="group-list-toggle">
+    <%= radio_button_tag 'used_by', TransitionsController::SELECTED_GROUPS,  @transition.has_group_prerequisites? || params[:used_by]==TransitionsController::SELECTED_GROUPS, :id => 'show-groups' %> 
+    <label for='show-groups'>Only team members of selected user groups</label>
+  </li>
+  <li id="member-list-toggle">
+    <%= radio_button_tag 'used_by', TransitionsController::SELECTED_MEMBERS,  @transition.has_user_prerequisites? || params[:used_by]==TransitionsController::SELECTED_MEMBERS, :id => 'show-members' %> 
+    <label for='show-members'>Only selected team members</label>
+  </li>
+</ul>
+
+</div>
+<div class="toggle-section" style='display: none'>
+</div>
+
+<div id='group-list' class="toggle-section form_item" style='display: none'>
+  <% if @project.user_defined_groups.any? -%>
+    <div class="select-all-none-panel">
+      Select: <%= render :partial => 'shared/checkbox_select_all_none', :locals => {:checkbox_container => 'group-members'} %>
+    </div>
+    <table class="list_table">
+      <thead>
+        <tr class="table-top">
+          <th class="last"></th>
+          <th class="last">Group</th>
+        </tr>
+      </thead>
+      <tbody id="group-members">
+        <% @project.user_defined_groups.smart_sort_by{|g|g.name}.each_with_index do |group, index| %>
+          <tr class="<%= cycle 'odd', 'even' %>">
+            <td class="checkbox" style="width: 3.5em;"><%= check_box_tag "group_prerequisites[#{index}]", group.id, @transition.uses_group?(group), {:id => "group_prerequisites_#{group.id}"} %></td>
+            <td class="last"><%= h group.name %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <span>There are no groups in the project.</span>
+  <% end -%>
+</div>
+
+<div id='member-list' class="toggle-section form_item" style='display: none'>
+  <% if @project.users.any? -%>
+    <div class="select-all-none-panel">
+      Select: <%= render :partial => 'shared/checkbox_select_all_none', :locals => {:checkbox_container => 'team-members'} %>
+    </div>
+    <table class="list_table">
+      <thead>
+        <tr class="table-top">
+          <th class="last"></th>
+          <th class="last">Team Member</th>
+        </tr>
+      </thead>
+      <tbody id="team-members">
+        <% @project.users.smart_sort_by{|m|m.name}.each_with_index do |user, index| %>
+          <tr class="<%= cycle 'odd', 'even' %>">
+            <td class="checkbox" style="width: 3.5em;"><%= check_box_tag "user_prerequisites[#{index}]", user.id, @transition.specified_to_user?(user), {:id => "user_prerequisites_#{user.id}"} %></td>
+            <td class="last"><%= h user.name %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <span>There are no team members in the project.</span>
+  <% end %>
+</div>
+
+<%= javascript_with_rescue <<-JAVASCRIPT
+  new RadioPanel('.toggle', '.toggle-section');
+JAVASCRIPT
+
+-%>
+
+<%= javascript_with_rescue <<-JAVASCRIPT
+  var allPropDefs = #{all_prop_defs}
+  var cardNameToPropertyDefIdMap = $H(#{card_type_map.to_json});
+  var currentCardType = 'cp#{escape_javascript(@transition.card_type_name)}';
+  window.cardTypePropertiesController = new CardTypePropertiesController(allPropDefs, currentCardType, cardNameToPropertyDefIdMap);
+  
+  var relationshipsMap = $H(#{tree_relationships_map(:html_id_postfix => "_sets", :include_tree_belongings => true).to_json});
+  var disableMessageMap = $H(#{disabled_message_map.to_json});
+  RelationshipPropertiesController.attach(relationshipsMap, new TransitionRelationshipProperties(disableMessageMap));
+  
+  var lastCardTypeInTreeMap = $H(#{last_card_type_in_tree_map.to_json});
+  var removeNodeWithChildrenOptions = $A(#{droplist_options_for_tree_with_cascading_delete.to_json});
+  var removeNodeOnlyOptions = $A(#{droplist_options_for_tree_without_cascading_delete.to_json});
+  var noChangeSelection = $A(#{PropertyValue::NO_CHANGE_PAIR.to_json});
+  var removeThisCardFromTreeSelection = $A(#{TreeBelongingPropertyDefinition::JUST_THIS_CARD_PAIR.to_json});
+  window.cardTypeTreePropertiesController = new CardTypeTreePropertiesController(lastCardTypeInTreeMap, removeNodeWithChildrenOptions, removeNodeOnlyOptions, window.droplists, noChangeSelection, removeThisCardFromTreeSelection);
+  var initialCardType = '#{escape_javascript(@transition.card_type_name)}';
+  window.cardTypeTreePropertiesController.updateTreeOptions(initialCardType);
+  
+JAVASCRIPT
+-%>

@@ -1,0 +1,281 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+  <meta http-equiv="Content-Language" content="en">
+<title>Racc Grammar File Reference</title>
+</head>
+<body>
+
+<h1>Racc Grammar File Reference</h1>
+<h2>Global Structure</h2>
+<h2>Class Block and User Code Block</h2>
+<p>
+There's two block on toplevel.
+one is 'class' block, another is 'user code' block. 'user code' block MUST
+places after 'class' block.
+</p>
+<h2>Comment</h2>
+<p>
+You can insert comment about all places. Two style comment can be used,
+Ruby style (#.....) and C style (/*......*/) .
+</p>
+<h2>Class Block</h2>
+<p>
+The class block is formed like this:
+</p>
+<pre>
+class CLASS_NAME
+  [precedance table]
+  [token declearations]
+  [expected number of S/R conflict]
+  [options]
+  [semantic value convertion]
+  [start rule]
+rule
+  GRAMMARS
+</pre>
+<p>
+CLASS_NAME is a name of parser class.
+This is the name of generating parser class.
+</p>
+<p>
+If CLASS_NAME includes '::', Racc outputs module clause.
+For example, writing &quot;class M::C&quot; causes creating the code bellow:
+</p>
+<pre>
+module M
+  class C
+    :
+    :
+  end
+end
+</pre>
+<h2>Grammar Block</h2>
+<p>
+The grammar block discripts grammar which is able
+to be understood by parser.  Syntax is:
+</p>
+<pre>
+(token): (token) (token) (token).... (action)
+
+(token): (token) (token) (token).... (action)
+       | (token) (token) (token).... (action)
+       | (token) (token) (token).... (action)
+</pre>
+<p>
+(action) is an action which is executed when its (token)s are found.
+(action) is a ruby code block, which is surrounded by braces:
+</p>
+<pre>
+{ print val[0]
+  puts val[1] }
+</pre>
+<p>
+Note that you cannot use '%' string, here document, '%r' regexp in action.
+</p>
+<p>
+Actions can be omitted.
+When it is omitted, '' (empty string) is used.
+</p>
+<p>
+A return value of action is a value of left side value ($$).
+It is value of result, or returned value by &quot;return&quot; statement.
+</p>
+<p>
+Here is an example of whole grammar block.
+</p>
+<pre>
+rule
+  goal: definition ruls source { result = val }
+
+  definition: /* none */   { result = [] }
+    | definition startdesig  { result[0] = val[1] }
+    | definition
+             precrule   # this line continue from upper line
+      {
+        result[1] = val[1]
+      }
+
+  startdesig: START TOKEN
+</pre>
+<p>
+You can use following special local variables in action.
+</p>
+<ul>
+<li>result ($$)</li>
+</ul>
+<p>
+The value of left-hand side (lhs). A default value is val[0].
+</p>
+<ul>
+<li>val ($1,$2,$3...)</li>
+</ul>
+<p>
+An array of value of right-hand side (rhs).
+</p>
+<ul>
+<li>_values (...$-2,$-1,$0)</li>
+</ul>
+<p>
+A stack of values.
+DO NOT MODIFY this stack unless you know what you are doing.
+</p>
+<h2>Operator Precedance</h2>
+<p>
+This function is equal to '%prec' in yacc.
+To designate this block:
+</p>
+<pre>
+prechigh
+  nonassoc '++'
+  left     '*' '/'
+  left     '+' '-'
+  right    '='
+preclow
+</pre>
+<p>
+`right' is yacc's %right, `left' is yacc's %left.
+</p>
+<p>
+`=' + (symbol) means yacc's %prec:
+</p>
+<pre>
+prechigh
+  nonassoc UMINUS
+  left '*' '/'
+  left '+' '-'
+preclow
+
+rule
+  exp: exp '*' exp
+     | exp '-' exp
+     | '-' exp       =UMINUS   # equals to &quot;%prec UMINUS&quot;
+         :
+         :
+</pre>
+<h2>expect</h2>
+<p>
+Racc has bison's &quot;expect&quot; directive.
+</p>
+<pre>
+# Example
+
+class MyParser
+rule
+  expect 3
+    :
+    :
+</pre>
+<p>
+This directive declears &quot;expected&quot; number of shift/reduce conflict.
+If &quot;expected&quot; number is equal to real number of conflicts,
+racc does not print confliction warning message.
+</p>
+<h2>Declaring Tokens</h2>
+<p>
+By declaring tokens, you can avoid many meanless bugs.
+If decleared token does not exist/existing token does not decleared,
+Racc output warnings.  Declearation syntax is:
+</p>
+<pre>
+token TOKEN_NAME AND_IS_THIS
+      ALSO_THIS_IS AGAIN_AND_AGAIN THIS_IS_LAST
+</pre>
+<h2>Options</h2>
+<p>
+You can write options for racc command in your racc file.
+</p>
+<pre>
+options OPTION OPTION ...
+</pre>
+<p>
+Options are:
+</p>
+<ul>
+<li>omit_action_call</li>
+</ul>
+<p>
+omit empty action call or not.
+</p>
+<ul>
+<li>result_var</li>
+</ul>
+<p>
+use/does not use local variable &quot;result&quot;
+</p>
+<p>
+You can use 'no_' prefix to invert its meanings.
+</p>
+<h2>Converting Token Symbol</h2>
+<p>
+Token symbols are, as default,
+</p>
+<ul>
+<li>naked token string in racc file (TOK, XFILE, this_is_token, ...)
+--&amp;gt; symbol (:TOK, :XFILE, :this_is_token, ...)</li>
+<li>quoted string (':', '.', '(', ...)
+--&amp;gt; same string (':', '.', '(', ...)</li>
+</ul>
+<p>
+You can change this default by &quot;convert&quot; block.
+Here is an example:
+</p>
+<pre>
+convert
+  PLUS 'PlusClass'      # We use PlusClass for symbol of `PLUS'
+  MIN  'MinusClass'     # We use MinusClass for symbol of `MIN'
+end
+</pre>
+<p>
+We can use almost all ruby value can be used by token symbol,
+except 'false' and 'nil'.  These are causes unexpected parse error.
+</p>
+<p>
+If you want to use String as token symbol, special care is required.
+For example:
+</p>
+<pre>
+convert
+  class '&quot;cls&quot;'            # in code, &quot;cls&quot;
+  PLUS '&quot;plus\n&quot;'          # in code, &quot;plus\n&quot;
+  MIN  &quot;\&quot;minus#{val}\&quot;&quot;   # in code, \&quot;minus#{val}\&quot;
+end
+</pre>
+<h2>Start Rule</h2>
+<p>
+'%start' in yacc. This changes start rule.
+</p>
+<pre>
+start real_target
+</pre>
+<p>
+This statement will not be used forever, I think.
+</p>
+<h2>User Code Block</h2>
+<p>
+&quot;User Code Block&quot; is a Ruby source code which is copied to output.
+There are three user code block, &quot;header&quot; &quot;inner&quot; and &quot;footer&quot;.
+</p>
+<p>
+Format of user code is like this:
+</p>
+<pre>
+---- header
+  ruby statement
+  ruby statement
+  ruby statement
+
+---- inner
+  ruby statement
+     :
+     :
+</pre>
+<p>
+If four '-' exist on line head,
+racc treat it as beginning of user code block.
+A name of user code must be one word.
+</p>
+
+</body>
+</html>

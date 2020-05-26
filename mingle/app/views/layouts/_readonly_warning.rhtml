@@ -1,0 +1,27 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% if MingleConfiguration.readonly_mode? %>
+  <div id="readonly-warning" class="info-box">
+    <div>
+      <h4>Mingle is now read-only</h4>
+      <a class="link" href="https://www.thoughtworks.com/mingle/news/2018/07/31/mingle-is-retiring.html" target="_blank">Mingle is being retired on July 31st 2019.</a><br />
+      From now on, you will not be able to create new cards, add new users or make any changes. Mingle administrators
+      can use the <a class="link" href="/exports">Export</a> feature to export all Mingle data.<br />
+      Please contact <a class="link" href="mailto:support@thoughtworks.com">support@thoughtworks.com</a> if you have any questions.
+    </div>
+  </div>
+<% end %>

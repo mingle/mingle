@@ -1,0 +1,13 @@
+<span id="contextual_help_identifier" style="display: none;">transition_list</span>
+<span id="contextual_help_title" style="display: none;">What you can do with Card Transitions</span>
+<span id="full_contextual_help_link" style="display: none;"><a class="full-contextual-help-link" href="{% helpPathDomain %}/card_transitions_page.html"  target="_blank">Full help for Card Transitions </a></span>
+
+<div>
+  <img src="{% contextPath %}/images/diagram-help-card-transitions.gif" class="help-diagram" width="350px" />
+
+  <p><img src="{% contextPath %}/images/icon-help-number-one.png" align="middle" alt='1'/> <a href="{% helpPathDomain %}/creating_card_transitions.html" target="_blank"><b>Create transition</b></a> - to create a workflow to support your specific development process</p>
+  <p><img src="{% contextPath %}/images/icon-help-number-two.png" align="middle" alt='2'/> <a href="{% helpPathDomain %}/transition_workflow_page.html" target="_blank"><b>Generate a transition workflow</b></a> - to automatically create a transition for each stage of your workflow </p>
+  <p><img src="{% contextPath %}/images/icon-help-number-three.png" align="middle" alt='3'/> <a href="{% helpPathDomain %}/card_transition_filters.html" target="_blank"><b>Filter</b></a> - to visualize your workflow </p>
+  <p><img src="{% contextPath %}/images/icon-help-number-four.png" align="middle" alt='4'/> <a href="{% helpPathDomain %}/modifying_or_deleting_card_transitions.html" target="_blank"><b>Edit</b></a> - to update your workflow </p>
+  <p><img src="{% contextPath %}/images/icon-help-number-five.png" align="middle" alt='5'/> <a href="{% helpPathDomain %}/modifying_or_deleting_card_transitions.html#delete_card_transition" target="_blank"><b>Delete</b></a> </p>
+</div>

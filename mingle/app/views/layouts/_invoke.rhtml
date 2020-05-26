@@ -1,0 +1,58 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% content_tag(:div, :id => "invoke", :"data-project" => (project_selected? && @project.identifier), :"data-card-context" => (project_selected? && (card_context.current_list_navigation_card_numbers || []).to_json)) do -%>
+  <form>
+  <h5>not ready yet...</h5>
+    <input type="text" placeholder="Type a command"/>
+  </form>
+<% end -%>
+
+<div id="keyboard-help">
+  <table class="keys">
+    <thead>
+      <tr>
+        <th colspan="2">Mingle Keyboard Shortcuts</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="combo">ctrl + shift + \:</td>
+        <td>Go to card by name or number (fuzzy search)</td>
+      </tr>
+      <tr>
+        <td class="combo">ctrl + shift + C:</td>
+        <td>Add a card</td>
+      </tr>
+      <tr>
+        <td class="combo">ctrl + ]:</td>
+        <td>Next card in your view (when card popup is displayed)</td>
+      </tr>
+      <tr>
+        <td class="combo">ctrl + [:</td>
+        <td>Previous card in your view (when card popup is displayed)</td>
+      </tr>
+      <tr>
+        <td class="combo">ctrl + enter:</td>
+        <td>Save card/page when editing</td>
+      </tr>
+      <tr>
+        <td class="combo">ctrl + /:</td>
+        <td>Show/Hide this help</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

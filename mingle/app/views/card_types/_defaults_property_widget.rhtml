@@ -1,0 +1,56 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="<%= html_id %>">
+
+<% 
+  onchange = nil unless defined?(onchange) 
+  track_changed_property = nil unless defined?(track_changed_property)
+  readonly = defined?(readonly) ? readonly : false
+%>
+
+<div class="properties_widget">
+    <% prop_def_holder.property_definitions_with_hiden_without_tree.each do |prop_def| %>
+      <%= render card_defaults_property_editor(prop_def,
+                                               card_defaults,
+                                               onchange_for_property_editor(prop_def, onchange, track_changed_property),
+                                               html_id_prefix, readonly) -%>
+    <% end %>
+    <%= clear_float %>
+</div>
+<%= clear_float %>
+
+<% prop_def_holder.tree_configurations.each do |tree_configuration| %>
+<div class="properties_widget tree_properties_widget">
+  <div class="tree_group">from <%= tree_name_label(tree_configuration.name) %></div>
+  <% tree_configuration.relationships_available_to(prop_def_holder).each do |prop_def| %>
+     <%= render card_defaults_property_editor(prop_def, 
+                                              card_defaults, 
+                                              onchange_for_property_editor(prop_def, onchange, track_changed_property), 
+                                              html_id_prefix, readonly) -%>
+  <% end %>
+
+  <% tree_configuration.aggregate_property_definitions_available_to(prop_def_holder).each do |prop_def| %>
+     <%= render card_defaults_property_editor(prop_def, 
+                                              card_defaults, 
+                                              onchange_for_property_editor(prop_def, onchange, track_changed_property), 
+                                              html_id_prefix, readonly) -%>
+  <% end %>
+  <%= clear_float %>
+</div>  
+<% end %>
+
+</div>

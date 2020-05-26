@@ -1,0 +1,47 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div class='work_filter'>
+  <h3>Filters <%= spinner :id => 'filter_spinner' %></h3>
+
+  <% form_tag program_plan_objective_works_path(@plan.program, @objective), :id => 'filter_form' do -%>
+
+  <div class="align-center clear_float" id="filter_widget"></div>
+
+  <div id='add_new_filter_link'class="align-center">
+    <%= link_to_function 'Add a filter', 'window.mingle_filters.addNewFilter()', :class => 'action_icon add_link' %>
+  </div>
+  <% end -%>
+  <%= javascript_with_rescue <<-JAVASCRIPT
+  cardTypes = [];
+  cardTypes.push(new CardType('Work', #{Work::Filter.filter_attributes(@plan).to_json}))
+
+  cardTypeDefinition = new CardTypeDefinition('Type', [['is', 'is'], ['is not', 'is not']], cardTypes);
+  window.mingle_filters = new Filters(cardTypeDefinition, 'filter_form', 'filter_widget', '#{image_path("shared/icons/icon_close_14.png")}', '#{image_path("icon-calendar.png")}');
+  window.mingle_filters.hideCardTypeFilter = true;
+  var filters = #{@filters.collect(&:to_filter_hash).to_json};
+  if (filters.any()) {
+    window.mingle_filters.addFilters(filters);
+  }
+
+  var filtersForm = $j("#filter_form");
+  filtersForm.data("filtersForm", new FiltersForm(filtersForm[0], 'filter_spinner'));
+  filtersForm.submit(function(e) {
+    return filtersForm.data("filtersForm").submitOnlyFiltersParam();
+  });
+JAVASCRIPT
+  -%>
+</div>

@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Chart Data Section Test</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <script src="../../../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js"
+          type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/thirdparty/jquery/jquery.tag-it.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/thirdparty/tinycolor.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+  <script src="../../../../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../../../../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+
+  <script src="../../../../../public/javascripts/application.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/drop_down.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/text_box.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/mingle_tag_storage.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/mingle_tageditor.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/tags_filter.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/project_data_store.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/section_helpers.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/card_filter.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/card_type_filter.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/card_filters.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/parameter.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/card_filter_value_wrapper.js"
+          type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/sections/data_section.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/daily_history_chart/sections/data_section.js" type="text/javascript"></script>
+
+  <script src="../../../test_assets/sinon-2.3.6.js" type="text/javascript"></script>
+  <script src="../../../test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+  <script src="../../../test_assets/qunit-phantom.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="../../../test_assets/qunit-1.21.0.css" type="text/css"/>
+
+</head>
+<body>
+<div id="qunit">
+</div>
+<div id="chart_wizard"></div>
+
+<script type="application/javascript">
+
+    QUnit.module('Daily History Chart Data Section', {
+    beforeEach: function () {
+      this.dataSectionSpy = sinon.stub(MingleUI.EasyCharts.Sections, 'DataSection')
+    },
+    afterEach: function () {
+      this.dataSectionSpy.restore();
+    }
+  });
+
+  QUnit.test('testShouldInitializeInvokeDataSectionWithConfigDisablingProjectDropDownAndTagsFilter', function (assert) {
+    MingleUI.EasyCharts.DailyHistoryChart.Sections.DataSection('name', 'dataStore', 'data');
+    assert.equal(this.dataSectionSpy.callCount, 1);
+    assert.equal(this.dataSectionSpy.args[0].length, 4);
+    assert.equal(this.dataSectionSpy.args[0][0], 'name');
+    assert.equal(this.dataSectionSpy.args[0][1], 'dataStore');
+    assert.equal(this.dataSectionSpy.args[0][2], 'data');
+    assert.deepEqual(this.dataSectionSpy.args[0][3], {
+      "config": {
+        "project": {
+          "isRequired": false
+        },
+        "tags-filter": {
+          "isRequired": false
+        }
+      },
+      disableProjectVariables: true,
+      propertyDefinitionFilters: ['aggregate']
+    });
+  });
+</script>
+
+</body>
+</html>

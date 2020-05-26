@@ -1,0 +1,295 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+.my-work {
+  @include popover($direction: up,
+    $width: auto,
+    $height: auto,
+    $popOffset: 0,
+    $triangleOffset: 0,
+    $triangleSize: 0
+  );
+
+  .trigger {
+    display: inline-block;
+    padding: 0 15px;
+    font-size: 11px;
+    height: 41px;
+    line-height: 41px;
+    color: #666;
+  }
+
+  &.open .trigger {
+    background: $MINGLE_PRIMARY_COLOR;
+    color: white;
+  }
+
+  .content {
+    position: fixed;
+    right: 3%;
+    z-index: 8001;
+    padding: 10px;
+    padding-right: 0;
+    width: 550px;
+    min-height: 330px;
+
+    .my-cards {
+      margin: 0;
+      width: 57%;
+
+      dt {
+        margin-bottom: 4px;
+        font-weight: bold;
+        color: #333;
+
+        &:before {
+          clear: left;
+          visibility: hidden;
+          display: block;
+          font-size: 0;
+          height: 0;
+          content: "";
+        }
+
+        &.legend {
+          font-size: 10px;
+        }
+
+        .refreshable {
+          margin-left: 5px;
+          font-weight: 300px;
+          color: #999;
+          cursor: pointer;
+        }
+      }
+
+      dd {
+        margin: 0 8px 8px 0;
+        float: left;
+        width: 142px;
+        height: 92px;
+        font-size: 11px;
+        font-weight: 300;
+
+        &.loading {
+          width: 100%;
+          height: auto;
+          text-align: center;
+          font-size: 17px;
+        }
+
+        &.no-cards {
+          width: 100%;
+          height: auto;
+          padding: 5px 10px;
+          color: #666;
+        }
+
+        &.color-legend {
+          margin: 0;
+          margin-right: 5px;
+          width: auto;
+          height: 14px;
+          max-width: 100px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          font-size: 10px;
+          color: #666;
+
+          i {
+            display: inline-block;
+            margin-right: 3px;
+            width: 14px;
+            height: 14px;
+            border: 1px solid #ddd;
+            border-radius: 14px;
+            font-size: 10px;
+            vertical-align: middle;
+          }
+        }
+
+        a {
+          margin: 0;
+          padding: 6px 10px;
+          border: 0;
+          overflow: hidden;
+          height: 100%;
+          display: block;
+
+          &:hover,&.ui-state-focus {
+            background: inherit;
+          }
+
+          .card-summary-number {
+            color: #333;
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+
+    .my-list {
+      background: #f3f3f3;
+      position: absolute;
+
+      right: 0;
+      top: 0px;
+      bottom: 0px;
+      width: 43%;
+      overflow-y: scroll;
+
+      color: #666;
+
+      .fa-trash-o {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 14px;
+        height: 14px;
+        line-height: 14px;
+        border-radius: 14px;
+        text-align: center;
+        cursor: pointer;
+      }
+
+      dl {
+        margin: 0;
+        padding: 10px;
+      }
+
+      dt {
+        font-weight: bold;
+        color: #666;
+        margin-bottom: 0;
+      }
+
+      dd {
+
+        &.loading {
+          width: 100%;
+          height: auto;
+          text-align: center;
+          font-size: 17px;
+        }
+
+        &.item {
+          position: relative;
+          font-weight: 300;
+          font-size: 11px;
+          padding: 5px;
+          margin-bottom: 3px;
+          box-shadow: 1px 1px 1px 0px rgba(50, 50, 50, 0.25);
+          border-radius: 2px;
+          background-color: #fcfcfc; /* IE < 10 fallback */
+          @include background-image(linear-gradient(white, #eee));
+
+          .body {
+            vertical-align: middle;
+          }
+
+          .actions {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            cursor: pointer;
+
+            i {
+              display: none;
+              width: 14px;
+              height: 14px;
+              line-height: 14px;
+              border-radius: 14px;
+              background: #666;
+              color: white;
+              text-align: center;
+              font-size: 10px;
+            }
+          }
+        }
+
+        &.new {
+          padding: 2px 0;
+          margin-bottom: 3px;
+
+          input[type="text"] {
+            font-size: 11px;
+            width: 100%;
+          }
+
+          &:last-child:after {
+            text-align: center;
+            font-weight: 300;
+            content: "No to-dos left.";
+            display: block;
+            color: #aaa;
+            text-shadow: 1px 1px #fff;
+            margin-top: 5px;
+          }
+        }
+
+        input[type="checkbox"] {
+          margin-right: 5px;
+          vertical-align: middle;
+        }
+      }
+
+      .tasks {
+        .item:hover {
+          .fa-pencil {
+            display: inline-block;
+          }
+        }
+      }
+
+      &.remove {
+        .fa-trash-o {
+          background: #666;
+          color: white;
+        }
+
+        .item {
+          .fa-times-circle {
+            display: inline-block;
+            font-size: 14px;
+            background: white;
+            color: #666;
+          }
+
+          &:hover {
+            .fa-pencil {
+              display: none;
+            }
+          }
+        }
+      }
+
+      .completed {
+        padding-top: 0;
+
+        dt {
+          margin-bottom: 3px;
+          padding-top: 5px;
+          border-top: 1px dotted #ccc;
+        }
+
+        dd {
+          opacity: 0.6;
+        }
+      }
+    }
+  }
+}

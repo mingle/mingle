@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Creating project variables">
+	<section collapsed="true" title="Navigate to the project variables page">
+		<steps title="Steps to create a new project variable">
+			<item><cref topic="signing_in_and_out_of_mingle">Sign in</cref> to Mingle
+    as a project administrator and open the project (if you're not already
+    working in the project).</item>
+			<item>
+				<p>Click the <tab>Project admin</tab> tab.</p>
+				<screenshot alttext="Project admin tab" src="resources/images/project_admin_tab.png"/>
+				<p>Mingle
+    displays the <strong>Project settings</strong> page.</p>
+				<note>if you are
+    logged in as a project team member, Mingle displays the
+    <strong>Team</strong> page.</note>
+				<screenshot alttext="Project admin menu - Project variables link" src="resources/images/project_variables_link.png"/>
+			</item>
+			<item>
+				<p>Click the <link>Project variables</link> link.</p>
+				<p>Mingle
+    displays the <strong>Project variables</strong> page with all project
+    variables setup for this project.</p>
+			</item>
+		</steps>
+	</section>
+	<screenshot alttext="Project variables page" src="resources/images/project_variables_page.png"/>
+	<section title="Create the project variable">
+		<p>Click the <link>Create new project
+variable</link> link.</p>
+		<p>Mingle displays the <strong>New project
+variable</strong> page.</p>
+		<screenshot alttext="New project variable dialog" src="resources/images/project_variable_new_dialog.png"/>
+		<subsection title="Assign a name to the project variable...">
+			<p>This is the
+name which will identify the variable wherever it is used in the project, it
+should be as succinct and descriptive as possible.</p>
+			<p>The name should be
+not blank, should not contain "'&amp;', '=', '#', '&quot;', ';', '[' or ']'" characters, and
+must be less than 40 characters in length.</p>
+			<p>Mingle will display how the
+project variable name will look - all project variable names are enclosed in
+brackets, e.g. (variable)</p>
+			<hint>While it is possible to use the same name
+for both a project variable and a card property, it's probably less confusing
+to avoid doing so.</hint>
+		</subsection>
+		<subsection title="Select the project variable data type">
+			<bullets>
+				<item><strong>Text</strong> - any text value of up to 255 characters in
+    length</item>
+				<item><strong>Numeric</strong> - any numeric value</item>
+				<item><strong>Selected from team list</strong> - any project team
+    member</item>
+				<item><strong>Date</strong> - any date</item>
+				<item><strong>Card</strong> - a reference to a card</item>
+			</bullets>
+		</subsection>
+		<subsection title="Assign a value to the project variable">
+			<p>Enter the value you want to
+assign to the project variable</p>
+			<bullets>
+				<item>If you chose <strong>Text or Numeric</strong> then enter the
+    appropriate value in the text box.</item>
+				<item>If you chose <strong>Selected from team list</strong> then select a
+    team member from the displayed list.</item>
+				<item>If you chose <strong>Date</strong> then use the popup calendar to
+    specify a valid date.</item>
+				<item>
+					<p>If you chose <strong>Card</strong> then select the <cref topic="card_types">card type</cref> you want to reference from the list
+    displayed</p>
+					<note>You will only be able to select from card types
+    which belong to one or more <cref topic="card_trees">card trees</cref>,
+    and have child card types in at least one of those trees. This is because
+    Card project variables can only be applied to the <cref topic="relationship_properties">relationship properties</cref> which link
+    cards together in card trees.</note>
+				</item>
+			</bullets>
+		</subsection>
+		<subsection title="Select which card properties the project variable can be used with">
+			<p><cref topic="card_transitions">Card transitions</cref> will be able to use
+the project variable as a value for the selected properties on either side of
+the transition.</p>
+			<p>If the property is a managed list, and the value of the
+project variable does not already exist in the list, then it will be added as
+a new value. This will happen regardless of whether the property is locked or
+not. The value will <strong>not</strong> be removed from the managed list if
+the project variable is assigned a new value or if the project variable is
+deleted or renamed.</p>
+			<note>
+				<bullets>
+					<item>Only properties which have the same data type as the project
+    variable will be shown in the list</item>
+					<item>If you chose <strong>Card</strong> then only <cref topic="relationship_properties">relationship properties</cref> which refer
+    to the same card type as the project variable will be displayed.</item>
+				</bullets>
+			</note>
+		</subsection>
+		<subsection title="Save your work">
+			<p>Click on the <link>Create project variable</link> link to create the
+project variable</p>
+			<screenshot alttext="Create project variable link" src="resources/images/create_project_variable_link.png"/>
+		</subsection>
+	</section>
+	<section title="Also see...">
+		<bullets>
+			<item>
+				<cref topic="modifying_or_deleting_project_variables">Modifying or
+    deleting project variables</cref>
+			</item>
+		</bullets>
+	</section>
+</topic>

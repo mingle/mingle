@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Creating card keywords">
+     	<p>Card keywords are words, numbers or symbols that Mingle uses to create automatic links in cards and wiki pages. 
+     		When you're editing a card or wiki page and you add any of these keywords, Mingle will automatically convert them to links.</p>
+    	
+    	<example>Your project has a card keyword definition of <markup>#</markup> 
+    		If for instance, you would like the description for a card to contain a link to card number 123. 
+    		Type: <markup>#123</markup> in the description to create a hyperlink to card 123.</example>
+    	
+	<hint>Choose card keywords based on the terminology that your team uses to describe cards, e.g. bug, defect, story, requirement, task, risk. 
+		At a minimum, it is a good idea to include card keywords that match the card types you create in card properties. 
+		If in doubt, it is better to include more card keywords than you will probably use.</hint>
+    	
+    	<p>When you type card keywords in Mingle (e.g. when editing a card description), always type the keyword followed by the card number, 
+    		e.g. <markup>#123</markup> or <markup>card 123</markup> It's irrelevant whether or not you add a space.</p>
+    	
+    	
+	<section title="How to create and update card keywords" file="create_card_keywords" />
+	<section title="Using card keywords in source repository messages">
+		<p>One of Mingle's strengths is the ability to link source commit messages to specific cards. This means you can link source versions to a bug, story or user requirement.</p>
+       	<p>Using the example in the procedure above, if you type <markup>#123</markup> in a commit message, Mingle automatically creates a link to card number 123. When you are editing card number 123, you will also see the source version and commit message in the card's History tab.</p>
+		<p><screenshot alttext="Card history - source commit link" src="resources/images/card_history_source_commit.png" /></p>
+    	<p>In the <tab>History</tab> tab for Card 1 above, you can see that Revision 937 addressed some aspect of this card (story 1). Clicking the <link>Revision 937</link> link would take you to the <tab>Source</tab> tab where you could see all source files changed for that revision.</p>
+    	
+		<note>To use this feature, you must have successfully <cref topic="setup_source_repository_integration">integrated your source repository</cref> with Mingle.</note>
+	</section>    	
+	<section title="How to check whether your card keywords pick up card numbers in existing commit messages" file="testing_card_keyword_source_control_integration" collapsed="true" />
+ </topic>
+
+

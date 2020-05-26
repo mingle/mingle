@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_help.dtd">
+<chapter title="Card properties">
+	<section title="Introduction">
+		<p>Card properties are custom attributes that you can define and then apply to a card type, they are analogous to custom fields. Card properties can be applied to one or more card types, and can have their allowable set of values restricted
+in a number of ways. You can choose whether or not to show or hide properties
+(so they're visible/invisible on cards), and lock or unlock properties (so
+that only project administrators can add or change property values).</p>
+		<hint>If you created a new project based on a template, the project will include some card properties by default. You can <cref topic="modifying_or_deleting_card_properties">update or remove</cref> any extra card properties as required.</hint>
+			</section>
+	<section title="Card Property Types" file="card_property_types" />
+	<section title="Attributes of card properties" file="attributes_card_properties"/>
+	<section title="How to...">
+		<bullets>
+			<item>
+				<cref topic="creating_card_properties">Create card
+    properties</cref>
+			</item>
+			<item>
+				<cref topic="modifying_or_deleting_card_properties">Modify or Delete
+    card properties</cref>
+			</item>
+			<item>
+				<cref topic="corrupt_properties">Resolving issues with corrupt properties</cref>
+			</item>
+		</bullets>
+	</section>
+</chapter>

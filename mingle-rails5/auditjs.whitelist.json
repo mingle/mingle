@@ -1,0 +1,37 @@
+{
+  "qs": [
+    {
+      "id": 8405001095,
+      "title": "Prototype override protection bypass",
+      "description": "A prototype override protection bypass is possible, which allows attackers to overwrite properties and functions. A previous solution for the problem is incomplete.",
+      "versions": [
+        "< 6.4.0"
+      ]
+    }
+  ],
+  "brace-expansion" : [
+    {
+      "id": 8402848607,
+      "title": "Regular Expression Denial of Service (ReDoS)",
+      "versions": [
+        "<= 1.1.6"
+      ]
+    }
+  ],
+  "ckeditor" : [
+    {
+      "id": 320764,
+      "title" :  "[CVE-2006-6978]  Improper Neutralization of Input During Web Page Generation (\"Cross-site Scripting\")",
+      "versions": [
+        "> 0"
+      ]
+    },
+    {
+      "id": 326038,
+      "title": "[CVE-2007-5156] Incomplete blacklist vulnerability in editor/filemanager/upload/php/upload.php i...",
+      "versions": [
+        "> 0"
+      ]
+    }
+  ]
+}

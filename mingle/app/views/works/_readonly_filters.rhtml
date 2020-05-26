@@ -1,0 +1,42 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% filters.each do |filter| -%>
+  <div class="condition-container clear_float">
+    <div class='first-operand'>
+      <%= filter.property_definition_name %>
+    </div>
+    <div class="operator">
+      <%= filter.operator_name || 'is' %>
+    </div>
+    <div class="second-operand">
+      <%= property_value_of_filter(filter) %>
+    </div>
+  </div>
+<% end -%>
+<% if filters.empty? -%>
+<div class="condition-container clear_float">
+  <div class='first-operand'>
+    Type
+  </div>
+  <div class="operator">
+    is
+  </div>
+  <div class="second-operand">
+    <%= PropertyValue::ANY %>
+  </div>
+</div>
+<% end -%>

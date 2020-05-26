@@ -1,0 +1,37 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% url_options = MingleConfiguration.site_url_as_url_options %>
+<div>
+  <% discussion = discussion(@murmur) %>
+  <div style="margin-bottom: 15px; font-size:1.4em; color: #888;">
+    <% if has_origin?(@murmur) %>
+      <%= raw "You've been murmured from #{replace_card_links(@murmur.origin.prefixed_number)}: #{@murmur.origin.name}" %>
+    <% else %>
+      <%= raw "You've been murmured from #{link_to "#{@project.name}",url_options.merge(:controller => 'projects', :action => 'show', :murmur_id => @murmur.id, :project_id => @project.identifier)}"%>
+    <% end %>
+  </div>
+  <div style="background-color: #FFFFFF;">
+    <% discussion.each_with_index do |murmur, i| %>
+      <% if i==1 %>
+        <div style="font-size: 1.5em; margin: 25px 0px 5px 10px; color: #888;">
+          <span>Previous murmurs</span>
+        </div>
+      <% end %>
+      <%= render :partial => 'murmur_notification', :locals => { :murmur => murmur, :discussion => discussion, :user => @user, :url_options => url_options } %>
+    <% end %>
+  </div>
+</div>

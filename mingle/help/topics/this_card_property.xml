@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="How to access values of properties on a card">
+	
+	<subsection title="Using THIS CARD.property in MQL">
+		
+	<note>THIS CARD.property is not valid for use in MQL on wiki pages, via the API, the MQL filter or conditional aggregates.</note>
+		
+	<p>THIS CARD.property (where property is any property name) can be used in a MQL WHERE clause to access values of properties on the card where THIS CARD.property syntax is used. This allows people to create reports on cards that are automatically updated when the card properties are updated. This is also useful when creating reports on card defaults as the reports can be created in the generic form using THIS CARD.property but when a card is created from the default the card's reports will automatically be updated with the card's specific values. </p>
+  <bullets>
+    <item>
+      <strong>Show the card that I depend on</strong>
+      <example>
+        <markup>table query: SELECT NAME, NUMBER WHERE NUMBER = THIS CARD.'Depend on'</markup>
+        <p>Where 'Depend on' is a card relationship property, this will show the card which the current card depends on.</p>
+      </example>
+    </item>
+    <item>
+      <strong>Show the cards that depend on the same card that I depend on</strong>
+      <example>
+        <markup>table query: SELECT NAME, NUMBER WHERE "Depend On" NUMBERS IN (THIS CARD.'Depend on')</markup>
+        <p>Where 'Depend on' is a card relationship property, this will show all cards which depend on the same card which the current card depends on.</p>
+      </example>
+    </item>
+    <item>
+      <strong>Other examples</strong>
+      <example>
+        <markup>table query: SELECT number, name WHERE status = THIS CARD.status</markup>
+        <p> This would create a table of cards that had the same value for the status property as the card this query was used on. For example: if the card had the value 'open' then this table would show all cards that were open.</p>
+      </example>
+      <example>
+        <markup>value query: SELECT "start date" WHERE "start date" = THIS CARD."start date"</markup>
+        <p>This would print out the value of the start date on the card where this query was used.</p>
+      </example>
+      <example>
+        <markup>table query: SELECT number, name WHERE "revision reported" > THIS CARD."revision completed"</markup>  
+        <p>This would create a table of cards that has a value for the "revision reported" property that is greater than the "revision completed" on the card where this query is used.</p> 
+      </example>
+    </item>
+  </bullets>
+</subsection>
+
+<subsection title="Using THIS CARD.property in macros">
+  You can also use THIS CARD.property (where property is any property name) as a value for most parameters on the standard <cref topic="macro_reference">macros</cref>. Any property data types which match the types of any chart parameters can be used in THIS CARD.property to generate charts. For example, you can use THIS CARD."Start Date" as the value of the parameter 'x-labels-start' on the data series chart. This will restrict the x-axis to start on the value of the "Start Date" property on the card where it is used.
+</subsection>
+</topic>

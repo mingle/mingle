@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE section SYSTEM "mingle_help.dtd">
+<chapter title="Column Headings">
+	<p>View the size of stories across different story statuses in a release or per iteration, by using aggregations in grid 'column aggregate'. </p>
+	<topic title="Using grid column aggregations">
+		<steps>
+			<item>Group stories by its status in grid view</item>
+			<item>Make sure all stories have a value for a 'Planning estimate'</item>
+			<item>Select 'Sum' operator and the property 'Planning Estimate' for Column Aggregate drop down</item>
+			<item>Each column header displays the sum total of the Planning Estimates for each story status.</item>
+			<p>
+				<screenshot alttext="Story walls" src="resources/images/lane_headings.png"/>
+			</p>
+		</steps>
+	</topic>
+</chapter>

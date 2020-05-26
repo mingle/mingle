@@ -1,0 +1,67 @@
+# Copyright 2020 ThoughtWorks, Inc.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+
+with_absolute_urls do
+  xml.instruct!
+  xml.feed "xmlns" => "http://www.w3.org/2005/Atom" do
+    xml.title @history.description
+    xml.link "href" => url_for(:action => 'index')
+    xml.updated @history.last_update_time
+    xml.author do
+      xml.name 'Mingle: ' + @project.name
+    end
+    xml.id url_for(:action => 'index')
+
+    @history.events.each do |event|
+      xml.entry do
+        if event.event_type == :revision
+          xml.title event.description
+          xml.revision event.number.to_s
+          xml.author event.user
+          xml.link "href" => repository_revision_url(:rev => event.identifier)
+          xml.id repository_revision_url(:rev => event.identifier)
+          xml.updated event.commit_time.to_s(:time_atom)
+          xml.summary truncate(event.commit_message, :length => 100)
+          xml.content "type" => "html" do
+            xml.text! bind_font(render(:partial => "revisions/show_atom", :locals => {:revision => event}))
+          end
+        elsif event.event_type == :card_version
+          xml.title "#{event.short_description} #{created_or_changed(event)} #{event.modified_by.name}"
+          xml.revision event.version
+          xml.author event.modified_by.name
+          xml.link "href" => url_for(:controller => 'cards', :action => 'show', :number => event.number, :version => event.version)
+          xml.id url_for(:controller => 'cards', :action => 'show', :number => event.number, :version => event.version)
+          xml.updated event.updated_at.to_s(:time_atom)
+          xml.summary truncate(event.describe_changes.join(','), :length => 100)
+          xml.content "type" => "html" do
+            xml.text! bind_font(render(:partial  => "cards/show_atom", :locals  => {:card  => event, :changes => event.changes}))
+          end
+        else
+          xml.title "Page #{event.name} #{created_or_changed(event)} #{event.modified_by.name}"
+          xml.revision event.version
+          xml.author event.modified_by
+          xml.link "href" => url_for(:controller => 'pages', :action => 'show', 
+            :pagename => Page.name2identifier(event.name), :version => event.version, :format => nil)      
+          xml.id url_for(:controller => 'pages', :action => 'show', :pagename => Page.name2identifier(event.name), :version => event.version, :format => nil)
+          xml.updated event.updated_at.to_s(:time_atom)
+          xml.summary truncate(event.describe_changes.join(','), :length => 100)
+          xml.content "type"  => "html" do
+            xml.text! bind_font(render(:partial  => "pages/show_atom", :locals  => {:page  => event, :changes => event.changes}))
+          end
+        end
+      end
+    end
+  end
+end

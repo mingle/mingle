@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_help.dtd">
+<chapter title="Card transitions">
+	<section title="Introduction">
+		<p>Card transitions give your team a <strong>shortcut for completing common actions</strong> in Mingle, such as closing a bug or marking a user story as
+complete. Card transitions are <strong>context sensitive</strong>. They are presented to the user only when appropriate to the current state of the card
+they are working with. Card transitions allow you to define a workflow for your project. You can use transitions to assign work to various team members
+at different stages of the project lifecycle. Essentially you can use transitions to automate any set of property changes to a card that should be performed in one go. </p>
+		<note>You must <cref topic="creating_card_properties">setup card properties</cref> before you can create card transitions.</note>
+	</section>
+	<section title="Context sensitive workflow actions">
+		<p>Card transitions appear as links in the action bar area on cards that match the card properties you specify in the card transition. For example, in the close defect transition below:</p>
+		<screenshot alttext="Example: archive transition" src="resources/images/transition_example_close_defect.png"/>
+		<p>Any card that is of <strong>Type is Defect</strong> with a <strong>Defect Status is Verified</strong> will have a link in the action bar called <link>Close
+defect</link>. Clicking this link will change the card's defect status to closed and remove the card's previous owner. In full view, card transitions are laid out above the card description.</p>
+		<screenshot alttext="Example: Close defect transition button" src="resources/images/transition_example_close_defect_button.png"/>
+		<p>In the card preview, transitions can be found by clicking on the ‘transitions’ button to produce a drop down with all the available transitions that can be triggered.</p>
+		<screenshot alttext="Transition drop down on card preview" src="resources/images/transitions_dropdown_example.png"/>
+		<note>
+			<p>Transitions which do not prompt for user input can also be used in
+<cref topic="updating_cards_in_bulk">bulk edit</cref> mode in list views.</p>
+			<p>A
+transition will prompt for user input if any property is set to the special value <strong>(user input - required)</strong>, <strong>(user input - optional)</strong> or if the <strong>Require team members to add a murmur..</strong> checkbox is ticked.</p>
+		</note>
+	</section>
+	<section title="Automate common tasks using Transitions">
+		<p>You can use transitions to automate common or repetitive tasks, e.g.</p>
+		<p>When marking a story 'Complete', in addition to setting the status value, you might want to gather details like:</p>
+		<bullets>
+			<item>Who closed the story</item>
+			<item>When it was closed</item>
+			<item>What the final amount of effort involved was</item>
+		</bullets>
+		<p>This data collection can be automated so that a user only needs a single click to collect and set the values.</p>
+	</section>
+	<section title="Prompt the user to manually select values for properties">
+		<p>You can ensure that values are provided for specific properties by using the special values <strong>(user input - required)</strong> or <strong>(user input - optional)</strong>. When a property is set to <strong>(user input - required)</strong> then the user will be prompted to select an appropriate value for that property when the transition is invoked. They will not be able to complete the transition until they select a value. If the property is set to <strong>(user input - optional)</strong> then the user will be prompted to select an appropriate value but they can complete the transition without selecting a value for this property as it is not mandatory for the transition.</p>
+		<p>Capture values like development effort by prompting for a value when a developer uses the transition 'dev complete'. You could also ask a member to set a due date for
+himself when signing up for a card.</p>
+	</section>
+	<section title="Control changes to property values">
+		<p> You can control changes to property values by marking those properties as <cref topic="transition_only_properties">transition only</cref>. This means the
+value of that property can only be set via a transition, and cannot be edited directly. Because you can control when a particular transition will be made
+available to the user, you can ensure that cards move through a prescribed workflow. So for example by making <strong>status</strong> a transition only
+field, and specifying that the bug card must have status set to 'fixed' for the Close defect transition, you ensure that bugs can only be closed if they have been fixed.</p>
+		<screenshot alttext="Example: Close defect transition" src="resources/images/transition_example_close_defect.png"/>
+		<p>You would also have to create transitions for the other allowable state changes for the bug status property. Examples might include: </p>
+		<bullets>
+			<item><strong>Assign defect</strong> - where a defect is 'open' or 'new', which could prompt for a team member, and change the status to 'assigned'</item>
+			<item><strong>Reject defect</strong> - where a defect is 'open' or 'new', which could prompt for a murmur (to collect the reason the defect was
+    rejected) and change the status to 'rejected'</item>
+			<item><strong>Reopen defect</strong> - which would allow a defect with status = 'closed' to be re-opened, this might prompt for a murmur and set
+    the status to 'open'</item>
+			<item><strong>Mark defect fixed</strong> - where a defect is assigned, which could set the status to 'fixed'</item>
+		</bullets>
+		<p>Of course, there are many possible work flows for defect management, but these examples serve to illustrate the sort of state transitions you might want to setup.</p>
+	</section>
+	<section title="Use project variables to change property values">
+		<p>You can make changes to property values by using project variables. As example below, the project variable 'Current Iteration' is set as a value of property 'Iteration - Analysis Complete'. The assigned value for (Current Iteration) will be used to set this property value when this transition is invoked. </p>
+		<screenshot src="resources/images/use_plv_in_transition.png"/>
+	</section>
+	<section title="Change for any set property to a specified property using (set)">
+<p> You can create transitions that will apply to any card that has a property value set (i.e. value is not (not set)) by setting the property value to (set) in the transition prerequisites. This type of transition is useful if you want to ensure the property has a value but you don't care what the value is. For example if you want all stories to have a priority before they are added to an iteration etc... The (set) value is also useful if you want to allow the same action to happen on cards that have any value but (not set), for example if you want to be able to set any story that is somewhere in the development process to be "blocked" you can say where status is (set) to do this.</p>
+	</section>
+	<section title="Prompt for explanatory Murmurs on important actions">
+		<p>When a team member is 'soft deleting' a card (setting the status property to deleted) or removing a story from scope, you can setup transitions to ensure a murmur is
+entered explaining why this action was performed.</p>
+	</section>
+	<section title="Hidden card properties">
+		<p>The Card transitions page indicates hidden properties with a colored background. </p>
+		<p>In some cases you may have hidden card properties which are only used in reporting and do not need to be set directly by users. Setting these hidden properties is a common use for a transition. One common example is to create date properties to track when a card enters specific states. The transitions which change the state of the
+card set the current date into the corresponding date property at the time the state changes. e.g. "Date Development Started" might get set to (current date)
+when a developer begins work on a card, then "Date Dev Done" set once it's ready for testing, then "Date Signed Off" set when the card is signed off. If
+a card property is hidden, this transition link will still display for cards that meet the card property criteria. The user will still be able to see that
+a hidden property has been updated by a transition if they look at the history for that card. </p>
+		<screenshot alttext="Card transitions page - hidden property" src="resources/images/transition_example_hidden_property.png"/>
+		<subsection title="Update hidden 'reporting' properties automatically" id='hidden_reporting_properties'>
+			<p>It is useful to capture values like 'Date completed on' or 'Analysis completed on' for reporting purposes, but these values do not have to be shown on the card and you might
+	choose to 'Hide' them. These hidden properties can be updated/captured automatically using transitions.</p>
+		</subsection>
+  </section>
+  <section title="Transitions for specific team members" id="who_can_execute">
+    <p>When you create transitions, you can make them available for all team members, only specific team members, or only team members who belong to specific <cref topic="user_groups">user groups</cref>.</p>
+    <screenshot alttext="Card transition used by options - user groups" src="resources/images/transition_example_user_group.png"/>
+    <bullets>
+      <item>If you don't need to restrict who can use a transition, select <strong>All team members</strong>.</item>
+      <item><strong>Only selected team members</strong> restricts usage of a transition to specific team members that you select. This choice is less adaptive to changes in team structure than <strong>Only team members of selected user groups</strong>, but may be appropriate if you have not created <cref topic="user_groups">user groups</cref> for your project, or you need more strict access control.</item>
+      <item>Choose <strong>Only team members of selected user groups</strong> if you only want team members that belong to specific <cref topic="user_groups">user groups</cref> to use the transition. For example, you may decide that only team members in the "Testers" user group can close defects, so you would make the "Close defect" transition available only to team members in that user group. As team members join the "Testers" user group, they would automatically have access to the "Close defect" transition. Likewise, if a team member leaves the "Testers" user group, they will no longer have access to the transition. In this way, using <strong>Only team members of selected user groups</strong> to restrict access to transitions is more flexible and maintainable than <strong>Only selected team members</strong>.</item>
+    </bullets>
+    <p>To prevent direct access to the properties set in the transition, you should also mark them as <cref topic="transition_only_properties">transition only</cref>.</p>
+  </section>
+	<section title="Removing cards from a tree">
+		<p> As well as updating card property values, transitions can also be used to remove cards from trees. There are a number of options when removing cards from tree using transitions just as there are when removing them manually from the tree. You can remove just one card using <strong> (remove card from this tree) </strong> or remove the card and any children it has using <strong> (remove card and its children from this tree)</strong>. </p>
+		<p>
+			<screenshot alttext="Card transitions page - remove card from tree options" src="resources/images/transition_example_remove_cards_from_tree_options.png"/>
+		</p>
+		<p>
+			<note>If the card is the lowest level of the tree then only the <strong>(remove card from this tree)</strong> option will be available.</note>
+		</p>
+		<p> When removing a card from a tree any tree relationship properties will be set to (not set) automatically. </p>
+		<p> Just like other transitions you can set other properties at the same time as removing cards from a tree. This is useful if you want to remove stories from scope and set some reporting properties, such as date removed from scope, at the same time. </p>
+		<p>
+			<screenshot alttext="Card transitions page - remove story from planning tree" src="resources/images/transition_example_remove_story_from_planning_tree.png"/>
+		</p>
+	</section>
+	<section title="How to...">
+		<bullets>
+			<item>
+				<cref topic="creating_card_transitions">Create card transitions</cref>
+			</item>
+			<item>
+				<cref topic="modifying_or_deleting_card_transitions">Modify or delete card transitions</cref>
+			</item>
+			<item>
+				<cref topic="transition_only_properties">Apply transition only properties</cref>
+			</item>
+			<item>
+				<cref topic="automated_transitions">Automate transitions on the grid view</cref>
+			</item>
+		</bullets>
+	</section>
+	<section title="Also see...">
+		<bullets>
+			<item><cref topic="card_transitions_page">Card Transitions page</cref></item>
+			<item><cref topic="card_properties">About card properties</cref></item>
+			<item><cref topic="transition_workflow_page">Generating transitions</cref></item>
+			<item><cref topic="user_groups">User groups</cref></item>
+			<item><cref topic="customizing_projects">Customizing projects</cref></item>
+		</bullets>
+	</section>
+</chapter>

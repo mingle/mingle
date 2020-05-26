@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE section SYSTEM "mingle_help.dtd">
+<chapter title="Using HTML anchors">
+	<p>You can direct users to any section of a card or page via a URL. </p>
+	<topic title="How to direct to a specific section in any page or card">
+		<steps>
+			<item>Switch to HTML editing mode by clicking  source tab on the toolbar</item>
+			<item><p>Add a named anchor in the spot that you want to jump to (e.g. you want to direct to the “UI” section in your card)</p>
+				<code>
+				<![CDATA[<h3><a name="UI">UI - Jump to here</a></h3>]]>
+			</code>
+			<item>In WYSIWYG edit mode, the UI section will have a flag to indicate you have a HTML anchor tag there. The flag will disappear when you save but the text will be blue.</item>
+			<screenshot alttext="HTML anchor flag" src="resources/images/html_anchor_flag.png"/>
+			</item>
+			<item>Now you can easily go to this section of the card via URL. For example, 
+				<code>
+				<![CDATA[http://url_to_your_card#UI]]>
+				</code>
+			</item>
+			<item>When you open this URL, the card will be loaded and the section, "UI - Jump to here", will be shown at the top of the browser.</item>
+		</steps>
+	</topic>
+</chapter>

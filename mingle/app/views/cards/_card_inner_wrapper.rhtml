@@ -1,0 +1,36 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%
+html_attrs = {
+  :id => "card_inner_wrapper_#{card.number}",
+  :class => "card-inner-wrapper clearfix",
+  :color_for => (uri_encode_for_js(view.color_by_property_definition.value(card)) if view.color_by),
+  :unselectable => "on",
+  :"data-sort-pos" => sort_position(card, view),
+  :"data-tags" => card.tags.join(","),
+  :"data-card-properties" => card_aggregate_properties(card, view),
+  :"data-popup-url" => url_for(:controller => "cards", :action => "popup_show", :number => card.number, :color_by => view.color_by)
+}
+content_tag :div, html_attrs do %>
+  <span class="card-summary-number">
+    <a href="<%= "#{CONTEXT_PATH}/projects/#{params[:project_id]}/cards/#{card.number}" %>" id="card_show_link_<%= card.number %>" title="Click to go directly to this card" >#<%= card.number %></a>
+  </span>
+  <%= render :partial => "cards/dependency_icon", :locals => { :card => card } %>
+  <div class="card-name">
+    <%= raw(substitute_card_name(card)) -%>
+  </div>
+<% end %>

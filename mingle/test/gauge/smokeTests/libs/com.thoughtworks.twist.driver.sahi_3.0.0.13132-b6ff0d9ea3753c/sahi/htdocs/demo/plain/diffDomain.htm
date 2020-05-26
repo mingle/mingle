@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN">
+<html>
+<head>
+<meta name="generator" content="HTML Tidy, see www.w3.org">
+<title></title>
+<script type="text/javascript">
+function ol(){
+    alert("Frameset loaded"+ ". I am "+ (top==self?"":"not ") + "top.");
+}
+function topFn(){
+    alert("topFn");
+}
+window.onload=ol;
+</script>
+</head>
+<frameset rows="*,*,*">
+<frame src="http://www.dom1.com:10000/demo/interact.htm">
+<frame src="http://www.dom2.com:10000/demo/iframeLoadTest.htm">
+<frame src="">
+</frameset>
+</html>
+

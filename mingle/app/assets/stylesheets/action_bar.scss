@@ -1,0 +1,234 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+/* Action bar */
+.ab-bg {
+  background-color: transparent;
+  display: none;
+}
+
+.basic-panel-one,
+.action_bar,
+.action-bar
+{
+  font-size: 11px;
+  margin: 0 0 10px 0 !important;
+  zoom: 1;
+  clear: both;
+  overflow: hidden;
+}
+
+.hide-explore-mingle-bar {
+  margin-bottom: 10px;
+}
+
+.column-selector-operations-bottom {
+  border-top: 1px solid #CCC;
+  background: #EEE url(../images/shared/backgrounds/overlay_top_innershadow_light.png) repeat-x top;
+  padding: 10px;
+  margin: 0;
+}
+
+
+#navigation_panel {
+  overflow: hidden;
+}
+
+#action_panel .for-selected-actions,
+#action_panel #lanes-header {
+  padding-top: 5px;
+}
+
+#action_panel .group_columns_by_actions {
+  padding-top: 4px;
+}
+
+.single-help-action-bar {
+  padding: 0;
+}
+
+.action-bar b {
+  font-weight: normal;
+}
+
+.action-bar a {
+  text-decoration: none;
+  font-weight: normal !important;
+}
+
+.action-bar.contextual-help{
+  background-color: #DFEDFE;
+}
+
+
+.hide-explore-mingle-bar.light{
+  background-color: transparent;
+}
+
+.hide-explore-mingle-bar.light .action-bar-inner-wrapper {
+  padding: 0;
+}
+
+.hide-explore-mingle-bar.light p
+{
+  margin: 0;
+}
+
+.hide-explore-mingle-bar input {
+  width: 13px;
+  height: 13px;
+  position: relative;
+  top: 1px;
+}
+
+.hide-explore-mingle-bar label {
+  padding-bottom:0;
+}
+
+.action-bar input {
+  margin: 0em;
+}
+
+.action-bar label
+{
+  display: inline;
+}
+
+.action-bar ul
+{
+  float: left;
+  margin: 0em auto;
+}
+
+.action-bar li
+{
+  list-style: none;
+  margin: 0em 1em;
+}
+
+.action-bar .notes
+{
+  display: inline-block;
+  padding: 4px 0;
+}
+
+.action-bar .current
+{
+  color: #AA0000;
+  font-weight: bold;
+  line-height: 1.8em;
+}
+
+.menu-separator
+{
+  border-bottom: 1px dotted #CCCCCC !important;
+}
+
+
+/* acdtion bar buttons */
+
+.action-bar a {
+  margin-right: 5px;
+}
+
+.action-bar a.up {
+  display: none;
+}
+
+a.edit:hover,
+a.next:hover,
+a.previous:hover,
+a.project-new:hover,
+a.project-import:hover,
+a.all-items:hover,
+a.preview:hover,
+a.transition:hover,
+a.cancel:hover,
+a.save:hover,
+a.ok:hover,
+a.delete:hover,
+a.delete-light:hover,
+a.add-tag:hover,
+a.add-action:hover,
+a.print-single:hover,
+a.copy-to:hover,
+a.temp:hover,
+a.update:hover,
+a.add-user:hover,
+a.back:hover,
+a.manage-users:hover,
+a.up:hover,
+a.forward:hover,
+a.edit-user:hover,
+a.edit-password:hover,
+a.safe:hover,
+a.email:hover,
+a.email-configuration-test:hover,
+a.rss:hover,
+a.show-hidden:hover,
+a.hide-hidden:hover,
+a.add:hover,
+a.show:hover,
+a.hide:hover,
+a.lock:hover,
+a.unlock:hover,
+a.template:hover,
+a.template-light:hover,
+a.page-help-at-action-bar:hover,
+a.add-transition:hover,
+a.add-transition-workflow:hover,
+a.generate_transitions:hover,
+a.delete-transition:hover,
+a.edit-transition:hover,
+a.revision:hover,
+a.source:hover,
+a.page-help:hover,
+a.page-help-in-message-box:hover,
+a.special-help-in-message-box:hover,
+a.page-help-at-quick-adding:hover,
+a.page-help-at-card-show:hover,
+a.page-help-at-login:hover,
+a.reset-tab:hover,
+a.reset-tab-all:hover,
+a.show-latest:hover,
+a.import-cards:hover,
+a.export-cards:hover,
+a.add-tree:hover,
+a.add-variable:hover,
+a.smtp-config:hover,
+a.register:hover,
+a.quick-add-selected:hover
+a.quick-add-unselected:hover
+{
+  text-decoration: none;
+}
+
+a.history-refresh {
+  cursor: pointer;
+}
+
+.action-bar a.disabled {
+  color: #CCC;
+}
+
+a:hover.disabled {
+  background-color: transparent;
+}
+
+
+#tree-and-style-selector a.contextual_help_link_with_divider {
+  float: left;
+}

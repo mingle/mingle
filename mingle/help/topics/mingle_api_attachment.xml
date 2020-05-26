@@ -1,0 +1,360 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Attachment API">
+  
+	<section title="Attachments">
+    Using the Mingle Attachment API files can be uploaded to cards and wiki pages as attachments. Existing attachments can also be accessed or deleted from cards or wiki pages.
+    
+    Card attachment resources are located by issuing a GET request to the server with the card's number as a parameter. Wiki page attachment resources are located by issuing a GET to a server with a wiki page's identifier.
+
+	<note><p>Please note:</p>
+		<bullets>
+			<item>Attachments identify cards by <strong>number</strong> rather than by id. If you specify a card id rather than a card number, you may end up updating the wrong card, and damage your data.</item>
+			<item>All the API resources and examples refer to <strong>v2 of the API</strong>. Support for v1 of the API was deprecated in fall 2012. Please refer to this <exref url="http://support.thoughtworks.com/entries/22029412-End-of-life-for-Version-1-of-the-Mingle-API">announcement</exref> in our Mingle community for more information about this deprecation.</item>
+			<item>Please note that all POST and PUT requests must be in XML format by default. This is not illustrated in the examples here. To specify parameters as shown in the examples you will have to set the request header for Content-Type to "application/x-www-form-urlencoded".</item>
+		</bullets>
+	</note> 
+	</section>
+	
+	<section title="Attchement API differences between Mingle and Mingle Onsite" id="mingle_vs_mingle_onsite">
+	  <bullets>
+	    <item> <b>Resource URL</b>: Mingle and <cref topic="mingle_onsite">Mingle Onsite</cref> respond differently on Attachment API.  Mingle responses with an absolute path while Mingle Onsite responses with relative path.
+      <br/>
+      Mingle attachment:<code>https://dumpling-attachments-storage.s3.amazonaws.com/mingle/attachments/6da6489ae420298128a133ceaacf3f50/19874/your_file_name.pdf?AWSAccessKeyId=ASIAIGSNO63NRYRVRWUQ&amp;Expires=1371061685&amp;Signature=6mPbS%2F7NJJw%2Fb0NFbxyrCOhMskY%3D&amp;x-amz-security-token=AQoDYXdzEKf%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaoAI55gyHrO5iDk5VLH0sqotu0WsDyG0ai07ddM0Yee3wL972D1nDhu20h4kE7StEKvkrHR2sjKF7DqPSTOe6tAHNbviCprlWNcIArTvV6LeBgazE46h3vqK1aL9ek5R7LuSgm3AQo1szq5wjhN1le%2FRNxbVc7nAkqnsVL8oxYahGxyCgLNpMjCtevvchGvbiFFYXeKUkmGL21oO2KGCjAyjDShFllwXY19%2FzqIBEsO69Od1nfop%2BbeTxm4iRyb7SDkezbk%2B9ognU10nJJDH7hOn5k2n36J%2BKIyNrxrommSs9oQwIwXV2NyUN%2BwAOEhZfoLig8h%2BpWpUvS8rBFglb9tWgz5TCdlGFQ7a9kncMmYgFLXTNf5dH2yIWaeDbbiEphSUgsPHhjQU%3D</code>
+      Mingle Onsite attachment:<code>projects/test_project/attachments/39</code>    
+	    </item>
+	    
+	    <item><b>Authentication</b>: Mingle uses access key to secure attchment. The attachment resource URL expieres after every 30 mins. Mingle Onsite use basic authentication for attahcment. 
+	      </item>
+	    
+	    
+    </bullets>
+	  
+	</section>
+
+  <section title="Structure of an attachment resource">
+    <p>The structure of the attachment resource, and its attributes are described below, along with their data type. Also included with each attribute is whether you are allowed to update the value. </p>
+    <api_attributes title="attachment resource xml - attributes">
+      <api_attribute name="file_name" type="String" readonly="true">file name of the attachment.</api_attribute>
+      <api_attribute name="url" type="String" readonly="true">system defined location of an attachment.</api_attribute>
+    </api_attributes>
+  </section>
+
+  <section title="Get all attachments for a card">
+    <api_reference>
+      <p><strong>Reference</strong></p>
+      <code>
+        Request Method: GET
+        URL: /api/v2/projects/<subst>project_identifier</subst>/cards/<subst>card_number</subst>/attachments.xml
+        Parameters: NA
+      </code>
+
+      <p><strong>Example</strong></p>
+      <code>
+        GET
+      
+        http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/cards/42/attachments.xml
+      </code>
+
+      <p><strong>Explanation</strong></p>
+      <p>The above is an example of a GET request to a Mingle server running at your.mingle.server, port 8080. The request is made with the authorization credentials of yourname/password. The URL of api/v2/projects/test_project/cards/42/attachments.xml represents the attachment resource for the card numbered 42 in project with identifier test_project.</p>
+    
+      <p><strong>Result (Mingle)</strong></p>
+      If you were authorized to perform the operation, and the resource was available, you should get an xml document that looks something like the following:
+      <code>
+        <![CDATA[
+    <?xml version="1.0" encoding="UTF-8"?>
+    <attachments type="array">
+      <attachment>                                
+				<url>https://dumpling-attachments-storage.s3.amazonaws.com/mingle/attachments/6da6489ae420298128a133ceaacf3f50/19874/notes.txt?AWSAccessKeyId=ASIAIGSNO63NRYRVRWUQ&amp;Expires=1371061685&amp;Signature=6mPbS%2F7NJJw%2Fb0NFbxyrCOhMskY%3D&amp;x-amz-security-token=AQoDYXdzEKf%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaoAI55gyHrO5iDk5VLH0sqotu0WsDyG0ai07ddM0Yee3wL972D1nDhu20h4kE7StEKvkrHR2sjKF7DqPSTOe6tAHNbviCprlWNcIArTvV6LeBgazE46h3vqK1aL9ek5R7LuSgm3AQo1szq5wjhN1le%2FRNxbVc7nAkqnsVL8oxYahGxyCgLNpMjCtevvchGvbiFFYXeKUkmGL21oO2KGCjAyjDShFllwXY19%2FzqIBEsO69Od1nfop%2BbeTxm4iRyb7SDkezbk%2B9ognU10nJJDH7hOn5k2n36J%2BKIyNrxrommSs9oQwIwXV2NyUN%2BwAOEhZfoLig8h%2BpWpUvS8rBFglb9tWgz5TCdlGFQ7a9kncMmYgFLXTNf5dH2yIWaeDbbiEphSUgsPHhjQU%3D</url>
+        <file_name>notes.txt</file_name>
+      </attachment>
+      <attachment> 
+				<url>https://dumpling-attachments-storage.s3.amazonaws.com/mingle/attachments/6da6489ae420298128a133ceaacf3f50/19874/picture_1.png?AWSAccessKeyId=ASIAIGSNO63NRYRVRWUQ&amp;Expires=1371061685&amp;Signature=6mPbS%2F7NJJw%2Fb0NFbxyrCOhMskY%3D&amp;x-amz-security-token=AQoDYXdzEKf%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaoAI55gyHrO5iDk5VLH0sqotu0WsDyG0ai07ddM0Yee3wL972D1nDhu20h4kE7StEKvkrHR2sjKF7DqPSTOe6tAHNbviCprlWNcIArTvV6LeBgazE46h3vqK1aL9ek5R7LuSgm3AQo1szq5wjhN1le%2FRNxbVc7nAkqnsVL8oxYahGxyCgLNpMjCtevvchGvbiFFYXeKUkmGL21oO2KGCjAyjDShFllwXY19%2FzqIBEsO69Od1nfop%2BbeTxm4iRyb7SDkezbk%2B9ognU10nJJDH7hOn5k2n36J%2BKIyNrxrommSs9oQwIwXV2NyUN%2BwAOEhZfoLig8h%2BpWpUvS8rBFglb9tWgz5TCdlGFQ7a9kncMmYgFLXTNf5dH2yIWaeDbbiEphSUgsPHhjQU%3D</url>
+        <file_name>picture_1.png</file_name>
+      </attachment>
+    </attachments>
+        ]]>
+      </code>  
+      <p><strong>Result (Mingle Onsite)</strong></p>
+      If you were authorized to perform the operation, and the resource was available, you should get an xml document that looks something like the following:
+      <code>
+        <![CDATA[
+    <?xml version="1.0" encoding="UTF-8"?>
+    <attachments type="array">
+      <attachment>
+        <url>/attachments/b4a15f3dcbebe1cc641f8c5a08f78394/811/notes.txt</url>
+        <file_name>notes.txt</file_name>
+      </attachment>
+      <attachment>
+        <url>/attachments/ecd1a5d278ac586a5b7d6be6edbb1747/812/picture_1.png</url>
+        <file_name>picture_1.png</file_name>
+      </attachment>
+    </attachments>
+        ]]>
+      </code>
+    </api_reference>
+  </section>  
+
+  <section title="Get all attachments for a wiki page">
+    <api_reference>
+      <p><strong>Reference</strong></p>
+      <code>
+        Request Method: GET
+        URL: /api/v2/projects/<subst>project_identifier</subst>/wiki/<subst>page_identifier</subst>/attachments.xml
+        Parameters: NA
+      </code>
+
+      <p><strong>Example</strong></p>
+      <code>
+        GET
+        
+        http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/wiki/overview_page/attachments.xml
+      </code>
+
+      <p><strong>Explanation</strong></p>
+      <p>The above is an example of a GET request to a Mingle server running at your.mingle.server, port 8080. The request is made with the authorization credentials of yourname/password. The URL of api/v2/projects/test_project/wiki/overview_page/attachments.xml represents the attachment resource for the Overview page in project with identifier test_project.</p>
+      <p><strong>Result (Mingle)</strong></p>
+      If you were authorized to perform the operation, and the resource was available, you should get an xml document that looks something like the following:
+      <code>
+        <![CDATA[
+    <?xml version="1.0" encoding="UTF-8"?>
+    <attachments type="array">
+      <attachment>
+				<url>https://dumpling-attachments-storage.s3.amazonaws.com/mingle/attachments/6da6489ae420298128a133ceaacf3f50/19874/notes.txt?AWSAccessKeyId=ASIAIGSNO63NRYRVRWUQ&amp;Expires=1371061685&amp;Signature=6mPbS%2F7NJJw%2Fb0NFbxyrCOhMskY%3D&amp;x-amz-security-token=AQoDYXdzEKf%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaoAI55gyHrO5iDk5VLH0sqotu0WsDyG0ai07ddM0Yee3wL972D1nDhu20h4kE7StEKvkrHR2sjKF7DqPSTOe6tAHNbviCprlWNcIArTvV6LeBgazE46h3vqK1aL9ek5R7LuSgm3AQo1szq5wjhN1le%2FRNxbVc7nAkqnsVL8oxYahGxyCgLNpMjCtevvchGvbiFFYXeKUkmGL21oO2KGCjAyjDShFllwXY19%2FzqIBEsO69Od1nfop%2BbeTxm4iRyb7SDkezbk%2B9ognU10nJJDH7hOn5k2n36J%2BKIyNrxrommSs9oQwIwXV2NyUN%2BwAOEhZfoLig8h%2BpWpUvS8rBFglb9tWgz5TCdlGFQ7a9kncMmYgFLXTNf5dH2yIWaeDbbiEphSUgsPHhjQU%3D</url>       
+				 <file_name>notes.txt</file_name>
+      </attachment>
+      <attachment>
+				<url>https://dumpling-attachments-storage.s3.amazonaws.com/mingle/attachments/6da6489ae420298128a133ceaacf3f50/19874/picture_1.png?AWSAccessKeyId=ASIAIGSNO63NRYRVRWUQ&amp;Expires=1371061685&amp;Signature=6mPbS%2F7NJJw%2Fb0NFbxyrCOhMskY%3D&amp;x-amz-security-token=AQoDYXdzEKf%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaoAI55gyHrO5iDk5VLH0sqotu0WsDyG0ai07ddM0Yee3wL972D1nDhu20h4kE7StEKvkrHR2sjKF7DqPSTOe6tAHNbviCprlWNcIArTvV6LeBgazE46h3vqK1aL9ek5R7LuSgm3AQo1szq5wjhN1le%2FRNxbVc7nAkqnsVL8oxYahGxyCgLNpMjCtevvchGvbiFFYXeKUkmGL21oO2KGCjAyjDShFllwXY19%2FzqIBEsO69Od1nfop%2BbeTxm4iRyb7SDkezbk%2B9ognU10nJJDH7hOn5k2n36J%2BKIyNrxrommSs9oQwIwXV2NyUN%2BwAOEhZfoLig8h%2BpWpUvS8rBFglb9tWgz5TCdlGFQ7a9kncMmYgFLXTNf5dH2yIWaeDbbiEphSUgsPHhjQU%3D</url>        
+				<file_name>picture_1.png</file_name>
+      </attachment>
+    </attachments>
+        ]]>
+      </code>
+      <p><strong>Result (Mingle Onsite)</strong></p>
+      If you were authorized to perform the operation, and the resource was available, you should get an xml document that looks something like the following:
+      <code>
+        <![CDATA[
+    <?xml version="1.0" encoding="UTF-8"?>
+    <attachments type="array">
+      <attachment>
+        <url>/attachments/b4a15f3dcbebe1cc641f8c5a08f78394/811/notes.txt</url>
+        <file_name>notes.txt</file_name>
+      </attachment>
+      <attachment>
+        <url>/attachments/ecd1a5d278ac586a5b7d6be6edbb1747/812/picture_1.png</url>
+        <file_name>picture_1.png</file_name>
+      </attachment>
+    </attachments>
+        ]]>
+      </code>  
+    </api_reference>
+  </section>
+
+  <section title="Get an attachment for a wiki page or card">
+    <api_reference>
+      <p><strong>Reference</strong></p>
+      <code>
+        Request Method: GET
+        URL: attachment url returned in the attachment resource when requesting all attachments for a wiki page or card (see above)
+        Parameters: NA
+      </code>
+      <p><strong>Example (Mingle)</strong></p>
+      <code>
+        GET
+
+				https://dumpling-attachments-storage.s3.amazonaws.com/mingle/attachments/6da6489ae420298128a133ceaacf3f50/19874/picture_1.png?AWSAccessKeyId=ASIAIGSNO63NRYRVRWUQ&amp;Expires=1371061685&amp;Signature=6mPbS%2F7NJJw%2Fb0NFbxyrCOhMskY%3D&amp;x-amz-security-token=AQoDYXdzEKf%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaoAI55gyHrO5iDk5VLH0sqotu0WsDyG0ai07ddM0Yee3wL972D1nDhu20h4kE7StEKvkrHR2sjKF7DqPSTOe6tAHNbviCprlWNcIArTvV6LeBgazE46h3vqK1aL9ek5R7LuSgm3AQo1szq5wjhN1le%2FRNxbVc7nAkqnsVL8oxYahGxyCgLNpMjCtevvchGvbiFFYXeKUkmGL21oO2KGCjAyjDShFllwXY19%2FzqIBEsO69Od1nfop%2BbeTxm4iRyb7SDkezbk%2B9ognU10nJJDH7hOn5k2n36J%2BKIyNrxrommSs9oQwIwXV2NyUN%2BwAOEhZfoLig8h%2BpWpUvS8rBFglb9tWgz5TCdlGFQ7a9kncMmYgFLXTNf5dH2yIWaeDbbiEphSUgsPHhjQU%3D            
+
+</code>
+
+      <p><strong>Explanation (Mingle)</strong></p>
+      <p>The above is an example of a GET request to Mingle. The request is secured by Access Key, and the Access Key expires every 30 minutes.</p>
+      <p><strong>Example (Mingle Onsite)</strong></p>
+      <code>
+        GET
+        
+        http://yourname:password@your.mingle.server:8080/api/v2/attachments/b4a15f3dcbebe1cc641f8c5a08f78394/811/notes.txt
+      </code>
+
+      <p><strong>Explanation (Mingle Onsite)</strong></p>
+      <p>The above is an example of a GET request to a Mingle server running at your.mingle.server, port 8080. The request is made with the authorization credentials of yourname/password. The URL of /attachments/b4a15f3dcbebe1cc641f8c5a08f78394/811/notes.txt represents the attachment you want to access.</p>
+      
+      <p><strong>Result</strong></p>
+      If you were authorized to perform the operation, and the resource was available, you should be able to access the attachment.
+    </api_reference>
+  </section>
+  
+  <section title="Deleting an attachment on a card">  
+    <api_reference>
+      <p><strong>Reference</strong></p>
+      <code>
+        Request Method: DELETE
+        URL:attachment url returned in the attachment resource when requesting all attachments for a wiki page or card (see above)
+        Parameters: NA
+      </code>
+
+      <p><strong>Example (Mingle)</strong></p>
+      <code>
+        DELETE
+
+				https://dumpling-attachments-storage.s3.amazonaws.com/mingle/attachments/6da6489ae420298128a133ceaacf3f50/19874/picture_1.png?AWSAccessKeyId=ASIAIGSNO63NRYRVRWUQ&amp;Expires=1371061685&amp;Signature=6mPbS%2F7NJJw%2Fb0NFbxyrCOhMskY%3D&amp;x-amz-security-token=AQoDYXdzEKf%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaoAI55gyHrO5iDk5VLH0sqotu0WsDyG0ai07ddM0Yee3wL972D1nDhu20h4kE7StEKvkrHR2sjKF7DqPSTOe6tAHNbviCprlWNcIArTvV6LeBgazE46h3vqK1aL9ek5R7LuSgm3AQo1szq5wjhN1le%2FRNxbVc7nAkqnsVL8oxYahGxyCgLNpMjCtevvchGvbiFFYXeKUkmGL21oO2KGCjAyjDShFllwXY19%2FzqIBEsO69Od1nfop%2BbeTxm4iRyb7SDkezbk%2B9ognU10nJJDH7hOn5k2n36J%2BKIyNrxrommSs9oQwIwXV2NyUN%2BwAOEhZfoLig8h%2BpWpUvS8rBFglb9tWgz5TCdlGFQ7a9kncMmYgFLXTNf5dH2yIWaeDbbiEphSUgsPHhjQU%3D            </code>
+
+      <p><strong>Explanation (Mingle)</strong></p>
+      <p>The above is an example of a GET request to Mingle. The request is secured by Access Key, and the Access Key expires every 30 minutes.</p>
+      
+      <p><strong>Example (Mingle Onsite)</strong></p>
+      <code>
+        DELETE
+
+        http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/cards/42/attachments/picture_1.png
+      </code>
+
+      <p><strong>Explanation (Mingle Onsite)</strong></p>
+      <p>The above is an example of a DELETE request to a Mingle server running at your.mingle.server, port 8080. The request is made with the authorization credentials of yourname/password. The URL of projects/test_project/cards/42/attachments/picture_1.png represents the attachment picture_1.png for the card numbered 42 in project with identifier test_project.</p>
+
+      <p><strong>Result</strong></p>
+      If you were authorized to perform the operation, and the resource was available, the attachment you specified should have been deleted.
+    </api_reference>
+  </section>
+  
+  <section title="Deleting an attachment on a wiki page">  
+    <api_reference>
+      <p><strong>Reference</strong></p>
+      <code>
+        Request Method: DELETE
+        URL: attachment url returned in the attachment resource when requesting all attachments for a wiki page or card (see above)
+        Parameters: NA
+      </code>
+
+            <p><strong>Example (Mingle)</strong></p>
+            <code>
+            DELETE
+  https://dumpling-attachments-storage.s3.amazonaws.com/mingle/attachments/6da6489ae420298128a133ceaacf3f50/19874/picture_1.png?AWSAccessKeyId=ASIAIGSNO63NRYRVRWUQ&amp;Expires=1371061685&amp;Signature=6mPbS%2F7NJJw%2Fb0NFbxyrCOhMskY%3D&amp;x-amz-security-token=AQoDYXdzEKf%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaoAI55gyHrO5iDk5VLH0sqotu0WsDyG0ai07ddM0Yee3wL972D1nDhu20h4kE7StEKvkrHR2sjKF7DqPSTOe6tAHNbviCprlWNcIArTvV6LeBgazE46h3vqK1aL9ek5R7LuSgm3AQo1szq5wjhN1le%2FRNxbVc7nAkqnsVL8oxYahGxyCgLNpMjCtevvchGvbiFFYXeKUkmGL21oO2KGCjAyjDShFllwXY19%2FzqIBEsO69Od1nfop%2BbeTxm4iRyb7SDkezbk%2B9ognU10nJJDH7hOn5k2n36J%2BKIyNrxrommSs9oQwIwXV2NyUN%2BwAOEhZfoLig8h%2BpWpUvS8rBFglb9tWgz5TCdlGFQ7a9kncMmYgFLXTNf5dH2yIWaeDbbiEphSUgsPHhjQU%3D</code>
+
+            <p><strong>Explanation (Mingle)</strong></p>
+            <p>The above is an example of a GET request to Mingle. The request is secured by Access Key, and the Access Key expires every 30 minutes.</p>
+
+
+      <p><strong>Example (Mingle Onsite)</strong></p>
+      <code>
+        DELETE
+
+        http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/wiki/overview_page/attachments/picture_1.png
+      </code>
+
+      <p><strong>Explanation (Mingle Onsite)</strong></p>
+      <p>The above is an example of a DELETE request to a Mingle server running at your.mingle.server, port 8080. The request is made with the authorization credentials of yourname/password. The URL of /projects/test_project/wiki/overview_page/attachments/picture_1.png represents the attachment picture_1.png for the wiki page Overview page in project with identifier test_project.</p>
+
+      <p><strong>Result</strong></p>
+      If you were authorized to perform the operation, and the resource was available, the attachment you specified should have been deleted.
+    </api_reference>
+
+  </section>
+
+  <section title="Uploading an attachment to a card">
+
+    <api_reference>
+      <p><strong>Reference</strong></p>
+      <code>
+        Request Method: POST
+        URL: /api/v2/projects/<subst>project_identifier</subst>/cards/<subst>card_number</subst>/attachments.xml
+        The header and body should contain the uploaded file information.
+      </code>
+
+      <p><strong>Example</strong></p>
+      <code>
+        POST
+
+        http://your.mingle.server:8080/api/v2/projects/test_project/cards/42/attachments.xml
+
+        Header:
+        Content-type: multipart/form-data; boundary=----------XnJLe9ZIbbGUYtzPQJ16u1
+        authorization: Basic &amp;lt;&amp;lt;encrypted user name and password&amp;gt;&amp;gt;
+
+        Body:
+        /var/folders/5J/5JlTqGEhFtKlM1mETxTWzU+++TI/-Tmp-/sample_attachment.txt.1513.0
+        application/octet-stream
+        ------------XnJLe9ZIbbGUYtzPQJ16u1 
+        Content-Disposition: form-data; name="file"; filename="sample_attachment.txt" 
+        Content-Type: application/octet-stream 
+        Content-Length: 29 
+
+        This is a sample attachment.
+
+        ------------XnJLe9ZIbbGUYtzPQJ16u1--
+      </code>
+
+      <p><strong>Explanation</strong></p>
+      <p>The above is an example of a POST request to a Mingle server running at your.mingle.server, port 8080. The request is made with the authorization credentials encrypted in the header. The URL of api/v2/projects/test_project/cards/42/attachments.xml represents the attachments card numbered 42 in project with identifier test_project. The header and body represent the data to upload for a file named sample_attachment.txt which contains the text:<p>
+        
+        This is a sample attachment.
+        </p>
+      </p>
+
+      <p><strong>Result</strong></p>
+      If you were authorized to perform the operation, and the resource was available, the attachment you specified should have been uploaded to the card.
+    </api_reference>
+  </section>
+
+  <section title="Uploading an attachment to a wiki page">
+
+    <api_reference>
+      <p><strong>Reference</strong></p>
+      <code>
+        Request Method: POST
+        URL: /api/v2/projects/<subst>project_identifier</subst>/wiki/<subst>wiki_page</subst>/attachments.xml
+        Parameters: File
+      </code>
+
+      <p><strong>Example</strong></p>
+      <code>
+       POST
+
+       http://your.mingle.server:8080/api/v2/projects/test_project/wiki/overview_page/attachments.xml
+
+       Header:
+       Content-type: multipart/form-data; boundary=----------XnJLe9ZIbbGUYtzPQJ16u1
+       authorization: Basic &amp;lt;&amp;lt;encrypted user name and password&amp;gt;&amp;gt;
+
+       Body:
+       /var/folders/5J/5JlTqGEhFtKlM1mETxTWzU+++TI/-Tmp-/sample_attachment.txt.1513.0
+       application/octet-stream
+       ------------XnJLe9ZIbbGUYtzPQJ16u1 
+       Content-Disposition: form-data; name="file"; filename="sample_attachment.txt" 
+       Content-Type: application/octet-stream 
+       Content-Length: 29 
+
+       This is a sample attachment.
+
+       ------------XnJLe9ZIbbGUYtzPQJ16u1--
+      </code>
+
+      <p><strong>Explanation</strong></p>
+      <p>The above is an example of a POST request to a Mingle server running at your.mingle.server, port 8080. The request is made with the authorization credentials encrypted in the header. The URL of api/v2/projects/test_project/wiki/overview_page/attachments.xml represents the attachments for the wiki page Overview page in project with identifier test_project. The header and body represent the data to upload for a file named sample_attachment.txt which contains the text:<p>
+        
+        This is a sample attachment.
+        </p>
+      </p>
+
+      <p><strong>Result</strong></p>
+      If you were authorized to perform the operation, and the resource was available, the attachment you specified should have been uploaded to the card.
+    </api_reference>
+  </section>
+
+</topic>

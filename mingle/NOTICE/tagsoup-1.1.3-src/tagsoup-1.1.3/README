@@ -1,0 +1,319 @@
+
+                        TagSoup - Just Keep On Truckin'
+
+  Introduction
+
+   This is the home page of TagSoup, a SAX-compliant parser written in
+   Java that, instead of parsing well-formed or valid XML, parses HTML as
+   it is found in the wild: [1]poor, nasty and brutish, though quite
+   often far from short. TagSoup is designed for people who have to
+   process this stuff using some semblance of a rational application
+   design. By providing a SAX interface, it allows standard XML tools to
+   be applied to even the worst HTML. TagSoup also includes a
+   command-line processor that reads HTML files and can generate either
+   clean HTML or well-formed XML that is a close approximation to XHTML.
+
+   This is also the README file packaged with TagSoup.
+
+   TagSoup is free and Open Source software, licensed under the
+   [2]Academic Free License version 3.0, a cleaned-up and patent-safe
+   BSD-style license which allows proprietary re-use. It's also licensed
+   under the [3]GNU GPL version 2.0, since unfortunately the GPL and the
+   AFL are incompatible. You can choose to license TagSoup from me under
+   either the GPL or the AFL.
+
+  Warning: TagSoup will not build on stock Java 5.x or 6.x!
+
+   Due to a bug in the versions of Xalan shipped with Java 5.x and 6.x,
+   TagSoup will not build out of the box. You need to retrieve [4]Saxon
+   6.5.5, which does not have the bug. Unpack the zipfile in an empty
+   directory and copy the saxon.jar and saxon-xml-apis.jar files to
+   $ANT_HOME/lib. The Ant build process for TagSoup will then notice that
+   Saxon is available and use it instead.
+
+  TagSoup 1.1.3 released
+
+   The 1.1.3 release fixes a problem that made TagSoup unable to
+   interoperate with the XSLT processors [5]Saxon-B and Saxon-SA. Any
+   attempt to set the ContentHandler, DTDHandler, ErrorHandler,
+   LexicalHandler, or EntityResolver of a TagSoup Parser object to null
+   caused the parser to break rather than resetting its behavior to the
+   default. As a result, Saxon would crash with a NullPointerException
+   when processing the second document. This represents a gap in the
+   [6]SAX specification.
+
+  TagSoup 1.1.2 released
+
+   This release fixes the reporting of CDATA sections. In TagSoup 1.1 and
+   previous versions, if you specified a SAX LexicalHandler to receive
+   indications of comments and CDATA sections, you were told that the
+   contents of the elements "style" and "script" constitute a CDATA
+   section. This report was incorrect, as "style" and "script" elements
+   may contain characters that are illegal in XML CDATA sections.
+   Consequently, the reports have been removed. However, this release now
+   correctly reports actual CDATA sections, which was not the case in any
+   previous release. Neither of these changes affects users who don't
+   make use of the SAX LexicalHandler facilities.
+
+   XMLWriter has not changed, so command-line TagSoup users will not see
+   CDATA sections appearing in the output.
+
+   I have also added CDATAElementsFeature, which is the programmatic
+   equivalent of the --nocdata switch. Turning this feature off
+   suppresses the special interpretation given to script and style
+   elements.
+
+   (TagSoup 1.1.1 had a paper-bag bug and is withdrawn.)
+
+   [7]Download the TagSoup 1.1.3 jar file here. It's about 58K long.
+   [8]Download the full TagSoup 1.1.3 source here. If you don't have zip,
+   you can use jar to unpack it.
+
+  TagSoup 1.1 released
+
+   TagSoup 1.1 adds Tatu Saloranta's JAXP support for TagSoup. To use
+   TagSoup within the JAXP framework (which is not something I
+   necessarily recommend, but it is part of the Java XML platform), you
+   can create a SAXParser by calling
+   org.ccil.cowan.tagsoup.jaxp.SAXParserImpl.newInstance(). You can also
+   set the system property javax.xml.parsers.SAXParserFactory to
+   org.ccil.cowan.tagsoup.jaxp.SAXFactoryImpl, but be aware that doing
+   this will cause all JAXP-based XML parsing to go through TagSoup,
+   which is a Bad Thing if your application also reads XML documents.
+
+   There are no new features in TagSoup itself.
+
+  What TagSoup does
+
+   TagSoup is designed as a parser, not a whole application; it isn't
+   intended to permanently clean up bad HTML, as [9]HTML Tidy does, only
+   to parse it on the fly. Therefore, it does not convert presentation
+   HTML to CSS or anything similar. It does guarantee well-structured
+   results: tags will wind up properly nested, default attributes will
+   appear appropriately, and so on.
+
+   The semantics of TagSoup are as far as practical those of actual HTML
+   browsers. In particular, never, never will it throw any sort of syntax
+   error: the TagSoup motto is [10]"Just Keep On Truckin'". But there's
+   much, much more. For example, if the first tag is LI, it will supply
+   the application with enclosing HTML, BODY, and UL tags. Why UL?
+   Because that's what browsers assume in this situation. For the same
+   reason, overlapping tags are correctly restarted whenever possible:
+   text like:
+This is <B>bold, <I>bold italic, </b>italic, </i>normal text
+
+   gets correctly rewritten as:
+This is <b>bold, <i>bold italic, </i></b><i>italic, </i>normal text.
+
+   By intention, TagSoup is small and fast. It does not depend on the
+   existence of any framework other than SAX, and should be able to work
+   with any framework that can accept SAX parsers. In particular, [11]XOM
+   is known to work.
+
+   You can replace the low-level HTML scanner with one based on Sean
+   McGrath's [12]PYX format (very close to James Clark's ESIS format).
+   You can also supply an AutoDetector that peeks at the incoming byte
+   stream and guesses a character encoding for it. Otherwise, the
+   platform default is used. If you need an autodetector of character
+   sets, consider trying to adapt the [13]Mozilla one; if you succeed,
+   let me know.
+
+  Note: TagSoup in Java 1.1
+
+   If you go through the TagSoup source and replace all references to
+   HashMap with Hashtable and recompile, TagSoup will work fine in Java
+   1.1 VMs. Thanks to Thorbjørn Vinne for this discovery.
+
+  The TSaxon XSLT-for-HTML processor
+
+   [14]I am also distributing [15]TSaxon, a repackaging of version 6.5.5
+   of Michael Kay's Saxon XSLT version 1.0 implementation that includes
+   TagSoup. TSaxon is a drop-in replacement for Saxon, and can be used to
+   process either HTML or XML documents with XSLT stylesheets.
+
+  TagSoup as a stand-alone program
+
+   It is possible to run TagSoup as a program by saying java -jar
+   tagsoup-1.0.1 [option ...] [file ...]. Files mentioned on the command
+   line will be parsed individually. If no files are specified, the
+   standard input is read.
+
+   The following options are understood:
+
+   --files
+          Output into individual files, with html extensions changed to
+          xhtml. Otherwise, all output is sent to the standard output.
+
+   --html
+          Output is in clean HTML: the XML declaration is suppressed, as
+          are end-tags for the known empty elements.
+
+   --omit-xml-declaration
+          The XML declaration is suppressed.
+
+   --method=html
+          End-tags for the known empty HTML elements are suppressed.
+
+   --pyx
+          Output is in PYX format.
+
+   --pyxin
+          Input is in PYXoid format (need not be well-formed).
+
+   --nons
+          Namespaces are suppressed. Normally, all elements are in the
+          XHTML 1.x namespace, and all attributes are in no namespace.
+
+   --nobogons
+          Bogons (unknown elements) are suppressed. Normally, they are
+          treated as empty.
+
+   --nodefaults
+          suppress default attribute values
+
+   --nocolons
+          change explicit colons in element and attribute names to
+          underscores
+
+   --norestart
+          don't restart any normally restartable elements
+
+   --ignorable
+          output whitespace in elements with element-only content
+
+   --any
+          Bogons are given a content model of ANY rather than EMPTY.
+
+   --lexical
+          Pass through HTML comments. Has no effect when output is in PYX
+          format.
+
+   --reuse
+          Reuse a single instance of TagSoup parser throughout. Normally,
+          a new one is instantiated for each input file.
+
+   --nocdata
+          Change the content models of the script and style elements to
+          treat them as ordinary #PCDATA (text-only) elements, as in
+          XHTML, rather than with the special CDATA content model.
+
+   --encoding=encoding
+          Specify the input encoding. The default is the Java platform
+          default.
+
+   --output-encoding=encoding
+          Specify the output encoding. The default is the Java platform
+          default.
+
+   --help
+          Print help.
+
+   --version
+          Print the version number.
+
+  SAX features and properties
+
+   TagSoup supports the following SAX features in addition to the
+   standard ones:
+
+   http://www.ccil.org/~cowan/tagsoup/features/ignore-bogons
+          A value of "true" indicates that the parser will ignore unknown
+          elements.
+
+   http://www.ccil.org/~cowan/tagsoup/features/bogons-empty
+          A value of "true" indicates that the parser will give unknown
+          elements a content model of EMPTY; a value of "false", a
+          content model of ANY.
+
+   http://www.ccil.org/~cowan/tagsoup/features/default-attributes
+          A value of "true" indicates that the parser will return default
+          attribute values for missing attributes that have default
+          values.
+
+   http://www.ccil.org/~cowan/tagsoup/features/translate-colons
+          A value of "true" indicates that the parser will translate
+          colons into underscores in names.
+
+   http://www.ccil.org/~cowan/tagsoup/features/restart-elements
+          A value of "true" indicates that the parser will attempt to
+          restart the restartable elements.
+
+   http://www.ccil.org/~cowan/tagsoup/features/ignorable-whitespace
+          A value of "true" indicates that the parser will transmit
+          whitespace in element-only content via the SAX
+          ignorableWhitespace callback. Normally this is not done,
+          because HTML is an SGML application and SGML suppresses such
+          whitespace.
+
+   http://www.ccil.org/~cowan/tagsoup/features/cdata-elements
+          A value of "true" indicates that the parser will process the
+          script and style elements (or any elements with type='cdata' in
+          the TSSL schema) as SGML CDATA elements (that is, no markup is
+          recognized except the matching end-tag).
+
+   TagSoup supports the following SAX properties in addition to the
+   standard ones:
+
+   http://www.ccil.org/~cowan/tagsoup/properties/scanner
+          Specifies the Scanner object this parser uses.
+
+   http://www.ccil.org/~cowan/tagsoup/properties/schema
+          Specifies the Schema object this parser uses.
+
+   http://www.ccil.org/~cowan/tagsoup/properties/auto-detector
+          Specifies the AutoDetector (for encoding detection) this parser
+          uses.
+
+  More information
+
+   I gave a presentation (a nocturne, so it's not on the schedule) at
+   [16]Extreme Markup Languages 2004 about TagSoup, updated from the one
+   presented in 2002 at the New York City XML SIG and at XML 2002. This
+   is the main high-level documentation about how TagSoup works. Formats:
+   [17]OpenDocument [18]Powerpoint [19]PDF.
+
+   I also had people add [20]"evil" HTML to a large poster so that I
+   could [21]clean it up; View Source is probably more useful than
+   ordinary browsing. The original instructions were:
+
+                        SOUPE DE BALISES (BE EVIL)!
+   Ecritez une balise ouvrante (sans attributs)
+   ou fermante HTML ici, s.v.p.
+
+   There is a [22]tagsoup-friends mailing list hosted at [23]Yahoo
+   Groups. You can [24]join via the Web, or by sending a blank email to
+   [25]tagsoup-friends-subscribe@yahoogroups.com. The [26]archives are
+   open to all.
+
+   Online TagSoup processing for publicly accessible HTML documents is
+   now [27]available courtesy of Leigh Dodds.
+
+References
+
+   1. http://oregonstate.edu/instruct/phl302/texts/hobbes/leviathan-c.html
+   2. http://www.opensource.org/licenses/afl-3.0.php
+   3. http://www.opensource.org/licenses/gpl-license.php
+   4. http://prdownloads.sourceforge.net/saxon/saxon6-5-5.zip
+   5. http://saxon.sourceforge.net/
+   6. http://sax.sourceforge.net/
+   7. http://home.ccil.org/~cowan/XML/tagsoup/tagsoup-1.1.3.jar
+   8. http://home.ccil.org/~cowan/XML/tagsoup/tagsoup-1.1.3-src.zip
+   9. http://tidy.sf.net/
+  10. http://www.crumbmuseum.com/truckin.html
+  11. http://www.cafeconleche.org/XOM
+  12. http://gnosis.cx/publish/programming/xml_matters_17.html
+  13. http://jchardet.sourceforge.net/
+  14. http://www.ccil.org/~cowan
+  15. http://home.ccil.org/~cowan/XML/tagsoup/tsaxon
+  16. http://www.extrememarkup.com/extreme/2004
+  17. http://home.ccil.org/~cowan/XML/tagsoup/tagsoup.odp
+  18. http://home.ccil.org/~cowan/XML/tagsoup/tagsoup.ppt
+  19. http://home.ccil.org/~cowan/XML/tagsoup/tagsoup.pdf
+  20. http://home.ccil.org/~cowan/XML/tagsoup/extreme.html
+  21. http://home.ccil.org/~cowan/XML/tagsoup/extreme.xhtml
+  22. http://groups.yahoo.com/group/tagsoup-friends
+  23. http://groups.yahoo.com/
+  24. http://groups.yahoo.com/group/tagsoup-friends/join
+  25. mailto:tagsoup-friends-subscribe@yahoogroups.com
+  26. http://groups.yahoo.com/group/tagsoup-friends/messages
+  27. http://xmlarmyknife.org/docs/xhtml/tagsoup/

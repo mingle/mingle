@@ -1,0 +1,39 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% if !@view.requires_tree? %>
+  <% form_tag('', {
+                    :id => 'transition-popup-form',
+                    :onsubmit => "$j.ajax({
+                      url: '/cards/transition_in_popup',
+                      method: 'POST',
+                      data: $j(this).serialize()
+                    }); return false;"
+                  }) do %>
+    <%= render :partial => 'transition_popup_hidden_fields', :locals => { :view => view, :transition => transition, :card => card, :project => card.project, :current_project_id => current_project_id } %>
+    <% # popups.unKeep.defer() does not work, lose the bind of popups_holder, see bug 9036 -%>
+    <%= render :partial => 'transition_popup_form', :locals => {:transition => transition, :card => card, :onCancel => delayed_call(:js => within_popups_holder('popups.unKeep()'), :delay => 0.01)} %>
+  <% end %>
+<% else %>
+  <% form_remote_tag({ :url => {:action => 'transition_in_old_popup'},
+                      :before => show_spinner('transition_spinner_id'),
+                      :complete => "(#{within_popups_holder 'popups.unKeep()'}); InputingContexts.clear(); (#{within_popups_holder 'popups.clear()'})",
+                      :html => {:id => 'transition-popup-form'} }) do  %>
+    <%= render :partial => 'transition_popup_hidden_fields', :locals => { :view => view, :transition => transition, :card => card, :project => card.project, :current_project_id => current_project_id } %>
+    <% # popups.unKeep.defer() does not work, lose the bind of popups_holder, see bug 9036 -%>
+    <%= render :partial => 'transition_popup_form', :locals => {:transition => transition, :card => card, :onCancel => delayed_call(:js => within_popups_holder('popups.unKeep()'), :delay => 0.01)} %>
+  <% end %>
+<% end %>

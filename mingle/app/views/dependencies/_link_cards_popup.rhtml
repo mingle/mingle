@@ -1,0 +1,63 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id='link-cards-popup'
+  data-card-search-url='<%= url_for(:controller => :cards, :action => :execute_mql, :project_id => @dependency.resolving_project.identifier) %>'
+  data-link-url='<%= url_for(:controller => controller_name, :action => :link_cards, :project_id => @dependency.resolving_project.identifier) %>'
+  data-dependency-number='<%= @dependency.number %>' data-raising-card-number='<%= @dependency.raising_card_number if @dependency.raising_project == @project %>'>
+  <% lightbox = Lightbox.with_close_link_and_close_button(self, 'Cancel', '', :id => 'foo')
+  lightbox.header "Accept Dependency (#{@dependency.number_and_name})"
+  lightbox.body do %>
+    <div class="link-cards-container">
+      <div class="info-box link-message">
+        Please link an existing card(s) in order to move this dependency from New to Accepted:
+      </div>
+
+      <div class="desired-completion-date">
+        Desired Completion Date: <%= @project.format_date(@dependency.desired_end_date) %>
+      </div>
+
+      <div class="cards-to-link">
+        <label>Resolving Card(s): <i class="fa fa-plus add-card"></i></label>
+        <ul class="cards">
+          <li class='add-card-field'>
+            <input type='text' />
+            <i class='fa fa-times remove-card'></i>
+            <% @dependency.resolving_cards.each do |card| %>
+              <li class="card-to-add">
+                <%= hidden_field_tag 'dependency[cards][]', card[:number] %>
+                <%= "##{card[:number]} #{card[:name]}" %>
+              </li>
+            <% end %>
+          </li>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="lightbox_actions">
+    <div class="action-bar" id="lightbox_actions">
+      <%= link_to 'Link Card(s)', 'javascript:void(0)', { :class => 'link_as_button primary disabled link-cards' } %>
+    </div>
+  </div>
+
+</div>
+
+<%= javascript_with_rescue(<<-JAVASCRIPTS)
+$j("#link-cards-popup").linkCardsPopup();
+#{"MingleUI.cardTypeColors = #{@dependency.resolving_project.card_type_colors.to_json};" unless project_selected?}
+JAVASCRIPTS
+%>

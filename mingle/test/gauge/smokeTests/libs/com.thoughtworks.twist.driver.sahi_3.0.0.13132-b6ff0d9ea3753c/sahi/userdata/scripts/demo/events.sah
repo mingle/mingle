@@ -1,0 +1,162 @@
+var $events = new Object();
+
+function commonEvents(){
+	return {
+		blurChange:  "\nt1:focus; $('t1').value=\nt1:keydown; $('t1').value=\nt1:keypress; $('t1').value=\nt1:keyup; $('t1').value=a\nt1:keydown; $('t1').value=a\nt1:keypress; $('t1').value=a\nt1:keyup; $('t1').value=ab\nb1:mousedown; $('t1').value=ab\nt1:change; $('t1').value=ab\nt1:blur; $('t1').value=ab\nb1:focus; $('t1').value=ab\nb1:mouseup; $('t1').value=ab\nb1:click; $('t1').value=ab\nb1:blur; $('t1').value=ab",
+		checkbox: "\ncb1:mousedown\ncb1:focus\ncb1:mouseup\ncb1:click\ncb1:change\ncb1:blur",
+		radio: "\nr11:mousedown\nr11:focus\nr11:mouseup\nr11:click\nr11:change\nr11:blur",
+		button: "\nb1:mousedown\nb1:focus\nb1:mouseup\nb1:click\nb1:blur",
+		divdblclick: "\nd1:mousedown; e.button=0; e.which=1; e.type=mousedown; e.detail=1\nd1:mouseup; e.button=0; e.which=1; e.type=mouseup; e.detail=1\nd1:click; e.button=0; e.which=1; e.type=click; e.detail=1\nd1:mousedown; e.button=0; e.which=1; e.type=mousedown; e.detail=2\nd1:mouseup; e.button=0; e.which=1; e.type=mouseup; e.detail=2\nd1:click; e.button=0; e.which=1; e.type=click; e.detail=2\nd1:dblclick; e.button=0; e.which=1; e.type=dblclick; e.detail=2",
+		textboxdblclick: "\nt1:mousedown; e.button=0; e.which=1; e.type=mousedown; e.detail=1\nt1:focus; e.button=undefined; e.which=undefined; e.type=focus; e.detail=undefined\nt1:mouseup; e.button=0; e.which=1; e.type=mouseup; e.detail=1\nt1:click; e.button=0; e.which=1; e.type=click; e.detail=1\nt1:mousedown; e.button=0; e.which=1; e.type=mousedown; e.detail=2\nt1:mouseup; e.button=0; e.which=1; e.type=mouseup; e.detail=2\nt1:click; e.button=0; e.which=1; e.type=click; e.detail=2\nt1:dblclick; e.button=0; e.which=1; e.type=dblclick; e.detail=2\nt1:blur; e.button=undefined; e.which=undefined; e.type=blur; e.detail=undefined",
+		divrightclick: "\nd1:mousedown; e.button=2; e.which=3; e.type=mousedown; e.detail=1\nd1:mouseup; e.button=2; e.which=3; e.type=mouseup; e.detail=1\nd1:contextmenu; e.button=2; e.which=3; e.type=contextmenu; e.detail=1",
+		textboxrightclick: "\nt1:mousedown; e.button=2; e.which=3; e.type=mousedown; e.detail=1\nt1:focus; e.button=undefined; e.which=undefined; e.type=focus; e.detail=undefined\nt1:mouseup; e.button=2; e.which=3; e.type=mouseup; e.detail=1\nt1:contextmenu; e.button=2; e.which=3; e.type=contextmenu; e.detail=1\nt1:blur; e.button=undefined; e.which=undefined; e.type=blur; e.detail=undefined",
+		dummy: ""
+	}
+}
+function safariLikeEvents(){
+	return {
+		blurChange:  "\nt1:focus; $('t1').value=\nt1:keydown; $('t1').value=\nt1:keypress; $('t1').value=\nt1:keyup; $('t1').value=a\nt1:keydown; $('t1').value=a\nt1:keypress; $('t1').value=a\nt1:keyup; $('t1').value=ab\nb1:mousedown; $('t1').value=ab\nt1:change; $('t1').value=ab\nt1:blur; $('t1').value=ab\nb1:mouseup; $('t1').value=ab\nb1:click; $('t1').value=ab",
+		checkbox: "\ncb1:mousedown\ncb1:mouseup\ncb1:change\ncb1:click",
+		radio: "\nr11:mousedown\nr11:mouseup\nr11:change\nr11:click",
+		button: "\nb1:mousedown\nb1:mouseup\nb1:click",
+		divdblclick: "\nd1:mousedown; e.button=0; e.which=1; e.type=mousedown; e.detail=1\nd1:mouseup; e.button=0; e.which=1; e.type=mouseup; e.detail=1\nd1:click; e.button=0; e.which=1; e.type=click; e.detail=1\nd1:mousedown; e.button=0; e.which=1; e.type=mousedown; e.detail=2\nd1:mouseup; e.button=0; e.which=1; e.type=mouseup; e.detail=2\nd1:click; e.button=0; e.which=1; e.type=click; e.detail=2\nd1:dblclick; e.button=0; e.which=1; e.type=dblclick; e.detail=2",
+		textboxdblclick: "\nt1:mousedown; e.button=0; e.which=1; e.type=mousedown; e.detail=1\nt1:focus; e.button=undefined; e.which=undefined; e.type=focus; e.detail=undefined\nt1:mouseup; e.button=0; e.which=1; e.type=mouseup; e.detail=1\nt1:click; e.button=0; e.which=1; e.type=click; e.detail=1\nt1:mousedown; e.button=0; e.which=1; e.type=mousedown; e.detail=2\nt1:mouseup; e.button=0; e.which=1; e.type=mouseup; e.detail=2\nt1:click; e.button=0; e.which=1; e.type=click; e.detail=2\nt1:dblclick; e.button=0; e.which=1; e.type=dblclick; e.detail=2\nt1:blur; e.button=undefined; e.which=undefined; e.type=blur; e.detail=undefined",
+		divrightclick: "\nd1:mousedown; e.button=2; e.which=3; e.type=mousedown; e.detail=1\nd1:mouseup; e.button=2; e.which=3; e.type=mouseup; e.detail=1\nd1:contextmenu; e.button=2; e.which=3; e.type=contextmenu; e.detail=0",
+		textboxrightclick: "\nt1:mousedown; e.button=2; e.which=3; e.type=mousedown; e.detail=1\nt1:focus; e.button=undefined; e.which=undefined; e.type=focus; e.detail=undefined\nt1:mouseup; e.button=2; e.which=3; e.type=mouseup; e.detail=1\nt1:contextmenu; e.button=2; e.which=3; e.type=contextmenu; e.detail=0\nt1:blur; e.button=undefined; e.which=undefined; e.type=blur; e.detail=undefined",
+		dummy: ""
+	}
+}
+
+$events.common = commonEvents();
+$events.ie = commonEvents();
+$events.ie.divdblclick = "\nd1:mousedown; e.button=1; e.which=undefined; e.type=mousedown; e.detail=undefined\nd1:focus; e.button=0; e.which=undefined; e.type=focus; e.detail=undefined\nd1:mouseup; e.button=1; e.which=undefined; e.type=mouseup; e.detail=undefined\nd1:click; e.button=0; e.which=undefined; e.type=click; e.detail=undefined\nd1:mouseup; e.button=1; e.which=undefined; e.type=mouseup; e.detail=undefined\nd1:dblclick; e.button=0; e.which=undefined; e.type=dblclick; e.detail=undefined\nd1:blur; e.button=0; e.which=undefined; e.type=blur; e.detail=undefined";
+$events.ie.textboxdblclick = "\nt1:mousedown; e.button=1; e.which=undefined; e.type=mousedown; e.detail=undefined\nt1:focus; e.button=0; e.which=undefined; e.type=focus; e.detail=undefined\nt1:mouseup; e.button=1; e.which=undefined; e.type=mouseup; e.detail=undefined\nt1:click; e.button=0; e.which=undefined; e.type=click; e.detail=undefined\nt1:mouseup; e.button=1; e.which=undefined; e.type=mouseup; e.detail=undefined\nt1:dblclick; e.button=0; e.which=undefined; e.type=dblclick; e.detail=undefined\nt1:blur; e.button=0; e.which=undefined; e.type=blur; e.detail=undefined";
+$events.ie.divrightclick = "\nd1:mousedown; e.button=2; e.which=undefined; e.type=mousedown; e.detail=undefined\nd1:focus; e.button=0; e.which=undefined; e.type=focus; e.detail=undefined\nd1:mouseup; e.button=2; e.which=undefined; e.type=mouseup; e.detail=undefined\nd1:contextmenu; e.button=0; e.which=undefined; e.type=contextmenu; e.detail=undefined\nd1:blur; e.button=0; e.which=undefined; e.type=blur; e.detail=undefined";
+$events.ie.textboxrightclick = "\nt1:mousedown; e.button=2; e.which=undefined; e.type=mousedown; e.detail=undefined\nt1:focus; e.button=0; e.which=undefined; e.type=focus; e.detail=undefined\nt1:mouseup; e.button=2; e.which=undefined; e.type=mouseup; e.detail=undefined\nt1:contextmenu; e.button=0; e.which=undefined; e.type=contextmenu; e.detail=undefined\nt1:blur; e.button=0; e.which=undefined; e.type=blur; e.detail=undefined";
+
+$events.ie9 = commonEvents();
+$events.ie9.checkbox = "\ncb1:mousedown\ncb1:focus\ncb1:mouseup\ncb1:change\ncb1:click\ncb1:blur";
+$events.ie9.radio = "\nr11:mousedown\nr11:focus\nr11:mouseup\nr11:change\nr11:click\nr11:blur";
+$events.ie9.divdblclick = "\nd1:mousedown; e.button=1; e.which=undefined; e.type=mousedown; e.detail=undefined\nd1:focus; e.button=0; e.which=undefined; e.type=focus; e.detail=undefined\nd1:mouseup; e.button=1; e.which=undefined; e.type=mouseup; e.detail=undefined\nd1:click; e.button=0; e.which=undefined; e.type=click; e.detail=undefined\nd1:mousedown; e.button=1; e.which=undefined; e.type=mousedown; e.detail=undefined\nd1:mouseup; e.button=1; e.which=undefined; e.type=mouseup; e.detail=undefined\nd1:click; e.button=0; e.which=undefined; e.type=click; e.detail=undefined\nd1:dblclick; e.button=0; e.which=undefined; e.type=dblclick; e.detail=undefined\nd1:blur; e.button=0; e.which=undefined; e.type=blur; e.detail=undefined";
+$events.ie9.textboxdblclick = "\nt1:mousedown; e.button=1; e.which=undefined; e.type=mousedown; e.detail=undefined\nt1:focus; e.button=0; e.which=undefined; e.type=focus; e.detail=undefined\nt1:mouseup; e.button=1; e.which=undefined; e.type=mouseup; e.detail=undefined\nt1:click; e.button=0; e.which=undefined; e.type=click; e.detail=undefined\nt1:mousedown; e.button=1; e.which=undefined; e.type=mousedown; e.detail=undefined\nt1:mouseup; e.button=1; e.which=undefined; e.type=mouseup; e.detail=undefined\nt1:click; e.button=0; e.which=undefined; e.type=click; e.detail=undefined\nt1:dblclick; e.button=0; e.which=undefined; e.type=dblclick; e.detail=undefined\nt1:blur; e.button=0; e.which=undefined; e.type=blur; e.detail=undefined";
+$events.ie9.divrightclick = "\nd1:mousedown; e.button=2; e.which=undefined; e.type=mousedown; e.detail=undefined\nd1:focus; e.button=0; e.which=undefined; e.type=focus; e.detail=undefined\nd1:mouseup; e.button=2; e.which=undefined; e.type=mouseup; e.detail=undefined\nd1:contextmenu; e.button=0; e.which=undefined; e.type=contextmenu; e.detail=undefined\nd1:blur; e.button=0; e.which=undefined; e.type=blur; e.detail=undefined";
+$events.ie9.textboxrightclick = "\nt1:mousedown; e.button=2; e.which=undefined; e.type=mousedown; e.detail=undefined\nt1:focus; e.button=0; e.which=undefined; e.type=focus; e.detail=undefined\nt1:mouseup; e.button=2; e.which=undefined; e.type=mouseup; e.detail=undefined\nt1:contextmenu; e.button=0; e.which=undefined; e.type=contextmenu; e.detail=undefined\nt1:blur; e.button=0; e.which=undefined; e.type=blur; e.detail=undefined";
+
+$events.ff = commonEvents();
+$events.ff.blurChange = "\nt1:focus; $('t1').value=\nt1:keydown; $('t1').value=\nt1:keypress; $('t1').value=\nt1:keyup; $('t1').value=a\nt1:keydown; $('t1').value=a\nt1:keypress; $('t1').value=a\nt1:keyup; $('t1').value=ab\nb1:mousedown; $('t1').value=ab\nt1:change; $('t1').value=ab\nt1:blur; $('t1').value=ab\nb1:focus; $('t1').value=ab\nb1:mouseup; $('t1').value=ab\nb1:click; $('t1').value=ab\nb1:blur; $('t1').value=ab";
+$events.ff4 = commonEvents();
+$events.ff4.divdblclick = $events.ff.divdblclick;
+
+$events.safari = safariLikeEvents();
+
+$events.chrome = safariLikeEvents();
+
+$events.opera = safariLikeEvents();
+$events.opera.divrightclick = "\nd1:mousedown; e.button=2; e.which=3; e.type=mousedown; e.detail=1\nd1:mouseup; e.button=2; e.which=3; e.type=mouseup; e.detail=1\nd1:contextmenu; e.button=2; e.which=3; e.type=contextmenu; e.detail=0";
+$events.opera.textboxrightclick = "\nt1:mousedown; e.button=2; e.which=3; e.type=mousedown; e.detail=1\nt1:focus; e.button=undefined; e.which=undefined; e.type=focus; e.detail=undefined\nt1:mouseup; e.button=2; e.which=3; e.type=mouseup; e.detail=1\nt1:contextmenu; e.button=2; e.which=3; e.type=contextmenu; e.detail=0\nt1:blur; e.button=undefined; e.which=undefined; e.type=blur; e.detail=undefined";
+
+var $browserEventSeq = $events.common;
+if (_isFF4()){
+	$browserEventSeq = $events.ff4;
+} else if (_isFF()) {
+	$browserEventSeq = $events.ff;
+} else if (_isIE9()) {
+	$browserEventSeq = $events.ie9;
+} else if (_isIE()) {
+	$browserEventSeq = $events.ie;
+} else if (_isSafari()) {
+	$browserEventSeq = $events.safari;
+} else if (_isChrome()) {
+	$browserEventSeq = $events.chrome;
+} else if (_isOpera()) {
+	$browserEventSeq = $events.opera;
+}
+
+function setUp(){
+	_navigateTo("/demo/eventSequence.htm");
+	if (_isIE9()){
+		_click(_radio(0, _near(_label("attachEvent"))));
+	}else{
+		_click(_radio(0, _near(_label("auto"))));
+	}
+	_click(_reset("Reset"));
+	_click(_reset("Reset[1]"));
+	_click(_button("Add event listeners"));
+	_click(_button("Clear"));
+}
+
+function testBlurChangeSequence(){
+	_click(_checkbox(0, _in(_label("textbox value"))));
+	_setValue(_textbox("t1"), "ab");
+	_click(_button("Button"));
+	_click(document.body);
+	_assertEqual($browserEventSeq.blurChange, _textarea("logs").value);
+}
+
+function testCheckboxEvents(){
+	_assert(!_checkbox("cb1").checked);
+	_click(_checkbox("cb1"));
+	_assert(_checkbox("cb1").checked);
+	_click(document.body);
+	_assertEqual($browserEventSeq.checkbox, _textarea("logs").value);
+}
+
+function testRadioEvents(){
+	_assert(!_radio("r11").checked);
+	_click(_radio("r11"));
+	_assert(_radio("r11").checked);
+	_click(document.body);
+	_assertEqual($browserEventSeq.radio, _textarea("logs").value);
+}
+
+function testButtonEvents(){
+	_click(_button("b1"));
+	_click(document.body);
+	_assertEqual($browserEventSeq.button, _textarea("logs").value);
+}
+
+function testDivDblClick(){
+	_click(_button("Add event listeners"));
+	_click(_checkbox(0, _in(_label("e.button"))));
+	_click(_checkbox(0, _in(_label("e.which"))));
+	_click(_checkbox(0, _in(_label("e.type"))));
+	_click(_checkbox(0, _in(_label("e.detail"))));
+	_doubleClick(_div("Div"));
+	_click(document.body);
+	_assertEqual($browserEventSeq.divdblclick, _getValue(_textarea("logs")));
+}
+
+function testTextboxDblClick(){
+	_click(_button("Add event listeners"));
+	_click(_checkbox(0, _in(_label("e.button"))));
+	_click(_checkbox(0, _in(_label("e.which"))));
+	_click(_checkbox(0, _in(_label("e.type"))));
+	_click(_checkbox(0, _in(_label("e.detail"))));
+	_doubleClick(_textbox("t1"));
+	_click(document.body);
+	_assertEqual($browserEventSeq.textboxdblclick, _getValue(_textarea("logs")));
+}
+
+function testDivRightClick(){
+	_click(_button("Add event listeners"));
+	_click(_checkbox(0, _in(_label("e.button"))));
+	_click(_checkbox(0, _in(_label("e.which"))));
+	_click(_checkbox(0, _in(_label("e.type"))));
+	_click(_checkbox(0, _in(_label("e.detail"))));
+	_rightClick(_div("Div"));
+	_click(document.body);
+	_assertEqual($browserEventSeq.divrightclick, _getValue(_textarea("logs")));
+}
+
+function testTextboxRightClick(){
+	_click(_button("Add event listeners"));
+	_click(_checkbox(0, _in(_label("e.button"))));
+	_click(_checkbox(0, _in(_label("e.which"))));
+	_click(_checkbox(0, _in(_label("e.type"))));
+	_click(_checkbox(0, _in(_label("e.detail"))));
+	_rightClick(_textbox("t1"));
+	_click(document.body);
+	_assertEqual($browserEventSeq.textboxrightclick, _getValue(_textarea("logs")));	
+}
+_runUnitTests();
+

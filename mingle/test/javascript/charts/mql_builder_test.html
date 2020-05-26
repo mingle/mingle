@@ -1,0 +1,376 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>MQL Builder Test</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <script src="../../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/mql_builder.js" type="text/javascript"></script>
+  <script src="" type="text/javascript"></script>
+
+  <script src="../test_assets/sinon-2.3.6.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="../test_assets/qunit-1.21.0.css" type="text/css"/>
+
+</head>
+<body>
+<div id="qunit">
+</div>
+
+<script src="../test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+<script src="../test_assets/qunit-phantom.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+  function FakeChartCondition(property, operator, value, isCardProperty) {
+    return {
+      property: { value: function () {return property; }},
+      operator: { value: function () {return operator; }},
+      value: { value: function () {return value; }},
+      isValid: function () { return property && operator && value; },
+      isForCardProperty: function() { return isCardProperty; }
+    };
+  }
+
+  QUnit.test('testShouldBuildMqlWhenAggTypeIsCount', function (assert) {
+    var options = {
+      property: "Status",
+      aggregateType: "Count",
+      cardTypes: ['Story']
+    };
+    var mql = new MQLBuilder(options).build();
+    assert.equal(mql, 'SELECT "Status", COUNT(*) WHERE "Type" = "Story"');
+  });
+
+  QUnit.test('testShouldBuildMqlWhenAggTypeIsSum', function (assert) {
+    var options = {
+      property: "Status",
+      aggregateType: "sum",
+      aggregateProp: "total estimate",
+      cardTypes: ['Story']
+    };
+    var mql = new MQLBuilder(options).build();
+    assert.equal(mql, 'SELECT "Status", SUM("total estimate") WHERE "Type" = "Story"');
+  });
+
+  QUnit.test('testShouldBuildMqlWhenAggTypeIsAverage', function (assert) {
+    var options = {
+      property: "Status",
+      aggregateType: "avg",
+      aggregateProp: "total estimate",
+      cardTypes: ['Story']
+    };
+    var mql = new MQLBuilder(options).build();
+    assert.equal(mql, 'SELECT "Status", AVG("total estimate") WHERE "Type" = "Story"');
+  });
+
+  QUnit.test('testShouldBuildMqlWithMultipleCardTypesSpecified', function (assert) {
+    var options = {
+      property: "Status",
+      aggregateType: "sum",
+      aggregateProp: "total estimate",
+      cardTypes: ['Story', 'Release type', 'Work']
+    };
+    var mql = new MQLBuilder(options).build();
+    assert.equal(mql, 'SELECT "Status", SUM("total estimate") WHERE "Type" IN ("Story","Release type","Work")');
+  });
+
+  QUnit.test('testShouldUseDefaultsWhenOptionsAreMissing', function (assert) {
+    var options = {cardTypes: []};
+    var mql = new MQLBuilder(options).build();
+
+    assert.equal(mql, 'SELECT "property", aggregate WHERE condition');
+  });
+
+  QUnit.test('testShouldAddAdditionalConditionsToMql', function (assert) {
+    var mockedAdditionalCondition = new FakeChartCondition("Estimate", 'eq', ['1']);
+    var options = {
+      property: "Status",
+      aggregateType: "Count",
+      cardTypes: ['Story'],
+      additionalConditions: [mockedAdditionalCondition]
+    };
+    var mql = new MQLBuilder(options).build();
+
+    assert.equal(mql, 'SELECT "Status", COUNT(*) WHERE "Type" = "Story" AND "Estimate" = 1');
+  });
+
+  QUnit.test('testShouldAddAdditionalConditionsWithMultipleValuesAndQuoteTheNonNumericValues', function (assert) {
+    var mockedAdditionalCondition = new FakeChartCondition("Estimate", 'eq', ['1','blah','3']);
+    var options = {
+      property: "Status",
+      aggregateType: "Count",
+      cardTypes: ['Story'],
+      additionalConditions: [mockedAdditionalCondition]
+    };
+    var mql = new MQLBuilder(options).build();
+
+    assert.equal(mql, 'SELECT "Status", COUNT(*) WHERE "Type" = "Story" AND "Estimate" IN (1,"blah",3)');
+  });
+
+  QUnit.test('testShouldNotQuoteNullValuesForAdditionalConditions', function (assert) {
+    var mockedAdditionalCondition = new FakeChartCondition("Estimate", 'ne', ['null']);
+    var options = {
+      property: "Status",
+      aggregateType: "Count",
+      cardTypes: ['Story'],
+      additionalConditions: [mockedAdditionalCondition]
+    };
+    var mql = new MQLBuilder(options).build();
+
+    assert.equal(mql, 'SELECT "Status", COUNT(*) WHERE "Type" = "Story" AND "Estimate" != null');
+  });
+
+  QUnit.test('testShouldAddAdditionalConditionsWithNotConditionInMultipleValues', function (assert) {
+    var mockedAdditionalCondition = new FakeChartCondition("Estimate", 'ne', ['1','2','3']);
+    var options = {
+      property: "Status",
+      aggregateType: "Count",
+      cardTypes: ['Story'],
+      additionalConditions: [mockedAdditionalCondition]
+    };
+    var mql = new MQLBuilder(options).build();
+
+    assert.equal(mql, 'SELECT "Status", COUNT(*) WHERE "Type" = "Story" AND NOT ("Estimate" IN (1,2,3))');
+  });
+
+  QUnit.test('testShouldHandleNullValuesForAdditionalConditionsWithMultipleValuesAndEqualOperatorInSeparateClauseConnectedByOr', function (assert) {
+    var mockedAdditionalCondition = new FakeChartCondition("Estimate", 'eq', ['null','2','3']);
+    var options = {
+      property: "Status",
+      aggregateType: "Count",
+      aggregateProp: "",
+      cardTypes: ['Story'],
+      additionalConditions: [mockedAdditionalCondition]
+    };
+    var mql = new MQLBuilder(options).build();
+
+    assert.equal(mql, 'SELECT "Status", COUNT(*) WHERE "Type" = "Story" AND ("Estimate" = null OR "Estimate" IN (2,3))');
+  });
+
+  QUnit.test('testShouldHandleNullValuesForAdditionalConditionsWithMultipleValuesAndNotEqualOperatorInSeparateClauseConnectedByAnd', function (assert) {
+    var mockedAdditionalCondition = new FakeChartCondition("Estimate", 'ne', ['null','2','3']);
+    var options = {
+      property: "Status",
+      aggregateType: "Count",
+      cardTypes: ['Story'],
+      additionalConditions: [mockedAdditionalCondition]
+    };
+    var mql = new MQLBuilder(options).build();
+
+    assert.equal(mql, 'SELECT "Status", COUNT(*) WHERE "Type" = "Story" AND ("Estimate" != null AND NOT ("Estimate" IN (2,3)))');
+  });
+
+  QUnit.test('testShouldAddNumberBeforeValueForCardTypeProperties', function (assert) {
+    var mockedAdditionalCondition = new FakeChartCondition("Sprint", 'eq', ['1'], true);
+    var options = {
+      property: "Status",
+      aggregateType: "Count",
+      cardTypes: ['Story'],
+      additionalConditions: [mockedAdditionalCondition]
+    };
+    var mql = new MQLBuilder(options).build();
+
+    assert.equal(mql, 'SELECT "Status", COUNT(*) WHERE "Type" = "Story" AND "Sprint" = NUMBER 1');
+  });
+
+  QUnit.test('testShouldAddNumbersBeforeValueForCardTypePropertiesHavingMultipleValues', function (assert) {
+    var mockedAdditionalCondition = new FakeChartCondition("Sprint", 'eq', ['1','5','8','9'], true);
+    var options = {
+      property: "Status",
+      aggregateType: "Count",
+      cardTypes: ['Story'],
+      additionalConditions: [mockedAdditionalCondition]
+    };
+    var mql = new MQLBuilder(options).build();
+
+    assert.equal(mql, 'SELECT "Status", COUNT(*) WHERE "Type" = "Story" AND "Sprint" NUMBERS IN (1,5,8,9)');
+  });
+
+  QUnit.test('testShouldAddMultipleConditionsConnectedByAnd', function (assert) {
+    var condition1 = new FakeChartCondition("Sprint", 'ne', ['1','5','8','9'], true);
+    var condition2 = new FakeChartCondition('blah', 'eq', ['foo'], false);
+    var options = {
+      property: "Status",
+      aggregateType: "Count",
+      cardTypes: ['Story'],
+      additionalConditions: [condition1, condition2]
+    };
+    var mql = new MQLBuilder(options).build();
+
+    assert.equal(mql, 'SELECT "Status", COUNT(*) WHERE "Type" = "Story" AND NOT ("Sprint" NUMBERS IN (1,5,8,9)) AND "blah" = "foo"');
+  });
+
+  QUnit.test('testShouldAddSeparateClauseForEachProjectLevelVariableForCardProperties', function (assert) {
+    var condition = new FakeChartCondition("Sprint", 'eq', ['(current sprint)','(next sprint)','8','9'], true);
+    var options = {
+      property: "Status",
+      aggregateType: "Count",
+      cardTypes: ['Story'],
+      additionalConditions: [condition]
+    };
+    var mql = new MQLBuilder(options).build();
+
+    assert.equal(mql, 'SELECT "Status", COUNT(*) WHERE "Type" = "Story" AND ("Sprint" = (current sprint) OR "Sprint" = (next sprint) OR "Sprint" NUMBERS IN (8,9))');
+  });
+
+  QUnit.test('testShouldNotAddSeparateClauseForEachProjectLevelVariableForNonCardProperties', function (assert) {
+    var condition = new FakeChartCondition('Ship Date', 'eq', ['(tomorrow)','(current sprint start date)','07-06-2017'], false);
+    var options = {
+      property: "Status",
+      aggregateType: "Count",
+      cardTypes: ['Story'],
+      additionalConditions: [condition]
+    };
+    var mql = new MQLBuilder(options).build();
+
+    assert.equal(mql, 'SELECT "Status", COUNT(*) WHERE "Type" = "Story" AND "Ship Date" IN ((tomorrow),(current sprint start date),"07-06-2017")');
+  });
+
+  QUnit.test('testShouldNotAddContextualValueAndQuotesForProjectLevelVariables', function (assert) {
+    var condition = new FakeChartCondition("Sprint", 'eq', '(current sprint)', true);
+    var options = {
+      property: "Status",
+      aggregateType: "Count",
+      cardTypes: ['Story'],
+      additionalConditions: [condition]
+    };
+    var mql = new MQLBuilder(options).build();
+
+    assert.equal(mql, 'SELECT "Status", COUNT(*) WHERE "Type" = "Story" AND "Sprint" = (current sprint)');
+  });
+
+  QUnit.test('testShouldReplaceReservedKeywordsWithCorrectValues', function (assert) {
+    var condition1 = new FakeChartCondition('Owner', 'eq', '(current USER)', false);
+    var condition2 = new FakeChartCondition('Ship Date', 'eq', '(TODAY)', false);
+    var options = {
+      property: "Status",
+      aggregateType: "Count",
+      cardTypes: ['Story'],
+      additionalConditions: [condition1, condition2]
+    };
+    var mql = new MQLBuilder(options).build();
+
+    assert.equal(mql, 'SELECT "Status", COUNT(*) WHERE "Type" = "Story" AND "Owner" = CURRENT USER AND "Ship Date" = TODAY');
+  });
+
+  QUnit.test('testShouldNotQuoteThisCardKeywords', function (assert) {
+    var condition = new FakeChartCondition("Sprint", 'eq', 'THIS CARD', true);
+    var options = {
+      property: "Status",
+      aggregateType: "Count",
+      cardTypes: ['Story'],
+      additionalConditions: [condition]
+    };
+    var mql = new MQLBuilder(options).build();
+
+    assert.equal(mql, 'SELECT "Status", COUNT(*) WHERE "Type" = "Story" AND "Sprint" = THIS CARD');
+  });
+
+  QUnit.test('testShouldAddTaggedWithClauseForEachTagJoinedByAnd', function (assert) {
+    var options = {
+      property: "Status",
+      aggregateType: "Count",
+      aggregateProp: "",
+      cardTypes: ['Story'],
+      additionalConditions: [],
+      tags: ['tag 1', 'tag 2']
+    };
+    var mql = new MQLBuilder(options).build();
+
+    assert.equal(mql, 'SELECT "Status", COUNT(*) WHERE "Type" = "Story" AND TAGGED WITH "tag 1" AND TAGGED WITH "tag 2"');
+  });
+
+  QUnit.test('testShouldAddSeparateClauseForThisCardWhenMutltipleValuesAreSelected', function (assert) {
+    var condition = new FakeChartCondition("Sprint", 'eq', ['THIS CARD', '3789', '675'], true);
+    var options = {
+      property: "Status",
+      aggregateType: "Count",
+      cardTypes: ['Story'],
+      additionalConditions: [condition]
+    };
+    var mql = new MQLBuilder(options).build();
+
+    assert.equal(mql, 'SELECT "Status", COUNT(*) WHERE "Type" = "Story" AND ("Sprint" = THIS CARD OR "Sprint" NUMBERS IN (3789,675))');
+  });
+
+  QUnit.test('testShouldAddConditionsWithoutAndPrefix', function (assert) {
+    var condition = new FakeChartCondition('Type', 'eq', ['Release', "Sprint", 'Story']);
+    var options = {
+      property: "Status",
+      aggregateType: "Count",
+      cardTypes: [],
+      additionalConditions: [condition]
+    };
+    var mql = new MQLBuilder(options).build();
+
+    assert.equal(mql, 'SELECT "Status", COUNT(*) WHERE "Type" IN ("Release","Sprint","Story")');
+  });
+
+  QUnit.test('testShouldBuildConditionsClauseWithAdditionalConditionsOnly', function (assert) {
+    var condition = new FakeChartCondition('Type', 'eq', ['Release', "Sprint", 'Story']);
+    var options = {
+      cardTypes: [],
+      additionalConditions: [condition]
+    };
+    var mql = new MQLBuilder(options).buildConditionsClause();
+
+    assert.equal(mql, '"Type" IN ("Release","Sprint","Story")');
+  });
+
+  QUnit.test('testShouldBuildConditionsClauseWithTagsClauseOnly', function (assert) {
+    var options = {
+      tags: ['tag1', 'tag2']
+    };
+    var mql = new MQLBuilder(options).buildConditionsClause();
+
+    assert.equal(mql, "TAGGED WITH \"tag1\" AND TAGGED WITH \"tag2\"");
+  });
+
+  QUnit.test('testShouldBuildConditionsClauseWithOnlyCardTypes', function (assert) {
+    var options = {
+      cardTypes: ['Story','Feature']
+    };
+    var mql = new MQLBuilder(options).buildConditionsClause();
+
+    assert.equal(mql, '"Type" IN ("Story","Feature")');
+  });
+
+  QUnit.test('testShouldBuildConditionsClause', function (assert) {
+    var condition = new FakeChartCondition('Status', 'eq', ['new','in dev','in qa']);
+    var options = {
+      cardTypes: ['Story','Feature'],
+      additionalConditions: [condition],
+      tags: ['tag1', 'tag2']
+    };
+    var mql = new MQLBuilder(options).buildConditionsClause();
+
+    assert.equal(mql, '"Type" IN ("Story","Feature") AND "Status" IN ("new","in dev","in qa") AND TAGGED WITH \"tag1\" AND TAGGED WITH \"tag2\"');
+  });
+
+  QUnit.test('testShouldBuildBurnDownMqlForGivenSeries', function (assert) {
+    var options = {
+      aggregateType: "sum",
+      aggregateProp: "total estimate",
+    };
+    var mql = new MQLBuilder(options).buildBurnDownMql();
+    assert.equal(mql, 'SELECT SUM("total estimate")');
+  })
+
+</script>
+</body>
+</html>

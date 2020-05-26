@@ -1,0 +1,181 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>JavaScript unit test file</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+  <script src="test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+
+  <script src="test_assets/unittest.js" type="text/javascript"></script>
+  <script src="test_assets/unittest_ext.js" type="text/javascript"></script>
+
+
+  <script src="../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/controls.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/builder.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+
+  <script src="../../public/javascripts/application.js" type="text/javascript"></script>
+
+  <script src="../../public/javascripts/card_list_view/rails_params.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/card_list_view/params_change_listener.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/column_selector.js" type="text/javascript"></script>
+
+  <link rel="stylesheet" href="assets/unittest.css" type="text/css" />
+  <link rel="stylesheet" href="test_assets/unittest.css" type="text/css" />
+</head>
+<body>
+
+<div id="content">
+
+  <div id="header">
+    <h1>JavaScript unit test file</h1>
+    <p>
+      This file tests the SelectAllCheckBoxesGroup.
+    </p>
+  </div>
+  <!-- Log output -->
+  <div id="testlog"> </div>
+
+  <div style ='border:solid 1px' id='sandbox'>
+    <h3> sandbox: </h3>
+    <a id='open_link'>open link</a>
+    <div id='column_selector' style="display:none">
+      <input id="selectAllCheckBox" name="selectAll" type="checkbox" value="selectAll"> Select All
+      <ul>
+        <li>
+          <input name="columns" type="checkbox" value="Status"><span>Status</span>
+          <input name="columns" type="checkbox" value="Priority"><span>Priority</span>
+          <input name="columns" type="checkbox" value="Co,Co"><span>Co,Co</span>
+          <input name="columns" type="checkbox" value="lu&gt;lu"><span>lu&gt;lu</span>
+          <input name="columns" type="checkbox" value="Created By"><span>Created By</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+// <![CDATA[
+  SAND_BOX_CONTENT = $('sandbox').innerHTML;
+
+  ServerStub = Class.create({
+    request: function(url, options) {
+      this.lastRequestUrl = url;
+      this.lastRequestOptions = options;
+    },
+  })
+
+  new Test.Unit.Runner({
+
+    setup: function() {
+      $('sandbox').innerHTML = SAND_BOX_CONTENT;
+      container = $('column_selector');
+      selectAllCheckBox = $('selectAllCheckBox');
+      checkBoxElements = container.select("input[type=checkbox][name=columns]")
+      selectAllCheckBoxesGroup = new SelectAllCheckBoxesGroup(selectAllCheckBox, checkBoxElements);
+
+      this.getCheckBox = function(value){
+        return container.select('input[type=checkbox][value=' + value + ']').first();
+      };
+
+      this.unChenck = function(value){
+        this.getCheckBox(value).checked = false;
+        Event.trigger(this.getCheckBox(value), 'click');
+      };
+
+      this.checkSelectAll = function(){
+        selectAllCheckBox.checked = true;
+        Event.trigger(selectAllCheckBox, 'click');
+      };
+
+      this.uncheckSelectAll = function(){
+        selectAllCheckBox.checked = false;
+        Event.trigger(selectAllCheckBox, 'click');
+      };
+    },
+
+    teardown: function() {
+      selectAllCheckBoxesGroup.destroy();
+    },
+
+    testShouldSelectAllColumnsWhenClickSelectAllCheckbox: function(){ with(this){
+      this.checkSelectAll();
+      checkBoxElements.each(function(checkBox){
+        assert(checkBox.checked);
+      }.bind(this))
+    }},
+
+    testShouldUnselectSelectAllCheckBoxWhenAnyOtherCheckBoxUnchecked: function() { with(this) {
+     this.checkSelectAll();
+     this.unChenck('Priority');
+     assert(!selectAllCheckBox.checked);
+    }},
+
+    testUncheckSelectAllShouldUncheckAllSelectedColumns: function(){ with(this){
+      this.checkSelectAll();
+      this.uncheckSelectAll();
+      checkBoxElements.each(function(checkBox){
+        assert(!checkBox.checked);
+      }.bind(this))
+    }},
+
+    testSelectAllShouldBeCheckedWhenAllColumnsWereSelected: function(){with(this){
+      allValues = checkBoxElements.map(function(checkBox){
+        return checkBox.value;
+      })
+      selectAllCheckBoxesGroup.checkMultipleItems(allValues);
+      assert(selectAllCheckBox.checked)
+    }},
+
+    testSelectAllShouldBeCheckedWhenInitialColumnsWereAllChecked: function(){with(this){
+      checkBoxElements.each(function(checkBox){
+        checkBox.checked = true;
+      })
+      selectAllCheckBoxesGroup = new SelectAllCheckBoxesGroup(selectAllCheckBox, checkBoxElements);
+      assert(selectAllCheckBox.checked)
+    }},
+
+    testResetRevertsCheckboxesToOriginalState: function() { with(this) {
+      this.checkSelectAll();
+      this.selectAllCheckBoxesGroup = new SelectAllCheckBoxesGroup(selectAllCheckBox, checkBoxElements);
+      this.unChenck('Priority');
+
+      this.selectAllCheckBoxesGroup.reset();
+      assert(this.getCheckBox('Priority').checked == true);
+    }},
+
+    testResetShouldRevertSelectAllCheckBoxIfItWasChecked: function() { with(this) {
+      this.checkSelectAll();
+      selectAllCheckBoxesGroup.reset();
+      assert(!selectAllCheckBox.checked);
+    }},
+
+
+
+
+  }, {testLog: "testlog", test: ''}).run;
+// ]]>
+</script>
+</body>
+</html>

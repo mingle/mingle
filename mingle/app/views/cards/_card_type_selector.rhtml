@@ -1,0 +1,29 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="card-type-editor" class="card-type-editor-container">
+  <div id="edit-card-types" class="view-mode-only card_type_widget card-type-property-container" onclick="PropertyEditor.Init.ondemand(event);"
+      data-url="<%= url_for(:controller => 'cards', :action => 'update_property_on_lightbox', :project_id => @project.identifier, :card => card.id) %>">
+    <%= hidden_field_tag 'changed_property', '', :id => 'changed_property_card_type' %>
+    <%= render :partial => "cards/property", :locals => property_editor_locals(Project.card_type_definition, card, CardsHelper::CARD_SHOW_MODE,
+    :onchange => onchange_for_property_editor(Project.card_type_definition, remote_function(
+        :url =>  {:action => 'add_card_popup', :controller => "quick_add_cards", :use_filters => params[:use_filters], :card_properties => params[:card_properties]}.merge(:from_url => params[:from_url]),
+        :with => "Object.toQueryString({'card[card_type_name]':$j('#card_type_name_field').val(), 'card[name]': $('card_name').value})",
+        :method => 'get'), "changed_property_card_type")) %>
+  </div>
+  <div class="edit-mode-only card-type-name">
+  </div>
+</div>

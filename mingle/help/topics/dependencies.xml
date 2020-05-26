@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_plus.dtd">
+<chapter title="Dependencies" id="mingle_plus">
+		<p>The dependency management feature set allows you to manage and track dependencies with ease across all of your teams. Managers at the program level will have much better visibility behind the progress of their dependencies via the Program Dependency Board. Teams at the project level will be able to plan for dependencies with little interuption to their existing workflow. Also, teams can also easily view the status of dependencies based on dependency icons on the card wall.</p>
+
+		<p>When developing the dependency management feature set within the Mingle Program, we wanted to give you the ability to:</p>
+
+		<bullets>
+			<item><strong>Enable teams to raise, accept and resolve cross-team dependencies through peer-to-peer dialogue.</strong></item>
+			<item><strong>Have clear visualizations of dependency status and progress inside your daily workspace with simple, color-coded indicators.</strong></item>
+			<item><strong>Have end-to-end visibility for managers of all the dependencies in the program.</strong></item>
+			<item><strong>Have filtering and sorting of program-wide dependencies based on different criteria to faciliate planning.</strong></item>
+		</bullets>
+
+		<p> </p>
+
+		<section title="Program Dependency Board" file="program_dependency_board" collapsed="true" />
+		<section title="Dependency Tab" file="dependency_tab" collapsed="true" />
+		<section title="Raising a Dependency" file="raising_a_dependency" collapsed="true" />
+  		<section title="Accepting a Dependency" file="accepting_a_dependency" collapsed="true" />
+  		<section title="Resolving a Dependency" file="resolving_a_dependency" collapsed="true" />
+  		<section title="Administering Dependencies" file="administering_dependencies" collapsed="true" />
+  		<section title="Dependency Icon Indicators" file="dependency_icon_indicators" collapsed="true" />
+</chapter>

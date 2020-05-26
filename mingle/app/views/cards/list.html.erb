@@ -1,0 +1,85 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% @page_specific_top = capture do %>
+  <%= link_to_restore_screen_furniture(@view) %>
+<% end %>
+
+<% @sidebar = capture do %>
+
+  <%= render :partial => @view.style.filter_tabs(@view), :locals => {:view => @view} %>
+
+  <%= render :partial => 'shared/favorites', :locals => {:allow_view_creation => true} %>
+
+  <% if @view.grid? %>
+    <%= render(:partial => 'shared/color_legend') %>
+  <% end -%>
+
+  <%= render :partial => 'import_export' %>
+
+<% end -%>
+
+<div id="card_list_view">
+  <%= render :partial => 'no_cards_found' %>
+
+  <div>
+    <%= render :partial => 'shared/contextual_help', :locals => {:connector_color => "light-grey"}%>
+  </div>
+
+  <div class="action-bar <%= 'light' if @view.requires_tree? %> card-views-actions hide-on-maximized" style="margin-top: 1 em;">
+    <% cache_to(Keys::TreeAndStyleSelector.new, @project, @view.tree_name, @view.style.to_s, @view.to_params[:tab], user_preference(:grid_settings)) do %>
+    <div id="navigation_panel">
+      <%= render :partial => 'tree_and_style_selector_contents' %>
+    </div>
+    <% end -%>
+    <%= render :partial => @view.style.action_panel_partial %>
+    <%= clear_float %>
+  </div>
+
+  <%-
+  html_attrs = {
+    :id => "card_results",
+    :"data-card-update-url-template" => url_for(:controller => "cards", :number => 0, :project_id => @project.identifier, :action => :update, :format => "json"),
+    :"data-card-popup-url-template" => url_for(:controller => "cards", :action => "popup_show", :number => 0, :color_by => @view.color_by),
+    :"data-card-show-url-template" => "#{CONTEXT_PATH}/projects/#{@project.identifier}/cards/:number"
+  }
+
+  html_attrs[:class] = "debug" if params["debug"]
+
+  if MingleConfiguration.live_wall?
+    html_attrs.merge!({
+      :"data-fb-token" => FirebaseAuth.generate_token(User.current.id).to_json,
+      :"data-fb-current-week" => FirebaseKeys.current_week_url.to_json,
+      :"data-fb-grid-endpoints" => [
+        FirebaseKeys.live_events_url(@project, FirebaseRetentionPolicy.keep_until),
+        FirebaseKeys.live_events_url(@project, FirebaseRetentionPolicy.current),
+        FirebaseKeys.live_events_url(@project, FirebaseRetentionPolicy.next),
+      ].to_json,
+    })
+  end
+  -%>
+  <% content_tag :div, html_attrs do %>
+    <%= raw(register_params_aware_widget("ScreenFurniture.attach('maximize-view', '.restore-view', new LinkNavigator())")) %>
+    <%= render :partial => @view.style.results_partial %>
+  <% end %>
+
+</div>
+
+<% if @view.maximized %>
+  <%= javascript_with_rescue "Sidebar.doNotPersistState();ScreenFurniture.monitorKeyDown();#{update_params_for_js(@view)}" -%>
+<% else %>
+  <%= javascript_with_rescue "Sidebar.persistState();#{update_params_for_js(@view)}" -%>
+<% end %>

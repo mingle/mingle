@@ -1,0 +1,79 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% content_for :header_pills do  %>
+  <div id="header-pills">
+    <ul>
+      <% if authorized?(:controller => :programs, :action => :index) %>
+        <li class='<%= header_pill_class("programs", selected_tab) %>'>
+          <%= link_to "Programs", {:controller => 'programs', :action => 'index'} %>
+        </li>
+      <% end %>
+      <% if authorized?(:controller => :projects, :action => :index) %>
+        <li class='<%= header_pill_class("projects", selected_tab) %>'>
+          <%= link_to "Projects", {:controller => 'projects', :action => 'index'} %>
+        </li>
+      <% end %>
+      <% if authorized?(:controller => 'users', :action => 'list') %>
+        <li class='<%= header_pill_class("admin", selected_tab) %>'>
+          <a href="javascript:void();" data-component="drop_down_menu" id='admin-drop-down'>
+            Admin
+            <span class="menu-icon fa fa-caret-down"></span>
+          </a>
+        </li>
+        <div id='admin-drop-down_menu_items' class="hide">
+          <ul>
+            <%= admin_task_link('Service plan', :controller => 'users', :action => 'plan') if MingleConfiguration.saas? %>
+            <%= admin_task_link('License', :controller => 'license', :action => 'show') %>
+            <%= admin_task_link('Project templates', :controller => 'templates', :action => 'index') %>
+            <%= admin_task_link('Manage users', :controller  => 'users', :action => 'list') %>
+            <%= admin_task_link('Global notifications', :controller => "sysadmin", :action => 'user_notification') if MingleConfiguration.installer? %>
+            <%= admin_task_link('Email settings', :controller => 'smtp', :action => 'edit') %>
+            <%= admin_task_link('OAuth clients', :controller => 'oauth_clients') %>
+            <%- if MingleConfiguration.sso_config? -%>
+              <%= admin_task_link('SSO config', :controller => 'sso_config', :action => 'show') %>
+            <%- end -%>
+            <%= admin_task_link('Import/export dependencies', :controller => 'dependencies_import_export', :action => 'index') %>
+            <%- if MingleConfiguration.saas? -%>
+              <%= admin_task_link('Integrations', :controller => 'integrations', :action => 'index') %>
+              <%- if MingleConfiguration.show_all_project_admins_enabled? -%>
+                <li class="show-all-project-admins"><span>Show all project admins</span>
+	                <%= check_box_tag "toggle_show_all_project_admins", nil, MingleConfiguration.show_all_project_admins,
+	                                  :onclick => "#{remote_function(
+			                                  :url => {:action => 'toggle_show_all_project_admins', :controller => 'sysadmin'},
+			                                  :with => "'show_all_project_admins='+this.checked",
+		                                    :complete => "window.location='#{url_for(:controller => 'projects', :action => 'index')}'"
+	                                  )}" %>
+                </li>
+              <%- end -%>
+          <%- end -%>
+            </ul>
+        </div>
+      <% end %>
+      <% if MingleConfiguration.display_export_banner? && !(MingleConfiguration.export_data? || MingleConfiguration.installer?)%>
+        <span class="coming-soon-banner"> Coming Soon </span>
+        <li class='header-menu-pill export-banner'>
+          Export
+        </li>
+      <% elsif authorized?(controller: :exports, action: :index ) && (MingleConfiguration.export_data? || MingleConfiguration.installer?)%>
+        <li class='<%= header_pill_class("export_data", selected_tab) %>'>
+          <%= link_to "Export", {controller: :exports, action: :index} %>
+        </li>
+      <% end %>
+    </ul>
+    <div style='clear: both'></div>
+  </div>
+<% end %>

@@ -1,0 +1,33 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+  <meta http-equiv="Content-Language" content="en">
+<title>Debugging</title>
+</head>
+<body>
+
+<h1>Debugging</h1>
+<h2>Racc reported syntax error.</h2>
+<p>
+Isn't there too many &quot;end&quot;?
+grammar of racc file is changed in v0.10.
+</p>
+<p>
+Racc does not use '%' mark, while yacc uses huge number of '%' marks..
+</p>
+<h2>Racc reported &quot;XXXX conflicts&quot;.</h2>
+<p>
+Try &quot;racc -v xxxx.y&quot;.
+It causes producing racc's internal log file, xxxx.output.
+</p>
+<h2>Generated parsers does not work correctly</h2>
+<p>
+Try &quot;racc -g xxxx.y&quot;.
+This command let racc generate &quot;debugging parser&quot;.
+Then set @yydebug=true in your parser.
+It produces a working log of your parser.
+</p>
+
+</body>
+</html>

@@ -1,0 +1,41 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% if user_notification? %>
+<div class="user-notification animated bounceInRight">
+  <div class="message">
+    <h2><%= MingleConfiguration.user_notification_heading %></h2>
+    <% img_options = (MingleConfiguration.user_notification_avatar.present? ? {:class => "notification-avatar"} : {:class => "notification-avatar hidden"}) -%>
+    <%= image_tag(MingleConfiguration.user_notification_avatar || "", img_options) %>
+    <p><%= MingleConfiguration.user_notification_body %></p>
+    <% if MingleConfiguration.user_notification_url.present? %>
+    <p class="more">
+      <%= link_to "Read more&hellip;".html_safe, MingleConfiguration.user_notification_url, :target => "_blank" %>
+    </p>
+    <% end %>
+    <% if MingleConfiguration.tweet_message.present? && MingleConfiguration.tweet_url.present? %>
+      <a href="https://twitter.com/share" class="twitter-share-button" data-text="<%= MingleConfiguration.tweet_message %>" data-url=<%= MingleConfiguration.tweet_url %> data-show-count="false">Tweet</a><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+    <% end %>
+  </div>
+
+  <%= link_to_remote("Got it!", {
+        :url => {:controller => :users, :action => 'mark_notification_read', :message => user_notification_key.join(":"), :id => User.current.id},
+        :method => :post,
+        :before => "this.parentNode.remove();"
+     },
+     :class => "read-notification") %>
+</div>
+<% end %>

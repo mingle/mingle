@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE section SYSTEM "mingle_help.dtd">
+<topic title="Tree view">
+  <section title="Viewing cards in a tree">
+    <screenshot alttext="Tree button" src="resources/images/tree_view_link.png" />
+    <p>Mingle's Tree view displays cards in a tree in an inverted tree layout. There are a number of controls which are specific to the tree view which are highlighted in the following screenshot.</p>
+    <screenshot alttext="Card tree - tree view page, controls indicated" src="resources/images/card_trees_tree_view_page.png"/>
+    <p>To view cards in a tree, select the card tree in the <strong>Select tree</strong> control, <cref topic="tree_filter">select the cards you want to work with</cref> and then click the <link>Tree</link> link.</p>
+    <note>The <button>tree view</button> button is only available when you have a card tree selected.</note>
+  </section>
+  <section title="How to view cards in a tree" collapsed="true">
+    <steps>
+      <item><cref topic="signing_in_and_out_of_mingle">Sign in</cref> to Mingle and open the project for which to view cards in a tree (if you're not currently working in the project).</item>
+      <item>
+        <p>Click the <tab>All</tab> tab.</p>
+        <p>You can also click any other tab that displays cards.</p>
+      </item>
+      <item>
+        <p>Select the card tree that contains the cards you want to work with.</p>
+        <screenshot alttext="Select tree" src="resources/images/select_card_tree_in_header.png" />
+      </item>
+      <item>
+        <p><cref topic="tree_filter">Filter the card list</cref> to isolate the cards you want to work with. In the image below, the list has been filtered to show only cards in the current release and iteration.</p>
+        <screenshot alttext="Tree filter" src="resources/images/tree_filter_example.png" />
+        <p>If you have existing similar <cref topic="managing_favorites_and_tabs">tabs or favorites</cref> setup, you can select one of these as a starting point and then change the filters.</p>
+      </item>
+      <item>
+        <p>Click the <link>Tree</link> link. Mingle displays all cards on the page in a hierarchical list.</p>
+        <screenshot alttext="Hierarchy view with filter" src="resources/images/tree_view_with_filter.png"/>
+      </item>
+    </steps>
+  </section>
+  <section title="What can you do on the Tree view?" file="what_you_can_do_on_the_tree_view"/>
+  <section title="Also see...">
+    <bullets>
+      <item><cref topic="card_trees">Card Trees</cref></item>        
+      <item><cref topic="working_with_card_trees">Working with card trees</cref></item>
+      <item><cref topic="hierarchy_view">Hierarchy View</cref></item>  
+    </bullets>
+  </section>
+</topic>

@@ -1,0 +1,39 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%-
+  link_params = local_assigns[:params_for_link] || params
+  html_attrs = { :id => "contextual_help_container", :style => "display: none;" }
+  html_attrs.merge!(:"data-content" => contextual_help_location(link_params)) if contextual_help_exists?(link_params)
+-%>
+<% content_tag(:div, html_attrs) do -%>
+  <div class="action-bar contextual-help explore_box contextual-help-connector-top">
+    <div class="contextual_help_title_bar">
+      <div>
+        <span><%= link_to_function('Hide help', "ContextualHelpController.toggle()", :id => 'hide_contextual_help_link', :class => "hide-contextual-help") %></span>
+        <span id="full_contextual_help_link_placeholder" style="float:right;"></span>
+        <div id="contextual_help_title_placeholder" class="contextual_help_title"></div>
+        <%= clear_float %>
+      </div>
+    </div>
+    <div class="action-bar-inner-wrapper">
+      <div id="contextual_help"><%= visible_spinner :id => nil -%></div>
+      <%= clear_float %>
+    </div>
+  </div>
+<% end -%>
+
+<%= clear_float %>

@@ -1,0 +1,22 @@
+<html>
+<head>
+<title>Visible elements</title>
+</head>
+<body>
+<form>
+<table>
+<tr><td>q[0]</td><td><input type="text" name="q" value="a"></td></tr>
+<tr><td>q[1] if not strict -- nothing if strict</td><td><input type="text" name="q" id="invQ" style="display:none" value="b"></td></tr>
+<tr><td>q[1] if not strict -- q[2] if strict</td><td><input type="text" name="q" value="c"></td></tr>
+</table>
+</form>
+
+<table>
+<tr><td>blue[0]</td><td><div>blue</div></td></tr>
+<tr><td>blue[1] if not strict -- nothing if strict</td><td><div style="display:none">blue</div></td></tr>
+<tr><td>blue[1] if not strict -- blue[2] if strict[</td><td><div>blue</div></td></tr>
+</table>
+
+
+</body>
+</html>

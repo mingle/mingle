@@ -1,0 +1,17 @@
+body *{font-family:verdana;font-size:9pt;}
+i {color: blue;}
+b {color: brown;}
+.box {border:1px solid gray; padding: 0px 15px 15px 15px;}
+.tip {border:1px dotted gray; padding: 15px;}
+#exc{
+	font-size:8pt;
+	font-family:monospace;
+	background-color:#FFFFCC;
+	overflow:auto;
+	padding:5px;
+	display:none;
+	margin-top:10px;
+}
+div.code, div.code i{
+	font-family:monospace;
+}

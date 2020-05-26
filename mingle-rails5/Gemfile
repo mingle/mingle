@@ -1,0 +1,58 @@
+source 'https://rubygems.org'
+
+git_source(:github) do |repo_name|
+  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
+  "https://github.com/#{repo_name}.git"
+end
+
+gem 'rails', '~> 5.0.1'
+platform :jruby do
+	github 'jruby/activerecord-jdbc-adapter', branch: 'rails-5' do
+		gem 'activerecord-jdbc-adapter'
+    gem 'activerecord-jdbcpostgresql-adapter'
+	end
+end
+gem 'validates_email_format_of'
+gem 'log4j', '0.1.1'
+gem 'activerecord-session_store'
+gem 'mingle-configuration', '~> 0.1.5'
+gem 'activerecord-oracle_enhanced-adapter', '~> 1.7.0'
+gem 'feature_toggle', '~> 0.0.2'
+gem 'retryable', '2.0.4', require: true
+gem 'auto_strip_attributes'
+gem 'file_column_with_s3', '~> 0.3', require: %w(rails_file_column file_compat)
+gem 'dalli'
+gem 'api-auth'
+gem 'httparty'
+gem 'mingle_keyvalue_store', '~> 0.2'
+gem 'octoshark', git: 'https://github.com/mingle/octoshark.git'
+gem 'webpacker'
+gem 'acts_as_versioned', git:'https://github.com/mingle/acts_as_versioned.git'
+
+group :development, :test do
+	gem 'listen'
+  gem 'jruby-rack'
+  gem 'warbler'
+  gem 'pry-rails'
+  gem 'pry-nav'
+  gem 'brakeman', require: false
+  gem 'bundler-audit', require: false
+end
+
+group :test do
+  gem 'mocha'
+  gem 'factory_girl_rails'
+  gem 'rails-controller-testing'
+  gem 'webmock', require: false
+  gem 'minitest-reporters'
+  gem 'shoulda', '~> 3.5'
+  gem 'shoulda-matchers', '~> 2.0'
+  gem 'timecop'
+end
+
+group 'production' do
+  gem 'honeybadger'
+end
+
+# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]

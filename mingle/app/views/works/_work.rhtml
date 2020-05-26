@@ -1,0 +1,26 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% auto_synced = @projects_in_sync.include?(work.project_id) -%>
+<tr class="work_row<%= ' disabled' if auto_synced %>">
+	<% if authorized_to_delete_work %>
+		<td class="checkbox"><%= check_box_tag 'works[]', work.id, false, :class => 'select_work', :id => nil, :disabled => auto_synced %></td>
+	<% end %>
+	<td class="project"><%= new_window_link_to_project(work.project.name, work.project.identifier) %><%= auto_sync_message(auto_synced) %></td>
+	<td class="number"><%= new_window_link_to_card(work.card_number, work.card_number, work.project.identifier) %></td>
+	<td class="name"><%= new_window_link_to_card(h(work.name), work.card_number, work.project.identifier) %></td>
+	<td class="status"><%= done_status(work, work.project) %></td>
+</tr>

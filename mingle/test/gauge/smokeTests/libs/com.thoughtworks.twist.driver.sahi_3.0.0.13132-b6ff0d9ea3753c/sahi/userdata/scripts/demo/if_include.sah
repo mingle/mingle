@@ -1,0 +1,16 @@
+_debug("In include");
+function insideIf() {
+    if (_condition('' == _textbox("t1").value)) {
+        _log("TRUE", "info")
+        _setValue(_textbox("t1"), "Here");
+        _setValue(_textbox(1), "There");
+        _setValue(_textbox("name"), "EveryWhere");
+        _click(_link("Back"));
+        _click(_link("Table Test"));
+        _assertEqual("4", _getCellText(_cell(_table("t2"), "Soap", "Number")));
+        _click(_link("Back"));
+    } else {
+        _log("FALSE", "info")
+        _click(_link("Back"));
+    }
+}

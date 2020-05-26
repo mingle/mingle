@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%- sidebar = Sidebar.new(@controller, User.current, @sidebar) -%>
+<html data-rev="<%= MINGLE_REVISION -%>">
+  <head>
+    <%= render :partial => 'layouts/metrics' %>
+    <%= csrf_meta_tag %>
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta charset="utf-8">
+    <title><%= page_title %></title>
+    <%= yield(:stylesheets)%>
+    <%= stylesheet_link_tag("sprockets_app").tap do|markup|
+      Alarms.notify(StandardError.new("stylesheets should be on cloudfront!"), :style_tag => markup, :site => MingleConfiguration.app_namespace) if markup =~ /mingle\.mingle(\-staging)?\.thoughtworks\.com/
+    end
+    %>
+    <%= stylesheet_link_tag("print", :media => 'print') %>
+    <%- if MingleSprocketsConfig.controller_spec_css?(@controller.controller_name) -%>
+      <%= stylesheet_link_tag(@controller.controller_name) %>
+    <%- end -%>
+
+    <%= raw yield(:stylesheets) -%>
+    <% if Rails.env.test? || Rails.env.development? -%>
+      <style type="text/css">
+        #javascript-errors {
+          margin: 0;
+          padding: 0;
+          border: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          background: black;
+          color: red;
+          font-weight: bold;
+          text-align: left;
+          display: none;
+          z-index: 100000;
+        }
+
+        #javascript-errors a {
+          color: yellow;
+        }
+      </style>
+      <%= raw javascript_include_tag("/javascripts/debug/errors.js") %>
+    <% end -%>
+    <%= javascript_include_tag("sprockets_app") %>
+    <%= javascript_include_tag(MingleConfiguration.ckeditor_source) %>
+    <% if Rails.env.test? -%>
+      <%= javascript_include_tag("/javascripts/test-only/thirdparty/jquery.simulate.js") %>
+      <%= javascript_include_tag("/javascripts/test-only/thirdparty/jquery.simulate.ext.js") %>
+      <%= javascript_include_tag("/javascripts/test-only/thirdparty/jquery.simulate.drag-n-drop.js") %>
+    <% end -%>
+
+    <link rel="shortcut icon" href="<%= image_path('/favicon.ico') %>" />
+    <link rel="apple-touch-icon" href="<%= image_path('/apple-touch-icon.png') %>" />
+    <%= javascript_with_rescue(<<-JAVASCRIPTS)
+MingleJavascript.env = #{Rails.env.to_s.to_json};
+MingleJavascript.metricsEnabled = #{metrics_enabled?.to_json};
+window.docLinkHandler = new LinkHandler(['doc']);
+window.MingleColorPalette = #{Color.defaults.to_json};
+AlsoViewing.CONTEXT_PATH = #{CONTEXT_PATH.inspect};
+AlsoViewing.INTERVAL = #{MingleConfiguration.also_viewing_interval};
+window.TRACE = #{MingleConfiguration.trace_js?};
+
+#{"TrialFeedback.showForm(#{new_trial_feedback_path.to_json});" if MingleConfiguration.saas? && show_trial_feedback_form?}
+#{element_highlight_js(flash[:highlight]) if flash[:highlight]};
+#{"MingleUI.cardTypeColors = #{@project.card_type_colors.to_json};" if project_selected?}
+#{"MingleUI.cards.baseUrl = #{cards_base_url.inspect};" if project_selected?}
+JAVASCRIPTS
+%>
+
+    <% if Rails.env.test? %>
+      <%= javascript_with_rescue(<<-JAVASCRIPTS)
+Date.clockNow = #{Clock.now.milliseconds};
+#{"LocaleDate.timezoneOffset = #{Clock.client_timezone_offset};" if Clock.client_timezone_offset}
+JAVASCRIPTS
+%>
+    <% end -%>
+    <%= yield(:javascripts)%>
+  </head>
+  <body id="page-identifier-<%= @controller.controller_name.dup << '-' << @controller.action_name %>"  data-show-holiday-fun="<%= MingleConfiguration.show_holiday_fun?(user_preference(:i_hate_holidays)) -%>"
+  data-holiday-name="<%= MingleConfiguration.show_holiday_fun?(user_preference(:i_hate_holidays)) ? MingleConfiguration.latest_holiday : '' -%>"
+  data-hover-logo-link="<%= MingleConfiguration.holiday_logo_link.nil? ? '' : MingleConfiguration.holiday_logo_link -%>">
+    <div id="doc" class="<%= if (sidebar.exist? && sidebar.visible?) then 'yui-t6 sidebar_visible' else 'yui-t7' end %>">
+      <% if project_selected? %>
+        <% content_for :mingle_logo do %>
+          <div id="project-list">
+            <% if MingleConfiguration.show_holiday_fun?(user_preference(:i_hate_holidays)) && MingleConfiguration.latest_holiday_name.present? %>
+              <% img_tag = image_tag(MingleConfiguration.holiday_logo, {:"data-hover-src" => MingleConfiguration.holiday_logo_hover,
+                                                                        :"data-src" => MingleConfiguration.holiday_logo,
+                                                                        :title => MingleConfiguration.show_holiday_fun?(user_preference(:i_hate_holidays)) ? MingleConfiguration.holiday_logo_tooltip : '',
+                                                                        :class => MingleConfiguration.latest_holiday_name})%>
+              <%= link_to "#{img_tag}".html_safe, projects_url,
+                          :class => "logo holiday #{MingleConfiguration.latest_holiday_name}" %>
+            <% else %>
+                <%= link_to "#{image_tag('/images/logo.png')}".html_safe, projects_url, :class => "logo" %>
+            <% end %>
+          </div>
+          <span class="header-name">
+            <%= link_to h(@project.name), :controller => 'projects', :project_id => @project.identifier, :action => 'show' %>
+          </span>
+          <%= render :partial => '/projects/drop_down' %>
+        <% end %>
+      <% end %>
+
+      <% content_for :special_header do %>
+        <% if project_selected? -%>
+          <%= header_actions_page_with_user_access %>
+        <% end -%>
+      <% end %>
+
+      <% content_for :after_logo do %>
+        <% if @page_specific_top %>
+          <div id="page-specific-top"></div>
+        <% end %>
+        <%= render :partial => "shared/header_actions" %>
+      <% end %>
+
+      <% if project_selected? -%>
+        <% content_for :header_pills do %>
+          <%= render :partial => '/layouts/tabs', :locals => {:sidebar => sidebar} %>
+          <%= clear_float %>
+        <% end %>
+      <% end -%>
+
+      <%= render :partial => 'layouts/application_hd' unless rendering_login? %>
+      <div id="bd">
+         <% if sidebar.exist? -%>
+          <div class="sidebar <%= 'expanded' unless sidebar.hidden? %>" id="sidebar" >
+            <div class="sidebar-panel">
+              <%= raw sidebar.panel %>
+            </div>
+          </div>
+        <% end -%>
+        <div class="page-content <%= 'with-sidebar' if sidebar.exist? && !sidebar.hidden? %>" id="main">
+          <div class="main_inner">
+            <%= render :partial => 'layouts/flash' %>
+            <%= render :partial => 'layouts/readonly_warning' %>
+            <%= raw yield %>
+          </div>
+        </div>
+      </div>
+      <% if !rendering_login? %>
+        <% if MingleConfiguration.display_export_banner? && display_export_notice? %>
+          <%= render :partial => 'layouts/retirement_banner', :locals => {:time_left_for_mingle_eol => remaining_time_for_mingle_eol} %>
+        <% end -%>
+      <% end -%>
+      <%= render :partial => 'layouts/footbar' %>
+    </div>
+    <div id="doc_overlay" style='background-color: white; opacity: 0.7; display:none; position:absolute'></div>
+    <div style="display:none"><%= render :partial => 'shared/lightbox_loading_message' %></div>
+    <%= render :partial => 'shared/user_notification' %>
+    <div class="overlay autosave-lightbox">
+      <div id="lightbox" class="lightbox" style="display: block; height: 394px;">
+        <% lightbox = Lightbox.with_close_link(self, 'Close', '')
+          lightbox.body do %>
+            <%= lightbox_close_button %>
+            <h1><i class="fa fa-cloud massive"></i><br/>Recover changes?</h1>
+            <p>We notice you have some unsaved changes from the last time you were here. Don't worry, we've kept them safe!</p>
+            <div class="actions">
+              <a href="javascript:void(0)" class="link_as_button cancel-autosave">No</a>
+              <a href="javascript:void(0)" class="link_as_button primary accept-autosave">Yes</a>
+            </div>
+          <%end%>
+      </div>
+    </div>
+  <div id="deletion-tray">
+    <div class="slot"></div>
+  </div>
+
+  <% if @project %>
+    <%= content_tag :div, "", :id => "tag-storage", :"data-project" => @project.identifier, :"data-all-tags" => tags_data(@project), :"data-color-update-url" => tag_color_update_path(:project_id => @project.identifier) -%>
+  <% end %>
+
+  <%= render_buffered_javascript %>
+  <%= render :partial => "layouts/any_card" %>
+  <%= render :partial => "layouts/invoke" %>
+  </body>
+</html>

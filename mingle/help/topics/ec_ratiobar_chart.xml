@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Ratio bar chart">
+    <p>Ratio bar charts are used to show completeness of a data set, as a percentage of the whole. They’re useful in project management to track progress of completed work as a percentage of the whole scope. Check out our <cref topic="ec_ratiobar_chart#ec_sample_ratiobar_charts">sample ratio bar charts.</cref></p>
+        <screenshot alttext="Example ratio bar chart" src="resources/images/ec_ratiobar_sprint_status.png" />
+    <strong><p>CREATE A RATIO BAR CHART</p></strong>
+    <p>To create a ratio bar chart on a page or a card, follow these steps:</p>
+    <bullets>
+        <item>In the editor, click on the Ratio Bar Chart button.</item>
+        <item>In the Easy Charts form, start by selecting the data that will go into your chart. This is similar to the filters you use to make various views in Mingle.</item>
+             <screenshot alttext="Ratiobar chart Section1" src="resources/images/ec_ratiobar_section1.gif" />
+        <p>Click on <i>Proceed to Step 2</i> when you’re done with this step.</p>
+        <item>Next, build the chart.</item>
+        <p>Specify the property of the cards determines what labels you want to see on the X-axis. In our example, each bar represents a feature. Specify the aggregate that defines the height of the Y-axis, or 100%. In our example, this is the total scope of the features.</p>
+             <screenshot alttext="Ratiobar chart Section2" src="resources/images/ec_ratiobar_section2.gif" />
+        <p>Next, specify the condition that defines completeness of each bar. In our example, the completeness of a feature is defined by whether stories of the feature are in the Done status. </p>
+             <screenshot alttext="Ratiobar chart Section3" src="resources/images/ec_ratiobar_section3.gif" />
+        <p>Click on <i>Proceed to Step 3</i> when you’ve finished this step.</p>
+        <item>Customize how you want the chart to look. You can select a size, the angle of the X-axis labels, and a color for the bars. Additionally, you can give the chart, the X-axis and the Y-axis titles of your choice.</item>
+        <item>Click on Insert to complete the chart and insert it into the page or card.</item>
+        <item>You can interact with the completed chart. Hovering over a bar will show you the last updated ten cards that correspond to that bar. Clicking on a bar takes you to a full list of all cards for the bar.</item>
+            <screenshot alttext="Ratiobar chart interaction" src="resources/images/ec_ratiobar_interaction.gif" />
+    </bullets>
+    <strong>Notes</strong>
+    <bullets>
+        <item>You can use project variables in your chart setup. For instance, if you’d like the ratio bar chart to represent work for the current iteration at any point of time, you can do so without having to update the chart each iteration!</item>
+            <screenshot alttext="Ratiobar chart using project variable" src="resources/images/ec_ratiobar_using_project_variable.gif" />
+        <item>If you’re inserting a ratio bar chart into a card description, you can refer to the card itself in your chart setup by selecting THIS CARD as a property value. For instance, if you want a ratio bar chart in a Release card to represent the status of all features that belong to that release, use Release is THIS CARD in the filters.</item>
+            <screenshot alttext="Ratiobar chart using this card" src="resources/images/ec_ratiobar_using_this_card.gif" />
+    </bullets>
+    <p>
+        <strong>CUSTOMIZE USING MQL:</strong>
+    </p>
+    <p>You can build or further customize a ratio bar chart using Mingle Query Language. Here’s a sample MQL snippet:</p>
+    <markup>
+        ratio-bar-chart
+          totals: SELECT Feature, SUM(Size) WHERE Type = Story
+          restrict-ratio-with: Status = Closed
+          project: agile
+    </markup>
+    <p>Some additional customizations you can set up in MQL are:</p>
+    <bullets>
+        <item>AS OF</item>
+        <item>FROM TREE </item>
+        <item>THIS CARD.Property</item>
+        <item>Use relationship operators on non-numeric properties (where ‘Due Date’ is greater than ‘Release Date’)</item>
+        <item>Custom chart width and height</item>
+        <item>Custom colours</item>
+    </bullets>
+    <topic title="Sample ratio bar charts" id="ec_sample_ratiobar_charts">
+    	<p><strong>Completion status of features planned in a release:</strong></p>
+    		<screenshot alttext="feature completion" src="resources/images/ec_ratiobar_example1.png" />
+    	<p><strong>Status of work planned in sprints in a release:</strong></p>
+    		<screenshot alttext="workload" src="resources/images/ec_ratiobar_example2.png" />
+    </topic>
+</topic>

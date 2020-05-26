@@ -1,0 +1,19 @@
+// -- Add this to your script: Start --
+<browser>
+function promptForUserInput(){
+	_sahi_temp_promptValue = _sahi._prompt("Enter a name");
+}
+</browser>
+
+function getUserInput(){
+	var $value = null; 
+	_call(promptForUserInput());
+	_set($value, _sahi_temp_promptValue);
+	return $value;
+}
+// -- Add this to your script: End --
+
+
+// Get the user input in your script
+var $userInput = getUserInput();
+_alert($userInput);

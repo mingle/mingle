@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Linking source files to cards">
+    <section title="Introduction">
+    	<p>Mingle integrates with your team's source repository to link your code to cards. By typing card numbers in the source commit messages, Mingle automatically links code revisions with the cards that are referenced. 
+    		All code revisions are also linked to Mingle's History tab, so you can always see what code changes happened relative to other changes in the project.</p> 
+    	
+    	<note>To use this feature, you must have successfully <cref topic="setup_source_repository_integration">integrated your source repository with Mingle</cref>.</note>
+    	
+    	<bullets title="Mingle's Source tab lets you browse your entire source repository and shows">    	
+	    	<item>code revision numbers against each directory and file</item>
+	    	<item>commit messages (including links to cards if card numbers were entered in the commit message)</item>
+	    	<item>when the source file(s) were committed</item>
+	    	<item>the name of the person who committed the source file(s) (setup your source repository user name in your <cref topic="managing_your_user_profile">user profile</cref>).</item>
+    	</bullets>
+    	
+    	<hint>Mingle's source repository integration is a great way to help new team members easily discover the code used to implement business requirements.</hint>
+    	
+    	<p>Mingle automatically scans all files in your source repository 
+    		(based on the local directory path specified under <tab>Project admin</tab> tab, <link>Project settings</link> link), and displays all revisions on the <tab>History</tab> tab.</p>  
+    	
+    	<p>From the <tab>Source</tab> tab you can click on a revision number to view the source files that were changed in the revision and the actual changes against the previous version (diffs).</p>
+    	
+    </section>
+	<section title="How to view details of revisions in your project's source repository">	
+		<steps>		
+			<item><cref topic="signing_in_and_out_of_mingle">Sign in</cref> to Mingle and locate your project (if you're not already working in the project).</item>
+			<item>
+				<p>Click the <tab>Source</tab> tab.</p>
+				<p>Mingle displays the highest level of your project's source repository, 
+					showing the most recent source file revision.</p>
+				<screenshot alttext="Source tab" src="resources/images/source_page.png"></screenshot>
+			</item>
+			<item>
+				<bullets title="If you want to">
+					<item>
+						<p><strong>view the details of a specific revision</strong>, type the revision number in the Choose revision to view field and click the Go button.</p>
+						<p>Mingle displays that revision of the repository. (Type HEAD and click the <button>Go</button> button to return to the latest revision.)</p>
+					</item>
+				    <item>
+				    	<p><strong>browse details of changes within the source directories</strong>, click the <link>Filename</link> link</p>
+						<p>Mingle displays the contents of the selected directory with details of each file/folder's last revision.</p>
+				    </item>
+				</bullets>
+			</item>
+			<item>
+				<p>If you want to display more details about specific changes made during a revision, click on a Revision number.</p>
+				<p>Mingle displays a list of all changes committed in the revision, including a list of all files.</p>		
+			</item>
+			<item>
+				<bullets title="If you want to">
+					<item>
+						<p><strong>view details of the actual card</strong> (e.g. bug or user story) referenced in the commit message, click the links to those cards (in the screen shot above #1708 and #1711).</p>
+						<p>Mingle displays the details of the selected card.</p>
+					</item>
+					<item>
+						<p><strong>view specific details of the changes to a source file</strong> between this version and the last version, click the <link>View diff</link> link.</p>
+						<p>Mingle displays details of the source file changed, added or deleted.</p>
+						<screenshot alttext="Source tab - source file diff" src="resources/images/source_file_diff.png"></screenshot>
+					</item>
+					<item>
+						<p><strong>view the actual source file</strong>, click the View source link.</p>
+						<hint>You can download a copy of the source file by right-clicking and selecting Save Link As... (or equivalent).</hint></item>
+					<item><strong>view details of the previous or next revision</strong>, click the <link>Previous revision</link> or <link>Next revision</link> links at the top</item>
+					<item><strong>view a history of all revisions checked in</strong>, click the <link>Revisions</link> link</item>
+					<item><strong>return to the latest revision</strong>, click the <link>Source</link> link.</item>
+				</bullets>
+			</item>
+		</steps>
+	</section>
+	<section title="Using card keywords in source repository checkin messages"> 		
+		<p>Before you can link card numbers to source repository messages, you must <cref topic="card_keywords">setup appropriate keywords</cref> so that Mingle identifies card numbers correctly and establishes the links between card numbers and code.</p>
+		
+		<p>For example if you have a keyword of <markup>#</markup>, typing <markup>#1</markup> in a commit message <strong>automatically creates a link to card number 1</strong>. When you're editing card number 1, you'll also see the source version and commit message in the card's <tab>History</tab> tab.</p>
+		<screenshot alttext="Card history tab - source commit" src="resources/images/card_history_source_commit.png"></screenshot>
+		<p>In the <tab>History</tab> tab for Card 1 above, you can see that Revision 937 addressed some aspect of this card (story 1). Clicking the <link>Revision 937</link> link would take you to the <tab>Source</tab> tab where you could see all source files changed for that revision.</p>
+	</section>
+	<section title="Also see...">
+	<bullets>
+		<item><cref topic="card_keywords">Card keywords</cref></item>
+		<item><cref topic="cross_project_card_page_linking">Cross project card and page links</cref></item>
+		<item><cref topic="murmurs_card_links">Murmurs Card Links</cref></item>
+	</bullets>
+	</section>
+</topic>
+
+
+

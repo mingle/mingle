@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Step 1 - Connecting to a database">
+
+<warning>If you have not <cref topic="configuring_a_database_for_use_with_mingle">installed a database</cref> you will need to do this before completing this step. If you have already configured a database for Mingle (e.g. if you're upgrading or re-installing) the wizard may skip this step. </warning>
+
+<note>Starting with Mingle 3.0 MySQL will no longer be supported. All existing MySQL users will need to <cref topic="database_migration">migrate</cref> their data to Postgres or Oracle before upgrading to Mingle 3.0.</note>
+
+	<steps>
+		<item>From the <strong>Database</strong> droplist select <strong>PostgreSQL</strong> or <strong>Oracle</strong>. When a database is selected the default options for that database will be displayed. You may update the defaults. Some specifics about your database will also need to be entered. </item>
+		<item>In the <strong>Database host</strong> or <strong>Machine name</strong> field type the name or the address of your database server. By default this is set up to run on the installation server i.e. localhost.</item>
+		<item>In the <strong>Database port</strong> or <strong>Listener port</strong> field, if you want to run Mingle on a port other than the default set up for PostgreSQL or Oracle, update the port number.</item>
+		<item>In the <strong>Database name</strong> or <strong>Database instance name</strong> field use the default name or update this with the name of the database you created for use with Mingle.</item>
+		<item>In the <strong>Database username</strong> or <strong>Username</strong> field use the default username or update this with the name of the user you created for use with Mingle. </item>
+		<item>In the <strong>Database password</strong> or <strong>Password</strong> field, if you have set up a password, enter it here.</item>
+		<note>When using Mingle with an Oracle database a password is required.</note>
+		<screenshot alttext="Setting up Mingle: Step 1 - Connect Mingle to your database" src="resources/images/installation/connect_database.png"/>
+		<item>Click the <strong>Continue</strong> button. Mingle checks the database credentials you entered, and if correct, Mingle will display the <strong>Set up the database</strong> page.</item>
+		<hint>If the connection test failed, check to ensure you entered the correct username, password, and database name. Also ensure that the PostgreSQL or Oracle database server is running.</hint>
+	</steps>
+
+</topic>

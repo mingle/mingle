@@ -1,0 +1,54 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<VirtualHost *:80>
+  <Proxy *>
+    Order deny,allow
+    Allow from all
+  </Proxy>
+
+  Timeout 240
+
+  ProxyPass / http://localhost:8080/ retry=0
+  ProxyPassReverse / http://localhost:8080/
+  ProxyPreserveHost on
+
+  LogFormat "%h (%{X-Forwarded-For}i) %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\""
+  ErrorLog /var/log/httpd/elasticbeanstalk-error_log
+  TransferLog /var/log/httpd/elasticbeanstalk-access_log
+
+  <% unless ENV['DISABLE_PUBLIC_ACCESS'].to_s.empty? %>
+  RewriteEngine on
+
+  # RewriteLog "/var/log/httpd/rewrite.log"
+  # RewriteLogLevel 3
+
+  RewriteCond %{REQUEST_URI} !^/(status|background_status|bootstrap_status|about)\b [NC]
+  RewriteRule ^/(.*)$ - [F,L]
+  <% end %>
+
+
+  <% unless ENV['NON_API_REWRITE_DOMAIN'].to_s.empty? %>
+  RewriteEngine on
+
+  # RewriteLog "/var/log/httpd/rewrite.log"
+  # RewriteLogLevel 3
+
+  RewriteCond %{REQUEST_URI} !^/(api\/|status|background_status|bootstrap_status|about)\b [NC]
+  RewriteCond %{HTTP_HOST} ^([^\.]+)\..+ [NC]
+  RewriteRule ^/(.*)$ https://%1.<%= ENV['NON_API_REWRITE_DOMAIN'] %>/$1 [R=301,NE,L]
+  <% end %>
+</VirtualHost>

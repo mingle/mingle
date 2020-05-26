@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE subsection SYSTEM "mingle_help.dtd">
+<subsection title="Pivot table" collapsed="true" id="pivot_table">
+  <markup_reference
+    title="Display a pivot table summing the estimates for in-scope stories by priority (cards of type 'Story' and property 'Story Status' is not set to 'Out of Scope') for each status.
+    The table will not display any empty rows or columns, but will display a total for each status in the bottom row.">
+    <note>
+        Macro markup is space sensitive and we advise you to stick to the indentation scheme specified in the example. If you add project as a parameter this needs to be added to a new line as shown in the markup below.     </note>
+    <icon alttext="Pivot table toolbar icon" src="resources/images/toolbar_pivot_table_icon.png" />
+    <markup>
+  pivot-table
+    conditions: Type = Story AND 'Story Status' != 'Out of Scope'
+    aggregation: SUM('Story Estimate - Original')
+    rows: Priority
+    columns: 'Story Status'
+    empty-rows: true
+    empty-columns: true
+    totals: true
+    project: agile
+    </markup>
+    <preview>
+      <screenshot alttext="Example pivot table" src="resources/images/tables_pivot_table_example.png" />
+    </preview>
+  </markup_reference>
+  <table caption="Chart level options">
+    <header-row>
+      <col-header>Name</col-header>
+      <col-header>Meaning</col-header>
+      <col-header>Required</col-header>
+      <col-header>Default value</col-header>
+    </header-row>
+    <row>
+      <label>aggregation</label>
+      <col>The database function to perform across all cards having the row and column values for a particular cell. The result of this function will display in the cell</col>
+      <col>No</col>
+      <col>COUNT(*)</col>
+    </row>
+    <row>
+      <label>columns</label>
+      <col>The card property whose values make up the columns of the table</col>
+      <col>Yes</col>
+      <col />
+    </row>
+    <row>
+      <label>conditions</label>
+      <col>A custom MQL condition clause that restricts the cards which are to be aggregated</col>
+      <col>No</col>
+      <col>If not specified, all cards are aggregated.</col>
+    </row>
+    <row>
+      <label>empty-columns</label>
+      <col>Should the table contain empty columns</col>
+      <col>No</col>
+      <col>TRUE</col>
+    </row>
+    <row>
+      <label>empty-rows</label>
+      <col>Should the table contain empty rows</col>
+      <col>No</col>
+      <col>TRUE</col>
+    </row>
+    <row>
+      <label>links</label>
+      <col>Should the cell contain a link to a card list containing the cards specified by the cell's row and column values</col>
+      <col>No</col>
+      <col>TRUE</col>
+    </row>
+    <row>
+      <label>project</label>
+      <col>Any valid project identifier, specifying which project’s cards will be plotted by this chart. Authorization will be enforced upon view. That is, if a user does not have access to a project, that data series will not be included in the chart for that user. Default is the project to which the page or card containing the macro belongs.</col>
+      <col>no</col>
+      <col />
+    </row>
+    <row>
+      <label>rows</label>
+      <col>The card property whose values make up the rows of the table</col>
+      <col>Yes</col>
+      <col />
+    </row>
+    <row>
+      <label>totals</label>
+      <col>Should column totals display</col>
+      <col>No</col>
+      <col>FALSE</col>
+    </row>
+  </table>
+</subsection>

@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE subsection SYSTEM "mingle_help.dtd">
+<subsection title="Print cards from the list view" id="printing" collapsed="true">
+	<p>Click on the 'Print' link from the card list view.</p>
+		<screenshot alttext="single card print" src="resources/images/print_link_from_list_view.png"/>
+	<p>This will generate a .pdf file that contains all of cards from the current list view. Every page will contain two Mingle cards.</p>
+	<p>Each printed card includes</p>
+		<bullets>
+			<item>card number</item>
+			<item>card title</item>
+			<item>card version information</item>
+			<item>card description</item>
+			<item>card properties</item>
+			<item>tags</item>
+		</bullets>
+	<hint>Please note the card description will be <strong>truncated</strong>. Plus any charts in the card description and properties which have a value of (not set) will <strong>not</strong> be printed.</hint>
+</subsection>

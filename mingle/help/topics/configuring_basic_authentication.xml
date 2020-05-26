@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<section title="Basic Authentication"> 
+	<p>To enable Basic authentication, you need to set the <config>basic_authentication_enabled</config> configuration option to true in the <path><subst>Mingle data directory</subst>/config/auth_config.yml</path> file, where <subst>Mingle data directory</subst> is the path to the Mingle data directory:</p>
+	<markup> basic_authentication_enabled: true</markup>
+	<p>Here's an example:</p>
+	  <markup>
+	    require "uri"
+      require "net/http"
+
+      url = "http://your-org.mingle-api.thoughtworks.com/api/v2/projects.xml"
+
+      uri = URI.parse(url)
+      http = Net::HTTP.new(uri.host, uri.port)
+      request = Net::HTTP::Get.new(uri.request_uri)
+      request.basic_auth("username", "password")
+
+      puts http.request(request)
+	  </markup>  
+</section>
+
+

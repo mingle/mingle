@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Example project overview page">    
+       
+            <p>This page provides a suggested example for an overview page.All of the formatting and macros used here are described in the <cref topic="macro_reference">macro reference guide</cref>. </p>
+            <p>Marcros used here are:</p>
+            <bullets>
+        			<item>
+        				<cref topic="markup_data_series_chart">Data series chart</cref>
+        			</item>
+        			<item>
+        				<cref topic="markup_stack_bar_chart">Stack bar chart</cref>
+        			</item>
+        			<item>
+        				<cref topic="markup_ratio_bar_chart">Ratio bar chart</cref>
+        			</item>
+        			<item>
+        				<cref topic="markup_table_query">Table Query</cref>
+        			</item>
+        			<item>
+        				<cref topic="markup_pivot_table">Pivot Table</cref>
+        			</item>        						
+        		</bullets>
+            <p>You can also find examples in our <cref topic="standard_mingle_templates">standard templates</cref> shipped with Mingle.</p>
+            <screenshot alttext="Example project overview wiki page" src="resources/images/project_overview_page_example.png"></screenshot>
+</topic>
+
+

@@ -1,0 +1,76 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<p>
+  <label for='card-type'>Name:</label>
+  <%= text_field 'card_type', 'name'%>
+</p>
+
+<p>
+  <% unless @prop_defs.size > 0 %>
+    There are no card properties in this project.
+    <%= link_to 'Return to card properties list', :controller => 'property_definitions', :action => 'index' %>
+  <% else %>
+    <label>Select properties for this type: <span class="notes">(You can customize which properties are available for this card type)</span></label>
+
+    <div id="content">
+      <table id="enum-table-top" class="list_table">
+      	<thead>
+      	  <tr class="table-top select-row">
+            <th colspan="3" class="last">
+              Select:
+              <% checkbox_container = 'reorder_container' -%>
+              <%= link_to_function 'All',
+                    "$A($('#{checkbox_container}').getElementsByTagName('input')).each(function(checkbox){checkbox.checked = true;$('drag_property_definition_'+checkbox.value).show()});",
+                    :id => "select_all" -%>
+              <%= link_to_function 'None', "$A($('#{checkbox_container}').getElementsByTagName('input')).each(function(checkbox){checkbox.checked = false;$('drag_property_definition_'+checkbox.value).hide();});", :id => 'select_none' -%>
+            </th>
+      	  </tr>
+      		<tr class="table-top">
+            <th class="col1">Available</th>
+            <th class="col2">Property</th>
+            <th class="col3 align-center">Order</th>
+      		</tr>
+      	</thead>
+      </table>
+      <input id="property_definitions_order" name="property_definitions_order[]" type="hidden" />
+      <ul id='reorder_container' class='compact-list'>
+        <% @prop_defs.each do |prop_def| -%>
+          <li id='card_type_property_row_<%= prop_def.id %>'>
+            <table class="enum-draggable-table">
+              <tbody>
+                <tr <%= raw("class = 'hidden-property'") if prop_def.hidden? %> >
+                  <td class="col1">
+                  <% checked = is_checked?(prop_def) -%>
+      		        <%= check_box_tag("property_definitions[#{prop_def.id}]", prop_def.id, checked, :onclick => "$('drag_property_definition_#{prop_def.id}').toggle()") %>
+       		        </td>
+                  <td class="col2" id="card_type_property_name_<%= prop_def.id %>">
+       	            <%= h prop_def.name %>
+       	          </td>
+                  <td class="vertical-grip col3 align-center">
+                    <%= link_to_function 'Drag', :id => "drag_property_definition_#{prop_def.id}", :class => 'link_button', :style => "#{checked ? '' : 'display: none'}" %>
+                  </td>
+            	  </tr>
+              </tbody>
+            </table>
+        	</li>
+        <% end %>
+      </ul>
+    </div>
+
+    <%= javascript_with_rescue sortable_element("reorder_container", :handle => 'link_button', :onUpdate => "Prototype.K") %>
+  <% end %>
+</p>

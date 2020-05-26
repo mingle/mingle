@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Using the card filter sidebar control">
+  <p>The card filter is governed largely by the various <cref topic="card_types">card types</cref> and <cref topic="card_properties">properties</cref> that you have created for your project.</p>
+  <note>There is always at least one filter by default in the filters panel. This first filter is set by default to <strong>filter by card type with an initial value of (any)</strong> - meaning that you will see all card types in the view. This filter cannot be removed, however you can change the card type to a value other than (any), or add additional card type filters.</note>
+  <p>Once you've filtered the cards you want to view, you can <cref topic="creating_a_favorite_card_view">save these filters as a favorite</cref> for quick reference in the <sidebar-button>Favorites...</sidebar-button> sidebar control. (Once you've made a view into a Favorite - you can <cref topic="creating_tabs_from_favorites">create a tab</cref> for it).</p>
+  <section title="Quick start to filtering">
+    <note>This section gives a quick overview of how to use the <strong>Filter cards by...</strong> sidebar control to control which cards are displayed. For more in-depth information about how filters work, take a look at the following sections.</note>
+    <steps>
+      <item>
+        <p><strong>Click on the <sidebar-button>Filter cards by...</sidebar-button> link</strong> to open the control (usually it will be open by default when it's available). The <sidebar-button>Filter card by...</sidebar-button> is available from any <cref topic="list_view">list</cref> or <cref topic="grid_view">grid</cref> view.</p>
+        <screenshot alttext="Filter list by sidebar control" src="resources/images/filter_list_by_sidebar_control.png"/>
+        <p>You'll see that one filter condition is already set: <strong>Type is (any)</strong>. This default condition cannot be removed, although you can change the value from (any) to one of the available card types. This is because card type determines what properties are available for further conditions. With the default of <strong>Type is (any)</strong>, all card types will be shown in the view, and only properties which are shared by all card types can be used in setting additional filter conditions.</p>
+        <p>For example, if you have two card types in your project: Story, which has properties (Type, Status, Priority); and Risk which has properties (Type, Status, Impact, Owner).</p>
+        <bullets>
+          <item>With the default filter condition <strong>Type is (any)</strong>, when you attempted to add a second condition the only properties you would be able to select are (Type, Status) because they are the only properties which are common to all card types.</item>
+          <item>If you were to change the filter condition to be <strong>Type is Story</strong>, then your choice of properties for further conditions would be (Type, Status, Priority).</item>
+        </bullets>
+      </item>
+      <item>
+        <p><strong>To quickly restrict the type of cards displayed</strong>, change the value in the default condition from (any) to a specific card type.</p>
+      </item>
+      <item>
+        <p><strong>To add a new filter condition</strong>, click on the <link>Add a filter</link> link. A new row will be inserted into the filter control.</p>
+      </item>
+      <item>
+        <p><strong>Choose a property</strong> by clicking on the <link>(select...)</link> link. You will be able to choose any property which is common to all of the card types currently selected.</p>
+        <screenshot alttext="New filter condition" src="resources/images/new_filter_condition.png"/>
+        <hint>
+          <p>The following property types are available to filter by:</p>
+          <bullets>
+            <item><cref topic="card_property_types#managed_list_properties">Managed text list</cref></item>
+            <item><cref topic="card_property_types#managed_list_properties">Managed number list</cref></item>
+            <item><cref topic="card_property_types#team_member_properties">Team member</cref></item>
+            <item><cref topic="card_property_types#date_properties">Date</cref></item>
+            <item><cref topic="card_property_types#relationship_properties">Relationship</cref></item>
+          </bullets>
+          <p>If the property you want to filter on is not showing up, you may need to restrict the card types to ones which have that property or consider using the <cref topic="filter_list_by_mql">Advanced Filter</cref>.</p>
+        </hint>
+      </item>
+      <item>
+        <p><strong>Choose a comparison operator</strong> by clicking on the <link>is</link> link. The options available will depend on what is applicable to the property you selected in the step above.</p>
+        <bullets title="Full list of comparison operators">
+          <item><strong>is</strong> - the default operator; will restrict the property to only the value specified.</item>
+          <item><strong>is not</strong> - will restrict the property to only values other than the one specified.</item>
+          <item><strong>is less than</strong> - shown when the property is ordered. Will restrict the property to values which are strictly less than the specified value. Does not include cards having the property value equal to the specified value.</item>
+          <item><strong>is greater than</strong> - shown when the property is ordered. Will restrict the property to values which are strictly greater than the specified value. Does not include cards having the property value equal to the specified value.</item>
+          <item><strong>is before</strong> - shown when the property is a date, equivalent to <strong>is less than</strong>. Does not include cards having the property value equal to the specified date.</item>
+          <item><strong>is after</strong> - shown when the property is a date, equivalent to <strong>is greater than</strong>. Does not include cards having the property value equal to the specified date.</item>
+        </bullets>
+        <note>
+          <bullets>
+            <item>Properties can have a natural order, such as numbers or dates - in this case that natural ordering is used to resolve 'is less/greater than' conditions.</item>
+            <item>Managed properties, where the allowable values are specified in a list - use the sort order of the list to resolve 'is less/greater
+        than' conditions. <todo>the rule is that the list is sorted in ascending order from top to bottom, should add graphics here to explain</todo></item>
+          </bullets>
+        </note>
+      </item>
+      <item>
+        <p><strong>Choose a value</strong> by clicking on the <link>(any)</link> link. The options available will depend on what is applicable to the property you selected in the step above.</p>
+        <bullets title="There are several special values which can appear here:">
+          <item><strong>(any)</strong> - Specifies cards having any value for the selected property. Available for operators <strong>is</strong> and <strong>is not</strong>.This is the same as having no condition for the property at all.</item>
+          <item><strong>(not set)</strong> - Specifies cards which have no value set for the property. Available for operators <strong>is</strong> and <strong>is not</strong>. This is analogous to the 'null' term in SQL. It is not available for mandatory Mingle card properties such as Type.</item>
+          <item><strong>(current user)</strong> - Specifies cards which have the currently logged in user assigned to the selected property. Available for operators <strong>is</strong> and <strong>is not</strong>. Available for properties which take Mingle users as values.</item>
+          <item><strong>(today)</strong> - Specifies cards which have the current date assigned to the selected property. Available for operators <strong>is</strong>, <strong>is not</strong>, <strong>is before</strong>, <strong>is after</strong>. Available for date properties.</item>
+        </bullets>
+        <bullets title="The available values depend on the data type of the property you selected">
+          <item>if you selected the <strong>Type property</strong>, then you will be presented with the list of all card types and the special value (any).</item>
+          <item>if you selected a <strong>Managed List property</strong>, then you will be presented with the list of all values that have been specified in the managed list and the special values (any), (not set).</item>
+          <item>if you selected a <strong>Date</strong>, then you will be presented with a calendar widget that will allow you to select a date, as well as the special values (any), (not set) and (today).</item>
+          <item>if you selected a <strong>Team member property</strong>, then you will be presented with a list of the current team members, as well as the special values (any), (not set) and (current user).</item>
+          <item>
+            <p>If you chose a <strong>Relationship property</strong> to filter on, as well as a droplist, if you select the option to 'select card...' you will be presented with a popup list of the available cards of that type in the corresponding tree.</p>
+            <p>
+              <screenshot alttext="Select filter value for relationship property" src="resources/images/select_filter_value_for_relationship_property.png"/>
+            </p>
+          </item>
+          <item>If the property you selected has any <strong>Project variables</strong> associated with it, then the names of those project variables will appear in the list of values. For example, a project variable called Current Iteration would appear as (Current Iteration).</item>
+        </bullets>
+      </item>
+      <item>Your new filter condition will be applied as soon as you've selected a value, and you should see the results reflected in the cards displayed in the view.</item>
+      <item>
+        <p><strong>To remove a filter condition</strong>, simply click on the <screenshot alttext="Delete filter condition button" src="resources/images/delete_filter_condition_button.png"/> next to the condition you want to remove. Again, the effect of removing the condition will immediately be reflected in the view.</p>
+        <note>You can't remove the first filter condition, there must always be at least one condition on the Type property.</note>
+      </item>
+      <item>
+        <p><strong>Select one or more <cref topic="working_with_tags">tags</cref></strong> to include in the filter conditions, by clicking on the <link>Add tags</link> link. Mingle will display an edit box which will allow you to enter one or more tags (separate multiple tags with commas). Click the <button>Add tags</button> to apply your tag list to the filter. Only cards which are tagged with all of the tags you enter here will be displayed. </p>
+      </item>
+      <item><strong>To remove a tag from the filter</strong>, click on the <link>Edit tags</link> and then click on the <screenshot alttext="Remove tag from filter button" src="resources/images/remove_tag_from_filter_button.png"/>. Mingle will remove that tag from the filter and refresh the display.</item>
+      <item>
+        <p>If no cards match the criteria, you will see the following message displayed at the top of the screen.</p>
+        <screenshot alttext="There are no cards that match the current filters message" src="resources/images/no_cards_match_filter.png"/>
+        <p>To resolve this, you can either:</p>
+        <bullets>
+          <item>Remove one or more filter conditions or tags from the filter.</item>
+          <item>Click on the <link>Reset filter</link> link in the message to reset the filter to the defaults.</item>
+        </bullets>
+      </item>
+    </steps>
+  </section>
+  <section title="How filtering works">
+    <subsection title="How card types affect filtering options">
+      <p>Selecting one or more card types restricts the properties available for filtering to those which are common to all of the selected card types. With the default of "Type is (any)", all card types will be shown in the view, and only properties which are shared by all card types can be used in setting additional filter condition.</p>
+      <note><strong>The (any) special value is overruled by any other conditions on the property</strong>, so for example if you start with "<filter>Type is (any)</filter>", and then add a condition "<filter>Type is story</filter>" then you will only see cards of type story displayed.</note>
+      <screenshot alttext="Filter property options restricted to those shared by all card types" src="resources/images/filter_with_type_set_to_any.png"/>
+    </subsection>
+    <subsection title="Filtering on multiple values for the same property using the IS operator">
+      <p>When you add more than one filter condition for a property, cards which <strong>satisfy any of the conditions</strong> are shown. (In other words, multiple conditions for a single property are OR'ed together). So for example, if you selected to filter on "<filter>Priority is Critical</filter>, <filter>Priority is Essential</filter>" then both Critical and Essential cards would be displayed.</p>
+      <screenshot alttext="Multiple filter conditions for one property" src="resources/images/filter_with_two_conditions_for_property.png"/>
+    </subsection>
+    <subsection title="Filtering on multiple values for the same property using other operators">
+      <p>When two conditions that return multiple possible values are specified for a single property, they are AND'ed. For example "<filter>Planning Estimate less than 10</filter>", "<filter>Planning Estimate greater than 2</filter>" will result in all cards which have a Planning Estimate greater than 2 <strong>and</strong> a Planning Estimate less than 10
+being displayed. However, when the conditions are mutually exclusive they are OR'ed together: "<filter>Planning Estimate less than 10</filter>", "<filter>Planning Estimate is 15</filter>" will result in all cards which have a Planning Estimate less than 10 <strong>or</strong> a Planning Estimate of 15 being displayed.</p>
+      <screenshot alttext="Greater than and Less than conditions on a single property" src="resources/images/filter_with_greater_and_less_for_property.png"/>
+    </subsection>
+    <subsection title="Filtering on more than one property">
+      <p>When you add filter conditions for more than one property, cards which satisfy all of the conditions are shown. (In other words, conditions for different properties are AND'ed together). So for example, if you selected to filter on "<filter>Priority is Critical</filter>, <filter>Story Status is 'Open'</filter>" then only cards having Priority 'Critical' and Story Status 'Open' would be displayed.</p>
+      <screenshot alttext="Filtering on multiple properties" src="resources/images/filter_on_two_properties.png"/>
+    </subsection>
+    <subsection title="Filtering on multiple values and multiple properties">
+      <p>When you add more than one condition for a property, and also add conditions on other properties, Mingle uses a simple and intuitive precedence rule to evaluate which cards to display. Mingle will display cards which meet at least one of the conditions, for each of the properties specified. (You can describe this as the OR operator taking precedence over the AND operator, in a similar way to the precedence of multiplication over addition in arithmetic).</p>
+      <note>If this explanation isn't helping, then we suggest you have a play with the filter control, as in practice it's much easier to use than explain, and you'll find that in most cases the results are what you would have expected.</note>
+      <example>
+        <p>If you wanted to view <strong>all stories and defects</strong> which have a <strong>priority of Critical or Essential</strong>, and are <strong>assigned to Iteration 5 </strong>:</p>
+        <bullets>
+          <item>First add two conditions on Type; <filter>Type is 'story'</filter>, <filter>Type is 'defect'</filter></item>
+          <item>then, add two conditions on Status; <filter>Status is 'open'</filter>, <filter>Status is 'new'</filter></item>
+          <item>then, add one conditions on Iteration; <filter>Iteration is '5'</filter></item>
+        </bullets>
+        <p>Mingle will first find all cards which have Type set to 'story' or 'defect'. It will then exclude any of the results which do not have a status of 'open' or 'new'. Finally it will exclude any of the results which do not have iteration 5.</p>
+      </example>
+      <screenshot alttext="Filtering on multiple values for multiple properties" src="resources/images/filter_on_multiple_properties_and_values.png"/>
+    </subsection>
+    <subsection title="Filter conditions using (any)">
+      <p>The special value (any) means "no filter" rather than "any one of the possible values". So if you have conditions of <filter>status is (any)</filter>, <filter>status is 'open'</filter>; then the first condition has no effect and you will only see cards which match the second condition. Likewise "is not (any)" has no effect.</p>
+    </subsection>
+    <subsection title="Filtering when a Card tree is selected">
+      <p>When a <cref topic="working_with_card_trees">Card tree</cref> is selected, only cards which are currently members of that card tree will be displayed. Any additional
+filter conditions will further restrict the cards displayed. So if you think that you should be seeing more cards from your filter conditions, check to see if you've got a card tree selected.</p>
+    </subsection>
+  </section>
+  <section title="Also see...">
+    <bullets>
+      <item>
+        <cref topic="filter_list_by_mql">Filtering cards by MQL</cref>
+      </item>
+      <item>
+        <cref topic="finding_cards_to_work_with">Finding cards to work with</cref>
+      </item>
+    </bullets>
+  </section>
+</topic>

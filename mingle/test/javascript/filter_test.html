@@ -1,0 +1,560 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>JavaScript unit test file</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/alignment.js" type="text/javascript"></script>
+
+  <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+  <script src="test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+
+  <script src="test_assets/unittest.js" type="text/javascript"></script>
+  <script src="test_assets/unittest_ext.js" type="text/javascript"></script>
+
+
+  <script src="../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/controls.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/builder.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+
+  <script src="../../public/javascripts/application.js" type="text/javascript"></script>
+
+  <script src="../../public/javascripts/drop_list/base.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/view/base.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/view/drop_down.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/view/drop_link.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/view/field.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/view/filter.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/view/inline_editor.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/view/layout.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/callback_action.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/basic_controller.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/filter_action.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/inline_edit_action.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/model.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/option.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list.js" type="text/javascript"></script>
+
+  <script src="../../public/javascripts/filter.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/calendar.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/calendar-setup.js" type="text/javascript"></script>
+
+  <link rel="stylesheet" href="test_assets/unittest.css" type="text/css" />
+</head>
+<body>
+  <div id="content" >
+    <div id="header">
+      <h1>JavaScript unit test file</h1>
+      <p>
+        This file tests <strong>Filters</strong> class in <strong>filter.js</strong>.
+      </p>
+    </div>
+    <!-- Log output -->
+    <div id="testlog"> </div>
+
+    <div style ='border:solid 1px' id='sandbox'>
+      <h3> sandbox: </h3>
+      <form onsubmit='return false;' action="#" id="test-form">
+        <div id="filter-widget"></div>
+      </form>
+    </div>
+
+    <div id='mock'></div>
+  </div>
+<script type="text/javascript">
+// <![CDATA[
+  new Test.Unit.Runner({
+
+    setup: function() {
+
+      var availableOperators = [['is','is'], ['is not','is not']];
+      this.statusPropertyDefinition = new PropertyDefinition('status', availableOperators, [['open', 'open'], ['closed', 'closed']], [], {}, 'status tooltip');
+      this.priorityPropertyDefinition = new PropertyDefinition('priority', availableOperators, [['any', ':ignore'], ['high', 'high'], ['low', 'low']]);
+
+      var availableOwners = [['any', ':ignore'], ['timmy', 'timmy'], ['jimmy', 'jimmy']];
+      this.bugOwnerPropertyDefinition = new PropertyDefinition('bug owner', availableOperators, availableOwners);
+      this.storyOwnerPropertyDefinition = new PropertyDefinition('story owner', availableOperators, availableOwners);
+      this.taskOwnerPropertyDefinition = new PropertyDefinition('task owner', availableOperators, availableOwners);
+
+      var availableDateOperators = [['is','is'], ['is not','is not'], ['is before', 'is before'], ['is after', 'is after']];
+      this.startedOn = new PropertyDefinition('started on', availableDateOperators, [PropertyDefinition.IGNORED_NAME_VALUE_PAIR, PropertyDefinition.NOT_SET_NAME_VALUE_PAIR, ['(today)', '(today)']], null, {isDatePropertyDefinition: true})
+
+      this.bugType = new CardType('bug', [this.statusPropertyDefinition, this.priorityPropertyDefinition, this.bugOwnerPropertyDefinition, this.startedOn]);
+      this.storyType = new CardType('story', [this.statusPropertyDefinition, this.storyOwnerPropertyDefinition, this.startedOn]);
+      this.taskType = new CardType('task', [this.statusPropertyDefinition, this.priorityPropertyDefinition, this.taskOwnerPropertyDefinition]);
+      this.cardTypeDefinition = new CardTypeDefinition('Type', availableOperators, [this.bugType, this.storyType, this.taskType]);
+
+      this.filters = new Filters(this.cardTypeDefinition, 'test-form', 'filter-widget', '/images/icon-remove.gif', '/images/icon-calendar.png');
+
+      this.assertFilter = function(index, expectedProperty, expectedOperator, expectedValue) {
+        var htmlId = 'cards_filter_' + index;
+        if ($(htmlId + '_properties_drop_link') != null){
+          this.assertEqual(expectedProperty, $(htmlId + '_properties_drop_link').text);
+        } else {
+          this.assertEqual(expectedProperty, $(htmlId + '_properties_text').innerHTML);
+        }
+        this.assertEqual(expectedOperator, $(htmlId + '_operators_drop_link').text);
+        this.assertEqual(expectedValue, $(htmlId + '_values_drop_link').text);
+      };
+
+      this.selectFilter = function(index, propertyName, operator, value){
+        htmlId = 'cards_filter_' + index;
+        if ($(htmlId + '_properties_drop_link') != null){
+          Event.trigger(htmlId + '_properties_drop_link', 'click');
+          Event.trigger(htmlId + '_properties_option_' + propertyName, 'click');
+        }
+        Event.trigger(htmlId + '_operators_drop_link', 'click');
+        Event.trigger(htmlId + '_operators_option_' + operator, 'click');
+        Event.trigger(htmlId + '_values_drop_link', 'click');
+        Event.trigger(htmlId + '_values_option_' + value, 'click');
+      };
+    },
+
+    teardown: function() {
+      this.filters = null;
+      $('filter-widget').innerHTML = "";
+    },
+
+    testAddingANewFilterCreatesAFilterDroplistTriplet: function() { with(this) {
+      this.filters.addNewFilter();
+      assertNotNull($('cards_filter_0_filter_container'));
+      this.assertFilter(0, 'Type', 'is', '(any)');
+    }},
+
+    testSettingACompleteFilterShouldSetDroplinksWithFilterValues: function() { with(this) {
+      this.filters.addNewFilter();
+      this.filters.addFilter('status', 'is', 'open', ['open', 'open']);
+      this.assertFilter(1, 'status', 'is', 'open');
+    }},
+
+    testChangingPropertyShouldPopulateDropLinksCorrectly: function() { with(this) {
+      this.filters.addNewFilter();
+      this.filters.addNewFilter();
+
+      Event.trigger('cards_filter_1_properties_drop_link', 'click');
+      Event.trigger('cards_filter_1_properties_option_status', 'click');
+      this.assertFilter(1, 'status', 'is', PropertyDefinition.ANY);
+    }},
+
+    testChangingPropertyShouldPopulateOperatorsAndValuesDropdowns: function() { with(this) {
+      this.filters.addNewFilter();
+      this.filters.addNewFilter();
+      Event.trigger('cards_filter_1_properties_drop_link', 'click');
+      Event.trigger('cards_filter_1_properties_option_status', 'click');
+      Event.trigger('cards_filter_1_values_drop_link', 'click');
+      assert($('cards_filter_1_values_drop_down').optionsContainer.select('.select-option').first().id == 'cards_filter_1_values_option_(any)')
+      assert($('cards_filter_1_values_drop_down').optionsContainer.select('.select-option').first().hasClassName('selected'))
+      assert($('cards_filter_1_values_drop_down').optionsContainer.select('.select-option')[1].id == 'cards_filter_1_values_option_open')
+      assert(!$('cards_filter_1_values_drop_down').optionsContainer.select('.select-option')[1].hasClassName('selected'))
+      assert($('cards_filter_1_values_drop_down').optionsContainer.select('.select-option')[2].id == 'cards_filter_1_values_option_closed')
+      assert(!$('cards_filter_1_values_drop_down').optionsContainer.select('.select-option')[2].hasClassName('selected'))
+    }},
+
+    testChangingPropertyOrValueShouldSetFilterFieldValue: function() { with(this) {
+      this.filters.addNewFilter();
+      this.filters.addNewFilter();
+      this.selectFilter(1, 'status', 'is', 'open');
+      assertEqual('[status][is][open]', $('cards_filter_1_filter_field').value);
+    }},
+
+    testShouldRemoveAddedFilterFieldIfFilterIsDeleted: function() { with(this) {
+      this.filters.addNewFilter();
+      this.selectFilter(0, 'Type', 'is', 'bug');
+      this.filters.addNewFilter();
+      this.selectFilter(1, 'status', 'is', 'open');
+      this.filters.addNewFilter();
+      this.selectFilter(2, 'priority', 'is', 'high');
+
+      Event.trigger('cards_filter_1_delete', 'click');
+      assertNull($('cards_filter_1_filter_field'));
+      assertNotNull($('cards_filter_2_filter_field'));
+
+      this.filters.addNewFilter();
+      assertEqual(3, this.filters.filters.length);
+      assertNotNull($('cards_filter_3_filter_field'));
+    }},
+
+    testShouldHandleFilteringByMultipleFilters: function() { with(this) {
+      this.filters.addNewFilter();
+      this.selectFilter(0, 'Type', 'is', 'bug');
+      this.filters.addNewFilter();
+      this.selectFilter(1, 'status', 'is', 'open');
+      this.filters.addNewFilter();
+      this.selectFilter(2, 'priority', 'is', 'low');
+
+      assertEqual('[status][is][open]', $('cards_filter_1_filter_field').value);
+      assertEqual('[priority][is][low]', $('cards_filter_2_filter_field').value);
+    }},
+
+    testFirstFilterAddedShouldBeForTypePropertyButNotSubsequentOnes: function() { with(this) {
+      this.filters.addNewFilter();
+      this.filters.addNewFilter();
+      this.assertFilter(1, '(select...)', 'is', '(any)');
+    }},
+
+    testShouldAddTypeIsAnyFilterIfNoneSpecified: function() { with(this) {
+      var statusIsOpenFilter = {
+       property: 'status',
+       operator: 'is',
+       value: 'open',
+       valueValue: ['open', 'open']
+      };
+
+      this.filters.addFilters([statusIsOpenFilter]);
+      this.assertFilter(0, 'Type', 'is', '(any)');
+      this.assertFilter(1, 'status', 'is', 'open');
+
+      assertNull($('cards_filter_0_delete'));
+    }},
+
+    testShouldMoveTypeFilterToFirstPlaceAndPreventDeletion: function() { with(this) {
+      var statusIsOpenFilter = {
+       property: 'status',
+       operator: 'is',
+       value: 'open',
+       valueValue: ['open', 'open']
+      };
+
+      var typeIsBugFilter = {
+       property: 'Type',
+       operator: 'is',
+       value: 'bug',
+       valueValue: ['bug', 'bug']
+      };
+
+      this.filters.addFilters([statusIsOpenFilter, typeIsBugFilter]);
+      this.assertFilter(0, 'Type', 'is', 'bug');
+      this.assertFilter(1, 'status', 'is', 'open');
+
+      assertNull($('cards_filter_0_delete'));
+    }},
+
+    testShouldOnlyProvideTypeSpecificPropertiesAfterTypeFilterIsSet: function() { with(this) {
+      this.filters.addNewFilter();
+      this.selectFilter(0, 'Type', 'is', 'bug');
+      this.filters.addNewFilter();
+      Event.trigger($('cards_filter_1_properties_drop_link'), 'click');
+      Event.trigger($('cards_filter_1_values_drop_link'), 'click');
+      assertNotNull($('cards_filter_1_properties_option_Type'));
+      assertNotNull($('cards_filter_1_properties_option_status'));
+      assertNotNull($('cards_filter_1_properties_option_priority'));
+      assertNotNull($('cards_filter_1_properties_option_bug owner'));
+      assertNull($('cards_filter_1_properties_option_story owner'));
+      assertNull($('cards_filter_1_properties_option_task owner'));
+
+      this.selectFilter(1, 'Type', 'is', 'task');
+      this.filters.addNewFilter();
+      [1,2].each(function(filterIndex) {
+        Event.trigger($('cards_filter_'+filterIndex+'_properties_drop_link'), 'click');
+        Event.trigger($('cards_filter_'+filterIndex+'_values_drop_link'), 'click');
+        assertNotNull($('cards_filter_' + filterIndex + '_properties_option_Type'));
+        assertNotNull($('cards_filter_' + filterIndex + '_properties_option_status'));
+        assertNotNull($('cards_filter_' + filterIndex + '_properties_option_priority'));
+        assertNull($('cards_filter_' + filterIndex + '_properties_option_bug owner'));
+        assertNull($('cards_filter_' + filterIndex + '_properties_option_story owner'));
+        assertNull($('cards_filter_' + filterIndex + '_properties_option_task owner'));
+      });
+
+      this.selectFilter(2, 'Type', 'is', 'story');
+      this.filters.addNewFilter();
+      [1,2,3].each(function(filterIndex) {
+        Event.trigger($('cards_filter_'+filterIndex+'_properties_drop_link'), 'click');
+        Event.trigger($('cards_filter_'+filterIndex+'_values_drop_link'), 'click');
+        assertNotNull($('cards_filter_' + filterIndex + '_properties_option_Type'));
+        assertNotNull($('cards_filter_' + filterIndex + '_properties_option_status'));
+        assertNull($('cards_filter_' + filterIndex + '_properties_option_priority'));
+        assertNull($('cards_filter_' + filterIndex + '_properties_option_bug owner'));
+        assertNull($('cards_filter_' + filterIndex + '_properties_option_story owner'));
+        assertNull($('cards_filter_' + filterIndex + '_properties_option_task owner'));
+      });
+    }},
+
+    testShouldRefreshDropdownOptionsWhenChangingType: function() { with(this) {
+      this.filters.addNewFilter();
+      this.selectFilter(0, 'Type', 'is', 'bug');
+      this.filters.addNewFilter();
+      this.selectFilter(1, 'status', 'is', 'open');
+      this.filters.addNewFilter();
+      this.selectFilter(2, 'priority', 'is', 'high');
+      this.selectFilter(0, 'Type', 'is', '(any)');
+
+      assertNull($('cards_filter_2_filter_field'));
+      assertNull($('cards_filter_1_properties_priority'));
+    }},
+
+    testShouldRemoveAllTypeSpecificPropertiesWhenRemovingType: function() { with(this) {
+      this.filters.addNewFilter();
+      this.selectFilter(0, 'Type', 'is', 'bug');
+      this.filters.addNewFilter();
+      this.selectFilter(1, 'priority', 'is', 'high');
+      assertNotNull($('cards_filter_1_filter_field'));
+      assertEqual(2, this.filters.filters.length);
+
+      this.selectFilter(0, 'Type', 'is', '(any)');
+      assertNull($('cards_filter_1_filter_field'));
+      assertEqual(1, this.filters.filters.length);
+    }},
+
+    testShouldBeAbleToRemoveMultipleInvalidFiltersWhenRemovingType: function() { with(this) {
+      this.filters.addNewFilter();
+      this.selectFilter(0, 'Type', 'is', 'bug');
+      this.filters.addNewFilter();
+      this.selectFilter(1, 'priority', 'is', 'high');
+      this.filters.addNewFilter();
+      this.selectFilter(2, 'priority', 'is', 'low');
+
+      assertEqual(3, this.filters.filters.length);
+
+      this.selectFilter(0, 'Type', 'is', '(any)');
+      assertEqual(1, this.filters.filters.length);
+    }},
+
+    testShouldProvideGlobalPropertiesIfNoTypeIsSelected: function() { with(this) {
+      this.filters.addNewFilter();
+      this.assertFilter(0, 'Type', 'is', '(any)');
+      this.filters.addNewFilter();
+      this.selectFilter(1, 'status', 'is', 'open');
+      this.assertFilter(1, 'status', 'is', 'open');
+    }},
+
+    testShouldAllowMultipleTypesToBeSelected: function() { with(this) {
+      this.filters.addNewFilter();
+      this.selectFilter(0, 'Type', 'is', 'bug');
+      this.filters.addNewFilter();
+      this.selectFilter(1, 'Type', 'is', 'story');
+      this.filters.addNewFilter();
+      this.selectFilter(2, 'status', 'is', 'open');
+      this.assertFilter(2, 'status', 'is', 'open');
+    }},
+
+    testShouldBeAbleToRemoveTypesFromFilter: function() { with(this) {
+      this.filters.addNewFilter();
+      this.selectFilter(0, 'Type', 'is', 'bug');
+      this.filters.addNewFilter();
+      this.selectFilter(1, 'Type', 'is', 'story');
+      Event.trigger('cards_filter_1_delete', 'click');
+      this.filters.addNewFilter();
+
+      Event.trigger('cards_filter_1_properties_drop_link', 'click');
+      Event.trigger('cards_filter_1_values_drop_link', 'click');
+
+      this.assertNotNull($('cards_filter_1_properties_option_status'));
+      this.assertNotNull($('cards_filter_1_properties_option_priority'));
+    }},
+
+    testShouldCreateAFilterGroupForEachProperty: function() { with(this) {
+      this.filters.addNewFilter();
+      assertEqual('cards_filter_Type_filter_group', $('cards_filter_0_filter_container').up().id);
+      this.filters.addNewFilter();
+      assertEqual('cards_filter__filter_group', $('cards_filter_1_filter_container').up().id);
+      this.selectFilter(1, 'status', 'is', 'open');
+      assertEqual('cards_filter_status_filter_group', $('cards_filter_1_filter_container').up().id);
+      this.selectFilter(1, 'Type', 'is', 'bug');
+      assertEqual('cards_filter_Type_filter_group', $('cards_filter_1_filter_container').up().id);
+    }},
+
+    testShouldUpdatePropertyDropDownForExistingFiltersWhenTypeChanges: function() { with(this) {
+      this.filters.addNewFilter();
+      this.filters.addNewFilter();
+      this.selectFilter(1, 'status', 'is', 'open');
+      Event.trigger('cards_filter_1_properties_drop_link', 'click');
+      assertNull($('cards_filter_1_properties_option_priority'));
+
+      this.selectFilter(0, 'Type', 'is', 'bug');
+      Event.trigger('cards_filter_1_properties_drop_link', 'click');
+      assertNotNull($('cards_filter_1_properties_option_priority'));
+    }},
+
+    testShouldBeAbleToAddFilterPropertyWithAnyCasing: function() { with(this) {
+      this.filters.addFilters([{
+       property: 'TYPE',
+       operator: 'IS',
+       value: 'Bug',
+       valueValue: ['Bug', 'Bug']
+      }
+      ]);
+      this.assertFilter(0, 'Type', 'is', 'bug');
+      this.filters.addNewFilter();
+      this.selectFilter(1, 'Type', 'is', 'story');
+      this.assertFilter(0, 'Type', 'is', 'bug');
+      this.assertFilter(1, 'Type', 'is', 'story');
+    }},
+
+    testShouldBeAbleToAddGlobalFilterPropertyWithAnyCasing: function() { with(this) {
+      this.filters.addFilters([{
+       property: 'sTAtus',
+       operator: 'IS',
+       value: 'Open',
+       valueValue: ['Open', 'Open']
+      }
+      ]);
+      this.assertFilter(0, 'Type', 'is', '(any)');
+      this.assertFilter(1, 'status', 'is', 'open');
+    }},
+
+    testShouldAllowIsNotOperator: function() { with(this) {
+      this.filters.addNewFilter();
+      this.selectFilter(0, 'Type', 'is not', 'bug');
+      this.filters.addNewFilter();
+      this.selectFilter(1, 'status', 'is not', 'closed');
+      this.assertFilter(0, 'Type', 'is not', 'bug');
+      this.assertFilter(1, 'status', 'is not', 'closed');
+    }},
+
+    testShouldModifyAvailablePropertiesWhenTypeIsChangedWithIsNotOperator: function() { with(this) {
+      this.filters.addNewFilter();
+      this.selectFilter(0, 'Type', 'is not', 'story');
+      this.filters.addNewFilter();
+      Event.trigger('cards_filter_1_properties_drop_link', 'click');
+      assertNotNull($('cards_filter_1_properties_option_Type'));
+      assertNotNull($('cards_filter_1_properties_option_status'));
+      assertNotNull($('cards_filter_1_properties_option_priority'));
+      assertNull($('cards_filter_1_properties_option_task owner'));
+      assertNull($('cards_filter_1_properties_option_story owner'));
+      assertNull($('cards_filter_1_properties_option_bug owner'));
+
+      this.selectFilter(1, 'Type', 'is not', 'bug');
+      this.filters.addNewFilter();
+      [1,2].each(function(filterIndex) {
+        Event.trigger('cards_filter_' + filterIndex + '_properties_drop_link', 'click');
+        assertNotNull($('cards_filter_' + filterIndex + '_properties_option_Type'));
+        assertNotNull($('cards_filter_' + filterIndex + '_properties_option_status'));
+        assertNotNull($('cards_filter_' + filterIndex + '_properties_option_priority'));
+        assertNotNull($('cards_filter_' + filterIndex + '_properties_option_task owner'));
+        assertNull($('cards_filter_' + filterIndex + '_properties_option_story owner'));
+        assertNull($('cards_filter_' + filterIndex + '_properties_option_bug owner'));
+      });
+
+      this.selectFilter(2, 'Type', 'is not', 'task'); // All types have been explicitly excluded.
+      this.filters.addNewFilter();
+      [1,2,3].each(function(filterIndex) {
+        Event.trigger('cards_filter_' + filterIndex + '_properties_drop_link', 'click');
+        assertNotNull($('cards_filter_' + filterIndex + '_properties_option_Type'));
+        assertNull($('cards_filter_' + filterIndex + '_properties_option_status'));
+        assertNull($('cards_filter_' + filterIndex + '_properties_option_priority'));
+        assertNull($('cards_filter_' + filterIndex + '_properties_option_task owner'));
+        assertNull($('cards_filter_' + filterIndex + '_properties_option_story owner'));
+        assertNull($('cards_filter_' + filterIndex + '_properties_option_bug owner'));
+      });
+    }},
+
+    testShouldModifyAvailablePropertiesWhenTypeIsChangedWithBothIsAndIsNotOperator: function() { with(this) {
+      this.filters.addNewFilter();
+      this.selectFilter(0, 'Type', 'is', 'story');
+      this.filters.addNewFilter();
+      Event.trigger('cards_filter_1_properties_drop_link', 'click');
+      assertNotNull($('cards_filter_1_properties_option_Type'));
+      assertNotNull($('cards_filter_1_properties_option_status'));
+      assertNotNull($('cards_filter_1_properties_option_story owner'));
+      assertNull($('cards_filter_1_properties_option_priority'));
+      assertNull($('cards_filter_1_properties_option_task owner'));
+      assertNull($('cards_filter_1_properties_option_bug owner'));
+
+      this.selectFilter(1, 'Type', 'is not', 'bug'); // types: story, task.
+      this.filters.addNewFilter();
+      [1,2].each(function(filterIndex) {
+        Event.trigger('cards_filter_' + filterIndex + '_properties_drop_link', 'click');
+        assertNotNull($('cards_filter_' + filterIndex + '_properties_option_Type'));
+        assertNotNull($('cards_filter_' + filterIndex + '_properties_option_status'));
+        assertNull($('cards_filter_' + filterIndex + '_properties_option_priority'));
+        assertNull($('cards_filter_' + filterIndex + '_properties_option_task owner'));
+        assertNull($('cards_filter_' + filterIndex + '_properties_option_story owner'));
+        assertNull($('cards_filter_' + filterIndex + '_properties_option_bug owner'));
+      });
+
+      this.selectFilter(2, 'Type', 'is not', 'task'); // type: story.
+      this.filters.addNewFilter();
+      [1,2,3].each(function(filterIndex) {
+        Event.trigger('cards_filter_' + filterIndex + '_properties_drop_link', 'click');
+        assertNotNull($('cards_filter_' + filterIndex + '_properties_option_Type'));
+        assertNotNull($('cards_filter_' + filterIndex + '_properties_option_status'));
+        assertNotNull($('cards_filter_' + filterIndex + '_properties_option_story owner'));
+        assertNull($('cards_filter_' + filterIndex + '_properties_option_priority'));
+        assertNull($('cards_filter_' + filterIndex + '_properties_option_task owner'));
+        assertNull($('cards_filter_' + filterIndex + '_properties_option_bug owner'));
+      });
+
+      this.selectFilter(2, 'Type', 'is', 'task'); // type: story. ("is not task" above nullifies this filter.)
+      this.filters.addNewFilter();
+      [1,2,3].each(function(filterIndex) {
+        Event.trigger('cards_filter_' + filterIndex + '_properties_drop_link', 'click');
+        assertNotNull($('cards_filter_' + filterIndex + '_properties_option_Type'));
+        assertNotNull($('cards_filter_' + filterIndex + '_properties_option_status'));
+        assertNull($('cards_filter_' + filterIndex + '_properties_option_story owner'));
+        assertNull($('cards_filter_' + filterIndex + '_properties_option_priority'));
+        assertNull($('cards_filter_' + filterIndex + '_properties_option_task owner'));
+        assertNull($('cards_filter_' + filterIndex + '_properties_option_bug owner'));
+      });
+    }},
+
+    testShouldRenderCalendarWidgetForDatePropertyDefinition: function() { with(this) {
+      this.filters.addNewFilter();
+      this.selectFilter(0, 'Type', 'is', 'story');
+      this.filters.addNewFilter();
+      this.selectFilter(1, 'started on', 'is', '(not set)');
+      assertNotNull($('cards_filter_1_values_date_picker'));
+    }},
+
+    testShouldBeAbleToSelectTodayInACaseInsensitiveMannerOnDateProperties: function() { with(this) {
+      this.filters.addNewFilter();
+      this.selectFilter(0, 'Type', 'is', 'story');
+      this.filters.addFilter('started on', 'is', '(ToDaY)', ['(ToDaY)', '(today)']);
+      this.assertFilter(1, 'started on', 'is', '(today)');
+    }},
+
+    testShouldBeAbleToSelectsBeforeAndIsAfterOperatorsForDateProperties: function() { with(this) {
+      this.filters.addNewFilter();
+      this.selectFilter(0, 'Type', 'is', 'story');
+      this.filters.addFilter('started on', 'is before', '(ToDaY)', ['(ToDaY)', '(today)']);
+      this.assertFilter(1, 'started on', 'is before', '(today)');
+      this.filters.addFilter('started on', 'is after', '(ToDaY)', ['(ToDaY)', '(today)']);
+      this.assertFilter(2, 'started on', 'is after', '(today)');
+    }},
+
+    // test for bug #2541.
+    testShouldNotBeAbleToDeleteTheFirstTypeFilterWhenSecondTypeFilterDoesNotYetBelongToTheTypeFilterGroup: function() { with(this) {
+      this.filters.addNewFilter();
+      this.filters.addNewFilter();
+      htmlId = 'cards_filter_1';
+      Event.trigger(htmlId + '_properties_drop_link', 'click');
+      Event.trigger(htmlId + '_properties_option_Type', 'click');
+      Event.trigger('cards_filter_1_delete', 'click');
+      assertNull($('cards_filter_1_filter_field'));
+      this.assertFilter(0, 'Type', 'is', '(any)')
+    }},
+
+    testShouldShowTooltip: function() { with(this) {
+      this.filters.addNewFilter();
+      this.selectFilter(0, 'Type', 'is', 'bug');
+      this.filters.addNewFilter();
+      assertEqual('(select...)', $('cards_filter_1_properties_drop_link').title);
+      this.selectFilter(1, 'status', 'is', 'open');
+      assertEqual('status tooltip', $('cards_filter_1_properties_drop_link').title);
+    }},
+
+}, { testLog: "testlog", test : ""}).run;
+// ]]>
+</script>
+</body>
+</html>

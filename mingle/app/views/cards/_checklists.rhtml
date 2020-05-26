@@ -1,0 +1,66 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="checklist-container" class="view-mode-only" data-checklist-bound="false"
+                data-delete-url=<%= url_for(:controller => "checklist_items", :action => "delete") %>
+                data-mark-url=<%= url_for(:controller => "checklist_items", :action => "mark")%>
+                data-update-url=<%= url_for(:controller => "checklist_items", :action => "update") %>
+                data-reorder-url=<%= url_for(:controller => "checklist_items", :action => "reorder") %>
+                data-card-number = <%= card.number %> >
+
+  <div class="card-content-heading">
+    <i class="fa fa-check icon"></i>
+    Checklist
+    <div class="checklist-input" data-url=<%= url_for(:controller => "checklist_items", :action => "create", :format => "json")%> >
+      <% if authorized?(:controller => :checklist_items, :action => :create) %>
+        <i class="fa fa-plus"></i>
+        <input type="text"/><%= spinner :class => 'add-item-spinner' %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="checklist-items">
+    <div class="items">
+        <%= render :partial => 'shared/checklist_items',
+                   :locals => {
+                       :items => card.incomplete_checklist_items,
+                       :item_list_class_name => 'items-list',
+                       :item_tags => "data-completed='false'",
+                       :item_classes => 'view-mode prevent-inline-edit',
+                       :item_input_name => '',
+                       :render_checkboxes => true} %>
+        <%= render :partial => 'shared/checklist_items',
+                   :locals => {
+                       :items => card.completed_checklist_items,
+                       :item_list_class_name => 'completed-items-list',
+                       :item_tags => "data-completed='true'",
+                       :item_classes => 'complete-item view-mode prevent-inline-edit',
+                       :item_input_name => '',
+                       :render_checkboxes => true} %>
+      <div class="toggle-completed-container prevent-inline-edit">
+        <a class="toggle-completed" href="javascript:void(0);"></a>
+      </div>
+    </div>
+  </div>
+</div>
+<%= javascript_with_rescue <<-JAVASCRIPT
+    $j("#checklist-container").checklist({
+        autoSave: true,
+        completable: true,
+        appendBottom: true,
+    });
+JAVASCRIPT
+-%>

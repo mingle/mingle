@@ -1,0 +1,55 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<h1>Under the Hood</h1>
+
+<%- render :layout => "debug_switch", :locals => { :debug_on => @specific_loggers_status[""].debug?, :logger_param => "", :name => "debug" } do -%>
+  <p class="description">Controls application log level.</p>
+<%- end -%>
+
+<%- render :layout => "debug_switch", :locals => { :debug_on => @specific_loggers_status["pool"].debug?, :logger_param => "pool", :name => "Pool" } do -%>
+<p class="description">Reports pool activities such as wait time.</p>
+<%- end -%>
+
+<%- render :layout => "debug_switch", :locals => { :debug_on => @specific_loggers_status["jobs"].debug?, :logger_param => "jobs", :name => "Jobs" } do -%>
+<p class="description">Reports statistics about background job activities. Examples of these jobs are card import and search indexing.</p>
+<%- end -%>
+
+<%- render :layout => "debug_switch", :locals => { :debug_on => @specific_loggers_status["servlet"].debug?, :logger_param => "servlet", :name => "Servlet" } do -%>
+<p class="description">Reports rack servlet dispatch statistics such as duration and difference in heap size.</p>
+<%- end -%>
+
+<%- render :layout => "debug_switch", :locals => { :debug_on => @specific_loggers_status["search"].debug?, :logger_param => "search", :name => "Search" } do -%>
+<p class="description">Reports search index activity.</p>
+<%- end -%>
+
+
+<%- styled_box :class => 'under_the_hood_item', :style => 'position: relative;' do -%>
+<h3>Force Background Jobs</h3>
+<% form_tag({:action => 'force_bg'}, :method => :post) do %>
+<p>
+  Name:
+  <%= select_tag('task_name', options_for_select(background_task_names, params[:task_name])) %>
+</p>
+<p>
+  Batch Size: <%= text_field_tag :batch_size %>
+</p>
+
+<p>
+  <%= submit_tag 'Trigger' %>
+</p>
+<%- end -%>
+<%- end -%>

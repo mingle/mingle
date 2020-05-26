@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Subscribing to project changes via Atom feeds">
+    <section title="Introduction">    	
+    	<p>Mingle's Atom feeds are readable by your favorite desktop news reader.</p>
+    	<note>Web-based news readers such as Bloglines and Google Reader will likely not be able to subscribe to your Mingle feeds.</note>
+    	<subsection title="How to subscribe to project changes using Atom feeds">    	
+    	<steps>
+    		<item><cref topic="signing_in_and_out_of_mingle">Sign in</cref> to Mingle and select the project with the changes you want to view (if not already working within the project).</item>
+	    	<item>
+	    		<p><cref topic="viewing_project_changes">Select Filter history items</cref> according to the changes you want to monitor.</p>
+				<p><screenshot alttext="history filter" src="resources/images/history_filter_side_bar.png" /></p>
+	    	</item>
+	    	<item>
+	    		<p>Click the <link>Via feed</link> link.</p>
+	    		<p><screenshot alttext="Filter history - watch this" src="resources/images/filter_history_watch_this.png" /></p>
+	    	</item>	    	
+	    	<item>You will be prompted by your web browser and/or news reader with a set of instructions to follow in order to subscribe to this feed.</item>
+    	</steps>
+    	</subsection>
+    </section>
+	<section title="Also see...">
+		<bullets>
+			<item><cref topic="viewing_project_changes">Viewing project changes (History tab)</cref></item>
+			<item><cref topic="managing_email_subscriptions">Managing email subscriptions</cref></item>
+			<item><cref topic="tip_subscribe_to_feeds">Subscribe to history feeds</cref></item>
+		</bullets>
+	</section>
+</topic>
+
+

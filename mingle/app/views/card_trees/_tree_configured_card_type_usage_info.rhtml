@@ -1,0 +1,51 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<ul>
+  
+<% if @warnings[:card_type].any? -%>
+  <li>Cards of <%= @warnings[:card_type].collect { |card_type| "type #{card_type.bold}"}.to_sentence %> will be removed from the tree. </li>
+  <li>Children of <%= @warnings[:card_type].collect { |card_type| "type #{card_type.bold}" }.to_sentence %> will be assigned to the deleted type's parent.</li>
+<% end -%>
+
+<% properties_deleted_size = 0 -%>
+<% if @warnings[:property].any? -%>
+  <% property_size = @warnings[:property].size -%>
+  <% properties_deleted_size += property_size -%>
+  <% extra_text = "Values for #{'this'.plural(property_size)} #{'property'.plural(property_size)} cannot be recovered and will no longer be displayed in history." %>
+  <%= the_following_will_be_deleted('property', @warnings[:property], :extra_text => extra_text) %>
+<% end  %>
+
+<% if @warnings[:plv].any? -%>
+<li name='project_variable_warning'>The following <%= pluralize(@warnings[:plv].size, 'project variable') %> will no longer be associated with the deleted property: <%= @warnings[:plv].sorted_bold_sentence %></li>
+<% end -%>
+<%= the_following_will_be_deleted('transition', @warnings[:transition]) %>
+<% if @warnings[:card_defaults].any? -%>
+  <li>The following <%= pluralize(@warnings[:card_defaults].size, 'card defaults') %> will be modified: <%= @warnings[:card_defaults].sorted_bold_sentence %></li>
+<% end -%>
+
+<% if @warnings[:aggregate].any? %>
+  <% properties_deleted_size += @warnings[:aggregate].size -%>
+  <%= the_following_will_be_deleted('aggregate', @warnings[:aggregate]) %>
+<% end %>
+
+<% if @warnings[:card_list_views].any? %>
+  <%= the_following_will_be_deleted('team favorite or tab', @warnings[:card_list_views]) %>
+<% end %>
+
+  <li>Pages and tables/charts that use <%= "#{'this'.plural(properties_deleted_size)} #{'property'.plural(properties_deleted_size)}"%> will no longer work.</li>
+  <li>In addition, any personal favorites that use <%= "#{'this'.plural(properties_deleted_size)} #{'property'.plural(properties_deleted_size)}"%> will be deleted.</li>
+</ul>

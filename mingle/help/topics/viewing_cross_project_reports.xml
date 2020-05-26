@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Viewing cross project reports">
+         <p>In order to view cross project reports you have to be a member of all the projects that are being reported on.</p> 
+         <p>If a wiki page or card is created that displays multiple project charts or tables the user must be a member of <strong>all</strong> projects to view any of the project reports. If the user is not a member an error message will be displayed.</p>
+         <p>Ensure that users can see all charts by <cref topic="managing_project_team_members">managing project team members</cref>
+         and adding users as project team members so that they can view project data.</p>    
+    </topic>

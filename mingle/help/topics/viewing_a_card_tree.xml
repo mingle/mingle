@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Viewing a card tree">
+    <p>
+    	Card trees can be viewed in a number of ways. 
+    	In addition to the usual <cref topic="list_view">List</cref> and <cref topic="grid_view">Grid</cref> views, 
+    	you can choose to view the card tree represented as an explorer-like <cref topic="hierarchy_view">Hierarchy</cref>, or as an inverted <cref topic="tree_view">Tree</cref>.
+    </p>
+	<p>
+		Card trees can be <cref topic="creating_a_favorite_card_view">included in favorites and tabs</cref> if they are likely to be used often.
+	</p>
+	<section title="Select a card tree...">
+		<p>To begin, you need to select a card tree to view</p>
+		<bullets>
+			<item>
+				<p>From the <tab>All</tab>, select a card tree from the drop-down list in the header area.</p>
+				<screenshot alttext="Select a card tree from the All tab " src="resources/images/select_card_tree_in_header.png" />
+			</item>
+			<item>
+				<p>From the <sidebar-button>Favorites</sidebar-button>, select a favorite that is based on a card tree.</p>
+				<screenshot alttext="Select a card tree from the Favorites sidebar" src="resources/images/select_card_tree_in_favorites.png" />
+			</item>
+		</bullets>
+	</section>
+	<section title="General tree controls...">
+		<subsection title="Configure current tree">
+			<p>The <link>Configure current tree</link> link is displayed in the view header whenever a tree is selected. 
+				It allows you to quickly navigate to <cref topic="modifying_an_existing_card_tree">configure the tree</cref> you are currently viewing if you have to appropriate permissions.</p>
+		</subsection>
+		<subsection title="Manage trees">
+			<p>The <link>Manage trees</link> link is always displayed in the view header. 
+				It allows you to quickly navigate to <cref topic="administering_card_trees">administer card trees</cref> for the project if you have to appropriate permissions.</p>
+		</subsection>
+		<subsection title="Tree filter" file="tree_filter" />         
+	</section>
+	<section title="Tree specific views">
+		<bullets>
+			<item><cref topic="tree_view">Using the Tree view</cref></item>
+			<item><cref topic="hierarchy_view">Using the Hierarchy view</cref></item>
+		</bullets>		
+	</section>
+</topic>
+
+

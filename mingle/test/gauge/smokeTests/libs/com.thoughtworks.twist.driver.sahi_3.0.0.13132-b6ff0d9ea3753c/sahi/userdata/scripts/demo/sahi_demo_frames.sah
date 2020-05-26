@@ -1,0 +1,6 @@
+_click(_link("Link Test"));
+_click(_link("Back"));
+_click(_link("Window Open Test"));
+_popup("popWin")._click(_link("Form Test"));
+_popup("popWin")._setValue(_textbox("t1"), 'aa');
+_popup("popWin")._setValue(_textbox(1), 'bb');

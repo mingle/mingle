@@ -1,0 +1,244 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+/*
+
+Adapted (read: stolen and modified) from http://codepen.io/cbracco/pen/nufHz to fit our needs.
+
+*/
+/**
+ * Tooltip Styles
+ */
+
+/* Base styles for the element that has a tooltip */
+[data-tooltip],
+.cooltips {
+  position: relative;
+  cursor: pointer;
+}
+
+/* Base styles for the entire tooltip */
+[data-tooltip]:before,
+[data-tooltip]:after,
+.cooltips:before,
+.cooltips:after {
+  position: absolute;
+  visibility: hidden;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+  -webkit-transition:
+	  opacity 0.2s ease-in-out,
+		visibility 0.2s ease-in-out,
+		-webkit-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+	-moz-transition:
+		opacity 0.2s ease-in-out,
+		visibility 0.2s ease-in-out,
+		-moz-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+	transition:
+		opacity 0.2s ease-in-out,
+		visibility 0.2s ease-in-out,
+		transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform:    translate3d(0, 0, 0);
+  transform:         translate3d(0, 0, 0);
+  pointer-events: none;
+}
+
+/* Show the entire tooltip on hover and focus */
+[data-tooltip]:hover:before,
+[data-tooltip]:hover:after,
+[data-tooltip]:focus:before,
+[data-tooltip]:focus:after,
+.cooltips:hover:before,
+.cooltips:hover:after,
+.cooltips:focus:before,
+.cooltips:focus:after {
+  visibility: visible;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+}
+
+/* Base styles for the tooltip's directional arrow */
+.cooltips:before,
+[data-tooltip]:before {
+  z-index: 1001;
+  border: 6px solid transparent;
+  background: transparent;
+  content: "";
+}
+
+/* Base styles for the tooltip's content area */
+.cooltips:after,
+[data-tooltip]:after {
+  z-index: 1000;
+  padding: 5px;
+  width: 100px;
+  background-color: #000;
+  background-color: hsla(0, 0%, 20%, 0.9);
+  border-radius: 4px;
+  color: #FFD;
+  content: attr(data-tooltip);
+  font-size: 12px;
+  line-height: 14px;
+}
+
+/* Directions */
+
+/* Top (default) */
+[data-tooltip]:before,
+[data-tooltip]:after,
+.cooltips:before,
+.cooltips:after,
+.cooltips-top:before,
+.cooltips-top:after {
+  bottom: 100%;
+  left: 50%;
+}
+
+[data-tooltip]:before,
+.cooltips:before,
+.cooltips-top:before {
+  margin-left: -6px;
+  margin-bottom: -16px;
+  border-top-color: #000;
+  border-top-color: hsla(0, 0%, 20%, 0.9);
+}
+
+/* Horizontally align top/bottom tooltips */
+[data-tooltip]:after,
+.cooltips:after,
+.cooltips-top:after {
+  margin-left: -50px;
+  margin-bottom: -4px;
+}
+
+[data-tooltip]:hover:before,
+[data-tooltip]:hover:after,
+[data-tooltip]:focus:before,
+[data-tooltip]:focus:after,
+.cooltips:hover:before,
+.cooltips:hover:after,
+.cooltips:focus:before,
+.cooltips:focus:after,
+.cooltips-top:hover:before,
+.cooltips-top:hover:after,
+.cooltips-top:focus:before,
+.cooltips-top:focus:after {
+  -webkit-transform: translateY(-12px);
+  -moz-transform:    translateY(-12px);
+  transform:         translateY(-12px);
+}
+
+/* Left */
+.cooltips-left:before,
+.cooltips-left:after {
+  right: 100%;
+  bottom: 50%;
+  left: auto;
+}
+
+.cooltips-left:before {
+  margin-left: 0;
+  margin-right: -16px;
+  margin-bottom: 0;
+  border-top-color: transparent;
+  border-left-color: #000;
+  border-left-color: hsla(0, 0%, 20%, 0.9);
+}
+
+.cooltips-left:hover:before,
+.cooltips-left:hover:after,
+.cooltips-left:focus:before,
+.cooltips-left:focus:after {
+  -webkit-transform: translateX(-12px);
+  -moz-transform:    translateX(-12px);
+  transform:         translateX(-12px);
+}
+
+/* Bottom */
+.cooltips-bottom:before,
+.cooltips-bottom:after {
+  top: 100%;
+  bottom: auto;
+  left: 50%;
+}
+
+.cooltips-bottom:before {
+  margin-top: -16px;
+  margin-bottom: 0;
+  border-top-color: transparent;
+  border-bottom-color: #000;
+  border-bottom-color: hsla(0, 0%, 20%, 0.9);
+}
+
+.cooltips-bottom:after {
+  margin-top: -4px;
+}
+
+.cooltips-bottom:hover:before,
+.cooltips-bottom:hover:after,
+.cooltips-bottom:focus:before,
+.cooltips-bottom:focus:after {
+  -webkit-transform: translateY(12px);
+  -moz-transform:    translateY(12px);
+  transform:         translateY(12px);
+}
+
+/* Right */
+.cooltips-right:before,
+.cooltips-right:after {
+  bottom: 50%;
+  left: 100%;
+}
+
+.cooltips-right:before {
+  margin-bottom: 0;
+  margin-left: -16px;
+  border-top-color: transparent;
+  border-right-color: #000;
+  border-right-color: hsla(0, 0%, 20%, 0.9);
+}
+
+.cooltips-right:hover:before,
+.cooltips-right:hover:after,
+.cooltips-right:focus:before,
+.cooltips-right:focus:after {
+  -webkit-transform: translateX(12px);
+  -moz-transform:    translateX(12px);
+  transform:         translateX(12px);
+}
+
+/* Move directional arrows down a bit for left/right tooltips */
+.cooltips-left:before,
+.cooltips-right:before {
+  top: 9px;
+}
+
+/* Vertically center tooltip content for left/right tooltips */
+.cooltips-left:after,
+.cooltips-right:after {
+  margin-bottom: -12px;
+}
+
+.cooltips-left:after {
+  margin-right: -4px;
+}
+
+.cooltips-right:after {
+  margin-left: -4px;
+}

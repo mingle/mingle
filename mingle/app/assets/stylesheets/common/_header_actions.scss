@@ -1,0 +1,175 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+#hd-actions {
+  border: 1px dashed #d3d3d3;
+  color: $MINGLE_SECONDARY_COLOR;
+  font-size: 12px;
+  padding: 10px;
+  width: 50%;
+  margin: 0 auto;
+  /* if someone feels the need to put a table in the special header, don't make it look like a table. this is sooo lame. */
+  td {
+    background: transparent;
+    border: none;
+    padding: 0;
+    color: $MINGLE_SECONDARY_COLOR;
+    font-size: 12px;
+  }
+
+  a
+  {
+    padding-right: 10px;
+  }
+}
+
+.header-actions {
+  float: right;
+  margin: 0px;
+  padding: 0px;
+
+  ul.actions_list, ul.project_actions {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    li.action_item, li.project_action {
+      float: left;
+      padding: 0;
+      margin: 0;
+      display: inline;
+    }
+  }
+
+  .search {
+    position: relative;
+    margin: 0 0 0 0;
+    height: 41px;
+
+    input::-ms-clear {
+      padding: 10px;
+      margin-right: 5px;
+    }
+
+    input[type="text"]{
+      border: 0;
+      width: 240px;
+      font-weight: 300;
+      font-family: Helvetica, Arial, 'Lucida Grande', sans-serif;
+      height: 41px;
+      padding: 3px 25px 3px 20px;
+      font-size: 12px;
+    }
+
+    form {
+      display: inline;
+
+      input[type="text"].hint {
+        color: gray;
+        font-style: italic;
+      }
+    }
+
+    input.button, input.button:disabled {
+      position: absolute;
+      padding:0;
+      height: 20px;
+      line-height: 13px;
+      margin: 0px 5px 0px 10px;
+      font-size: 11px;
+      right: 13px;
+      top: 10px;
+      text-indent: -3000px;
+      min-width: 20px;
+      width: 20px;
+      border: 0;
+      border-radius: 5px;
+      cursor: pointer;
+      background: #fff url("../images/shared/icons/icon_search.png") no-repeat center 2px;
+      background-color: white;
+      box-shadow: none;
+      -moz-box-shadow: none;
+      -webkit-box-shadow: none;
+    }
+  }
+
+  .profile_utilities {
+      font-weight: 300;
+      margin: 1px 10px 0 10px;
+      padding-top: 6px;
+
+      a.profile {
+        img, div {
+          vertical-align: middle;
+          border-radius: 14px;
+          border-width: 1px;
+          border-style: solid;
+          border-color: #eee;
+          width: 28px;
+          height: 28px;
+          margin-right: 5px;
+        }
+      }
+
+      a.profile:hover img {
+        border-color: #ccc;
+      }
+
+
+      ul, a {
+          font-size: 11px;
+          color: #000;
+          line-height: 12px;
+          margin: 0;
+          li {
+              border-left: 1px solid #666;
+              padding: 0 10px 0 10px;
+              display: inline;
+              margin: 0;
+
+              &:first-child {
+                  border: 0;
+                  padding-left: 0;
+              }
+          }
+
+        &.login-panel {
+          margin: 8px 0 0 10px;
+        }
+
+      }
+
+
+
+      .current-user span {
+          font-weight: bold;
+      }
+  }
+
+  .current-user-actions{
+    display: inline-flex;
+    padding: 0;
+    margin: 0;
+
+    ul {
+      li {
+        border-right: 1px solid $SUBTLE_TRACE_COLOR;
+        &:first-child {
+          border-left: 1px solid $SUBTLE_TRACE_COLOR;
+        }
+      }
+    }
+  }
+}

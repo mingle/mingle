@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "backlog.dtd">
+<chapter title="Program">
+	<section title="What is a program?" collapsed="false" >
+		<p>A Mingle program is an entity that supports collaboration and visibility across multiple, independent teams, helping them coordinate work and adapt plans as they change and progress. It does so by combining the following items into a single workspace:</p>
+				<bullets>
+					<bullets>
+					   <item><strong><cref topic="backlog">Backlog</cref></strong></item>
+					   <item><strong><cref topic="plan">Plan</cref></strong></item>
+					   <item><strong><cref topic="projects_program">Projects</cref></strong></item>
+					</bullets>
+				</bullets>
+		<screenshot src="resources/images/new_program.png"/>
+		<p>See <cref topic="program_admin">Program Admin</cref> to learn more about setting up and administering your program of work.</p>
+	</section>	
+	<section title="Who do programs support?">
+		<p>Mingle programs primarily support people responsible for managing high-level objectives and work across multiple teams and projects that share a common goal. However, it’s much more about your specific needs and activities than your individual role.</p>
+  </section>
+  <section title="What do programs support?">
+		<p>Mingle programs help you discover and communicate shared goals, coordinate those goals across multiple teams, and adapt them as they progress. As you manage your program of work, Mingle Plus presents realistic information that supports visibility and collaboration. It allows you to focus on delivering customer value and supports your teams’ unique and evolving processes.</p>
+  </section>
+  <section title="What can programs help you achieve?">
+		<p>By focusing on high-level objectives and simple visual models, Mingle Programs can help you overcome the problems that often hinder successful cross-team coordination and collaboration. Managing your program with Mingle Plus, you can:</p>
+		<bullets>
+			<bullets>
+			   <item><strong>Gain visibility about:</strong></item>
+			      <bullets>
+				      <bullets>
+				         <item>The big picture and the relationships among its component parts</item>
+				         <item>Impediments that may impact change</item>
+						 <item>The progress of the program as a whole</item>
+						 <item>Potential future work</item>
+				      </bullets> 
+				 </bullets>
+		       <item><strong>Capture and prioritize high-level objectives</strong></item>
+			   <item><strong>Discover and create a shared understanding about customer value</strong></item>
+			   <item><strong>Access specific data to help teams deliver</strong></item>	
+			   <item><strong>Achieve the ability to:</strong></item>
+				  <bullets>
+					  <bullets>
+				         <item>Communicate the purpose and value of program objectives</item>
+				         <item>Identify the problem areas or understand where assistance is needed</item>
+						 <item>Understand the status or accurately track a program</item>
+						 <item>Understand diverse data within the larger program context</item>
+					  </bullets>
+				  </bullets>
+			</bullets>
+		</bullets>
+  </section>
+	
+	
+</chapter>
+

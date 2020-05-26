@@ -1,0 +1,122 @@
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<project default="default_installer_migration_test" basedir=".">
+
+  <property name="INSTALLER_DOWNLOAD_SERVER" value="http://localhost" />
+  <property name="INSTALLER_NAME" value="mingle_windows_${INSTALLER_VERSION}.exe" />
+  <property name="MINGLE_DOWNLOAD_FOLDER" value="c:/Temp"/>
+  <property name="MINGLE_DATABASE" value="mingle_migration_test"/>
+  <property name="MINGLE_DATABASE_USER" value="admin"/>
+  <property name="MINGLE_DATABASE_PASSWORD" value="admin"/>
+  <property name="MINGLE_INSTALL_LOCATION" value="c:/mingle_migration_test"/>
+  <property name="MINGLE_DATADIR" value="c:/mingle_migration_test_data"/>
+
+  <target name="installer_migration_test">
+    <echo message="Stop Mingle : MingleServer_${INSTALLER_VERSION}"/>
+    <exec executable="net">
+      <arg value="stop"/>
+      <arg value="MingleServer_${INSTALLER_VERSION}"/>
+    </exec>
+    <echo message="Uninstall Mingle - ${MINGLE_INSTALL_LOCATION}/uninstall.exe"/>
+    <exec executable="${MINGLE_INSTALL_LOCATION}/uninstall.exe"
+      failifexecutionfails="false">
+      <arg value="-q"/>
+    </exec>
+    <echo message="Download Installer  - ${INSTALLER_DOWNLOAD_SERVER}/${INSTALLER_VERSION}/${INSTALLER_NAME}"/>
+    <get src="${INSTALLER_DOWNLOAD_SERVER}/${INSTALLER_NAME}"
+      dest="${MINGLE_DOWNLOAD_FOLDER}"
+      verbose="true" />
+    <echo message="Drop Postgresql DB"/>
+    <exec executable="dropdb">
+      <arg value="-U"/>
+      <arg value="${MINGLE_DATABASE_USER}"/>
+      <arg value="${MINGLE_DATABASE}"/>
+    </exec>
+    <echo message="Create Postgresql DB"/>
+    <exec executable="createdb">
+      <arg value="-U"/>
+      <arg value="${MINGLE_DATABASE_USER}"/>
+      <arg value="-O"/>
+      <arg value="${MINGLE_DATABASE_USER}"/>
+      <arg value="-E"/>
+      <arg value="UTF-8"/>
+      <arg value="${MINGLE_DATABASE}"/>
+    </exec>
+    <echo message="Install Mingle - ${MINGLE_DOWNLOAD_FOLDER}/${INSTALLER_NAME}"/>
+    <exec executable="${MINGLE_DOWNLOAD_FOLDER}/${INSTALLER_NAME}">
+      <arg value="-q"/>
+      <arg value="-dir"/>
+      <arg value="${MINGLE_INSTALL_LOCATION}"/>
+    </exec>
+    <echo message="Sleep for 5 minutes to allow Mingle to fully start"/>
+    <sleep seconds="300"/>
+    <echo message="Stop Mingle after quite install - MingleServer_${INSTALLER_VERSION}"/>
+    <exec executable="net">
+      <arg value="stop"/>
+      <arg value="MingleServer_${INSTALLER_VERSION}"/>
+    </exec>
+    <echo message="Sleep for 5 minutes to allow Mingle to fully stop"/>
+    <sleep seconds="300"/>
+    <echo message="Create Mingle Mingle.vmoptions"/>
+      <echo file="${MINGLE_INSTALL_LOCATION}/Mingle.vmoptions">
+-Dmingle.dataDir=${MINGLE_DATADIR}/data
+-Dmingle.configDir=${MINGLE_DATADIR}/config
+-include-options ${MINGLE_DATADIR}/config/mingle.properties
+      </echo>
+    <echo message="Create Mingle mingle.properties"/>
+      <echo file="${MINGLE_DATADIR}/config/mingle.properties">
+-XX:+HeapDumpOnOutOfMemoryError
+-Dmingle.swapDir=${MINGLE_DATADIR}/data/tmp
+-Dmingle.appContext=/
+-Dmingle.memcachedPort=11211
+-Dmingle.port=8080
+-Dmingle.logDir=log
+-Dmingle.memcachedHost=127.0.0.1
+      </echo>
+    <echo message="Create Mingle database.yml"/>
+      <echo file="${MINGLE_DATADIR}/config/database.yml">
+production: 
+  driver: org.postgresql.Driver
+  password: admin
+  username: admin
+  adapter: jdbc
+  url: jdbc:postgresql://localhost:5432/mingle_migration_test
+      </echo>
+    <echo file="${MINGLE_DATADIR}/config/smtp_config.yml">
+smtp_settings:
+  #authentication: 
+  #user_name: 
+  #password: 
+  address: localhost
+  port: 25
+  domain: thoughtworks.com
+  tls: false
+sender:
+  address: mingle-nobody@thoughtworks.com
+  name: Mingle Administrator
+      </echo>
+    <echo message="Start Mingle - MingleServer_${INSTALLER_VERSION}"/>
+    <exec executable="net">
+      <arg value="start"/>
+      <arg value="MingleServer_${INSTALLER_VERSION}"/>
+    </exec>
+  </target>
+ 
+  <target name="default_installer_migration_test">
+    <echo message="installer migration task"/>
+  </target>
+</project>

@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Creating a team favorite page">
+    <section title="Introduction">
+    	<p><cref topic="working_with_pages">Pages</cref> can be made into favorites and <cref topic="creating_tabs_from_favorites">tabs</cref> to allow accessing them to be more straightforward</p>
+    </section>
+	<section title="How to create a favorite from a page">
+		<steps>
+			<item><cref topic="signing_in_and_out_of_mingle">Sign in</cref> to Mingle and open the project with the pages you want to convert to favorites (if you're not already working in the project).
+				You don't need to sign in as a project administrator.</item>
+			<item><cref topic="creating_and_formatting_pages">Create the pages</cref> you want to turn into favorites (if you haven't done so already).</item>
+			<item><cref topic="finding_a_page">Open the page</cref> you want to create a favorite with.</item>
+				<screenshot alttext="Wiki page - make team favorite link" src="resources/images/wiki_page_make_favorite.png" />
+			<item><p>Click on the <link>Make team favorite</link> link in the page header.</p>
+				<hint>To make the page a <cref topic="managing_my_favorites">My favorite</cref> use the "Add current page to my favorites…" link in the sidebar.</hint>
+			</item>
+			<item>
+				<p>Mingle will create a new team favorite named the same as the page. You will be able to see the team favorite in the <sidebar-button>Team Favorites</sidebar-button> sidebar control.</p>
+				<screenshot alttext="Wiki page - remove team favorite link" src="resources/images/wiki_page_remove_favorite.png" />
+				<p>To remove the team favorite, click on the <link>Remove team favorite</link> link in the page header.</p>
+				<hint>To remove a page from <cref topic="managing_my_favorites">My favorite</cref>, go to the users' profile page.</hint>
+			</item>
+		</steps>
+	</section>
+	<section title="Also see...">
+		<bullets>
+			<item><cref topic="managing_favorites_and_tabs">Managing team favorites and tabs</cref></item>
+			<item><cref topic="creating_tabs_from_favorites">Creating tabs from team favorites</cref></item>
+			<item><cref topic="working_with_pages">Working with pages</cref></item>
+		</bullets>
+	</section>
+</topic>
+
+

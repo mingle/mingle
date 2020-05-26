@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_help.dtd">
+<chapter title="Mingle Plus" id="mingle_plus">
+  <section title="What is Mingle Plus?">
+    <p>Since <cref topic="whats_new_in_release_12_2">release 12.2</cref>, Mingle has been available in two editions: <strong>Mingle</strong> and <strong>Mingle Plus</strong>. The main feature set that differentiates Mingle and Mingle Plus is the <cref topic="program"><strong>Program</strong></cref>. To use Mingle's Plus features, you will need a valid Mingle Plus license.</p>
+    <p>Please visit our website to understand how to <exref url="http://support.thoughtworks.com/entries/21784662-mingle-plus-faq">get a Mingle Plus license</exref>.</p>
+  </section>  	
+	<section title="Video">
+			<p> A 6:50 demonstration to <video url="http://thoughtworks.wistia.com/medias/gd4aovqcnf">walk you through Mingle Plus.</video> </p>	
+	</section>
+  <section title="Also see...">
+	    <bullets>
+		   <item><cref topic="program">Program</cref></item>
+		        <bullets>
+			         <item><cref topic="backlog">Backlog</cref></item>
+							 <bullets>
+							       <item><cref topic="capture_objectives">Capture your objectives</cref></item>
+								   <item><cref topic="prioritize_objectives">Prioritize your objectives</cref></item>
+								   <item><cref topic="plan_and_share_objectives">Plan and share objectives with your team</cref></item>
+								   <item><cref topic="prune_backlog">Prune your backlog</cref></item>
+							 </bullets>
+					 <item><cref topic="plan">Plan</cref></item>		
+					 		<bullets>
+							       <item><cref topic="define_your_plan">Define your plan</cref></item>
+								   <item><cref topic="check_status_and_progress">Check the status and progress of your plan</cref></item>
+								   <item><cref topic="identify_whom_to_talk_to">Identify whom to talk to as your plan changes</cref></item>
+							</bullets>
+					 <item><cref topic="projects_program">Projects</cref></item>
+			    </bullets>
+		   <item><cref topic="program_admin">Program Admin</cref></item>
+		        <bullets>
+				     <item><cref topic="program_admin#create_update_program">Create and update your program</cref></item>
+					 <item><cref topic="program_admin#add_program_members">Add team members to your program</cref></item>
+					 <item><cref topic="program_admin#export_import_program">Export and import your program</cref></item>
+					 <item><cref topic="program_admin#delete_program">Delete your program</cref></item>
+				</bullets>	
+		</bullets>
+  </section>			
+</chapter>

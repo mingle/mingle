@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Adding card comments">
+    <section title="How to add a comment to a card">
+   		<p>Card comments are freeform notes that you and your team members can attach to cards. They're designed to record discussions and explanations around the card. For example, comments can explain reasons why a developer fixed a bug a certain way, or provide clarification to a developer implementing a user story.</p>
+
+		<p>You can add card comments whenever you open a card. The card comments field is open and ready for you to type by default.</p>
+		<p><screenshot alttext="history filter" src="resources/images/add_comments.png" /></p>
+		<hint>The card comments do <strong>not</strong> support any text formatting to make words bold, italic, etc. However, card comments do support line breaks so that you can organize the text to be more readable.</hint>
+		<note>You can't edit or delete card comments, either your own or from other team members.</note>
+        <steps>
+			  <item>Sign in to Mingle and open the project with the cards you want to update (if not already working in the project).</item>
+			  <item>Locate the card you want to update.</item>
+			  <item>Click on the card name to open it up for editing.</item>
+			  <item>Mingle displays the Comments component in edit mode ready for you to add a new comment. You can also see any other comments that team members have made against the card.</item>
+			  <item>Type your comment and click the Add comment button.</item>
+              <item>Mingle displays your new comment underneath the Add comment button and updates the card version.</item>
+		</steps>
+			<note>If you're adding a card comment at the same time as you're editing the card's description, Mingle saves the comment when you click the Save link.</note>
+			
+	</section>    
+</topic>
+
+

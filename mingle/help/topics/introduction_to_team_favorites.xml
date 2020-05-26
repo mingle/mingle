@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+
+<section title="Introduction">
+	<p>Team favorites give you and your team members a quick way to view the cards you work with regularly in the format you prefer (i.e. grid, list or other view).</p>
+	<p>
+		For example, iteration managers or project managers can view all cards of type=story with a status=new in a grid view. 
+		This may be useful at the start of an iteration or sprint where they need to assign new user stories to an iteration and to specific developers.
+	</p>
+	<bullets>
+    	<item>Team Favorites are global - i.e. they display for all team members, not just the team member who creates them.</item>
+    	<item>When you click on a card within a team favorite, Mingle lets you navigate through all items in that team favorite. This may be useful when evaluating bugs or analyzing stories.</item>
+    	<item>You can't save more than one identical team favorite.</item>
+    	<item>You can't edit team favorites from the <tab>Project admin</tab> tab <link>Favorites &amp; tabs</link>link. 
+    		However, you can overwrite a team favorite by selecting <sidebar-button>Team Favorites</sidebar-button> <link>Add current view to team favorites</link> when viewing a card list, and typing in the name of the existing team favorite.</item>
+    	<item>If your team will be using a saved view regularly, e.g. looking at all stories in a specific iteration, you can turn this into a tab.</item>
+	</bullets>
+	<hint><p>You can also <cref topic="creating_wiki_pages">create a wiki page</cref> that shows cards according to different card properties. 
+		You can even setup a wiki page that references the current user, so whenever the signed in user visits that wiki page, they can see all cards assigned to them. 
+		See <cref topic="macro_and_mql_guide">MQL user guide</cref> for all the macros you can insert into wiki pages.</p>
+		<p>Wiki pages can be made into <cref topic="creating_a_favorite_wiki_page">team favorites</cref> and <cref topic="creating_tabs_from_favorites">tabs</cref> to allow accessing them to be more straightforward</p>
+	</hint>    
+</section>

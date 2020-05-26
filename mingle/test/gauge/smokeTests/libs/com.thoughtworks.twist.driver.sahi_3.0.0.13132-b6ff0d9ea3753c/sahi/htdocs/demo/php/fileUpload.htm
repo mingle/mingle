@@ -1,0 +1,25 @@
+<html>
+<body>
+
+<form action="fileUpload.php" method="post" enctype="multipart/form-data">
+<label for="file">File:</label>
+<input type="file" name="file" id="file" /> 
+<br />
+<input type="hidden" name="multi" value="false"/>
+<input type="submit" name="submit" value="Submit Single" />
+</form>
+
+
+<form action="fileUpload.php" method="post" enctype="multipart/form-data">
+<label for="file2">File[]:</label>
+<input type="file" name="file[]" id="file2" /> 
+<br />
+<label for="file3">File[]:</label>
+<input type="file" name="file[]" id="file3" /> 
+<br />
+<input type="hidden" name="multi" value="true"/>
+<input type="submit" name="submit" value="Submit Array" />
+</form>
+
+</body>
+</html>

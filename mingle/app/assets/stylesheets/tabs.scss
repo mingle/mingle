@@ -1,0 +1,402 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+#hd-nav {
+  margin: 0;
+  padding: 0;
+  background-color: $HEADER_BACKGROUND_COLOR;
+  position: relative;
+  display: -ms-flexbox; // IE 10
+  display: -webkit-flex; // old Safari
+  display: flex;
+
+  // ensure tabs are on the left, sidebar switch is on the right
+  -ms-justify-content: space-between;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+  // ie 10 support of flex to get the same effect as justify-content: space-between
+  -ms-flex-pack: justify;
+}
+
+.sortable-tabs {
+
+  li {
+    -ms-touch-action: none;
+
+    margin: 5px 5px 0 0;
+    padding: 0;
+
+    padding-right: 4px;
+    font-size: 12px;
+    height: 34px;
+
+    color: $MINGLE_SECONDARY_COLOR;
+
+    &:hover {
+      background-color: $HEADER_TAB_HOVER_COLOR;
+    }
+
+    a {
+      float: left; // includes 'save' and 'reset view' links
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+
+    a[role="tab-name"] {
+      max-width: 125px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      height: 34px;
+
+      padding: 10px 10px 12px 15px;
+    }
+
+    &.current-menu-item {
+      background: white;
+      box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+
+      &:hover {
+        background: white;
+      }
+    }
+  }
+}
+
+.tab-nav {
+  width: calc(100% - 150px);
+
+  transition-property: width;
+  transition-duration: .6s;
+  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+
+  .page-prev,.page-next {
+    display: none;
+  }
+
+  // as sidebar-control is set to flex- shrink: 0, flex-grow here causes this to expand as far as possible
+  // so that the project admin tab is right-justified. dloating the tab does nothing in a flexbox.
+  -ms-flex-grow: 1;
+  -webkit-flex-grow: 1;
+  flex-grow: 1;
+
+  //ie 10
+  -ms-flex-negative: 0;
+  -ms-flex-positive: 1;
+  -ms-flex-preferred-size: 0px;
+
+  &.paged {
+    /*
+     * While it's tempting to use CSS pseudo-elements (:before, :after) here, we cannot because one cannot bind events
+     * to pseudo-elements. Yes, there are hacks based on position to essentially detect if an event occurred in an area
+     * coinciding with the visible position, but such techniques are not resilient to refactoring, robustness, etc.
+     */
+    .page-prev,.page-next {
+      display: inline-block;
+      position: absolute;
+      top: 0;
+      font-size: 21px;
+      line-height: 39px;
+      height: 39px;
+      background: darken($HEADER_BACKGROUND_COLOR, 5%);
+      text-align: center;
+      cursor: pointer;
+
+      &:hover {
+        background: lighten($HEADER_BACKGROUND_COLOR, 2%);
+      }
+
+    }
+
+    .page-prev {
+      left: 0;
+      padding: 0 7px 0 3px;
+    }
+
+    .page-next {
+      right: 0;
+      padding: 0 3px 0 7px;
+    }
+  }
+
+  .sortable-tabs {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      &.wiki-tab span a[role=tab-name]:before {
+        @include fa_icon($fa-var-file-text-o);
+      }
+
+      &.grid-tab span a[role=tab-name]:before {
+        @include fa_icon($fa-var-th-large);
+      }
+
+      &.list-tab span a[role=tab-name]:before {
+        @include fa_icon($fa-var-list-ul);
+      }
+
+      &.tree-tab span a[role=tab-name]:before {
+        @include fa_icon($fa-var-sitemap);
+      }
+
+      &.hierarchy-tab span a[role=tab-name]:before {
+        @include fa_icon($fa-var-level-down);
+      }
+
+      &.murmurs-tab span a[role=tab-name]:before {
+        @include fa_icon($fa-var-comments);
+      }
+
+      &.dependencies-tab span a[role=tab-name]:before {
+        @include mng_icon("\e900"); /* mng-dep-base */
+        float: left;
+        margin-right: 2px;
+        font-size: 14px;
+      }
+
+      &.dependencies-tab span a[role=tab-name] {
+        max-width: none;
+        text-overflow: none;
+        overflow: visible;
+      }
+
+      .tab-counter {
+        background-color: #E40000;
+        margin-left: 3px;
+        margin-right: -7px;
+      }
+
+      &.current-menu-item {
+
+        a.tab-action-text {
+          font-size: 10px;
+          padding: 4px;
+          padding-bottom: 5px;
+          background-color: #999;
+          border-radius: 4px;
+          color: #FFF;
+          height: 23px;
+          margin: 5px 4px 0 4px;
+
+          &:nth-child(2), &:last-child {
+            margin-left: 0px;
+          }
+
+          &.reset-all-link {
+            background: $SUBTLE_TRACE_COLOR;
+            border: $SUBTLE_TRACE_COLOR solid 1px;
+            color: #333;
+
+            &:hover {
+              background: transparent;
+              border: $TRACE_COLOR solid 1px;
+            }
+          }
+
+          &.update-tab {
+            background-color: $MINGLE_PRIMARY_COLOR;
+            border: $MINGLE_PRIMARY_COLOR solid 1px;
+
+            &:hover {
+              border: $MINGLE_PRIMARY_COLOR solid 1px;
+              background: transparent;
+              color: $MINGLE_PRIMARY_COLOR;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &[data-scrolling="true"] {
+    position: relative;
+    padding: 0 15px; // ensure the navigational buttons don't cover tabs
+
+    overflow: hidden;
+    height: 39px;
+
+    .sortable-tabs {
+      white-space: nowrap;
+      overflow-x: auto;
+      padding-bottom: 100px;
+
+      li {
+        display: inline-block;
+      }
+    }
+  }
+}
+
+.sidebar-control {
+  -ms-align-self: flex-end;
+  -webkit-align-self: flex-end;
+  align-self: flex-end; // stick to the bottom when wrapping rows
+
+  background-color: $MINGLE_PRIMARY_COLOR;
+  height: 39px;
+  line-height: 39px;
+  font-size: 14px;
+  color: white;
+  padding: 0 13px 0 15px;
+  box-sizing: border-box;
+  margin-right: 0;
+  cursor: pointer;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  white-space: nowrap;
+
+  .fa, .sidebar-text {
+    height: inherit;
+    vertical-align: middle;
+  }
+
+  .fa {
+    line-height: inherit;
+    font-size: 18pt;
+  }
+
+  .sidebar-text {
+    text-transform: uppercase;
+    display: inline-block;
+    padding-top: 1px;
+  }
+
+  #sidebar-icon-collapse {
+    display: none;
+    line-height: 37px;
+  }
+
+  #sidebar-icon-expand {
+    display: inline-block;
+    line-height: 37px;
+  }
+
+  &.open {
+    #sidebar-icon-collapse {
+      display: inline-block;
+    }
+
+    #sidebar-icon-expand {
+      display: none;
+    }
+  }
+
+  &:hover {
+    background-color: $MINGLE_PRIMARY_COLOR;
+    background-color: rgba($MINGLE_PRIMARY_COLOR, 0.6);
+  }
+}
+
+.sidebar-control {
+  -ms-flex-shrink: 0;
+  -webkit-flex-shrink: 0;
+  flex-shrink: 0;
+
+  min-width: 0;
+  transition-property: all;
+  transition-duration: .5s;
+  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+
+  &.open {
+    // 1px accounts for left border on sidebar
+    min-width: calc(24% + 1px);
+    max-width: calc(24% + 1px);
+
+    transition-property: all;
+    transition-duration: .5s;
+    transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  }
+}
+
+.with-sidebar {
+  .tab-nav {
+    width: 76%;
+    margin-right: 0;
+    transition-property: width;
+    transition-duration: .6s;
+    transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  }
+
+  &[data-ignore-sidebar="true"] {
+    .tab-nav {
+      width: 100%;
+    }
+  }
+}
+
+.tab-drop-down {
+  @include popover($direction: up,
+                   $width: 300px,
+                   $height: auto,
+                   $popOffset: 35px,
+                   $triangleOffset: 28px);
+
+  .content {
+    form {
+      margin-bottom: 10px;
+
+      input {
+        vertical-align: middle;
+        line-height: 22px;
+        min-width: 0;
+      }
+
+      input[type=text] {
+        width: 210px;
+        color: $MINGLE_SECONDARY_COLOR;
+        font-size: 19px;
+        padding: 5px;
+      }
+
+      input[type=submit].primary {
+        margin: 0;
+        width: auto;
+      }
+    }
+  }
+
+  p {
+    color: #333;
+  }
+
+  .tab-error-message {
+    @include bubble(down, 8px, 77px);
+    bottom: 91px;
+    right: -10px;
+  }
+}
+
+.tab-edit-icon {
+  float: right;
+  color: #c8c8c8;
+  margin: 8px 0 0;
+  padding: 0 5px 0 0;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.ellipsis {
+  font-size: 1.5em;
+}

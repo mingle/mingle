@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE subsection SYSTEM "mingle_help.dtd">
+<subsection title="Inline images">
+  <markup_reference title="To insert images inline directly when editing from the card preview, drag and drop the image into the editor.">
+			   <screenshot src="resources/images/d+d_attachment.gif"/> 		   
+		<note>
+			<bullets>
+				<item>When you save your card, the image will also appear as a card attachment. Deleting the image attachment will not delete it from your card content. Similarly, deleting the inline image will not remove the attachment. To remove the image inline, you must delete it from the card description itself and to remove the attachment, you must delete the attachment.</item>
+			</bullets>
+		</note>		
+  </markup_reference>
+</subsection>

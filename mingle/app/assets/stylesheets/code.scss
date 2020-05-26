@@ -1,0 +1,103 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+.code {
+  background: #FFFFDD none repeat scroll 0%;
+  border: 1px solid black;
+  line-height: normal;
+  margin: 2em;
+  .caption {
+    background: #000088 none repeat scroll 0%;
+    border: 1px dotted #7777FF;
+    color: white;
+    font-size: small;
+    font-weight: bold;
+    margin-left: 8px;
+    padding: 4px 24px 4px 8px;
+  }
+  .lineno {
+    color: #BB0000;
+    font-family: monospace;
+    padding-right: 1em;
+    text-align: right;
+    padding-top: 1em;
+    float: left;
+    font-size: 100%;
+  }
+  .body {
+    padding-top: 1em;
+    padding-left: 1em;
+  }
+  pre {
+    background: transparent none repeat scroll 0%;
+    border: medium none;
+    font-family: monospace;
+    font-size: 100%;
+    padding: 0px;
+  }
+
+  .comment {
+    color: #000055;
+    font-style: italic;
+  }
+  .keyword {
+    color: #AA0000;
+    font-weight: bold;
+  }
+  .method {
+    color: #007777;
+  }
+  .class {
+    color: #007744;
+  }
+  .module {
+    color: #005500;
+  }
+  .punct {
+    color: #444477;
+    font-weight: bold;
+  }
+  .symbol {
+    color: #009999;
+  }
+  .string {
+    color: #994444;
+  }
+  .char {
+    color: #FF0077;
+  }
+  .ident {
+    color: #000044;
+  }
+  .constant {
+    color: #0077FF;
+  }
+  .regex {
+    color: #BB6666;
+  }
+  .number {
+    color: #DD5555;
+  }
+  .attribute {
+    color: #337777;
+  }
+  .global {
+    color: #33BB77;
+  }
+  .expr {
+    color: #222277;
+  }
+}

@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Creating a page">
+		<hint>
+			<bullets>
+				<item>There is no button or link in Mingle for creating pages. You must create pages manually as described above.</item>
+				<item>Page names are <strong>case sensitive</strong>, so "My page" is <strong>not</strong> the same as "my page".</item>
+			</bullets>
+		</hint>
+		<p>There are two ways to create a page:</p>
+	<subsection title="Create a page on another page or card">
+			<p>Create a new link on an <cref topic="viewing_pages">existing page</cref> (the <tab>Overview</tab> tab is a page) or card. While editing a card or page, type the following to create a page called <strong>new page name</strong>:
+				<code><strong>[[new page name]]</strong></code>
+			</p>
+			<screenshot alttext="Defining new wiki page link" src="resources/images/wiki_page_wiki_link_define.png"/>
+			<p>When you save the card or page, you'll see a new link. Click this link to <cref topic="creating_and_formatting_pages#editing_page">edit the new page</cref>.</p>
+			<screenshot alttext="A newly created wiki page link" src="resources/images/wiki_page_wiki_link_view.png"/>
+	</subsection>
+	<subsection title="Create a page via URL">
+			<p>You can also create a page by typing a new URL directly into your browser's address bar. For example, typing the following will create a page called <strong>demo_page</strong>: 
+				<code>
+					<strong>http://mingle.yourcompany.com/projects/your_project/wiki/demo_page</strong>
+				</code> 
+			</p>
+			<p>In this case you will be taken directly to the new page and can begin editing its content using Mingle's WYSIWYG editor.</p>
+			<hint>
+				<bullets>
+					<item>A quick way to do this is by navigating to the page list (in the Project admin tab), and replacing the <subst>/list</subst> at the end of the browser URL with the desired page name.</item>
+				</bullets>
+			</hint>		
+	</subsection>
+		<screenshot src="resources/images/wiki_page_via_url.png" caption="A newly created wiki page ready for editing"/>
+  <subsection title="Also see...">
+    		<bullets>
+    		  <item><cref topic="deleting_a_page">Deleting pages</cref></item>
+    			<item><cref topic="formatting_help_component">Creating and formatting content</cref></item>
+    			<item><cref topic="macro_reference">Full reference of chart, table, and dashboard macros</cref></item>
+    			<item><cref topic="mql_reference">MQL Syntax</cref></item>
+    			<item><cref topic="mingle_tips_and_tricks">Mingle tips and tricks</cref></item>
+    		</bullets>
+  </subsection>
+</topic>
+	

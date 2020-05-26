@@ -1,0 +1,90 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% form_tag(@view.to_params.merge(:action => :import), {:id => 'back_form', :style => 'display:none'}) do -%>
+  <%= hidden_field_tag 'tab_separated_import_preview_id', @preview_request_id %>
+<% end -%>
+
+<%= render :partial => 'preview_actions' %>
+
+<h1>Preview import</h1>
+
+<% info_box do %>
+  <p><strong>Using the preview</strong></p>
+  <ul>
+    <li>Use the <b>drop-down</b> to choose the description that best fits each column - Mingle will help by making its best guess</li>
+    <li>You can choose <b>'card description'</b> for more than one column - they will be added together</li>
+    <li>Columns that have characters such as <b>#</b>, <b>&amp;</b>, <b>=</b>, <b>&quot;</b>, <b>;</b>, <b>[</b>, <b>]</b>, which are not valid in property definition names, can only be imported as card description</li>
+    <li>You need to have one column for the <b>'card name'</b> of each row (or Mingle will choose one)</li>
+    <li>And you need to have one column that provides each row with a <b>'card number'</b> (or Mingle will generate one automatically)</li>
+  </ul>
+<% end %>
+
+<% form_remote_tag(:url => @view.to_params.merge(:action => :accept), 
+     :before => "#{disable_links}$$('select').each(function(select_box){select_box.disabled = false;})", 
+     :html => {:id => 'tab_separated_import_form'}) do -%>
+  <% if @card_reader.available_trees.any? %>
+    <% info_box do %>
+      <p>      
+        You seem to be importing card tree data. Mingle supports the importing of data for only one-tree at a time. <br />
+        Please select which tree for which you would like to update card tree properties. All other tree properties will be ignored.
+      </p>
+      <%= select_tag 'tree_configuration_id', preview_tree_options(@card_reader.available_trees), :id => 'tree_configuration_select' %>
+      <%= javascript_with_rescue "new TreeGroupsSelect('tree_configuration_select', #{@card_reader.completed_tree_column_groups.to_json})" %>
+    <% end %>
+  <% end %>
+  <div class="preview-area">
+    <table id='preview_table'>
+      <thead>
+        <tr>
+        <td rowspan="2" class="align-center ignore-column">Ignore row</td>
+        <% @mappings.each_with_index do |mapping, index| -%>
+          <th><%= h mapping.original %></th>
+        <% end %>
+        </tr>
+        <tr>
+        <% @mappings.each_with_index do |mapping, index| -%>
+          <% if @card_reader.incompleted_tree_column?(index) %>
+            <th>
+              <%= select_tag "mapping[#{mapping.index}]", options_for_select([["(ignore)", "ignore"]]), {:id => "#{mapping.original.underscored}_import_as", :disabled => true } %>
+            </th>
+          <% else %>
+            <th>
+              <%= select_tag "mapping[#{mapping.index}]", options_for_select(mapping.mapping_options_sorted, mapping.import_as), {:id => "#{mapping.original.underscored}_import_as", :disabled => mapping.disable? } %>
+            </th>
+          <% end %>
+        <% end -%>
+        </tr>
+      </thead>
+      <tbody>
+      <% @card_reader.excel_content.cells.each_with_index do |line, line_no| -%>
+        <tr class="<%= cycle('even', 'odd', :name => 'row')%>">
+          <td class="align-center ignore-column <%= cycle('ignore-even', 'ignore-odd', :name => 'ignore_cell')%>"><%= check_box_tag "ignore[#{line_no + 1}]" %></td>
+
+            <% line.each_with_index do |cell, index| -%>
+              <td <%= 'class=preserve-whitespaces' if @mappings[index].checklist_items? %>><%=h display_value(cell, @mappings[index]) %></td>
+            <% end -%>
+
+        </tr>
+      <% end -%>
+      </tbody>
+    </table>
+  </div>
+
+  <%= hidden_field_tag 'tab_separated_import_preview_id', @preview_request_id %>
+  <%= render :partial => 'preview_actions' %>
+
+<% end -%>

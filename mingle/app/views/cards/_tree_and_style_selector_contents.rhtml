@@ -1,0 +1,59 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% close_text = "Hide quick add" %>
+<% add_card_text = "Show quick add" %>
+<div id="tree-and-style-selector">
+  <div class="card-views-actions-top">
+
+    <% hide_text = 'Hide grid settings' %>
+    <% show_text = 'Show grid settings' %>
+    <%-  if @view.grid? -%>
+      <%= link_to_remote(user_preference(:grid_settings) ? hide_text : show_text,
+                         { :url    => { :controller => 'user_display_preference', :action => 'update_user_display_preference' },
+                           :with   => "'user_display_preference[grid_settings]=' + !$('action_panel').visible()"},
+                         :id => 'grid_settings_toggle',
+                         :class => user_preference(:grid_settings) ? 'hide_grid_settings' : 'show_grid_settings')%>
+      <%- javascript_with_rescue do -%>
+        $('grid_settings_toggle').observe('click', function(){
+          $('action_panel').toggle();
+          $j(document).trigger("mingle:relayout");
+          $('grid_settings_toggle').toggleClassName('hide_grid_settings');
+          $('grid_settings_toggle').toggleClassName('show_grid_settings');
+
+          $('grid_settings_toggle').innerHTML = $('action_panel').visible() ? '<%= hide_text %>' : '<%= show_text %>';
+        });
+      <%- end -%>
+    <%- end -%>
+
+    <%= render "shared/contextual_help_or_normal_help_link", :position => "top", :help_link => render_help_link("Card #{@view.style.to_s} page", :class => 'help-at-style-selector contextual_help_link_with_divider'), :contextual_help_class => 'help-at-style-selector contextual_help_link_with_divider' %>
+
+
+    <span class="workspace-actions-panel">
+      <span class="workspace-actions">
+        <span class='inline_action_label'>Select tree:</span>
+        <%= render :partial => 'cards/workspace_selector' %>
+        </span>
+      <span id="list-grid-toggle">
+          <span class="view_toggle_controls"><%= raw(style_switch_panel(@view)) %></span>
+      </span>
+    </span>
+
+    <%= clear_float %>
+
+  </div>
+
+</div>

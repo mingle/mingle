@@ -1,0 +1,51 @@
+<html>
+
+<head>
+<title>
+
+</title>
+</head>
+
+<script>
+function f1(){
+	alert(stacktrace());
+}
+
+function f2(){
+	f1();
+}
+
+f2();
+
+function funcname(f) {
+    var s = f.toString().match(/function (\w*)/)[1];
+    if ((s == null) || (s.length == 0)) return "anonymous";
+    return s;
+}
+
+function stacktrace(){
+    var s = "";
+	if (document.all){
+		for(var a = arguments.caller; a != null; a = a.caller) {
+			s += funcname(a.callee) + "\n";
+			if (a.caller == a) break;
+		}
+	}
+	else{
+		for(var a = stacktrace.caller; a != null; a = a.caller) {
+			s += funcname(a.arguments.callee) + "\n";
+			if (a.caller == a) break;
+		}
+	}
+	return s;
+}
+
+
+
+</script>
+
+<body>
+
+</body>
+
+</html>

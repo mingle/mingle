@@ -1,0 +1,25 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<li class='<%= "#{tab_class(tab)} #{tab.image_name}" %> hide-on-maximized' id='<%= tab.html_id %>' data-tab-name='<%= tab.name %>' data-tab-id='<%= tab.identifier %>'>
+  <span class="first-link">
+    <%= link_to(tab_name(tab), tab.params, {:accesskey => tab.access_key, :id => tab.html_id + "_link", :title => tab.name, :role => "tab-name"}) %>
+  </span>
+  <% if can_rename_tabs? && tab.current && tab.allows_renaming? %>
+    <i class="fa fa-pencil tab-edit-icon pencil"></i>
+  <% end %>
+</li>
+

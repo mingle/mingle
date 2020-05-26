@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<project name="module_version" default="compile.module.version">
+
+    <dirname property="module.version.basedir" file="${ant.file.module_version}"/>
+
+    <property name="module.jdk.home.start" value="${project.jdk.home}"/>
+    <property name="module.jdk.bin.start" value="${project.jdk.bin}"/>
+    <property name="module.jdk.classpath.start" value="${project.jdk.classpath}"/>
+
+    <property name="compiler.args.version" value="${compiler.args}"/>
+
+    <property name="version.output.dir" value="${module.version.basedir}/../../tmp/classes/production/version"/>
+    <property name="version.testoutput.dir" value="${module.version.basedir}/../../tmp/classes/test/version"/>
+    <property name="version.jar.path" value="lib/version.jar" />
+
+    <path id="version.module.sourcepath">
+        <dirset dir="${module.version.basedir}">
+            <include name="src"/>
+        </dirset>
+    </path>
+
+    <path id="version.module.tests.sourcepath">
+        <dirset dir="${module.version.basedir}">
+            <include name="test"/>
+        </dirset>
+    </path>
+
+    <path id="version.module.classpath">
+        <fileset dir="${module.version.basedir}/../../vendor/java" includes="**/*.jar"/>
+        <fileset dir="${module.version.basedir}/../../development/build_java" includes="**/*.jar"/>
+    </path>
+
+
+    <path id="junit.version.test.classpath">
+        <pathelement path="${version.output.dir}"/>
+        <pathelement path="${version.testoutput.dir}"/>
+        <path refid="version.module.classpath"/>
+    </path>
+
+    <property name="version.jar.path" value="$"/>
+
+    <target name="assemble-version-jar" depends="clean.module.version, compile.module.version, run_version_java_tests">
+        <tstamp>
+            <format property="jar.timestamp" pattern="MM/dd/yyyy hh:mm:ss aa"/>
+        </tstamp>
+        <jar destfile="${version.jar.path}" basedir="${version.output.dir}"
+             excludes="**/Version.*" update="true">
+            <manifest>
+                <attribute name="Mingle-Version" value="${version}"/>
+                <attribute name="Mingle-Revision" value="${revision}"/>
+                <attribute name="Mingle-Built-On" value="${jar.timestamp}"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="compile.module.version.tests" depends="clean.module.version, compile.module.version">
+        <mkdir dir="${version.testoutput.dir}"/>
+        <javac source="1.8" target="1.8" destdir="${version.testoutput.dir}" fork="true">
+            <classpath refid="junit.version.test.classpath"/>
+            <compilerarg line="${compiler.args.version}"/>
+            <src refid="version.module.tests.sourcepath"/>
+        </javac>
+
+        <copy todir="${version.output.dir}">
+            <fileset dir="${module.version.basedir}/src">
+                <patternset refid="compiler.resources"/>
+                <type type="file"/>
+            </fileset>
+            <fileset dir="${module.version.basedir}/test">
+                <patternset refid="compiler.resources"/>
+                <type type="file"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="run_version_java_tests" depends="compile.module.version.tests">
+        <mkdir dir="test/reports"/>
+        <junit printsummary="yes" haltonfailure="yes">
+            <classpath refid="junit.version.test.classpath"/>
+            <formatter type="plain" usefile="false"/>
+            <formatter type="xml" />
+            <batchtest fork="yes" todir="test/reports">
+                <fileset dir="${module.version.basedir}/test">
+                    <include name="**/*Test.class"/>
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
+
+    <target name="compile.module.version" depends="">
+        <mkdir dir="${version.output.dir}"/>
+        <javac source="1.8" target="1.8" destdir="${version.output.dir}" fork="true">
+            <compilerarg line="${compiler.args.version}"/>
+            <src refid="version.module.sourcepath"/>
+        </javac>
+
+        <copy todir="${version.output.dir}">
+            <fileset dir="${module.version.basedir}/src">
+                <patternset refid="compiler.resources"/>
+                <type type="file"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="clean.module.version">
+        <delete dir="${version.output.dir}"/>
+        <delete dir="${version.testoutput.dir}"/>
+    </target>
+</project>

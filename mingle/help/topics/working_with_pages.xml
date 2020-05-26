@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_help.dtd">
+<chapter title="Working with pages">
+  <section title="Introduction" collapsed="true">        
+      <p>Distinct from <cref topic="explore_mingle_topic_whats_a_card">cards</cref>, <strong>Mingle pages</strong> are where anyone can add information on any topic relevant to a community. Mingle pages can be linked to one another to provide structured navigation. 
+      </p> 
+  </section>
+  <section title="What's different about Mingle pages" collapsed="true">
+      <p>Like cards, pages are an <strong>integral part of Mingle</strong>. Both cards and pages have direct access to the underlying data stored in Mingle, so you can easily <strong>create and insert graphs, charts and tables derived from live project data</strong> in both. (Learn more about <cref topic="macro_and_mql_guide">Mingle reporting.</cref>)
+          You can also <strong>link directly to cards</strong> from pages (and vice versa), and if you embed a MQL query that returns cards in either a page or card, then you will automatically be able to <strong>click through to view and edit</strong> any of the cards listed.
+      </p>
+  	<p>The distinguishing feature about pages is that, unlike cards, they can be made into <cref topic="creating_a_favorite_page">favorites</cref> and <cref topic="creating_tabs_from_pages">tabs</cref> to allow quick access from the Mingle user interface, the <cref topic="project_overview_tab">Overview page</cref> being one example.</p>
+  </section>
+  <section title="The Overview tab" collapsed="true">
+          <p>The <tab>Overview</tab> tab is a predefined page that is always directly accessible from the Mingle user interface, and typically acts as an access page into other linked pages. 
+              Mingle supports the creation of charts and tables in pages (as well as cards) that query the Mingle database to display up-to-date project information graphically. 
+              The standard project templates generally have some project reporting in the form of charts and tables on the overview tab.
+          </p>
+          <p>You can take a look at this <cref topic="project_overview_page_example">example project overview page</cref> to see how that might look.</p>
+  </section>
+  <section title="Recently viewed pages" file="recently_viewed_pages_control" collapsed="true"/>
+  <section title="Linking between pages and cards" file="linking_between_pages_and_cards" collapsed="true" />
+  <section title="Cross project card and page linking" file="cross_project_card_page_linking" collapsed="true" />
+  <section title="Creating project reports in pages and cards" collapsed="true">
+          <p>Mingle supports the creation of <cref topic="creating_charts_and_tables_in_pages">graphs, charts and tables</cref> that display up-to-date project information graphically by querying the Mingle database.</p>
+          <p>The <cref topic="using_the_editing_toolbar">editing toolbar</cref> allows you to access the <cref topic="mingle_macro_builder">Mingle macro builder</cref> and insert templates for graphs, charts and tables via the icons indicated below.</p>
+          <screenshot src="resources/images/editing_toolbar_macro_builder.png" />
+  </section>          
+  <section title="Special header actions" collapsed="true"/>
+  <section title="How to.. ">
+      <bullets>
+          <item><cref topic="creating_a_page">Create a page</cref></item>
+          <item><cref topic="viewing_pages">Find and view pages</cref></item>
+          <item><cref topic="formatting_help_component">Create, edit and format page content</cref></item>
+		      <item><cref topic="deleting_a_page">Delete pages</cref></item>  
+          <item><cref topic="attaching_and_inserting_objects_and_links">Attach files and add links to pages</cref> </item>
+          <item><cref topic="viewing_previous_versions_of_pages">View previous versions of pages</cref></item>
+      	  <item><cref topic="creating_tabs_from_pages">Create tabs from pages</cref></item>
+      </bullets>
+  </section>
+	  <section title="Also see...">
+		<bullets>
+        	<item><cref topic="macro_reference">Reference of all Mingle macros</cref></item>
+        	<item><cref topic="mql_reference">Use MQL queries in wiki pages</cref></item>
+    		  <item><cref topic="project_overview_page_example">Project overview page example</cref></item>
+        	<item><cref topic="cross_project_reporting">Cross project reporting</cref></item>
+    	</bullets>
+	</section>
+</chapter>

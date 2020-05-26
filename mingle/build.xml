@@ -1,0 +1,153 @@
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<project default="dist" basedir=".">
+    <property file="build.properties"/>
+    <import file="${basedir}/mingle.xml"/>
+    <property name="revision" value="unsupported"/>
+    <property name="version" value="current"/>
+    <property name="install_help_url" value="unsupported"/>
+    <property name="install4j.home" value="/Applications/install4j-5"/>
+    <property name="dist.dir" value="dist"/>
+    <property name="start.jar.path" value="lib/start.jar"/>
+    <property name="start.jar.encrypted.path" value="tmp/encrypted/lib/start.jar"/>
+    <property name="unix_tar_archive" value="mingle_unix_${version}_${revision}"/>
+    <echo message="${version}"/>
+    <echo message="${revision}"/>
+
+    <!-- these artifacts are checked into the repository as they are so rarely changed -->
+    <target name="jars" depends="start-jar, internal-jar"/>
+
+    <target name="internal-jar" depends="clean, compile.module.secret.production">
+        <jar destfile="installer/internal-crypto-utils.jar" basedir="${secret.output.dir}"/>
+    </target>
+
+    <target name="start-jar" depends="assemble-start-jar, encrypt-start-jar"/>
+
+    <target name="encrypt-start-jar" if="obfuscated">
+        <taskdef name="yguard" classname="com.yworks.yguard.YGuardTask" classpath="development/build_java/yguard-2.6.0.jar"/>
+        <yguard>
+            <inoutpair in="${start.jar.path}" out="${start.jar.path}"/>
+            <shrink logfile="tmp/yshrinklog.xml"/>
+            <rename logfile="tmp/yrenamelog.xml">
+                <keep>
+                    <class classes="public" methods="public">
+                        <patternset>
+                            <include name="com.thoughtworks.mingle.**.*"/>
+                            <exclude name="com.thoughtworks.mingle.security.crypto.*"/>
+                        </patternset>
+                    </class>
+                    <class name="com.thoughtworks.mingle.MingleProperties" fields="public"/>
+                </keep>
+            </rename>
+        </yguard>
+    </target>
+
+    <target name="assemble-start-jar" depends="clean, compile.module.start.production, assemble-version-jar">
+        <pathconvert property="start.manifest.classpath" pathsep=" ">
+            <mapper>
+                <regexpmapper from="${basedir}(.*)" to="..\1"/>
+            </mapper>
+
+            <path>
+                <filelist dir="${basedir}">
+                    <file name="vendor/java/ojdbc6.jar"/>
+                    <file name="vendor/java/activemq-all-5.5.1.jar"/>
+                    <file name="vendor/java/spring-*.jar"/>
+                    <file name="vendor/java/jmemcached-core-0.5.jar"/>
+                    <file name="vendor/java/jaxb-api-2.1.jar"/>
+                    <file name="vendor/java/commons-lang-2.4.jar"/>
+                    <file name="vendor/java/commons-codec-1.6.jar"/>
+                    <file name="vendor/java/smack-3.1.0.jar"/>
+                    <file name="vendor/java/smackx-3.1.0.jar"/>
+                    <file name="vendor/java/jruby-rack-1.1.20.jar"/>
+                    <file name="vendor/java/elastic_search/**/*.jar"/>
+                </filelist>
+            </path>
+        </pathconvert>
+        <copy file="config/routes.yml" todir="${start.output.dir}"/>
+
+        <jar destfile="${start.jar.path}" basedir="${start.output.dir}"
+             excludes="**/Version.*,com/thoughtworks/mingle/multiapp/*.class" update="true">
+        </jar>
+    </target>
+
+    <target name="installer" depends="jars">
+        <mkdir dir="${dist.dir}"/>
+        <taskdef name="install4j"
+                 classname="com.install4j.Install4JTask"
+                 classpath="${install4j.home}/bin/ant.jar"/>
+        <install4j projectfile="installer/mingle.install4j" buildselected="true">
+            <variable name="VERSION" value="${version}"/>
+            <variable name="REVISION" value="${revision}"/>
+            <variable name="INSTALL_HELP_URL" value="${install_help_url}"/>
+        </install4j>
+        <checksum format="MD5SUM" fileext=".md5sum" forceoverwrite="yes" file="${dist.dir}/${unix_tar_archive}.tar.gz"/>
+        <!-- uncomment below line for building media for windows -->
+        <!--<checksum format="MD5SUM" fileext=".md5sum" forceoverwrite="yes" file="${dist.dir}/mingle_windows-x64_${version}_${revision}.exe"/>-->
+    </target>
+
+    <target name="dual_app_installer">
+        <mkdir dir="${dist.dir}"/>
+        <taskdef name="install4j"
+                 classname="com.install4j.Install4JTask"
+                 classpath="${install4j.home}/bin/ant.jar"/>
+        <install4j projectfile="installer/mingle_dual_app.install4j" buildselected="true">
+            <variable name="VERSION" value="${version}"/>
+            <variable name="REVISION" value="${revision}"/>
+            <variable name="INSTALL_HELP_URL" value="${install_help_url}"/>
+        </install4j>
+        <checksum format="MD5SUM" fileext=".md5sum" forceoverwrite="yes" file="${dist.dir}/${unix_tar_archive}.tar.gz"/>
+        <!-- uncomment below line for building media for windows -->
+        <!--<checksum format="MD5SUM" fileext=".md5sum" forceoverwrite="yes" file="${dist.dir}/mingle_windows-x64_${version}_${revision}.exe"/>-->
+    </target>
+
+    <target name="clean.reports" description="clean up reports directory">
+        <delete dir="test/reports"/>
+    </target>
+
+    <target name="clean.dist" description="clean up dist files">
+        <delete dir="dist"/>
+    </target>
+
+    <target name="dist" depends="clean.dist, installer"/>
+
+    <target name="cpd">
+        <taskdef name="cpd" classname="net.sourceforge.pmd.cpd.CPDTask">
+            <classpath>
+                <pathelement location="development/build_java/pmd-4.2.4.jar"/>
+            </classpath>
+        </taskdef>
+        <cpd minimumTokenCount="21" language="ruby" format="xml" encoding="UTF-8" outputFile="cpd.xml">
+            <fileset dir="app">
+                <include name="**/*.rb"/>
+            </fileset>
+        </cpd>
+        <xslt in="cpd.xml" style="development/build_java/pmd/etc/xslt/cpdhtml.xslt" out="cpd.html"/>
+    </target>
+
+    <target name="zip_help_text">
+        <zip destfile="tmp/help_text.zip">
+            <fileset dir="help/build"/>
+        </zip>
+    </target>
+
+    <target name="java_tests_for_cruise" depends="clean.module.start, run_java_tests"
+            description="this is the task for java units job on cruise"/>
+    <target name="test" depends="java_tests_for_cruise"
+            description="java_tests_for_cruise short name"/>
+
+</project>

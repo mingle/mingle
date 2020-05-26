@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "define_your_plan.dtd">
+<chapter title="Define your plan" >
+	<section title="Create and update your plan" collapsed="true">
+		<p>Your plan is automatically generated as part of your program and has a default one-year timeline. (See <cref topic="Program Admin">Program Admin</cref> for more details.) If you'd like to modify the dates, click on the admin gear on your program's plan timeline view.</p>
+		      <screenshot src="resources/images/admin_gear.png"/>
+		      <screenshot src="resources/images/change_program_dates.png"/>
+	</section>
+	<section title="Set objectives for achieving your plan" collapsed="false">
+		<section title="Create objectives" collapsed="true">
+		<p>You can either <cref topic="plan_and_share_objectives">plan objectives from your backlog</cref> or create them directly in your program's plan by clicking on the timeline. (Read our blog post for <exref url="https://www.thoughtworks.com/insights/blog/keeping-eye-why-naming-program-objectives">tips on naming</exref>.)</p>
+			<screenshot src="resources/images/first_new_objective.png"/>	
+		<p>You can change the length of your objective by dragging on either end of the objective bar: </p>
+			<screenshot src="resources/images/drag_objective.png"/>	
+		</section>
+		<section title="Remove objectives" collapsed="false">
+			<section title="Move objectives to your backlog" collapsed="true">
+				<p>If you'd like to remove an objective from your program's current plan, but still want to keep it as part of your program, you can move it to your <cref topic="backlog">backlog</cref> by selecting "<strong>Remove</strong>" on your objective's pop-over and then "<strong>Move to Backlog</strong>." It will reappear at the bottom of your backlog with the original value, size and statement you originally defined it with. However, it will lose all work and projects associated with it.</p>
+				  <screenshot src="resources/images/remove_button.png"/><screenshot src="resources/images/move_to_backlog.png"/>
+			</section>	
+			<section title="Delete objectives from your program's plan" collapsed="true">
+				<p>If you'd like to completely remove an objective from your program, select "<strong>Remove</strong>" on your objective's pop-over and then "<strong>Delete</strong>." The objective and its contents will completely disappear, while projects associated with the objective will continue to be associated with your program.</p>
+				  <screenshot src="resources/images/remove_button.png"/><screenshot src="resources/images/delete_from_plan.png"/>
+			</section>
+		</section>					
+	</section>
+	<section title="Add projects" collapsed="true" id="add_projects">
+		<p>After you lay out the objectives in your program's plan, you’ll need to add the projects necessary to carry out each objective. On the “Projects” pill, you can add any project that is on your Mingle instance to your program:</p>
+		<screenshot src="resources/images/projects_tab.png"/>
+	</section>
+    <section title="Define what done means for work in your program" id="done_definition" collapsed="true">
+	    <p>To track the progress of your program's plan, you’ll need to define what “done” means based on a card property in your Mingle project. Mingle Plus automatically lists the properties and values available to create your “done” definition. Once you select the property and value, Mingle Plus will also show you which card types are tracked by this “done” definition. (Starting with Mingle 12.4, you can set your "done" definition to include all values greater than a specified value in your workflow.)</p>
+	      <screenshot src="resources/images/edit_projects.png"/>
+	      <note><strong>Please keep in mind:</strong>
+	    <p> </p> 
+		 <bullets>
+			<bullets>
+		       <item>Mingle currently supports only:</item>
+		          <bullets>
+			         <bullets>
+			             <item>Managed text properties to define “done”</item>
+			         </bullets>
+			      </bullets>
+			   <item>Projects can belong to multiple objectives</item>
+			 </bullets>
+		 </bullets>
+	</note>	
+	</section>	
+    <section title="Add and remove work" id="add_work" collapsed="false">
+  	  <subsection title="From your plan" collapsed="false">
+  		<subsection title="Manually" collapsed="true">
+  		<p>To add work to an objective in your program's plan, you must first select the project from which you want to add work. You can manually select and add individual cards to an objective, using a filter to help surface those of greatest interest.</p>
+  		    <p><screenshot src="resources/images/select_project.png"/></p> 
+  		    <p><screenshot src="resources/images/manually_add_work.png"/></p>
+  		    <note>Like projects, work items can be added to multiple objectives.</note>
+ 			<p>You can remove work from an objective by selecting the appropriate checkboxes on the "View Work" page.</p>
+ 	        <note>You cannot remove work items from projects that have an <cref topic="define_your_plan#autosync">auto-sync</cref> filter.</note>
+ 	            <screenshot src="resources/images/remove_work.png"/>          
+  		</subsection>
+    		<subsection title="Using auto-sync" id="autosync" collapsed="true">
+    			<p>If you know you’ll want to track all current and future cards that meet certain criteria, you can auto-sync your filter. Once enabled, auto-sync will automatically add all cards that meet the filter criteria to your objective; it will also automatically remove all cards that do not meet these criteria.</p>
+    			   <p><screenshot src="resources/images/auto_sync_confirmation_modal.png"/></p>
+    			   <p><screenshot src="resources/images/auto_sync_on.png"/></p>
+    			<p>When you enable auto-sync for a project filter, you cannot manually add or remove cards from an objective. To return to manually adding work (adding cards that do not meet filter criteria and removing cards that do), you must disable auto-sync.</p>
+    			<p>When you disable auto-sync, all cards previously added from a project to your objective will remain in the objective, and you can proceed manually managing the work in your objective.</p>
+    			<note><strong>Please keep in mind:</strong>
+    			<p> </p> 
+    				 <bullets>
+    					<bullets>
+    				       <item>Auto-sync does not support filters with project level variables</item>
+    				       <item>Auto-sync can be applied to only one filter (with any number of settings) per project per objective; the same project can enable auto-sync for different filters in different objectives</item>
+    				          <bullets>
+    					         <bullets>
+    						         <item><strong>Example:</strong> If Project A belongs to Objective I and Objective II, Project A can enable auto-sync for one filter in Objective I and another filter in Objective II</item>
+    					         </bullets>
+    					      </bullets>
+    					   <item>To change your filter, you must disable auto-sync. Once you change your filter and re-enable auto-sync, all cards that:</item>
+    						  <bullets>
+    					         <bullets>
+    						         <item>match your new filter will be automatically added to your objective</item>
+    						         <item>do not match the new filter will be automatically removed from your objective</item>
+    					         </bullets>
+    					   </bullets>
+    					 </bullets>
+    				 </bullets>
+    			</note>
+    		  <p>After you set or change your auto-sync filter, you will see a spinner (as in the image below) on your objective until the objective work count has been updated according to your new auto-sync filter setting.</p>
+				  <p><screenshot src="resources/images/auto_sync_spinner.png"/></p>	
+    		</subsection>
+ 		 </subsection>    
+     <subsection title="From your project" collapsed="true">
+       	<p>If a Mingle project belongs to a program, you can also add and remove work from an objective from any card in that project. When viewing a card in a project that is part of a program, you will see all objectives that the card belongs to:</p>
+        		    <screenshot src="resources/images/add_from_project.png"/>
+        	<p>You can add and remove the card from all objectives in the plan, except those that have been added to objectives via auto-sync:</p>
+        		    <screenshot src="resources/images/card_objectives_modal.png"/>
+        	<p>You can manually add or remove the card from objectives in the top group; objectives that the card has been added to via auto-sync cannot be modified and are listed at the bottom. Once you modify a card’s objectives, the change will be automatically reflected in your program.</p>
+     </subsection>
+   </section>
+</chapter>
+
+    

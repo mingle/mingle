@@ -1,0 +1,199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <meta name="generator" content="HTML Tidy, see www.w3.org">
+    <title>Sahi - Sahi - Configuration (sahi.properties)</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="sahi.css">
+</head>
+
+<body>
+<table width="100%">
+<tr>
+<td width="150px" valign="top">
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+
+    <div class="menu">
+        <ul>
+            <li><a href="index.html">Introduction</a></li>
+            <!--<li><a href="index.html#features">Features</a></li>-->
+
+        </ul>
+        <ul>
+            <li><a href="sahi_tutorial.html" target="_blank">Flash Tutorial</a></li>
+            <li><a href="screenshots.html">Screen Shots</a></li>
+        </ul>
+
+        <ul>
+            <li><a href="install.html">Downloading Sahi</a></li>
+
+            <li><a href="install.html#prereq">Prerequisites</a></li>
+
+            <li><a href="install.html#install">Installing Sahi</a></li>
+        </ul>
+
+        <ul>
+            <li><a href="using.html">Getting started</a></li>
+
+            <li><a href="using.html#record">Recording through Sahi</a></li>
+
+            <li><a href="using.html#playback">Playing back</a></li>
+
+            <li><a href="using.html#suites">Suites</a></li>
+
+            <li><a href="using.html#logging">Logging</a></li>
+        </ul>
+
+        <ul>
+            <li>Documentation:
+
+                <ul>
+                    <li><a href="http://sahi.co.in/w/apis">APIs</a></li>
+                    <li><a href="http://sahi.co.in/w/sahi-script">Scripting</a></li>
+                </ul>
+            </li>
+        </ul>
+
+        <ul>
+            <li><a href="http://sahi.co.in/w/Running+multiple+tests+in+batch+mode">Running in batch mode</a></li>
+        </ul>
+
+        <ul>
+            <li><a href="ide.html">Editor Support</a></li>
+        </ul>
+
+        <ul>
+            <li><a href="problems.html#problems">Problems</a></li>
+
+            <li><a href="problems.html#notyet">Not yet supported, but coming
+                in</a></li>
+        </ul>
+
+        <hr>
+
+        <ul>
+            <li><a href="http://sourceforge.net/projects/sahi" target="_blank">On Sourceforge</a></li>
+            <li><a href="http://sahi.co.in/forums/" target="_blank">Forums</a></li>
+            <li><a href="http://sourceforge.net/tracker/?group_id=151639&atid=781586" target="_blank">Report/View Bugs</a></li>
+            </li>
+        </ul>
+
+
+    </div>
+</td>
+<td valign="top">
+    <div class="content">
+        <div style="float:right;" width="100%" border="0">
+                <a href="http://sourceforge.net"><img src=
+                        "http://sourceforge.net/sflogo.php?group_id=151639&amp;type=3"
+                                                                        width="125" height="37" border="0"
+                                                                        alt="SourceForge.net Logo"></a>
+                    <br>
+            </div>
+        <h2>Sahi - Web Automation and Test Tool</h2><br/>
+        <div style="background-color:red;color:white;font-size:12pt;text-align:center;">
+		Documentation in this directory is not current.
+		Please visit <a style="color:white;font-size:12pt;" href="http://sahi.co.in/">http://sahi.co.in/</a> for the latest documentation.
+		</div>
+
+        <!--<h2> Sahi - Web Automation and Test Tool</h2>-->
+        <!--<br>-->
+        <!--<table width="100%">-->
+        <!--<tr>-->
+        <!--<td valign="top" align="left">-->
+        <!--<a class="top_menu" href="docs">Home</a>-->
+        <!--<a class="top_menu" href="docs">Why Sahi</a>-->
+        <!--<a class="top_menu" href="docs">Docs</a>-->
+        <!--<a class="top_menu" href="docs">Support</a>-->
+        <!--<a class="top_menu" href="docs">License</a>-->
+        <!--</td>-->
+        <!--</tr>-->
+        <!--</table>-->
+        <hr/>
+        <br/>
+
+        <h2 class="pageTitle">Sahi - Configuration (sahi.properties)</h2>
+        <!--Sahi - Configuration (sahi.properties)-->
+<pre>
+    # Sahi configuration file
+
+    <a href="#port">proxy.port=9999</a>
+
+    # dirs. Relative paths are relative to bin dir. Separate directories with semi-colon
+    # scripts.dir=../scripts;D:\\my\\project1\\scripts;D:\\my\\project2\\scripts
+    scripts.dir=../scripts;
+    script.extension=sah;sahi;inc
+    # default log directory.
+    logs.dir=../logs
+    # Directory where auto generated ssl cerificates are stored
+    certs.dir=../certs/
+
+    # Use external proxy server
+    ext.proxy.enable=false
+    ext.proxy.host=203.236.20.129
+    ext.proxy.port=80
+
+    # Sets the hotkey which when pressed and doubleclicked,
+    # will open the Sahi controller window.
+    # Can specify ALT, SHIFT or CTRL
+    <a href="#hotkey">controller.hotkey = ALT</a>
+
+    # Increase this if you get random connection refused exceptions or if tests hang after some time.
+    suite.time_between_tests=1000
+
+    # Script execution params
+
+    #Time delay between steps
+    script.time_between_steps=100
+    #Time delay between retries once an error occurs
+    script.time_between_steps_on_error=1000
+    #Number of retries once an error occurs
+    script.max_reattempts_on_error=5
+    #Number of cycles Sahi will wait for the page to load before it proceeds with execution
+    script.max_cycles_for_page_load=50
+
+    # For automatic SSL keystore creation.
+    ssl.auto_create_keystore=true
+    ssl.password=sahipassword
+    # Full file path to keytool utility if not in the system path
+    # This is generally in the &lt;java_home&gt;/bin directory
+    keytool.path=keytool
+
+
+</pre>
+<br>
+
+
+<h4><a name="port">proxy.port=9999</a></h4>
+
+Port which the Sahi proxy server uses.<br>
+This should be the same as used in the browser proxy settings.
+
+<h4><a name="#hotkey">Hot Key</a></h4>
+
+When the Hot Key is pressed and the page is doubleclicked, the Sahi
+Controller window is displayed.<br>
+By default, the Hot Key is set to ALT.<br>
+If ALT does not work on your platform, you could configure the
+hotkey in this file. <br>
+The hot key could be any one of ALT, SHIFT or CTRL keys. <br>
+Note that popup blockers may prevent the Controller window from
+coming up.<br>
+So first turn off popup blockers on your browser.<br>
+Sometimes CTRL-ALT-DblClick works on some browsers since that
+temporarily turns off some blockers.<br>
+<br>
+
+
+    </div>
+</td>
+</tr>
+</table>
+Please send your feedback to <a href="http://sourceforge.net/users/narayanraman/">V Narayan Raman</a>.
+</body>
+</html>
+

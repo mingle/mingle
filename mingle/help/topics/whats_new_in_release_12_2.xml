@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="What's new in Release 12.2">
+  <p>Please review the <cref topic="upgrading_from_previous_versions">upgrade instructions</cref> before moving to Mingle 12.2.</p>
+  <section title="Program management">
+    <p>Mingle 12.2 marks the release of <cref topic="planner">Planner</cref>, a new program management feature available in <cref topic="mingle_plus">Mingle Plus</cref>. Planner supports collaboration and visibility across multiple, independent teams, helping them coordinate work and adapt plans as they progress.</p>
+  <screenshot src="resources/images/timeline.png"/>
+  </section>
+  <section title="Supported systems">
+    <p>We have added official support for the following in Mingle 12.2:</p>
+	     <bullets>
+	       <item>Firefox 10 is now a <cref topic="system_requirements#browser_requirements">supported browser</cref>. (Yes, yes. We know it's already up to Firefox 14.)</item>
+	       <item>PostgreSQL 9.1 is now a <cref topic="system_requirements#database">supported database</cref>.</item>
+	     </bullets>   
+  </section>
+  <section title="More search options">
+    <p>Building upon the <cref topic="mingle_search">search</cref> improvements released in Mingle 12.1, we now also provide the option to index text, numeric and user properties so you can more easily locate cards that have a specific property or property value.</p>
+  </section>
+  <section title="See more of your card title on grid view">
+    <p>We’ve made some changes to our grid view so you can see more of your card title (up to 140 characters) without having to open individual cards. While we encourage teams to keep card titles short and sweet--just enough to trigger your memory--we understand that this is not always possible and that seeing more text can help contextualize the card and facilitate conversation around it.</p>
+  </section>
+</topic>

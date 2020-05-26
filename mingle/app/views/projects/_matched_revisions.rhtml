@@ -1,0 +1,31 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="matches">
+	<% if @revisions.empty? -%>
+		No matches for pattern against card number <%= @card_number %> were found.
+	<% else %>
+	  <h2>Showing the last 10 matching <%= repository_vocabulary['revision'].pluralize %></h2>
+		<% for revision in @revisions -%>
+		  <div id="revision-<%= revision.number %>" class="event revision-event">
+		    <h3><%= revision.name %></h3><%= " #{repository_vocabulary['committed']} by #{h(revision.user)} #{date_time_lapsed_in_words_for_project(revision.updated_at, revision.project)}" %>
+		    <ul class="change">
+			    <li><%= replace_card_links(h(revision.commit_message)) %></li>
+		    </ul>			
+		  </div>
+		<% end -%>
+	<% end %>
+</div>	

@@ -1,0 +1,59 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% wip_type_id = 'wip_type' %>
+<% aggregate_property_id = 'wip_aggregate_property' %>
+<% select_aggregate_property = 'select_wip_aggregate_property_field' %>
+<% select_wip_type = 'select_wip_type_field' %>
+<% type_drop_link_id = 'select_aggregate_type_wip_drop_link' %>
+<% property_drop_link_id = 'select_aggregate_property_wip_drop_link' %>
+<% column_selector_function_name = 'wip_aggregate_function_selector' %>
+<% column_selector_property_name = 'wip_aggregate_property_selector' %>
+    <div class='wip-limits-section'>
+      <p><strong>Set Work in Progress limit</strong></p>
+      <span class='drop-list-panel <%= column_selector_function_name %>'>
+        <%= link_to_function '', nil, :id => type_drop_link_id, :class => 'dropdown-arrow' %>
+        <%= hidden_field_tag(select_wip_type, 'count', :id => wip_type_id) %>
+      </span>
+      <span class='drop-list-panel <%= column_selector_property_name %>'>
+        <%= link_to_function '', nil, :id => property_drop_link_id, :class => 'dropdown-arrow' %>
+        <%= hidden_field_tag(select_aggregate_property, '', :id => aggregate_property_id) %>
+      </span>
+      <span>=&nbsp;&nbsp;<input type="text" name='new_wip_limit' class='wip_limit'></span>
+    </div>
+<%= render :partial => 'cards/wip_limit_form', locals: {view: view} %>
+<p class="notes">To save the set WIP limits, please save the current grid view.</p>
+<%- wip_type_drop_list_options = js_options({
+                                                :html_id_prefix => select_wip_type,
+                                                :select_options => [%w(Count count), %w(Sum sum)],
+                                                :drop_link => type_drop_link_id,
+                                                :initial_selected => %w(Count count),
+                                                :onchange => 'WipEditPopup.wipTypeChanged(e);'
+                                            })
+
+    wip_agg_prop_drop_list_options = js_options({
+                                                    :html_id_prefix => select_aggregate_property,
+                                                    :select_options => options_for_aggregate_property(view),
+                                                    :drop_link => property_drop_link_id,
+                                                    :initial_selected => %w(),
+                                                    :onchange => 'WipEditPopup.wipPropertyChanged(e)'
+                                                })
+
+%>
+<%= javascript_with_rescue <<-JAVASCRIPT
+            WipEditPopup.setupEditableWip($j('.lane_header'),new DropList(#{wip_type_drop_list_options}),new DropList(#{wip_agg_prop_drop_list_options}));
+    JAVASCRIPT
+-%>

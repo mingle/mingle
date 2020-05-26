@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Creating tabs from pages">
+	<section title="Introduction" file="introducing_tabs" />
+	
+	<hint>Personal favorites cannot be created as tabs.</hint>
+	<section title="How to create a tab from a page">
+		<steps>
+			<item><cref topic="signing_in_and_out_of_mingle">Sign in</cref> to Mingle and open the project with the pages you want to convert to tabs (if you're not already working in the project).
+				You don't need to sign in as a project administrator.</item>
+			<item><cref topic="creating_and_formatting_pages">Create the pages</cref> you want to turn into tabs (if you haven't done so already).</item>
+			<item><cref topic="finding_a_page">Open the page</cref> you want to create a tab with.</item>
+			<item>
+				<screenshot alttext="Wiki page - make tab link" src="resources/images/wiki_page_make_tab.png" />
+				<p>Click on the <link>Make tab</link> link in the page header.</p>
+			</item>
+			<item>
+				<p>Mingle will create and highlight a new tab named the same as the page.</p>
+				<screenshot alttext="Wiki page - remove tab link" src="resources/images/wiki_page_remove_tab.png" />
+				<p>To remove the tab, click on the <link>Remove tab</link> link in the page header.</p>
+			</item>
+		</steps>
+	</section>
+	<section title="Also see...">
+		<bullets>
+			<item><cref topic="managing_favorites_and_tabs">Managing team favorites and tabs</cref></item>
+			<item><cref topic="creating_tabs_from_favorites">Creating tabs from team favorites</cref></item>
+			<item><cref topic="working_with_pages">Working with pages</cref></item>
+		</bullets>
+	</section>
+</topic>
+
+

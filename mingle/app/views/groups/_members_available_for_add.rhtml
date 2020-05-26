@@ -1,0 +1,50 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div><h1>Add team member to <%= @group.name %> group</h1></div>
+
+<div id="content">
+
+  <%= render :partial => 'shared/pagination_info', :locals => {:position => 'top', :models => @users, :model_name => 'team member'} %>
+
+  <div class="table-action-panel">
+    <%= render :partial => 'users/search', :locals => { :search_controller_name => 'groups', :search_action_name => 'list_members_available_for_add' } %>
+    <%= clear_float %>
+  </div>
+  <table id='users' class="highlightable-table">
+    <thead>
+      <tr class="table-top">
+        <th>Display name</th>
+        <th>Sign-in name</th>
+        <th>Email</th>
+        <th>Version controller user</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% if @users.empty? -%>
+        <td colspan="5" class="italic-light align-center last"><%= flash.now[:info] || 'There are currently no members to list.' %></td>
+      <% else -%>
+        <%= render :partial => 'available_user', :collection => @users, :as => :user, :locals => {:group => @group } %>
+      <% end %>
+    </tbody>
+    
+  </table>
+
+  <%= render :partial => 'shared/pagination_info', :locals => {:position => 'top', :models => @users, :model_name => 'team member'} %>
+  
+</div>

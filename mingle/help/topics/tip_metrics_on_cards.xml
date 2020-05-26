@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE section SYSTEM "mingle_help.dtd">
+<chapter title="Using cards for reporting">
+			<section title="Introduction">
+				
+	To create milestones, releases and iterations reports (such as burnups and burndowns) easily, represent milestones, releases and iterations as cards and use these cards to create and view metrics and charts. 
+				
+				For example:
+				    <bullets>
+				<item>create release and iteration specific burnups and burndowns using the <cref topic="markup_daily_history_chart">Daily History Chart</cref> or <cref topic="markup_data_series_chart">Data Series Chart</cref>	</item>
+			    <item>see the number of stories planned for the release by creating a <cref topic="markup_stack_bar_chart">Stack bar chart</cref></item>
+				<item>see release specific feature breakup and completion status of stories by creating a <cref topic="markup_ratio_bar_chart">Ratio bar chart</cref> </item>			
+				</bullets> 
+				</section>
+		
+			
+				<section title="Card specific reports"> Using a card as a representation of an Iteration or Release means that it is easier to roll up your metrics on that card to give easily accessible 'Iteration' or 'Release' level reports. 
+					<bullets> <item>By adding your <cref topic="card_trees">card to a tree</cref> you can create <cref topic="aggregate_properties">aggregate properties</cref> that can summarize data about children cards. As the status of the children card changes the aggregate properties are also updated automatically so the Release metrics are always up to date.
+				</item> 
+				<item>Create card specific <cref topic="macro_reference">charts</cref> easily by using <cref topic="mql_reference">THIS CARD</cref> to reference the card the charts they are being displayed on. 
+			</item>
+				<item>By adding your desired cards (as well as using THIS CARD) to your <cref topic="card_defaults">card defaults</cref> any new cards of that type will automatically have card specific charts created.</item>	
+				</bullets>
+			</section>
+			
+			<p><screenshot alttext="metrics_on_cards" src="resources/images/metrics_on_cards.png" /></p>
+			
+			<section title="Also see...">
+		        <bullets>
+			<item><cref topic="macro_and_mql_guide">Full reference of chart, table, and dashboard macros</cref></item>
+		    <item><cref topic="explore_mingle_topic_tracking_release">Tracking releases, sprints and iterations</cref></item>
+		    <item><cref topic="creating_charts_and_tables_in_wiki_pages">Creating charts and tables on cards and wiki pages</cref></item>
+			<item><cref topic="cross_project_reporting">Cross project reporting</cref></item>
+					<item><cref topic="explore_mingle">Explore Mingle</cref></item>
+					
+		        </bullets>
+		    </section>
+</chapter>

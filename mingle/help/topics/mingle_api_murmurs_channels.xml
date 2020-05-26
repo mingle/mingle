@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Murmurs Channels API">
+  	<section title="Murmurs Channels">
+    <p>Murmurs is a built-in feature in all projects and cannot be disabled. You can manage this channel settings via the Murmurs channels API. </p>
+    </section>
+
+	<note>Please note that all POST and PUT requests must be in XML format by default. This is not illustrated in the examples here. To specify parameters as shown in the examples you will have to set the request header for Content-Type to "application/x-www-form-urlencoded".</note>
+	
+	<section title = "Structure of the Murmurs channel resource">
+		<p>The structure of the murmurs channel resource, and its attributes are described below, along with their data type. Also included with each attribute is whether you are allowed to update the value. </p>
+		
+		<api_attributes title="murmurs channel for built-in murmurs resource xml - attributes">
+      <api_attribute name="enabled" type="Boolean">represents whether a project has Murmurs enabled or not. Set this to true to enable Murmurs. </api_attribute>
+      <api_attribute name="project" type="Resource"><strong>name</strong> and <strong>identifier</strong> of a project. Both Strings.</api_attribute>
+    </api_attributes>
+	</section>
+
+</topic>
+
+
+
+
+
+

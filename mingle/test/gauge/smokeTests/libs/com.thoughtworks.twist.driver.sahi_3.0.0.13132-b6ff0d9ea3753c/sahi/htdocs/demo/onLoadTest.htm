@@ -1,0 +1,44 @@
+<html>
+<head>
+<meta name="generator" content="HTML Tidy, see www.w3.org">
+<title>OnBeforeUnload Test</title>
+</head>
+<script>
+function addEvent(el, ev, fn) {
+    if (!el) return;
+    if (el.attachEvent) {
+        el.attachEvent("on" + ev, fn);
+    } else if (el.addEventListener) {
+        el.addEventListener(ev, fn, false);
+    }
+};
+function viaAddEvent2(e){
+	alert("viaAddEvent2");
+}
+addEvent(window, "load", viaAddEvent2);
+</script>
+<body onload="bodyOnload()">
+<h2>Onload Test</h2>
+Date=<script>document.write(new Date());</script>
+<br/>
+<a href="index.htm">Back</a>
+
+<script>
+function bodyOnload(e){
+	alert("bodyOnload");
+}
+
+function viaAddEvent(e){
+	alert("viaAddEvent");
+}
+
+function directAssignment(e){
+	alert("directAssignment")
+}
+addEvent(window, "load", viaAddEvent);
+//window.onload=directAssignment;
+//window.onbeforeunload=function(){return 'abaac'};
+</script>
+
+</body>
+</html>

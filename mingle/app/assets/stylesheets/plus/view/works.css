@@ -1,0 +1,110 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+.works_table {
+  margin-top: 12px;
+}
+.works_table table.work {
+  margin-bottom: 24px;
+}
+.works_table .add_work_form {
+  margin-bottom: 36px;
+}
+
+.work_filter {
+  border-bottom: 1px solid #CCC;
+  padding-bottom: 10px;
+}
+
+#change_project_form {
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+#change_project_form #project_id {
+  margin-left: 6px;
+}
+
+#cards_view {
+  margin-top: 20px;
+}
+
+.add_work_form {
+  min-height: 70px;
+}
+
+.add_work_form .form_item .left input[type=submit] {
+  margin-top: 15px;
+}
+ 
+.find_cards_wrapper {
+  border-top: 1px solid #CCC;
+  margin-top: 5px;
+  padding-top: 5px;
+}
+
+.autosync {
+  float: left;
+  margin-bottom: 10px;
+  padding-top: 5px;
+}
+
+.autosync label {
+  margin-left: 5px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  display: inline-block;
+}
+
+.autosync span.notes {
+  font-weight: normal;
+  color: #777;
+}
+
+a.component-help {
+  margin-left: 5px;
+  height: 16px;
+  width: 16px;
+}
+
+.auto-sync-message {
+  font-style: italic;
+  padding-left:10px;
+}
+.autosync-form {
+  float: left;
+  margin-left: 2px;
+}
+
+#add_work_filter a.action_icon.add_link.disabled {
+  background-image: url(../../../images/planner/icons/icon_add_disabled_16.png);
+  color: grey;
+}
+
+#autosync_spinner {
+  margin-left: 5px;
+}
+
+.project-selector {
+  float: left;
+}
+.autosync-help {
+  float: left;
+}
+
+#autosync_confirmation_content p {
+  font-size: medium;
+}

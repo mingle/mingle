@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Viewing previous versions of pages">
+    <section title="Introduction">
+    	<p>Whenever anybody on your team edits a card or page, Mingle saves the previous version and maintains a full history of all changes. 
+    		You can view changes to pages as they happen from the main <tab>History</tab> tab, but you can view the history of the page from its <cref topic="page_history_component">History component</cref>. 
+    		From here, you can also view previous versions of the page.</p>
+    	
+    	<bullets title="You may want to view previous versions of a page if:">    	
+	    	<item>you or a team member accidentally overwrote a page's content</item>
+	    	<item>you want to view information captured at an earlier stage of your project</item>
+	    	<item>you remembered that there was some useful information or attachment in a previous version of a page.</item>
+    	</bullets>
+    	
+    	<bullets title="For each page, Mingle shows:">    	
+	    	<item>who updated the page and when (relative to your current time)</item>
+	    	<item>a summary of the changes made for each version</item>
+	    	<item>a link to view a previous page version.</item>
+    	</bullets>
+    </section>
+	<section title="How to view page history and previous versions">
+		<steps>
+			<item><cref topic="signing_in_and_out_of_mingle">Sign in</cref> to Mingle and navigate to the project with the pages you want to view (if you're not already working within the project).</item>
+			<item>
+				<p><cref topic="finding_a_page">Locate the page</cref> with the history you want to view.</p>			
+				<p>You can click the <tab>Project admin</tab> tab, <link>Pages</link> link to view a <cref topic="pages_page">list of all pages</cref> within the project.</p>			
+				<p>You may also find pages attached to cards or other pages, or from <cref topic="mingle_search">Mingle's search</cref>.</p>
+			</item>
+			<item><p>Click the <link>page name</link> link to open the page.</p>
+				<screenshot alttext="Wiki page names" src="resources/images/wiki_pages.png"></screenshot>			
+				<p>Mingle displays the contents of the page, with the History component at the top-right side of the page.</p>		
+				<screenshot alttext="View wiki history" src="resources/images/view_wiki_history.png"></screenshot>
+			</item>
+			<item>
+				<p>If you would like to view a previous version of a page, locate the version you want to view and click the View link.</p>
+				<screenshot alttext="old wiki page" src="resources/images/wiki_old.png"></screenshot>
+				<p>Mingle displays the previous page version, with a summary of the version number and a link to return to the latest version.</p>
+			</item>
+		</steps>
+	</section>
+	<section title="Also see...">
+		<bullets>
+			<item><cref topic="viewing_project_changes">Viewing project changes (History tab)</cref></item>
+			<item><cref topic="viewing_card_history_and_murmurs">Viewing card history and murmurs</cref></item>
+		</bullets>
+	</section>
+</topic>

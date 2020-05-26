@@ -1,0 +1,235 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Objective API">
+	<section title="Objectives">
+	    <p>Objectives are a central feature of <cref topic="mingle_plus">Mingle Plus</cref> and represent high-level value that will be delivered as part of your <cref topic="program">program</cref>. Currently, this Objective API pertains to planned objectives only, that is objectives that exist on your program <cref topic="plan">plan</cref>. It does not pertain to any of your program’s unplanned objectives, that is objectives that exist in your program <cref topic="backlog">backlog</cref>. (If you're using this objective API, you may also be interested in our <cref topic="mingle_api_events#plan_objective_events">plan objective events API</cref>.)</p>
+		<note>
+			<p>Please note that:</p>
+			<bullets>
+				<item>All the API resources and examples refer to <strong>v2 of the API</strong>. Support for v1 of the API was deprecated in fall 2012. Please refer to this <exref url="http://support.thoughtworks.com/entries/22029412-End-of-life-for-Version-1-of-the-Mingle-API">announcement</exref> in our Mingle community for more information about this deprecation.</item>
+				<item>All POST and PUT requests must be in XML format by default. This is not illustrated in the examples here. To specify parameters as shown in the examples you will have to set the request header for Content-Type to "application/x-www-form-urlencoded".</item>
+			</bullets>
+		</note>
+	</section>
+	<section title="Structure of an objective resource">
+	    <p>The structure of an objective resource and its attributes are described below, along with their data type. Also included with each attribute is whether you are allowed to update the value.</p>
+
+	    <api_attributes title="objective resource xml - attributes">
+	  		<api_attribute name ="number" type="integer" readonly="true">system assigned unique identifier for an objective.</api_attribute>
+			<api_attribute name ="name" type="character varying (80)">objective names may be up to 80 characters.</api_attribute> 
+	  		<api_attribute name ="identifier" type="character varying (30); read only">objective identifiers may be up to 30 characters.</api_attribute>
+	  		<api_attribute name ="start_at" type="date">objective's start date (yyyy-mm-dd format).</api_attribute>
+	  		<api_attribute name ="end_at" type="date">objective's end date (yyyy-mm-dd format).</api_attribute>
+	  		<api_attribute name ="work" type="array">array of <strong>card</strong> resources. Work that has been added to the objective.</api_attribute>
+	    </api_attributes>
+	</section>  
+	<section title="Get a single objective in a plan">
+		<p>You can get information about a single objective on your program plan, including the objective number, name and identifier, start date and end date, and cards that have been added to the objective, either manually or via <cref topic="define_your_plan#autosync">auto-sync</cref>.</p>
+	    <api_reference>
+	      <p><strong>Reference</strong></p>
+	        <code>
+	Request Method: GET
+	URL: /api/v2/programs/program_identifier/plan/objectives/objective_identifier.xml
+	Parameters: NA
+	        </code>
+
+	      <p><strong>Example</strong></p>
+	        <code>
+	GET
+
+	http://yourname:password@your.mingle.server:8080/api/v2/programs/test_program/plan/objectives/test_objective.xml
+	      </code>
+
+	      <p><strong>Explanation</strong></p>
+	      <p>The above is an example of a GET request to a Mingle server running at your.mingle.server, port 8080. The request is made with the authorization credentials of yourname/password. The URL of api/v2/programs/test_program/plan/objectives/test_objective.xml represents the objective resource for the objective “Test objective” in the program with identifier test_program.</p>
+
+	      <p><strong>Result</strong></p>
+	      If you were authorized to perform the operation, and the resource was available, you should get an xml document that looks something like the following with the objective name and identifier, start and end dates, and cards that have been added to the objective. The URLs of the card and the project from which it belongs are also provided.
+	      <code>
+	        <![CDATA[
+	<objective>
+	  <number>1</number>
+	  <identifier>test_objective</identifier>
+	  <name>Test objective</name>
+	  <start_at type="date">2012-12-29</start_at>
+	  <end_at type="date">2013-04-30</end_at>
+	  <work type="array">
+		 <card url="http://your.mingle.server:8080/api/v2/projects/test/cards/84.xml">
+			<completed nil="true"/>
+			<number type="integer">84</number>
+			<project url="http://your.mingle.server:8080/api/v2/projects/test.xml">
+				<name>test</name>
+				<identifier>test</identifier>
+			</project>
+		 </card>
+			.
+			.
+			.			
+	  </work>	
+	</objective>
+	        ]]>
+	      </code>  
+	    </api_reference>
+	</section>  
+	
+	<section title="Get all objectives in a plan">
+		<p>You can get information about all objectives in your program plan, including the objective number, name and identifier as well as start and end dates.</p>
+	    <api_reference>
+	      <p><strong>Reference</strong></p>
+	        <code>
+	Request Method: GET
+	URL: /api/v2/programs/program_identifier/plan/objectives.xml
+	Parameters: NA
+	        </code>
+
+	      <p><strong>Example</strong></p>
+	        <code>
+	GET
+	
+	http://yourname:password@your.mingle.server:8080/api/v2/programs/test_program/plan/objectives.xml
+	      </code>
+
+	      <p><strong>Explanation</strong></p>
+	      <p>The above is an example of a GET request to a Mingle server running at your.mingle.server, port 8080. The request is made with the authorization credentials of yourname/password. The URL of api/v2/programs/test_program/plan/objectives.xml represents the list of objective resources for the program with identifier test_program.</p>
+
+	      <p><strong>Result</strong></p>
+	      If you were authorized to perform the operation, and the resource was available, you should get an xml document that looks something like the following with all of your program plan’s objectives, their names and identifiers, and start and end dates. The URLs of the objectives in your plan are also provided. 
+	<note>This request calls <strong>planned objectives only</strong>, that is objectives that exist on your program plan. It does not call any of your program’s unplanned objectives, that is objectives that exist in your program backlog.</note>
+	      <code>
+	        <![CDATA[
+	<objectives type="array">
+		<objective url="http://your.mingle.server:8080/api/v2/programs/test_program/plan/objectives.xml">
+			<number>1</number>
+			<identifier>test_objective</identifier>
+			<name>Test objective</name>
+			<start_at type="date">2012-12-29</start_at>
+			<end_at type="date">2013-04-30</end_at>
+		</objective>	
+			.
+			.
+			.			
+	</objectives>	
+	        ]]>
+	      </code>  
+	    </api_reference>
+	</section>
+
+	<section title="Update a planned objective">
+		<p>You can update different attributes of a planned objective, including its name, start date and end date. (Currently, this API does not support <cref topic="define_your_plan#add_work">adding work</cref> to a planned objective.)</p>
+	  <api_reference>
+	      <p><strong>Reference</strong></p>
+	      <code>
+  Request Method: PUT
+  URL: /api/v2/programs/program_identifier/plan/objectives/objective_identifier.xml
+  Parameters: all objective attributes that can be updated
+
+  objective[name] : The objective name
+  objective[start_at] : The objective start date (yyyy-mm-dd format)
+  objective[end_at] : The objective end date (yyyy-mm-dd format)
+	    
+	      </code>
+
+	      <p><strong>Example</strong></p>
+	      <code>
+  PUT
+
+  http://yourname:password@your.mingle.server:8080/api/v2/programs/program_identifier/plan/objectives/test_objective.xml
+
+  objective[name]=new name
+  objective[start_at]=2013-01-15
+  objective[end_at]=2013-06-15
+	      </code>
+
+	      <p><strong>Explanation</strong></p>
+	      <p>The above is an example of a PUT request to a Mingle server running at your.mingle.server, port 8080. The request is made with the authorization credentials of yourname/password. The URL of api/v2/programs/program_identifier/plan/objectives/test_objective.xml represents the objective resource for the objective with identifier test_program with the name “Test objective” in the program. The value of the name, start_at, and end_at attributes will be set to the respective and newly specified values of "new name", “January 15, 2013” and “June 15, 2013”.</p>
+		  
+	      <p><strong>Result</strong></p>
+	      <p>If you were authorized to perform the operation, and the operation succeeded, you will be returned a location attribute in the http header of the response, which is a URL to the updated resource.</p>
+
+		</api_reference>
+	</section>  
+
+	<section title="Create an objective in your plan">  
+		<note>This request allows you to create an objective in <strong>pre-existing plans only</strong>.</note>
+	    <api_reference>    
+	      <p><strong>Reference</strong></p>
+	      <code>
+  Request Method: POST
+  URL: /api/v2/programs/program_identifier/plan/objectives.xml
+  Parameters: the objective attributes required to create an objective.
+	
+  objective[name] : The objective name
+  objective[start_date] : The objective start date (yyyy-mm-dd format)
+  objective[end_date] : The objective end date (yyyy-mm-dd format)
+
+	      </code>
+
+	      <p><strong>Example</strong></p>
+	      <code>
+  POST
+
+  http://yourname:password@your.mingle.server:8080/api/v2/programs/test_program/plan/objectives.xml
+
+  objective[name]=first objective
+  objective[start_at]=2013-01-15
+  objective[end_at]=2013-06-15
+		
+	      </code>
+
+	      <p><strong>Explanation</strong></p>
+	      <p>The above is an example of a POST request to a Mingle server running at your.mingle.server, port 8080. The request is made with the authorization credentials of yourname/password. The URL of api/v2/programs/test_program/plan/objectives.xml represents the list of objective resources for the program with identifier test_program. Upon execution of this request, the post parameters will be used to create an objective in the plan in the program with the identifier "test_program". The value of the name, start_at, and end_at attributes will be set to the respective specified values of "first objective", “January 15, 2013”, and “June 15, 2013”.</p>
+
+	      <p><strong>Result</strong></p>
+	      <p>If you were authorized to perform the operation, and the operation succeeded, you will be returned a location attribute in the http header of the response, which is a URL from which you can get the objective resource that was created.</p>
+	    </api_reference>
+	</section>  
+
+	<section title="Delete an objective">
+		<p>This request allows you to delete an objective from program plan.</p>
+	    <api_reference>    
+	      <p><strong>Reference</strong></p>
+	      <code>
+  Request Method: DELETE
+  URL: /api/v2/programs/program_identifier/plan/objectives/test_objective.xml
+  Parameters: NA
+		  </code>
+
+	      <p><strong>Example</strong></p>
+	      <code>
+  DELETE
+
+  http://yourname:password@your.mingle.server:8080/api/v2/programs/program_identifier/plan/objectives/test_objective.xml
+		
+	      </code>
+
+	      <p><strong>Explanation</strong></p>
+	      <p>The above is an example of a DELETE request to a Mingle server running at your.mingle.server, port 8080. The request is made with the authorization credentials of yourname/password. The URL of api/v2/programs/program_identifier/plan/objectives/test_objective.xml represents the objective resource for the objective with the name “test_objective” in the program with identifier test_program.</p>
+
+	      <p><strong>Result</strong></p>
+	      <p>If you were authorized to perform the operation, and the resource was available, the objective you specified should have been deleted and a 200 response code will be returned.</p>
+	    </api_reference>
+	</section>
+	<section title="Also see...">
+		<bullets>
+			<item>
+				<cref topic="mingle_api_events#plan_objective_events">Plan objective events API</cref>
+			</item>
+		</bullets>
+		</section>	
+</topic>

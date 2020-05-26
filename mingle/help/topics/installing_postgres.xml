@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+  <section title="Installing PostgreSQL">
+    <subsection title="How to install PostgreSQL for Windows" collapsed="true">
+      <p> PostgreSQL version 9.6 is currently recommended. Please download it from <exref url="https://www.enterprisedb.com/downloads/postgres-postgresql-downloads">here</exref>.</p>
+      <note>When you install PostgreSQL, it creates a new Windows user account and database superuser account, both called "postgres". When you complete the Mingle configuration wizard, the database username and password you enter is for the "postgres" account you create during installation.</note>
+      <steps>
+        <item>Open the <strong>one click installer</strong> that you downloaded.</item>
+        <item>
+          <p>Follow the onscreen instructions to install PostgreSQL, and accept the installation defaults.</p>
+          <note>No additional tools, drivers or applications are necessary for Mingle. You can choose not to launch Stack Builder at exit option if you don't have any other need for it.</note>
+        </item>
+      </steps>
+    </subsection>
+    <subsection title="How to install PostgreSQL for Linux" collapsed="true">
+      <p>PostgreSQL should be available in your distributions's preferred package management tools.</p>
+      <bullets title="Detailed guides">
+        <item><exref url="http://wiki.postgresql.org/wiki/YUM_Installation">Red Hat (RHEL) / CentOS</exref></item>
+        <item><exref url="https://help.ubuntu.com/community/PostgreSQL">Ubuntu</exref></item>
+      </bullets>
+    </subsection>
+    <subsection title="Creating the Mingle database">
+      <p>Once you've finished installing PostgreSQL, start the PostgreSQL server. Create a database called <strong>mingle</strong> before installing Mingle.</p>
+      <note>Create the <strong>mingle</strong> database so that it uses the UTF-8 character set. This is usually the default character set. If you have configured PostgreSQL to use a different character set, you will need to explicitly specify that the <strong>mingle</strong> database should use the UTF-8 character set.</note>
+    </subsection>
+  </section>

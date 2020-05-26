@@ -1,0 +1,9 @@
+Mingle Server (DB version 40) on TW-issued standard Dell D620 (1G RAM)
+
+JMeter-Server running on the Dell machine to receive load-test-request.
+
+JMeter running on MacMini OSX generates multiple-threads and send tests
+to the Jmeter-Server so that it can execute the test.
+
+The MacMini is essentially used for generating threads as the Dell is not
+powerful enough.

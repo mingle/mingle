@@ -1,0 +1,52 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="slack-notification-subscription">
+  <h3>Slack Notifications</h3>
+  <div class="subscription-note">
+    You can select the projects from the list below to receive murmur notification on Slack.
+    The projects that have been linked to a Slack channel will only be displayed below.
+  </div>
+  <table class="highlightable-table" id='slack-notification-subscription'>
+    <tbody>
+    <tr>
+      <th class="col1">
+        Project
+      </th>
+      <th name="usage" class="col2">
+        Subscribe
+      </th>
+    </tr>
+    <% mapped_projects = projects_mapped_to_slack(@user.projects) %>
+    <% if mapped_projects.any? %>
+      <% mapped_projects.each do |project| -%>
+        <tr>
+          <%= content_tag(:td, content_tag(:h, project.name), id: "project_#{project.id}") -%>
+          <td name="usage" class="col2">
+            <%= check_box_tag("slack_murmur_subscription_#{project.id}", 'slack_murmur_subscription',
+                              @user.display_preference.read_project_preference(project,:slack_murmur_subscription),
+                              class: 'slack-murmur-subscription', onClick: "UserProjectPreferences.subscribeUnsubscribe(#{project.id})",
+                              'data-update-subscription-url' => url_for(:controller => "user_display_preference",
+                                                                        :action => "update_user_project_preference")) %> Yes
+          </td>
+        </tr>
+      <% end -%>
+    <% else %>
+      <%= render :partial => 'shared/no_records', :locals => { :colspan => 2, :model => 'projects mapped to Slack' } %>
+    <% end -%>
+    </tbody>
+  </table>
+</div>

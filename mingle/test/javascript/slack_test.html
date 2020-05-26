@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Sidebar test</title>
+
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/slack.js" type="text/javascript"></script>
+
+  <link rel="stylesheet" href="test_assets/qunit-1.21.0.css" type="text/css" />
+
+ </head>
+
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture">
+  <div>
+    <div id="slack-test-section">stuff in sidebar</div>
+    <form id="slack_channel_form">
+      <select id="selected_slack_channel_id" name="selected_slack_channel_id" onchange="Slack.channelUpdateHandler('#slack_channel_form','map_channels',false)">
+        <option value="">Select Channel</option>
+        <optgroup label="Open channels">
+          <option value="C3DALSZ97">general</option>
+          <option value="C3E3PRC1K">random</option>
+        </optgroup>
+        <optgroup label="Private channels">
+          <option value="C3DALSZ98">private_general</option>
+          <option value="C3E3PRC2K">private_random</option>
+        </optgroup>
+      </select>
+      <input type="hidden" id="is_private">
+      <input type="checkbox" id="eula_acceptance">
+      <input type="submit" id="slack-test-form-submit">
+    </form>
+  </div>
+</div>
+
+<script src="test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+<script src="test_assets/qunit-phantom.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+  QUnit.module("Sidebar tests");
+
+  QUnit.test("toggleSectionDisplay() should toggle hide class on the target", function(assert) {
+    var section = $j('#slack-test-section');
+    Slack.toggleSectionDisplay('#slack-test-section');
+
+    assert.ok(section.hasClass('hide'));
+
+    Slack.toggleSectionDisplay('#slack-test-section');
+
+    assert.notOk(section.hasClass('hide'));
+  });
+
+  QUnit.test("toggleSubmit() should toggle the submit button enabled for add to slack context", function(assert) {
+    var checkbox = $j('#eula_acceptance');
+    var submitButton = $j('#slack-test-form-submit');
+
+    checkbox.prop('checked', true);
+    Slack.toggleSubmit("#slack_channel_form",'add_to_slack', true);
+    assert.notOk(submitButton.prop('disabled'));
+
+    checkbox.prop('checked', false);
+    Slack.toggleSubmit("#slack_channel_form",'add_to_slack', true);
+    assert.ok(submitButton.prop('disabled'));
+  });
+
+  QUnit.test("toggleSubmit() should toggle the submit button enable when channel is selected for map_channels context", function(assert) {
+    var checkbox = $j('#eula_acceptance');
+    var submitButton = $j('#slack-test-form-submit');
+    var select = $j('#selected_slack_channel_id');
+
+    checkbox.prop('checked', true);
+    Slack.toggleSubmit("#slack_channel_form",'map_channels', true);
+    assert.ok(submitButton.prop('disabled'));
+
+    select.find('option[value="C3DALSZ97"]').prop('selected', true);
+    Slack.toggleSubmit("#slack_channel_form",'map_channels', true);
+    assert.notOk(submitButton.prop('disabled'));
+
+    checkbox.prop('checked', false);
+    Slack.toggleSubmit("#slack_channel_form",'map_channels', true);
+    assert.ok(submitButton.prop('disabled'));
+  });
+
+  QUnit.test("resetMapChannelForm() should disable submit", function(assert) {
+    var submitButton = $j('#slack-test-form-submit');
+    var select = $j('#selected_slack_channel_id');
+    var isPrivate = $j('#is_private');
+
+    Slack.channelUpdateHandler("#slack_channel_form",'map_channels');
+    assert.ok(submitButton.prop('disabled'));
+
+    var checkbox = $j('#eula_acceptance');
+    checkbox.prop("checked", true);
+    select.find('option[value="C3DALSZ97"]').prop('selected', true);
+    Slack.channelUpdateHandler("#slack_channel_form",'map_channels');
+    assert.equal("false", isPrivate.val());
+    assert.notOk(submitButton.prop('disabled'));
+
+    Slack.resetMapChannelForm();
+    assert.equal("false",isPrivate.val());
+    assert.ok(select.find('option[value=""]').prop('selected'));
+    assert.ok(submitButton.prop('disabled'));
+  });
+
+  QUnit.done(function(result){console.log(result);});
+
+</script>
+</body>
+</html>

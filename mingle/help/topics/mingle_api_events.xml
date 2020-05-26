@@ -1,0 +1,978 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Events API">
+  <section title="Introduction">
+    <p>The event API was introduced in Mingle 3.3 and provides programmatic access to Mingle historical data. This API is readonly.</p>
+    <p>It has always been possible to <cref topic="subscribing_via_feeds">subscribe to history</cref> in Mingle. However, those subscriptions are oriented toward human readability - generally in a feed reader. In comparison, the event API is oriented toward programmatic access. This programmatic orientation provides many benefits and possibilities for clients to integrate with and consume Mingle data. Potential usages of this API include:
+      <bullets>
+        <item>Aggregated feeds between Mingle projects or even other products</item>
+        <item>Custom filtered Mingle feeds</item>
+        <item>Activity monitoring</item>
+        <item>Integrating Mingle with other products</item>
+        <item>Custom metrics analysis, such as cycle-time analysis and scope change analysis</item>
+      </bullets>
+    </p>
+  </section>
+  
+  <section title = "Structure of the event API">
+    <p>The event API is an <exref url="http://tools.ietf.org/html/rfc4287">atom feed</exref>. As an atom feed, the event API is comprised of a <strong>feed</strong> root element with the feed attributes described below.</p>
+    
+    <subsection title="Feed">
+      <api_attributes title="feed resource xml - attributes">
+        <api_attribute name="title" type="String">The title of this feed.</api_attribute>
+        <api_attribute name="id" type="String">The URL for this feed.</api_attribute>
+        <api_attribute name="link" type="XML Element">There are several links associated with the feed. These provide information about the feed, in particular it provides information which allows you to <cref topic="mingle_api_events#feed_navigation">navigate through the feed</cref>.</api_attribute>
+        <api_attribute name="updated" type="Datetime">The time that the last entry on this feed occurred.</api_attribute>
+        <api_attribute name="entry" type="Resource">The feed will contain one or more entry elements which describe the Mingle events in the feed. Details can be found in the <cref topic="mingle_api_events#entries_structure">Entries section</cref> on this page.</api_attribute>
+      </api_attributes>
+    </subsection>
+    
+    <note>The URLs that are contained within the events feed are based on the site URL that was entered during installation. If the URLs are incorrect, see <cref topic="advanced_mingle_configuration#site_url">advanced mingle configuration</cref> to learn how to change the site URL.</note>
+    
+    <subsection title="Entries" id="entries_structure">
+      <p>Entries are the core of the the API. Each entry represents one or more Mingle events. Entries are broadly one of the following: <cref topic="mingle_api_events#card_events">card</cref>, <cref topic="mingle_api_events#page_events">page</cref>, <cref topic="mingle_api_events#revision_events">revision</cref>, or <cref topic="mingle_api_events#feed_correction_events">feed corrections</cref> . Although each type of event differ, all events have some common elements.</p>
+      <api_attributes title="entry resource xml - attributes">
+        <api_attribute name="id" type="String">Identifier of this entry.</api_attribute>
+        <api_attribute name="title" type="String">Friendly title for entry.</api_attribute>
+        <api_attribute name="updated" type="Datetime">The time that the last entry on this feed occurred.</api_attribute>
+        <api_attribute name="author" type="Resource">The user who caused this event. Revision events may only contain a name element, if the person who checked in is not associated with a Mingle user. If a Mingle user is known, the following elements may be present: name, email, uri, and mingle:icon.</api_attribute>
+        <api_attribute name="link" type="XML Element">Links associated with the entry. The link contains several attributes about the resource: href (link to resource), rel (definition of the resource), type (type of the resource, e.g., "text/html"), and title.</api_attribute>
+        <api_attribute name="category" type="XML Element">Categories associated with the entry. The category contains term and scheme attributes. Term identifies the types of changes that occurred in this entry, e.g., "property-change". There will be one category for each entry with a term of card, page, revision, or feed-correction. This defines the source of the entry.</api_attribute>
+        <api_attribute name="content" type="XML Element">Details about the changes that occurred in this entry. Also includes a timestamp indicating the date and time the event occurred. E.g., what property changed along with the old and new values. Content will contain a changes XML element which contains individual change elements.</api_attribute>
+      </api_attributes>
+    </subsection>
+    
+    <subsection title="Card events" id="card_events" collapsed="true">
+      <p>Card events are entries which have a category with a term value of "card"; other categories may also be present. Card events can have the following types of changes.</p>
+		<note>Mingle 13.1 introduced two new card event types: <strong>"copied to"</strong> and <strong>"copied from"</strong>. For these events, you will see the URL of the card that was copied in the source project as well as the URL of the new card in the destination project, which was copied from the source project. Read more about <cref topic="copying_a_card">copying a card</cref>.</note>
+      <table>
+        <header-row>
+          <col-header>Event</col-header>
+          <col-header>Category</col-header>
+          <col-header>Example</col-header>
+        </header-row>
+        <row>
+          <col>Create card</col>
+          <col>card-creation</col>
+          <col>
+            <code><![CDATA[
+<change type="card-creation" mingle_timestamp="2015-11-19 21:36:17.0">
+</change>
+]]>
+            </code>
+          </col>
+        </row>
+		<row>
+          <col>Copy card</col>
+          <col>card-copied-to</col>
+          <col>
+            <code><![CDATA[
+<change type="card-copied-to" mingle_timestamp="2015-11-19 21:36:17.0">
+	<source url="http://your.mingle.server:8080/api/v2/projects/one/cards/2.xml">
+	<destination url="http://your.mingle.server:8080/api/v2/projects/two/cards/3.xml"></destination>
+</change>
+]]>
+            </code>
+          </col>
+        </row>
+		<row>
+          <col>Copied card</col>
+          <col>card-copied-from</col>
+          <col>
+            <code><![CDATA[
+<change type="card-copied-from" mingle_timestamp="2015-11-19 21:36:17.0">
+	<source url="http://your.mingle.server:8080/api/v2/projects/one/cards/2.xml">
+	<destination url="http://your.mingle.server:8080/api/v2/projects/two/cards/3.xml"></destination>
+</change>
+]]>
+            </code>
+          </col>
+        </row>
+        <row>
+          <col>Delete card</col>
+          <col>card-deletion</col>
+          <col>
+            <code><![CDATA[
+<change type="card-deletion" mingle_timestamp="2015-11-19 21:36:17.0">
+</change>
+]]>
+            </code>
+          </col>
+        </row>
+        <row>
+          <col>Change name</col>
+          <col>name-change</col>
+          <col>
+            <code><![CDATA[
+<change type="name-change" mingle_timestamp="2015-11-19 21:36:17.0">
+  <old_value>Old name</old_value>
+  <new_value>New name</new_value>
+</change>
+]]>
+            </code>
+          </col>
+        </row>
+        <row>
+          <col>Change description</col>
+          <col>description-change</col>
+          <col>
+            <code><![CDATA[
+<change type="description-change" mingle_timestamp="2015-11-19 21:36:17.0">
+</change>
+]]>
+            </code>
+          </col>
+        </row>
+        <row>
+          <col>Change property</col>
+          <col>property-change</col>
+          <col>
+            <code><![CDATA[
+<change type="property-change" mingle_timestamp="2015-11-19 21:36:17.0">
+  <property_definition 
+    url="http://your_mingle_server.com/api/v2/projects/your_project/property_definitions/10418.xml">
+    <name>Priority</name>
+    <position nil="true"></position>
+    <data_type>string</data_type>
+    <is_numeric type="boolean">false</is_numeric>
+  </property_definition>
+  <old_value nil="true"></old_value>
+  <new_value>must</new_value>
+</change>
+]]>
+            </code>
+          </col>
+        </row>
+        <row>
+          <col>Change card type</col>
+          <col>card-type-change</col>
+          <col>
+            <code><![CDATA[
+<change type="card-type-change" mingle_timestamp="2015-11-19 21:36:17.0">
+  <old_value>
+    <card_type url="http://your_mingle_server.com/api/v2/projects/your_project/card_types/123.xml">
+      <name>Story</name>
+    </card_type>
+  </old_value>
+  <new_value>
+    <card_type url="http://your_mingle_server.com/api/v2/projects/your_project/card_types/432.xml">
+      <name>Iteration</name>
+    </card_type>
+  </new_value>
+</change>
+]]>
+            </code>
+          </col>
+        </row>
+        <row>
+          <col>Add tag to card</col>
+          <col>tag-addition</col>
+          <col>
+            <code><![CDATA[
+<change type="tag-addition" mingle_timestamp="2015-11-19 21:36:17.0">
+  <tag>Client X</tag>
+</change>
+]]>
+            </code>
+          </col>
+        </row>
+        <row>
+          <col>Remove tag from card</col>
+          <col>tag-removal</col>
+          <col>
+            <code><![CDATA[
+<change type="tag-removal" mingle_timestamp="2015-11-19 21:36:17.0">
+  <tag>Needs review</tag>
+</change>
+]]>
+            </code>
+          </col>
+        </row>
+        <row>
+          <col>Add attachment to card</col>
+          <col>attachment-addition</col>
+          <col>
+            <code><![CDATA[
+<change type="attachment-addition" mingle_timestamp="2015-11-19 21:36:17.0">
+  <attachment>
+    <url>/attachments/b4a16f3dcbebe1cc631f8c5a08f78394/811/notes.txt</url>
+    <file_name>notes.txt</file_name>
+  </attachment>
+</change>
+]]>
+            </code>
+          </col>
+        </row>
+        <row>
+          <col>Remove attachment from card</col>
+          <col>attachment-removal</col>
+          <col>
+            <code><![CDATA[
+<change type="attachment-removal" mingle_timestamp="2015-11-19 21:36:17.0">
+  <attachment>
+    <url>/attachments/b4a16f3dcbebe1cc631f8c5a08f78394/811/notes.txt</url>
+    <file_name>notes.txt</file_name>
+  </attachment>
+</change>
+]]>
+            </code>
+          </col>
+        </row>
+        <row>
+          <col>Replace attachment on card</col>
+          <col>attachment-replacement</col>
+          <col>
+            <code><![CDATA[
+<change type="attachment-replacement" mingle_timestamp="2015-11-19 21:36:17.0">
+  <attachment>
+    <url>/attachments/b4a16f3dcbebe1cc631f8c5a08f78394/811/notes.txt</url>
+    <file_name>notes.txt</file_name>
+  </attachment>
+</change>
+]]>
+            </code>
+          </col>
+        </row>
+        <row>
+          <col>Card murmur</col>
+          <col>murmur-addition</col>
+          <col>
+            <code><![CDATA[
+<change type="murmur-addition" mingle_timestamp="2015-11-19 21:36:17.0">
+  <murmur>Attached discussion from sales engineers.</murmur>
+</change>
+]]>
+            </code>
+          </col>
+        </row>
+        <row>
+          <col>System-generated murmur added to card.</col>
+          <col>system-murmur-addition</col>
+          <col>
+            <code><![CDATA[
+<change type="system-murmur-addition" mingle_timestamp="2015-11-19 21:36:17.0">
+  <murmur> next release changed from release + 1 to release + 8 </murmur>
+</change>
+]]>
+            </code>
+          </col>
+        </row>
+      </table>
+      <note>When a card is deleted, an entry is created for the event. All of the events for the card should remain.</note>
+      <note><strong>What is a system-generated murmur?</strong> Occasionally, Mingle will add murmurs to a card based on system changes. For example, if the formula of a formula property has changed, Mingle will murmur on all cards with that property about why the property value has changed.</note>
+    </subsection>
+    
+    <subsection title="Page events" id="page_events" collapsed="true">
+      <p>Page events are entries which have a category with a term value of "page"; other categories may also be present. Page events can have the following types of changes.</p>
+      <table>
+        <header-row>
+          <col-header>Event</col-header>
+          <col-header>Category</col-header>
+          <col-header>Example</col-header>
+        </header-row>
+        <row>
+          <col>Create page</col>
+          <col>page-creation</col>
+          <col>
+            <code><![CDATA[
+<change type="page-creation" mingle_timestamp="2015-11-19 21:36:17.0"/>
+]]>
+            </code>
+          </col>
+        </row>
+        <row>
+          <col>Change name</col>
+          <col>name-change</col>
+          <col>
+            <code><![CDATA[
+<change type="name-change" mingle_timestamp="2015-11-19 21:36:17.0">
+  <old_value nil="true"></old_value>
+  <new_value>New name</new_value>
+</change>
+]]>
+            </code>
+          </col>
+        </row>
+        <row>
+          <col>Wiki content changed</col>
+          <col>description-change</col>
+          <col>
+            <code><![CDATA[
+<change type="description-change" mingle_timestamp="2015-11-19 21:36:17.0">
+</change>
+]]>
+            </code>
+          </col>
+        </row>
+        <row>
+          <col>Add tag to page</col>
+          <col>tag-addition</col>
+          <col>
+            <code><![CDATA[
+<change type="tag-addition" mingle_timestamp="2015-11-19 21:36:17.0">
+  <tag>Client X</tag>
+</change>
+]]>
+            </code>
+          </col>
+        </row>
+        <row>
+          <col>Remove tag from page</col>
+          <col>tag-removal</col>
+          <col>
+            <code><![CDATA[
+<change type="tag-removal" mingle_timestamp="2015-11-19 21:36:17.0">
+  <tag>Needs review</tag>
+</change>
+]]>
+            </code>
+          </col>
+        </row>
+        <row>
+          <col>Add attachment to page</col>
+          <col>attachment-addition</col>
+          <col>
+            <code><![CDATA[
+<change type="attachment-addition" mingle_timestamp="2015-11-19 21:36:17.0">
+  <attachment>
+    <url>/attachments/b4a16f3dcbebe1cc631f8c5a08f78394/811/notes.txt</url>
+    <file_name>notes.txt</file_name>
+  </attachment>
+</change>
+]]>
+            </code>
+          </col>
+        </row>
+        <row>
+          <col>Remove attachment from page</col>
+          <col>attachment-removal</col>
+          <col>
+            <code><![CDATA[
+<change type="attachment-removal" mingle_timestamp="2015-11-19 21:36:17.0">
+  <attachment>
+    <url>/attachments/b4a16f3dcbebe1cc631f8c5a08f78394/811/notes.txt</url>
+    <file_name>notes.txt</file_name>
+  </attachment>
+</change>
+]]>
+            </code>
+          </col>
+        </row>
+        <row>
+          <col>Replace attachment on page</col>
+          <col>attachment-replacement</col>
+          <col>
+            <code><![CDATA[
+<change type="attachment-replacement" mingle_timestamp="2015-11-19 21:36:17.0">
+  <attachment>
+    <url>/attachments/b4a16f3dcbebe1cc631f8c5a08f78394/811/notes.txt</url>
+    <file_name>notes.txt</file_name>
+  </attachment>
+</change>
+]]>
+            </code>
+          </col>
+        </row>
+      </table>
+      <warning>When a page is deleted, all of the entries for that page are removed.</warning>
+    </subsection>
+    
+	<subsection title="Plan objective events" id="plan_objective_events" collapsed="true">
+	      <p>Plan objective events are entries that have a category with a term value of “objective”; other categories may also be present. Objective events can have the change types below. See related documentation on our <cref topic="mingle_api_objective">objective API</cref> and how to <cref topic="mingle_api_events#get_list_objective_events">get a list of objective-related events from your plan</cref>.</p>
+			<note>Please note that:
+				<p></p>
+				<bullets>
+					<item>The plan objective events feed pertains to <cref topic="mingle_plus">Mingle Plus</cref> users only.</item>
+					<item>Plan objective events relate to planned objectives only, that is objectives on your <cref topic="plan">plan</cref> timeline. They do not include events related to unplanned objectives, that is objectives in your program <cref topic="backlog">backlog</cref>.</item>
+					<item>Currently, this plan objectives event API does not track:</item>
+						<bullets>
+							<item>Objective status or alerts</item>
+							<item>Work-related events (e.g. when work is added or removed from an objective or when a work item’s status has changed)</item>
+						</bullets>			
+				</bullets>	
+			</note>				
+	      <table>
+	        <header-row>
+	          <col-header>Event</col-header>
+	          <col-header>Category</col-header>
+	          <col-header>Example</col-header>
+	        </header-row>
+	        <row>
+	          <col>Create objective on plan timeline</col>
+	          <col>objective-planned</col>
+	          <col>
+	            <code><![CDATA[
+	<change type="objective-planned" mingle_timestamp="2015-11-19 21:36:17.0">
+	</change>
+	]]>
+	            </code>
+	          </col>
+	        </row>
+	        <row>
+	          <col>Plan objective from backlog onto plan timeline</col>
+	          <col>objective-planned</col>
+	          <col>
+	            <code><![CDATA[
+	<change type="objective-planned" mingle_timestamp="2015-11-19 21:36:17.0">
+	</change>
+	]]>
+	            </code>
+	          </col>
+	        </row>
+			<row>
+	          <col>Change objective name</col>
+	          <col>objective-updated</col>
+	          <col>
+	            <code><![CDATA[
+	<change type="objective-updated" mingle_timestamp="2015-11-19 21:36:17.0">
+		<old_value>old name</old_value>
+		<new_value>new name</new_value>
+	</change>
+	]]>
+	            </code>
+	          </col>
+	        </row>
+			<row>
+			  <col>Change objective start date</col>
+	          <col>objective-updated</col>
+	          <col>
+	            <code><![CDATA[
+	<change type="objective-updated" mingle_timestamp="2015-11-19 21:36:17.0">
+		<old_value>old start date</old_value>
+		<new_value>new start date</new_value>
+	</change>
+	]]>
+	            </code>
+	          </col>
+	        </row>
+			<row>
+			  <col>Change objective end date</col>
+	          <col>objective-updated</col>
+	          <col>
+	            <code><![CDATA[
+	<change type="objective-updated" mingle_timestamp="2015-11-19 21:36:17.0">
+		<old_value>old end date</old_value>
+		<new_value>new end date</new_value>
+	</change>
+	]]>
+	            </code>
+	          </col>
+	        </row>
+			<row>
+	          <col>Delete objective from plan timeline</col>
+	          <col>objective-removed</col>
+	          <col>
+	            <code><![CDATA[
+	<change type="objective-removed" mingle_timestamp="2015-11-19 21:36:17.0">
+	</change>
+	]]>
+	            </code>
+	          </col>
+	        </row>
+			<row>
+	          <col>Remove objective from plan timeline to backlog</col>
+	          <col>objective-removed</col>
+	          <col>
+	            <code><![CDATA[
+	<change type="objective-removed" mingle_timestamp="2015-11-19 21:36:17.0">
+	</change>	
+	]]>
+	            </code>
+	          </col>
+	        </row>
+		</table>
+	</subsection>
+
+
+    <subsection title="Revision events" id="revision_events" collapsed="true">
+      <p>Revision events are entries which have a category with a term value of "revision"; other categories may also be present. Revision events have the following type of change.</p>
+      <table>
+        <header-row>
+          <col-header>Event</col-header>
+          <col-header>Category</col-header>
+          <col-header>Example</col-header>
+        </header-row>
+        <row>
+          <col>Revision committed</col>
+          <col>revision-commit</col>
+          <col>
+            <code><![CDATA[
+<change type="revision-commit" mingle_timestamp="2015-11-19 21:36:17.0">
+  <changeset>
+    <user>timmy</user>
+    <check_in_time type="datetime">2011-01-20T01:17:16Z</check_in_time>
+    <revision>176254d9317ded4d6a5f5089db1132246f41b9e2</revision>
+    <message>#119 (Contact API): done.</message>
+  </changeset>
+</change>
+]]>
+            </code>
+          </col>
+        </row>
+      </table>
+    </subsection>
+    
+    <subsection title="Feed correction events" id="feed_correction_events" collapsed="true">
+      <p>Feed correction events are entries which have a category with a term value of "feed-correction"; other categories may also be present. Feed correction events generally represent changes to the structure of your project which affect previous feed entries. For example, previous entries could have shown that cards were tagged with "developer review". If the "developer review" tag is renamed to "need developer help" then the previous entries will change to show that those cards are tagged with "need developer help." Depending on how you are using this API, you may or may not be interested in feed corrections. Feed correction events can have the following types of changes.</p>
+      <table>
+        <header-row>
+          <col-header>Event</col-header>
+          <col-header>Category</col-header>
+          <col-header>Example</col-header>
+        </header-row>
+        <row>
+          <col>Rename managed property value</col>
+          <col>property-change</col>
+          <col>
+            <code><![CDATA[
+<change type="managed-property-value-change" mingle_timestamp="2015-11-19 21:36:17.0">
+  <property_definition url="http://your_mingle_server.com/api/v2/projects/your_mingle_project/property_definitions/140.xml"/>
+  <old_value>Low</old_value>
+  <new_value>Lowest</new_value>
+</change>
+]]>
+            </code>
+          </col>
+        </row>
+        <row>
+          <col>Rename property</col>
+          <col>property-change</col>
+          <col>
+            <code><![CDATA[
+<change type="property-rename" mingle_timestamp="2015-11-19 21:36:17.0">
+  <property_definition url="http://your_mingle_project.com/api/v2/projects/your_mingle_project/property_definitions/140.xml"/>
+  <old_value>Status</old_value>
+  <new_value>Story Status</new_value>
+</change>
+]]>
+            </code>
+          </col>
+        </row>
+        <row>
+          <col>Delete property</col>
+          <col>property-deletion</col>
+          <col>
+            <code><![CDATA[
+<change type="property-deletion" mingle_timestamp="2015-11-19 21:36:17.0">
+  <property_definition url="http://your_mingle_server.com/api/v2/projects/your_mingle_project/property_definitions/169.xml"/>
+</change>
+]]>
+            </code>
+          </col>
+        </row>
+        <row>
+          <col>Card type and property disassociated</col>
+          <col>card-type-change and property-change</col>
+          <col>
+            <code><![CDATA[
+<change type="card-type-and-property-disassociation" mingle_timestamp="2015-11-19 21:36:17.0">
+  <card_type url="http://your_mingle_server.com/api/v2/projects/your_mingle_project/card_types/25.xml"/>
+  <property_definition url="http://your_mingle_server.com/api/v2/projects/your_mingle_project/property_definitions/133.xml"/>
+</change>
+]]>
+            </code>
+          </col>
+        </row>
+        <row>
+          <col>Rename card type</col>
+          <col>card-type-change</col>
+          <col>
+            <code><![CDATA[
+<change type="card-type-rename" mingle_timestamp="2015-11-19 21:36:17.0">
+  <card_type url="http://your_mingle_server.com/api/v2/projects/your_mingle_project/card_types/27.xml"/>
+  <old_value>Card</old_value>
+  <new_value>Story</new_value>
+</change>
+]]>
+            </code>
+          </col>
+        </row>
+        <row>
+          <col>Delete card type</col>
+          <col>card-type-deletion</col>
+          <col>
+            <code><![CDATA[
+<change type="card-type-deletion" mingle_timestamp="2015-11-19 21:36:17.0">
+  <card_type url="http://your_mingle_server.com/api/v2/projects/your_mingle_project/card_types/31.xml"/>
+</change>
+]]>
+            </code>
+          </col>
+        </row>
+        <row>
+          <col>Rename tag</col>
+          <col>tag-change</col>
+          <col>
+            <code><![CDATA[
+<change type="tag-rename" mingle_timestamp="2015-11-19 21:36:17.0">
+  <old_value>dev</old_value>
+  <new_value>developer</new_value>
+</change>
+]]>
+            </code>
+          </col>
+        </row>
+        <row>
+          <col>Change repository configuration</col>
+          <col>repository-settings-change</col>
+          <col>
+            <code><![CDATA[
+<change type="repository-settings-change" mingle_timestamp="2015-11-19 21:36:17.0">
+</change>
+]]>
+            </code>
+          </col>
+        </row>
+        <row>
+          <col>Delete repository configuration</col>
+          <col>repository-settings-change</col>
+          <col>
+            <code><![CDATA[
+<change type="repository-settings-change" mingle_timestamp="2015-11-19 21:36:17.0">
+</change>
+]]>
+            </code>
+          </col>
+        </row>
+        <row>
+          <col>Clear revision cache</col>
+          <col>repository-settings-change</col>
+          <col>
+            <code><![CDATA[
+<change type="repository-settings-change" mingle_timestamp="2015-11-19 21:36:17.0">
+</change>
+]]>
+            </code>
+          </col>
+        </row>
+        <row>
+          <col>Change project numeric precision</col>
+          <col>project-change</col>
+          <col>
+            <code><![CDATA[
+<change type="numeric-precision-change" mingle_timestamp="2015-11-19 21:36:17.0">
+  <project url="http://your_mingle_server.com/api/v2/projects/your_mingle_project.xml"/>
+  <old_value>2</old_value>
+  <new_value>1</new_value>
+</change>
+]]>
+            </code>
+          </col>
+        </row>
+        <row>
+          <col>Modify project card keywords</col>
+          <col>project-change</col>
+          <col>
+            <code><![CDATA[
+<change type="card-keywords-change" mingle_timestamp="2015-11-19 21:36:17.0">
+  <project url="http://your_mingle_server.com/api/v2/projects/your_mingle_project.xml"/>
+  <old_value>card, #</old_value>
+  <new_value>card, #, story, bug</new_value>
+</change>
+]]>
+            </code>
+          </col>
+        </row>
+      </table>
+    </subsection>
+  </section>
+
+  <section title="Feed navigation" id="feed_navigation" collapsed="true">
+    <p>There are four potential links on an event feed: current, self, next, and previous. The type of link is identified by its "rel" attribute.</p>
+    <bullets>
+      <item><strong>current</strong> represents the URL of the most recent events in this feed. The current link is always available and the link URL will not change.</item>
+      <item><strong>self</strong> represents the URL of the page for the has been requested. The self link is always available.</item>
+      <item><strong>next</strong> is a link to the next <strong>older</strong> set of events. The next link is available unless the current set of events are the oldest events in the project.</item>
+      <item><strong>previous</strong> is a link to the next <strong>newer</strong> set of events. The previous link is available unless the current set of events are the newest events in the project.</item>
+    </bullets>
+    <p>Suppose your project has three pages of events.</p>
+    <screenshot alttext="Atom feed pages" src="resources/images/atom_pages.png" />
+    <note>The page numbers are not guaranteed to be in any particular order. In this example, page 1 contains the oldest events. However, page 1 is not guaranteed to contain the oldest events. Please do not assume that feed pages follow any particular order. Instead you should rely on the feed links to navigate the feed.</note>
+    <p>If you do not specify any particular page, you will get the most recent events in the project - represented here by page 3. On page 3, you will have the following links:</p>
+    <code>
+  <![CDATA[
+<link href="http://your_mingle_server.com/api/v2/projects/your_project/feeds/events.xml" rel="current"/>
+<link href="http://your_mingle_server.com/api/v2/projects/your_project/feeds/events.xml" rel="self"/>
+<link href="http://your_mingle_server.com/api/v2/projects/your_project/feeds/events.xml?page=2" rel="next"/>
+]]>
+    </code>
+    <p>On page 2, you will have the following links:</p>
+    <code>
+  <![CDATA[
+<link href="http://your_mingle_server.com/api/v2/projects/your_project/feeds/events.xml" rel="current"/>
+<link href="http://your_mingle_server.com/api/v2/projects/your_project/feeds/events.xml?page=2" rel="self"/>
+<link href="http://your_mingle_server.com/api/v2/projects/your_project/feeds/events.xml?page=1" rel="next"/>
+<link href="http://your_mingle_server.com/api/v2/projects/your_project/feeds/events.xml?page=3" rel="previous"/>
+]]>
+    </code>
+    <p>Lastly, on page 1, you will have the following links:</p>
+    <code>
+  <![CDATA[
+<link href="https://your_mingle_server.com/api/v2/projects/your_project/feeds/events.xml" rel="current"/>
+<link href="https://your_mingle_server.com/api/v2/projects/your_project/feeds/events.xml?page=1" rel="self"/>
+<link href="https://your_mingle_server.com/api/v2/projects/your_project/feeds/events.xml?page=2" rel="previous"/>
+]]>
+    </code>
+    <note>
+      <p>Using <strong>next</strong> to go to <strong>older</strong> history and <strong>previous</strong> to go to <strong>newer</strong> history can be confusing at first. Shouldn't next be used to go to newer events (the next things that happened) and previous to go to older events (the previous things that happened)? Keep in mind, that these links are based on the atom standard which was created largely with blog entries in mind. Think of next/previous in terms of navigating the feed, not in terms of the next/previous things that have happened.</p>
+      <p>You always start at the most recent set of events.</p>
+      <screenshot alttext="Atom feed navigation - start" src="resources/images/atom_page_start.png" />
+      <p>Then you follow the next link to see the next oldest set of events.</p>
+      <screenshot alttext="Atom feed navigation - next" src="resources/images/atom_page_next.png" />
+      <p>If you decide you need to go back to more recent events, you use the previous link to look at newer events. These are "previous", because you have seen these pages previously when you navigated the feed with the next link.</p>
+      <screenshot alttext="Atom feed navigation - previous" src="resources/images/atom_page_previous.png" />
+    </note>
+  </section>
+  
+  <section title = "Get a list of events from your project">
+    <p>You can list the events that happened in your project.</p>
+    <p><strong>Reference</strong></p>
+    <code>
+Request Method: GET
+
+URL: /api/v2/projects/project_identifier/feeds/events.xml
+
+Parameters: NA
+    </code>
+
+    <p><strong>Example</strong></p>
+    <code>
+GET
+
+http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/feeds/events.xml
+    </code>
+    <p><strong>Explanation</strong></p>
+    <p>The above is an example of a GET to retrieve the most recent events in a project with identifier "test_project". The request is made with the authorization credentials of yourname/password.</p>
+
+    <p><strong>Result</strong></p>
+    <p>If you were authorized to perform the operation, and the resource was available, you should get an xml document that looks something like the following.</p>
+    <code>
+<![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:mingle="http://www.thoughtworks-studios.com/ns/mingle">
+  <title>Mingle Events: agile</title>
+  <id>http://your.mingle.server:8080/api/v2/projects/test_project/feeds/events.xml</id>
+  <link href="http://your.mingle.server:8080/api/v2/projects/test_project/feeds/events.xml" rel="current"/>
+  <link href="http://your.mingle.server:8080/api/v2/projects/test_project/feeds/events.xml?page=5" rel="self"/>
+  <link href="http://your.mingle.server:8080/api/v2/projects/test_project/feeds/events.xml?page=4" rel="next"/>
+  <updated>2011-01-20T01:23:05Z</updated>
+  <entry>
+    <id>http://your.mingle.server:8080/projects/test_project/events/index/443</id>
+    <title>Story #120 Delete email created</title>
+    <updated>2011-01-20T01:23:05Z</updated>
+    <author>
+      <name>bob</name>
+      <email>bob@your_mingle_server.com</email>
+      <uri>http://your.mingle.server:8080/api/v2/users/1.xml</uri>
+    </author>
+    <link href="http://your.mingle.server:8080/api/v2/projects/test_project/cards/120.xml"
+          rel="http://www.thoughtworks-studios.com/ns/mingle#event-source" type="application/vnd.mingle+xml" title="Story #120"/>
+    <link href="http://your.mingle.server:8080/projects/test_project/cards/120"
+          rel="http://www.thoughtworks-studios.com/ns/mingle#event-source" type="text/html" title="Story #120"/>
+    <link href="http://your.mingle.server:8080/api/v2/projects/test_project/cards/120.xml?version=1"
+          rel="http://www.thoughtworks-studios.com/ns/mingle#version" type="application/vnd.mingle+xml" title="Story #120 (v1)"/>
+    <link href="http://your.mingle.server:8080/projects/test_project/cards/120?version=1"
+          rel="http://www.thoughtworks-studios.com/ns/mingle#version" type="text/html" title="Story #120 (v1)"/>
+    <category term="card" scheme="http://www.thoughtworks-studios.com/ns/mingle#categories"/>
+    <category term="card-creation" scheme="http://www.thoughtworks-studios.com/ns/mingle#categories"/>
+    <category term="card-type-change" scheme="http://www.thoughtworks-studios.com/ns/mingle#categories"/>
+    <category term="description-change" scheme="http://www.thoughtworks-studios.com/ns/mingle#categories"/>
+    <category term="name-change" scheme="http://www.thoughtworks-studios.com/ns/mingle#categories"/>
+    <category term="property-change" scheme="http://www.thoughtworks-studios.com/ns/mingle#categories"/>
+    <content type="application/vnd.mingle+xml">
+      <changes xmlns="http://www.thoughtworks-studios.com/ns/mingle">
+        <change type="card-creation"/>
+        <change type="card-type-change">
+          <old_value nil="true"></old_value>
+          <new_value>
+            <card_type url="http://your.mingle.server:8080/api/v2/projects/test_project/card_types/24.xml">
+              <name>Story</name>
+            </card_type>
+          </new_value>
+        </change>
+        <change type="description-change" mingle_timestamp="2015-11-19 21:36:17.0">
+        </change>
+        <change type="name-change" mingle_timestamp="2015-11-19 21:36:17.0">
+          <old_value nil="true"></old_value>
+          <new_value>Delete email</new_value>
+        </change>
+        <change type="property-change" mingle_timestamp="2015-11-19 21:36:17.0">
+          <property_definition url="http://your.mingle.server:8080/api/v2/projects/test_project/property_definitions/154.xml">
+            <name>Added to Scope in Iteration</name>
+            <position nil="true"></position>
+            <data_type>card</data_type>
+            <is_numeric type="boolean">false</is_numeric>
+          </property_definition>
+          <old_value nil="true"></old_value>
+          <new_value>
+            <card url="http://your.mingle.server:8080/api/v2/projects/test_project/cards/37.xml">
+              <number type="integer">37</number>
+            </card>
+          </new_value>
+        </change>
+        <change type="property-change" mingle_timestamp="2015-11-19 21:36:17.0">
+          <property_definition url="http://your.mingle.server:8080/api/v2/projects/test_project/property_definitions/114.xml">
+            <name>Story Status</name>
+            <position nil="true"></position>
+            <data_type>string</data_type>
+            <is_numeric type="boolean">false</is_numeric>
+          </property_definition>
+          <old_value nil="true"></old_value>
+          <new_value>New</new_value>
+        </change>
+      </changes>
+    </content>
+  </entry>
+  ...
+  <entry>
+    <id>http://your.mingle.server:8080/projects/test_project/events/index/432</id>
+    <title>Story #113 Add calendar event via email deleted</title>
+    <updated>2011-01-20T12:32:49Z</updated>
+    <author>
+      <name>sally</name>
+      <email>sally@your_mingle_server.com</email>
+      <uri>http://your.mingle.server:8080/api/v2/users/2.xml</uri>
+    </author>
+    <link href="http://your.mingle.server:8080/api/v2/projects/test_project/cards/113.xml"
+          rel="http://www.thoughtworks-studios.com/ns/mingle#event-source" type="application/vnd.mingle+xml" title="Defect #113"/>
+    <link href="http://your.mingle.server:8080/projects/test_project/cards/113"
+          rel="http://www.thoughtworks-studios.com/ns/mingle#event-source" type="text/html" title="Defect #113"/>
+    <link href="http://your.mingle.server:8080/api/v2/projects/test_project/cards/113.xml?version=4"
+          rel="http://www.thoughtworks-studios.com/ns/mingle#version" type="application/vnd.mingle+xml" title="Defect #113 (v4)"/>
+    <link href="http://your.mingle.server:8080/projects/test_project/cards/113?version=4"
+          rel="http://www.thoughtworks-studios.com/ns/mingle#version" type="text/html" title="Defect #113 (v4)"/>
+    <category term="card" scheme="http://www.thoughtworks-studios.com/ns/mingle#categories"/>
+    <category term="card-deletion" scheme="http://www.thoughtworks-studios.com/ns/mingle#categories"/>
+    <content type="application/vnd.mingle+xml">
+      <changes xmlns="http://www.thoughtworks-studios.com/ns/mingle">
+        <change type="card-deletion">
+        </change>
+      </changes>
+    </content>
+  </entry>
+</feed>
+]]>
+    </code>
+  </section>
+<section title = "Get a list of objective-related events from your plan" id="get_list_objective_events">
+    <p>You can get list of objective-related events that happened in your plan.</p>
+    <p><strong>Reference</strong></p>
+    <code>
+Request Method: GET
+URL: /api/v2/programs/program_identifier/plan/feeds/events.xml
+Parameters: NA</code>
+
+    <p><strong>Example</strong></p>
+    <code>
+GET
+
+http://yourname:password@your.mingle.server:8080/api/v2/programs/program_identifier/plan/feeds/events.xml
+    </code>
+    <p><strong>Explanation</strong></p>
+    <p>The above is an example of a GET to retrieve the most recent events in a plan from the program with identifier "test_program". The request is made with the authorization credentials of yourname/password.</p>
+
+    <p><strong>Result</strong></p>
+    <p>If you were authorized to perform the operation, and the resource was available, you should get an xml document that looks something like the following. The URL of the objective to which the event occurred is also provided.</p>
+    <code>
+		<![CDATA[
+		<?xml version="1.0" encoding="UTF-8"?>
+		<feed xmlns="http://www.w3.org/2005/Atom" xmlns:mingle="http://www.thoughtworks-studios.com/ns/mingle">
+		  <title>Mingle Plan Events for Program: Events Api</title>
+		  <id>http://your.mingle.server:8080/api/v2/program/events_api/plan/feeds/events.xml</id>
+		  <link href="http://your.mingle.server:8080/api/v2/program/events_api/plan/feeds/events.xml" rel="current"/>
+		  <link href="http://your.mingle.server:8080/api/v2/program/events_api/plan/feeds/events.xml" rel="self"/>
+		  <updated>2013-02-12T01:30:32Z</updated>
+		  <entry>
+		    <id>http://your.mingle.server:8080/events/index/2500143</id>
+		    <title>Objective removed</title>
+		    <updated>2013-02-12T01:30:32Z</updated>
+		    <author>
+		      <name>user</name>
+		      <email>user@thoughtworks.com</email>
+		      <url>http://your.mingle.server:8080/api/v2/users/14281.xml</url>
+		    </author>
+		    <link href="http://your.mingle.server:8080/api/v2/programs/events_api/plan/objectives/first.xml" rel="http://www.thoughtworks-studios.com/ns/mingle#event-source" type="application/vnd.mingle+xml" title="Objective: first"/>
+		    <category term="objective" scheme="http://www.thoughtworks-studios.com/ns/mingle#categories"/>
+		    <category term="objective-removed" scheme="http://www.thoughtworks-studios.com/ns/mingle#categories"/>
+		    <content type="application/vnd.mingle+xml">
+		      <changes xmlns="http://www.thoughtworks-studios.com/ns/mingle">
+		        <change type="objective-removed" mingle_timestamp="2015-11-19 21:36:17.0">
+		        </change>
+		      </changes>
+		    </content>
+		  </entry>
+		  <entry>
+		    <id>http://your.mingle.server:8080/events/index/2500142</id>
+		    <title>Objective updated</title>
+		    <updated>2013-02-12T01:30:26Z</updated>
+		    <author>
+		      <name>user</name>
+		      <email>user@thoughtworks.com</email>
+		      <url>http://your.mingle.server:8080/api/v2/users/14281.xml</url>
+		    </author>
+		    <link href="http://your.mingle.server:8080/api/v2/programs/events_api/plan/objectives/second.xml" rel="http://www.thoughtworks-studios.com/ns/mingle#event-source" type="application/vnd.mingle+xml" title="Objective: second"/>
+		    <category term="objective" scheme="http://www.thoughtworks-studios.com/ns/mingle#categories"/>
+		    <category term="end_at-change" scheme="http://www.thoughtworks-studios.com/ns/mingle#categories"/>
+		    <content type="application/vnd.mingle+xml">
+		      <changes xmlns="http://www.thoughtworks-studios.com/ns/mingle">
+		        <change type="end_at-change" mingle_timestamp="2015-11-19 21:36:17.0">
+		          <old_value>2013-05-22</old_value>
+		          <new_value>2013-06-12</new_value>
+		        </change>
+		      </changes>
+		    </content>
+		  </entry>
+		  <entry>
+		    <id>http://your.mingle.server:8080/events/index/2500141</id>
+		    <title>Objective planned</title>
+		    <updated>2013-02-12T01:30:24Z</updated>
+		    <author>
+		      <name>user</name>
+		      <email>user@thoughtworks.com</email>
+		      <url>http://your.mingle.server:8080/api/v2/users/14281.xml</url>
+		    </author>
+		    <link href="http://your.mingle.server:8080/api/v2/programs/events_api/plan/objectives/third.xml" rel="http://www.thoughtworks-studios.com/ns/mingle#event-source" type="application/vnd.mingle+xml" title="Objective: third"/>
+		    <category term="objective" scheme="http://www.thoughtworks-studios.com/ns/mingle#categories"/>
+		    <category term="objective-planned" scheme="http://www.thoughtworks-studios.com/ns/mingle#categories"/>
+		    <category term="end_at-change" scheme="http://www.thoughtworks-studios.com/ns/mingle#categories"/>
+		    <category term="name-change" scheme="http://www.thoughtworks-studios.com/ns/mingle#categories"/>
+		    <category term="start_at-change" scheme="http://www.thoughtworks-studios.com/ns/mingle#categories"/>
+		    <content type="application/vnd.mingle+xml">
+		      <changes xmlns="http://www.thoughtworks-studios.com/ns/mingle">
+		        <change type="objective-planned"/>
+		        <change type="end_at-change">
+		          <old_value nil="true"></old_value>
+		          <new_value>2013-07-31</new_value>
+		        </change>
+		        <change type="name-change" mingle_timestamp="2015-11-19 21:36:17.0">
+		          <old_value nil="true"></old_value>
+		          <new_value>third</new_value>
+		        </change>
+		        <change type="start_at-change" mingle_timestamp="2015-11-19 21:36:17.0">
+		          <old_value nil="true"></old_value>
+		          <new_value>2013-07-01</new_value>
+		        </change>
+		      </changes>
+		    </content>
+		  </entry>
+		</feed>
+		]]>	
+	</code>
+</section>	
+</topic>

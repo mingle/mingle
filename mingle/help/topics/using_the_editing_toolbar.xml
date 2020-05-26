@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Using the editing toolbar">
+	<p>All common formatting tasks are available as buttons in the editing toolbar. The toolbar also allows you to create tables, graphs, links and layout in cards and pages.</p>
+	<screenshot alttext="Editing toolbar" src="resources/images/new_editing_toolbar.png" />
+	<note>To modify content in "Edit" mode, just right click with your mouse. (This becomes particularly handy for editing links, tables, charts, graphs and other macros.)</note>
+	<section title="Using the editing toolbar to create and format content" collapsed="true">
+		<p>To use the toolbar to format text, select the text to format and click on the relevant icon in the toolbar.</p>
+		<subsection title="Bold text" file="markup_bold_text" collapsed="true"/>
+		<subsection title="Italicize text" file="markup_italicize_text" collapsed="true"/>
+		<subsection title="Underline text" file="markup_underline_text" collapsed="true"/>
+		<subsection title="Strikethrough text" file="markup_strike_through_text" collapsed="true"/>
+		<subsection title="Color text" file="markup_color_text" collapsed="true"/>
+		<subsection title="Images" file="markup_inline_image" collapsed="true"/>
+		<subsection title="Tables" file="markup_create_table" collapsed="true"/>
+		<subsection title="Paragraph format" file="markup_paragraph_format" collapsed="true"/>
+		<subsection title="Layouts" file="page_card_layout" collapsed="true"/>
+		<subsection title="Create numbered list" file="markup_create_numbered_list" collapsed="true"/>
+		<subsection title="Create bulleted list" file="markup_bulleted_list" collapsed="true"/>
+		<subsection title="Right indent text" file="markup_right_indent_text" collapsed="true"/>
+		<subsection title="Left indent text (outdent)" file="markup_left_indent_text" collapsed="true"/>
+	  <subsection title="Links" file="markup_linking" collapsed="true"/>
+	  <subsection title="Keyboard Shortcuts" file="keyboard_shortcuts" collapsed="true"/>	  
+		<subsection title="Attachments" file="markup_attach_file" collapsed="true"/>
+		<subsection title="Macros" file="markup_macros" collapsed="true"/>
+		<subsection title="Source tab" file="editing_toolbar_source_tab" collapsed="true"/>
+	</section>
+	<section title="Using the editing toolbar to create charts and tables" collapsed="true">		
+		<section file="charts"/>
+		<section file="tables"/>
+	</section>
+  <section title="Also see...">
+  		<bullets>
+  			<item><cref topic="macro_and_mql_guide">Overview of Mingle reporting using macros and MQL</cref></item>
+  			<item><cref topic="macro_reference">Full reference of chart, table, and dashboard macros</cref></item>
+  			<item><cref topic="mql_reference">MQL Syntax</cref></item>
+  			<item><cref topic="mingle_tips_and_tricks">Mingle tips and tricks</cref></item>
+  			<item><cref topic="markup_other_toolbar_functions">Other editing toolbar functions</cref></item>
+  		</bullets>
+  </section>
+</topic>
+

@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Easy chart for Stacked bar">
+    <p>Stacked bar charts are useful to compare different parts of a data set to the whole. A bar is divided into categories of data, or stacks. Each bar represents a total, and is a stack of parts of the data. Check out our <cref topic="ec_stacked_bar_charts#ec_sample_stacked_bar">sample stacked bar charts.</cref></p>
+        <screenshot alttext="Example pie chart" src="resources/images/ec_stacked_bar_feature_status.png" />
+    <strong><p>CREATE A STACKED BAR CHART</p></strong>
+    <p>To create a stacked bar chart on a page or a card, follow these steps:</p>
+    <bullets>
+        <item>In the editor, click on the Pie Chart button.</item>
+        <item>In the Easy Charts form, start by selecting the data that will go into your pie chart. This is similar to the filters you use to make various views in Mingle.</item>
+         <screenshot alttext="Stacked bar chart section1" src="resources/images/ec_stackedbar_section1.gif" />
+        <p>Click on <i>Proceed to Step 2</i> when you’re done with this step.</p>
+        <item>Next, build the chart.</item>
+        <p>Specify which property of the cards determines what labels you want to see on the X-axis. In our example, each bar represents a feature.</p>
+          <screenshot alttext="Stacked bar chart section2" src="resources/images/ec_stackedbar_section2.gif" />
+        <p>You can filter the X-axis values as you need using the next few fields.</p>
+        <screenshot alttext="Stacked bar chart section3" src="resources/images/ec_stackedbar_section3.gif"></screenshot>
+        <item>The Stacked Bar chart requires that you specify atleast one series. Click on the Add a Series button to get started. Specify what you’d like to call this series. Then use the dropdowns to select the data that defines this series.</item>
+        <screenshot alttext="Stacked bar chart section4" src="resources/images/ec_stackedbar_section4.gif"></screenshot>
+       <p>You can customize how this series should look. </p>
+       <screenshot alttext="Stacked bar chart section5" src="resources/images/ec_stackedbar_section5.gif"></screenshot>
+       <p>When you’re done, you could either Add Another Series, or Proceed to Step 3.</p>
+        <item>Customize how you want the chart to look. You can select a size, the angle of the X-axis labels, and a color for the bars. Additionally, you can give the chart, the X-axis and the Y-axis titles of your choice.</item>
+        <item>Click on Insert to complete the chart and insert it into the page or card.</item>
+        <item>You can interact with the completed chart. Hovering over a bar will show you the last updated ten cards that correspond to that bar. Clicking on a bar takes you to a full list of all cards for the bar.</item>
+        <screenshot alttext="Stacked bar chart section6" src="resources/images/ec_stackedbar_section6.gif"></screenshot>
+    </bullets>
+    <strong>Notes</strong>
+    <bullets>
+        <item>You can use project variables in your chart setup. For instance, if you’d like the stacked bar chart to represent work for the current iteration at any point of time, you can do so without having to update the chart each iteration!</item>
+            <screenshot alttext="Pie chart using project variable" src="resources/images/ec_stackedbar_using_project_variable.gif" />
+        <item>If you’re inserting a stacked bar chart into a card description, you can refer to the card itself in your chart setup by selecting THIS CARD as a property value. For instance, if you want a stacked bar chart in a Release card to represent the status of all features that belong to that release, use Release is THIS CARD in the filters.</item>
+            <screenshot alttext="Pie chart using this card" src="resources/images/ec_stackedbar_using_this_card.gif" />
+    </bullets>
+    <p>
+        <strong>CUSTOMIZE USING MQL:</strong>
+    </p>
+    <p>You can build or further customize a stacked bar chart using Mingle Query Language. Here’s a sample MQL snippet:</p>
+    <markup>
+        stack-bar-chart
+    conditions: 'Release' = '2.3' AND 'Type' = 'Story' AND NOT 'Iteration' = NULL
+    labels: SELECT DISTINCT 'Iteration'
+    cumulative: true
+    project: agile
+    series:
+    - label: Closed
+      color: green
+      type: bar
+      data: SELECT 'Closed Iteration', COUNT(*) WHERE NOT 'Closed Iteration' = NULL
+      combine: overlay-bottom
+    - label: Analysis Complete
+      color: yellow
+      type: bar
+      data: SELECT 'Analysis Complete Iteration', COUNT(*) WHERE NOT 'Analysis Complete Iteration' = NULL
+      combine: overlay-bottom
+    - label: Entire Scope
+      color: blue
+      type: bar
+      data: SELECT 'Entered Scope Iteration', COUNT(*) WHERE NOT 'Entered Scope Iteration' = NULL
+      combine: total
+
+    </markup>
+    <p>Some additional customizations you can set up in MQL are:</p>
+    <bullets>
+        <item>AS OF</item>
+        <item>FROM TREE </item>
+        <item>THIS CARD.Property</item>
+        <item>Use relationship operators on non-numeric properties (where ‘Due Date’ is greater than ‘Release Date’)</item>
+        <item>Custom chart width and height</item>
+        <item>Custom colours</item>
+    </bullets>
+    <topic id="ec_sample_stacked_bar" title="Sample Stacked bar charts">
+        <p><strong>Status of features in a release:</strong></p>
+           <screenshot alttext="feature completion" src="resources/images/ec_stacked_bar_feature_status.png" />
+        <p><strong>Status of stories by iteration:</strong></p>
+            <screenshot alttext="workload" src="resources/images/ec_stackedbar_story_by_iteration.png" />
+    </topic>
+</topic>

@@ -1,0 +1,231 @@
+<!--
+/**
+ * Copyright  2006  V Narayan Raman
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+
+<html>
+<head>
+  <meta name="generator" content="HTML Tidy, see www.w3.org">
+  <title>Sahi Controller</title>
+
+  <script type="text/javascript" src="/_s_/spr/domainfix.js">
+  </script>
+
+  <script type="text/javascript" src="/_s_/spr/exception.js">
+  </script>
+
+  <script type="text/javascript" src="/_s_/spr/controller2.js">
+  </script>
+
+  <script type="text/javascript" src="/_s_/dyn/ControllerUI_scriptDirsList/scriptDirslist.js">
+  </script>
+
+  <script type="text/javascript" src="/_s_/dyn/ControllerUI_scriptsList/scriptslist.js">
+  </script>
+
+  <script type="text/javascript" src="/_s_/spr/util.js">
+  </script>
+
+  <script type="text/javascript" src="/_s_/spr/common.js">
+  </script>
+
+  <script type="text/javascript" src="/_s_/spr/cookie.js">
+  </script>
+
+  <style type="text/css">
+    .playbackPane {
+      display: block;
+      background-color: white;
+      border-left: solid white 2px;
+      border-right: solid gray 2px;
+      border-top: solid white 2px;
+      border-bottom: solid gray 2px;
+      margin: 2px;
+    }
+
+    a, body, input, td, textarea, select {
+      font-size: 8pt;
+      font-family: verdana;
+    }
+
+    .button {
+      width: 50px;
+    }
+
+    form {
+      margin-bottom: 0;
+    }
+
+    body {
+      margin: 8px;
+      background-color: lightgrey;
+    }
+
+    .comment {
+      color: darkred;
+      font-size: 10px;
+      font-weight: bolder;
+    }
+    a{
+      text-decoration:none;
+      color: blue;
+    }
+  </style>
+</head>
+<script>
+function resizeTAs(){
+	resizeTA2(document.getElementById('ta'), 40, 290, 100);
+}
+</script>
+<body onload="doOnPlaybackLoad();resizeTAs()" onbeforeunload="doOnPlaybackUnLoad()" onresize="resizeTAs()">
+<div id="playback" class="playbackPane">
+<table>
+  <tr>
+    <td>
+      <div id="setfile">
+        <form name="scriptfileform" action=
+            "/_s_/dyn/Player_setScriptFile" method=
+            "get" target="channel" onsubmit="return onScriptFormSubmit(this)">
+          <table>
+            <tr>
+              <td colspan="2">Set script from file: <a href="javascript:byFile(false)">[from url]</a></td>
+            </tr>
+
+            <tr>
+              <td>Script Directory: </td>
+              <td>
+                <select name="dir" onchange="populateScripts()" style="width:250px">
+                  <option value="../scripts">../scripts</option>
+                </select>
+              </td>
+            </tr>
+
+            <tr>
+              <td bgcolor="">File:</td>
+              <td><select name="file" style="width:250px"></select></td>
+            </tr>
+
+            <tr>
+              <td>Start URL:</td>
+              <td><input type="text" name="starturl" value="" style="width:250pt"></td>
+            </tr>
+
+            <tr>
+              <td><input type="submit" value="Set"></td>
+              <td class="comment">Click 'Set', wait till page refreshes, then
+                click 'Play'.</td>
+            </tr>
+          </table>
+          <input type="hidden" name="manual" value="1">
+        </form>
+      </div>
+    </td>
+    <td>
+      <div id="seturl" style="display:none">
+        <form name="scripturlform" action=
+            "/_s_/dyn/Player_setScriptUrl" method=
+            "get" target="channel" onsubmit="return onScriptFormSubmit(this)">
+          <table>
+            <tr>
+              <td colspan="2">Set script from url: <a href=
+                  "javascript:byFile(true)">[from file]</a></td>
+            </tr>
+
+            <tr>
+              <td bgcolor="">Script:</td>
+              <td><input type="text" name="url" size="50"></td>
+            </tr>
+
+            <tr>
+              <td>Start URL:</td>
+              <td><input type="text" name="starturl" value="" size="50"></td>
+            </tr>
+
+            <tr>
+              <td><input type="submit" value="Set"></td>
+              <td class="comment">Click 'Set', wait till page refreshes, then
+                click 'Play'.</td>
+            </tr>
+          </table>
+          <input type="hidden" name="manual" value="1">
+        </form>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<hr>
+<table width="100%">
+  <tr>
+    <td>Replay:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class=
+        "comment">Set script above, before clicking on 'Play'.</span></td>
+  </tr>
+
+  <tr>
+    <td bgcolor="">
+      <form name="playform" action=
+          "/_s_/dyn/Player_start" onsubmit="play()"
+                                   target="channel">
+        <table width="100%" border="0">
+          <tr>
+            <td width="70%">
+              <table border="0">
+                <tr>
+                  <td>Current Step:<span id="currentStep">0</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  Next Step: <input type="text" size="3" name="nextStep" value="1">
+                     <!-- [<a href="#" onclick="resetStep()">Reset</a>]
+        To: <input type="text" size="2" name="stepend" value="0">
+        -->
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                  <input class="button" type="button" value="Play" onclick="play()">
+                  <input class="button" type="button" value="Pause" onclick="pause()">
+                  <input class="button" type="button" value="Step" onclick="stepWisePlay()">
+                  <input class="button" type="button" value="Stop" onclick="stopPlay()">
+                  <input class="button" type="button" value="Reset" onclick="replay()">
+                  </td>
+                </tr>
+              </table>
+            </td>
+            <td valign="top"></td>
+          </tr>
+        </table>
+      </form>
+    </td>
+  </tr>
+</table>
+
+<hr>
+<table>
+  <tr>
+    <td bgcolor="">
+      <form name="logForm">Statements:<br>
+        <textarea id="ta" name="logs" cols="50" rows="10"></textarea></form>
+    </td>
+  </tr>
+</table>
+&nbsp;
+<a href="/_s_/dyn/Player_currentScript/" target="_blank">View Script</a>&nbsp;&nbsp;&nbsp;
+<a href="/_s_/dyn/Player_currentParsedScript" target="_blank">View Parsed Script</a>&nbsp;&nbsp;&nbsp;
+<a href="/_s_/dyn/Player_currentBrowserScript" target="_blank">View Browser Script</a>&nbsp;&nbsp;&nbsp;
+<a href="/_s_/dyn/Log_viewLogs" target="_blank">View Logs</a><br>
+</div>
+</body>
+</html>
+

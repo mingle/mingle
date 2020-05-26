@@ -1,0 +1,2 @@
+changeset = "<files>{file_dels}</files>"
+file_del = "<file>{file_del|escape}</file>"

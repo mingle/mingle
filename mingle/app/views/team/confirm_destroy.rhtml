@@ -1,0 +1,62 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% @action_bar = capture do %>
+  <% action_bar do %>
+    <%= link_to 'Continue to remove', {:action => params[:action], :selected_users => @selection.member_ids, :confirm => true, :page => params[:page], :tab => tab }, :method => :post, :class => 'ok' %>
+    <%= link_to 'Cancel', {:action => 'list', :selected_users => @selection.member_ids, :page => params[:page], :tab => tab}, :class => 'cancel action-bar-separator' %>
+  <% end %>
+<% end %>
+
+<%= @action_bar %>
+
+<h1>Confirm removing team members</h1>
+
+<% warning_box do %>
+  <div><strong>WARNING</strong>: You are about to <%= @selection.describe %> with the following effects:</div>
+  
+  <% if @selection.transitions_used.any? %>
+    <p>
+      <strong><%= pluralize(@selection.transitions_used.size, 'Transition') %> Deleted</strong>: <%= comma_separated_list(@selection.transitions_used) %>
+    </p>
+  <% end %>
+  
+  <% if @selection.transitions_specified.any? %>
+    <p>
+      <strong><%= pluralize(@selection.transitions_specified.size, 'Transition') %> Modified</strong>: <%= comma_separated_list(@selection.transitions_specified) %>
+    </p>
+  <% end %>
+  
+  <% if @selection.card_defaults_usages.any? %>
+    <p>
+      <strong><%= @selection.card_defaults_usages.size %> Card Defaults Modified</strong>: <%= comma_separated_list(@selection.card_defaults_usages.uniq) %>
+    </p>
+  <% end %>
+  
+  <% if @selection.project_variable_usage.any? %>
+    <p>
+      <strong><%= pluralize(@selection.project_variable_usage.size, 'Project Variable') %> changed to (not set)</strong>: <%= comma_separated_list(@selection.project_variable_usage) %>
+    </p>
+  <% end %>
+
+  <% if @selection.property_usages.any? %>
+    <p>
+      <strong>Card Properties changed to (not set)</strong>: <%= comma_separated_list(@selection.property_usages.uniq) %>
+    </p>
+  <% end %>
+<% end -%>
+
+<%= @action_bar %>

@@ -1,0 +1,27 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% action_bar do %>
+  <%= render_help_link('Source Tab', :class => 'page-help-at-action-bar')%>
+  <%= link_to_revisions(:class => 'revision action-bar-separator') %>
+  <% form_tag({:action => 'index', :rev => nil, :path => nil}, {:method => :get, :style => 'display: inline'}) do -%>
+  	<label for="rev">Choose <%= repository_vocabulary['revision'] %> to view:</label>
+  	<%= text_field_tag("rev", view_revision) %>
+  	<%= submit_tag('Go') %>
+  	<%= hidden_field_tag("path", node.path)%>
+  <% end -%>
+  <%= clear_float %>
+<% end %>

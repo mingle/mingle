@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Story List">
+
+    <p>Managing your "story list" or "product backlog" in Mingle is easy.  Mingle allows you to model your business vision (ideas and features) in a way that makes sense to you.  You can customize different levels of granularity, e.g. epics, features, stories, tasks, etc.</p>
+
+    <p>Once you determine how you want to <cref topic="explore_mingle_topic_feature_breakdown">break down your features</cref> and assuming you know how to <cref topic="filter_list_by_component">filter your cards</cref>, you will have several different <cref topic="viewing_cards">view options</cref> to see your story list:</p>
+
+    <bullets>
+        <item><cref topic="list_view">list view</cref></item>
+        <item><cref topic="grid_view">grid view</cref></item>
+        <item><cref topic="tree_view">tree view</cref> (if you use card trees)</item>
+        <item><cref topic="hierarchy_view">hierarchy view</cref> (if you use card trees)</item>
+    </bullets>
+
+    <p>You can toggle back and forth between the view options based on what you need to do. </p>
+
+    <p>Here is a story list displayed in the hierarchy view:</p>
+
+    <screenshot alttext="Story List in the Hierarchy view" src="resources/images/explore_mingle_story_list_hierarchy.png" />
+
+    <p>Here is the same story list displayed in the tree view:</p>
+
+    <screenshot alttext="Story List in the Tree view" src="resources/images/explore_mingle_story_list_tree.png" />
+
+    <section title="Tips">
+        <bullets>
+            <item>Create either a <cref topic="creating_a_favorite_card_view">team favorite</cref> or a <cref topic="managing_my_favorites">my favorite</cref> to easily navigate to your story list.</item>
+            <item>Using the grid view, you can also use the <cref topic="grid_view#group_cards">group by</cref>, <cref topic="grid_view#sort_cards">sort by</cref> and <cref topic="grid_view#color_cards">color by</cref> actions to help you see your story list from different perspectives and <cref topic="card_rankings">rank the cards</cref> in your story list.</item>
+            <item>Using the tree view allows you to easily drag and drop cards within your story list.</item>
+        </bullets>
+    </section>
+
+    <section title="Also see...">
+        <bullets>
+            <item><cref topic="viewing_cards">Viewing Cards</cref></item>
+            <item><cref topic="creating_a_favorite_card_view">Creating a Team Favorite Card View</cref></item>
+            <item><cref topic="explore_mingle_topic_feature_breakdown">Feature Breakdown</cref></item>
+			<item><cref topic="explore_mingle">Explore Mingle</cref></item>
+		        </bullets>
+		    </section>
+
+</topic>

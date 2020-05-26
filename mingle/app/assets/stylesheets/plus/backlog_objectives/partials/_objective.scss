@@ -1,0 +1,239 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+$objectivePageTextSize: 14px;
+
+@mixin objective-box {
+  list-style-type: none;
+  border-bottom: 1px solid #bbb;
+  margin: 0;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  float: left;
+  width: 100%;
+
+  button {
+    background-color: #F6F6F6;
+    background-repeat: repeat-x;
+    background-position: center center;
+    border: 1px solid rgba(0,0,0,0.1);
+    margin-left:3px;
+  }
+
+  button[type=submit] {
+    background-color: #fd7406;
+    color: #FFF;
+  }
+
+  .editor {
+    margin-top: 10px;
+    clear: left;
+    width: 100%;
+
+    .action-bar {
+      a {
+        float: left;
+      }
+
+      a.inline-delete-link {
+        float: right;
+      }
+    }
+
+    .objective_error {
+      margin-left: 28px;
+      color: #C00;
+      padding-top: 10px;
+    }
+
+    .value_statement {
+      @include pre(1, 50);
+      @include span-columns(27, 50);
+
+      margin-top: 5px;
+      margin-bottom:12px;
+
+      .value_statement_text {
+        width: 100%;
+
+        .charcounter {
+          float: right;
+        }
+
+        textarea {
+          width: 100%;
+          overflow: auto;
+          resize: none;
+          margin-bottom: 5px;
+          font-size: $objectivePageTextSize;
+        }
+      }
+    }
+
+
+    .guiding_questions {
+      margin-left: 20px;
+      @include span-columns(15, 50);
+      margin-top: 25px;
+
+      li {
+          padding: 2px;
+          list-style-type: disc;
+          border: none;
+          float: none;
+        }
+      }
+    }
+
+
+  .objective_summary {
+    .handle {
+      float: left;
+      font-size: 16px;
+      @include span-columns(1, 50);
+    }
+
+    .name-container {
+      @include span-columns(29, 50);
+      cursor: pointer;
+
+      .name_input {
+        @include span-columns(27, 29);
+        display: none;
+        cursor: pointer;
+        font-size: $objectivePageTextSize;
+      }
+
+      .error {
+        background-color: #ECCACA;
+        font-size: $objectivePageTextSize;
+      }
+
+      .name {
+        @include span-columns(27, 29);
+        font-size: $objectivePageTextSize;
+        display: block;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+
+    }
+
+    .slider_container {
+      @include span-columns(19 omega, 50);
+      .slider {
+        margin-top: 4px;
+        margin-left: 3.4%;
+        @include span-columns(5, 19);
+        margin-right: 3.4%;
+      }
+
+      .ui-slider-horizontal .ui-slider-range-min {
+        background: #ccc;
+      }
+
+      .ui-slider-horizontal .ui-slider-handle {
+        top: -4px;
+
+      }
+
+      .ui-slider .ui-slider-handle {
+        width: 8px;
+        height: 14px;
+        border: 2px solid #999;
+      }
+
+      .ui-state-hover, .ui-state-focus {
+        background: #fff;
+        cursor: pointer;
+      }
+
+      .ui-progressbar {
+        margin-top: 4px;
+        height: 10px;
+        margin-left: 3.4%;
+        @include span-columns(5, 19);
+      }
+
+      .ui-progressbar-value {
+        background: #ccc;
+        border: 1px solid #ccc;
+      }
+
+    }
+
+  }
+
+}
+
+@mixin objective-box-dragging {
+  @include objective-box;
+}
+
+.ui-sortable-helper {
+  box-shadow: 0 2px 5px 0 #666;
+  -webkit-box-shadow: 0 2px 5px 0 #666;
+  -moz-box-shadow: 0 2px 5px 0 #666;
+  background: #fff;
+}
+
+.slider_header_container {
+  @include span-columns(19 omega, 50);
+  margin-bottom: 5px;
+  .slider-header {
+    margin-left: 3.4%;
+    @include span-columns(5, 19);
+    margin-right: 3.4%;
+    text-align: center;
+    color: #666;
+    font-size: 14px;
+  }
+}
+
+
+
+.objective-handle-column-header {
+  @include span-columns(1, 50);
+}
+
+.objective-name-column-header {
+  @include span-columns(33, 50);
+}
+
+.ui-state-focus {
+    outline: none;
+}
+
+a.close-popup {
+  float: none;
+}
+
+.objectives {
+  .handle {
+    color: #666;
+    cursor: move;
+  }
+}
+
+.disabled_sorting {
+  li {
+  .handle {
+      color: #eee;
+      cursor: auto;
+    }
+  }
+}

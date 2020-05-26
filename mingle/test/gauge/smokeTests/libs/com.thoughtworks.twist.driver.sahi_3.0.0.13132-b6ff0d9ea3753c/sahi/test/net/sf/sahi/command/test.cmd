@@ -1,0 +1,1 @@
+del help.txt

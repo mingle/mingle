@@ -1,0 +1,42 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="slack-channel-list" data-update-channel-mappings-url= "<%= url_for(:controller => 'slack', :action => 'update_channel_mappings') %>">
+  <ul class="slack-channel-container">
+    <li><label class="slack-channel-group-level"><strong>Open channels</strong></label></li>
+    <% public_channels.each do |channel| %>
+        <li>
+          <% if !readonly %>
+            <%= check_box_tag("toggle_channel_#{channel.id}", channel.id , channel.mapped, onClick: "MultipleMappings.updateCancelButton()" ,'data-mapped'=> channel.mapped,'data-channel-name'=> channel.name,'data-is-private'=> channel.private ) %>
+          <% end %>
+          <label for="toggle_channel"><%= h(channel.name) %></label>
+        </li>
+    <% end %>
+  </ul>
+  <% unless private_channels.empty? %>
+      <ul class="slack-channel-container">
+        <li><label class="slack-channel-group-level"><strong>Private channels</strong></label></li>
+        <% private_channels.each do |channel| %>
+            <li>
+              <% if !readonly %>
+                <%= check_box_tag("toggle_channel_#{channel.id}", channel.id , channel.mapped, onClick: "MultipleMappings.updateCancelButton()", 'data-mapped'=> channel.mapped, 'data-channel-name'=> channel.name, 'data-is-private'=> channel.private ) %>
+              <% end %>
+              <label for="toggle_channel_<%= channel.name %>"><%= h(channel.name) %></label>
+            </li>
+        <% end %>
+      </ul>
+  <% end %>
+</div>

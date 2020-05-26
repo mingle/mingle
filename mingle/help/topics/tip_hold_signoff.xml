@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE section SYSTEM "mingle_help.dtd">
+<chapter title="Hold Signoff">
+	<p>Create a 'Hold signoff' transition for customers and allow them to enter feedback using the card <cref topic="mumurs">'Murmurs'</cref>.</p>
+	<topic title="Creating and using customer only transitions">
+		<steps>
+			<item>Create a transition which can be used only by customers. Set the transition to move a card from 'Ready for Showcase' back to 'Ready for Development'. Set the transition to require a murmur.
+</item>
+			<screenshot alttext="Create transition" src="resources/images/hold_signoff1.PNG"/>
+			<screenshot alttext="Use transition" src="resources/images/hold_signoff2.PNG"/>
+			<item> When the customer uses the transition the customer can use the murmur to explain the change that needs to be made and why the card needs more development.</item>
+			<screenshot alttext="Add comment" src="resources/images/hold_signoff3.PNG"/>
+		</steps>
+	</topic>
+</chapter>

@@ -1,0 +1,18 @@
+<html>
+<head>
+    <title>HTMLUnit Tests</title>
+</head>
+<body onload="fn()">
+<form>
+<input type="text" name="t1" value="0"><br/><br/>
+<input type="text" name="t1" value="1">
+</form>
+
+<script>
+function fn(){
+	var o = _sahi.getArrayNameAndIndex("t1[1]");
+	alert(o.name+" " +o.index);
+}
+</script>
+</body>
+</html>

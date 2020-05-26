@@ -1,0 +1,64 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+//************************************************************************//
+// Background-image property for adding multiple background images with
+// gradients, or for stringing multiple gradients together.
+//************************************************************************//
+
+@mixin background-image($images...) {
+  background-image: _add-prefix($images, webkit);
+  background-image: _add-prefix($images);
+}
+
+@function _add-prefix($images, $vendor: false) {
+  $images-prefixed: ();
+  $gradient-positions: false;
+  @for $i from 1 through length($images) {
+    $type: type-of(nth($images, $i)); // Get type of variable - List or String
+
+    // If variable is a list - Gradient
+    @if $type == list {
+      $gradient-type: nth(nth($images, $i), 1); // linear or radial
+      $gradient-pos: null;
+      $gradient-args: null;
+
+      @if ($gradient-type == linear) or ($gradient-type == radial) {
+        $gradient-pos:  nth(nth($images, $i), 2); // Get gradient position
+        $gradient-args: nth(nth($images, $i), 3); // Get actual gradient (red, blue)
+      }
+      @else {
+        $gradient-args: nth(nth($images, $i), 2); // Get actual gradient (red, blue)
+      }
+
+      $gradient-positions: _gradient-positions-parser($gradient-type, $gradient-pos);
+      $gradient: _render-gradients($gradient-positions, $gradient-args, $gradient-type, $vendor);
+      $images-prefixed: append($images-prefixed, $gradient, comma);
+    }
+    // If variable is a string - Image
+    @else if $type == string {
+      $images-prefixed: join($images-prefixed, nth($images, $i), comma);
+    }
+  }
+  @return $images-prefixed;
+}
+
+//Examples:
+  //@include background-image(linear-gradient(top, orange, red));
+  //@include background-image(radial-gradient(50% 50%, cover circle, orange, red));
+  //@include background-image(url("/images/a.png"), linear-gradient(orange, red));
+  //@include background-image(url("image.png"), linear-gradient(orange, red), url("image.png"));
+  //@include background-image(linear-gradient(hsla(0, 100%, 100%, 0.25) 0%, hsla(0, 100%, 100%, 0.08) 50%, transparent 50%), linear-gradient(orange, red));

@@ -1,0 +1,297 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Pages (wiki) API">
+  <section title="Pages">
+    <p><cref topic="working_with_pages">Mingle Pages</cref> are located by issuing a GET request to the server using the page's <strong>identifier</strong> as a parameter. The page's identifier is the page's name with special characters encoded. For example, a page with name "the name" has an identifier of "the_name". Page identifiers for all pages in a project can be retrieved. See the section below, 'Getting all pages for a project'.</p>
+  </section>
+
+  <section title="Examples using Javascript">
+    <p>The following examples use curl.  If you want to interact with the Mingle API using javascript, ThoughtWorks Studios maintains a <exref url="https://github.com/mingle/mingle-api-js-demo">sample app here</exref>.</p>
+  </section>
+
+  <section title="Structure of a page resource">
+
+    <p>The structure of a page will completely depend on your project and how you have configured your properties. That said, all pages in all projects in Mingle have a few default attributes.</p>
+    <p>The default attributes are described below, along with their data type.  Also included with each attribute is whether you are allowed to update the value. System generated fields like <strong>id</strong> and <strong>created_at</strong> are provided only as information about the page and cannot be updated through the API.</p>
+
+     <api_attributes title="page resource xml - attributes">
+      <api_attribute name="id" type="Integer" readonly="true">system assigned unique identifier for the page.</api_attribute>
+      <api_attribute name="identifier" type="String" readonly="true">encoded name of the page.</api_attribute>
+      <api_attribute name="name" type="String" readonly="true">user given name for the page.</api_attribute>
+      <api_attribute name="content" type="String">the HTML that Mingle renders for the page content.</api_attribute>
+      <api_attribute name="project" type="Resource"><strong>name</strong> and <strong>identifier</strong> of the project of the page; both String.</api_attribute>
+      <api_attribute name="created_at" type="Datetime" readonly="true">date and time of creating the page.</api_attribute>
+      <api_attribute name="updated_at" type="Datetime" readonly="true">date and time of updating the page.</api_attribute>      
+      <api_attribute name="created_by" type="Resource">details of the user who created a page.</api_attribute>
+      <api_attribute name="modified_by" type="Resource">details of the user who modified a page.</api_attribute>  
+      <api_attribute name="version" type="Integer" readonly="true">current version of the page.</api_attribute>
+      <api_attribute name="rendered_description" type="Resource">Link to rendered page content as HTML.</api_attribute>
+    </api_attributes>
+  </section>  
+  
+  <section title="Locating a page">
+    <api_reference>
+      <p><strong>Reference</strong></p>
+      <code>
+    Request Method: GET
+    URL: /api/v2/projects/<subst>project_identifier</subst>/wiki/<subst>page_name</subst>.xml
+    Parameters: NA
+      </code>
+
+      <p><strong>Example</strong></p>
+      <code>
+    GET
+
+    http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/wiki/new_page.xml
+      </code>
+
+      <p><strong>Explanation</strong></p>
+      <p>The above is an example of a GET request to a Mingle server running at your.mingle.server, port 8080. The request is made with the authorization credentials of yourname/password. The URL of api/v2/projects/test_project/wiki/new_page.xml represents the page resource for the page named, 'new page', in project with identifier test_project.</p>
+    
+      <p><strong>Result</strong></p>
+      If you were authorized to perform the operation, and the resource was available, you should get an xml document that looks something like the following.
+      <code>
+        <![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<page>
+  <id type="integer">5</id>
+  <identifier>new_page</identifier>
+  <name>New Page</name>
+  <content>
+    <p>This is a new page in Mingle.</p>
+  </content>
+  <project url="http://localhost:8080/api/v2/projects/test_project.xml">
+    <name>test project</name>
+    <identifier>test_project</identifier>
+  </project>
+  <version type="integer">1</version>
+  <created_at type="datetime">2016-03-01T09:14:54Z</created_on>
+  <modified_on type="datetime">2016-03-02T09:14:54Z</modified_on>
+  <modified_by url="http://localhost:8080/api/v2/users/1.xml">
+    <name>anne</name>
+    <login>anne</login>
+  </modified_by>
+  <created_by url="http://localhost:8080/api/v2/users/2.xml">
+    <name>jane</name>
+    <login>jane</login>
+  </created_by>
+</page>
+        ]]>
+      </code>  
+    </api_reference>
+  </section>  
+  
+  <section title="Updating a page">
+	<p>You can update the page content via the wiki API.</p>
+
+	<api_reference>
+  <p><strong>Reference</strong></p>
+    <code>
+    Request Method: PUT
+    URL: /api/v2/projects/<subst>project_identifier</subst>/wiki/<subst>page_name</subst>.xml
+    Parameters: page content
+    </code>
+  <p><strong>Example</strong></p>
+    <code>
+    PUT
+
+    http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/wiki/new_page.xml
+
+    page[content]=Adding information to the content of this page. 
+    </code>
+
+  <p><strong>Explanation</strong></p>
+  <p>The above is an example of a PUT request to a Mingle server running at your.mingle.server, port 8080. The request is made with the authorization credentials of yourname/password. The URL of api/v2/projects/test_project/wiki/new_page.xml represents the page resource for the page named, 'new page', in project with identifier test_project. The content of the page will be updated with the text in the example.</p>
+    
+  <p><strong>Result</strong></p>
+  If you were authorized to perform the operation, and the resource was available, you should get an xml document that looks something like the following.
+  <code>
+<![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<page>
+  <id type="integer">201</id>
+  <identifier>new_page</identifier>
+  <name>new page</name>
+  <content>Adding additional information to the content of this page.</content>
+  <project url="http://localhost:8080/api/v2/projects/test_project.xml"
+    <name>Test Project</name>
+    <identifier>test_project</identifier>
+  </project>
+  <created_at type="datetime">2016-02-29T17:39:53Z</created_at>
+  <updated_at type="datetime">2016-03-01T19:26:34Z</updated_at>
+  <created_by url="http://localhost:8080/api/v2/users/41.xml">
+    <name>lkwong</name>
+    <login>lkwong</login>
+  </created_by>
+  <modified_by url="http://localhost:8080/api/v2/users/41.xml">
+    <name>lkwong</name>
+    <login>lkwong</login>
+  </modified_by>
+  <version type="integer">8</version>
+  <rendered_description url="https://localhost:8080/api/v2/projects/test_project/render?content_provider%5Bid%5D=201&amp;content_provider%5Btype%5D=page">
+  </rendered_description>
+</page>
+        ]]>
+    </code>  
+  </api_reference>
+  </section>  
+  
+  <section title="Creating a page">  
+    <api_reference>     
+      <p><strong>Reference</strong></p>
+      <code>
+    Request Method: POST
+    URL: /api/v2/projects/<subst>project_identifier</subst>/wiki.xml
+    Parameters: page name and page content
+      </code>
+
+      <p><strong>Example</strong></p>
+      <code>
+    POST
+
+    http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/wiki.xml
+
+    page[name]=A new page
+    page[content]=Look at this cool new page I just created. 
+      </code>
+  
+      <p><strong>Explanation</strong></p>
+      <p>The above is an example of a POST request to a Mingle server running at your.mingle.server, port 8080. The request is made with the authorization credentials of yourname/password. Upon execution of this request, the post parameters will be used to create a page on the project with identifier "test_project". The value of the name and content attributes will be set to the specified values of "A new page" and "Look at this cool new page I just created".
+      </p>
+
+      <p><strong>Result</strong></p>
+      <p>If you were authorized to perform the operation, and the operation succeeded, you will be returned a location attribute in the http header of the response, which is a url from which you can get the page resource that was created.</p>
+    </api_reference>
+  </section>  
+  
+  <section title="Getting all pages for a project">
+    <api_reference>     
+      <p><strong>Reference</strong></p>
+      <code>
+    Request Method: GET
+    URL: /api/v2/projects/<subst>project_identifier</subst>/wiki.xml
+    Parameters: 
+      </code>
+
+      <p><strong>Example</strong></p>
+      <code>
+    GET
+
+    http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/wiki.xml
+      </code>
+  
+      <p><strong>Explanation</strong></p>
+      <p>The above is an example of a GET request to retrieve all pages from the project with identifier "test_project". The pages will be returned in alphabetical order. 
+      </p>
+
+      <p><strong>Result</strong></p>
+      <p>If you were authorized to perform the operation, and the resource was available, you should get an xml document that looks something like the following.
+        <code>
+          <![CDATA[ 
+<?xml version="1.0" encoding="UTF-8"?>
+<pages type="array">
+  <page>
+    <id type="integer">201</id>
+    <identifier>new_page</identifier>
+    <name>new page</name>
+    <content>Adding additional information to the content of this page.</content>
+    <project url="http://localhost:8080/api/v2/projects/test_project.xml">
+      <name>Test Project</name>
+      <identifier>test_project</identifier>
+    </project>
+    <created_at type="datetime">2016-02-29T17:39:53Z</created_at>
+    <updated_at type="datetime">2016-03-01T19:26:34Z</updated_at>
+    <created_by url="http://localhost:8080/api/v2/users/41.xml">
+      <name>lkwong</name>
+      <login>lkwong</login>
+    </created_by>
+    <modified_by url="http://localhost:8080/api/v2/users/41.xml">
+      <name>lkwong</name>
+      <login>lkwong</login>
+    </modified_by>
+    <version type="integer">8</version>
+    <rendered_description url="http://localhost:8080/api/v2/projects/test_project/render?content_provider%5Bid%5D=201&amp;content_provider%5Btype%5D=page">
+    </rendered_description>
+  </page>
+  <page>
+    <id type="integer">23</id>
+    <identifier>Overview_Page</identifier>
+    <name>Overview Page</name>
+    <content>&lt;p&gt;&lt;span style="background-color:rgb(223, 237, 243); color:rgb(34, 34, 34); font-family:raleway,helveticaneue,helvetica neue,helvetica,arial,sans-serif; font-size:15px; line-height:24px"&gt;[[new page]]&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&#160;&lt;/p&gt;
+
+&lt;div class="dashboard-panel"&gt;
+&lt;h2&gt;Cumulative Flow&lt;/h2&gt;
+
+&lt;div class="dashboard-content"&gt;
+{{ daily-history-chart
+    aggregate: count(*)
+    start-date: 03 August, 2015
+    end-date: 19 August, 2015
+    chart-conditions: type = work
+    chart-width: 900
+    chart-height: 400
+    plot-width: 700
+    plot-height: 300
+    plot-x-offset: 80
+    series:
+      - conditions: type = work and status &gt;= "to do"
+        color: '#f28900'
+        label: To Do
+        line-width: 2
+      - conditions: type = work and status &gt;= "doing"
+        color: '#30f200'
+        label: Doing
+        line-width: 2
+      - conditions: type = work and status &gt;= "done"
+        color: '#087300'
+        label: Done
+        line-width: 2
+}}
+&lt;/div&gt;
+&lt;/div&gt;</content>
+    <project url="http://localhost:8080/api/v2/projects/test_project.xml">
+      <name>Test Project</name>
+      <identifier>test_project</identifier>
+    </project>
+    <created_at type="datetime">2015-08-05T19:00:51Z</created_at>
+    <updated_at type="datetime">2016-02-29T17:39:41Z</updated_at>
+    <created_by url="http://localhost:8080/api/v2/users/2.xml">
+      <name>mingle</name>
+      <login>mingle</login>
+    </created_by>
+    <modified_by url="http://localhost:8080/api/v2/users/41.xml">
+      <name>lkwong</name>
+      <login>lkwong</login>
+    </modified_by>
+    <version type="integer">2</version>
+    <rendered_description url="http://localhost:8080/api/v2/projects/test_project/render?content_provider%5Bid%5D=23&amp;content_provider%5Btype%5D=page">
+    </rendered_description>
+  </page>
+</pages>
+      ]]>
+        </code>    
+      </p>       
+    </api_reference>
+  </section>	
+  <section title="Get rendered page content as HTML" id="rendered_description">
+    <p>From a page resource, follow the <link>rendered_description</link> resource to retrieve the rendered content for a page as HTML. This is similar to <cref topic="mingle_api_card#rendered_description">getting rendered card description as HTML for cards</cref>.</p>
+  </section>
+</topic>

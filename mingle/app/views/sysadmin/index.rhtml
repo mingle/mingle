@@ -1,0 +1,35 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= render :partial => 'shared/top_level_header_pills', :locals => { :selected_tab => 'admin' } %>
+
+<h1>System Admin</h1>
+<ul>
+  <li><%= link_to 'Data Fixes', {:action => 'data_fixes'} %></li>
+  <li><%= link_to 'Simulate Runtime Error', {:action => 'error'} %></li>
+
+<% if MingleConfiguration.saas? -%>
+  <li><%= link_to 'Tenant Configuration', {:action => 'tenant_configuration'} %></li>
+  <li><%= link_to 'Global Configuration', {:action => 'global_configuration'} %></li>
+  <li><%= link_to 'Clear License Cache', {:action => 'clear_license_cache'} %></li>
+  <li><%= link_to 'Dual App Routing Toggle', {:action => 'dual_routing_toggle'} %></li>
+  <li><%= link_to 'Reindex tenant', {:action => 'reindex_tenant'} %></li>
+  <li><%= link_to 'Export data', {:action => 'export'} %></li>
+<% else -%>
+  <li><%= link_to 'Set Global Notification', {:action => "user_notification"} %></li>
+<% end -%>
+
+</ul>

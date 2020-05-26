@@ -1,0 +1,72 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+@mixin search-cards() {
+ .ui-autocomplete {
+    border-spacing: 0 2px;
+    width: 50%;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    li {
+      &:nth-child(2n+1) {
+        background: #f9f9f9;
+      }
+    }
+
+    .ui-menu-item {
+      display: table-row-group;
+
+      a {
+        display: table-row;
+
+        .number, .name {
+          background: transparent;
+          display: table-cell;
+          padding: 5px;
+          font-weight: 300;
+        }
+
+        .number {
+          width: 1%;
+          white-space: nowrap;
+          text-align: right;
+          padding-right: 0;
+          border-left: 5px solid transparent;
+
+          &:before {
+            content: "#";
+            display: inline-block;
+            vertical-align: top;
+            margin-right: 3px;
+            color: #cdcdcd;
+            font-size: 10px;
+            font-weight: 100;
+          }
+        }
+
+        b {
+          font-weight: bold;
+        }
+      }
+
+    }
+    .ui-state-focus {
+      background: $MINGLE_PRIMARY_COLOR;
+      color: white;
+    }
+  }
+}

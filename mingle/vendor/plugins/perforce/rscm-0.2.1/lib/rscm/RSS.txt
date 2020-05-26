@@ -1,0 +1,41 @@
+Sketch of RSS layout for DC and RSCM
+
+rss
+  channel
+    title: 
+    link:
+    description: 
+    item
+      pubDate:
+      title:
+      link:
+      description
+        xxx:
+        
+rss
+  channel
+    title: PicoContainer Builds
+    link: http://builds.codehaus.org/build/damagecontrol/project/picocontainer
+    description: DamageControl build of PicoContainer 
+    item (one per build)
+      pubDate: <dc_creation_time>
+      title: PicoContainer Build FAILED
+      link: http://builds.codehaus.org/build/damagecontrol/project/picocontainer/build/<dc_creation_time>
+      description
+        "Blurb about why it failed (tail from logs)"
+        "who broke it (from changesets)"
+        "Changesets"
+
+rss
+  channel
+    title: PicoContainer CVS
+    link: http://cvs.picocontainer.org/
+    description: Changesets for PicoContainer (viewcvs/fisheye etc)
+    item (one per changeset)
+      pubDate: <changeset_time>
+      title: changeset commit message (trunkated - w/o links)
+      link: Link to changeset page (if supported - fisheye etc). otherwise to root of scm_web
+      description
+        "changeset message with tracker URLs (newline-escaped)"
+        "|revision|path (with links)|"
+        

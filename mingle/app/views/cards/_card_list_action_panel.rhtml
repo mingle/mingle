@@ -1,0 +1,153 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="action_panel">
+
+<% if @cards and @cards.size > 0 -%>
+
+  <div class="for-selected-actions">
+    <div class="bulk-actions-group">
+      <%
+        actions = []
+        actions << bulk_edit_properties_link(@view.all_cards_size)
+        actions << bulk_tagging_link(@view.all_cards_size)
+        actions << link_to_function('<span class="dropdown">Transitions</span>'.html_safe, :id => 'bulk_transitions', :class => 'link_as_button group-link', :accessing => ':bulk_transition')
+      %>
+      <div id="transition-selector" class="slider-down widget-dropdown" style="display: none">
+        <span class="no_transition_message" style="display: none">No available transitions for selected cards</span>
+        <ul id="bulk-transitions-options-container" class="transition-dropdown"></ul>
+      </div>
+      <% actions << button_to_function('Delete', :id => 'bulk-delete-button', :accessing => 'cards:destroy') %>
+
+      <%- if actions.compact.any? -%>
+        <div id="bulk-options" ><span>For selected:</span> <%= raw actions.join %> <%= spinner :id => 'actions-spinner' %></div>
+      <% end%>
+    </div>
+
+  <% if @controller.action_name == 'bulk_set_properties'  %>
+    <div id="bulk-set-properties-panel"> <%= render :partial => 'bulk_set_properties_panel' %>  </div>
+  <% else %>
+    <div id="bulk-set-properties-panel" style="float:none;display:none;"></div>
+  <% end %>
+
+  <% if @controller.action_name == 'bulk_remove_tag' || @controller.action_name == 'bulk_add_tags' -%>
+    <div id="bulk-tagging-panel"> <%= render :partial => 'bulk_tagging_panel' %> </div>
+  <% else -%>
+    <div id="bulk-tagging-panel" style="float:none;display:none;"></div>
+  <% end -%>
+
+  </div>
+<% end -%>
+
+
+<% form_tag({:action => 'bulk_transition', :controller => 'cards', :validate => true}, {:id => 'bulk-transition-form'}) do -%>
+  <%= hidden_field_tag 'selected_cards' %>
+  <%= hidden_field_tag 'all_cards_selected' %>
+  <%= hidden_field_tag 'transition_id' %>
+  <%= hidden_field_tag 'favorite_id', params[:favorite_id] %>
+<% end -%>
+
+<% form_remote_tag(:url => {:action => 'require_comment_for_bulk_transition', :controller => 'cards', :validate => true}, :html => {:id => 'bulk-transition-require-comment-form'}, :method => 'get') do -%>
+  <%= hidden_field_tag 'selected_cards', '' %>
+  <%= hidden_field_tag 'all_cards_selected' %>
+  <%= hidden_field_tag 'transition_id', '' %>
+  <%= hidden_field_tag 'favorite_id', params[:favorite_id] %>
+<% end -%>
+
+<% form_remote_tag(
+      :before   => "if ($('actions-spinner')) $('actions-spinner').show();",
+      :complete => "if ($('actions-spinner')) $('actions-spinner').hide();",
+      :method   => 'get',
+      :url      => {:action => 'bulk_tagging_panel', :controller => 'cards', :validate => true},
+      :html     => {:id => 'bulk-tagging-panel-form'}
+    ) do -%>
+  <%= hidden_field_tag 'selected_cards', '', :id => 'bulk-tagging-selected-cards' %>
+  <%= hidden_field_tag 'all_cards_selected'%>
+  <%= hidden_view_tags @view, :include_page => true %>
+  <%= hidden_field_tag 'favorite_id', params[:favorite_id] %>
+<% end -%>
+
+<% form_remote_tag(
+      :before   => "if ($('actions-spinner')) $('actions-spinner').show();",
+      :complete => "if ($('actions-spinner')) $('actions-spinner').hide();",
+      :method   => 'get',
+      :url      => {:action => 'bulk_set_properties_panel', :controller => 'cards', :validate => true},
+      :html     => {:id => 'bulk-set-properties-panel-form'}
+    ) do -%>
+  <%= hidden_field_tag 'selected_cards', '', :id => 'bulk-set-properties-selected-cards' %>
+  <%= hidden_view_tags @view, :include_page => true %>
+  <%= hidden_field_tag 'all_cards_selected'%>
+  <%= hidden_field_tag 'favorite_id', params[:favorite_id] %>
+<% end -%>
+
+<% form_tag 'bulk_destroy', :id => 'bulk-destroy-form' do -%>
+  <%= hidden_field_tag 'selected_cards', '', :id => 'bulk-destroy-selected-cards' %>
+  <%= hidden_view_tags @view, :include_page => true %>
+  <%= hidden_field_tag 'all_cards_selected'%>
+<% end -%>
+
+
+<% if @cards.any? -%>
+  <%- javascript_with_rescue do -%>
+    BulkOperationPanel.CARD_LIMIT = <%= CardViewLimits::MAX_CARDS_TO_BULK_UPDATE %>;
+
+    checkBoxes = new CheckBoxes(this.document, 'checkbox_');
+
+    <%- if authorized?(:action => 'edit') -%>
+      BulkTransitions.instance = new BulkTransitions(checkBoxes, 'bulk-transition-form', 'bulk-transition-require-comment-form', "<%= url_for(:controller => 'cards', :action => 'card_transitions', :project_id => escape_javascript(@project.identifier)) %>");
+
+      var transitions_require_comment = new Array();
+      <% cache_to(Keys::Transitions.new, @project) do -%>
+        <%= raw(transitions_require_popup_array) %>
+      <% end -%>
+
+      var bulkOpsPanels = [];
+
+      bulkTaggingPanel = new BulkOperationPanel({
+        panelElement: "bulk-tagging-panel",
+        toggleLink: "bulk-tag-button",
+        checkboxes: checkBoxes,
+        updatePanelForm: "bulk-tagging-panel-form",
+        cardSelectionHiddenInput: "bulk-tagging-selected-cards",
+        limit: true
+      });
+
+      bulkPropertiesPanel = new BulkOperationPanel({
+        panelElement: "bulk-set-properties-panel",
+        toggleLink: "bulk-set-properties-button",
+        checkboxes: checkBoxes,
+        updatePanelForm: "bulk-set-properties-panel-form",
+        cardSelectionHiddenInput: "bulk-set-properties-selected-cards",
+        limit: true
+      });
+
+      new MutuallyExclusiveOpenPanels(bulkTaggingPanel, bulkPropertiesPanel, BulkTransitions.instance);
+
+      bulkOpsPanels.push(bulkTaggingPanel);
+      bulkOpsPanels.push(bulkPropertiesPanel);
+
+      AllCardsSelector.attach(checkBoxes, 'all_cards_selected', 'really_select_all', bulkOpsPanels, BulkTransitions.instance, <%= @view.card_numbers.size %>);
+
+      <% bulk_delete_ajax_request = remote_function(:url => {:controller => 'cards', :action => 'confirm_bulk_delete'},
+                                                    :with => "Form.serialize($('bulk-destroy-form'))", :before => "$('bulk-delete-button').disabled=true", :complete => "$('bulk-delete-button').disabled=false")
+         bulk_delete_function = "function() { #{bulk_delete_ajax_request} }"
+      %>
+      new BulkDestroy('bulk-delete-button', checkBoxes, <%= raw(bulk_delete_function) %>, 'bulk-destroy-selected-cards');
+    <%- end -%>
+
+  <%- end -%>
+<%- end -%>
+</div>

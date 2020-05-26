@@ -1,0 +1,34 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% if authorized?(:controller => controller_name, :action => 'update_tags') -%>
+  <% form_tag({:action => "update_tags", :tab => @tab_name}, {:id => 'update-tags-form'}) do -%>
+    <%= hidden_field_tag 'taggable_id', taggable.id %>
+
+    <%= render :partial => "tags/tags_editor", :locals => {:tag_names => taggable.tags.collect(&:name), :tag_field_name  => tag_field_name, :icon => true, :auto_submit => true, :project => @project, :sortable => sortable, :"update_order_url" => update_order_url } %>
+  <% end %>
+<% else -%>
+  <%= render :partial => 'shared/readonly_tags_panel', :locals => {:event => taggable} %>
+<% end -%>
+<%= javascript_with_rescue <<-JAVASCRIPT
+var updateTagsForm = $j("#update-tags-form");
+updateTagsForm.data("filtersForm", new FiltersForm(updateTagsForm[0], 'tags-editor-spinner'));
+updateTagsForm.submit(function(e) {
+  updateTagsForm.data("filtersForm").submit({type: "POST"});
+  return false;
+});
+JAVASCRIPT
+%>

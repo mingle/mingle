@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE section SYSTEM "mingle_help.dtd">
+<section title="Subversion source integration for Mingle Onsite">
+	
+	<subsection title="Before you start">
+	<note>
+	  <item>Native Subversion integration is available for Mingle onsite only.</item>
+    <item>Please be aware Mingle supports up to Subversion 1.6.6 for source integration.</item>
+  </note>
+	</subsection>
+	<subsection title="Configuration">
+    <p>After choosing <strong>Subversion</strong> from the source repository list, Mingle will display the <strong>Subversion Repository settings</strong> page</p>
+    <screenshot alttext="Subversion Repository settings page" src="resources/images/subversion_repository_settings_page.png" />
+    <bullets>
+        <item>Enter the URL for your Subversion repository. Most standard SVN URL schemes are supported by Mingle, including local file access if the repository is located on the same filesystem as Mingle. Mingle can integrate your project with a subdirectory of your SVN repository. This allows Mingle to work better with multi-project SVN repositories.</item>
+        <item>If your repository requires username and password authentication, be sure to enter that information as well. You must first click the <button>Change login user password</button> to enter a new password.</item>
+            <screenshot alttext="Subversion repository settings page - user password" src="resources/images/subversion_repository_settings_password.png" />
+        <item>Click the <link>Save settings</link> link to save the configuration and return to the <strong>Project admin</strong> page</item>  
+            
+    </bullets>
+</subsection>
+    
+    <subsection title="svn+ssh key pair authentication" collapsed="false">
+    
+      <p>If you wish to use ssh key pair authentication (via an svn+ssh URL), please add the below code to the config/initializers/svnssh.rb file in your Mingle installation directory. At this time, Mingle supports only one key pair for use across all projects. 
+        <code>
+          java.lang.System.setProperty("svnkit.ssh2.key", "/path/to/private/key");
+          java.lang.System.setProperty("svnkit.ssh2.username", "your_username");
+          java.lang.System.setProperty("svnkit.ssh2.passphrase", "your_passphrase");
+        </code>
+        
+      </p>    
+    </subsection>
+    
+</section>
+
+
+

@@ -1,0 +1,51 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%- select_tab :program_wall -%>
+
+<div class="<%= params[:action] %>">
+  <div id='inner-container'>
+    <h1>Capture and Prioritize Features</h1>
+    <div class="basic-panel-one create_objective">
+      <%= render :partial => 'quick_add' %>
+    </div>
+
+
+    <div id="backlog_objectives_list" class="<%= 'hide' if @program.objectives.backlog.empty?%>">
+
+      <div id='objectives_list_header'>
+        <div class="slider_header_container">
+          <div class="slider-header">Value</div>
+          <div class="slider-header">Size</div>
+          <% if !MingleConfiguration.hide_objective_ratio? %>
+            <div class="slider-header">Ratio</div>
+          <% end %>
+        </div>
+      </div>
+
+      <ul class="objectives">
+        <%= render :partial => 'backlog_objective', :collection => @program.objectives.backlog %>
+      </ul>
+    </div>
+    <div style='clear: both;'></div>
+  </div>
+</div>
+
+<%= javascript_with_rescue <<-JAVASCRIPT
+  BacklogObjectiveSort.reorder_ready('#{reorder_program_backlog_objectives_path(@program)}');
+  BacklogObjectives.initializeAllObjectiveContentEditors();
+JAVASCRIPT
+%>

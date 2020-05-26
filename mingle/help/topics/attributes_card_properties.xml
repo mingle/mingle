@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_help.dtd">
+
+<section title="Attributes of card properties">
+<subsection title="Name" id="name" collapsed="true"> Every property must have a unique name.</subsection>
+<subsection title="Property Values" id="values">The set of values that a card
+property can be assigned can be restricted to either an restricted list
+(Managed Lists, Team members), or a data type (such as Any Date, or Any
+Number)</subsection>
+<subsection title="Show / Hide" id="show_hide" collapsed="true">
+		
+	<p>	Properties can be hidden if they are not required for data entry, for example calculated values used in reporting. If you make a property hidden, these hidden card properties are conditionally displayed in the card view (to show them check the Show hidden properties checkbox), and <strong>not</strong> available in filters.</p>
+		<hint>Hidden properties are highlighted on card types, card properties, card defaults and card transitions page so that user can easily distinguish them from regular properties.</hint>
+		<p>The value can only be set by declaring a <cref topic="card_defaults">default value</cref>, or via a <cref topic="card_transitions">transition</cref>, or calculated if it's a formula property.</p>
+		<p>You can also hide a property instead of deleting it, which will retain historical data about changes to that property.</p>
+</subsection>
+<subsection title="Lock / Unlock" id="lock" collapsed="true"> Any Managed List property can be locked, this restricts the set of allowed values to only those predefined by the Project Administrator. Team members will not be able to dynamically add new values, however project admins can still add new values dynamically.</subsection>
+<subsection title="Transition only?" id="transition_only"> <cref topic="transition_only_properties">Transition
+only?</cref> indicates that the property can only have its value set via a transition, it will not be directly editable by team members.</subsection>
+</section>

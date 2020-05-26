@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_help.dtd">
+<?xml-stylesheet type="text/css" href="../resources/stylesheets/mingle_help.css"?>
+<chapter title="Pre-defined Mingle templates">
+	<section title="Introduction">
+		<p>Mingle is shipped with 3 pre-defined templates and 1 blank template. These templates are useful when you first start a new Mingle project as they illustrate how Mingle's functionality can be used in different scenarios and for different types of projects or teams. All templates exhibit different structures for you to get started with you familiar practice.</p>
+			<note>When using templates, please note that changes to project templates are not pushed to existing projects using that template. Changes will only apply to newly created projects.</note>
+	</section>
+	<section title="The pre-defined templates">
+		<bullets>
+      <item><strong>Kanban template</strong> is designed for teams practicing Kanban. It includes a Kanban board, a Cumulative Flow Diagram, and Work in Progress.</item>
+      <item><strong>Agile template</strong> is designed for agile teams practicing a blended agile methodology rather than strictly following Scrum. It includes concepts like Card Wall, Release planning, Iteration Planning. and a Burn-up chart.</item>
+      <item><strong>Scrum template</strong> represents a Scrum approach to project tracking that supports Story Mapping, Product Backlog Management, Release Planning, Estimation, Sprint Management, and Retros.</item>
+      <item><strong>Blank template</strong> is a blank project with a single card type (card) with no additional structure or properties so you can build your project from the ground up.</item> 
+		</bullets>
+	</section>
+
+	<section title="Also see...">
+		<bullets>
+			<item>
+				<cref topic="quick_project_setup">Quick project setup</cref>
+			</item>
+			<item>
+				<cref topic="creating_mingle_projects">Creating Mingle projects</cref>
+			</item>
+			<item>
+				<cref topic="customizing_projects">Customizing projects</cref>
+			</item>
+		</bullets>
+	</section>
+</chapter>

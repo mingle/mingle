@@ -1,0 +1,44 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% @sidebar = capture do -%>
+  <%= render :partial => "shared/favorites" %>
+<% end -%>
+
+
+<div class="search-header">
+  <div class='search-tips notes'><b>#1234</b>, <b>type:story</b>, <b>"iced tea"</b>, <b>-green</b>, <%= render_help_link("Advanced Search Page", :class => "search-tips-help", :content => "  Advanced tips...") %></div>
+  <ul id="facets" class="clear_float">
+    <%- tabs.each do |t| -%>
+      <li id = "facet_<%= t %>" <%= 'class="selected"'.html_safe if is_selected(t) -%>>
+        <%= link_to(display_name(t), options(t)) -%>
+      </li>
+    <%- end -%>
+  </ul>
+</div>
+
+<%- if @results.blank? -%>
+  <div id="resultcount" class="result-count">No <%= search_type || "results" %> found for <%= params[:q].bold %>.</div>
+<% else %>
+  <div id="resultcount" class="result-count"><%= pluralize(@results.count, "result") %> found.</div>
+  <% content_tag :div, :id => "results", :"data-dependency-popup-url" => url_for(:controller =>"dependencies", :action => "popup_show", :project_id => @project.identifier) do -%>
+    <% @results.each_with_index do |result, index| -%>
+      <div class="divider"></div>
+      <%= render_result(result, search_result_rank(index + 1, @results.size)) %>
+    <% end -%>
+    <div class="divider"></div>
+  <% end -%>
+<%- end -%>

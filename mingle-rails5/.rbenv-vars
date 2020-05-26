@@ -1,0 +1,2 @@
+CLASSPATH=lib/version.jar:lib/*:config:vendor/java/*
+JAVA_OPTS=-XX:+TieredCompilation -XX:TieredStopAtLevel=1 -noverify -Xmx1024m -Dfile.encoding=UTF-8 -XX:NewSize=128m -XX:+UseConcMarkSweepGC

@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_help.dtd">
+	<section title="How to install Mingle for Linux/Unix/Mac OSX" collapsed="true">	  
+	  <subsection title="Installation Steps" id="unix_installation_steps">
+  	  <note>
+  	  <p>During installation of Mingle you will need to set the location of the Mingle data directory (dataDir).</p>
+  	  <p>The dataDir is where Mingle will store project data including configuration files and attachments. This is not the database location.</p>
+  	  <p>This directory should not be within the Mingle installation folder. To avoid problems with future upgrades, keep these directory separate from the Mingle installation.</p>
+  	  </note>
+  		<steps title="Installation steps:">
+  			<item>Move the downloaded Linux/Unix installer file into the directory where you want to install Mingle.</item>
+  			<item>Untar the file using <cmd os="UNIX">tar -xzvf mingle_unix_X_X_XXXX.tar.gz</cmd> (where the Xs should be replaced with the downloaded file's revision number as shown in the filename).</item>
+  			<hint> If Safari was used to download the file you may find that the file was already unzipped. If this is the case the file will now have the extension .tar and you can use the command tar -xvf mingle_unix_X_X_XXXX.tar to extract the files.</hint>
+  			<item><p>Start the Mingle server and specify the data directory</p>
+  				<p>cd into the Mingle install directory and type:</p>
+  				<markup>./MingleServer --mingle.dataDir=/path/to/your/data start</markup>
+  				<p>where /path/to/your/data is the location of your data directory.</p>
+  				<note>You will need to be logged in as a user with the appropriate permissions to create the data directory in the location you specify. Otherwise when the Mingle Server starts up, it will not be able to create the data directory or swap directory.</note>
+		      	<hint>By default Mingle Server starts in background. To start it in foreground, use, <markup>./MingleServer --mingle.dataDir=/path/to/your/data start-launchd</markup></hint>
+  			</item>		
+  			<item>
+  				<p>Open a browser to the Mingle root.</p>
+  				<p>If you were configuring Mingle on the same machine the server was running on, this would be <strong>http://localhost:8080</strong>. Open your browser to the correct host and port for your installation.</p>
+  				<p>The browser displays the <cref topic="completing_the_mingle_configuration_wizard">configuration wizard</cref>.</p>
+  				<screenshot alttext="Welcome to Mingle" src="resources/images/installation/setup_wizard.png" />
+  			</item>
+<item>	If you have issues starting Mingle please refer to Mingle's <cref topic="troubleshooting_mingle_installation_and_upgrade">troubleshooting help</cref>.</item>
+  		</steps>
+  		<hint>
+  			<p>You may also optionally, set other <cref topic="advanced_mingle_configuration">advanced configuration options</cref> when starting Mingle or by editing the mingle.properties file located in the data directory. Refer to the mingle.properties.example file in your Mingle installation folder to see other properties that can be set to configure Mingle. If you do not manually set these options defaults will be used.</p>
+  			</hint>
+  		</subsection>
+	</section>

@@ -1,0 +1,41 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+
+<%= render :partial => 'shared/admin_actions'%>
+
+<% @edit_actions = capture do %>
+  <% action_bar do %>
+    <%= render_help_link('Project Settings Page', :class => 'page-help-at-action-bar')%>
+  	<%= link_to_function('Save', "Element.disableLink(this); $('project-properties').submit()", {:class => 'save'}) %>
+  	<%= link_to 'Cancel', {:action => 'show'}, :class => 'cancel' %>
+    <%= link_to "Delete", {:action => 'delete', :project_id => @project.identifier}, {:class => 'delete'} %>
+  	<%= spinner %>
+  <% end %>
+<% end %>
+
+
+
+<h1>Project settings</h1>
+
+<div id="edit-project-settings" class="form_contents">
+<% form_tag({:action => 'update'}, {:multipart => true, :id => 'project-properties'}) do -%>
+	<%= render :partial => 'form' %>
+	<%= hidden_field_tag "id", @project.id %>
+<% end -%>
+</div>
+
+<%= @edit_actions %>

@@ -1,0 +1,226 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+.type-node {
+  width:140px;
+  height:65px;
+  padding: 5px;
+  padding-top: 25px;
+  margin: 0 auto;
+  border: 1px solid #CCC;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+
+a.add-button {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  bottom: 5px;
+  left: 45%;
+  &:before {
+    @include fa_icon($fa-var-plus-circle);
+    font-weight: large;
+  }
+}
+
+a.remove-button {
+  width: 16px;
+  height: 16px;
+  display: block;
+  background: url(../images/shared/icons/icon_close_transparent_dark.png) no-repeat left;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+#update-aggregate-property {
+  float: right;
+}
+
+a.select-type {
+  padding-right: 20px;
+  background: url(../images/shared/icons/icon_triangle_down.png) no-repeat right;
+}
+
+.vertical-line {
+  border-right: 1px solid #ccc;
+  width: 1px;
+  height: 47px;
+  margin: 0 auto;
+}
+
+#tree_config_view {
+  padding: 10px;
+  border: 1px solid #CCC;
+  width: 550px;
+  margin-bottom: 10px;
+}
+
+.aggregate-popup {
+  width: 700px;
+  z-index: 9000;
+}
+
+.aggregate-popup-arrow {
+  background: transparent url(../images/tree-configure-dialog-bg.png) no-repeat left top;
+  position: absolute;
+  display: block;
+  width: 12px;
+  height: 31px;
+  z-index: 9999;
+}
+
+.aggregate-popup-outer {
+  border: solid 1px #CCC;
+  background: #FFF;
+  text-align: left;
+  box-shadow: 0 0 10px rgba(0,0,0,0.4);
+    -moz-box-shadow: 0 0 10px rgba(0,0,0,0.4);
+    -webkit-box-shadow: 0 0 10px rgba(0,0,0,0.4);
+    -o-box-shadow: 0 0 10px rgba(0,0,0,0.4);
+}
+
+.aggregate-popup-outer .lightbox_content_wrapper {
+  height: 350px;
+  padding: 15px;
+}
+
+.aggregate-popup-outer .fieldWithErrors {
+  margin: 0;
+}
+
+.aggregate-popup-outer .form_item,
+.aggregate-popup-outer p.relative-parent {
+  padding-bottom: 10px;
+}
+
+.aggregate-popup-outer input[type=text],
+.aggregate-popup-outer select {
+  width:300px;
+
+}
+
+#aggregate_property_definition_aggregate_condition {
+  margin-left: 5px;
+}
+
+.aggregate-popup-outer a.edit-agregate,
+.aggregate-popup-outer a:visited.edit-agregate {
+  float: right;
+  margin-right: 5px;
+}
+
+.aggregate-popup-outer a.delete-agregate,
+.aggregate-popup-outer a:visited.delete-agregate {
+  float: right;
+  margin-right: 5px;
+}
+
+.aggregate-popup-outer h2 {
+  background: #333 url(../images/shared/backgrounds/bg_glass_gradient.png) center center repeat-x;
+  padding: 10px;
+  margin: 0;
+  position: relative;
+  color: #FFF;
+}
+
+
+.relationship-connector {
+  position: relative;
+  zoom: 1;
+}
+
+.relationship-property {
+  position: absolute;
+  left: 52%;
+  top: 11px;
+}
+
+a.relationship-name-link {
+  padding: 5px 6px;
+  display: block;
+}
+
+input.relationship-name-field {
+  width: 250px;
+}
+
+a.aggregates-edit-link,
+a:visited.aggregates-edit-link {
+  display: block;
+  background: transparent url(../images/icon-tree-configuration-node-edit.png) no-repeat left -12px;
+  height: 12px;
+  position: absolute;
+  left: 8px;
+  bottom: 0;
+  padding: 0 0 0 18px;
+  margin-bottom: 1px;
+  font-size: 11px;
+  line-height: 11px;
+  white-space: nowrap;
+}
+
+a:hover.aggregates-edit-link {
+  background: transparent url(../images/icon-tree-configuration-node-edit.png) no-repeat left top;
+}
+
+.aggregate-popup-outer h3 {
+  margin: 10px 0;
+  border-top: 1px solid #CCC;
+  padding: 10px 0 0 0;
+}
+
+ul.aggregate-list {
+  margin: 0;
+  margin-bottom: 5px;
+  width: auto;
+  list-style: none;
+
+  ul.items {
+    list-style: none;
+    margin: 0;
+    max-height: 70px;
+    overflow: auto;
+  }
+
+  li {
+    margin: 0;
+    padding: 5px 10px;
+    border-top:1px solid #CCC;
+    background-color: #FFF;
+  }
+
+  li.header {
+    background:#EEE url(../images/shared/backgrounds/bg_gradient_50.png) repeat-x;
+    padding: 5px 10px;
+    border: 0;
+  }
+}
+
+.no-aggregates-hint {
+  color: #999;
+  text-align: center;
+  font-style: italic;
+}
+
+.no-aggregates-hint p {
+  background: #7FB9FA url(../images/icon-info.gif) no-repeat left 50%;
+  padding-left: 2.4em;
+}

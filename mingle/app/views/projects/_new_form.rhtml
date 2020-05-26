@@ -1,0 +1,211 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+
+  <h2 class="hide"><%= link_to_function('Basic Options', "$('basic-options-content').toggle();if($('basic-options-content').visible()){this.title='Hide basic options'}else{this.title='Show basic options';};$(this).toggleClassName('section-expand').toggleClassName('section-collapse')", {:id => 'basic-options-toggle-link', :class => 'section-collapse'}) %></h2>
+
+  <div id="basic-options-content" class="options-content">
+    <h2>Project details</h2>
+    <div class="form_section">
+
+      <div class="form_item">
+        <label for="project_name">Name:
+          <span class="required">*</span>
+        </label>
+        <%= text_field('project', 'name',  :class => 'width-large') %>
+      </div>
+
+      <%= hidden_field 'project', 'identifier', :maxlength => Identifiable::IDENTIFIER_MAX_LEN, :class => 'width-large' %>
+    </div>
+
+    <% templates_exist = false %>
+     <h2>
+      Pre-defined templates
+      <small>
+      These are the most popular templates. You can find more at our <a href="<%= COMMUNITY_URL_ROOT %>/entries/23483572" target="_blank">community site</a>.
+      </small>
+     </h2>
+    <div class="form_section last">
+      <div id="template-list" class="templates toggle-section">
+       <div class="predefined">
+        <% ConfigurableTemplate.templates.each do |project_template| -%>
+        <% templates_exist = true -%>
+        <%= render :partial => 'thumbnail', :locals => { :name => project_template.name , :value => "yml_#{project_template.identifier}", :class_name => "yml_#{project_template.identifier}" } %>
+        <% end -%>
+        <%= render :partial => 'thumbnail', :locals => { :name => 'Blank', :value => ProjectsController::BLANK, :class_name => 'blank' } %>
+       </div>
+       <% if MingleConfiguration.in_progress_templates? && ConfigurableTemplate.in_progress_templates.any? %>
+       <div class="in-progress">
+        <h2>
+          Templates currently in progress
+        </h2>
+        <% ConfigurableTemplate.in_progress_templates.each do |project_template| -%>
+        <% templates_exist = true -%>
+        <%= render :partial => 'thumbnail', :locals => { :name => project_template.name , :value => "in_progress_#{project_template.identifier}", :class_name => "yml_#{project_template.identifier}" } %>
+        <% end -%>
+       </div>
+       <% end %>
+       <div class="custom">
+         <% custom_templates = DBTemplate.templates.smart_sort_by(&:name) %>
+         <% if custom_templates.any? %>
+           <% templates_exist = true -%>
+           <h2>Your custom templates</h2>
+           <% custom_templates.each do |project_template| -%>
+           <%= render :partial => 'thumbnail', :locals => { :name => project_template.name , :value => "custom_#{project_template.identifier}", :class_name => "custom_#{project_template.identifier}" } %>
+           <% end -%>
+         <% end -%>
+      </div>
+      </div>
+    </div>
+
+    <% selected_template = params[:template_name] ?
+                                   ".#{params[:template_name]} label" :
+                                   ".templates label:first"%>
+    <%= javascript_with_rescue <<-JAVASCRIPT
+      function selectTemplate(template) {
+          $j('.templates label').removeClass('selected');
+          $j('.templates input:radio').prop('checked', false);
+          $j(template).addClass('selected');
+          $j(template).siblings().prop('checked', true);
+      }
+
+      selectTemplate('#{selected_template}');
+
+      $j('.templates label').click(function() {
+          selectTemplate(this);
+          $j('#template_options .item input:radio').attr('disabled', false);
+      });
+
+      $j('.templates .template.blank label').click(function() {
+          $j('#template_options .item input:radio').attr('disabled', true);
+      })
+    JAVASCRIPT
+    %>
+
+
+<!-- old project details -->
+
+  </div>
+
+  <h2 id="advanced_options_header"><%= link_to_function('Advanced Options', "$('advanced-options-content').toggle();if($('advanced-options-content').visible()){this.title='Hide advanced options'}else{this.title='Show advanced options';};$(this).toggleClassName('section-expand').toggleClassName('section-collapse')", {:id => 'options-toggle-link', :class => 'section-expand'}) %></h2>
+
+  <div class="options-content">
+    <% if CurrentLicense.status.enterprise? -%>
+      <p class="instructions">
+        Use this to update the <strong>time settings</strong>, <strong>number settings</strong>, <strong>email settings</strong>, <strong>Cycle Time settings</strong>, <strong>icon</strong>, <strong>dependencies settings</strong> and <strong>project membership settings</strong>.
+      </p>
+    <% else -%>
+      <p class="instructions">
+        Use this to update the <strong>time settings</strong>, <strong>number settings</strong>, <strong>email settings</strong>, <strong>Cycle Time settings</strong>, <strong>icon</strong> and <strong>project membership settings</strong>.
+      </p>
+    <% end -%>
+
+    <div id="advanced-options-content" style="display: none">
+
+      <div class="form_section">
+        <h4>Time settings</h4>
+        <div class="form_item">
+          <label for="project_time_zone">Time zone:</label>
+          <%= time_zone_select(:project, :time_zone) %>
+        </div>
+        <div class="form_item">
+          <label for="project_date_format">Date format:<span class="required">*</span> <span class="notes">(Dates will displayed in this format throughout the project.)</span></label>
+          <%= select 'project', 'date_format', Project::AVAILABLE_DATE_FORMATS %>
+        </div>
+      </div>
+
+      <div class="form_section cta-options">
+        <h4>Cycle Time settings</h4>
+        <div class="form_item">
+          <%= check_box 'project', 'exclude_weekends_in_cta', {} %> <label for="exclude_weekends_in_cta" class="inline">Exclude weekends<span class="required">*</span> in Cycle Time Analytics</label>
+          <div class="notes notes-for-exclude-weekends-in-cta"><span class="required">*</span>Weekends determined based on Timezone selected above</div>
+        </div>
+      </div>
+
+      <div class="form_section">
+        <h4>Number settings</h4>
+        <div class="form_item">
+          <label for="project_precision">Numeric precision: <span class="notes">(This value determines the precision with which your numeric properties are stored and formula properties are calculated.  Decreasing this value could change existing data. <a href='<%= link_to_help('Project Numeric Precision') %>'>Help</a>.)</span></label>
+          <%= text_field(:project, :precision) %>
+        </div>
+      </div>
+
+      <% if FEATURES.active?('smtp_configuration') %>
+      <div class="form_section">
+        <h4>Send project email from</h4>
+        <div class="form_item">
+        <label for="project_email_sender_name">Name:</label> <%= text_field 'project', 'email_sender_name', :class => 'width-large' %>
+        </div>
+
+        <div class="form_item">
+        <label for="project_email_address">Email Address:</label> <%= text_field 'project', 'email_address', :class => 'width-large' %>
+        </div>
+      </div>
+      <% end %>
+
+
+
+      <div class="form_section">
+
+        <h4>Icon</h4>
+        <span class="notes">(This will appear beside the project name in the list of projects. Supported formats are BMP, GIF, JPEG and PNG)</span>
+        <div class="form_item">
+        <%= image_tag(icon_url_for_model(@project), :size => "32x32", :class=> 'project_icon') if @project.icon %>
+        <%= file_column_field 'project', 'icon' %>
+        </div>
+
+      </div>
+
+      <% if CurrentLicense.status.enterprise? -%>
+        <div class="form_section">
+
+          <h4>Dependencies Settings</h4>
+          <div class="form_item">
+            <label class="inline">
+              <%= check_box "project", "accepts_dependencies", {}, "true", "false" -%>
+              Allow all projects to raise dependencies on this project
+            </label>
+          </div>
+          <span class="notes">(All users will be able to select this project by name when raising a dependency)</span>
+
+        </div>
+      <% end -%>
+
+      <div class="form_section last">
+
+        <h4>Membership</h4>
+        <%= render :partial => 'auto_enroll_option' %>
+
+        <div class="checkbox_row">
+          <%= check_box_tag 'as_member', 'true', true %> <label for="as_member" class="inline">I will be a member of this project's team</label>
+        </div>
+
+        <% if allow_anonymous %>
+        <div class="checkbox_row">
+          <%= check_box 'project', 'anonymous_accessible', {}, 'true', 'false' %> <label for="project_anonymous_accessible" class="inline">Allow anonymous users to access this project</label>
+        </div>
+        <% end %>
+        <% unless @project.template? %>
+        <div class="checkbox_row">
+          <%= check_box 'project', 'membership_requestable', {}, 'true', 'false' %> <label for="project_membership_requestable" class="inline">Allow logged in users to request membership to this project</label>
+        </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<%= synchronized_inputs "#project_name", "#project_identifier" %>
+
+<%= javascript_with_rescue "if($$('#advanced-options-content .fieldWithErrors').length > 0) {$('options-toggle-link').onclick();}" %>

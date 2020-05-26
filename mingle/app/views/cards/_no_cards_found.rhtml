@@ -1,0 +1,46 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%- @view ||= CardListView.find_or_construct(@project, params) -%>
+
+<div id="no_cards_found">
+  <%- if @view.invalid? -%>
+    <%- error_box do -%>
+      <div id='error' class="flash-content">
+        <%= @view.workspace.validation_errors.join('</br>') if @view.workspace.validation_errors.any? -%>
+        <%- if @view.filters.invalid? -%>
+          Filter is invalid. <%= @view.filters.validation_errors.join(' ') %><%= simple_help_link(Thread.current['mingle_cache_help_link']) %>&nbsp;<%= link_to 'Reset filter', link_to_current_tab_with_filter_reset(@view) %>
+        <%- end -%>
+      </div>
+    <%- end -%>
+  <%- elsif @view.cards.empty? -%>
+    <%- info_box do -%>
+      <div id="info" class="flash-content">
+        <%- if @project.cards.count.zero? -%>
+          <%= raw no_cards_for_project_message(@project) %>
+        <%- elsif tree_config = @view.workspace.tree_configuration -%>
+          <%- if tree_config.cards_count > 0 -%>
+            No cards that have been assigned to <strong title="<%= @view.tree_name %>"><%= truncate(@view.tree_name, :length => 40) %></strong> tree match the current filter - <%= link_to 'Reset filter', link_to_current_tab_with_filter_reset(@view) %>
+          <%- else -%>
+            No cards have been assigned to <strong title="<%= @view.tree_name %>"><%= truncate(@view.tree_name, :length => 40) %></strong> tree.
+          <%- end -%>
+        <%- else -%>
+          There are no cards that match the current filter - <%= link_to 'Reset filter', link_to_current_tab_with_filter_reset(@view) %>
+        <%- end -%>
+      </div>
+    <%- end -%>
+  <%- end -%>
+</div>

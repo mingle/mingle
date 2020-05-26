@@ -1,0 +1,64 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div style="<%= notification_style(murmur, discussion, user) %>">
+  <div style="<%= murmur_style(murmur, discussion) %>">
+    <%= raw format_murmur_notification(format_as_discussion_item(murmur.murmur)) %>
+  </div>
+  <div style="font-size: 0.9em;">
+    <div style="padding: 10px 12px 12px 15px; background-color: <%= murmur_highlight_color(murmur, discussion, user) %>">
+      <table>
+        <tr>
+          <% if MingleConfiguration.asset_host.present? %>
+            <td>
+              <%= image_tag_for_user_icon(murmur.author, :size => '24x24', :style => 'margin: 2.5px 5px 0 0; border-radius: 14px') %>
+            </td>
+          <% end %>
+          <td>
+            <div style="color: black; margin-bottom: 1px;">
+              <span style="font-weight: bold"><%= murmur.user_display_name %></span>
+              <span><%= " (@#{murmur.author.login})" %></span>
+            </div>
+            <div style="color: #777"><%= murmured_at(murmur) %></div>
+          </td>
+        </tr>
+      </table>
+      <% if murmur == discussion.first %>
+        <% if MingleConfiguration.installer?  %>
+          <div style="padding-top: 20px; height: 24px">
+            <%= link_to "REPLY",
+                        url_options.merge(:controller => 'projects', :action => 'show', :murmur_id => @murmur.id, :project_id => @project.identifier),
+                        :style => "border: 1px solid #3FBEEA; background-color: white; color: #3FBEEA; padding: 5px 13px; width: 90px; font-size: 11px; text-decoration: none" %>
+          </div>
+        <% else %>
+          <div style="border-top: 1px solid #ccc;  margin-top: 5px; padding-top: 5px; background-color: <%= murmur_highlight_color(murmur, discussion, user) %>;">
+            <div style="color: #9E9E9E; margin-bottom: 1px;"> Want to post a murmur?</div>
+            <div style="margin-bottom: 1px;">
+              <span style="color: black;">Reply to this email</span>
+              <span style="color: #9E9E9E;"> or</span>
+              <span>
+                <%= link_to "View in Mingle", murmur_url(murmur, url_options), :style => "color: #3FBEEA; text-decoration: none" %>
+              </span>
+            </div>
+            <% if murmur.is_a?(CardCommentMurmur) %>
+              <div style="color: #9E9E9E; margin-bottom: 1px;"> Do you need to post a file on to #<%= "#{murmur.origin.number}"%>? Attach the file in your reply to this email.</div>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>

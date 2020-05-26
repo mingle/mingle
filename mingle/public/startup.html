@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html>
+<head>
+  <title>Mingle is starting...</title>
+  <meta http-equiv="Pragma" content="no-cache"/>
+  <meta http-equiv="cache-control" content="no-cache"/>
+  <meta http-equiv="Expires" content="-1"/>
+  {% stylesheetLinks %}
+  <link rel="shortcut icon" href="{% contextPath %}/favicon.ico">
+  {% assetsJsLink %}
+  <script type="text/javascript" charset="utf-8">
+      function openDatabaseMigrationPage() {
+          window.location = '{% helpPath %}/database_migration.html';
+          return false;
+      }
+      function openUpgradingFromPreviousVersionsPage() {
+          window.location = '{% helpPath %}/upgrading_from_previous_versions.html';
+          return false;
+      }
+
+      function updateStartupMessage() {
+          var lastState = $("state").innerHTML.strip();
+          var periodicalUpdater = new Ajax.PeriodicalUpdater('state', '{% contextPath %}/bootstrap_status', {
+              method: 'get',
+              frequency: 2,
+              onSuccess: function (transport) {
+                  var response = transport.responseText.toString().strip();
+                  if (response !== lastState) {
+                      periodicalUpdater.stop();
+                      reload();
+                  }
+                  lastState = response;
+              }
+          });
+      }
+
+      function submitConfirmation() {
+          $$('button').each(function (item) {
+              item.disabled = true;
+          });
+          $('spinner').show();
+          new Ajax.Request('{% contextPath %}/startup', {
+              method: 'post',
+              parameters: Form.serialize('confirm_upgrade_form'),
+              onComplete: reload
+          });
+          return false;
+      }
+
+      function reload() {
+          window.location.reload(true);
+      }
+  </script>
+</head>
+<body onload="updateStartupMessage()" id="page-identifier-profile-login" class="startup">
+  <div id="doc" class="yui-t7">
+    <div id='hd'>
+      <div id="hd-top">
+        <div id="title">
+        </div>
+        <div class='clear-both'><!-- Clear floats --></div>
+      </div>
+    </div>
+    <div id="bd">
+      <div class='main_inner'>
+        <div id="flash"></div>
+        <div id="graphic-dialog-container">
+           <div id="graphic-dialog" class="profile-box">
+              <div id="graphic-dialog-input">
+                <h2 class="login_header">&nbsp;</h2>
+                 <h2 id="starting-message">Mingle is starting... <img id='spinner' style="display: none" alt="Mingle is starting..." src="{% contextPath %}/images/spinner.gif"/></h2>
+                 <div id='bootstrap_message'>
+                     {% message %}
+                 </div>
+              </div>
+          </div>
+        </div>
+        <div class='ie-margin-collapse-fix'>&nbsp;</div>
+      </div>
+    </div>
+
+    <div id="ft">
+      <ul id="support">
+        <li id="support_request"><a href="{% supportUrl %}">Support request</a></li>
+        <li id="community"><a href="{% communityHome %}">Community</a></li>
+        <li><a href='{% helpPath %}/index.html'>Help</a></li>
+      </ul>
+    </div>
+</div>
+<div id="state" style="display:none">{% currentState %}</div>
+</body>
+</html>

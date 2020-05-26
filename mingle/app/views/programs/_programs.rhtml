@@ -1,0 +1,41 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% action_bar do %>
+    <%= link_to_remote "new program", {:url => {:action => 'create'},
+    :success => "Program.initializeFromJSON(request.responseJSON);", :method => :post}, { :class => 'link_as_button primary'} %>
+    <%= link_to "import program", {:controller => 'program_import', :action => 'new'}, :class => 'link_as_button' %>
+<%- end -%>
+
+<div class="program_list">
+  <% if !User.current.admin? && @programs.empty? %>
+    <% info_box :id => "no-programs" do %>
+      <div class='clear_float'>
+        <div id='no-programs-available-warning'>
+          You are currently not a member of any program.
+        </div>
+      </div>
+      <%= clear_float %>
+    <% end %>
+  <% end %>
+
+<% @programs.each do |program| %>
+  <div class="program program-panel" id="program_details_<%= program.id %>">
+    <%= render :partial => 'program', :locals => {:program => program, :initialize_menu => false} %>
+  </div>
+<% end %>
+
+</div>

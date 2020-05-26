@@ -1,0 +1,38 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= link_to_function 'Close', 'Lightbox.deactivate()', {:style => 'float:right'} %>
+<h3>Import to Excel</h3>
+<ol>
+	<li>Select <b>all cells</b> containing cells in Excel, <b>including headers</b>
+	<li>Copy cards from Excel into the clipboard</li>
+	<li>Paste cards into the text area below</li>
+  <li>Click "Preview" to arrange your columns</li>
+  <li>Click "Import" to finish your importing </li>
+</ol>
+
+<div id ='display_area'>
+  <% form_remote_tag(:html => {:id => 'import_preview_form'}, :update => 'display_area', :url => {:controller => 'cards_import', :action => 'import_preview'}, :before => 'previousDisplayArea = $("display_area").innerHTML; pastedText = $("tab_separated_import").value') do -%>
+<div>
+	<%= text_area_tag 'tab_separated_import', '', :rows => 15 %>
+</div>
+<div class="button-bar">
+  <div style='float: left;'> <font style="color: green;">Past</font>...Preview...Import </div>
+  <%= submit_tag 'Preview' %>
+</div>
+<% end -%>
+</div>
+

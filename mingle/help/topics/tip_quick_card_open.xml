@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE section SYSTEM "mingle_help.dtd">
+<chapter title="Quick access to cards">
+				<p> Access to a card quickly and from anywhere in Mingle.</p>
+				<topic title="Quick card view via full text search">
+								<item> You can simply put a pound (#) followed by a card number you want to open in a text search area.</item>
+								<screenshot alttext="Quick card open" src="resources/images/quick_card_open1.jpg"/>
+				</topic>
+				<topic title="Quick card view via Firefox quick search">
+								<steps>
+												<item> To setup a quick card search, open Firefox and go to Mingle full text search box at the top right corner. </item>
+												<item> Right-click inside the search input box and choose "Add a Keyword for this Search..." </item>
+												<screenshot alttext="Add keyword to search" src="resources/images/firefox_mingle_quick_search.png"/>
+												<item> Enter a title for the search (i.e. "Mingle Quick Search") and a keyword you'll use to execute it, such as "mingle" </item>
+												<screenshot alttext="Save quick search" src="resources/images/firefox_mingle_quick_search_2.png"/>
+												<item> Press 'Add' and your Mingle quick search is setup </item>
+												<item> Now, from the Firefox address bar, you can type in "mingle" plus your search query such as "#100" to go directly to specific card in your project</item>
+								</steps>
+						<hint>You can use the Firefox quick search to search any content in Mingle. Just replace #100 with your query. </hint>		
+								
+				</topic>
+</chapter>

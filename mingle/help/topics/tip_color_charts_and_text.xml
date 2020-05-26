@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE section SYSTEM "mingle_help.dtd">
+<chapter title="Use colors in charts">
+	<p>Mingle supports <exref url="http://www.w3.org/TR/css3-color/#svg-color">standard web color names</exref> so that you can easily create charts and wiki content with colors you specify.</p>
+	<topic title="Change your chart color">
+		<subsection title="Example one" collapsed="false">
+			<markup_reference title="The following is the syntax to create a ratio bar chart. Notice that the color 'HotPink' is used." />
+				<markup>
+					<screenshot src="resources/images/color_chart_1.png" />
+				</markup>
+				<preview>
+					<screenshot alttext="Preview" src="resources/images/color_chart_2.png" />
+				</preview>
+		</subsection>
+		<subsection title="Example two" collapsed="false">
+			<markup_reference title="The following is the syntax to create a data series chart. Notice that the colors 'MediumOrchid', 'Indigo', 'DarkSlateBlue' are used." />
+			<markup>
+				<screenshot src="resources/images/color_chart_3.png" />
+			</markup>
+			<preview>
+				<screenshot alttext="Preview" src="resources/images/color_chart_4.png" />
+			</preview>
+		</subsection>
+	</topic>
+</chapter>

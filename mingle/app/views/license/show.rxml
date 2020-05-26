@@ -1,0 +1,28 @@
+# Copyright 2020 ThoughtWorks, Inc.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+
+xml.instruct!
+xml.license_registration do
+   xml.licensed_to @registration.licensed_to
+   xml.edition @registration.edition
+   xml.expiration_date @registration.expiration_date
+   xml.max_active_full_users @registration.max_active_full_users
+   xml.max_active_light_users @registration.max_active_light_users
+   xml.allow_anonymous @registration.allow_anonymous?
+
+   xml.current_active_users User.activated_full_users
+   xml.activated_light_users User.activated_light_users
+   xml.full_users_used_as_light @registration.full_users_used_as_light
+end

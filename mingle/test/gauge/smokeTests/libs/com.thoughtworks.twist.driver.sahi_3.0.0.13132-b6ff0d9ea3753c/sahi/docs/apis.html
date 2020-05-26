@@ -1,0 +1,721 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <meta name="generator" content="HTML Tidy, see www.w3.org">
+    <title>Sahi - APIs</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="sahi.css">
+</head>
+
+<body>
+<table width="100%">
+<tr>
+<td width="150px" valign="top">
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+
+    <div class="menu">
+        <ul>
+            <li><a href="index.html">Introduction</a></li>
+            <!--<li><a href="index.html#features">Features</a></li>-->
+
+        </ul>
+        <ul>
+            <li><a href="sahi_tutorial.html" target="_blank">Flash Tutorial</a></li>
+            <li><a href="screenshots.html">Screen Shots</a></li>
+        </ul>
+
+        <ul>
+            <li><a href="install.html">Downloading Sahi</a></li>
+
+            <li><a href="install.html#prereq">Prerequisites</a></li>
+
+            <li><a href="install.html#install">Installing Sahi</a></li>
+        </ul>
+
+        <ul>
+            <li><a href="using.html">Getting started</a></li>
+
+            <li><a href="using.html#record">Recording through Sahi</a></li>
+
+            <li><a href="using.html#playback">Playing back</a></li>
+
+            <li><a href="using.html#suites">Suites</a></li>
+
+            <li><a href="using.html#logging">Logging</a></li>
+        </ul>
+
+        <ul>
+            <li>Documentation:
+
+                <ul>
+                    <li><a href="http://sahi.co.in/w/apis">APIs</a></li>
+                    <li><a href="http://sahi.co.in/w/sahi-script">Scripting</a></li>
+                </ul>
+            </li>
+        </ul>
+
+        <ul>
+            <li><a href="http://sahi.co.in/w/Running+multiple+tests+in+batch+mode">Running in batch mode</a></li>
+        </ul>
+
+        <ul>
+            <li><a href="ide.html">Editor Support</a></li>
+        </ul>
+
+        <ul>
+            <li><a href="problems.html#problems">Problems</a></li>
+
+            <li><a href="problems.html#notyet">Not yet supported, but coming
+                in</a></li>
+        </ul>
+
+        <hr>
+
+        <ul>
+            <li><a href="http://sourceforge.net/projects/sahi" target="_blank">On Sourceforge</a></li>
+            <li><a href="http://sahi.co.in/forums/" target="_blank">Forums</a></li>
+            <li><a href="http://sourceforge.net/tracker/?group_id=151639&atid=781586" target="_blank">Report/View Bugs</a></li>
+            </li>
+        </ul>
+
+
+    </div>
+</td>
+<td valign="top">
+    <div class="content">
+        <div style="float:right;" width="100%" border="0">
+                <a href="http://sourceforge.net"><img src=
+                        "http://sourceforge.net/sflogo.php?group_id=151639&amp;type=3"
+                                                                        width="125" height="37" border="0"
+                                                                        alt="SourceForge.net Logo"></a>
+                    <br>
+            </div>
+        <h2>Sahi - Web Automation and Test Tool</h2><br/>
+        <div style="background-color:red;color:white;font-size:12pt;text-align:center;">
+		Documentation in this directory is not current.
+		Please visit <a style="color:white;font-size:12pt;" href="http://sahi.co.in/">http://sahi.co.in/</a> for the latest documentation.
+		</div>
+
+        <!--<h2> Sahi - Web Automation and Test Tool</h2>-->
+        <!--<br>-->
+        <!--<table width="100%">-->
+        <!--<tr>-->
+        <!--<td valign="top" align="left">-->
+        <!--<a class="top_menu" href="docs">Home</a>-->
+        <!--<a class="top_menu" href="docs">Why Sahi</a>-->
+        <!--<a class="top_menu" href="docs">Docs</a>-->
+        <!--<a class="top_menu" href="docs">Support</a>-->
+        <!--<a class="top_menu" href="docs">License</a>-->
+        <!--</td>-->
+        <!--</tr>-->
+        <!--</table>-->
+        <hr/>
+        <br/>
+
+        <h2 class="pageTitle">APIs</h2>
+        <!--APIs-->
+The best way to learn how these APIs work is by recording actions
+using the Sahi controller and looking at the recorded code. <br>
+<br>
+<a href="#aform">Accessor Functions : Form elements</a><br>
+<a href="#alink">Accessor Functions : Link</a><br>
+<a href="#atable">Accessor Functions : Tables</a><br>
+<a href="#ageneric">Accessor Functions : Generic</a><br>
+<a href="#action">Action Scheduler Functions</a><br>
+<a href="#assertion">Assertion Scheduler Functions</a><br>
+<a href="#textaccess">Text Access Functions</a><br>
+<a href="#textverify">Text Verification boolean Functions</a><br>
+<a href="#include">File Inclusion</a><br>
+<a href="#utility">Utility Functions</a><br>
+<a href="#db">Database Functions</a><br>
+<a href="#readFile">File Read Functions</a><br>
+<a href="#popup">Handling popup windows</a><br>
+(<a href="#top">Top</a>) <br>
+<h4><a name="aform"></a>Accessor Functions : Form elements</h4>
+
+<b>_textbox(idStr)<br>
+    _password(idStr)<br>
+    _checkbox(idStr)<br>
+    _textarea(idStr)<br>
+    _select(idStr)<br>
+    _option(selectElement, text)<br>
+    _radio(idStr)<br>
+    _image(idStr)<br>
+    _button(idStr)<br>
+    _submit(idStr)<br>
+    <a href="#confirm">_lastConfirm()</a><br>
+    <a href="#prompt">_lastPrompt()</a><br>
+    _file(idStr)<br>
+</b> (<a href="#top">Top</a>) <br>
+<h4><a name="alink"></a>Accessor Functions : Link</h4>
+
+<b>_link(idStr)<br>
+</b> (<a href="#top">Top</a>) <br>
+<h4><a name="atable"></a>Accessor Functions : Tables</h4>
+
+<b>_table(idStr)<br>
+    _cell(tableEl, rowNo, colNo)<br>
+    _cell(tableEl, someTextWhichIdentifiesRow,
+    someTextWhichIdentifiesColumn)<br>
+    _cell(cellIdStr)<br>
+    _row(tableEl, rowNo)<br>
+    _row(tableEl, someTextWhichIdentifiesRow)<br>
+</b> (<a href="#top">Top</a>) <br>
+<h4><a name="ageneric"></a>Accessor Functions : Generic</h4>
+
+<b>_accessor(idStr)<br>
+</b> (<a href="#top">Top</a>) <br>
+<h4><a name="scheduler"></a>Scheduler Functions</h4>
+
+<div class="explain">Scheduler Functions behave differently from
+    normal functions.<br>
+    They schedule the execution of the action for later execution in a
+    different thread. They essentailly have the effect of converting
+    the whole statement into a string and adding it to a global
+    array.<br>
+    Each statement from the array is then executed one at a time, with
+    a delay, when its turn comes.<br>
+    <br>
+    Note: All these functions can also be made to execute instantly
+    (and not delayed) by using __ (double underscores) instead of _
+    (single underscore)<br>
+</div>
+
+(<a href="#top">Top</a>) <br>
+<h4><a name="action"></a>Action Scheduler Functions</h4>
+
+These are <a href="#scheduler">Scheduler Functions</a><br>
+<br>
+<b>_click(jsElement)<br>
+    _clickImage(jsElement)<br>
+    _dragDrop(draggableElement, dropDestinationElement);<br>
+    _setValue(jsElement, val)<br>
+    _setSelected(jsElement, val)<br>
+    _check(jsElement, val)<br>
+    _simulateEvent(jsElement, ev)<br>
+    _wait(millis)<br>
+    _alert(str)<br>
+    _setGlobal(name, value)<br>
+    <a href="scripting.html#functions">_call(fn())</a><br>
+    _log(message, type) where type can be "success", "failure",
+    "error", "info"<br>
+    _highlight(jsElement)<br>
+    _navigateTo("URLString")<br>
+    <a href="#callserver">_callServer("class_method", "querystring")</a><br>
+    <a href="#mock">_addMock("pattern")</a><br>
+    <a href="#mock">_addMock("pattern", "class_method")</a><br>
+    <a href="#mock">_removeMock("pattern")</a><br>
+    <a href="#confirm">_expectConfirm()</a><br>
+    <a href="#prompt">_expectPrompt()</a><br>
+    <a href="#setfile">_setFile(_file("id"), filePath)</a><br>
+
+</b> <br>
+(<a href="#top">Top</a>) <br>
+<h4><a name="assertion"></a>Assertion Scheduler Functions</h4>
+
+These are <a href="#scheduler">Scheduler Functions</a><br>
+<br>
+<b>_assertNotNull(jsElement, msg)<br>
+    _assertNull(jsElement, msg)<br>
+    _assertEqual(expected, actual, msg)<br>
+    _assertNotEqual(expected, actual, msg)<br>
+    _assertTrue(condition, msg)<br>
+    _assertNotTrue(condition, msg)<br>
+</b> (<a href="#top">Top</a>) <br>
+<h4><a name="textaccess"></a>Text Access Functions</h4>
+
+<b>_getSelectedText(selectElement)<br>
+    _getCellText(tableCellElement)<br>
+</b> (<a href="#top">Top</a>) <br>
+<h4><a name="textverify"></a>Text Verification boolean
+    Functions</h4>
+
+<b>_containsText(element, textToSearch)<br>
+    _containsHTML(element, htmlToSearch)<br>
+</b> (<a href="#top">Top</a>) <br>
+<br>
+<hr>
+<br>
+<h4><a name="include"></a>File Inclusion</h4>
+
+<b>_include(filePath)<br>
+</b> <br>
+<b>_include(filePath)</b> <br>
+<br>
+One sah file may include other sah files, thus allowing logical
+separation of code.<br>
+Syntax: _include(file2.sah) <br>
+<br>
+Example:<br>
+<br>
+<b style="background-color:lightgreen;padding:10px">File
+    create_customer.sah</b><br>
+<pre class="code">
+    _include("create_customer_Functions.sah");
+    createCustomer("Narayan", 1001, 27);
+</pre>
+
+<br>
+<br>
+<b style="background-color:lightgreen;padding:10px">File
+    create_customer_Functions.sah</b><br>
+<pre class="code">
+    function createCustomer($name, $id, $age){
+    _setValue(_textbox("name"), $name);
+    _setValue(_textbox("id"), $id);
+    _setValue(_textbox("age"), $age);
+    }<br>
+</pre>
+
+(<a href="#top">Top</a>) <br>
+<hr>
+<br>
+<h4><a name="utility"></a>Utility Functions</h4>
+
+<a href="#random">_savedRandom(id, minNo, maxNo)<br>
+    <a href="#resetrandom">_resetSavedRandom(id)<br>
+        <a href="#global">_setGlobal(name, value)</a><br>
+        <a href="#global">_getGlobal(name)</a><br>
+        <a href="#debug">_debug(msg)</a><br>
+        <a href="#debug">_debugToErr(msg)</a><br>
+        <a href="#debug">_debugToFile(msg, filePath)</a><br>
+        <br>
+        <b><a name="random">_savedRandom(id, min, max)</a></b><br>
+        <br>
+        If a script was recorded for say, creating a user, and if the user
+        name is mandated to be unique in the application,<br>
+        we need to add random numbers to the user name so that it remains
+        unique.<br>
+        <br>
+        One can obtain a random number by using _savedRandom(id, min,
+        max).<br>
+        During the first call to it, it creates a random number between min
+        and max, associates with the id and returns the number.<br>
+        On subsequent accesses with that id, it returns the same random
+        number which it had created in the first access.<br>
+        <br>
+        Example:<br>
+    </a></a>
+<pre class="code">
+    var $x = _savedRandom("login", 100, 200); //sets $x to say 145 (a random number between 100, 200).
+    //Defaults for min and max, if omitted, are 0 and 10000
+    $y = _savedRandom("login", 100, 200); //will set $y to 145 again.
+    $y = _savedRandom("login"); //will also set $y to 145.
+</pre>
+
+<br>
+The min and max are needed only during the first call.<br>
+<br>
+<b><a name="resetrandom">_resetSavedRandom(id)</a></b> <br>
+_resetSavedRandom(id) resets value of _savedRandom(id) to null;
+<br>
+<br>
+
+
+<hr>
+<br>
+<b><a name="global">_setGlobal(name, value) and
+    _getGloblal(name)</a></b> <br>
+<br>
+Since a script may span across multiple web pages, variables from
+one page may need to be stored for later use.<br>
+For example, an id which is generated on customer creation may need
+to stored for later look up of the customer, on a different
+page.<br>
+This can be accomplished by _setGlobal(name, value) and
+_getGloblal(name).<br>
+<br>
+Example:<br>
+<pre class="code">
+    _setGlobal("customerId", _getCellText(_cell("custId"))); // sets the text in table cell with id "custId" into a
+    global variable keyed by "customerId"
+</pre>
+
+Then on a later page, one can retrieve the customerId through<br>
+<pre class="code">
+    _setValue(_textbox("lookup"), _getGlobal("customerId")); // the second parameter retrieves the text stored.
+</pre>
+
+These variables are stored on the server in a hashmap associated
+with the session.<br>
+<br>
+Note: that all values will be stored as strings only. <br>
+Note: _setGlobal is a <a href="#scheduler">Scheduler Function</a>.
+<br>
+
+<hr>
+<br>
+<b><a name="debug">_debug(msg)</a></b>
+<br>
+Writes the message to the standard output stream. The messages will be visible on the window where the proxy is running unless redirected.
+<br>
+
+<br>
+<b>_debugToErr(msg)</b>
+<br>
+Writes the message to the standard error stream. The messages will be visible on the window where the proxy is running unless redirected.
+<br>
+
+<br>
+<b>_debugToFile(msg, filePath)</b>
+<br>
+Writes the message to the file specified.
+<br>
+
+
+(<a href="#top">Top</a>) <br>
+
+<hr>
+<br>
+<h4><a name="popup">Handling popup windows</a></h4>
+
+<a href="#popup1">_popup(windowName)<br>
+    <br>
+    <b><a name="popup1">_popup(windowName)</a></b><br>
+    <br>
+    In order to execute sahi commands in a popup window, for example
+    click a link,<br>
+    use</a>
+<pre class="code">
+    _popup("popupWinName")._click(_link("Click Me"));
+</pre>
+
+<br>
+where popupWinName was defined like this:<br>
+<pre class="code">
+    window.open("http://popup.url", "popupWinName");
+</pre>
+or<br>
+<pre class="code">
+    &lt;a href="http://popup.url" target="popupWinName"&gt;
+</pre>
+Note that there may be problems in recording this. <br>
+<br>
+
+(<a href="#top">Top</a>) <br>
+<hr>
+<br>
+<h4><a name="callserver">_callServer("class_method", "querystring")</a></h4>
+
+_callServer allows Sahi to execute any server side code.
+
+
+Example:<br>
+<pre class="code">
+
+    <b>Create this Counter class. You will need sahi.jar in the compilation path.</b>
+
+    package sahi.ext;
+
+    import net.sf.sahi.request.HttpRequest;
+    import net.sf.sahi.response.HttpResponse;
+    import net.sf.sahi.response.SimpleHttpResponse;
+
+
+    public class Counter {
+    static int counter = 0;
+
+    public void incrementCounter(HttpRequest request) {
+    counter++;
+    }
+
+    public HttpResponse getCounter(HttpRequest request) {
+    return new SimpleHttpResponse(""+counter);
+    }
+
+    }
+
+
+    <b>Add this class to Sahi's class path.</b>
+    For example, if you are using sahi.bat, you could add it to the path like this:
+    java -classpath ..\lib\sahi.jar;<b>C:\sahiext\classes;</b> net.sf.sahi.Proxy
+
+    <b>Restart Sahi</b>
+
+    <b>Now we can call the methods of Counter class from any Sahi script in this way:</b>
+    var $currentCount = parseInt(<i>_callServer("sahi.ext.Counter_getCounter")</i>);
+    <i>_callServer("sahi.ext.Counter_incrementCounter");</i>
+    _assertEqual($currentCount + 1, <i>_callServer("sahi.ext.Counter_getCounter")</i>);
+
+</pre>
+
+<hr>
+<br>
+<h4><a name="mock">Mocks</a></h4>
+
+Mocks are used to mock out responses to urls which match a particular pattern.<br>
+For example:<br>
+A web page has embedded advertisements in an iframe<br>
+and we do not wish to test these advertisements everytime we test our web page.<br>
+So we can add a mock by specifying<br>
+<pre class="code">_addMock("www[.]adserver[.]com", "sahi.ext.MyCustomMock_filterAds");<br></pre>
+to our script.<br>
+<br>
+Whenever Sahi encounters a URL request which matches www[.]adserver[.]com<br>
+It will delegate the response handling to sahi.ext.MyCustomMock's filterAds method.<br>
+One can call any class's any method, as long as the method has one of these two signatures.<br>
+<br>
+<pre class="code">
+    public net.sf.sahi.response.HttpResponse methodName(net.sf.sahi.request.HttpRequest request);<br>
+    public void methodName(net.sf.sahi.request.HttpRequest request);<br>
+</pre>
+<br>
+If _addMock("pattern") is called without a second parameter,<br>
+<b>net.sf.sahi.command.MockResponder.simple(HttpRequest)</b> is used to process the request.<br>
+The response uses the template at <b>htdocs/spr/simpleMock.htm</b>.<br>
+One can modify this to show a generic mock response.        <br>
+<br>
+This script may explain mocks better:<br>
+<br>
+<pre class="code">
+    _navigateTo("http://localhost:10000/demo/index.htm");
+    _assert<b>NotNull</b>(_link("Link Test"));
+    <b>_addMock(".*localhost.*");</b>
+    _navigateTo("http://localhost:10000/demo/index.htm");
+    _assert<b>Null</b>(_link("Link Test"));
+    _containsText(document.body, "http://localhost:10000/demo/index.htm");
+    <b>_removeMock(".*localhost.*");</b>
+    _navigateTo("http://localhost:10000/demo/index.htm");
+    _assert<b>NotNull</b>(_link("Link Test"));
+</pre>
+
+(<a href="#top">Top</a>) <br>
+<hr>
+<br>
+<h4><a name="confirm">Confirm</a></h4>
+Javascript calls to confirm(msg) are mocked out by Sahi so that it does not stop the playback.<br>
+Sahi by default acts as if "OK" was clicked when a confirm dialog comes up.<br>
+It is possible to make the confirm return as if it was cancelled by setting<br>
+<pre class="code">
+    _expectConfirm(label, false);
+</pre>
+before the statement which triggers the confirm dialog.<br>
+If there was no expectation set, Sahi will return true.<br>
+It is also possible to get the text of the last occurred confirm dialog using<br>
+<pre class="code">
+    _lastConfirm();
+</pre>
+
+<h4>Example:</h4>
+
+<script type="text/javascript">
+    function showConfirm() {
+        var t1 = document.f1.t1;
+        if (confirm("Some question?")) {
+            t1.value = "oked";
+        } else {
+            t1.value = "canceled";
+        }
+    }
+</script>
+<form name="f1">
+    <input type="button" name="b1" value="Click For Confirm" onclick="showConfirm()"><br><br>
+    <input type="text" name="t1">
+</form>
+
+<pre class="code">
+
+    &lt;script type="text/javascript"&gt;
+        function showConfirm(){
+            var t1 = document.f1.t1;
+            if (confirm("Some question?")){
+                t1.value = "oked";
+            }else{
+                t1.value = "canceled";
+            }
+        }
+    &lt;/script&gt;
+    &lt;form name="f1"&gt;
+        &lt;input type="button" name="b1" value="Click For Confirm" onclick="showConfirm()"&gt;
+        &lt;input type="text" name="t1"&gt;
+    &lt;/form&gt;
+
+    <hr>
+    _click(_button("Click For Confirm"));
+    _assertNotNull(_textbox("t1"));
+    _assertEqual("<b>oked</b>", _textbox("t1").value);
+    _assertEqual(_lastConfirm(), "Some question?");
+
+    <b>_expectConfirm("Some question?", false);</b>
+    _click(_button("Click For Confirm"));
+    _assertNotNull(_textbox("t1"));
+    _assertEqual("<b>canceled</b>", _textbox("t1").value);
+    _assertEqual(_lastConfirm(), "Some question?"); //Kind of redundant here.
+
+</pre>
+
+<br>
+
+(<a href="#top">Top</a>) <br>
+<hr>
+<br>
+
+<br>
+<h4><a name="prompt">Prompt</a></h4>
+Javascript calls to prompt(msg) are mocked out by Sahi so that it does not stop the playback.<br>
+Sahi by default returns "" if a prompt dialog comes up.<br>
+It is possible to make the prompt return the value one wants, by specifying<br>
+<pre class="code">
+    _expectPrompt(label, value);
+</pre>
+before the statement which triggers the prompt dialog.<br>
+If there was no expectation set, Sahi will return "".<br>
+It is also possible to get the text of the last occurred prompt dialog using<br>
+<pre class="code">
+    _lastPrompt();
+</pre>
+
+<h4>Example:</h4>
+
+<script type="text/javascript">
+function showPrompt(){
+    var t2 = document.f2.t2;
+    t2.value = prompt("Some prompt?");
+}
+</script>
+<form name="f2">
+    <input type="button" name="b1" value="Click For Prompt" onclick="showPrompt()"><br><br>
+    <input type="text" name="t2">
+</form>
+
+<pre class="code">
+
+    &lt;script type="text/javascript"&gt;
+    function showPrompt(){
+        var t2 = document.f2.t2;
+        t2.value = prompt("Some prompt?");
+    }
+    &lt;/script&gt;
+    &lt;form name="f2"&gt;
+        &lt;input type="button" name="b1" value="Click For Prompt" onclick="showPrompt()"&gt;&lt;br&gt;&lt;br&gt;
+        &lt;input type="text" name="t2"&gt;
+    &lt;/form&gt;
+
+    <hr>
+    _expectPrompt("Some prompt?", "abc")
+    _click(_button("Click For Prompt"));
+    _assertNotNull(_textbox("t2"));
+    _assertEqual("abc", _textbox("t2").value);
+    _assertEqual(_lastPrompt(), "Some prompt?");
+
+</pre>
+
+<br>
+
+(<a href="#top">Top</a>) <br>
+<hr>
+<br>
+
+<h4><a name="setfile">_setFile(_file("id"), filePath)</a></h4>
+Form elements of type "file" cannot be populated using javascript on the browser.<br>
+So Sahi has a workaround for handling file uploads.<br>
+Sahi intercepts the request in the proxy, reads the file off the file system and inserts it into the multipart request.<br>
+
+<pre class="code">
+    _setFile(_file("id"), "C:\\abc\\efg.jpg");
+</pre>
+<br>        
+The file has to be present on that path on the machine running the proxy.
+<br>
+
+<br>
+(<a href="#top">Top</a>) <br>
+
+<hr>
+<br>
+<h4><a name="db">_getDB("driver", "jdbcurl", "username", "password")</a></h4>
+_getDB returns a sahiDB object.<br>
+sahiDB has two methods.<br>
+select(sql); // select statements<br>
+update(sql); // update/delete/insert statements<br>
+<br>
+select returns a sequential array of associative arrays.<br>
+<br>
+Eg.<br>
+<br>
+For table "User"<br>
+<table>
+    <tr>
+        <td>ID</td>
+        <td>NAME</td>
+        <td>AGE</td>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>Kamlesh</td>
+        <td>28</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>Arun</td>
+        <td>30</td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>Raja</td>
+        <td>35</td>
+    </tr>
+</table>
+<br>
+<pre class="code">
+
+var db = _getDB("oracle.jdbc.driver.OracleDriver", "jdbc:oracle:thin:@dbserver:1521:sid", "username", "password")
+var $rs = db.select("select * from User");
+
+_assertEqual("1", $rs[0]["ID"]);
+_assertEqual("Kamlesh", $rs[0]["NAME"]);
+_assertEqual("28", $rs[0]["AGE"]);
+
+_assertEqual("2", $rs[1]["ID"]);
+_assertEqual("Arun", $rs[1]["NAME"]);
+_assertEqual("30", $rs[1]["AGE"]);
+
+_assertEqual("3", $rs[2]["ID"]);
+_assertEqual("Raja", $rs[2]["NAME"]);
+_assertEqual("36", $rs[2]["AGE"]);
+
+</pre>
+<br>
+    The driver has to be present in the classpath of Sahi.<br>
+    For example, if you are using sahi.bat, you could add it to the path like this:<br>
+    java -classpath ..\lib\sahi.jar;<b>C:\sahiext\driver.jar;</b> net.sf.sahi.Proxy<br>
+
+<br>
+
+<br>
+(<a href="#top">Top</a>) <br>
+
+<hr>
+<h4><a name="readFile">_readFile(fullFilePath)</a></h4>
+_readFile(fullFilePath) returns the contents of a text file as a string.<br>
+<br>
+<pre class="code">
+    _readFile("C:\\abc\\data.txt");
+</pre>
+<br>
+The file has to be present on that path on the machine running the proxy.<br>
+One could then use the JS String's <a href="http://www.w3schools.com/jsref/jsref_split.asp">split</a> method to get an array of lines.<br>
+<br>
+eg.<br>
+<pre class="code">
+        var $content = _readFile("C:\\abc\\data.txt");
+        var $lines = $content.split("\n");
+</pre>
+<br>
+
+<br>
+(<a href="#top">Top</a>) <br>
+
+
+    </div>
+</td>
+</tr>
+</table>
+Please send your feedback to <a href="http://sourceforge.net/users/narayanraman/">V Narayan Raman</a>.
+</body>
+</html>
+

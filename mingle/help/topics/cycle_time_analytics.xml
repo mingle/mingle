@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_help.dtd">
+<chapter title="Cycle Time Analytics" id="cycle_time">
+  <section title="What is Cycle Time Analytics?">
+    <p>Cycle Time Analytics is a new feature available for Mingle and Mingle Plus. (It is not available for Mingle Onsite.) Mingle's Cycle Time Analytics helps your team <strong>improve</strong> and <strong>deliver faster</strong> by highlighting outliers and trends in your team’s cycle time. It also makes bottlenecks in your delivery process visible and obvious. With Mingle + Cycle Time Analytics you can STOP:</p>
+      <bullets>
+        <bullets>
+              <item>Manually track the cycle time of your stories or rely on explicit transitions</item>
+              <item>Exporting data to Excel or via custom scripts</item>
+              <item>Struggling to make sense of complex control charts</item>
+        </bullets>
+      </bullets>
+    <p>Check out <exref url="https://thoughtworks.wistia.com/medias/bhjf5sgucl">this video</exref> for more information.</p>
+  </section>
+  
+  <section title="What is Cycle Time?">
+    <p>Cycle Time is a simple, but powerful metric. Simply put, it is the measure of the elapsed time from the moment you start working on a piece of work until it is done (however you define start and done on your team). In Mingle, your cycle time is the time it takes a card to move through your workflow, as defined by the <cref topic="grid_view#group_cards">grid view</cref>. Check out <exref url="https://thoughtworks.wistia.com/medias/eva9alzzt1">this video</exref> for a more in depth look.</p>
+  </section>
+  
+  <section title="How do I access Cycle Time Analytics from my Mingle project?">
+    <p>It’s simple. Just click on the Cycle Time link in the upper right hand corner of your card wall. Since cycle time is calculated based on a workflow, only card walls organized by a property that includes “status”, “stage”, or “state” in its name will have the link.</p>
+          <screenshot src="resources/images/cta_grid_link.png" />
+    <note>If the link is disabled, it means we don't have enough data to calculate your cycle time yet. As soon as you complete a card, you'll have a cycle time and the link will enable.</note>      
+  </section>
+  
+  <section title="What are those blue lines on my Cycle Time Analytics bubble chart?">
+    <p>The blues lines represent one standard deviation above and below your team’s average (mean) Cycle Time, and are there to help you identify outliers. As you adjust your bubble chart, you’ll see them move to represent the standard deviation for the newly set time range and scale.</p>
+  </section>
+  
+  <section title="How do I get back to my Mingle project from Cycle Time Analytics?">
+    <p>Just click on your Mingle project under the Mingle logo and to the right of the collapsable menu.</p>
+          <screenshot src="resources/images/cta_mingle.png" />
+  </section>
+  
+  <section title="How do I get back to the original 6-week default timeline of my Cycle Time Analytics?">
+    <p>Just click on the Mingle + Cycle Time Analytics logo in the project header. This will reset your bubble chart to the 6-week default timeline. Whatever default properties you have set to track a particular Cycle Time will persist; only the timeline scale will change.</p>
+          <screenshot src="resources/images/cta_header_refresh.png" />
+  </section>
+  
+  <section title="How am I supposed to use Cycle Time Analytics?">
+    <p>You can use Cycle Time Analytics to focus team conversations about what’s most important and decide on action items with confidence. While there is no right way to use Cycle Time Analytics, check out <exref url="https://thoughtworks.wistia.com/medias/hwy6w01vw9">this video</exref> for suggestions.</p>
+  </section>
+
+  <section title="What happens if I modify my workflow? Will my Cycle Time Analytics be updated?">
+    <p>Mingle automatically detects when you change your card wall to reflect changes in how your team works. Watch <exref url="https://www.youtube.com/watch?v=8OhNYPUbf4Q&amp;feature=youtu.be">this video</exref> to see how Mingle adapts to your new workflow and updates your Cycle Time accordingly.</p>
+  </section>
+  
+  <section title="How do I filter on a card property?">
+    <p>Cycle Time Analytics tracks the time a card takes to change status (or the respective property name in your Mingle project), and eventually to be completed. You can define the start and end values for the statuses you’re most interested in. You can also add an additional property filter so you capture Cycle Time Analytics for a particular set of cards. Just set the additional filter in the left collapsable panel.</p>
+        <screenshot src="resources/images/cta_filter_property_final.png" />
+  </section>
+
+  <section title="I just moved a card. Why don’t I see a change in my Cycle Time?">
+    <p>Right now, your project’s cycle time is updated once daily, so check back the next day to see your updated Cycle Time.</p>
+  </section>
+
+  <section title="Where can I learn more about Cycle Time?">
+    <p>Watch and read! Check out the additional resources to learn all you need to know about cycle time and Mingle + Cycle Time Analytics:</p>
+      <bullets>
+        <bullets>
+              <item><exref url="https://www.thoughtworks.com/insights/blog/get-better-90-seconds-part-2-why-cycle-time-important">"Why is cycle time important?"</exref> by Ethan Teng</item>
+              <item><exref url="https://www.thoughtworks.com/insights/blog/whittling-our-wall-reduce-cycle-time">"Whittling our Wall to reduce cycle time"</exref> by Melissa Doerken</item>
+              <item><exref url="https://www.thoughtworks.com/insights/blog/how-do-you-know-youve-improved-look-your-cycle-time">"How do you know you've improved? Look at your cycle time"</exref> by Scott Turnquest</item>
+        </bullets>
+      </bullets>
+    <p>For any other questions, please <exref url="@tw_studios_mingle_support_url@">contact the Mingle support team</exref>.</p>
+  </section>
+</chapter>

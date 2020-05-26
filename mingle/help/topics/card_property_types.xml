@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Card property types">
+  <section title="Managed list properties" id="managed_list_properties" collapsed="true">
+    <p>Managed list properties are restricted to a list of specified values. The list of allowed values is generally setup in advance, and may be locked to prevent users other than Project admins from adding or removing values. If the property is not locked, then new values can be added dynamically by selecting the (new value) option while editing the property.</p>
+    <p>You can <cref topic="maintain_card_property_values">specify the allowable set of values</cref> for managed list properties from the <tab>Project admin</tab> tab.</p>
+
+    <subsection collapsed="true" title="Managed text list">
+      <p>Restricted to a list of text values. Managed text list properties can be used in <cref topic="filter_list_by_component">filter conditions</cref> and <cref topic="card_transitions">card transitions</cref>.</p>
+    </subsection>
+
+    <subsection title="Managed number list" collapsed="true">
+      <p>Restricted to a list of numeric values. Managed number list properties can be used in <cref topic="filter_list_by_component">filter conditions</cref> and <cref topic="card_transitions">card transitions</cref>. Managed number list properties are affected by the <cref topic="project_numeric_precision">project numeric precision</cref>.</p>
+    </subsection>
+    <warning>If a value is subsequently removed from the property, there may be multiple consequences - you can read more about deleting a value in <cref topic="maintain_card_property_values">maintaining card property values</cref>.</warning>
+  </section>
+  
+  <section title="Any value properties" collapsed="true">
+    <subsection collapsed="true" title="Allow any text">
+      <p>Allows any text up to 255 characters in length to be assigned as a value. Mingle will not manage these values.</p>
+    </subsection>
+    <subsection collapsed="true" title="Allow any number">
+      <p>Allows any number to be assigned as a value. The number will be rounded to the <cref topic="project_numeric_precision">project numeric precision</cref>. Mingle will not manage these values.</p>
+    </subsection>
+    <note>"Allow any text" and "allow any number" properties cannot be used in the following areas in Mingle:
+      <bullets>
+        <item>Grid view <cref topic="grid_view#group_cards">group by</cref></item>
+        <item><cref topic="filter_list_by_widget">Card filters</cref></item>
+        <item><cref topic="filter_history_component">History filters</cref></item>
+      </bullets>
+    </note>
+  </section>
+
+  <section title="Team member properties" collapsed="true" id="team_member_properties">
+    <p>Allows any project team member to be assigned as a value.</p>
+    <p>If a team member is subsequently removed from the project, all cards where the property is assigned to that team member will have the property value changed to (not set)</p>
+    <note>
+      <item>Team member properties can be used to<cref topic="show_avatars_on_grid_view"> show avatars on your card wall.</cref></item>
+    </note>  
+  </section>
+
+  <section title="Date properties" collapsed="true" id="date_properties"> 
+    <p>Allows any date to be assigned as a value. Mingle will not manage these values.</p>
+  </section>
+
+  <section title="Formula properties" collapsed="true">
+    <p><cref topic="formula_properties">Formula properties</cref> can be <strong>derived from numeric or date card properties</strong>. They allow you to create automatically computed values, reducing opportunities for inconsistency.</p>
+    <p>You can create an <cref topic="aggregate_properties">aggregate property</cref> based on a formula property</p>
+    <example title="simple example - Calculating the end date of an iteration">
+      <p>A simple example is calculating the end date of an iteration based on the start date and the length of the iteration in days. Here "Start Date" and "Iteration Length" are Iteration card properties.</p> 
+      <p>The formula definition might look like: <formula>"Start Date" + ("Iteration Length" - 1)</formula></p>
+    </example>
+    <p>Take a look at some <cref topic="formula_property_examples">formula property examples</cref>.</p>
+    <note>Formula properties can return either a date or decimal number with the <cref topic="project_numeric_precision">chosen numeric precision</cref>.</note>
+  </section>
+
+  <section title="Relationship properties" collapsed="true" id="relationship_properties"> 
+    <p>There are two types of relationship properties; Card Relationship Property and Tree Relationship Property. The card relationship properties allow users to create a link between any cards regardless of card type. The tree relationship properties are created and named as part of creating a card tree. The tree relationship properties are references in a child card that link it to its ancestors in the tree. More at <cref topic="relationship_properties">relationship properties</cref>.</p>
+  </section>
+
+  <section title="Predefined properties" collapsed="true">
+    <p>Special properties which are automatically assigned to any card, these are "Type", "Name", "Number", "Description", "Created On", "Modified On", "Created By", "Modified By" and "Project". Type is restricted to the set of defined <cref topic="card_types">Card Types</cref>; Number is an automatically incrementing unique integer; Project, Name and Description are text fields; Created On and Modified On are date properties and Created By and Modified By are team properties. The standard properties cannot be deleted or re-defined, and the property names of "Type", "Name", "Number", "Project", "Description", "Created On", "Modified On", "Created By" and "Modified By" are reserved and cannot be used for any user-defined card properties.</p>
+
+    <info>If you are migrating from a previous release of Mingle to Mingle 3.0 and have properties already called "Created On" and/or "Modified On" these will be renamed to be called "Created On_1" and/or "Modified On_1" and any previous uses of these properties (in Favorites, Formulas etc...) will be updated. Use in MQL (including MQL filters) will not be updated and, as a result, any previous MQL using "Created On" and "Modified On" will now use Mingle's predefined properties of the same name in the query.</info>
+  </section>
+
+  <section title="Aggregate properties" collapsed="true">
+    <p>Defined as part of a <cref topic="card_trees">Card tree</cref>, <cref topic="aggregate_properties">aggregate properties</cref> display the <strong>Sum</strong>, <strong>Average</strong>, <strong>Min</strong>, <strong>Max</strong> or <strong>Count</strong> of properties of cards lower in a card tree.</p>
+  </section>
+</topic>

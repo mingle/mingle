@@ -1,0 +1,393 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Transition API">
+  <section title="Transitions">
+    <p><cref topic="card_transitions">Card transitions</cref> are project specific steps in your process workflow. Once your project is setup and configured with the appropriate transitions, you can use the API to get transitions that are available to you on each card and also to execute a transition on a particular card. The transition itself can be identified by the name and the card by its number. Certain transitions require the user to enter a murmur or make it mandatory to set certain property values. You can do these as well using the API.</p>
+    <p>Before you execute transitions using the API, we recommend that familiarize yourself with some key concepts dealing with <cref topic="card_transitions">transitions</cref>.</p>
+
+	<note><p>Please note:</p>
+		<bullets>
+			<item>All the API resources and examples refer to <strong>v2 of the API</strong>. Support for v1 of the API was deprecated in fall 2012. Please refer to this <exref url="http://support.thoughtworks.com/entries/22029412-End-of-life-for-Version-1-of-the-Mingle-API">announcement</exref> in our Mingle community for more information about this deprecation.</item>
+			<item>Please note that all POST and PUT requests must be in XML format by default. This is not illustrated in the examples here. To specify parameters as shown in the examples you will have to set the request header for Content-Type to "application/x-www-form-urlencoded".</item>
+		</bullets>
+	</note>
+ </section>
+
+	
+	<section title = "Structure of a transition resource">
+	
+		<p>The structure of the transition resource, and its attributes are described below, along with their data type. Also included with each attribute is whether you are allowed to update the value.</p>
+		<note>It is worth noting that the returned attribute without a <strong>type</strong> specified has a data type of <strong>String</strong>.</note>
+		
+    <api_attributes title="transition resource xml - attributes">
+      <api_attribute name="id" type="Integer" readonly="true">the system generated id for a transition. </api_attribute>
+      <api_attribute name="name" type="String" />
+      <api_attribute name="require_murmur" type="Boolean">indicates whether a murmur is required to execute this transition. </api_attribute>
+      <api_attribute name="transition_execution_url" type="String">URL to execute this transition</api_attribute>
+      <api_attribute name="user_input_required" type="Array">all of the required property's attributes. </api_attribute>
+      <api_attribute name="user_input_optional" type="Array">all of the optionally required property's attributes.</api_attribute>
+      <api_attribute name="if_card_has_properties" type="Array">all properties which are required to have a specific value for the transition to be executed, along with the value.</api_attribute>
+      <api_attribute name="if_card_has_properties_set" type="Array">all properties which are required to be "(not set)" for the transition to be executed.</api_attribute>
+      <api_attribute name="will_set_card_properties" type="Array">returns all properties which will be set to a specific value when the transition is executed, along with the value.</api_attribute>
+      <api_attribute name="only_available_for_users" type="Array">all users for which this transition will be available. If only_available_for_users and only_available_for_groups are both missing, the transition is available for all team members.</api_attribute>
+      <api_attribute name="only_available_for_groups" type="Array">all <cref topic="user_groups">user groups</cref> for which this transition will be available.  If only_available_for_users and only_available_for_groups are both missing, the transition is available for all team members.</api_attribute>
+      <api_attribute name="card_type" type="String">card type associated with this transition. If missing, the transition can be executed against any card type.</api_attribute>
+      <api_attribute name="to_remove_from_trees_with_children" type="Array">all trees which the card and its children will be removed from when the transition is executed.</api_attribute>
+      <api_attribute name="to_remove_from_trees_without_children" type="Array">all trees which the card will be removed from when the transition is executed.</api_attribute>
+    </api_attributes>
+		    
+	</section>
+
+  <section title = "Get all transitions that are executable per card">
+	<p>You can get transitions that are available to execute on each card and what must be supplied to execute that transition; such as names of required/optionally required property name.</p>
+
+    <p><strong>Reference</strong></p>
+    <code>
+    Request Method: GET
+    URL: /api/v2/projects/project_identifier/cards/card_number/transitions.xml
+    Parameters: NA
+    </code>
+
+    <p><strong>Example</strong></p>
+    <code>
+    GET
+    
+    http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/cards/212/transitions.xml
+    </code>
+
+    <p><strong>Explanation</strong></p>
+    <p>The above is an example of a GET to list all transitions that are available to you on a card with the number 212; in a project with identifier "test_project". The request is made with the authorization credentials of yourname/password.</p>
+	
+    <p><strong>Result</strong></p>
+    <p>If you were authorized to perform the operation, and the resource was available, you should get an xml document that looks something like the following.</p>
+    <code>
+<![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<transitions type="array">
+  <transition>
+    <id type="integer">64</id>
+    <name>Start Development</name>
+    <require_murmur type="boolean">false</require_murmur>
+    <transition_execution_url>http://localhost:8080/api/v2/projects/test_project/transition_executions/64.xml</transition_execution_url>
+    <user_input_required type="array"></user_input_required>
+    <user_input_optional type="array"></user_input_optional>
+    <if_card_has_properties type="array">
+      <property type_description="Managed text list" hidden="false">
+        <name>Story Status</name>
+        <value>Ready for Development</value>
+      </property>
+    </if_card_has_properties>
+    <if_card_has_properties_set type="array"></if_card_has_properties_set>
+    <will_set_card_properties type="array">
+      <property type_description="Managed text list" hidden="false">
+        <name>Story Status</name>
+        <value>Development In Progress</value>
+      </property>
+      <property type_description="Automatically generated from the team list" hidden="false">
+        <name>Owner</name>
+        <value url="http://localhost:8080/api/v2/users/1.xml">
+          <name>Julie Anderton</name>
+          <login>jander</login>
+        </value>
+      </property>
+      <property type_description="Date" hidden="true">
+        <name>Development Started On</name>
+        <value type="date">2010-04-07</value>
+      </property>
+      <property type_description="Card" hidden="false">
+        <name>Development Started in Iteration</name>
+        <value url="http://localhost:8080/api/v2/projects/test_project/cards/37.xml">
+          <number type="integer">37</number>
+        </value>
+      </property>
+    </will_set_card_properties>
+    <card_type>
+      <name>Story</name>
+    </card_type>
+  </transition>
+</transitions>
+]]>
+    </code>
+  </section>
+
+  <section title = "Get all transitions in a project">
+	<p>You can get all transitions in a project.</p>
+
+    <p><strong>Reference</strong></p>
+    <code>
+    Request Method: GET
+    URL: /api/v2/projects/project_identifier/transitions.xml
+    Parameters: NA
+    </code>
+
+    <p><strong>Example</strong></p>
+    <code>
+    GET
+
+    http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/transitions.xml
+    </code>
+
+    <p><strong>Explanation</strong></p>
+    <p>The above is an example of a GET to list all transitions in a project with identifier "test_project". The request is made with the authorization credentials of yourname/password.</p>
+
+    <p><strong>Result</strong></p>
+    <p>If the resource was available, you should get an xml document that looks something like the following.</p>
+    <code>
+<![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<transitions type="array">
+  <transition>
+    <id type="integer">64</id>
+    <name>Start Development</name>
+    <require_murmur type="boolean">false</require_murmur>
+    <transition_execution_url>http://localhost:8080/api/v2/projects/test_project/transition_executions/64.xml</transition_execution_url>
+    <user_input_required type="array"></user_input_required>
+    <user_input_optional type="array"></user_input_optional>
+    <if_card_has_properties type="array">
+      <property type_description="Managed text list" hidden="false">
+        <name>Story Status</name>
+        <value>Ready for Development</value>
+      </property>
+    </if_card_has_properties>
+    <if_card_has_properties_set type="array"></if_card_has_properties_set>
+    <will_set_card_properties type="array">
+      <property type_description="Managed text list" hidden="false">
+        <name>Story Status</name>
+        <value>Development In Progress</value>
+      </property>
+      <property type_description="Automatically generated from the team list" hidden="false">
+        <name>Owner</name>
+        <value url="http://localhost:8080/api/v2/users/1.xml">
+          <name>Julie Anderton</name>
+          <login>jander</login>
+        </value>
+      </property>
+      <property type_description="Date" hidden="true">
+        <name>Development Started On</name>
+        <value type="date">2010-04-07</value>
+      </property>
+      <property type_description="Card" hidden="false">
+        <name>Development Started in Iteration</name>
+        <value url="http://localhost:8080/api/v2/projects/test_project/cards/37.xml">
+          <number type="integer">37</number>
+        </value>
+      </property>
+    </will_set_card_properties>
+    <card_type>
+      <name>Story</name>
+    </card_type>
+  </transition>
+  <transition>
+    <id type="integer">73</id>
+    <name>Close Defect</name>
+    <require_murmur type="boolean">false</require_murmur>
+    <transition_execution_url>http://localhost:8080/api/v2/projects/test_project/transition_executions/73.xml</transition_execution_url>
+    <user_input_required type="array">
+      <property_definition url="http://localhost:8080/api/v2/projects/test_project/property_definitions/151.xml">
+        <id type="integer">151</id>
+        <name>Type of test</name>
+        <description>
+        </description>
+        <data_type>string</data_type>
+        <is_numeric type="boolean">false</is_numeric>
+        <hidden type="boolean">false</hidden>
+        <restricted type="boolean">true</restricted>
+        <transition_only type="boolean">false</transition_only>
+        <project url="http://localhost:8080/api/v2/projects/test_project.xml">
+          <name>test project</name>
+          <identifier>test_project</identifier>
+        </project>
+        <column_name>cp_type_of_test</column_name>
+        <position nil="true"/>
+        <property_values_description>Managed text list</property_values_description>
+        <property_value_details type="array">
+          <property_value>
+            <value>Automated</value>
+          </property_value>
+          <property_value>
+            <value>Manual</value>
+          </property_value>
+          <property_value>
+            <value>None</value>
+          </property_value>
+        </property_value_details>
+      </property_definition>
+    </user_input_required>
+    <user_input_optional type="array"></user_input_optional>
+    <if_card_has_properties type="array">
+      <property type_description="Managed text list" hidden="false">
+        <name>Defect Status</name>
+        <value>Fixed</value>
+      </property>
+    </if_card_has_properties>
+    <if_card_has_properties_set type="array"></if_card_has_properties_set>
+    <will_set_card_properties type="array">
+      <property type_description="Managed text list" hidden="false">
+        <name>Defect Status</name>
+        <value>Closed</value>
+      </property>
+      <property type_description="Managed text list" hidden="false">
+        <name>Testing Status</name>
+        <value>Testing Complete</value>
+      </property>
+    </will_set_card_properties>
+    <card_type>
+      <name>Defect</name>
+    </card_type>
+  </transition>
+</transitions>
+]]>
+    </code>
+  </section>
+
+  <section title = "Get a single transition in a project">
+	<p>You can get a single transition in a project.</p>
+
+    <p><strong>Reference</strong></p>
+    <code>
+    Request Method: GET
+    URL: /api/v2/projects/project_identifier/transitions/transition_id.xml
+    Parameters: NA
+    </code>
+
+    <p><strong>Example</strong></p>
+    <code>
+    GET
+
+    http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/transitions/73.xml
+    </code>
+
+    <p><strong>Explanation</strong></p>
+    <p>The above is an example of a GET to view a specific transition with an id of 510 in a project with an identifier "test_project". The request is made with the authorization credentials of yourname/password.</p>
+
+    <p><strong>Result</strong></p>
+    <p>If the resource was available, you should get an xml document that looks something like the following.</p>
+    <code>
+<![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<transitions type="array">
+  <transition>
+    <id type="integer">73</id>
+    <name>Close Defect</name>
+    <require_murmur type="boolean">false</require_murmur>
+    <transition_execution_url>http://localhost:8080/api/v2/projects/test_project/transition_executions/73.xml</transition_execution_url>
+    <user_input_required type="array">
+      <property_definition url="http://localhost:8080/api/v2/projects/test_project/property_definitions/151.xml">
+        <id type="integer">151</id>
+        <name>Type of test</name>
+        <description>
+        </description>
+        <data_type>string</data_type>
+        <is_numeric type="boolean">false</is_numeric>
+        <hidden type="boolean">false</hidden>
+        <restricted type="boolean">true</restricted>
+        <transition_only type="boolean">false</transition_only>
+        <project url="http://localhost:8080/api/v2/projects/test_project.xml">
+          <name>test project</name>
+          <identifier>test_project</identifier>
+        </project>
+        <column_name>cp_type_of_test</column_name>
+        <position nil="true"/>
+        <property_values_description>Managed text list</property_values_description>
+        <property_value_details type="array">
+          <property_value>
+            <value>Automated</value>
+          </property_value>
+          <property_value>
+            <value>Manual</value>
+          </property_value>
+          <property_value>
+            <value>None</value>
+          </property_value>
+        </property_value_details>
+      </property_definition>
+    </user_input_required>
+    <user_input_optional type="array"></user_input_optional>
+    <if_card_has_properties type="array">
+      <property type_description="Managed text list" hidden="false">
+        <name>Defect Status</name>
+        <value>Fixed</value>
+      </property>
+    </if_card_has_properties>
+    <if_card_has_properties_set type="array"></if_card_has_properties_set>
+    <will_set_card_properties type="array">
+      <property type_description="Managed text list" hidden="false">
+        <name>Defect Status</name>
+        <value>Closed</value>
+      </property>
+      <property type_description="Managed text list" hidden="false">
+        <name>Testing Status</name>
+        <value>Testing Complete</value>
+      </property>
+    </will_set_card_properties>
+    <card_type>
+      <name>Defect</name>
+    </card_type>
+  </transition>
+</transitions>
+]]>
+    </code>
+  </section>
+
+  <section title="Executing a transition">
+    <api_reference>
+      <p><strong>Reference</strong></p>
+      <code>
+    Request Method: POST
+    URL: /api/v2/projects/project_identifier/transition_executions/id.xml
+    Parameters: NA
+    transition_execution[card]: Integer, number of the card to execute the transition on, required
+    transition_execution[murmur]: String, murmur to be added when executing the transition, required if transition is created with "require murmur" set to true
+    transition_execution[properties][][name]: String, each value for a parameter with this key is the name of a property that needs to be set while executing the transition, required if transition is created with "require user to input" for the particular property
+    transition_execution[properties][][value]: String, each value for a parameter with this key is the value for the property in the corresponding position in the transition_execution[properties][][name] parameter values
+      </code>
+
+      <p><strong>Example</strong></p>
+      <code>
+    POST
+
+    http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/transition_executions/1.xml
+
+    transition_execution[card]=212
+    transition_execution[murmur]=close defect
+    transition_execution[properties][][name]=fixed in version
+    transition_execution[properties][][value]=release 1 branch
+    transition_execution[properties][][name]=fixed in revision
+    transition_execution[properties][][value]=1234
+      </code>
+
+      <p><strong>Explanation</strong></p>
+      <p>The above is an example of a POST to execute a transition called "close defect" on a card with the number 212; in a project with identifier "test_project". The request is made with the authorization credentials of yourname/password. When the transition is applied, a murmur will be added. 
+        
+        The transition_execution[properties] parameter can be understood as follows. The first value for transition_execution[properties][][name] is "fixed in version" and the first value in transition_execution[properties][][value] is "release 1 branch". This means that upon execution of the transition, the value of "fixed in revision" will be set to "release 1 branch". The second value for transition_execution[properties][][name] is "fixed in revision" and the corresponding value in transition_execution[properties][][value] is "1234". Thus, upon execution of the transition, the value of "fixed in revision" will be set to "1234". This can be repeated for as many properties that were configured as "(require user input)" or "(user input optional)" when the transition was setup.
+      </p>
+
+      <p><strong>Result</strong></p>
+      <p>If you were authorized to perform the operation, and the operation succeeded, you will be returned a location attribute in the http header of the response, which is a url from which you can get the card resource that was updated by the transition. You should get an xml document that looks something like the following.</p>
+      <code>
+<![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<transition_execution>
+  <status>completed</status>
+</transition_execution>
+]]>
+      </code>
+    </api_reference>
+  </section>
+</topic>

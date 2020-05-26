@@ -1,0 +1,132 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Setting up cross project reporting">
+  <section title="Introduction">
+    <p>This section assumes you already know how to or have <cref topic="creating_wiki_pages">created wiki pages</cref> or <cref topic="creating_a_card">created cards</cref> and <cref topic="creating_charts_and_tables_in_wiki_pages">set-up project charts and tables</cref> for reporting.</p>
+    <p>Once you start to report on multiple projects, the projects that are charted need to be identified. This sections shows you how to add a project identifier to chart and table macros in order to specify which project to report on.</p>
+  </section>
+  <section title="Update charts and tables with a project identifer" collapsed="false">
+    <steps>
+      <item><cref topic="editing_and_deleting_wiki_pages">Edit wiki page</cref> or card that will be used for cross project reporting</item>
+      <item>Add the project identifier to the chart or table macro using project as a chart level option.
+        <note> The project identifier is unique to the project and is usually created from the project name e.g. a project called "Agile One" will automatically be given the identifier agile_one. To find out the project identifier view the <cref topic="project_settings_page">project settings</cref>.</note>
+        
+        <p>The markup below shows how project, as a chart level option, can be added to a pie chart macro to give a pie chart for a specific project. Project can be used as a chart level option on all <cref topic="macro_reference">chart and table macros</cref>.</p>
+        <markup>
+{{
+  pie-chart
+    data: SELECT Feature, COUNT(*) WHERE Type = 'Defect'
+    project: agile_one
+}}
+        </markup>
+        
+        <hint>If no project identifier is added the default is the current project e.g. if you are working on a wiki page in project "Agile One" by default all charts and tables created in that project will report data for "Agile One" project unless you specify another project. </hint>
+      </item>
+      <item>Save wiki page or card</item>
+    </steps>
+  </section>
+  <section title="Reporting across projects">
+    <p>As multiple charts and tables can be added to a single wiki page or card, multiple macros can be included on a single wiki page to report on multiple projects.</p>
+    
+    <markup>
+{{
+  pie-chart
+    data: SELECT Feature, COUNT(*) WHERE Type = 'Defect'
+    project: agile_one
+}}
+
+{{
+  pie-chart
+    data: SELECT Feature, COUNT(*) WHERE Type = 'Defect'
+    project: agile_two
+}}
+    </markup>
+    
+    <p>The markup above will give two pie charts, one for project Agile One and the other for Agile Two. These pies report the same data but for two different projects.</p>
+    <p>The markup below shows how distinct data from multiple projects can also be used on the same view. It shows three different macros; an average query, ratio-bar-chart and a data-series-chart each from different projects using different properties. Any combination of macros and project identifiers can be used on a single view so a comprehensive overview of multiple projects can easily be achieved.</p>
+    <markup>
+{{
+  average
+    query: SELECT 'planning estimate' WHERE type = story
+    project: agile_one
+}}
+
+{{
+  ratio-bar-chart
+  three-d: true
+    totals: SELECT  'Functional split - Functional area' , SUM('Initial estimate') WHERE 'Type' = 'Card'
+    restrict-ratio-with: 'Card status' &gt; 'Complete'
+    project: agile_two
+}}
+
+{{
+ data-series-chart
+    conditions: 'Planning - Release' = 'Release 1' AND  'Type' = 'Card'
+    cumulative: true
+    x-labels-start: '2008-01-01'
+    x-labels-end: '2008-06-01'
+    x-labels-step: 21
+  chart-width:420
+  project: agile_three
+    series:
+    - label: Scope required by
+      color: green
+      type: line
+      data: SELECT 'Required by', SUM('Initial estimate')
+      trend: true
+      trend-line-width: 2
+    - label: Scope complete by
+      color: blue
+      type: line
+      data: SELECT 'Completed date', SUM('Initial estimate')
+      trend: true
+      trend-line-width: 2
+}}
+    </markup>
+  </section>
+  <section title="Reporting across projects on a single chart">
+    <p>Mingle 2.3 saw the introduction of series level project identifiers on Mingle macros. This means that on data series and stack bar charts different projects can be defined for each series. This therefore, allows for cross project reporting on a single chart. </p>
+    
+    <p>The markup below shows how data from two projects can also be used on the same data series chart to visualize story completion across projects. Any number of series and therefore, any number of projects can be added to a single data series or stack bar chart so a comparative overview of multiple projects can easily be achieved.</p>
+    <markup>
+{{
+  data-series-chart
+    conditions: 'Planning - Release' = 'Current Release' AND  'Type' = 'Story'
+    cumulative: true
+    series:
+    - label: Progress of Project 1
+      color: green
+      type: line
+      data: SELECT 'Completed date', SUM('Initial estimate')
+      project: project_1
+      trend: true
+      trend-line-width: 2
+    - label: Progress of Project 2
+      color: blue
+      type: line
+      data: SELECT 'Completed date', SUM('Initial estimate')
+      project: project_2
+      trend: true
+      trend-line-width: 2
+}}
+    </markup>
+    
+    <p>If you want to show data from multiple projects against a property that is a relationship (card)  property (e.g. "Release" or "Iteration") you may want to ensure the data is aggregated using the card names as the identifiers and not card numbers. This is particularly relevant when creating cross project reports on a single chart as using card number may result in incorrect aggregation as "Iteration 1" may be represented by card number #1 on one project but card number #2 on another. In order to ensure you are matching "Iteration 1" on Project 1 with "Iteration 1" on Project 2 use the parameter <strong>x-labels-tree</strong> as defined in the <cref topic="macro_reference">macro reference</cref>.</p>
+  </section>
+</topic>

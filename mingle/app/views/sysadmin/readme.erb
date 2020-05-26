@@ -1,0 +1,113 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% saas_instance = MingleConfiguration.saas?
+   enterprise_version = CurrentLicense.registration.enterprise?%>
+  This export of Mingle Plus is divided into many sections. If any of the folders, sheets or files is empty, it will not be visible in the export.
+
+  1. Users and Admins.xlsx
+  This .xlsx file has 2 sheets:
+    a. Users: Name, sign-in name, email address, role and activity status of all users in Mingle. This includes deactivated users.
+    b. Project admins: A list of all projects and admins' names and email addresses.
+
+  2. User icons
+  This is a folder of all the profile images used by Mingle users. The filename of each image is in the format signinname_originalfilename.png
+<% if saas_instance %>
+  3. Integrations.xlsx
+  If Mingle has been integrated with Slack, this file indicates the name of the Slack team that it is integrated with.
+
+  4. Projects
+  This folder contains a sub-folder for every project that is exported. Each project folder has the name of the project, and contains the following:
+<% else%>
+  3. Projects
+  This folder contains a sub-folder for every project that is exported. Each project folder has the name of the project, and contains the following:
+<%end%>
+    a. Data.xlsx
+    This file has multiple sheets and contains all data related to the project:
+
+      i. Team: This is a list of all members in the project, with their name, display name, email address, permissions and groups in the project.
+
+      ii. Cards: Every card in the project is listed as a row in this sheet. The card details - Number, Name, Description in plain text, Description in HTML, Type, Tags, Created by, Modified by, Incomplete checklist items, Complete checklist items and all properties of the card are columns. In addition, the Attachments column lists the names of all the attachments that were on the card, and these can be found in the Attachments folder. A column titled Has Charts indicates if the card contained any charts. The column titled Charts and Macros lists all the types of charts that were on the card. The Name column for each card links to the card in Mingle. Additionally, the column titled Data exceeding 32767 character limit indicates which columns have more data than the cell can hold. All such large data is exported to a .txt file in the Large descriptions folder.
+
+      iii. Pages: Every page in the project is a row in this sheet. The details of the pages - Title, Description in plain text, Description in HTML and Tags are columns. In addition, the columns titled Tab and Team favorite indicate if the page was a tab or a team favorite respectively. The Attachments column lists the names of all the attachments that were on the page, and these can be found in the Attachments folder. A column titled Has Charts indicates if the page contained any charts. The column titled Charts and Macros lists all the types of charts that were on the page. The Title column for each page links to the page in Mingle. Additionally, the column titled Data exceeding 32767 character limit indicates which columns have more data than the cell can hold. All such large data is exported to a .txt file in the Large descriptions folder.
+
+      iv. Murmurs: All the murmurs posted in this project are listed on this sheet, along with the timestamp, sign-in name of the member who posted it and the card number it was posted to. If it was posted to the project and not to a single card, it is indicated as Project.
+
+      v. Card types: This is a list of all the card types configured in this project. If the card default for the type contained a description, it is listed in the columns titled Default description (Plain text) and Default description (HTML)
+
+      vi. Properties: All the properties configured in the project are listed in this sheet. Their description, type and values are listed in columns. Additionally, the properties are indicated as Hidden, Locked and Transition-only in separate columns.
+
+      vii. Types and properties: The mapping between card types and properties is listed in this sheet. Additionally, if a property takes a default value for a card type, it is listed in the Default value column.
+
+      viii. Project variables: If any project variables are configured in the project, they are listed in this sheet, along with the type and properties they apply on. Additionally, the value of the project variable at the time of export is listed.
+
+      ix. Trees: All trees in the project are in this sheet. There is a row for each connection between two nodes. The name and description of the tree, the parent node, child node and the property that links them are columns. Additionally, there are columns listing aggregate properties, their formula and scope, if any.
+
+      x. Transitions: This sheet represents all the workflow transitions configured in the project, if any.
+<% if saas_instance %>
+      xi. Slack integration: If the project is integrated with Slack, this sheet contains the list of channels it is integrated with. Additionally, the Primary and Private columns indicate which channel is the default and which channels are private, respectively.
+
+      xii. Github integration: If the project is integrated with Github, this sheet indicates the username, repository and webhook ID.
+<%else%>
+      xi. Code integration: This sheet lists codebase integrations, if any.
+<%end%>
+    If any of the above sheets has no data, it will not appear in the file.
+
+    b. History.xlsx
+    This file has a record of every action taken in the project. There are two sheets:
+      i. Card history
+      ii. Page history
+    In both, each event has several details - The date and time of the event, the sign-in name of the member who carried the action out, and the details of the change made. These changes include creation of a card or page, update of the description, properties, tags, attachments and murmurs.
+
+    c. Attachments
+    This folder contains sub-folders for each card and each page that contained attachments at the time of the export. The sub-folders are named by the card number and the page name.
+
+    d. Large descriptions
+    In the rare scenario that a card or page description exceeds the 32767-character limit in Microsoft Excel, the description is exported in a .txt file, and can be found in this folder.
+
+<% if enterprise_version%>
+  5. Programs
+  This folder contains a sub-folder for every program that is exported. Each program folder has the name of the program. The folder contains:
+
+    a. Program name data.xlsx
+    The file contains four sheets:
+      i. Projects: This is a list of all the projects that are part of this program, along with the rule set for what qualifies as Done for the project (a property and value pair). Additionally, the Accepts dependencies column indicates if the other projects in the program will select the project when raising dependencies.
+
+      ii. Team: This is a list of all the members in the program - their display names, sign-in names and email addresses
+
+      iii. Objectives: Each of the objectives created in the program is a row in this sheet. Details of the objectives are listed in columns - Number, title, value statement in plain text and HTML, value, size, created on timestamp, modified on timestamp, the sign-in name of the member who last modified it, the status, and the planned start and end date, if any. Additionally, the column titled Data exceeding 32767 character limit indicates which columns have more data than the cell can hold. All such large data is exported to a .txt file in the Large descriptions folder.
+
+      iv. Objectives added work: This sheet lists the cards added to each objective at the time of export. The card name, number and the project is belongs to are listed in columns. Additionally, the Filter column indicates if the card was added to the objective as a result of a filter, and the Done status indicates if the card is complete based on the Done rule for the project.
+
+    b. Large descriptions
+    In the rare scenario that an objective value statement exceeds the 32767-character limit in Microsoft Excel, the description is exported in a .txt file, and can be found in this folder.
+
+  6. Dependencies
+  This folder contains two things:
+    a. Dependencies.xlsx: This is a list of all dependencies that exist in Mingle at the time of export. It has two sheets:
+      i.  Dependencies: Each dependency is listed as a row in this sheet. The number, name, description in plain text and in HTML, the status, the date it was raised on, the projec, the member and the card it was raised by, the project and cards that resolve it, and the desired completion date are details of the dependencies listed in columns. Additionally, the column titled Attachments lists the names of the files attached to the dependency, if any. Additionally, the column titled Data exceeding 32767 character limit indicates which columns have more data than the cell can hold. All such large data is exported to a .txt file in the Large descriptions folder.
+
+      ii. History: This sheet has a record of every action taken with the dependencies. Each action is listed in a row. The columns contain details of the action - date and time that the action occured, the sign-in name of the member who took the action, the dependency, and the details of the event that the action triggered.
+
+    b. Attachments folder
+    This folder has a subfolder for each dependency that contains attachments. All files attached to the dependency at the time of export can be found in the subfolder, which is named by the dependency number.
+
+    c. Large descriptions
+    In the rare scenario that a dependency description exceeds the 32767-character limit in Microsoft Excel, the description is exported in a .txt file, and can be found in this folder.
+<%end%>
+
+  If any of the folders, sheets or files is empty, it will not be visible in the export.
+  For any further details, please refer to our Help documentation.

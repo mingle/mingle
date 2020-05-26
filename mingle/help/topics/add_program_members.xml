@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "add_program_members.dtd">
+<chapter title="Add team members to your program" id="add_program_members" collapsed="false">
+	    <p></p>
+		<p>To add team members to your program from the Programs page, click on the admin carrot and select “<strong>Team</strong>."</p>
+		<screenshot src="resources/images/program_team.png"/>
+        <p>This will take you to the “Team” page within your program.</p>
+		<screenshot src="resources/images/add_program_member.png"/>
+		<p>By clicking on the blue “(+) Add team member” icon, you can view a list of all the Mingle users who can be added to your plan. Once added, team members can collaborate on your program, modifying work and objectives to adapt your program as it progresses.</p> 
+        <p>To remove team members, check the box next to the appropriate name(s). This will enable the remove button, which by clicking, will remove the member from your program.  (N.B. This action will <i>not</i> delete users from your Mingle instance. It will only remove them from your program.)</p>
+        <note>
+	        <p>To add or remove team members from <i>within</i> your program, simply click on the “Team” navigation pill in the orange Mingle header.</p>
+	    </note>
+</chapter>

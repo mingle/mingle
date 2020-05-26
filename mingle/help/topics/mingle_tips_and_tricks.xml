@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_help.dtd">
+<chapter title="Mingle Tips and Tricks">
+	<section title="Introduction">
+		<p>This section describes some tips and tricks for getting the most out of Mingle.</p>
+		<hint>For more cool, exciting and novel tips and tricks from the Mingle team and other Mingle users please take a look at our <exref url="@tips_and_tricks@">Mingle Community</exref>. We have examples that explain how to change the look and feel of Mingle, special custom macros and charts, specialized templates and much more. Check it out!</hint>		
+	</section>
+	<topic title="Tips for using Mingle">
+	  <bullets>
+	    <item><cref topic="tip_using_html_anchor">Use html anchors</cref> - go straight to any section on pages and cards via a URL</item>
+	<item><cref topic="tip_subscribe_to_feeds">Subscribe to feeds</cref> - receive notification of important changes in your Mingle project by email or Atom feed</item>
+      <item><cref topic="tip_lane_headings">Grid column headings</cref> - view the size of stories across statuses in a release or per iteration, by using aggregations in 'column headings'</item>
+		<item><cref topic="tip_release_planning">Release planning</cref> - use aggregations in column headings in the grid view for release planning</item>
+		<item><cref topic="creating_cards_with_quick_add_card">Quick add a card</cref> - Simply drag and drop the Quick Add Card onto the grid view to create a new card!</item>
+		<item><cref topic="tip_quick_card_open">Quick access to card view</cref> - quick access to card view from anywhere in Mingle!</item>
+		<item><cref topic="tip_color_charts_and_text">Use colors in charts</cref> - 140 web color names are supported for your charts and text!</item>
+		<item><cref topic="tip_avoiding_macro_syntax_errors">Avoiding macro syntax errors</cref> - hints on how to write Mingle macros to avoid getting syntax errors</item>
+		<item><cref topic="tip_tagging_on_wiki_pages">Use tags on pages</cref> - did you know you could apply tags to Mingle pages?</item>
+	</bullets>
+	</topic>
+	<topic title="Tips for administering Mingle">
+		<bullets>
+		<item><cref topic="tip_metrics_on_cards">Using cards for reporting</cref> - display metrics and charts on cards for easy tracking</item>
+		<item><cref topic="tip_chart_size_and_layout">Chart size and layout</cref> - use chart level parameters to size and layout charts as you want</item>
+		<item><cref topic="tip_hold_signoff">Hold signoff</cref> - create a transition to allow customers to give feedback on stories before they are considered 'Done'</item>
+		<item><cref topic="tip_use_project_variables">Using project variables</cref> - update tables, charts and favorites for the 'current iteration' in a single step</item>
+		<item><cref topic="tip_soft_delete">Soft delete</cref> - soft delete cards from a project to remove from active story lists but protect card history</item>
+		<item><cref topic="transition_workflow_page">Setting up transition workflow</cref> - generate transitions according to your project workflow</item>
+		<item><cref topic="tip_export_import_projects">Export and import all projects</cref> - use Mingle's export and import tool to export and/or all projects</item>
+	</bullets>
+		</topic>
+		<section file="need_more_help"/>
+	<section title="Also see...">
+		<bullets>
+			<item>
+				<cref topic="getting_started_in_mingle">Getting started in Mingle</cref>
+			</item>
+			<item>
+				<cref topic="quick_project_setup">Quick project setup</cref>
+			</item>
+			<item><cref topic="explore_mingle">Explore Mingle</cref></item>
+			<item>
+			<exref url="@tips_and_tricks@">ThoughtWorks Studios community - Tips and Tricks</exref>
+			</item>
+		</bullets>
+	</section>
+</chapter>

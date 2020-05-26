@@ -1,0 +1,83 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+/**
+ * action_icons.css
+ *
+ * Style for links that have actions and icons associated with them
+ */
+
+/**
+ * TABLE OF CONTENTS
+ *
+ * =BASE
+ * =ENHANCEMENTS
+ */
+
+
+/**
+ * =BASE
+ */
+a.dismiss {
+ background-image: url(../../../images/planner/icons/icon_remove_16.png);
+ display: block;
+ height: 16px;
+ width: 16px;
+ cursor: pointer;
+}
+
+a.action_icon {
+  background-position:  left center;
+  background-repeat: no-repeat;
+  color: #333;
+  display: inline-block;
+  font-size: 12px;
+  height: auto;
+  line-height: 16px;
+  margin-right: 10px;
+  padding:  3px 0px 3px 20px;
+  width: auto;
+}
+
+a.link_as_button {
+ min-width: 80px;
+ line-height: 13px;
+}
+
+/*
+ * =ENHANCEMENTS
+ */
+a.action_icon.delete_link {
+  background-image: url(../../../images/planner/icons/icon_delete_16.png);
+}
+a.action_icon.edit_link {
+  background-image: url(../../../images/planner/icons/icon_edit_16.png);
+}
+a.action_icon.add_link {
+  &:before {
+    @include fa_icon($fa-var-plus-circle);
+  }
+}
+a.action_icon.arrow_link {
+  color: white;
+  background-image: url(../../../images/planner/icons/icon_arrow_16.png);
+}
+
+a.action_icon.back_link {
+  &:before {
+    @include fa_icon($fa-var-angle-left);
+  }
+}

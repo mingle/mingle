@@ -1,0 +1,121 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+.col1
+{
+  width: 20%;
+  overflow: hidden;
+}
+
+.col2
+{
+  width: 30%;
+}
+
+.col3
+{
+  width: 17%;
+}
+
+.col4
+{
+  width: 17%;
+}
+
+.col5
+{
+  width: 16%;
+}
+
+#page-identifier-enumeration_values-list #content {
+  border: 1px solid #CCC;
+  box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    -webkit-box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    -o-box-shadow: 0 0 5px rgba(0,0,0,0.2);
+  margin-bottom: 10px;
+}
+
+#page-identifier-enumeration_values-list table.highlightable-table {
+  box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    -o-box-shadow: none;
+}
+
+table#enum-table-top
+{
+  table-layout: fixed;
+  margin: 0em;
+}
+
+table.enum-draggable-table
+{
+  table-layout: fixed;
+  margin-top: 0em;
+  margin-bottom: 0em;
+  border: 0px;
+  border-bottom: 1px solid #CCC;
+}
+
+table.enum-draggable-table tbody
+{
+  border-bottom: none !important;
+  border-top: none !important;
+}
+
+table.enum-draggable-table td
+{
+  border: 0px;
+  border-left: 1px solid #ccc;
+}
+
+#content {
+  overflow: inherit; !important
+}
+
+#content li {
+  list-style: none;
+}
+
+/* Format for the quick add bar */
+
+form#quick-add .fieldWithErrors
+{
+  margin: 0;
+  display:inline;
+}
+
+form#quick-add
+{
+  display: block;
+	margin: 0.5em;
+	position: relative; /* This does not impact the form's own position but provides a reference for the spinner which is then positioned absolutely with respect the form */
+}
+
+.full_width_input_wrapper {
+  margin-right: 150px;
+}
+
+
+input#submit-quick-add {
+  float: right;
+  margin-right: 0;
+}
+
+.quick-add-text-field {
+  width: 100%;
+}

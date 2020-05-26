@@ -1,0 +1,40 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% index = 0 unless index %>
+<% is_last = node.parent && (index == node.parent.children_size - 1) %>
+<% card_type = node.respond_to?(:card_type) ? node.card_type : Null.new -%>
+<div id="<%=node.html_id %>" number="<%= node.number %>" cardTypeHtmlId="<%=card_type.html_id%>" cardTypeName="<%= h card_type.name %>" title="<%= h node.name %>" class="vtree-node <%= 'last' if is_last %> <%= card_type.html_id %>">
+  <div class="card-wrapper">
+    <div class="vtree-card" id="<%=node.html_id %>_inner_element">
+      <%= render :partial => 'cards/node_toolbar', :locals => {:node => node, :tab_name => @tab_name} %>
+      <div class="node-content" <%= card_color_border_by_card(node) %>>
+        <%= spinner :id => spinner_id_from(node), :style => 'display: none;', :class=> 'spinner'%>
+        <span class="card-summary-number" onclick="$('<%= node.html_id %>').ignoreOnClick = true;"><%= link_to "##{node.card.number}", card_show_url(:number => node.card.number), :id => "card_show_link_#{node.card.number}", :title => "Click to go directly to this card" %></span>
+        <span class='card-name'> <%=h node.name %> </span>
+      </div>
+    </div>
+    <div class="twisty-connector" id="twisty_for_card_<%=node.number%>" style="<%= 'display: none' unless show_twisty_for?(node)%>">
+      <a href="javascript:void(0)"
+      class="no-popup twisty <%= twisty_class(node) %>"
+      title="Expand or collapse children"
+      onclick="TreeView.toggleNode(<%= node.number %>);return false;"><span><%= node.partial_tree_card_count %></span></a>
+      <div class="clear"></div>
+    </div>
+  </div>
+  <%= render :partial => 'cards/sub_tree', :locals => {:node => node }%>
+  <div class="clear"></div>
+</div>

@@ -1,0 +1,297 @@
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+
+<web-app>
+
+    <% if ENV["BUILD_SELENIUM_WEB_XML"] %>
+      <context-param>
+          <param-name>rails.env</param-name>
+          <param-value>test</param-value>
+      </context-param>
+      <context-param>
+          <param-name>rails.root</param-name>
+          <param-value>/WEB-INF</param-value>
+      </context-param>
+
+      <context-param>
+          <param-name>public.root</param-name>
+          <param-value>/</param-value>
+      </context-param>
+
+      <context-param>
+          <param-name>war.packaged</param-name>
+          <param-value>true</param-value>
+      </context-param>
+    <% else %>
+      <% webxml.context_params.reject {|k,v| %w(jruby.min.runtimes jruby.max.runtimes).include?(k)}.each do |k,v| %>
+          <context-param>
+              <param-name><%= k %></param-name>
+              <param-value><%= v %></param-value>
+          </context-param>
+      <% end %>
+    <% end %>
+
+
+    <% if ENV["BUILD_DUAL_APP"] %>
+      <filter>
+          <filter-name>DispatchFilter</filter-name>
+          <filter-class>com.thoughtworks.mingle.multiapp.DispatchFilter</filter-class>
+      </filter>
+      <filter-mapping>
+          <filter-name>DispatchFilter</filter-name>
+          <url-pattern>/*</url-pattern>
+      </filter-mapping>
+    <% end %>
+
+    <% if ENV["BUILD_SELENIUM_WEB_XML"].nil? %>
+      <filter>
+          <filter-name>HttpRedirectFilter</filter-name>
+          <filter-class>com.thoughtworks.mingle.HttpRedirectFilter</filter-class>
+      </filter>
+
+      <filter>
+          <filter-name>TokenAuthFilter</filter-name>
+          <filter-class>com.thoughtworks.mingle.security.TokenAuthFilter</filter-class>
+      </filter>
+
+      <filter-mapping>
+        <filter-name>HttpRedirectFilter</filter-name>
+        <url-pattern>*</url-pattern>
+      </filter-mapping>
+
+      <filter-mapping>
+          <filter-name>TokenAuthFilter</filter-name>
+          <url-pattern>/background_status</url-pattern>
+      </filter-mapping>
+    <% end %>
+
+    <filter>
+        <filter-name>startupFilter</filter-name>
+        <filter-class>com.thoughtworks.mingle.StartupFilter</filter-class>
+        <init-param>
+            <param-name>forwardToWhileStarting</param-name>
+            <param-value>/startup</param-value>
+        </init-param>
+    </filter>
+
+    <filter>
+        <filter-name>RackFilter</filter-name>
+        <filter-class>com.thoughtworks.mingle.rack.MingleRackFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>startupFilter</filter-name>
+        <url-pattern>*</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>RackFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <listener>
+        <listener-class>com.thoughtworks.mingle.InitializeWarListener</listener-class>
+    </listener>
+
+    <listener>
+        <listener-class>com.thoughtworks.mingle.MingleServicesContextListener</listener-class>
+    </listener>
+
+    <listener>
+        <listener-class>com.thoughtworks.mingle.rack.MingleRackServletContextListener</listener-class>
+    </listener>
+
+    <listener>
+        <listener-class>com.thoughtworks.mingle.BootstrapListener</listener-class>
+    </listener>
+
+    <servlet>
+        <servlet-name>StaticContent</servlet-name>
+        <servlet-class>com.thoughtworks.mingle.StaticFilesServlet</servlet-class>
+        <% if !ENV["BUILD_SELENIUM_WEB_XML"] %>
+        <init-param>
+            <param-name>cacheControl</param-name>
+            <param-value>max-age=2592000,public</param-value>
+            <!-- 1 month -->
+        </init-param>
+        <% end %>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>alsoViewing</servlet-name>
+        <servlet-class>com.thoughtworks.mingle.AlsoViewingServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+
+    <% if ENV["BUILD_SELENIUM_WEB_XML"] %>
+    <servlet>
+        <servlet-name>eval</servlet-name>
+        <servlet-class>com.thoughtworks.mingle.EvalServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>class_method_call</servlet-name>
+        <servlet-class>com.thoughtworks.mingle.ClassMethodServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+    <% end %>
+
+    <servlet>
+        <servlet-name>status</servlet-name>
+        <servlet-class>com.thoughtworks.mingle.RuntimeStatusServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+
+    <!-- Mingle Frontend Node Servlets -->
+
+    <servlet>
+        <servlet-name>bootstrap_status</servlet-name>
+        <servlet-class>com.thoughtworks.mingle.BootstrapStatusServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>contextual_help</servlet-name>
+        <servlet-class>com.thoughtworks.mingle.ContextualHelpFileServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>mingleFiles</servlet-name>
+        <servlet-class>com.thoughtworks.mingle.DataDirPublicFileServlet</servlet-class>
+        <init-param>
+            <param-name>cacheControl</param-name>
+            <param-value>max-age=2592000</param-value>
+            <!-- 1 month -->
+        </init-param>
+        <init-param>
+            <param-name>dirAllowed</param-name>
+            <param-value>false</param-value>
+        </init-param>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>startup</servlet-name>
+        <servlet-class>com.thoughtworks.mingle.StartupServlet</servlet-class>
+        <init-param>
+            <param-name>templatePath</param-name>
+            <param-value>/startup.html</param-value>
+        </init-param>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+    <!-- End Mingle Frontend Node Servlets -->
+
+    <!-- Mingle Backend Node Servlets -->
+    <servlet>
+        <servlet-name>periodical_tasks</servlet-name>
+        <servlet-class>com.thoughtworks.mingle.MinglePeriodicalTaskServlet</servlet-class>
+        <init-param>
+            <param-name>tasks.config</param-name>
+            <param-value>periodical_tasks.yml</param-value>
+        </init-param>
+        <load-on-startup>5</load-on-startup>
+    </servlet>
+    <!-- End Mingle Backend Node Servlets -->
+
+    <!-- End Mingle Frontend Node Filter-Mapping -->
+    <servlet-mapping>
+        <servlet-name>StaticContent</servlet-name>
+        <url-pattern>/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- Mingle Frontend Node Servlet-Mapping -->
+    <servlet-mapping>
+        <servlet-name>alsoViewing</servlet-name>
+        <url-pattern>/also_viewing/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>startup</servlet-name>
+        <url-pattern>/startup</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>contextual_help</servlet-name>
+        <url-pattern>/contextual_help/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>bootstrap_status</servlet-name>
+        <url-pattern>/bootstrap_status/*</url-pattern>
+    </servlet-mapping>
+    <!-- End Mingle Frontend Node Servlet-Mapping -->
+
+    <servlet-mapping>
+        <servlet-name>status</servlet-name>
+        <url-pattern>/status/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>periodical_tasks</servlet-name>
+        <url-pattern>/background_status/*</url-pattern>
+    </servlet-mapping>
+
+    <% if ENV["BUILD_SELENIUM_WEB_XML"] %>
+    <servlet-mapping>
+        <servlet-name>eval</servlet-name>
+        <url-pattern>/_eval/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>class_method_call</servlet-name>
+        <url-pattern>/_class_method_call/*</url-pattern>
+    </servlet-mapping>
+    <% end %>
+
+    <!-- Mime mapping for newer versions of file extensions.
+      This is needed for static content servlet (StaticFilesServlet).
+      We may have some attachments is served by this servlet.
+    -->
+    <mime-mapping>
+        <extension>css</extension>
+        <mime-type>text/css</mime-type>
+    </mime-mapping>
+
+    <mime-mapping>
+        <extension>eml</extension>
+        <mime-type>message/rfc822</mime-type>
+    </mime-mapping>
+
+    <mime-mapping>
+        <extension>docx</extension>
+        <mime-type>application/x-word</mime-type>
+    </mime-mapping>
+
+    <mime-mapping>
+        <extension>xlsx</extension>
+        <mime-type>application/x-excel</mime-type>
+    </mime-mapping>
+
+    <mime-mapping>
+        <extension>pptx</extension>
+        <mime-type>application/vnd.openxmlformats-officedocument.presentationml.presentation</mime-type>
+    </mime-mapping>
+
+    <mime-mapping>
+      <extension>msg</extension>
+      <mime-type>application/vnd.ms-outlook</mime-type>
+    </mime-mapping>
+</web-app>

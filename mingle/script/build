@@ -1,0 +1,100 @@
+#!/bin/bash
+#  Copyright 2020 ThoughtWorks, Inc.
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Affero General Public License as
+#  published by the Free Software Foundation, either version 3 of the
+#  License, or (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Affero General Public License for more details.
+#
+#  You should have received a copy of the GNU Affero General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+WORKSPACE=$(cd `dirname $0`/.. && pwd)
+BUNDLER_VERSION="1.11.2"
+
+if [ -e $WORKSPACE/.bundle ]; then
+  rm -rf $WORKSPACE/.bundle
+fi
+
+export RBENV_VERSION=$(cat $WORKSPACE/.ruby-version)
+export RBENV_ROOT=$HOME/.rbenv$GO_AGENT_ID
+
+unset GEM_PATH
+unset GEM_HOME
+
+if [ ! -d $RBENV_ROOT ]; then
+    echo "Installing rbenv."
+    git clone git://github.com/sstephenson/rbenv.git $RBENV_ROOT
+fi
+
+if [ ! -d $RBENV_ROOT/plugins/rbenv-update ]; then
+    echo "Installing rbenv-update plugin."
+    git clone https://github.com/rkh/rbenv-update.git $RBENV_ROOT/plugins/rbenv-update
+fi
+
+if [ ! -d $RBENV_ROOT/plugins/ruby-build ]; then
+    echo "Installing ruby-build plugin."
+    git clone https://github.com/sstephenson/ruby-build.git $RBENV_ROOT/plugins/ruby-build
+fi
+
+if [ ! -d $RBENV_ROOT/plugins/rbenv-gemset ]; then
+    echo "Installing rbenv-gemset plugin."
+    git clone https://github.com/jf/rbenv-gemset.git $RBENV_ROOT/plugins/rbenv-gemset
+fi
+
+if [ ! -d $RBENV_ROOT/plugins/rbenv-vars ]; then
+    echo "Installing rbenv-vars plugin."
+    git clone https://github.com/sstephenson/rbenv-vars.git $RBENV_ROOT/plugins/rbenv-vars
+fi
+
+if [ ! -d $RBENV_ROOT/versions/$RBENV_VERSION ]; then
+    echo "Installing ruby ${RBENV_VERSION}."
+    $RBENV_ROOT/bin/rbenv update
+    $RBENV_ROOT/bin/rbenv install $RBENV_VERSION
+
+    if [[ $RBENV_VERSION =~ "jruby" ]]; then
+      # should be the same as pristine since this is a new install, but `gem pristine` hits file permissions errors the first time
+      $RBENV_ROOT/bin/rbenv exec gem install jruby-launcher
+    fi
+
+    echo "done"
+elif [[ ("true" = "${RBENV_UPDATE:-false}") || ($(uname -a) =~ Darwin) ]]; then
+    echo "Updating rbenv..."
+    $RBENV_ROOT/bin/rbenv update
+else
+    echo "Environment up to date, ruby version: $RBENV_VERSION"
+fi
+
+if ! (echo $PATH | grep -F "$RBENV_ROOT" > /dev/null 2>&1 && grep -F 'export PATH="$HOME/.rbenv' $HOME/.bash_profile 2>&1 > /dev/null); then
+  echo "Adding rbenv to PATH"
+  echo 'export PATH="$HOME/.rbenv$GO_AGENT_ID/bin:$PATH"' >> $HOME/.bash_profile
+  export PATH="$RBENV_ROOT/bin:$PATH"
+fi
+
+if ! (type rbenv > /dev/null 2>&1 && grep -F 'eval "$(rbenv init -)"' $HOME/.bash_profile 2>&1 > /dev/null); then
+  echo "Initializing rbenv in your .bash_profile"
+  echo 'eval "$(rbenv init -)"' >> $HOME/.bash_profile
+  eval "$(rbenv init -)"
+fi
+
+if ! ($RBENV_ROOT/shims/bundle --version 2> /dev/null | grep -F "$BUNDLER_VERSION" > /dev/null 2>&1); then
+    echo "installing bundler $BUNDLER_VERSION"
+    cmd="$RBENV_ROOT/bin/rbenv exec gem install --no-ri --no-rdoc $WORKSPACE/development/build_gems/bundler-$BUNDLER_VERSION.gem"
+    echo "executing: $cmd"
+    $cmd
+    echo "done, result: $?"
+fi
+unset BUNDLER_VERSION
+$RBENV_ROOT/bin/rbenv exec ruby -S bundle clean --force
+$RBENV_ROOT/bin/rbenv exec ruby -S bundle install --local
+$RBENV_ROOT/bin/rbenv rehash
+
+if [ $# -gt 0 ]; then
+  cmd="$RBENV_ROOT/bin/rbenv exec ruby -S bundle exec $@"
+  echo "executing: $cmd"
+  $RBENV_ROOT/bin/rbenv exec ruby -S bundle exec $@ 2>&1
+fi

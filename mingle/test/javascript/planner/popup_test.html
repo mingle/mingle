@@ -1,0 +1,178 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>JavaScript unit test file</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../test_assets/unittest.js" type="text/javascript"></script>
+  <script src="../test_assets/unittest_ext.js" type="text/javascript"></script>
+
+
+  <script src="../../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/controls.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/slider.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/application.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/planner/planner_application.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/planner/timeline_status.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/planner/timeline.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/planner/timeline/objective.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/planner/timeline/popup.js" type="text/javascript"></script>
+
+
+  <link rel="stylesheet" href="../test_assets/unittest.css" type="text/css" />
+</head>
+<body>
+
+<div id="content">
+
+  <div id="header">
+    <h1>JavaScript unit test file</h1>
+    <p>
+      This file tests <strong>popup.js</strong>.
+    </p>
+  </div>
+
+  <div id='test-content' style='padding: 0; margin: 0; left: 0px; top: 0px; position: absolute'>
+  </div>
+
+  <!-- Log output -->
+  <div id="testlog"> </div>
+
+</div>
+
+<script type="text/javascript">
+// <![CDATA[
+
+  new Test.Unit.Runner({
+
+    setup: function() {
+      this.mockElement = function(attributes) {
+        var element = new Element("div")
+          element.setStyle({
+            width: attributes.width + "px",
+            height: attributes.height + "px"
+          });
+        $("test-content").appendChild(element);
+        return element;
+      }
+      this.timeline = this.mockElement({width: 500, height: 0});
+    },
+
+    teardown: function() {
+      $("test-content").update("");
+    },
+
+
+    testPopupArrowShouldSwitchToRightWhenObjectiveIsAtTopRightCorner: function() { with(this) {
+      var clickPoint = {x: 400, y: 1, distanceToObjectiveEnd: 30};
+      var popup = this.mockElement({height: 60, width: 550});
+      var result = {arrow:{}};
+
+      new Timeline.Objective.Popup(popup,this.timeline)._calculateLeft(result, clickPoint, {align: 'left'});
+      assertEqual('right', result.arrow.horizontalPosition);
+    }},
+
+    testPopupArrowFromObjectiveLatenessAlertShouldHaveSameXAsMouse: function() { with(this) {
+      var mouseClickLeft = 300;
+
+      var clickPoint = {x: mouseClickLeft, y: 1, distanceToObjectiveEnd: 20};
+      var popup = this.mockElement({height: 60, width: 150});
+      var result = {arrow:{}};
+
+      new Timeline.Objective.Popup(popup,this.timeline)._calculateLeft(result, clickPoint, {align: 'left', alignTipToEdge: true});
+
+      assertEqual('left', result.arrow.horizontalPosition);
+
+      var TIP_TO_POPUP_EDGE = 35;
+      var expectedLeft = mouseClickLeft - TIP_TO_POPUP_EDGE;// align to edge i.e moving left so that tip of the popup is at the mouse X
+      assertEqual(expectedLeft, result.left);
+
+    }},
+
+    testCreationPopupOffsetWhenObjectiveIsAtLeftTopCornerAndLongerThanPopup: function() { with(this) {
+      var clickPoint = {x: 1, y: 1, objectiveHeight: 20, distanceToObjectiveEnd: 200};
+      var popup = this.mockElement({height: 60, width: 50});
+      var offset = new Timeline.Objective.Popup(popup,this.timeline)._offset(clickPoint, {align: 'right'});
+      assertEqual(20 + 1, offset.top);
+      assertEqual(200 - 50 + 1, offset.left);
+      assertEqual('top', offset.arrow.position);
+      assertEqual('right', offset.arrow.horizontalPosition);
+    }},
+
+    testCreationPopupOffsetWhenObjectiveIsAtLeftTopCornerAndShorterThanPopup: function() { with(this) {
+      var heightOfObjective = 30;
+      var clickPoint = {x: 1, y: 1, objectiveHeight: heightOfObjective, distanceToObjectiveEnd: 20};
+      var popup = this.mockElement({height: 60, width: 50});
+      var offset = new Timeline.Objective.Popup(popup,this.timeline)._offset(clickPoint, {align: 'right'});
+
+      assertEqual(heightOfObjective + 1, offset.top);
+      assertEqual(1, offset.left);
+      assertEqual('top', offset.arrow.position);
+      assertEqual('left', offset.arrow.horizontalPosition);
+    }},
+
+    testCreationPopupOffsetWhenSpaceAboveObjectiveIsEnoughForShowingPopup: function() { with(this) {
+      var popupHeight = 60;
+      var popupWidth = 50;
+
+      var clickPoint = {x: 0, y: 100, objectiveHeight: 20, distanceToObjectiveEnd: 200};
+      var popup = this.mockElement({height: popupHeight, width: popupWidth});
+      var offset = new Timeline.Objective.Popup(popup,this.timeline)._offset(clickPoint, {align: 'right'});
+
+      assertEqual(clickPoint.y - popupHeight, offset.top);
+      assertEqual(clickPoint.distanceToObjectiveEnd - popupWidth, offset.left);
+      assertEqual('bottom', offset.arrow.position);
+    }},
+
+    testShouldAlignLeft: function() { with(this) {
+      var popupHeight = 60;
+      var clickPoint = {x: 0, y: 100, objectiveHeight: 20, distanceToObjectiveEnd: 200};
+      var popup = this.mockElement({height: popupHeight, width: 100});
+      var offset = new Timeline.Objective.Popup(popup, this.timeline)._offset(clickPoint, { align: 'left' });
+
+      assertEqual(clickPoint.y - popupHeight, offset.top);
+      assertEqual(clickPoint.x, offset.left);
+      assertEqual('bottom', offset.arrow.position);
+    }},
+
+    testAlignLeftWithShortObjectiveShouldBePositionedOverObjectiveMiddle: function() { with(this) {
+      var clickPoint = {x: 100, y: 100, objectiveHeight: 20, distanceToObjectiveEnd: 20};
+      var popup = this.mockElement({height: 60, width: 100});
+      var offset = new Timeline.Objective.Popup(popup, this.timeline)._offset(clickPoint, { align: 'left' });
+      assertEqual(clickPoint.x, offset.left);
+    }},
+
+    testForecastPopupShowsForecastData: function() { with(this) {
+      var clickPoint = {x: 100, y: 100, objectiveHeight: 20, distanceToObjectiveEnd: 20};
+      var popup = this.mockElement({height: 60, width: 100});
+      var forecastPopup = new Timeline.Objective.ForecastPopup(popup, this.timeline);
+      forecastPopup._setPositionFrom(clickPoint);
+      assertEqual((clickPoint.x + clickPoint.distanceToObjectiveEnd) + "px", forecastPopup.element.style.left);
+      assertEqual((clickPoint.y + Timeline.Objective.FORECAST_TOP_OFFSET) + "px", forecastPopup.element.style.top);
+    }},
+
+  }, { testLog: "testlog", test : '' });
+// ]]>
+</script>
+</body>
+</html>

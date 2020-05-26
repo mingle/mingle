@@ -1,0 +1,124 @@
+Mingle CAS Authentication
+--------------------------
+
+This authentication plugin supports the JA-SIG Central Authentication Service.
+
+1. Before you can use Mingle CAS authentication, you must first complete 
+the standard Mingle installation and configuration. Make sure that you setup a 
+user with both full Mingle administrative privileges and a login that is also 
+contained in your CAS System.
+
+2. Stop Mingle server.
+
+4. Edit <mingle_data_directory>/config/auth_config.yml to contain your configuration:
+
+Please for all options include the slash in cas_uri
+
+Options One:
+
+  If your CAS server use secure connection (i.e., HTTPS) with a certification signed by a 
+  commercial signer, use the following configuration:
+  
+  authentication: cas
+  cas_settings:
+    cas_host: cas.example.com
+    cas_uri: /cas
+    cas_port: 443
+    auto_enroll: true
+    auto_enroll_as_mingle_admin: false
+
+Options Two:
+
+  If your CAS Server use secure connection (i.e., HTTPS) with a self-signed certification,
+  use the following configuration:
+  
+  authentication: cas
+  cas_settings:
+    cas_host: cas.example.com
+    cas_uri: /cas
+    cas_port: 443
+    cas_root_cert_path: /etc/pki/cacert/cacert.pem
+    auto_enroll: true
+    auto_enroll_as_mingle_admin: false
+
+Option Three: (Not Recommended)
+
+  If your CAS Server use secure connection (i.e., HTTPS), but you do not care to validate 
+  the certification, use the following configuration:
+  
+  authentication: cas
+  cas_settings:
+    cas_host: cas.example.com
+    cas_uri: /cas
+    cas_port: 443
+    cas_trust_all_certs: true
+    auto_enroll: true
+    auto_enroll_as_mingle_admin: false
+  
+Option Four:
+
+  If your CAS server is using a self-signed certificate, you can import your CAS server's certificate 
+  and/or your CA Root certificate into your Java keystore:
+    
+    keytool -import -trustcacerts -alias "My Root Certificate" -file cacert.crt -keystore /usr/java/default/jre/lib/security/cacerts
+           
+    IMPORTANT: Please check where is your Java keystore located.  In the example above, 
+    the Java keystore is under /usr/java/default/jre/lib/security/cacerts
+    
+  You can then use the same settings as option one above:
+  
+  authentication: cas
+  cas_settings:
+    cas_host: cas.example.com
+    cas_uri: /cas
+    cas_port: 443
+    auto_enroll: true
+    auto_enroll_as_mingle_admin: false  
+              
+4. Notice the first line of each configuration above, as of 2.0.1 it is now necessary 
+to explicitly state an authentication of type 'cas' in order to use the CAS SSO authentication plugin.  
+
+If you have enabled basic authentication, you will not be able to use the CAS plugin for 
+basic authentication, so you will need to specify either 'ldap' or 'mingle' authentication:
+
+  basic_authentication_enabled: true
+  basic_authentication: ldap
+  authentication: cas 
+  cas_settings:
+    cas_host: ...
+    ...
+  ldap_settings: 
+    ldapserver: ...
+    ...       
+              
+5. Start Mingle server.
+
+6. Go to any mingle page and you should be redirected to your CAS login page. After entering
+you username and CAS password, you will be redirected to Mingle and will be logged
+in as the user you setup in Step 1. This user will still have full Mingle admin
+privileges.  This user can make future Mingle users Mingle admins if you wish to grant others
+that privilege.
+
+7. Assuming that you set auto_enroll to true in Step 3, any users enrolled in your CAS
+system can now login to Mingle. When they login to Mingle, a Mingle account will be
+automatically created if it does not already exist. Once a user has logged in for the
+first time s/he can be granted access to projects.
+
+If for some reason, you did not wish for Mingle users to be automatically created,
+you could set 'auto_enroll' to false in your configuration.  Note that this would require anyone
+logging in to already exist in the Mingle database.  This setting would typically never
+be used. The default value of 'auto_enroll' is true.
+
+8. If auto_enroll_as_mingle_admin was set to true, any new users in your CAS system 
+can not only log into Mingle, they will also be made administrators by default.
+
+9. Should you ever wish to turn off CAS authentication, simply change the values of 'authentication'
+and 'basic_authentication' in the config/auth_config.yml file to the type of authentication you wish
+to switch to, either 'ldap' or 'mingle'. After restarting the Mingle server, users will then be able to use the 
+Mingle password recovery feature in order to set a Mingle password.
+
+WARNING: If you are going to turn off CAS authentication, be absolutely sure that you configure 
+Mingle SMTP successfully before turning off CAS authentication. This will ensure that the password 
+recovery feature is available, allowing users to continue to use Mingle with Mingle's built-in 
+authentication mechanism.
+

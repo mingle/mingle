@@ -1,0 +1,105 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<html>
+ <head>
+   <title> Caching server monitoring </title>
+   <%= stylesheet_link_tag("sprockets_app") %>
+ </head>
+
+ <body>
+  <div id='memcached'>
+    <h1>MemcachedServers </h1>
+    <table>
+      <thead>
+        <tr>
+          <td> Server </td>
+          <td> Version </td>
+          <td> Up time </td>
+          <td> Get hits </td>
+          <td> Total get </td>
+          <td> Hit rate </td>
+          <td> Bytes used </td>
+          <td> Limit max bytes </td>
+          <td> Use rate </td>
+          <td> Total items </td>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% memcached_servers.each do |server| %>
+          <tr>
+            <td> <%=h server.address %> </td>
+            <td> <%=h server.version %> </td>
+            <td> <%=h server.uptime %> </td>
+            <td> <%=h server.get_hits %> </td>
+            <td> <%=h server.total_gets %> </td>
+            <td> <%=h server.hit_rate %> </td>
+            <td> <%=h server.bytes_used %> </td>
+            <td> <%=h server.limit_max_bytes %> </td>
+            <td> <%=h server.use_rate %> </td>
+            <td> <%=h server.total_items %> </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div id='project_cache_stat'>
+    <h1>Project Cache (Total count: <%= ProjectCacheFacade.instance.total_count %>, Max: <%= ProjectCacheFacade.instance.max_size %>) </h1>
+
+    <table>
+      <thead>
+        <tr>
+          <td> project </td>
+          <td> Total get </td>
+          <td> Get hits </td>
+          <td> Hit rate </td>
+          <td> Active </td>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% ProjectCacheFacade.instance.stats.each do |stat| %>
+          <tr>
+            <td> <%= stat.key %> </td>
+            <td> <%= stat.total_gets %> </td>
+            <td> <%= stat.total_hits %> </td>
+            <td> <%= stat.hit_rate %> </td>
+            <td>  </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <h1>In Cache Projects</h1>
+    <table>
+      <thead>
+        <tr>
+          <th> project </th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% ProjectCacheFacade.instance.in_cache_projects.each do |project| %>
+          <tr>
+            <td><%= project %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+ </body>
+</html>

@@ -1,0 +1,32 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<table class="reset-table" id="help-table-for-wysiwyg">
+  <tr><th>Text</th><th>Effect</th></tr>
+  <tr><td>#123</td><td>Link to card 123 in current Mingle project</td></tr>
+  <tr><td>project_identifier/#456</td><td>Link to card 456 in Mingle project with identifier project_identifier</td></tr>
+  <tr><td>[[project_identifier/page]]</td><td>Link to page "page" in Mingle project with identifier project_identifier</td></tr>
+  <tr><td>[[page]]</td><td>Link to page</td></tr>
+  <tr><td>[[page/file_name.ext]]</td><td>Link to attachment "file_name" on page</td></tr>
+  <tr><td>[[#123/file_name.ext]]</td><td>Link to attachment "file_name" on card 123 in current Mingle project</td></tr>
+</table>
+
+<br />
+
+<p>Learn more about Mingle <%= render_help_link('charts and reporting', :class=> 'help-link', :content => "charts and reporting") %></p>
+
+
+

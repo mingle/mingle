@@ -1,0 +1,111 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% allow_view_creation = false unless defined? allow_view_creation %>
+<div id="favorites-container">
+
+  <% if @project.favorites.of_team.any? %>
+    <% collapsible 'Team favorites', false, :html => { :id => 'favorites-container-team' }, :visibility_preference => :favorites_visible do -%>
+      <% cache_to(Keys::FavoritesView.new, @project, allow_view_creation) do -%>
+  
+      <div id='favorites-team' class='favorites'>
+        <%= render :partial => 'shared/favorite_listing', :locals => {
+                :allow_view_creation => allow_view_creation, 
+                :favorites => @project.favorites.of_team
+        } -%>
+        
+        <%= render :partial => 'shared/favorite_management', :locals => {
+          :allow_view_creation => allow_view_creation, 
+          :user_params => {}, 
+          :suffix => "team"
+        } -%>
+
+        <div>
+          <%= link_to('Manage team favorites and tabs', {:controller => 'favorites', :action => 'manage_favorites_and_tabs'}, :class => 'tab-small manage_link')%>
+        </div>
+      </div>
+    
+      <% end -%>
+    <% end -%>
+  <% elsif allow_view_creation -%>
+    <%= render :partial => 'shared/create_new_favorite', :locals => { :suffix => 'team', :show_manage_favorites_and_tabs_link => true, :user_params => {}, :visibility_preference => :favorites_visible } %>
+  <% else %>
+    <div id='favorites-container-team'></div>
+  <% end -%>
+
+
+  <% if authorized?(:controller => 'cards', :action => 'create_view') && (@page || @project.favorites.personal(User.current).any?) %>
+    <% collapsible 'My favorites', true, :html => { :id => 'favorites-container-personal' }, :visibility_preference => :personal_favorites_visible do -%>
+    <div id='favorites-personal' class='favorites'>
+      <% cache_to(Keys::PersonalFavoritesView.new, @project, allow_view_creation) do -%>    
+          <%- personal_favorites = @project.favorites.personal(User.current) -%>
+          <div id="favorite_list_div">
+            <%= render :partial => 'shared/favorite_listing', :locals => { 
+              :allow_view_creation => allow_view_creation, 
+              :favorites => personal_favorites,
+              :user_id => User.current.id
+            } -%>
+          </div>
+          
+          <%= render :partial => 'shared/favorite_management', :locals => {
+            :allow_view_creation => allow_view_creation, 
+            :user_params => {:user_id => User.current.id}, :suffix => "my"
+            } if personal_favorites.any? -%>
+            
+      <% end -%>
+      
+      <% if @page && !personal_page?(@page) && authorized?(:controller => 'personal_favorites', :action => 'create') -%>
+          <%= link_to_remote 'Add current page to my favorites...', 
+              {:url => { :controller => 'personal_favorites', :action => "create", :favorite => {:favorited_id => @page.id, :favorited_type => Page.name} }, 
+              :before => "$('add_current_page_to_my_favorite_spinner').show()", 
+              :complete => "$('add_current_page_to_my_favorite_spinner').hide()"}, 
+              {:method => 'post', :id => 'add_current_page_to_my_favorite_link', :class => 'add-small-orange open-save-view'} 
+          -%> 
+          
+          <%= spinner :id => 'add_current_page_to_my_favorite_spinner' -%>
+      <% end -%>
+    </div>
+    <% end -%>
+  <% elsif !@project.template? && allow_view_creation -%>
+    <%= render :partial => 'shared/create_new_favorite', :locals => { 
+      :suffix => 'my', 
+      :show_manage_favorites_and_tabs_link => false, 
+      :user_params => { :user_id => User.current.id },
+      :visibility_preference => :personal_favorites_visible
+    } %>
+  <% else %>
+    <div id='favorites-container-personal'></div>
+  <% end -%>
+
+</div>
+
+<%
+favorite_id = params[:favorite_id]
+#todo cleanup later, we need this, because we want hightlight favorite when user type cards?view=name in url
+favorite_id = @view.favorite.id if favorite_id.nil? && (@view && @view.favorite && @view.favorite.id)
+favorite_id = @page.favorites.of_team.first.id if favorite_id.nil? && (@page && @page.favorites.of_team.first && @page.favorites.of_team.first.id)
+
+if favorite_id
+-%>
+  <%= javascript_with_rescue <<-JAVASCRIPT
+    var highlighting = new RegisterCardListViewFavoriteHighlighting(#{favorite_id.to_json});
+    highlighting.highlight();
+    ParamsController.register(highlighting);
+JAVASCRIPT
+-%>
+<% end -%>
+
+

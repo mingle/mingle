@@ -1,0 +1,92 @@
+#  Copyright 2020 ThoughtWorks, Inc.
+#  
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Affero General Public License as
+#  published by the Free Software Foundation, either version 3 of the
+#  License, or (at your option) any later version.
+#  
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Affero General Public License for more details.
+#  
+#  You should have received a copy of the GNU Affero General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+migrate_all_sites:
+  command: TenantInstallation.upgrade_all_tenants
+  interval: 30
+  minIdle: 1
+  runOnce: true
+  worker_count: 1
+  parallelizable: false
+cleanup_firebase_data:
+  command: FirebaseRetentionPolicy.apply
+  interval: 1800
+  minIdle: 1
+  worker_count: 1
+  parallelizable: false
+process_tenant_creations:
+  command: TenantCreationProcessor.run_once(:batch_size => 10)
+  interval: 5
+  minIdle: 1
+  worker_count: 1
+  parallelizable: false
+process_tenant_destructions:
+  command: TenantDestructionProcessor.run_once(:batch_size => 10)
+  interval: 5
+  minIdle: 1
+  worker_count: 1
+  parallelizable: false
+replenish_schema_pool:
+  command: SchemaPool.new.replenish_pool
+  interval: 10
+  minIdle: 1
+  worker_count: 1
+  parallelizable: false
+refresh_schema_pool_messages:
+  command: SchemaPool.new.refresh_messages(5)
+  interval: 600
+  minIdle: 1
+  worker_count: 1
+  parallelizable: false
+run_queued_data_fixes:
+  command: DataFixesProcessor.run_once(:batch_size => 10)
+  interval: 5
+  minIdle: 1
+  worker_count: 1
+  parallelizable: false
+merge_export_data:
+  command: MergeExportDataProcessor.run_once(:batch_size => 1)
+  interval: 10
+  minIdle: 1
+  worker_count: 2
+export_instance_data:
+  command: InstanceDataExportProcessor.run_once(:batch_size => 1)
+  interval: 5
+  minIdle: 1
+  worker_count: 2
+export_project_data:
+  command: ProjectDataExportProcessor.run_once(:batch_size => 1)
+  interval: 5
+  minIdle: 1
+  worker_count: 3
+export_project_history_data:
+  command: ProjectHistoryDataExportProcessor.run_once(:batch_size => 1)
+  interval: 5
+  minIdle: 1
+  worker_count: 3
+export_dependencies_data:
+  command: DependencyDataExportProcessor.run_once(:batch_size => 1)
+  interval: 5
+  minIdle: 1
+  worker_count: 1
+export_programs_data:
+  command: ProgramDataExportProcessor.run_once(:batch_size => 1)
+  interval: 5
+  minIdle: 1
+  worker_count: 1
+export_integrations_data:
+  command: IntegrationsExportProcessor.run_once(:batch_size => 1)
+  interval: 5
+  minIdle: 1
+  worker_count: 1

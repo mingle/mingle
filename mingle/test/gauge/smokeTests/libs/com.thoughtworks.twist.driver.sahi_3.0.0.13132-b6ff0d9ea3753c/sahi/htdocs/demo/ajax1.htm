@@ -1,0 +1,131 @@
+<html>
+<body>
+<!--
+<script type="text/javascript" src="framework.jsf"></script>
+<script type="text/javascript" src="framework_jsf.js"></script>
+-->
+<script type="text/javascript">
+/*
+
+*/
+
+function getIENativeXHR(){
+	return new XMLHttpRequest();
+}
+function getIEActiveX(){
+	return new ActiveXObject("Microsoft.XMLHTTP");
+}
+function getFFXHR(){
+	return new XMLHttpRequest();
+}
+function getIEAutomatic1(){
+    if (document.all) {
+        obj = new ActiveXObject("Microsoft.XMLHTTP");
+    } else {
+        obj = new XMLHttpRequest();
+    }
+	return obj;
+}
+function getIEAutomatic2(){
+	if (window.XMLHttpRequest){
+		// If IE7, Mozilla, Safari, etc: Use native object
+		obj = new XMLHttpRequest()
+	}else {
+		if (window.ActiveXObject){
+			// ...otherwise, use the ActiveX control for IE5.x and IE6
+			obj = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+	}
+	return obj;
+}
+function getXHR(){
+	var t = document.myForm.ajaxType;
+	if (t[0].checked) return getFFXHR();
+	if (t[1].checked) return getIENativeXHR();
+	if (t[2].checked) return getIEActiveX();
+	if (t[3].checked) return getIEAutomatic1();
+	if (t[4].checked) return getIEAutomatic2();
+}
+function ajaxGet(){
+	clearMe();
+	check();
+	var obj = getXHR();
+	obj.onreadystatechange=function(){
+	    if(obj.readyState==4){
+    		document.myForm.resp.value = GETME = obj.responseText;
+		}
+	}
+	obj.open("GET","/demo/ajaxResponse1.htm?q=" + (new Date()),true);
+	obj.send(null);
+}
+function ajaxPost(){
+	clearMe();
+	check();
+	var obj = getXHR();
+	obj.onreadystatechange=function(){
+	    if(obj.readyState==4){
+    		document.myForm.resp.value = GETME = obj.responseText;
+		}
+	}
+	obj.open("POST","/demo/ajaxResponse1.htm?q=" + (new Date()),true);
+	obj.send(null);
+}
+function check(){
+	if (window.XMLHttpRequest){
+		document.getElementById("xhrtype").innerHTML = "window.XMLHttpRequest found";
+	}else {
+		if (window.ActiveXObject){
+			document.getElementById("xhrtype").innerHTML = "Using activex	";
+		}
+	}
+}
+function clearMe(){
+	document.getElementById("xhrtype").innerHTML = "";
+	document.myForm.resp.value = "";
+}
+function xajaxFn(){
+	//var obj;
+	if (window.XMLHttpRequest){
+		document.getElementById("xhrtype").innerHTML = "window.XMLHttpRequest found";
+		// If IE7, Mozilla, Safari, etc: Use native object
+		obj = new XMLHttpRequest()
+	}else {
+		if (window.ActiveXObject){
+			document.getElementById("xhrtype").innerHTML = "Using activex	";
+			// ...otherwise, use the ActiveX control for IE5.x and IE6
+			obj = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+	}
+	obj.onreadystatechange=function(){
+	    if(obj.readyState==4){
+	    /*
+	    	try{
+	    	doc = obj.responseXML.documentElement;
+	    	document.myForm.resp.value = doc.getElementsByTagName("html").length;
+	    	}catch(e){document.myForm.resp.value = e.message}
+	   	*/
+    		document.myForm.resp.value=obj.responseText;
+		}
+	}
+	obj.open("GET","/demo/ajaxResponse1.htm?q=" + (new Date()),true);
+	obj.send(null);
+}
+</script>
+<form name="myForm">
+<div id="xhrtype">Checking XMLHttpRequest...</div>
+<textarea name="resp" rows="6" cols="30"></textarea><br/>
+<label><input type="radio" name="ajaxType">FF XHR</label><br/>
+<label><input type="radio" name="ajaxType" checked="true">IE Native XHR</label><br/>
+<label><input type="radio" name="ajaxType">IE ActiveX</label><br/>
+<label><input type="radio" name="ajaxType">Auto choose IE 1</label><br/>
+<label><input type="radio" name="ajaxType">Auto choose IE 2</label><br/><br/>
+<input type="button" value="Ajax Get" onclick="ajaxGet();"/>
+<input type="button" value="Ajax Post" onclick="ajaxPost();"/>
+<input type="button" value="Clear" onclick="clearMe();"/><br/><br/>
+<!--
+<iframe src="http://me.example.com/demo/index.htm" height="0" width="0"></iframe>
+-->
+</form>
+
+</body>
+</html>

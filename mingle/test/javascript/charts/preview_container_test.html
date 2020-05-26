@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Preview Container Test</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="application/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js" type="application/javascript"></script>
+  <script src="../../../app/assets/javascripts/jquery_conflict_handler.js" type="application/javascript"></script>
+
+  <script src="../../../app/assets/javascripts/thirdparty/prototype.js" type="application/javascript"></script>
+  <script src="../../../public/javascripts/prototype_ext.js" type="application/javascript"></script>
+
+  <script src="../../../app/assets/javascripts/easy_charts/preview_container.js" type="application/javascript"></script>
+
+  <script src="../test_assets/qunit-1.21.0.js" type="application/javascript"></script>
+  <script src="../test_assets/qunit-phantom.js" type="application/javascript"></script>
+  <script src="../test_assets/sinon-2.3.6.js" type="application/javascript"></script>
+  <link rel="stylesheet" href="../test_assets/qunit-1.21.0.css" type="text/css"/>
+</head>
+<body>
+<div id="qunit"></div>
+<script type="application/javascript">
+  QUnit.module('Preview Container', {
+    beforeEach: function () {
+      this.helpUrl = 'www.help.com/link';
+      this.container = new MingleUI.EasyCharts.PreviewContainer(this.helpUrl);
+    }
+  });
+
+  QUnit.test('testShouldCreateHtmlContainer', function (assert) {
+    assert.ok(this.container.htmlContainer[0]);
+  });
+
+  QUnit.test('testShouldAddTitle', function (assert) {
+    var title = this.container.htmlContainer.find('.preview-title');
+
+    assert.ok(title.is('span'));
+    assert.equal(title.text(), 'Preview');
+  });
+
+  QUnit.test('testShouldAddHelpLink', function (assert) {
+    var helpLink = this.container.htmlContainer.find('.page-help-at-action-bar');
+
+    assert.ok(helpLink.is('a'));
+    assert.equal(helpLink.text(), 'Help');
+    assert.equal(helpLink.attr('href'), this.helpUrl);
+    assert.equal(helpLink.attr('target'), 'blank');
+    assert.equal(helpLink.attr('title'), 'Click to open help document');
+  });
+
+  QUnit.test('testShouldAddPreviewPanel', function (assert) {
+    var previewPanel = this.container.htmlContainer.find('#macro_preview');
+
+    assert.ok(previewPanel.is('.preview-panel.wiki'));
+    assert.equal(previewPanel.text(), '');
+  });
+
+  QUnit.test('testUpdatePreviewShouldUpdatePreviewPanelContent', function (assert) {
+    var previewPanel = this.container.htmlContainer.find('#macro_preview');
+    assert.equal(previewPanel.text(), '');
+
+    this.container.updatePreview('Preview Content');
+
+    assert.equal(previewPanel.text(), 'Preview Content');
+  });
+
+  QUnit.test('testResetShouldClearPreviewPanelContent', function (assert) {
+    var previewPanel = this.container.htmlContainer.find('#macro_preview');
+    this.container.updatePreview('Preview Content');
+    assert.equal(previewPanel.text(), 'Preview Content');
+
+    this.container.reset();
+
+    assert.equal(previewPanel.text(), '');
+  });
+
+  QUnit.test('testUpdateCardCountShouldUpdateCardCountMessageInPreviewPanel', function (assert) {
+    var previewPanel = this.container.htmlContainer.find('#macro_preview');
+    this.container.updateCardCount('1');
+    assert.equal(previewPanel.find('.card-count-container').text(), '1 card found');
+
+    this.container.updateCardCount('2');
+
+    assert.equal(previewPanel.find('.card-count-container').text(), '2 cards found');
+
+    this.container.updateCardCount('0');
+    assert.equal(previewPanel.find('.card-count-container').text(), 'no cards found');
+  });
+
+  QUnit.test('testDisplayErrorMessageShouldUpdatePreviewPanelWithErrorMessage', function (assert) {
+    var previewPanel = this.container.htmlContainer.find('#macro_preview');
+    assert.equal(previewPanel.text(), '');
+
+    this.container.displayErrorMessage('Preview Content');
+
+    assert.equal(previewPanel.text(), 'Preview Content');
+  });
+
+  QUnit.test('testDisplayErrorMessageShouldUpdatePreviewPanelWithFormattedErrorMessage', function (assert) {
+    var previewPanel = this.container.htmlContainer.find('#macro_preview');
+    assert.equal(previewPanel.text(), '');
+
+    this.container.displayErrorMessage(' preview Content ',true);
+
+    assert.equal(previewPanel.find('.error').text(), 'Preview Content');
+  });
+
+</script>
+</body>
+</html>

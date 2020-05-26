@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Group Parameter Test</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+  <script src="../../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/application.js" type="text/javascript"></script>
+
+  <script src="../../../app/assets/javascripts/text_box.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/parameter.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/group_parameter.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/section_helpers.js" type="text/javascript"></script>
+
+  <script src="../test_assets/sinon-2.3.6.js" type="text/javascript"></script>
+  <script src="../test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+  <script src="../test_assets/qunit-phantom.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="../test_assets/qunit-1.21.0.css" type="text/css"/>
+</head>
+<body>
+  <div id="qunit"></div>
+  <div id="group_container"></div>
+  <script type="application/javascript">
+    var groupDef = {
+      name: 'group-param',
+      input_type: 'group-parameter',
+      vertical:true,
+      label:'jhjhgfkk',
+      param_defs: [
+        {
+          name: 'param1',
+          input_type: 'textbox',
+          label: 'Param 1 title',
+          initial_value:'param1Val'
+        },
+        {
+          name: 'param2',
+          input_type: 'textbox',
+          label: 'Param 2 title',
+          initial_value:'param2Val'
+        },
+        {
+          name: 'param3',
+          input_type: 'textbox',
+          label: 'Param 3 title',
+          initial_value:'param3Val'
+        },
+        {
+          name: 'param4',
+          input_type: 'textbox',
+          initial_value:'param4Val',
+          label: 'Param 4 title'
+        }
+      ]
+    };
+
+    function assertParam(container, index, options) {
+      var groupName = groupDef.name.toSnakeCase(), paramDef = groupDef.param_defs[index],
+          parameterHtmlContainer = container.find('#' + groupName + '_' + paramDef.name.toSnakeCase() + '_parameter'),
+          paramArgs = MingleUI.EasyCharts.Parameter.args[index];
+
+      this.equal(paramArgs[0], groupName);
+      this.equal(paramArgs[1], paramDef);
+      this.deepEqual(paramArgs[2], options);
+
+      this.ok(parameterHtmlContainer[0]);
+      this.ok(parameterHtmlContainer.find('.parameter input')[0]);
+    }
+
+    QUnit.module('Group Parameter', {
+      beforeEach: function(){
+        this.container = $j('#group_container');
+        sinon.spy(MingleUI.EasyCharts, 'Parameter');
+
+        this.groupParameter =  new MingleUI.EasyCharts.GroupParameter(this.container, groupDef, {});
+      },
+      afterEach: function(){
+        this.container.empty();
+        MingleUI.EasyCharts.Parameter.restore();
+      }
+    });
+
+    QUnit.test('testShouldInitializeAllParamDefs', function (assert) {
+
+      assert.equal(MingleUI.EasyCharts.Parameter.callCount, 4);
+      assertParam.call(assert, this.container, 0, {});
+      assertParam.call(assert, this.container, 1, {});
+      assertParam.call(assert, this.container, 2, {});
+      assertParam.call(assert, this.container, 3, {});
+
+    });
+
+    QUnit.test('testValueShouldReturnSelectedValues', function (assert) {
+      assert.equal(MingleUI.EasyCharts.Parameter.callCount, 4);
+      assert.deepEqual(this.groupParameter.value(),{param1: "param1Val", param2: "param2Val", param3: "param3Val", param4: "param4Val"});
+    });
+
+    QUnit.test('testShouldAddVerticalParameterClassParameter', function (assert) {
+      assert.equal(this.container.find(".section-params-container.vertical-parameter").length, 1);
+
+    });
+  </script>
+</body>
+</html>

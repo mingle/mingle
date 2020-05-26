@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+#  Copyright 2020 ThoughtWorks, Inc.
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Affero General Public License as
+#  published by the Free Software Foundation, either version 3 of the
+#  License, or (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Affero General Public License for more details.
+#
+#  You should have received a copy of the GNU Affero General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+
+if ! (rbenv vars > /dev/null 2>&1) || [ ! -f .ruby-env ]; then
+  source `dirname $0`/devenv
+fi
+generate_web_xml(){
+    bundle exec 'rake web_xml'
+}
+
+if [ ! -f config/web.xml ]; then
+  echo "config/web.xml not found. Generating web.xml"
+  generate_web_xml
+fi
+
+if (grep -F "<filter-name>DispatchFilter</filter-name>" config/web.xml 2>&1 > /dev/null); then
+  echo "config/web.xml has DispatchFilter"
+  echo "Regenerating web.xml without dual app setup"
+  generate_web_xml
+fi
+
+if (grep -F "<param-value>../</param-value>" config/web.xml 2>&1 > /dev/null); then
+  echo "Your config/web.xml is incompatible with Tomcat 8. Regenerate it with 'rake web_xml'."
+  exit 1
+fi
+
+bundle exec 'rake assets'
+if [[ -n "${ALLOW_REMOTE_DEBUG}" ]]; then
+ export _DEBUG_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,address=${DEBUG_PORT:-4000},suspend=${SUSPEND:-n}"
+fi
+bundle exec 'java -server ${_DEBUG_OPTS} $JAVA_OPTS -Dlog4j.configuration=log4j.properties.server com.thoughtworks.mingle.Server'

@@ -1,0 +1,75 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%
+  sidebar = Sidebar.new(@controller, User.current, nil, true) if (request.xhr? && defined?(include_sidebar_control) && include_sidebar_control)
+
+  sidebar_exists = defined?(sidebar) && sidebar && sidebar.exist?
+  show_sidebar_control = sidebar_exists && !sidebar.always_show?
+  sidebar_control_classes = ["sidebar-control"]
+  header_classes = []
+
+  if sidebar_exists && (!sidebar.hidden? || sidebar.always_show?)
+    sidebar_control_classes << "open"
+    header_classes << "with-sidebar"
+  end
+-%>
+
+<% content_tag :div, :id => "hd-nav", :class => header_classes.join(" "), :"data-ignore-sidebar" => !show_sidebar_control do -%>
+
+  <% content_tag :div, :class => "tab-nav", :"data-scrolling" => true do -%>
+    <i class="page-prev fa fa-angle-left"></i>
+    <i class="page-next fa fa-angle-right"></i>
+
+    <% content_tag :ul, :class => "sortable-tabs",
+      :"data-reorderable" => can_reorder_tabs?,
+      :"data-tab-reorder-url" => url_for(:controller => 'tabs', :action => 'reorder', :project_id => @project.identifier) do -%>
+      <% display_tabs.sortable_tabs.each do |tab| %>
+        <%= render :partial => "shared/display_tab", :locals => { :tab => tab } %>
+      <% end %>
+    <% end -%>
+
+  <% end -%>
+
+  <% if can_rename_tabs? && (current_tab = display_tabs.current) && current_tab.allows_renaming? -%>
+    <div class="tab-drop-down">
+      <div class="content">
+        <% form_tag({:controller => "tabs", :action => "rename", :project_id => @project.identifier}, :id => "tab-rename") do -%>
+          <input type='hidden' name='tab[identifier]' value="<%= current_tab.identifier %>"/>
+          <input type='text' name='tab[new_name]' id="tab-name"/>
+          <input type='submit' value="Save" class="primary"/>
+        <% end -%>
+        <p>
+          <strong>To rename this tab for your team</strong>, type in the text box and click &quot;Save&quot;.
+        </p>
+      </div>
+    </div>
+  <% end -%>
+
+  <% if show_sidebar_control -%>
+    <% content_tag :div, :id => "sidebar-control", :class => sidebar_control_classes.join(" ") do -%>
+      <i class="fa fa-angle-left" id="sidebar-icon-expand" alt="Expand the sidebar"></i>
+      <% if @card %>
+        <span class="sidebar-text">Card Info</span>
+      <% else %>
+        <span class="sidebar-text"><%= (cur_tab = display_tabs.current).nil? ? "Filters" : cur_tab.sidebar_text -%></span>
+      <% end %>
+      <i class="fa fa-angle-right" id="sidebar-icon-collapse" alt="Collapse the sidebar"></i>
+    <% end -%>
+    <%= javascript_with_rescue %Q/Sidebar.attach("#sidebar", "#sidebar-control", "#hd-nav", "#main");/ -%>
+  <% end -%>
+
+<% end -%>

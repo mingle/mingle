@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="OpenSocial gadgets">
+  <p>ThoughtWorks Studios products use the <exref url="http://www.opensocial.org/">OpenSocial</exref> gadget stack to provide UI integrations. This provides a secure, standards-based platform for displaying one application's content in another application. Part of this infrastructure is that Mingle is itself an OpenSocial gadget rendering server.  That is, it's possible to display most any Open Social gadget in Mingle using <cref topic="markup_opensocial_gadget">Mingle's OpenSocial gadget macro</cref>. For the most part, a gadget is simply a piece of content from another application, such as a weather forecast map or a Go pipeline status indicator. If you use iGoogle and have customized your home page, you have worked with OpenSocial gadgets.</p>
+  <p>Out of the box, most gadgets are publicly available content that do not require authentication and authorization. However, some gadgets, such as those published by the ThoughtWorks Studios products Mingle and Go, do require authorization. To accomplish this, Mingle's gadget rendering server supports OAuth 2.0 services. If gadget content can be securely accessed via OAuth 2.0, Mingle will be able to render that content. If the gadget content is secured through some other means, Mingle will not be able to display that gadget.</p>
+  <p>Enabling Mingle for OAuth 2.0 enabled gadgets does require the Mingle administrator to take <cref topic="configuring_oauth_enabled_gadgets"> extra configuration steps</cref>.
+  </p>
+<hint>If you are simply looking to configure the display of Go pipeline status gadgets in Mingle, please skip straight the the <cref topic="go_in_mingle">instructions that are specific to showing Go gadgets in Mingle.</cref></hint>
+  <p>A gadget rendering server with OAuth 2.0 capabilities similar to what Mingle provides would be capable of showing ThoughtWorks Studios gadgets. That is, if iGoogle were to start supporting OAuth 2.0 in conjunction with its gadget support, and your Mingle instance was on a public server, it would be possible to display ThoughtWorks Studios gadgets on your home page. This is not currently possible so look for more on this from us in the future.</p>  
+</topic>

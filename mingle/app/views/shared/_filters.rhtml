@@ -1,0 +1,61 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id='filters-panel'>
+<% collapsible 'Filter cards by...', true, {:visibility_preference => :filters_visible, :style => {:collapsible_content_style => 'collapsible_content_light sidebar-tabs-content filter_content'}} do -%>
+
+  <% cache_to(Keys::Filters.new, @project, @view.filter_by_mql?, @view.filter_tags) do %>
+
+      <% form_tag({:controller => 'cards', :action => @view.action}, {:id => 'new_filter', :method => :get}) do -%>
+      <%= render :partial => 'shared/tabs', :locals => {
+              :tabs =>
+                  [
+                    { :title => 'Filter', :params => {:partial => "shared/interactive_filter_tab", :initially_shown =>  !@view.filter_by_mql?, :container_class => ['inputs-group'] } },
+                    { :title => 'Advanced Filter', :params => {:partial => 'shared/mql_filter_tab', :initially_shown =>  @view.filter_by_mql?, :container_class => ['inputs-group']}}
+                  ]
+          } %>
+      <% end -%>
+
+    <%
+    script = ''
+    if @view.filter_by_mql?
+      script << "$('advanced-filter-container-resubmit-filter').show();\n"
+    else
+      script << "$('filter-container-resubmit-filter').show();\n"
+    end
+    script << "cardTypes = [];\n"
+    script << @project.card_types.collect { |card_type| "cardTypes.push(#{to_js_card_type(card_type)});" }.join("\n")
+    script << "cardTypeDefinition = new CardTypeDefinition('Type', [['is', 'is'], ['is not', 'is not']], cardTypes);\n"
+    script << "window.mingle_filters = new Filters(cardTypeDefinition, 'new_filter', 'filter-widget', '#{image_path("shared/icons/icon_close_14.png")}', '#{image_path("icon-calendar.png")}');"
+    -%>
+    <%= javascript_with_rescue script -%>
+  <% end -%>
+<% end -%>
+<%= register_xhr_refreshable_card_list_view_form('new_filter', :exclude => ['all_cards_selected', 'tagged_with', 'filters', 'page']) %>
+
+<%= javascript_with_rescue <<-JAVASCRIPT
+  var filtersForm = $j("#new_filter");
+  filtersForm.data("filtersForm", Module.decorate(new FiltersForm(filtersForm[0], 'spinner-for-Filter-cards-by---'), FiltersForm.ReapplyingModule));
+  filtersForm.submit(function(e) {
+    filtersForm.data("filtersForm").submit();
+    return false;
+  });
+
+  window.mingle_filters.addFilters(#{to_js_filters(@view.interactive_filters)});
+  new InplaceTextareaEditor('filter_mql', 'mql_edit_view', #{CardsHelper::EMPTY_MQL_FILTER_NOTICE_MESSAGE.to_json}).setRailsEscapedContent(#{html_escape(@view.mql_filters.to_s).to_json});
+JAVASCRIPT
+-%>
+</div>

@@ -1,0 +1,47 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% cache_to Keys::PropertyEditor.new, @project, attrs do %>
+  <%-
+    property_value = card.property_value(property)
+    class_names = ["drop-list-panel", property.class.to_s.underscore]
+    class_names << "expandable" if attrs[:expandable]
+    class_names << (property.is_a?(CardTypeDefinition) ? 'card-type' : 'property-definition')
+    class_names << "hidden-property" if property.hidden?
+
+    hide = attrs[:expandable] && !attrs[:expanded]
+  -%>
+  <div id="<%= h(attrs[:id] + '_panel') -%>" class="<%= class_names.join(" ") %>" style="<%= "display:none;" if hide %>" >
+    <span class="property-name" title="<%= h(property_definition_tooltip(property)) %>">
+      <%= h property_display_name(property) %>
+    </span>
+
+    <%- content_tag :span, attrs.dup do -%>
+      <%= truncate_words(property_value.display_value, 13) -%>
+    <%- end -%>
+    <%= card_relationship_link(property_value, mode) if property.refers_to_cards? -%>
+
+    <%- if property.is_a?(DatePropertyDefinition) && !attrs[:read_only] -%>
+      <%= image_tag("icon-calendar.png", :border => 0, :class => "date-picker", :id => "#{attrs[:id]}_calendar", :alt => "Calendar picker", :title => "Pick a date") -%>
+    <%- end -%>
+
+    <%- if attrs["data-inline-text-editor"] == "true" -%>
+      <%= text_field_tag(property_field_name(property), attrs["data-value"], :id =>"#{property.html_id.downcase}_field", :class => "inline-editor", :style => "display: none") %>
+    <%- else -%>
+      <%= hidden_field_tag(property_field_name(property), attrs["data-value"], :id =>"#{property.html_id.downcase}_field") %>
+    <%- end -%>
+  </div>
+<% end %>

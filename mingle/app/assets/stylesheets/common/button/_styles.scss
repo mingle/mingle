@@ -1,0 +1,154 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+@import 'mixins';
+
+/* Form Buttons */
+
+button,
+a.link_as_button,
+a.edit,
+a.previous,
+a.all-items,
+a.preview,
+a.cancel,
+a.save,
+a.ok,
+a.delete,
+
+a.add-tag,
+a.add-action,
+a.print-single,
+a.temp,
+a.update,
+a.add-user,
+a.edit-user,
+a.edit-password,
+a.safe,
+a.email-configuration-test,
+a.show-hidden,
+a.hide-hidden,
+a.add,
+a.show,
+a.hide,
+a.lock,
+a.unlock,
+a.add-transition,
+a.add-transition-workflow,
+a.generate_transitions,
+a.delete-transition,
+a.edit-transition,
+a.revision,
+a.source,
+#mql_edit_view button {
+  @include default-button;
+}
+
+input[type=submit],
+input[type=button] {
+  @include default-button;
+  padding: 5px 13px;
+}
+
+.link_as_button,
+input[type=submit].secondary,
+input[type=submit].secondary:hover {
+  padding: 5px 13px;
+  border: 1px solid rgba(0,0,0,0.15);
+  color: #333;
+  cursor: pointer;
+}
+
+.link_as_button.subtle {
+  border-color: $SUBTLE_TRACE_COLOR;
+}
+
+/* these are the primary actions */
+
+a.primary,
+a.edit,
+a.save,
+button.save,
+input[type=submit].save,
+.card-popup-content .action a.edit,
+a.open,
+a.ok,
+input[type=submit].add-tag-button,
+input[type=button]#apply_selected_column,
+#submit_button,
+input[type=submit].primary,
+input[type=button].primary,
+#sidebar input[type=submit],
+input[type=submit]#murmur_submit,
+input[type=button]#add_comment,
+input[type=submit]#submit-quick-add,
+input[type=button].save,
+button.primary,
+a.edit-transition {
+    background-color: $MINGLE_PRIMARY_CONTRAST_COLOR;
+    border: 1px solid $MINGLE_PRIMARY_COLOR;
+    color: $MINGLE_PRIMARY_COLOR;
+    &:visited {
+        color: $MINGLE_PRIMARY_COLOR;
+    }
+    &:hover {
+        background-color: $MINGLE_PRIMARY_COLOR;
+        color: $MINGLE_PRIMARY_CONTRAST_COLOR;
+    }
+    &:active {
+     background-color: $MINGLE_PRIMARY_ACTIVE;
+     border-color: $MINGLE_PRIMARY_ACTIVE;
+   }
+}
+
+input[disabled],
+input[disabled]:hover,
+a.disabled,
+a.disabled:hover,
+a.disabled:active {
+  color: #999 !important;
+  background-color: #EEE;
+  background-image: none;
+  cursor: default;
+  box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+}
+
+.inline_button_wrapper {
+  margin-left: 10px;
+  padding-left: 15px;
+  border-left: 1px solid #CCC;
+}
+
+
+/* removes thick outline on IE */
+input[type=submit]:focus,
+input[type=button]:focus {
+  outline-width:0;
+}
+
+input[type='submit'][disabled],
+input[type='submit'][disabled]:hover,
+input[type='button'][disabled],
+input[type='button'][disabled]:hover {
+  background:#EEE;
+  border: 1px #c9c9c9 solid;
+}
+
+.float_left {
+  float: left;
+}

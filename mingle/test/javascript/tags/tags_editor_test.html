@@ -1,0 +1,305 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>
+      JavaScript unit test file
+    </title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+    <script src="../../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+    <script src="../../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+
+    <script src="../test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../test_assets/unittest.js" type="text/javascript"></script>
+    <script src="../test_assets/unittest_ext.js" type="text/javascript"></script>
+
+    <script src="../../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/thirdparty/controls.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/thirdparty/builder.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+
+    <script src="../../../public/javascripts/application.js" type="text/javascript"></script>
+
+    <script src="../../../public/javascripts/case_insensitive_hash.js" type="text/javascript"></script>
+    <script src="../../../public/javascripts/tags/removable_tag.js" type="text/javascript"></script>
+    <script src="../../../public/javascripts/tags/removable_tag_set.js" type="text/javascript"></script>
+    <script src="../../../public/javascripts/tags/tags_editor.js" type="text/javascript"></script>
+
+    <script src="../../../public/javascripts/autocompleter.js" type="text/javascript"></script>
+
+    <link rel="stylesheet" href="assets/unittest.css" type="text/css" />
+    <link rel="stylesheet" href="../test_assets/unittest.css" type="text/css" />
+  </head>
+  <body>
+    <div id="content">
+      <div id="header">
+        <h1>
+          JavaScript unit test file
+        </h1>
+        <p>
+          This file tests <strong>TagsEditor</strong> class in <strong>tags_editor.js</strong>.
+        </p>
+      </div><!-- Log output -->
+      <div id="testlog"></div>
+      <div style='border:solid 1px' id='sandbox'>
+        <h3>
+          sandbox:
+        </h3>
+
+        <form id='outer_form'>
+          <div id="container">
+            <input type="hidden" value="6205" name="taggable_id" id="taggable_id" />
+            <input type="hidden" value="goo" name="tag_list" id="tag_list" class='tags-field' />
+            <div class="display-container">
+              <div class="tag-list"></div>
+
+              <div id="tag-editor-actions">
+                <a class="open-edit-link" href="javascript:void(0)">(edit tags)</a>
+              </div>
+            </div>
+            <div style="display: none;" class='edit-container'>
+              <div class="removable-tag-list-panel">
+                <span class="removable-tag"></span>
+              </div>
+              <div id="tag-editor-actions">
+                <div class="notes">(separate multiple tags with commas)</div>
+                <div>
+                  <input type="text" value="" name="input_tag_list" id='input_tag_list' class="input-type-text input-box" autocomplete="off" />
+                  <input type="submit" value="Add tags" name="commit" class="input-type-button add-tag-button" />
+                  <input type="button" value="Close" class="input-type-button close-button" />
+
+                  <div class="auto_complete" style="display: none;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+
+      </div>
+    </div>
+    <p>
+      <script type="text/javascript">
+// <![CDATA[
+
+  SAND_BOX_CONTENT = $('sandbox').innerHTML;
+  new Test.Unit.Runner({
+
+    setup: function() {
+      $('sandbox').innerHTML = SAND_BOX_CONTENT;
+      $A(Effect.Queue.effects).each(function(effect) { Effect.Queue.remove(effect); });
+
+      $('outer_form').onsubmit = function() { this.isSubmitted = true; };
+      $("tag_list").getForm = function() { return $('outer_form'); };
+      $('input_tag_list').focus = function() { this.isFocused = true; };
+
+      $('container').down('.tags-field').value = "goo";
+      var fakeAutocompleterAllTags = [];
+
+      this.assertTagsInEditor = function(expected, tagsEditor) {
+        this.assertEqual(expected.size(), tagsEditor.tagList.tagNodes.size());
+        $A(expected).each(function(element) {
+          this.assert(tagsEditor.tagList.findTag(element), "Tag '" + element + "' cannot be found.");
+        }, this);
+      }.bind(this);
+      this.tagsEditor = new TagsEditor('container', fakeAutocompleterAllTags, '/images/icon-remove.gif');
+    },
+
+    testOnAddTagByUsingEnterKeyStopsDefaultFormSubmission: function() { with(this) {
+      tagsEditor.tagsInputField.value = 'lulu, lala';
+      var keypressEvent = jQuery.Event('keypress');
+      keypressEvent.which = keypressEvent.keyCode = $j.ui.keyCode.ENTER;
+      $j(tagsEditor.tagsInputField).trigger(keypressEvent);
+      assert(keypressEvent.isPropagationStopped());
+    }},
+
+    testOnAddTagStopsDefaultFormSubmission: function() { with(this) {
+      tagsEditor.tagsInputField.value = 'lulu, lala';
+      var event = jQuery.Event('click');
+      $j(tagsEditor.submitButton).trigger(event);
+      assert(event.isPropagationStopped());
+    }},
+
+    testOnAddTagAddsTagAndClearsTextBox: function() { with(this) {
+      tagsEditor.tagsInputField.value = 'lulu';
+      $j(tagsEditor.submitButton).trigger("click");
+      assert(tagsEditor.tagList.findTag('lulu'));
+      assertEqual('', $F(tagsEditor.tagsInputField));
+    }},
+
+    testOnAddTagsDoesNotSubmitOuterFormWithBlank: function() { with(this) {
+      tagsEditor.tagsInputField.value = '';
+      $j(tagsEditor.submitButton).trigger("click");
+      assert(!$('outer_form').isSubmitted);
+    }},
+
+    testOnAddTagDoesNotSubmitOuterFormIfOnlyAlreadyExistedTagAreEntered: function() { with(this) {
+      tagsEditor.tagsInputField.value = 'goo';
+      $j(tagsEditor.submitButton).trigger("click");
+      assert(!$('outer_form').isSubmitted);
+    }},
+
+    testOnAddTagSubmitsOuterFormIfThereAreNewTagsEntered: function() { with(this) {
+      tagsEditor.tagsInputField.value = 'goo';
+      $j(tagsEditor.submitButton).trigger("click");
+      assert(!$('outer_form').isSubmitted);
+
+      tagsEditor.tagsInputField.value = 'goo,lulu';
+      $j(tagsEditor.submitButton).trigger("click");
+      assertEqual(true, $('outer_form').isSubmitted);
+      this.assertTagsInEditor(['goo', 'lulu'], tagsEditor);
+    }},
+
+    testOnAddTagDoesNotAddDuplicatedTag: function() { with(this) {
+      tagsEditor.tagsInputField.value = 'lulu';
+      $j(tagsEditor.submitButton).trigger("click");
+      this.assertTagsInEditor(['goo', 'lulu'], tagsEditor);
+
+      tagsEditor.tagsInputField.value = 'lulu';
+      $j(tagsEditor.submitButton).trigger("click");
+      this.assertTagsInEditor(['goo', 'lulu'], tagsEditor);
+
+      tagsEditor.tagsInputField.value = 'LuLu';
+      $j(tagsEditor.submitButton).trigger("click");
+      this.assertTagsInEditor(['goo', 'lulu'], tagsEditor);
+
+      tagsEditor.tagsInputField.value = '  LuLu  ';
+      $j(tagsEditor.submitButton).trigger("click");
+      this.assertTagsInEditor(['goo', 'lulu'], tagsEditor);
+    }},
+
+    testOnAddTagCanAddBackTagsRemovedEarlier: function() { with(this) {
+      tagsEditor.tagsInputField.value = 'lulu';
+      $j(tagsEditor.submitButton).trigger("click");
+      this.assertTagsInEditor(['goo', 'lulu'], tagsEditor);
+
+      $j('#delete-goo').trigger('click');
+      assert($('outer_form').isSubmitted);
+      this.assertTagsInEditor(['lulu'], tagsEditor);
+
+      tagsEditor.tagsInputField.value = 'goo';
+      $j(tagsEditor.submitButton).trigger("click");
+      this.assertTagsInEditor(['goo', 'lulu'], tagsEditor);
+    }},
+
+    testOnAddTagHighlightsAlreadyExistedTag: function() { with(this) {
+      assertEqual(0, Effect.Queue.size());
+      this.assertTagsInEditor(['goo'], tagsEditor);
+      assertEqual(0, Effect.Queue.size());
+      tagsEditor._onOpeningEditor();
+      assertEqual(0, Effect.Queue.size());
+      tagsEditor.tagsInputField.value = 'goo';
+      $j(tagsEditor.submitButton).trigger("click");
+      assertEqual(1, Effect.Queue.size());
+    }},
+
+    testOnAddTagDoesNotHighlightAlreadyExistedTagMoreThanOnce: function() { with(this) {
+      this.assertTagsInEditor(['goo'], tagsEditor);
+      tagsEditor._onOpeningEditor();
+      tagsEditor.tagsInputField.value = 'goo,goo';
+      $j(tagsEditor.submitButton).trigger("click");
+      assertEqual(1, Effect.Queue.size());
+    }},
+
+    testOnAddTagUpdatesHiddenTagsFieldToCleanCommaSeparatedValue: function() { with(this) {
+      this.assertTagsInEditor(['goo'], tagsEditor);
+      tagsEditor._onOpeningEditor();
+      tagsEditor.tagsInputField.value = ',,,ONE,goo,TWO,goo,THREE';
+      $j(tagsEditor.submitButton).trigger("click");
+      assertEqual('ONE,THREE,TWO,goo', $F(tagsEditor.tagsField));
+    }},
+
+    testOnRemoveTagRemovesTagAndFocusTextBox: function() { with(this) {
+      $j('#delete-goo').trigger('click');
+      assert($('input_tag_list').isFocused);
+      this.assertTagsInEditor([], tagsEditor);
+    }},
+
+    testOnRemoveTagTriggersOuterFormOnSubmitAndUpdateMemorizedHiddenFormInputValiue: function() { with(this) {
+      $j('#delete-goo').trigger('click');
+      assert($('outer_form').isSubmitted);
+      assertEqual('', this.tagsEditor.tagsField.memorizedValue());
+    }},
+
+    testOnOpeningEditorHidesDisplayViewAndShowEditView: function() { with(this) {
+      this.tagsEditor._onOpeningEditor();
+      assertVisible(tagsEditor.editContainer);
+      assertNotVisible(tagsEditor.displayContainer);
+    }},
+
+    testOnOpeningEditorFocusesTheTextBox: function() { with(this) {
+      this.tagsEditor._onOpeningEditor();
+      assert($('input_tag_list').isFocused);
+    }},
+
+    testOnOpeningEditorBoxilizesContainer: function() { with(this) {
+      this.tagsEditor._onOpeningEditor();
+      assert($('container').hasClassName('box'));
+    }},
+
+    testOnClosingEditorUnboxilizesContainer: function() { with(this) {
+      tagsEditor._onClosingEditor();
+      assert(!$('container').hasClassName('box'));
+    }},
+
+    testOnClosingEditorShowsDisplayViewAndHideEditView: function() { with(this) {
+      tagsEditor._onClosingEditor();
+      assertNotVisible(tagsEditor.editContainer);
+      assertVisible(tagsEditor.displayContainer);
+    }},
+
+    testCleanTagsValue: function() { with(this) {
+      assertEqual('one,two', TagsEditor.cleanTagsValue('one , two'));
+      assertEqual('one,two', TagsEditor.cleanTagsValue('one,,two'));
+      assertEqual('one,two', TagsEditor.cleanTagsValue('   ,,,one,two'));
+      assertEqual('one,two', TagsEditor.cleanTagsValue('one,two   ,,,'));
+    }},
+
+    testCleanTags: function() { with(this) {
+      assertArrayEqual([], TagsEditor.cleanTags(''));
+      assertArrayEqual(['one','two'], TagsEditor.cleanTags('one , two'));
+      assertArrayEqual(['one','two'], TagsEditor.cleanTags('one,,two'));
+      assertArrayEqual(['one','two'], TagsEditor.cleanTags('   ,,,one,two'));
+      assertArrayEqual(['one','two'], TagsEditor.cleanTags('one,two   ,,,'));
+    }},
+
+    testTagsValueReturnsCleansedStoredTagNames: function() { with(this) {
+      $('tag_list').value = '   ,,,one,two';
+      assertEqual('one,two', this.tagsEditor.tagsValue());
+    }},
+
+    testSetTagsValueCleanseInputBeforeSettingIt: function() { with(this) {
+      this.tagsEditor.setTagsValue('   ,,,one,two');
+      assertEqual('one,two', $F('tag_list'));
+    }},
+
+    testHighlightTagTriggersEffectIfRemovableTagListPanelIsVisible: function() { with(this) {
+      this.tagsEditor._onOpeningEditor();
+      this.tagsEditor.highlightTag('goo');
+      assertEqual(1, Effect.Queue.size());
+    }},
+
+  }, { testLog: "testlog", test : '' }).run;
+// ]]>
+</script>
+    </p>
+  </body>
+</html>

@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Card transitions page">	
+	
+		<p>The Card transitions page shows all <cref topic="card_transitions">card transitions</cref> that are used in this project. </p>
+		
+		<note>You must setup <cref topic="card_types">card types</cref> and <cref topic="card_properties">card properties</cref> before you can use them in creating card transitions.</note>
+		
+	<section title="What you can do on this page:">	
+			
+	<bullets>		
+		<item><cref topic="card_transition_filters">Filter transitions to view your transitions for each card type and property</cref></item>
+		<item><cref topic="transition_workflow_page">Generate a transition workflow</cref></item>
+		<item><cref topic="creating_card_transitions">Create card transitions</cref></item>
+		<item><cref topic="modifying_or_deleting_card_transitions">Modify or delete card transitions</cref></item>		
+	</bullets>
+	
+</section>
+	
+
+	<section title="Also see...">	
+	<bullets>		
+		<item><cref topic="card_transitions">Card transitions overview</cref></item>
+		<item><cref topic="transition_workflow_page">Generating transitions</cref></item>
+		<item><cref topic="transition_only_properties">Transition only properties</cref></item>
+		<item><cref topic="automated_transitions">Automated transitions</cref></item>
+		<item><cref topic="creating_card_properties">Creating card properties</cref></item>
+		<item><cref topic="project_variables">Project variables</cref></item>
+	</bullets>
+	</section>	
+</topic>

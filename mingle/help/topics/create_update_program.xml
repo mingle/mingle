@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "create_update_program.dtd">
+<chapter title="Create and update your program" id="create_update_program" collapsed="false">
+		<p></p>
+		<p>To create a new program, click on the “<strong>New Program</strong>” button on the Programs page. (This is the default page for Mingle Plus users. To access your Mingle Projects, click on the Projects navigation pill in the orange Mingle header.)</p>
+		<screenshot src="resources/images/new_program_button.png"/>
+        <p>A new program will be created and contain a <cref topic="backlog">backlog</cref>, <cref topic="plan">plan</cref> (with a default one-year timeline, one month before and eleven months after today) and a <cref topic="projects_program">projects</cref> space. All of these elements will be empty to provide you a “blank slate” to start developing your program.</p>
+		<screenshot src="resources/images/new_program.png"/>
+		      <p>To edit your program name, click on the admin carrot and select “<strong>Rename</strong>.” Simply edit inline and press return to save.</p>
+		      <screenshot src="resources/images/rename_program.png"/>
+		<p>To modify your program dates, click on the admin gear on your program's plan timeline view.</p>
+		      <screenshot src="resources/images/admin_gear.png"/>
+</chapter>

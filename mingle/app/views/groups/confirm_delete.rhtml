@@ -1,0 +1,32 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<h1>Delete group</h1>
+
+<% form_tag({:action => 'destroy', :id => @group.id}, {:id => 'delete-form', :method => :delete}) do %>
+  <%= render :partial => 'shared/irrecoverable_warning' %>
+  <% info_box do %>
+    <p>We recommend that you review the following things that will be affected by deleting the group <%= @group.name.bold %>:</p>
+    <ul>
+      <li id="group_membership_deletion_warning"><b><%= enumerate(@group.user_memberships.size, 'team member') %></b> will lose their group membership.</li>
+
+      <li id="transitions_affected_warning">Used by <b><%= enumerate(@group.transition_prerequisites.count, 'transition') %></b>.</li>
+    </ul>
+    <% end %>
+
+  <%= render :partial => "shared/delete_actions", :locals => {:location  => "bottom", :thing_to_delete => @project, :cancel_url => url_for(:action => 'index')} %>
+<% end %>
+

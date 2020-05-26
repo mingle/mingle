@@ -1,0 +1,362 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>JavaScript unit test file</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/mingle_ui.js" type="text/javascript"></script>
+
+  <script src="../../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+  <script src="../test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+
+  <script src="../test_assets/unittest.js" type="text/javascript"></script>
+  <script src="../test_assets/unittest_ext.js" type="text/javascript"></script>
+
+
+  <script src="../../../public/javascripts/module.js" type="text/javascript"></script>
+
+  <script src="../../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/controls.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/builder.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+
+  <script src="../../../public/javascripts/dragdrop_ext.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/jsloader.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/application.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/swimming_pool.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/card_popup.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/smart_sort.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/card_tree/tree_node_base.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/card_tree/node_parser.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/card_tree/collapsible_node_behavior.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/card_tree/searchable_node_behavior.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/card_tree/dragdroppable_node_behavior.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/card_drag_options.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/card_tree/popup_node_behavior.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/card_tree/vertical_tree_node.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/card_tree/tree_view.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/card_tree/remove_from_tree.js" type="text/javascript"></script>
+
+
+  <link rel="stylesheet" href="assets/unittest.css" type="text/css" />
+  <link rel="stylesheet" href="../test_assets/unittest.css" type="text/css" />
+
+  <style type="text/css">
+  </style>
+
+</head>
+<body>
+
+<div id="content" >
+  <div id="header">
+    <h1>JavaScript unit test file</h1>
+    <p>
+      This file tests <strong>various node behaviors</strong> in <strong>cardtree</strong>.
+    </p>
+  </div>
+  <!-- Log output -->
+  <div id="testlog"> </div>
+
+  <div style ='border:solid 1px' id='sandbox'>
+    <h3> sandbox: </h3>
+
+    <div id="view_port">
+      <div id='tree'>
+        <div id="root" class='node'>
+          <div id="vtree-root">
+          <a class='card-name' id="node_0">root node</a>
+          </div>
+        </div>
+
+        <div class="vtree-column first-column">
+          <div class="vtree-node" id="child1">
+            <div class="card-wrapper">
+              <div class="vtree-card" id="child1_inner_element"><a class='card-name'>child1</a></div></div>
+            <div class="sub-tree">
+              <div class="vtree-node" id="child11">
+                <div class="card-wrapper"><div class="vtree-card" id="child11_inner_element"><a class='card-name'>child11</a></div></div>
+                <div class="sub-tree"></div>
+              </div>
+              <div class="vtree-node last" id="child12">
+                <div class="card-wrapper"><div class="vtree-card" id="child12_inner_element"><a class='card-name'>child12</a></div></div>
+                <div class="sub-tree"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="vtree-column">
+          <div class="vtree-node" id="child2">
+            <div class="card-wrapper"><div class="vtree-card" id="child2_inner_element"><a class='card-name'>child2</a></div></div>
+            <div class="sub-tree">
+              <div class="vtree-node" id="child21">
+                <div class="card-wrapper"><div class="vtree-card" id="child21_inner_element"><a class='card-name'>child21</a></div></div>
+                <div class="sub-tree"></div>
+              </div>
+              <div class="vtree-node" id="child22">
+                <div class="card-wrapper"><div class="vtree-card" id="child22_inner_element"><a class='card-name'>child22</a></div></div>
+                <div class="sub-tree"></div>
+              </div>
+              <div class="vtree-node last" id="child23">
+                <div class="card-wrapper"><div class="vtree-card" id="child23_inner_element"><a class='card-name'>child23</a></div></div>
+                <div class="sub-tree"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="vtree-column">
+          <div class="vtree-node" id="child10">
+            <div class="card-wrapper"><div class="vtree-card" id="child10_inner_element"><a class='card-name'>child10</a></div></div>
+            <div class="sub-tree"></div>
+          </div>
+        </div>
+
+        <div class="vtree-column last-column">
+          <div class="vtree-node" id="child9">
+            <div class="card-wrapper"><div class="vtree-card" id="child9_inner_element"><a class='card-name'>child9</a></div></div>
+            <div class="sub-tree"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="vtree-layout-clear" class="clear"/>
+    </div>
+
+    <div id="search_results">
+    </div>
+    <div id="filter_results">
+    </div>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+// <![CDATA[
+
+  MockCanvas = Class.create();
+  MockCanvas.prototype = {
+    initialize: function() {
+      this.elements = [];
+      this.lines = [];
+    },
+
+    initWithRootNode: function() {
+
+    },
+
+    clearLines: function() {
+
+    },
+
+    drawShape: function(shape) {
+      this.elements.push(shape);
+    },
+
+    drawPolyLine: function(points) {
+      var line = {points: points};
+      this.lines.push(line);
+      return line;
+    },
+
+    elementAt: function(x, y) {
+      var target = this.elements.detect(function(obj) {
+        return obj.x == x && obj.y == y;
+      })
+      return target && target.element;
+    },
+
+    sizeOf: function(element) {
+      var target = this.elements.detect(function(obj) {
+        return obj.element == $(element);
+      })
+      return target && {width: target.width, height: target.height};
+    },
+
+    positionOf: function(element) {
+      var target = this.elements.detect(function(obj) {
+        return obj.element == $(element);
+      })
+      return target && {x: target.x, y: target.y};
+    },
+
+    hasElement: function(element) {
+      return this.positionOf(element) != null;
+    },
+
+    hasLine: function(points) {
+      return this.lines.detect(function(line) {
+        return line.points.toJSON() == points.toJSON();
+      });
+    },
+
+    removePolyLine: function(line) {
+      this.lines = this.lines.without(line);
+    }
+
+  }
+
+  PopupLoaderStub = Class.create({
+    getData: function(cardNumber) {
+    },
+
+    requestCardsPopups: function() {
+    },
+
+    refresh: function(cards) {
+    },
+
+    remove: function(cards) {
+    }
+  })
+
+  SAND_BOX_CONTENT = $('sandbox').innerHTML;
+
+  new Test.Unit.Runner({
+
+    setup: function() {
+      $('sandbox').innerHTML = SAND_BOX_CONTENT;
+      this.canvas = new MockCanvas();
+      var structure = { html_id: 'root', number: 0, expanded: true, allCardCount: 14, children: [
+        // child 1 has 2 children
+        { html_id: 'child1', number: 1, allCardCount: 2, children: [
+           {html_id: 'child11', number: 11, allCardCount: 0, children: []},
+           {html_id: 'child12', number: 12, allCardCount: 0, children: []},
+        ]},
+        // child 2 has 3 children
+        { html_id: 'child2', number: 2, allCardCount: 10, children: [
+           {html_id: 'child21', number: 21, allCardCount: 0, children: []},
+           {html_id: 'child22', number: 22, allCardCount: 0, children: []},
+           {html_id: 'child23', number: 23, allCardCount: 7, children: []},
+        ]},
+      ]};
+
+      this.tree = new Tree(structure, function(){}, new PopupLoaderStub());
+      this.root = this.tree.root;
+      child1 = this.root.findNodeByNumber(1);
+      child2 = this.root.findNodeByNumber(2);
+      child11 = this.root.findNodeByNumber(11);
+      child12 = this.root.findNodeByNumber(12);
+      child21 = this.root.findNodeByNumber(21);
+      child22 = this.root.findNodeByNumber(22);
+      child23 = this.root.findNodeByNumber(23);
+    },
+
+    // testNodesShouldBeSortedInNameAlphabeticalOrder: function() { with(this) {
+    //   new Insertion.Bottom("tree", "<div id='child31' class='node'><a class='card-name'>s Card 31 hello</a></div>");
+    //   new Insertion.Bottom("tree", "<div id='child32' class='node'><a class='card-name'>T Card 32 hello</a></div>");
+    //   new Insertion.Bottom("tree", "<div id='child33' class='node'><a class='card-name'>r Card 33 hello</a></div>");
+    //   var node = tree.addNode(23, {html_id: 'child31', number: 31, children: []});
+    //   tree.addNode(23, {html_id: 'child32', number: 32, children: []});
+    //   tree.addNode(23, {html_id: 'child33', number: 33, children: []});
+    //   assertArrayEqual([33, 31, 32], node.parent.children.collect(function(node){ return node.number; }));
+    // }},
+
+    testAddNodeToTreeShouldAddNodeToSpecifiedParent: function() { with(this) {
+      new Insertion.Bottom("tree", "<div id='child3' class='node'><div class='vtree-card' id='child3_inner_element'><a class='card-name'>Card 3 hello</a></div></div>");
+      var node = tree.addNode(tree.root, {html_id: 'child3', number: 3, children: []});
+      assertEqual(3, root.children.size());
+    }},
+
+    testRegisteringADraggableCardShouldMakeCardElementDraggable: function() { with(this) {
+      TreeView.register(this.tree, this.canvas)
+      new Insertion.Bottom("search_results", "<div id='search_card_child_candidate_1'></div>");
+      TreeView.registerDraggable('search', 1);
+      var elementId = TreeView.getElementId('search', 1);
+      assertEqual(elementId, TreeView.draggableFor(elementId).element.id);
+    }},
+
+    testRegisteringADraggableCardDoesNotExistShouldDoNothing: function() { with(this) {
+      TreeView.register(this.tree, this.canvas)
+      TreeView.registerDraggable('search', 'not exist card number');
+    }},
+
+    testRegisteringADraggableCardWithTheSamePrefixShouldOnlyAddThePrefixOnce: function() { with(this) {
+      TreeView.register(this.tree, this.canvas)
+      new Insertion.Bottom("search_results", "<div id='search_card_child_candidate_1'></div>");
+      TreeView.registerDraggable('search', 1);
+      TreeView.registerDraggable('search', 1);
+      var elementId = TreeView.getElementId('search', 1);
+      assertEqual(1, TreeView.prefixes.length);
+      assertEqual(elementId, TreeView.draggableFor(elementId).element.id);
+    }},
+
+    testShouldRegisterDraggableCardsWithADifferentPrefix: function() { with(this) {
+      TreeView.register(this.tree, this.canvas)
+      new Insertion.Bottom("search_results", "<div id='search_card_child_candidate_1'></div>");
+      new Insertion.Bottom("filter_results", "<div id='filter_card_child_candidate_1'></div>");
+      TreeView.registerDraggable('search', 1);
+      TreeView.registerDraggable('filter', 1);
+      var searchElementId = TreeView.getElementId('search', 1);
+      var filterElementId = TreeView.getElementId('filter', 1);
+      assertEqual(2, TreeView.prefixes.length);
+      assertEqual(searchElementId, TreeView.draggableFor(searchElementId).element.id);
+      assertEqual(filterElementId, TreeView.draggableFor(filterElementId).element.id);
+    }},
+
+    testShouldUnregisterAllDraggableCardsWithTheSameCardNumber: function() { with(this) {
+      TreeView.register(this.tree, this.canvas)
+      new Insertion.Bottom("search_results", "<input type='checkbox' id='checkbox[1]' /><div id='search_card_child_candidate_1'></div>");
+      new Insertion.Bottom("filter_results", "<input type='checkbox' id='checkbox[1]' /><div id='filter_card_child_candidate_1'></div>");
+      TreeView.registerDraggable('search', 1);
+      TreeView.registerDraggable('filter', 1);
+      var searchElementId = TreeView.getElementId('search', 1);
+      var filterElementId = TreeView.getElementId('filter', 1);
+      TreeView.unregisterDraggable(1);
+      assertEqual(2, TreeView.prefixes.length);
+      assertEqual(null, TreeView.draggableFor(searchElementId));
+      assertEqual(null, TreeView.draggableFor(filterElementId));
+      assertNotNull($(searchElementId));
+      assertNotNull($(filterElementId));
+      assertEqual('card-child-disabled', $(searchElementId).className);
+      assertEqual('card-child-disabled', $(filterElementId).className);
+    }},
+
+
+    testShouldDeleteSubTreeWhenNodeHasChildren: function() { with(this){
+      called_method = '';
+      removeSingle = function(){ called_method = 'removeSingle' }
+      removeWithChildren = Prototype.emptyFunction;
+      ConfirmBox.activate = function(){ called_method = 'removeWithChildren' }
+      assertEqual(0, child11.allCardCount);
+      RemoveFromTree.removeCardInTree(child11, removeSingle, removeWithChildren);
+      assertEqual('removeSingle', called_method);
+
+      assertEqual(2, child1.allCardCount);
+      RemoveFromTree.removeCardInTree(child1, removeSingle, removeWithChildren);
+      assertEqual('removeWithChildren', called_method);
+    }},
+
+    testRegisterShouldProperlyDestroyPreviouslyRegisteredTrees: function() { with(this) {
+      // Bug 3714, 7412
+      TreeView.register(this.tree, this.canvas);
+      this.tree.popups.visiblePopups.push({ remove: function() {} });
+      TreeView.register(this.tree, this.canvas);
+      assertEqual(0, this.tree.popups.visiblePopups.size());
+    }}
+
+  }, { testLog: "testlog", test: "" }).run;
+// ]]>
+</script>
+</body>
+</html>

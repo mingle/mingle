@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_plus.dtd">
+<chapter title="Administering Dependencies" id="mingle_plus">
+		<p>You can manage what projects have the ability to raise and resolve dependencies at the program and project level.</p>
+
+		<section title="Enabling/disabling dependencies in a Program">
+			<p>When a project is added to a program, it will automatically have dependencies enabled. This means that any other project within the same program will be able to raise and resolve dependencies on that project and vice versa. If for some reason you do not want a particular project to resolve dependencies within the program, then uncheck the "Accepts Dependencies" checkbox.</p> 
+
+			<screenshot alttext="enable/disable program dependencies" src="resources/images/enable_disable_program_dependencies.png" />
+		</section>
+
+		<section title="Enabling/disabling dependencies in a project">
+			<p>If there are projects that do not belong to any programs, but you still want this project to resolve dependencies, you can do so by changing the "Dependencies Settings" in the advanced settings of the Project Admin tab.</p>
+
+			<screenshot alttext="enable/disable project dependencies" src="resources/images/enable_disable_project_dependencies.png" />
+		</section>
+</chapter>

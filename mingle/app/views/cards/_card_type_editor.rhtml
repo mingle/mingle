@@ -1,0 +1,36 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div class="card-type-editor-container" id="card-type-droplist">
+  <% if defined?(displaying_older_version) && displaying_older_version %>
+    <span class="card-type-name"><%= card.card_type.name.upcase %></span>
+    <span id="old-version-note">( v<%= card.version if card.respond_to? :version %> Old version <%= date_time_lapsed_in_words(card.updated_at, card.project.date_format, card.project.time_zone) %> - <span class="latest-version-link"> <%= link_to_function "Show latest", "InputingContexts.pop();", { :"data-number" => card.number, :"data-popup-url" => url_for(:controller =>"cards", :action => "popup_show") } %> </span> )</span>
+  <% else %>
+    <% confirmation_lightbox_template = render(:partial => 'cards/change_card_type_confirmation', :locals => {
+        :multiple => false,
+        :on_continue_javascript => "jQuery(InputingContexts.top().lightbox.lightboxUnder.content).find('.card_type_widget').savePropertyChange('changed_property_card_type'); InputingContexts.pop();",
+        :on_cancel_javascript => "var property = jQuery(InputingContexts.top().lightbox.content).find('.card-type-editor-container .property-value-widget'); property.text(property.data('value')); property[0].handler.model.selection = null;"
+      }) -%>
+    <% content_tag :div, :id => "edit-card-types", :class => "view-mode-only card_type_widget card-type-property-container", :onclick => "PropertyEditor.Init.ondemand(event);", :"data-url" => url_for(:controller => "cards", :action => "update_property_on_lightbox", :project_id => @project.identifier, :card => card.id), :"data-confirm-template" => confirmation_lightbox_template do -%>
+      <%= hidden_field_tag 'changed_property', '', :id => 'changed_property_card_type' %>
+      <%= render :partial => "cards/property", :locals => property_editor_locals(Project.card_type_definition, card, CardsHelper::CARD_SHOW_MODE, :onchange =>
+      onchange_for_property_editor(Project.card_type_definition, "InputingContexts.push(new LightboxInputingContext()); var html = jQuery(jQuery(this).closest(\"[data-confirm-template]\").data(\"confirm-template\")).html(); InputingContexts.update(html);", "changed_property_card_type")) -%>
+    <% end -%>
+
+    <div class="edit-mode-only card-type-name">
+    </div>
+  <% end %>
+</div>

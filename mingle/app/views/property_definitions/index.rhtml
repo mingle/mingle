@@ -1,0 +1,45 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= render :partial => 'shared/admin_actions'%>
+
+<%= render :partial => 'shared/title_bar', :locals => { :action_partial_path => 'property_definitions/action_bar', :title => 'Card properties', :help_link_name => 'Card Properties Page'} %>
+
+<div id="content">
+  <table id="property_definitions" class="highlightable-table">
+    <thead>
+      <tr class="table-top">
+        <th>Card property</th>
+        <th>Property values</th>
+        <th>Show / Hide</th>
+        <th>Lock / Unlock</th>
+        <th>Transition only?</th>
+        <th class="last">&nbsp;</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if @property_definitions.empty? -%>
+        <tr>
+          <td colspan="6" class="italic-light align-center last">There are currently no card properties to list.</td>
+      <% end -%>
+      
+      <%= render :partial => 'property_definitions/property_definition', :collection => @property_definitions %>
+    </tbody>
+  </table>
+</div>
+
+<%= render :partial => 'shared/background_color_notice' %>
+<%= render :partial => 'property_definitions/action_bar', :locals => { :position => 'bottom' } %>

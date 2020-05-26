@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_help.dtd">
+<chapter title="Project variables">
+	<section title="Introduction">
+		<p>Project variables allow you to specify in one place a value which can then be referenced in many places within your Mingle project. 
+        Using a project variable instead of hard-coding a specific value means that value can be changed in one place and immediately the new value will be reflected throughout the project.</p>
+		<hint>Any time you find yourself entering a constant into a MQL query, it's worth considering if it might be better to use a project variable instead. This is especially likely if you find yourself using the same constant in several places.</hint>
+	</section>
+	<section title="How and where to use project variables">
+		<bullets title="There are multiple areas where you can use a project variable as a value of a property:">
+			<subsection title="Card transitions" collapsed = "true">
+				<p>Project variables can be assigned to card properties in <cref topic="card_transitions">card transitions</cref>, e.g. Transition 'Planning - Iteration' might update a card's iteration number property to equal the project variable called 'Current Iteration'.</p>
+				<screenshot src="resources/images/use_plv_in_transition.png"/>
+				<hint>Project variables are available on the pop ups we provide when a transition sets (user input required) or (user input optional) as a property value.</hint>
+			</subsection>
+				
+			<subsection title="MQL statements" collapsed = "true">
+				<p>Project variables can be referenced as constants from within <cref topic="mql_reference">MQL queries</cref>, e.g.</p>
+				<markup>'Iteration Number' = (Current Iteration)</markup>
+				<p>where 'Iteration Number' is a numeric property and (Current Iteration) is numeric type project variable. This example applies to other data types, but please note - </p>
+				<hint>To use tree relationship type project variables in MQL, i.e. the data type for the project variable is one of the card types used in a tree's configuration, its name needs to be inside of single quotes. </hint>
+				<p>For example,</p>
+				<markup> 'Planning - Iteration' = ('Current Planning Iteration') </markup>
+				<p>where 'Planning - Iteration' is a tree relationship property in the 'Release - Iteration - Story' tree, and 'Current Planning Iteration' is an Iteration type project variable.</p>
+			</subsection>
+			
+			<subsection title="Filter conditions" collapsed = "true">
+				<p>Project variables can be used in <cref topic="filter_list_by_component">filter conditions</cref>, this also applies to <cref topic="tree_filter">tree filters</cref>.</p>
+				<screenshot alttext="Filter cards by project variables in tree" src="resources/images/use_plv_in_tree_filter.png"/>
+				<screenshot alttext="Filter cards by project variables" src="resources/images/use_plv_in_regular_filter.png"/>
+			</subsection>	
+			
+			<subsection title="Card defaults" collapsed = "true">
+				<p>Project variables are available for use in <cref topic="card_defaults">card defaults</cref>. For example, you may want all newly created cards to be added to the current iteration. This can be accomplished by setting  'Planning - Iteration' to a project variable called 'Current Iteration'.</p>
+				<screenshot src="resources/images/plv_on_card_defaults_page.png"/>
+			</subsection>
+			
+			<subsection title="Card views" collapsed = "true">
+				<p>Project variables are available on the card view. When a property is associated to a project variable, the project variable is available as a possible value for that property.</p>
+				<screenshot src="resources/images/plv_on_card_view.png"/>
+			</subsection>
+			
+			<subsection title="Bulk editor on card list views" collapsed = "true">
+				<p>Project variables are available on the card bulk editor on the list view. As soon as you choose a project variable as a value for a property, the value of the project variable will be applied to selected card(s) on card list view.</p>
+				<screenshot src="resources/images/plv_on_bulk_editor.png"/>
+			</subsection>
+			
+		</bullets>
+		<bullets title="You can create the following types of project variable">
+			<item><strong>Text</strong> - any text value of up to 255 characters in length.</item>
+			<item><strong>Numeric</strong> - any numeric value.</item>
+			<item><strong>Selected from team list</strong> - any project team member.</item>
+			<item><strong>Date</strong> - any date.</item>
+			<item><strong>Card</strong> - a reference to a card.</item>
+		</bullets>
+		<note>Beginning with Mingle 2.3, project variables are available as values for most existing parameters for all macro charts. Any project variable data types which match the types of any chart parameters can be used to generate charts. For example, you can use the date project variable called (Release Start Date) in 'x-labels-start' in data series chart.</note>
+		<hint>
+			<p>If you created a new project based on a template, the project may include some project variables by default. You can <cref topic="modifying_or_deleting_project_variables">update or remove</cref> any extra project variables as required. </p>
+			<p>If templates that contain project variables are imported without cards, then any project variable references a specific card, then it will be changed to be (not set).</p>
+		</hint>
+	</section>
+	<section title="How to...">
+		<bullets>
+			<item>
+				<cref topic="creating_project_variables">Create project variables</cref>
+			</item>
+			<item>
+				<cref topic="modifying_or_deleting_project_variables">Modify or delete project variables</cref>
+			</item>
+		</bullets>
+	</section>
+</chapter>

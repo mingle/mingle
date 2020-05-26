@@ -1,0 +1,12 @@
+@echo off
+
+set JAVA_MEM=-Xmx1024m -XX:MaxPermSize=256m -XX:PermSize=128m -XX:NewSize=128m -XX:+UseConcMarkSweepGC -XX:+HeapDumpOnOutOfMemoryError
+set LOGGING=-Djava.util.logging.config.file=java_util_logging.properties -Dmingle.logDir=log  -Dlog4j.configuration=log4j.properties -Dlog4j.ignoreTCL=true
+set EXTRA=-Djruby.jit.threshold=1000 -Djruby.jit.logging=false -Duser.language=en -Duser.country=US -Djava.awt.headless=true -Dfile.encoding=UTF-8 -Xverify:none -da -Djruby.compat.version=<%=MINGLE_RUBY_VERSION%>
+
+set JAVA_OPTS=%JAVA_MEM% %LOGGING% %EXTRA%
+
+rem determine if we want to use the production gems
+if "%RAILS_ENV%" NEQ "production" set USE_DEV_GEMS=true
+
+IF DEFINED JAVA_HOME (set JAVA_CMD="%JAVA_HOME%/bin/java") ELSE (set JAVA_CMD='java')

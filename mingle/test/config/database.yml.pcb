@@ -1,0 +1,22 @@
+<%
+yaml = %{
+development:
+  adapter: jdbc
+  driver: org.postgresql.Driver
+  url: jdbc:postgresql://#{ENV['PCB_DATABASE_SERVER']}:5432/mingle_development_#{ENV['PCB_DATABASE_CLIENT']}_#{ENV['GO_AGENT_ID']}
+  password:
+  username: mingle_builder
+  pool: 12
+test:
+  adapter: jdbc
+  driver: org.postgresql.Driver
+  url: jdbc:postgresql://#{ENV['PCB_DATABASE_SERVER']}:5432/mingle_test_#{ENV['PCB_DATABASE_CLIENT']}_#{ENV['GO_AGENT_ID']}
+  password:
+  username: mingle_builder
+  pool: 12
+}
+File.open(File.join(Rails.root, 'config', "database.yml"), 'w') do |f|
+  f.write(yaml)
+end
+%>
+<%= yaml %>

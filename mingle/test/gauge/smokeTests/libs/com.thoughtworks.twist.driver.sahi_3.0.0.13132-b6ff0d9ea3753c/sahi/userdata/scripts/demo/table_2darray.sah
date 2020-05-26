@@ -1,0 +1,189 @@
+// Use this browser function to fetch table contents.
+<browser>
+// Fetches table contents. contents will be accessible via indexes. 
+function getTableContents(table){
+    var array2d = new Array();
+    var rows = table.rows;
+    for (var i=0; i<rows.length; i++){
+        var row = rows[i];
+        array2d[i] = new Array();
+        var cells = rows[i].cells;
+        for (var j=0; j<cells.length; j++){
+            array2d[i][j] = _getText(cells[j]);
+        }
+    }    
+    return array2d;
+}
+</browser>
+
+// Adds a get method to Array which lets you fetch array by headers or indexes.
+function makeAssociative(array2d){
+    array2d.get = function(rowHeader, colHeader){
+        var r = null;
+        if ((typeof rowHeader) == "number"){
+            r = this[rowHeader];
+        }else{
+            for (var i=0; i<this.length; i++){
+                if (rowHeader == this[i][0]){
+                    r = this[i];
+                }
+            }
+        }
+        if (!r) return null;
+
+        if ((typeof colHeader) == "number"){
+            return r[colHeader];
+        }else{
+            for (var j=0; j<r.length; j++){
+                   if (colHeader == this[0][j]){
+                    return r[j];
+                }
+            }            
+        }        
+    }    
+    array2d.set = function(rowHeader, colHeader, value){
+        var r = null;
+        if ((typeof rowHeader) == "number"){
+            r = this[rowHeader];
+        }else{
+            for (var i=0; i<this.length; i++){
+                if (rowHeader == this[i][0]){
+                    r = this[i];
+                }
+            }
+        }
+        if (!r) return;
+
+        if ((typeof colHeader) == "number"){
+            r[colHeader] = value;
+        }else{
+            for (var j=0; j<r.length; j++){
+                if (colHeader == this[0][j]){
+                    r[j] = value;
+                }
+            }            
+        }        
+    }      
+    array2d.deleteColumn = function(colHeader){
+    	var toDelete = colHeader;
+        if ((typeof colHeader) != "number"){
+            for (var j=0; j<this[0].length; j++){
+                if (colHeader == this[0][j]){
+                	toDelete = j;
+                }
+            }            
+        }        
+        for (var i=0; i<this.length; i++){
+        	this[i].splice(toDelete, 1);
+        }
+    }     
+    array2d.sortAscendingBy = function(colHeader, includeHeader){
+    	return this.sortBy(colHeader, false, includeHeader);
+    }
+    array2d.sortDescendingBy = function(colHeader, includeHeader){
+    	return this.sortBy(colHeader, true, includeHeader);
+    }    
+    array2d.sortBy = function(colHeader, isDescending, includeHeader){
+        var header = new Array();
+
+        if (!includeHeader) 
+            header = this.slice(0, 1);        
+
+        var toSort = includeHeader ? this.slice(0) : this.slice(1);
+
+        var colIndex = null;
+        if ((typeof colHeader) == "number"){
+            colIndex = colHeader;
+        }else{
+            for (var j=0; j<this[0].length; j++){
+                   if (colHeader == this[0][j]){
+                    colIndex = j;
+                    break;
+                }
+            }            
+        } 
+
+        toSort.sort(function(a, b){
+            if (a[colIndex] == b[colIndex]) return 0;
+			if (isDescending) return b[colIndex] < a[colIndex] ? -1 : 1;
+			else return a[colIndex] < b[colIndex] ? -1 : 1;
+        });
+
+        return makeAssociative(header.concat(toSort));
+    }
+    return array2d;
+}
+
+var $ar2 = ["a\nb", "c"];
+_assertEqualArrays($ar2, $ar2);
+
+_navigateTo("/demo/tableTest.htm");
+_assertEqualArrays(getTableContents(_table("t2")), getTableContents(_table("t2")), "s");
+_set($table1, getTableContents(_table("t2")));
+_set($table2, getTableContents(_table("t2")));
+_assertEqualArrays($table1, $table2, "s");
+
+makeAssociative($table1);
+_assertEqual("Rs. 20", $table1[1][1]);
+_assertEqual("Rs. 20", $table1.get(1, "Price"));
+_assertEqual("Rs. 18", $table1[2][1]);
+_assertEqual("Rs. 18", $table1.get(2, "Price"));
+
+var $sorted = $table1.sortBy("Price");
+_assertEqual("Rs. 18", $sorted[1][1]);
+_assertEqual("Rs. 18", $sorted.get(1, "Price"));
+_assertEqual("Rs. 20", $sorted[2][1]);
+_assertEqual("Rs. 20", $sorted.get(2, "Price"));
+
+var $ar = [["ha", "hb", "hc"], ["a2", "b3", "c1"], ["a1","b2","c2"], ["a3","b1","c3"]];
+makeAssociative($ar);
+var $asort = $ar.sortBy("h1");
+_assertEqualArrays([["ha","hb","hc"], ["a1","b2","c2"], ["a2","b3","c1"], ["a3","b1","c3"]], $ar.sortBy("ha"));
+_assertEqualArrays([["ha","hb","hc"], ["a3","b1","c3"], ["a1","b2","c2"], ["a2","b3","c1"]], $ar.sortBy("hb"));
+_assertEqualArrays([["ha","hb","hc"], ["a2","b3","c1"], ["a1","b2","c2"], ["a3","b1","c3"]], $ar.sortBy("hc"));
+
+_assertEqualArrays([["ha","hb","hc"], ["a1","b2","c2"], ["a2","b3","c1"], ["a3","b1","c3"]], $ar.sortBy(0));
+_assertEqualArrays([["ha","hb","hc"], ["a3","b1","c3"], ["a1","b2","c2"], ["a2","b3","c1"]], $ar.sortBy(1));
+_assertEqualArrays([["ha","hb","hc"], ["a2","b3","c1"], ["a1","b2","c2"], ["a3","b1","c3"]], $ar.sortBy(2));
+
+_assertEqualArrays([["ha","hb","hc"], ["a1","b2","c2"], ["a2","b3","c1"], ["a3","b1","c3"]], $ar.sortAscendingBy("ha"));
+_assertEqualArrays([["ha","hb","hc"], ["a3","b1","c3"], ["a2","b3","c1"], ["a1","b2","c2"]], $ar.sortDescendingBy("ha"));
+_assertEqualArrays([["ha","hb","hc"], ["a3","b1","c3"], ["a1","b2","c2"], ["a2","b3","c1"]], $ar.sortDescendingBy("hc"));
+_assertEqualArrays([["ha","hb","hc"], ["a3","b1","c3"], ["a1","b2","c2"], ["a2","b3","c1"]], $ar.sortDescendingBy(2));
+
+
+_assertEqualArrays([["ha","hb","hc"], ["a3","b1","c3"], ["a2","b3","c1"], ["a1","b2","c2"]], $ar.sortBy("ha", true));
+_assertEqualArrays([["ha","hb","hc"], ["a2","b3","c1"], ["a1","b2","c2"], ["a3","b1","c3"]], $ar.sortBy("hb", true));
+_assertEqualArrays([["ha","hb","hc"], ["a3","b1","c3"], ["a1","b2","c2"], ["a2","b3","c1"]], $ar.sortBy("hc", true));
+
+_assertEqualArrays([["ha","hb","hc"], ["a3","b1","c3"], ["a2","b3","c1"], ["a1","b2","c2"]], $ar.sortBy(0, true));
+_assertEqualArrays([["ha","hb","hc"], ["a2","b3","c1"], ["a1","b2","c2"], ["a3","b1","c3"]], $ar.sortBy(1, true));
+_assertEqualArrays([["ha","hb","hc"], ["a3","b1","c3"], ["a1","b2","c2"], ["a2","b3","c1"]], $ar.sortBy(2, true));
+
+
+_assertEqualArrays([["a1","b2","c2"], ["a2","b3","c1"], ["a3","b1","c3"], ["ha","hb","hc"]], $ar.sortBy("ha", false, true));
+_assertEqualArrays([["a3","b1","c3"], ["a1","b2","c2"], ["a2","b3","c1"], ["ha","hb","hc"]], $ar.sortBy(1, false, true));
+
+_assertEqualArrays([["ha","hb","hc"], ["a3","b1","c3"], ["a2","b3","c1"], ["a1","b2","c2"]], $ar.sortBy("ha", true, true));
+_assertEqualArrays([["ha","hb","hc"], ["a2","b3","c1"], ["a1","b2","c2"], ["a3","b1","c3"]], $ar.sortBy(1, true, true));
+_assertEqualArrays([["a1","b2","c2"], ["a2","b3","c1"], ["a3","b1","c3"], ["ha","hb","hc"]], $ar.sortBy("ha", false, true));  
+
+
+var $ar = [["ha", "hb", "hc"], ["a2", "b3", "c1"], ["a1","b2","c2"], ["a3","b1","c3"]];
+
+makeAssociative($ar);
+$ar.set("a2", "hb", "b33");
+_assertEqual("b33", $ar.get("a2", "hb"));
+
+$ar.set("a1", "hc", "c22");
+_assertEqual("c22", $ar.get("a1", "hc"));
+
+_assertEqualArrays([["ha", "hb", "hc"], ["a2", "b33", "c1"], ["a1","b2","c22"], ["a3","b1","c3"]], $ar);
+
+var $ar = [["ha", "hb", "hc"], ["a1", "b1", "c1"], ["a2","b2","c2"], ["a3","b3","c3"]];
+makeAssociative($ar);
+$ar.deleteColumn("hb");
+_assertEqual([["ha", "hc"], ["a1", "c1"], ["a2", "c2"], ["a3", "c3"]], $ar);
+_assertEqual("c2", $ar[2][1]);
+_assertEqual("a1", $ar.get(1, "ha"));
+_assertEqual("c1", $ar.get(1, "hc"));

@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Tracking Releases, Sprints and Iterations">
+    <section title="Some of our favorite tracking methods">
+        <subsection title="Daily History Chart">
+            <p>The most effective way to track your releases, sprints and iterations is to use Mingle's <cref topic="markup_daily_history_chart">Daily History Chart</cref> (a feature introduced in Mingle 3.2).  It is a chart showing the increase (and decrease) of a numeric property over time e.g. the number of points of scope for stories in each card status over time.</p>
+
+            <screenshot alttext="Daily history chart example" src="resources/images/charts_daily_history_chart_example.png" />
+
+        </subsection>
+        <subsection title="Pivot Table">
+            <p>A <cref topic="macro_reference#pivot_table">pivot table</cref> is a great way to track your project.  You can specify a property for your rows and a property for your columns to see your release, sprint or iteration from different perspectives.</p>
+            <p>Example pivot tables:</p>
+            <bullets>
+                <item>
+                    <p>A pivot table to sum the estimates for in-scope stories by priority</p>
+                    <screenshot alttext=" wall" src="resources/images/explore_mingle_tracking_pivot_table_by_priority.png" />
+                </item>
+                <item>
+                    <p>A pivot table to sum the estimates for all stories by feature</p>
+                    <screenshot alttext=" wall" src="resources/images/explore_mingle_tracking_pivot_table_by_feature.png" />
+                </item>
+            </bullets>
+        </subsection>
+    </section>
+
+    <section title="Other Tracking Methods">
+        <p>Mingle supports a lot of <cref topic="creating_charts_and_tables_in_wiki_pages">other methods (i.e. graphs, charts and tables in wiki pages)</cref> to track your releases, sprints and iterations.</p>
+    </section>
+
+	<section title="Also see...">
+        <bullets>
+    <item><cref topic="creating_charts_and_tables_in_wiki_pages">Creating charts and tables on cards and wiki pages</cref></item>
+    <item><cref topic="macro_and_mql_guide">Full reference of chart, table, and dashboard macros</cref></item>
+	<item><cref topic="cross_project_reporting">Cross project reporting</cref></item>
+	<item><cref topic="tip_metrics_on_cards">Using cards for reporting</cref></item>
+	<item><cref topic="explore_mingle">Explore Mingle</cref></item>
+        </bullets>
+    </section>
+</topic>

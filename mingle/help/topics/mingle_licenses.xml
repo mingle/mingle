@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Mingle Subscriptions &amp; Licenses"> 
+<section title="Managing your subscription"> 
+<p>Please note the following in relation to your Mingle subscription. To renew or modify your Mingle subscription, please contact the <exref url="@tw_studios_mingle_support_url@">Mingle support team</exref> or your sales representative.</p>
+    <bullets>  
+        <item><strong>Expired subscription</strong> - all users will be set as light users, no new users or new projects can be created, any anonymous access projects will be inaccessible to anonymous users. This may only be resolved by renewing your subscription.</item>
+          <item><strong>Too many full users</strong> -  all users will be set as light users, no new users or new projects can be created. This may be resolved by modifying your subscription or deactivating the excess full users.</item>
+            <item><strong>Too many light users</strong> -  all users will be set as light users, no new users or new projects can be created. This may be resolved by modifying your subscription or deactivating the excess light users.</item>
+    </bullets> 
+</section>
+
+<section title="Managing your license (Mingle Onsite only)">
+  <hint>This section pertains to <cref topic="mingle_onsite">Mingle Onsite</cref> only.</hint> 
+After completing Mingle installation, Mingle administrators can manage their Mingle instance by accessing the 'License' option from the Admin menu. 
+
+	<screenshot alttext="license_option_on_admin_menue" src="resources/images/license_option_on_admin_menue.png"/>
+
+<subsection title="Anonymous access and Mingle licenses">
+
+In order to enable anonymous user access on projects within a Mingle instance the Mingle license for that instance must have anonymous access enabled. Without an anonymous access license anonymous access projects will not be configurable and will be inaccessible to all anonymous users.
+
+<note>To enable anonymous access on a appropriately licensed instance see <cref topic="project_settings_page">project settings</cref>.</note> 
+</subsection>
+
+<subsection title="Numbers for full and light users"> 
+  <p> Each Mingle license indicates the maximum number of active full and light users that can be created on that instance. If the active number of full or light users exceeds the maximum allowed the instance will be incorrectly licensed. </p>
+
+<note>In some scenarios administrators are prevented from exceeding the maximum user allowance. In these scenarios a warning banner will be shown to indicate that no more users can be activated until the license has been updated or the active user count decreased.</note>
+
+
+<p>Beginning with Mingle 2.3 any available full user seats can be used to activate full or light users. This means that even if you have not specifically purchased a light user seat you will be able to use a full user seat to register a light user.</p>
+</subsection>
+
+<subsection title="Incorrectly licensed Mingle instances and resolving any licensing issues">
+  <p> Mingle instances that are incorrectly licensed will have limited functionality. There are number of scenarios that cause a Mingle instance to be incorrectly licensed and the impact of having an incorrectly registered Mingle instance depends on how the license is invalidated. </p>
+  <bullets>
+    <item> <strong>No license</strong> - all users will be set as light users, no new users or new projects can be created, any anonymous access projects will be inaccessible to anonymous users. This may only be resolved by registering a valid license.</item>
+    <item><strong>Expired license</strong> - all users will be set as light users, no new users or new projects can be created, any anonymous access projects will be inaccessible to anonymous users. This may only be resolved by registering a valid license.</item>
+    <item><strong>Too many full users</strong> -  all users will be set as light users, no new users or new projects can be created. This may be resolved by registering a valid license or deactivating the excess full users.</item>
+    <item><strong>Too many light users</strong> -  all users will be set as light users, no new users or new projects can be created. This may be resolved by registering a valid license or deactivating the excess light users.  </item>
+  </bullets>
+</subsection>
+
+
+
+</section>
+<section title="Also see..."/> 
+</topic>
+

@@ -1,0 +1,351 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>
+        JavaScript unit test file
+    </title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/mingle_ui.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js"
+            type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/jquery/jquery.tipsy.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/jquery.tipsy-flash.js" type="text/javascript"></script>
+    <script src="test_assets/unittest.js" type="text/javascript"></script>
+    <script src="test_assets/unittest_ext.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/draggable_icon.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/icon_droppable.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/jquery.invite_to_team.js" type="text/javascript"></script>
+
+
+    <link rel="stylesheet" href="test_assets/unittest.css" type="text/css"/>
+    <style type="text/css" media="screen">
+        form {
+            display: none;
+        }
+
+        .spinner {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div id="content">
+    <div id="header">
+        <h1>
+            JavaScript unit test file
+        </h1>
+        <p>
+            This file tests <strong>jquery.invite_to_team.js</strong>.
+        </p>
+    </div>
+    <!-- Log output -->
+    <div id="testlog"></div>
+    <div style='border:solid 1px' id='sandbox'>
+        <div id="ft">
+            <div class="team-list">
+                <li><img class="placeholder"></li>
+            </div>
+            <div class="invite-to-team">
+                <form>
+                    <input type="text"/>
+                    <input type="submit" disabled="disabled" value="Submit"/>
+                    <button class="cancel">Cancel</button>
+                    <i class="fa fa-spinner fa-spin spinner">Spinner!</i>
+                </form>
+                <button class="show-form test-show">Show</button>
+            </div>
+            <div class="also-viewing"></div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    (function ($) {
+
+        SANDBOX_CONTENT = $('#sandbox').html();
+
+        new Test.Unit.Runner({
+
+            setup: function () {
+
+                $('#sandbox').html(SANDBOX_CONTENT);
+
+                $(".invite-to-team").inviteToTeam();
+                $(".invite-to-team form").submit(function (event) {
+                    event.preventDefault();
+                });
+
+                this.mockMixpanel = function () {
+
+                    var _lastEvent = null;
+
+                    var lastEvent = function () {
+                        return _lastEvent;
+                    };
+
+                    var track = function (name, metadata) {
+                        _lastEvent = {name: name, metadata: metadata};
+                    };
+
+                    return {
+                        lastEvent: lastEvent,
+                        track: track
+                    };
+
+                }();
+
+                window.mixpanel = this.mockMixpanel;
+                window.MingleJavascript = {metricsEnabled: true};
+
+                this.user_info = {id: 1, name: "Bob", icon: "/avatar.png", color: "#eee"}
+            },
+
+            teardown: function () {
+                $('.low-on-licenses-alert').remove()
+                $('.tipsy').remove();
+            },
+
+            testInitializeSetsUpAutocomplete: function () {
+                with (this) {
+                    assert($(".invite-to-team input[type=text]").hasClass('ui-autocomplete-input'));
+                }
+            },
+
+            testClickShowButtonShowsForm: function () {
+                with (this) {
+                    assert(!$(".invite-to-team form").is(':visible'));
+                    $(".invite-to-team button.show-form").trigger("click");
+                    assert($(".invite-to-team form").is(':visible'));
+                    assert(!$(".invite-to-team button.show-form").is(':visible'));
+                }
+            },
+
+            testClickPlaceholderShowsForm: function () {
+                with (this) {
+                    assert(!$(".invite-to-team form").is(':visible'));
+                    $(".placeholder").trigger("click");
+                    assert($(".invite-to-team form").is(':visible'));
+                    assert(!$(".invite-to-team button.show-form").is(':visible'));
+                }
+            },
+
+            testWithValidEmailSubmitButtonIsEnabled: function () {
+                with (this) {
+                    assertEqual('disabled', $(".invite-to-team input[type=submit]").attr('disabled'));
+                    $(".invite-to-team button.show-form").trigger("click");
+                    $(".invite-to-team input[type=text]").val('osito@bonito.org');
+                    $(".invite-to-team input[type=text]").trigger('keyup');
+                    assertNotEqual('disabled', $(".invite-to-team input[type=submit]").attr('disabled'));
+                }
+            },
+
+            testClickCancelButtonHidesForm: function () {
+                with (this) {
+                    $(".invite-to-team button.show-form").trigger("click");
+                    $(".invite-to-team button.cancel").trigger("click");
+                    assert($(".invite-to-team button.show-form").is(':visible'));
+                    assert(!$(".invite-to-team form").is(':visible'));
+                }
+            },
+
+            testClickCancelButtonResetsValueOfEmailTextbox: function () {
+                with (this) {
+                    $(".invite-to-team input[type=text]").val('junk');
+                    $(".invite-to-team button.cancel").trigger("click");
+                    assertEqual('', $(".invite-to-team input[type=text]").val());
+                }
+            },
+
+            testClickCancelButtonDisablesSubmitButton: function () {
+                with (this) {
+                    assertEqual('disabled', $(".invite-to-team input[type=submit]").attr('disabled'));
+                    $(".invite-to-team button.show-form").trigger("click");
+                    $(".invite-to-team input[type=text]").val('valid@email.com');
+                    $(".invite-to-team input[type=text]").trigger('keyup');
+                    assertNotEqual('disabled', $(".invite-to-team input[type=submit]").attr('disabled'));
+                    $(".invite-to-team button.cancel").trigger("click");
+                    $(".invite-to-team button.show-form").trigger("click");
+                    assertEqual('disabled', $(".invite-to-team input[type=submit]").attr('disabled'));
+                }
+            },
+
+            testOnSendInviteShowSpinner: function () {
+                with (this) {
+                    $(".invite-to-team button.show-form").trigger("click");
+                    assert(!$('.fa-spinner').is(':visible'));
+                    $(".invite-to-team input[type=text]").val('osito@bonito.org');
+                    $(".invite-to-team form").submit();
+                    assert($('.fa-spinner').is(':visible'));
+                }
+            },
+
+            testOnAjaxSuccessHideSpinner: function () {
+                with (this) {
+                    $(".invite-to-team button.show-form").trigger("click");
+                    $(".invite-to-team input[type=text]").val('osito@bonito.org');
+                    $(".invite-to-team form").submit();
+                    assert($('.fa-spinner').is(':visible'));
+                    $(".invite-to-team form").trigger("ajax:success", [this.user_info, null, {status: 200}]);
+                    assert(!$('.fa-spinner').is(':visible'));
+                }
+            },
+
+            testOnAjaxSuccessDraggableNewMemberIconAddedToTeamList: function () {
+                with (this) {
+                    $(".invite-to-team button.show-form").trigger("click");
+                    $(".invite-to-team form").trigger("ajax:success", [this.user_info, null, {status: 200}]);
+                    assertEqual(1, $('.team-list').find('.avatar').first().data('value-identifier'));
+                    assert($('.team-list').find('.avatar').first().hasClass("ui-draggable"));
+                }
+            },
+
+            testOnFailedInvitationHideSpinner: function () {
+                with (this) {
+                    $(".invite-to-team button.show-form").trigger("click");
+                    $(".invite-to-team input[type=text]").val('osito@bonito.org');
+                    $(".invite-to-team form").submit();
+                    assert($('.fa-spinner').is(':visible'));
+                    $(".invite-to-team form").trigger("ajax:error", [{errorMessage: "hide spinner"}, null, {status: 422}]);
+                    assert(!$('.fa-spinner').is(':visible'));
+                }
+            },
+
+            testonFailedInvitationCloseForm: function () {
+                with (this) {
+                    $(".invite-to-team button.show-form").trigger("click");
+                    $(".invite-to-team input[type=text]").val('osito@bonito.org');
+                    $(".invite-to-team form").submit();
+                    assert(!$(".invite-to-team button.show-form").is(':visible'));
+                    assert($(".invite-to-team form").is(':visible'));
+                    $(".invite-to-team form").trigger("ajax:error", [{errorMessage: "hide spinner"}, null, {status: 422}]);
+                    assert($(".invite-to-team button.show-form").is(':visible'));
+                    assert(!$(".invite-to-team form").is(':visible'));
+                }
+            },
+
+            testOnSuccessfulInvitationShowMessageOnShowButton: function () {
+                with (this) {
+                    $(".invite-to-team button.show-form").trigger("click");
+                    $(".invite-to-team form").trigger("ajax:success", [this.user_info, null, {status: 200}]);
+                    assertMatch(/sent/i, $('.tipsy').text());
+                }
+            },
+            testOnSuccessfulInvitationUpdateLicenseAlertMessage: function () {
+                with (this) {
+                    this.user_info.license_alert_message = '1 license left';
+                    $(".invite-to-team button.show-form").trigger("click");
+                    $('#ft').append("<div class='low-on-licenses-alert'></div>");
+                    $('#ft .low-on-licenses-alert').append('<span>2 licenses left</span>');
+                    $(".invite-to-team form").trigger("ajax:success", [this.user_info, null, {status: 200}]);
+                    assertEqual('1 license left', $('#ft .low-on-licenses-alert span').text());
+
+                }
+            },
+            testOnSuccessfulInvitationOfLastUserDisableInviteButton: function () {
+                with (this) {
+                    this.user_info.license_alert_message = 'No licenses left';
+                    $(".invite-to-team button.show-form").trigger("click");
+                    $('#ft').append("<div class='low-on-licenses-alert'></div>");
+                    $('#ft .low-on-licenses-alert').append('<span>1 licenses left</span>');
+                    $(".invite-to-team form").trigger("ajax:success", [this.user_info, null, {status: 200}]);
+                    assertEqual('No licenses left', $('#ft .low-on-licenses-alert span').text());
+                    assertEqual('disabled', $('#ft button.show-form').attr('disabled'));
+                }
+            },
+            testOnSuccessfulInvitationAddLicenseAlertMessageExists: function () {
+                with (this) {
+                    this.user_info.license_alert_message = '5 licenses left';
+
+                    assertEqual(0, $('#ft .low-on-licenses-alert span').length);
+
+                    $(".invite-to-team button.show-form").trigger("click");
+                    $(".invite-to-team form").trigger("ajax:success", [this.user_info, null, {status: 200}]);
+                    assertEqual('5 licenses left', $('#ft .low-on-licenses-alert span').text());
+                    assertEqual(true, $('#ft .low-on-licenses-alert').next().hasClass('also-viewing'));
+                }
+            },
+            testOnFailedInvitationShowPlaintextMessageOnEmailTextbox: function () {
+                with (this) {
+                    $(".invite-to-team form").trigger("ajax:error", [{responseText: "{ \"errorMessage\": \"I am a plaintext message\"}"}]);
+                    assertMatch(/plaintext/, $('.tipsy').text());
+                }
+            },
+
+            testOnFailedInvitationShowHtmlMessageInLightbox: function () {
+                with (this) {
+
+                    var capturedContent = null;
+
+                    window.InputingContexts = {
+                        push: function () {
+                        },
+                        update: function (content) {
+                            capturedContent = content;
+                        }
+                    };
+                    window.LightboxInputingContext = function (params) {
+                    };
+
+                    $(".invite-to-team form").trigger("ajax:error", [{responseText: "{ \"errorHtml\": \"<p>I am html</p>\" }"}]);
+                    assertEqual(0, $('.tipsy').size());
+                    assertEqual('<p>I am html</p>', capturedContent);
+                }
+            },
+
+            testOnSuccessfulInvitationSendMixpanelEvent: function () {
+                with (this) {
+                    $(".invite-to-team button.show-form").trigger("click");
+                    $(".invite-to-team form").trigger("ajax:success", [this.user_info, null, {status: 200}]);
+                    assertEqual('invite_user', this.mockMixpanel.lastEvent().name);
+                }
+            },
+
+            testOnShowSendMixpanelEvent: function () {
+                with (this) {
+                    $(".invite-to-team button.show-form").trigger("click");
+                    assertEqual('show_invite_form', this.mockMixpanel.lastEvent().name);
+                    assertEqual('show-form test-show', this.mockMixpanel.lastEvent().metadata.clicked_to_open);
+                }
+            },
+
+            testOnSuccessfulInvitationWith200StatusCodeIndicatesExisting: function () {
+                with (this) {
+                    $(".invite-to-team button.show-form").trigger("click");
+                    $(".invite-to-team form").trigger("ajax:success", [this.user_info, null, {status: 200}]);
+                    assertEqual('existing', this.mockMixpanel.lastEvent().metadata.type);
+                }
+            },
+
+            testOnSuccessfulInvitationWith201StatusCodeIndicatesNew: function () {
+                with (this) {
+                    $(".invite-to-team button.show-form").trigger("click");
+                    $(".invite-to-team form").trigger("ajax:success", [this.user_info, null, {status: 201}]);
+                    assertEqual('new', this.mockMixpanel.lastEvent().metadata.type);
+                }
+            }
+
+        }, {testLog: "testlog", test: ''}).run;
+    })(jQuery);
+</script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= render :partial => 'shared/top_level_header_pills', :locals => { :selected_tab => 'admin' } %>
+
+<h1>Manage project templates</h1>
+
+<%= render :partial => 'templates/template_actions' %>
+
+<% @templates.each do |template| -%>
+  <% styled_box :class => 'project' do %>
+    <div class="project-icon-holder">
+      <%= image_tag(icon_url_for_model(template), :size => "32x32") if template.icon %>
+    </div>
+
+    <div class="project-description">
+      <h2><%= link_to_open_project(h(template.name), template) %></h2>
+      <p><%=h template.description %></p>
+      <%= link_to "<i class=\"fa fa-times-circle\"></i> Delete this".html_safe, {:action => "delete", :project_id => template.identifier}, {:class => "delete-light"} %>
+    </div>
+
+    <%= clear_float %>
+  <% end %>
+<% end -%>
+<h3 class="bottom_space">
+  Find more templates at our <a href="<%= COMMUNITY_URL_ROOT %>/entries/23483572" target="_blank">community site</a>.
+</h3>
+
+<% unless @templates.empty? -%>
+  <%= render :partial => 'templates/template_actions' %>
+<% end %>

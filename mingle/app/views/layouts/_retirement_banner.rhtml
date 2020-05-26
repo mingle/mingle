@@ -1,0 +1,37 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id='retirement_banner' class="banner-overlay" style="display: block; position: absolute">
+  <div id="graphic-dialog-container" class="retirement-banner">
+    <div id="banner-heading">
+      Mingle is retiring!
+    </div>
+    <div id='info-box'>
+      <strong id="eol_remaining_time">Please be aware that Mingle is being retired in <%=time_left_for_mingle_eol %> on 31st July 2019.</strong>
+      <br/>
+      <p id = 'mail'>Check out our <a href='https://www.thoughtworks.com/mingle/news/2018/07/31/mingle-is-retiring.html' target='blank'> EOL page </a> and <a  href='https://www.thoughtworks.com/mingle/news/2018/07/31/mingle-eol-faq.html' target='blank'> FAQ page </a>for details.</p>
+      <br/>
+      <p>For questions specific to this Mingle instance, please contact your Mingle administrator or write to
+        <span id="mail"><%= mail_to('support@thoughtworks.com')%></span></p>
+    </div>
+    <div id="continue-button">
+      <%= '<button type="button" onclick=\'$j("#retirement_banner").hide();\'>Continue</button>'.html_safe %>
+    </div>
+  </div>
+</div>
+<script type='text/javascript'>
+  $j('#eol_remaining_time').text('Please be aware that Mingle is being retired in '+remainingTimeForMingleEol(new Date('07/31/2019'), new Date())+' on 31st July 2019.');
+</script>

@@ -1,0 +1,57 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= spinner(:id => 'spinner-for-Card-Explorer', :style => 'float: right;') %>
+
+<%= render :partial => 'shared/tabs', :locals => {
+      :tabs => [
+        { :title => 'Filter',
+          :params =>
+            {
+              :partial => 'card_explorer/tree_card_filters',
+              :initially_shown => true,
+              :locals => { :view => CardListView.construct_from_params(@project, {}), :spinner_id => 'spinner-for-Card-Explorer'}
+            }
+        },
+        { :title => 'Search',
+          :params =>
+            {
+              :partial => 'cards/card_search_explorer',
+              :locals => {:tree => @tree}
+            }
+        }
+      ] } %>
+
+  <div id="card_drag_candidates_container">
+    <div id="card_drag_candidates_from_search" class="card-explorer-search-result-for-tree" style="display:none"></div>
+    <div id="card_drag_candidates_from_filter" class="card-explorer-search-result-for-tree" style="display:none"></div>
+  </div>
+
+<%= javascript_with_rescue <<-JAVASCRIPT
+ var search_tab_button_event_handler = function(){
+    $('card_drag_candidates_from_search').show();
+    $('card_drag_candidates_from_filter').hide();
+ };
+ Event.observe($('search-link'), 'click', search_tab_button_event_handler);
+ var filter_tab_button_event_handler = function(){
+     $('card_drag_candidates_from_search').hide();
+     $('card_drag_candidates_from_filter').show();
+ };
+ Event.observe($('filter-link'), 'click', filter_tab_button_event_handler);
+
+ filter_tab_button_event_handler();
+JAVASCRIPT
+-%>

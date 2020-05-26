@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE subsection SYSTEM "mingle_help.dtd">
+<subsection title="Single-column layout">
+  <markup_reference title="You can create a single column layout that spans a card or page and encloses other content by clicking on the respective icon in the editing toolbar:">
+    <p>
+      <screenshot src="resources/images/single_column.png" />
+    </p>
+    <p>Just click inside the column panel to edit the name and add content, including <cref topic="creating_charts_and_tables">graphs, charts and tables</cref>. However, please note that nesting layout blocks is not recommended.</p>
+  </markup_reference>
+</subsection>

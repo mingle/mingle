@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>
+      JavaScript unit test file
+    </title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+    <script src="test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+
+    <script src="test_assets/unittest.js" type="text/javascript"></script>
+    <script src="test_assets/unittest_ext.js" type="text/javascript"></script>
+
+
+    <script src="../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/controls.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/builder.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+
+    <script src="../../public/javascripts/jsloader.js" type="text/javascript"></script>
+    <script src="../../public/javascripts/module.js" type="text/javascript"></script>
+    <script src="../../public/javascripts/dragdrop_ext.js" type="text/javascript"></script>
+
+
+    <link rel="stylesheet" href="assets/unittest.css" type="text/css" />
+    <link rel="stylesheet" href="test_assets/unittest.css" type="text/css" />
+    <style type="text/css" media="screen">
+      div.card-icon {
+        width:80px;
+        height:40px;
+        border:1px solid;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="content">
+      <div id="header">
+        <h1>
+          JavaScript unit test file
+        </h1>
+        <p>
+          This file tests <strong>DroppablesExt</strong> module in <strong>dragdrop_ext.js</strong>.
+        </p>
+      </div><!-- Log output -->
+      <div id="testlog"></div>
+      <div style='border:solid 1px; position:static' id='sandbox'>
+        <h3> sandbox: </h3>
+        <div style="z-index:2; position:absolute; left:0; top: 200px; width: 20px; height:20px; background-color: red" class='draggable' id="draggable"></div>
+        <div style="z-index:1; position:absolute; left: 300px; top: 200px; width: 200px; height:200px; background-color: grey" id="drop_area"></div>
+      </div>
+    </div>
+    <script type="text/javascript">
+// <![CDATA[
+  SAND_BOX_CONTENT = $('sandbox').innerHTML;
+
+
+  new Test.Unit.Runner({
+
+    setup: function() {
+      $('sandbox').innerHTML = SAND_BOX_CONTENT;
+      this.eventLog = $A()
+      this.draggable = new Draggable('draggable', {revert: false});
+
+      Droppables.add('drop_area', {
+        accept: 'draggable',
+        onActivate: function() { this.eventLog.push("activate"); }.bind(this),
+        onDeactivate: function() { this.eventLog.push("deactivate"); }.bind(this),
+        onHover: function() { this.eventLog.push("hover"); }.bind(this)
+      })
+    },
+
+    teardown: function(){
+      this.draggable.destroy();
+      Droppables.remove('drop_area');
+    },
+
+    testShouldTriggerOnceOnActiveEventFirstWhenDraggableEntersDroppable: function() { with(this) {
+      var dest = $('drop_area').cumulativeOffset();
+      dragTo('draggable', [dest[0] + 10, dest[1] + 10]);
+      assertArrayEqual(['activate', 'hover'], this.eventLog.uniq());
+    }},
+
+    testShouldTriggerOnceOndeactiveEventWhenDraggableleftsDroppableArea: function() { with(this) {
+      var dest = $('drop_area').cumulativeOffset()
+      dragTo('draggable', [dest[0] + 400, dest[1] + 100]);
+      assertArrayEqual(['activate', 'hover', 'deactivate'], this.eventLog.uniq());
+    }}
+
+  }, { testLog: "testlog", test: "" }).run;
+  // }, { testLog: "testlog", test: 'testInsertBeforeShouldInsertCardBeforeTheProvidedTargetCard' }).run;
+
+// ]]>
+</script>
+  </body>
+</html>

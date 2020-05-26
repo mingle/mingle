@@ -1,0 +1,92 @@
+<browser>
+Sahi.prototype.lockMouseOn = function(el){
+	if (window.screenTop){
+		
+	}else if (window.screenY){
+		
+	}
+};
+</browser>
+
+Sahi.prototype._clickNative = function(x, y){
+	this.robot.mouseMove(x, y);
+	this.robot.mousePress(java.awt.event.InputEvent.BUTTON1_MASK);
+	this.robot.mouseRelease(java.awt.event.InputEvent.BUTTON1_MASK);
+};
+Sahi.prototype._typeNative = function(str){
+	for (var i=0; i<str.length; i++){
+		var c = str.charAt(i);
+		var keyCode = str.charCodeAt(i);
+		var shiftKey = false;
+		switch (c){
+			case ":":{
+				shiftKey = true;
+				keyCode = java.awt.event.KeyEvent.VK_SEMICOLON;
+				break;
+			}
+			case "\\":{
+				keyCode = java.awt.event.KeyEvent.VK_BACK_SLASH;
+				break;
+			}
+			case "_":{
+				shiftKey = true;
+				keyCode = java.awt.event.KeyEvent.VK_MINUS;
+				break;
+			}
+		}
+		if ((keyCode >= 97 && keyCode <= 122) || (keyCode >= 65 && keyCode <= 90)) {
+			shiftKey = (keyCode >= 65 && keyCode <= 90); 
+			keyCode = eval("java.awt.event.KeyEvent.VK_" + (""+c).toUpperCase());
+		}
+		
+		if (shiftKey) this.robot.keyPress(java.awt.event.KeyEvent.VK_SHIFT);
+		try{
+			this._typeNativeKeyCode(keyCode);
+		}catch(e){
+			print (c + " " + e);
+		}finally{
+			if (shiftKey) this.robot.keyRelease(java.awt.event.KeyEvent.VK_SHIFT);
+		}
+	}
+//	this._typeNativeKeyCode(java.awt.event.KeyEvent.VK_SHIFT);
+};
+Sahi.prototype._typeNativeKeyCode = function(keyCode){
+	this.robot.keyPress(keyCode);
+	this.robot.keyRelease(keyCode);
+};
+/*
+_clickNative
+_typeNative
+_typeNativeKeyCode
+ */
+ 
+
+<browser>
+function getX(){
+	if (document.all){
+		return window.screenLeft + 10;
+	}
+	else return window.screenX + 10;
+}
+function getY(){
+	if (document.all){
+		return window.screenTop;
+	}
+	else return window.screenY + 110;
+}
+</browser>
+
+_sahi.robot = new java.awt.Robot(); 
+for (var i=0; i<2; i++)
+{
+	_focus(_file("f1"));
+	_wait(1000);
+	_set($x, getX() + _sahi.findPosX(_file("f2")) + _file("f2").offsetWidth - 20 ); 
+	_set($y, getY() + _sahi.findPosY(_file("f2")) + (_file("f2").offsetHeight/2) ); 
+	_sahi._clickNative($x, $y);
+	_wait(1000);
+	_sahi._typeNative("D:\\sahi_v2\\temp\\xx.txt");
+	_wait(1000);
+	_sahi._typeNativeKeyCode(java.awt.event.KeyEvent.VK_ENTER);
+	_wait(1000);
+}

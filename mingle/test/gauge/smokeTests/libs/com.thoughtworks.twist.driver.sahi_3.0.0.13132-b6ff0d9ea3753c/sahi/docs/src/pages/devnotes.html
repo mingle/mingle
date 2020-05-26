@@ -1,0 +1,171 @@
+<!--Technical Aspects-->
+<a href="#basics">How does Sahi work?</a><br>
+ <a href="#delayed">How does the script in sah files
+execute?</a><br>
+ <a href="#variable">Why do variables need to be prefixed with a
+dollar($) sign?</a><br>
+<a href="#underscore">Why do all Sahi APIs start with an
+underscore?</a><br>
+ 
+
+<h4><a name="basics">How does Sahi work?</a></h4>
+
+Sahi's core parts include the <span class="code">Sahi proxy
+server</span> and the <span class="code">javascript
+engine</span><br>
+ <img src="sahi_architecture.gif"><br>
+Html responses which pass through the proxy are modified such that
+javascript is injected at the start and end of the response.<br>
+This will allow the browser to record and playback scripts and talk
+back to the proxy when needed.<br>
+<br>
+ Apart from handling requests for pages that the browser requests,
+<br>
+Sahi also handles custom commands related to recording, playback
+etc. which the browser sends.<br>
+ <br>
+<br>
+<hr>
+<br>
+ 
+
+<h4><a name="delayed">How does the script in sah files
+execute?</a></h4>
+
+The Sahi script, even though looking like javascript, is not
+executed as regular javascript on the browser.<br>
+The reasons for this are: 
+
+<ul>
+<li>The script refers to objects spread over multiple pages and
+will result in errors if executed directly on any page</li>
+
+<li>The script needs to be executed step by step with a slight
+delay between execution of each step.<br>
+This cannot be accomplished directly since javascript has no way of
+pausing execution.</li>
+</ul>
+
+Sahi handles this by parsing and modifying the script in the
+proxy.<br>
+<br>
+Thus, a line which looked like this:<br>
+<pre class="code">
+_click(_link("Link Test"));
+</pre>
+
+<br>
+gets translated to:<br>
+<pre class="code">
+sahiAdd("sahi_click(sahi_link(\"Link Test\"));", "sahi_demo.sah : 3")
+</pre>
+
+<br>
+<br>
+ The method sahiAdd(cmd, debugInfo) takes two parameters.<br>
+The first is the line of script, which has been converted into a
+string.<br>
+The second is debug information which the proxy adds.<br>
+<pre>
+function sahiAdd(cmd, debugInfo){
+    var i = _sahiCmds.length;
+  _sahiCmds[i] = cmd;
+  _sahiCmdDebugInfo[i] = debugInfo;
+}
+</pre>
+
+During page load, <a href="apis.html#scheduler">Scheduler
+Functions</a> add steps in the script to an array.<br>
+A counter is maintained on the server which marks the index in the
+array of the step that is to be run next.<br>
+This counter is updated with each successful execution of a
+step.<br>
+<br>
+ <br>
+<hr>
+<br>
+ 
+
+<h4><a name="variable">Why do variables need to be prefixed with a
+dollar($) sign?</a></h4>
+
+When variables are used, the transformation of script is as
+follows:<br>
+<pre class="code">
+var $linkText = "Link Test";
+_click(_link($linkText));
+</pre>
+
+<br>
+becomes<br>
+<pre class="code">
+var $linkText = "Link Test";
+sahiAdd("sahi_click(sahi_link("+s_v($linkText)+"));", "sahi_demo.sah : 4");
+</pre>
+
+<br>
+ 
+
+<pre>
+function s_v(v){
+    var type = typeof v;
+    if (type == "number") return v;
+    else if (type == "string") return "\""+v+"\"";
+    else return v;
+}
+</pre>
+
+Thus, what will eventually execute, will be:<br>
+<pre class="code">
+sahi_click(sahi_link("Link Test"));
+</pre>
+
+<br>
+For easy identifcation of variables while parsing, it is needed
+that there is some way of tagging variables. <br>
+The dollar($) sign serves that purpose.<br>
+ <br>
+<br>
+<hr>
+<br>
+ 
+
+<h4><a name="underscore">Why do all Sahi APIs start with an
+underscore?</a></h4>
+
+Sahi scripts are loaded with each page that appears on the
+browser.<br>
+Since it is all javascript, the API function names need to be
+unique.<br>
+If the application under test has a function with the same name, it
+can cause problems. <br>
+For this, all API functions start with "sahi_".<br>
+ When Sahi's proxy serves the script to the browser, it parses and
+does a lot of modifications to the script.<br>
+One of these is to correctly replace the API methods starting with
+"_" with "sahi_". <br>
+<br>
+Thus, 
+
+<pre class="code">
+_click(_link("Create Login"));
+</pre>
+
+<br>
+actually becomes <br>
+ 
+
+<pre class="code">
+sahi_click(sahi_link("Create Login"));
+</pre>
+
+<br>
+Starting the APIs with "_" helps in easy substitution with "sahi_"
+with less scope for ambiguity.<br>
+<br>
+<br>
+<br>
+<br>
+</body>
+</html>
+

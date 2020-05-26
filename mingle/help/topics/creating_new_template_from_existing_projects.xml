@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE subsection SYSTEM "mingle_help.dtd">
+<subsection title="Create new template using existing projects">
+	<note>Only Mingle or project administrator can create new templates.</note>
+	<p>You can create a new template from existing projects. This allows users to create templates that fit their project structure the best.</p>
+	<steps>
+		<item>
+			<p>Click on the 'New template' link from manage templates page. This will take you to the 'Create a new template' page.</p>
+			<screenshot alttext="Manage templates" src="resources/images/create_new_template_link.png"/>
+		</item>
+		<item>
+			<p>The 'Create a new template' page will list all existing projects that are available to you. For every project there will be a link called 'Create template from this project'. Click on the link that corresponds to the project from which you want to create your template. </p>
+			<screenshot alttext="Manage templates" src="resources/images/create_new_template_from_page.png"/>
+		</item>
+		<item>
+			<p>If you return to the manage templates page you can verify the template was successfully created from selected project.</p>
+			<screenshot alttext="Manage templates" src="resources/images/created_new_template_from_project.png"/>
+		</item>
+	</steps>
+</subsection>

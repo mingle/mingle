@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Slack Integration">
+   <p>We love teams, and we want to help you collaborate even better than before!</p>
+   <p> With the Mingle + Slack integration, we bring to you the best of both collaboration tools. View cards, create cards, assign owners, post murmurs and more - all from Slack.</p>
+   <p> Your Mingle instance can be integrated with one Slack team. Each individual Mingle project may be linked with a Slack channel. Currently, a Slack channel may be linked with one Mingle project only. </p>
+   <hint>This is available for Mingle on the Cloud only. </hint>
+   	<bullets>
+   		<item> <cref topic="setup_slack">Set up Mingle with Slack</cref></item>
+   		<item> <cref topic="features_slack">Mingle + Slack features</cref></item>
+   	</bullets>
+</topic>
+
+

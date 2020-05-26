@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+  <meta http-equiv="Content-Language" content="en">
+<title>class <a name="Racc%3a%3aParser">Racc::Parser</a> </title>
+</head>
+<body>
+
+<h1>class <a name="Racc%3a%3aParser">Racc::Parser</a> </h1>
+<h2>Super Class</h2>
+<p>
+Object
+</p>
+<h2>Instance Methods</h2>
+<dl>
+<dt><a name="Racc%3a%3aParser-do_parse">do_parse</a> -&gt; Object</dt>
+<dd><p>
+The entry point of parser. This method is used with <a href="parser.html#Racc%3a%3aParser-next_token">#next_token</a>.
+If Racc wants to get token (and its value), calls next_token.
+</p>
+<pre>
+     # Example
+     ---- inner
+       def parse
+         @q = [[1,1],
+               [2,2],
+               [3,3],
+               [false, '$']]
+         do_parse
+       end
+
+       def next_token
+         @q.shift
+       end
+</pre>
+</dd>
+<dt><a name="Racc%3a%3aParser-next_token">next_token</a> -&gt; [Symbol, Object]</dt>
+<dd><p>
+[abstract method]
+</p>
+<p>
+The method to fetch next token.  If you use <a href="parser.html#Racc%3a%3aParser-do_parse">#do_parse</a> method,
+you must implement <a href="parser.html#Racc%3a%3aParser-next_token">#next_token</a>.  The format of return value is
+[TOKEN_SYMBOL, VALUE].  token-symbol is represented by Ruby's symbol
+by default, e.g. :IDENT for 'IDENT'.  &quot;;&quot; (String) for ';'.
+</p>
+<p>
+The final symbol (End of file) must be false.
+</p>
+</dd>
+<dt><a name="Racc%3a%3aParser-yyparse">yyparse( <var>receiver</var>, <var>method_id</var> )</a></dt>
+<dd><p>
+The another entry point of parser.
+If you use this method, you must implement RECEIVER<a href="parser.html#Racc%3a%3aParser-METHOD_ID">#METHOD_ID</a> method.
+</p>
+<p>
+RECEIVER<a href="parser.html#Racc%3a%3aParser-METHOD_ID">#METHOD_ID</a> is a method to get next token.
+It must 'yield's token, which format is [TOKEN-SYMBOL, VALUE].
+</p>
+</dd>
+<dt><a name="Racc%3a%3aParser-on_error">on_error( <var>error_token_id</var>, <var>error_value</var>, <var>value_stack</var> )</a></dt>
+<dd><p>
+This method is called when parse error is found.
+</p>
+<p>
+ERROR_TOKEN_ID is an internal ID of token which caused error.
+You can get string replesentation of this ID by calling
+<a href="parser.html#Racc%3a%3aParser-token_to_str">#token_to_str</a>.
+</p>
+<p>
+ERROR_VALUE is a value of error token.
+</p>
+<p>
+<var>value_stack</var> is a stack of symbol values.
+DO NOT MODIFY this object.
+</p>
+<p>
+This method raises ParseError by default.
+</p>
+<p>
+If this method returns, parsers enter &quot;error recovering mode&quot;.
+</p>
+</dd>
+<dt><a name="Racc%3a%3aParser-token_to_str">token_to_str( <var>t</var> )</a> -&gt; String</dt>
+<dd><p>
+Convert internal ID of token symbol to the string.
+</p>
+</dd>
+<dt><a name="Racc%3a%3aParser-yyerror">yyerror</a></dt>
+<dd><p>
+Enter error recovering mode.
+This method does not call <a href="parser.html#Racc%3a%3aParser-on_error">#on_error</a>.
+</p>
+</dd>
+<dt><a name="Racc%3a%3aParser-yyerrok">yyerrok</a></dt>
+<dd><p>
+Leave error recovering mode.
+</p>
+</dd>
+<dt><a name="Racc%3a%3aParser-yyaccept">yyaccept</a></dt>
+<dd><p>
+Exit parser.
+Return value is Symbol_Value_Stack[0].
+</p>
+</dd>
+</dl>
+
+</body>
+</html>

@@ -1,0 +1,29 @@
+<html>
+<head>
+    <title>
+        File Upload Test
+    </title>
+</head>
+
+<body>
+<script>
+function setFile(){
+	alert(document.form1.f1.value);
+	document.form1.f1.value = 'C:\\Program Files\\Mozilla Firefox\\README.txt';
+	alert(document.form1.f1.value);
+}
+</script>
+
+
+File Upload Test
+<br>
+<form name="form1" method="POST" enctype="multipart/form-data">
+    <input type="file" name="f1" onchange="alert(123)"><br>
+    <input type="file" name="f2"><br>
+    <input type="submit" value="Submit"><br>
+    <input type="button" value="Set" onclick="setFile()"><br>
+</form>
+</body>
+
+
+</html>

@@ -1,0 +1,313 @@
+Accessor APIs:
+
+All accessor APIs take an identifier and an optional domRelation.
+Identifiers can either be a numerical index or a property as specified in each case.
+Identifiers which are not numerical, can either be a string or a javascript regular expression.
+Identifiers which are strings can also have an index along with them in square brackets as part of the string. 
+
+
+Simple case where links are uniquely identifiable:
+
+For example, 
+
+<div id="link_container">
+<a href="http://sahi.co.in" id="sahi_link">Link to Sahi website</a> <img src="add.gif" id="my_img">
+</div>
+
+can be represented in the following ways:
+
+_link(12)           :Using index in the page; assuming it is the 13th link on the page.
+
+_link("sahi_link")  :Using id as string
+_link(/.*_link/);   :Using id as regular expression
+
+_link("Link to Sahi website")   :Using visible text as string
+_link(/Link to .* website/);    :Using visible text as regular expression
+
+
+Case where multiple elements with similar property are present.
+
+For example, 
+
+<table>
+    <tr>
+        <td>User One</td> 
+        <td id="del1"><a href="/deleteUser?id=1">delete</a></td> 
+    </tr>
+    <tr> 
+        <td>User Two</td> 
+        <td id="del2"><a href="/deleteUser?id=2">delete</a></td> 
+    </tr>
+</table>
+
+There are two delete links in this table and there may be more. 
+
+_link("delete") points to the first delete link. This is the same as _link("delete[0]").
+_link("delete[1]") points to the second delete link; Note that indexing starts at 0.
+
+Using indexes works fine as long as the page is static, but it is not recommended for dynamic applications, 
+as it makes scripts fail when changes are made to the web pages.
+
+
+Use of DOM relations 
+
+When elements are not uniquely identifiable by themselves, we should try to identify them in relation to either some element near them or by the element in which they are contained.
+_near is a DOM relation marker which specifies that the element should be searched near another element.
+_in is a DOM relation marker which specifies that the element should be searched within another element.
+
+
+For example, in the above case, the second delete link is near User Two.
+
+_link(0, _near(_cell("User Two"))): points to the 0th link near cell with text "User Two". 
+Note that the index is 0 here since it is the nearest link.
+_link("delete", _near(_cell("User Two"))): points to the nearest link with text "delete" near cell with text "User Two". Note that we do not need to specify "delete[1]" since it is the delete link nearest to User Two.
+
+
+A similar DOM relation is _in
+
+_link(0, _in(_cell("del2"))): points to the 0th link in cell with id "del2"
+_link("delete", _in(_cell("del2"))): points to the link with text "delete" within cell with id "del2"
+
+
+
+Accessors of HTML Elements
+
+API: _link(identifier, [domRelation])
+HTML: <a href="http://u/r/l" id="id">visible text</a> 
+Identifier: index, visible text, id. 
+
+API: _image(identifier, [domRelation])
+HTML: <img src="/path/to/images/add.gif" id="id" alt="alt" title="title">
+Identifier: index, title or alt, id, file name from src 
+Notes: _image("add.gif") for an image with src "/path/to/images/add.gif"
+
+
+API: _label(identifier, [domRelation])
+HTML: <label id="id">text</label>
+Identifier: index, id, text
+
+API: _listItem(identifier, [domRelation])
+HTML: <li id="id">text</li>
+Identifier: index, id, text
+
+API: _div(identifier, [domRelation])
+HTML: <div id="id">text</div>
+Identifier: index, id, text
+
+API: _span(identifier, [domRelation])
+HTML: <span id="id">text</span>
+Identifier: index, id, text
+
+API: _spandiv(identifier, [domRelation])
+HTML: <span id="id">text</span> or <div id="id">text</div>
+Identifier: index, id, text
+Deprecated
+
+
+Accessors of Table related elements
+API: _cell(identifier, [domRelation])
+HTML: <td id="id">text</td>
+Identifier: index, id, text
+
+API: _cell(tableElement, rowText, colText)
+HTML: <td id="id">text</td>
+Notes: 
+<table id="tableId">
+<tr><td> header1 </td><td> header2 </td><td> header3 </td></tr>
+<tr><td> value11 </td><td> value12 </td><td> value13 </td></tr>
+<tr><td> value21 </td><td> value22 </td><td> value23 </td></tr>
+</table>
+Eg.
+_cell(_table("tableId"), "header2", "value11") will point to cell with value "value12"
+(Need to add support for regular expressions for rowText and colText)
+
+
+API: _row(tableElement, identifier)
+HTML: <tr><td>te</td><td>xt</td></tr>
+Identifier: index, text
+Notes: _parentRow(_cell(identifier)) is more useful than this API. 
+_cell("text1", _near(_cell("id2"))) can be useful in places where we are looking for another cell in a _row. 
+(Need to add support for regular expressions)
+
+API: _table(identifier, [domRelation])
+HTML: <table id="id">text</table>
+Identifier: index, id
+
+Accessors of Form elements
+
+API: _button(identifier, [domRelation])
+HTML: <input type="button" name="name" id="id" value="value">
+HTML: <button type="button" name="name" id="id">value</button>
+Identifier: index, value, name, id
+
+API: _checkbox(identifier, [domRelation])
+HTML: <input type="checkbox" name="name" id="id" value="value">
+Identifier: index, name, id
+
+API: _password(identifier, [domRelation])
+HTML: <input type="password" name="name" id="id" value="value">
+Identifier: index, name, id
+
+API: _radio(identifier, [domRelation])
+HTML: <input type="radio" name="name" id="id" value="value">
+Identifier: index, name, id
+
+API: _submit(identifier, [domRelation])
+HTML: <input type="submit" name="name" id="id" value="value">
+HTML: <button type="submit" name="name" id="id">value</button>
+Identifier: index, value, name, id
+
+API: _textbox(identifier, [domRelation])
+HTML: <input type="textbox" name="name" id="id" value="value">
+Identifier: index, name, id
+
+API: _reset(identifier, [domRelation])
+HTML: <input type="reset" name="name" id="id" value="value">
+Identifier: index, name, id
+
+API: _file(identifier, [domRelation])
+HTML: <input type="file" name="name" id="id" value="value">
+Identifier: index, name, id
+
+API: _imageSubmitButton(identifier, [domRelation])
+HTML: <input type="image" name="name" id="id" value="value" alt="alt" title="title" src="/images/file.gif">
+Identifier: index, tilte/alt, name, id
+Notes: (Add support to treat this like _image)
+
+API: _select(identifier, [domRelation])
+HTML: <select name="name" id="id"></select>
+Identifier: index, name, id
+
+API: _option(selectElement, identifier)
+HTML: <option value="value">text</option>
+Identifier: index, text
+Notes: eg. _option(_select("selectId"), "text")
+
+API: _textarea(identifier, [domRelation])
+HTML: <textarea name="name" id="id">text</textarea>
+Identifier: index, name, id
+
+
+Accessors of parent DOM Nodes
+
+All parent node accessors can take two parameters:
+element: The element whose parent node needs to be found
+occurrence: The nth parent. 1 is the immediate parent. 
+Eg. 
+<div id="div2"><span><div id="div1"><a href="">aLink</a></div></span></div>
+_parentNode(_link("aLink"), "DIV", 1) points to div1
+_parentNode(_link("aLink"), "DIV", 2) points to div2
+
+
+API: _parentNode(element, tagname[, occurrence])
+HTML: <div id="id"><a href="">aElement</a></div>
+Notes: eg. _parentNode("DIV", _link("aElement"))
+
+API: _parentCell(element[, occurrence])
+HTML: <td id="id"><a href="">aElement</a></td>
+Notes: eg. _parentCell(_link("aElement"))
+
+API: _parentRow(element[, occurrence])
+HTML: <tr><td>aCell</td></tr>
+Notes: eg. _parentRow(_cell("aCell"))
+
+API: _parentTable(element[, occurrence])
+HTML: <table><tr><td>aCell</td></tr></table>
+Notes: eg. _parentTable(_cell("aCell"))
+
+
+
+Accessors of IFrames and Rich Text Editors based on IFrames in editable mode.
+
+API: _rte(identifier)
+HTML: <iframe src="" name="name" id="id" ></iframe>
+Identifier: index, id, name 
+
+API: _iframe(identifier)
+HTML: <iframe src="" name="name" id="id" ></iframe>
+Identifier: index, id, name 
+
+Generic accessors
+
+API: _byId(id)
+HTML: <anytag id="id" ></anytag>
+Identifier: id 
+Notes: This can be used for any tag with an id. This API does not accept regular expressions or indexes.
+
+API: _byText(identifier, tagName)
+HTML: <anytag>text</anytag>
+Identifier: text
+Notes: Eg. <div>text</div>
+
+API: _accessor(string)
+Notes: This API just evaluates the string and returns a dom object. Eg. _accessor("document.formName.elementName").
+This API is not too useful.
+
+
+Browser popups: Alerts, Confirms and Prompts
+
+_lastAlert, _lastConfirm and _lastPrompt are used in assertions.
+Eg. _assertEqual("Enter a valid username", _lastAlert()); 
+
+API: _lastAlert()
+Notes: Returns the message displayed in the last javascript alert popup.
+
+API: _lastConfirm()
+Notes: Returns the message displayed in the last javascript confirm popup.
+
+API: _lastPrompt()
+Notes: Returns the message displayed in the last javascript prompt popup.
+
+Utility functions to access properties of elements
+
+API: _style(element, cssProperty)
+cssProperty: any property declared via CSS. Eg. height, background-color etc. 
+Notes: Returns the value of the style property for that element.
+Eg. 
+For <td style="background-color:red">cell text</td>
+_style(_cell("cell text"), "background-color") returns "red"
+
+
+API: _cookie(cookieName)
+Notes: Returns the value of the cookie with cookieName.
+
+API: _position(element)
+Notes: Returns the an array with the element's x, y coordinate in pixels.
+Eg.
+_position(_div("id")) may return [100, 180]
+
+API: _getText(element)
+Notes: Returns the innerText or textContent of an element.
+Eg. For <div id="divId">This is some <b>bold</b> <a href="">link</a></div>
+_getText(_div("divId")) will return "This is some bold link".  
+
+API: _getCellText(cellElement)
+Notes: Deprecated. Same as _getText 
+
+API: _rteHTML(element)
+Notes: Returns the html inside a rich text editor.
+Eg. _rteHTML(_rte("rteId")) will return the rich text editor's contents. 
+
+API: _rteText(element)
+Notes: Returns the text inside a rich text editor.
+Eg. _rteText(_rte("rteId")) will return the rich text editor's text content (without the html formatting). 
+
+API: _isVisible(element)
+Notes: Returns true if the element is visible on the user interface. 
+Can be used to assert if a mouse over menu has appeared or not.
+
+API: _containsText(element, text)
+Notes: Returns true if the element contains the given text
+Eg.
+For <div id="divId">some text</div>
+_containsText(_div("divId"), "some") returns true 
+
+API: _contains(parentElement, childElement)
+Notes: Returns true if childElement is a child of parentElement
+
+Marker functions to show DOM relation
+API: _in(element)
+Notes: Refer to "DOM Relations"
+
+API: _near(element)
+Notes: Refer to "DOM Relations"

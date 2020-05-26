@@ -1,0 +1,274 @@
+<!DOCTYPE HTML>
+<html>
+<head><title>Event Sequence</title></head>
+<body>
+<style>
+</style>
+<script src="common.js"></script>
+
+<table>
+<tr>
+<td style="width:500px;">
+<div>
+Events attach mode: <br/>
+<table><tr>
+<td><label><input type="radio" name="eventmode" onclick="setModeDirect()">Direct</label></td>
+<td><label><input type="radio" name="eventmode" onclick="setModeAddEventListener()"> addEventListener</label></td>
+<td><label><input type="radio" name="eventmode" onclick="setModeAttachEvent()"> attachEvent</label></td>
+<td><label><input type="radio" name="eventmode" onclick="setModeAuto()"> auto</label></td>
+</tr></table>
+</div>
+
+
+<div>
+Events to monitor: <br/>
+<form>
+<table><tr>
+<td><label><input type="checkbox" name="events" value="mouseover"> mouseover</label></td>
+<td><label><input type="checkbox" name="events" value="mousemove"> mousemove</label></td>
+<td><label><input type="checkbox" name="events" value="mouseout"> mouseout</label></td>
+</tr><tr>
+<td><label><input type="checkbox" name="events" value="mouseup" checked="checked"> mouseup</label></td>
+<td><label><input type="checkbox" name="events" value="mousedown" checked="checked"> mousedown</label></td>
+<td><label><input type="checkbox" name="events" value="click" checked="checked"> click</label></td>
+<td><label><input type="checkbox" name="events" value="dblclick" checked="checked"> dblclick</label></td>
+<td><label><input type="checkbox" name="events" value="contextmenu" checked="checked"> contextmenu</label></td>
+</tr><tr>
+<td><label><input type="checkbox" name="events" value="focus" checked="checked"> focus</label></td>
+<td><label><input type="checkbox" name="events" value="blur" checked="checked"> blur</label></td>
+<td><label><input type="checkbox" name="events" value="change" checked="checked"> change</label></td>
+</tr><tr>
+<td><label><input type="checkbox" name="events" value="keydown" checked="checked"> keydown</label></td>
+<td><label><input type="checkbox" name="events" value="keypress" checked="checked"> keypress</label></td>
+<td><label><input type="checkbox" name="events" value="keyup" checked="checked"> keyup</label></td>
+</tr>
+</table>
+<input type="button" value="Add event listeners" onclick="addEvListeners()">
+<input type="reset" value="Reset">
+</form>
+</div>
+
+
+</td>
+<td>
+<div id="redrawable">
+<form id="f1" onsubmit="return false">
+<div id="d1" style="width:100px;border: 1px solid red;padding:10px;">Div</div><br/>
+<span id="span1" style="width:100px;border: 1px solid red;padding:10px;">Span</span><br/><br/>
+<input type="button" id="b1" value="Button"><br/>
+<input type="text" id="t1" value=""><br/>
+<input type="checkbox" value="Click me" id="cb1">
+<input type="radio" name="r1" id="r11">
+<input type="radio" name="r1" id="r12"><br/>
+<select name="s1" id="s1">
+<option value="o1v" id="o1">opt one</option>
+<option value="o2v" id="o2">opt two</option>
+</select>
+<br/>
+<select name="sm1" id="sm1" multiple="true">
+<option value="om1v" id="om1">opt one multi</option>
+<option value="om2v" id="om2">opt two multi</option>
+<option value="om3v" id="om3">opt three multi</option>
+</select>
+</form>
+<a href="index.htm" id="ln1" target="_blank">Link</a>
+</div>
+</td>
+</tr>
+</table>
+
+<br/>
+<hr/>
+<br/>
+<form>
+<input type="button" value="Check All" onclick="checkAll()"> | <input type="reset" value="Reset"> | 
+<input type="button" value="Clear" onclick="$('logs').value=''"/><br/>
+<label><input type="checkbox" name="props" value="e.keyCode">keyCode</label>
+<label><input type="checkbox" name="props" value="e.charCode">charCode</label>
+<label><input type="checkbox" name="props" value="e.cancelBubble">cancelBubble</label>
+<br/>
+<label><input type="checkbox" name="props" value="e.clientX">clientX</label>
+<label><input type="checkbox" name="props" value="e.clientY">clientY</label>
+<label><input type="checkbox" name="props" value="e.pageX">pageX</label>
+<label><input type="checkbox" name="props" value="e.pageY">pageY</label>
+<label><input type="checkbox" name="props" value="e.screenX">screenX</label>
+<label><input type="checkbox" name="props" value="e.screenY">screenY</label>
+<br/>
+<label><input type="checkbox" name="props" value="e.shiftKey">shiftKey</label>
+<label><input type="checkbox" name="props" value="e.ctrlKey">ctrlKey</label>
+<label><input type="checkbox" name="props" value="el.checked">el.checked</label>
+<label><input type="checkbox" name="props" value="$('t1').value">textbox value</label>
+<label><input type="checkbox" name="props" value="e.button">e.button</label>
+<label><input type="checkbox" name="props" value="e.which">e.which</label>
+<label><input type="checkbox" name="props" value="e.type">e.type</label>
+<label><input type="checkbox" name="props" value="e.detail">e.detail</label>
+<label><input type="checkbox" name="props" value="el.value">el.value</label>
+</br>
+
+<br/>
+<textarea id="logs" style="width:1024px;height:300px"></textarea>
+</form>
+
+<script>
+function addEventWithAddEventListener(el, ev, fn) {
+    if (!el) return;
+    el.addEventListener(ev, fn, true);
+};
+function addEventWithAttachEvent(el, ev, fn) {
+    if (!el) return;
+	el.attachEvent("on" + ev, fn);
+};
+function addEventDirect(el, ev, fn) {
+    if (!el) return;
+	el["on" + ev] = fn;
+};
+function addEventAuto(el, ev, fn) {
+    if (!el) return;
+    if (el.attachEvent) {
+        el.attachEvent("on" + ev, fn);
+    } else if (el.addEventListener) {
+        el.addEventListener(ev, fn, true);
+    }
+};
+var addEvent = addEventAuto;
+function setModeAddEventListener(){
+	addEvent = addEventWithAddEventListener;
+}
+function setModeAttachEvent(){
+	addEvent = addEventWithAttachEvent;
+}
+function setModeDirect(){
+	addEvent = addEventDirect;
+}
+function setModeAuto(){
+	addEvent = addEventAuto;
+}
+function getTarget (e) {
+    var targ;
+    if (!e) e = window.event;
+    var evType = e.type;
+    if (e.target) targ = e.target;
+    else if (e.srcElement) targ = e.srcElement;
+    if (targ.nodeType == 3) // defeat Safari bug
+        targ = targ.parentNode;  
+    return targ;
+};
+
+var _last = null;
+function fn(s){
+	return function(e){
+		if (!e) e = window.event;
+		if (_last == s) return;
+		//_sahi._debug(_sahi.list(e));
+		var el = getTarget(e);
+		var msg = "\n" + el.id + ":" + s;
+
+		var inputs = document.getElementsByTagName("INPUT");
+		for (var i=0; i<inputs.length; i++){
+			var cb = inputs[i];
+			if (cb.type == "checkbox" && cb.name == "props" && cb.checked) {
+				msg += "; " + cb.value + "=" + eval(cb.value);
+			}
+		}
+		$('logs').value += msg;
+		_last = s;
+	}
+}
+function checkAll(){
+	var inputs = document.getElementsByTagName("INPUT");
+	for (var i=0; i<inputs.length; i++){
+		var cb = inputs[i];
+		if (cb.type == "checkbox" && cb.name == "props") {
+			cb.checked = true;
+		}
+	}
+}
+function addEv(el, s){
+	addEvent(el, s, fn(s));
+}
+function addEvents(el){
+	var inputs = document.getElementsByTagName("INPUT");
+	for (var i=0; i<inputs.length; i++){
+		var cb = inputs[i];
+		if (cb.type == "checkbox" && cb.name == "events" && cb.checked) {
+			addEv(el, cb.value);
+		}
+	}
+}
+
+function addEvListeners(){
+	redraw();
+	addEvents($('d1'));
+	addEvents($('span1'));
+	addEvents($('t1'));
+	addEvents($('b1'));
+	addEvents($('cb1'));
+	addEvents($('r11'));
+	addEvents($('r12'));
+	addEvents($('s1'));
+	addEvents($('o1'));
+	addEvents($('o2'));
+	addEvents($('sm1'));
+	addEvents($('om1'));
+	addEvents($('om2'));	
+	addEvents($('om3'));
+	addEvents($('ln1'));	
+}
+
+function redraw(){
+	$("redrawable").innerHTML = $("redrawable").innerHTML; 	
+}
+
+function storeState(){
+	var states = [];
+	var inputs = document.getElementsByTagName("INPUT");
+	for (var i=0; i<inputs.length; i++){
+		var cb = inputs[i];
+		if (cb.type == "checkbox" || cb.type == "radio") {
+			states[i] = cb.checked;
+		}
+	}
+	createCookie("eventstate", states.join("|"));
+}
+
+function restoreState(){
+	var s = readCookie("eventstate");
+	if (s == null) return;
+	var states = s.split("|");
+	var inputs = document.getElementsByTagName("INPUT");
+	for (var i=0; i<states.length; i++){
+		var cb = inputs[i];
+		if (cb.type == "checkbox" || cb.type == "radio") {
+			cb.checked = states[i] == "true";
+		}
+	}
+}
+
+function createCookie(name,value,days) {
+	if (days) {
+		var date = new Date();
+		date.setTime(date.getTime()+(days*24*60*60*1000));
+		var expires = "; expires="+date.toGMTString();
+	}
+	else var expires = "";
+	document.cookie = name+"="+value+expires+"; path=/";
+}
+
+function readCookie(name) {
+	var nameEQ = name + "=";
+	var ca = document.cookie.split(';');
+	for(var i=0;i < ca.length;i++) {
+		var c = ca[i];
+		while (c.charAt(0)==' ') c = c.substring(1,c.length);
+		if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+	}
+	return null;
+}
+restoreState();
+window.onbeforeunload = storeState;
+</script>
+
+
+
+</body>
+</html>

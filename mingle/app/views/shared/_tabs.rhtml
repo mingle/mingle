@@ -1,0 +1,44 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% top_level_container_class ||= TabsHelper::Tabs::SIDEBAR_TOP_LEVEL_CONTAINER_CLASS %>
+<% prefix ||= 'sidebar' %>
+<% tabs = TabsHelper::Tabs.new(tabs, self, top_level_container_class, prefix) %>
+
+<div class="<%= top_level_container_class %>">
+
+  <div class="<%= prefix %>-tabs">
+    <ul>
+    <% hide = raw("style='display: none;'") %>
+    <% tabs.each do |tab| -%>
+      <li class='menu-item' id='<%= tab.inactive_tab %>' <%= hide if tab.initially_shown? %>>
+        <%= tab.switching_tab_link(self) %>
+      </li>
+      <li class='current-menu-item' id='<%= tab.active_tab %>' <%= hide unless tab.initially_shown? %> >
+        <span><%= tab.name %></span>
+      </li>
+    <% end -%>
+    </ul>
+    <div class="clear-both"><!--Clear floats!--></div>
+  </div>
+
+
+  <% tabs.each do |tab| %>
+    <div id='<%= tab.container %>' class='<%= tab.container_classes.join(' ')%>' <%= hide unless tab.initially_shown? %>>
+         <%= render tab.params %>
+    </div>
+  <% end -%>
+</div>

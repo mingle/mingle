@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_help.dtd">
+<chapter title="Automated card transitions">
+
+<section title="Introduction">
+<p><cref topic="card_transitions">Card transitions</cref> and <cref topic="transition_only_properties">transition only properties</cref> are a very useful way for project administrators to enforce a project workflow. Likewise, card walls and the Mingle <cref topic="grid_view">grid view</cref> are useful ways for an Agile project team to easily visualize and update the status of cards in their project.</p>
+<p>Automated transitions combine the card wall concept to update card status, as provided in Mingle's grid view, with the workflow enforcement provided by card transitions. Simply, automated transitions allow the team to update and view their project status quickly while also ensuring other important data is captured.</p> 
+</section>
+
+<section title="Why do I need automated transitions?"> 
+<p>A common example of a status update that happens frequently and needs to be efficient is the story wall status update. This update also often requires extra reporting data to be captured which is not provided by using the grid view alone.</p>
+<p>Consider a standard story wall that is tracking the status of stories in a given release or iteration. Generally this wall is divided into status lanes that indicate the current state of stories in the project (e.g. 'ready for development', 'in development' and 'closed'). In the simplest scenario, team members will move cards from one state to another as the project progresses. The <cref topic="grid_view">grid view</cref> is a good way to represent this scenario in Mingle. However, for projects that require tracking and reporting information (such as the date a story moved between states), Mingle transitions need to be used to ensure the tracking information is provided at the same time the status is updated.</p>
+<p>Transition only properties are one way to ensure values are only updated using the transitions and therefore, ensure that supplementary tracking information is also updated. Using transition only properties in transitions previously meant that the ease of movement on the grid view was restricted to enforce the workflow. This is where automated transitions bridge that gap: they allow quick update of cards properties using the grid view but also ensure any required data and workforce is achieve by triggering transitions when cards are moved in the grid.</p>
+</section>
+
+<section title="What is needed to automate transitions on grid view?">
+
+<p>To automate transitions on the grid view project admins will need to ensure they have the required transitions set-up and that these transitions are updating transition only properties. They can then group by the transition only property on the grid view and any card movements between states that match a transition will trigger the transition to be automated. For example, to create the automated story wall the admin would need to complete the following steps:</p>
+
+<steps>
+<item>Create a <cref topic="card_types">card type</cref> called 'story'</item>
+<item><cref topic="creating_card_properties">Create a card property</cref> called 'status' with values of 'in development' and 'closed' 
+</item>
+<item>Set 'status' property as transition only</item> 
+	<screenshot alttext="Set property as transition only" src="resources/images/auto_transition_property_transition_only.png"/> 
+<item>Create a reporting property called 'Development complete on'</item>
+<item>Create transitions that updates stories which are 'in development' to status 'closed' and sets the 'Development complete on' as today</item>
+ <screenshot alttext="Create transition" src="resources/images/auto_transition_transition.png"/>
+<item> Create a grid view and filter cards by 'story' type and group by property 'status'. This is the story wall:</item>
+	<screenshot alttext="Create story wall" src="resources/images/auto_transition_story_wall.png"/> 
+<item> Move stories between the 'in development' column and the 'closed' column</item>
+	<screenshot alttext="Trigger transition" src="resources/images/auto_transition_drag_card.png"/> 
+<item> The transition is triggered
+	
+	<p>	<screenshot alttext="Transition is completed" src="resources/images/auto_transition_complete.png"/> </p>
+	The stories are automatically updated with the 'Development complete on'
+	<p>	<screenshot alttext="Card properties are updated" src="resources/images/auto_transition_properties_updated.png"/> </p>
+	
+</item>
+</steps>
+ </section>
+
+<section title="Why weren't my cards updated?">
+<bullets><item><strong>Transitions will only be automated on the grid view</strong> - for Mingle and projects admins, who can update transitions only properties in other views, any updates not made on the grid view will not automate transitions. </item>
+
+<item><strong>Property updates can only be automated if transitions are created</strong> - for example, although a transition may have been created to update cards with 'in development' to 'development complete' the reverse transition may not have been created. In this instance if the cards are dragged in the reverse direction to 'in development' from 'development complete' then an update will not be made and the user will be informed. 
+
+	<p>	<screenshot alttext="Card properties are updated" src="resources/images/auto_transition_no_transition.png"/> </p>
+</item>
+
+<item><strong>Property updates can only be automated if the group by property on the grid view is transition only </strong> - if transitions are created to update properties that are not transition only then dragging and dropping cards to update this property value will not automate transitions. These properties can be updated independently and do not require transitions to be updated. 
+</item>
+
+</bullets>
+	
+</section>
+
+<section title="How to..."> 
+
+<bullets>
+    <item><cref topic="creating_card_transitions">Create card
+    transitions</cref></item>
+
+    <item><cref topic="modifying_or_deleting_card_transitions">Modify or
+    Delete card transitions</cref></item>
+
+    <item><cref topic="transition_only_properties">Apply transition only
+    properties</cref></item>
+ 
+  </bullets> </section> <section title="Also see..."> <bullets>
+
+<item><cref topic="card_transitions">About card transitions </cref></item>
+    <item><cref topic="card_properties">About card properties</cref></item>
+
+    <item><cref topic="customizing_projects">Customizing
+    projects</cref></item>
+  </bullets> 
+</section>
+</chapter>

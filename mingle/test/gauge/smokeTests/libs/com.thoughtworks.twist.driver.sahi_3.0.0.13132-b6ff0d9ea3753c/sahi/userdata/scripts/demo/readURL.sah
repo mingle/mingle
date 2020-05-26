@@ -1,0 +1,11 @@
+var $URLContents = _readURL("http://sahi.co.in/demo/");
+var $lines = $URLContents.replace(/\r\r/g, '').split("\n");
+var $pattern='linkTest.htm'; 
+for(var $i=0;$i<$lines.length;$i++){
+	var $row= $lines[$i];
+	if($row.match($pattern)){
+		_navigateTo($pattern);
+		_click(_link('Back'));
+		break;
+	}
+}

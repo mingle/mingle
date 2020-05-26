@@ -1,0 +1,47 @@
+_navigateTo("/demo/clicks.htm");
+
+_doubleClick(_div("dbl click me"));
+_assertEqual("[DOUBLE_CLICK]", _textarea("t2").value);
+_click(_button("Clear"));
+
+_doubleClick(_button("dbl click me"));
+_assertEqual("[DOUBLE_CLICK]", _textarea("t2").value);
+_click(_button("Clear"));
+
+_click(_button("click me"));
+_assertEqual("[CLICK]", _textarea("t2").value);
+_click(_button("Clear"));
+
+_rightClick(_div("right click me"));
+_assertEqual("[RIGHT_CLICK]", _textarea("t2").value);
+_click(_button("Clear"));
+
+_rightClick(_button("right click me"));
+_assertEqual("[RIGHT_CLICK]", _textarea("t2").value);
+_click(_button("Clear"));
+
+_click(_checkbox(0));
+_assertTrue(_checkbox(0).checked);
+if (_condition(_isIE() || _sahi.isSafariLike())){
+	_assertEqual("onclick_c1", _textarea("t2").value);
+}else{
+	_assertEqual("onchange_c1", _textarea("t2").value);	
+}
+
+_click(_checkbox(0));
+_assertFalse(_checkbox(0).checked);
+
+
+_click(_radio(0));
+_assertTrue(_radio(0).checked);
+
+if (_condition(_isIE() || _sahi.isSafariLike())){
+	_assertEqual("onclick_r1", _textarea("t2").value);
+}else{
+	_assertEqual("onchange_r1", _textarea("t2").value);	
+}
+
+_click(_radio(1));
+_assertFalse(_radio(0).checked);
+_assertTrue(_radio(1).checked);
+

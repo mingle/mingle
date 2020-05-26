@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Tags page">
+	<section title="What you can do on this page">
+		<p>
+			The Tags page shows all tags applied to cards or pages in Mingle. 
+			From here you can see which tags are currently used in the project and those that are no longer being used. 
+			You can also delete tags or edit tag names from this page.
+		</p>
+		<bullets>
+			<item><cref topic="creating_tags_for_cards_or_wiki_pages">Creating tags for cards or wiki pages</cref></item>
+			<item><cref topic="managing_tags">Managing tags</cref></item>
+		</bullets>
+	</section>
+	<section title="Also see...">
+		<bullets>
+			<item><cref topic="working_with_tags">Working with tags</cref></item>
+			<item><cref topic="customizing_projects">Customizing projects</cref></item>
+		</bullets>
+	</section>
+</topic>
+
+

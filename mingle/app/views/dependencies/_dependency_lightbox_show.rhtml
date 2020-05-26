@@ -1,0 +1,43 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div class="dependency-popup-lightbox">
+  <% lightbox = Lightbox.with_close_link(self, "Close", "") -%>
+  <% lightbox.body("dependency_show_lightbox_content", @dependency.status.downcase,
+    :"data-link-cards-url" => url_for(:controller => controller_name, :action => "link_cards_popup", :number => @dependency.number),
+    :"data-editable" => allowed_to_edit_raising || allowed_to_edit_resolving) do -%>
+
+    <%= render :partial => "shared/lightbox_flyout", :locals => {:renderable => @dependency, :delete_controller => "dependencies", :authorized_to_delete_attachments => authorized_to_edit_dependency(@dependency)} -%>
+
+    <% form_tag({:action => "update", :format => 'json', :id => @dependency.id }, { 'data-remote' => true, :class => 'inline-edit-form view-mode', :"data-editable-id" => "dependency-#{@dependency.id}"}) do -%>
+      <%= lightbox_close_button(:class => "view-mode-only", :skip_default_click_handler => true) -%>
+      <%= render :partial => "dependencies/dependency_type" -%>
+      <div class="dependency-title">
+        <h1>
+          <span class="dependency-number"><%= @dependency.prefixed_number -%></span>
+          <span focus-target="input[name='dependency[name]']" class="dependency-name view-mode-only"><%= @dependency.name -%></span>
+          <%= text_field_tag "dependency[name]", @dependency.name, { :class => "edit-mode-only large", "maxlength" => 255, :onkeydown => "MingleUI.cmd.saveOnKeyHandler(event)", :id => nil } -%>
+        </h1>
+      </div>
+      <div class="dependency-content-container">
+         <%= render :partial => "dependencies/dependency_content", :locals => { :read_only => false } -%>
+      </div>
+      <%= render :partial => "dependencies/dependency_properties", :locals => {:date_format_context => date_format_context, :allowed_to_edit_raising => allowed_to_edit_raising, :allowed_to_edit_resolving => allowed_to_edit_resolving} -%>
+
+      <%= render :partial => "dependencies/dependency_actions", :locals => {:allowed_to_edit_raising => allowed_to_edit_raising, :allowed_to_edit_resolving => allowed_to_edit_resolving } -%>
+    <% end -%>
+  <% end -%>
+</div>

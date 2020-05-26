@@ -1,0 +1,75 @@
+<html>
+<head>
+<title>Cookie Manager</title>
+<style>
+body *{
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-size: 9pt;
+}
+</style>
+</head>
+<body onload="loadCookies()">
+<h1 id="domain"></h1>
+<script>
+function byId(id){
+	return document.getElementById(id);
+}
+function isIE() {
+    var browser = navigator.appName;
+    return browser == "Microsoft Internet Explorer";
+}
+function chooseAll(me){
+	var els = document.getElementsByTagName("INPUT");
+	for (var i=0; i<els.length; i++) {
+		var el = els[i];
+		if (el.type == "checkbox") {
+			if (el.id != "_sahi_chooseAll"){
+				el.checked = me.checked;
+			}
+		}	
+	}
+}
+function loadCookies(){
+	byId("raw").innerHTML = "$cookies";
+	var cookies = "$cookies".split(";");
+	var s = "<table><tr><th><input type='checkbox' id='_sahi_chooseAll' onclick='chooseAll(this)'></th>" 
+		+ "<th>Name</th><th>Value</th></tr>";
+	for (var i=0; i<cookies.length; i++){
+		s += showCookie(cookies[i], i);
+	}
+	s += "</table>"
+	byId("cookies").innerHTML = s;
+}
+function trim(s) {
+    return s.replace(/^\s+|\s+$/g, "");
+}
+function showCookie(cookie, i){ 
+	var ix = cookie.indexOf("=");
+	if (ix != -1) {
+		var cookieName = trim(cookie.substring(0, ix));
+		var cookieValue = trim(cookie.substring(ix+1));
+		if (cookieName != "sahisid")
+			return "<tr><td><input type='checkbox' id='" + i + "' value='" + cookieName + "'></td><td>" + cookieName + "</td><td>" + cookieValue + "</td></tr>";
+	}
+	return "";
+}
+function deleteCookies(){
+	var els = document.getElementsByTagName("INPUT");
+	for (var i=0; i<els.length; i++) {
+		var el = els[i];
+		if (el.type == "checkbox") {
+			if (el.checked) deleteCookie(el.value);
+		}	
+	}
+	location.reload();
+}
+function deleteCookie(name){
+	_sahi.sendToServer("/_s_/dyn/Cookies_delete?name=" + name);
+}
+</script>
+<br/>
+<div id="cookies"></div>
+<input type="button" value="Delete" onclick="deleteCookies();" style="margin:25px;">
+<div id="raw" style="padding:10px;"></div>
+</body>
+</html>

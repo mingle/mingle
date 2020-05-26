@@ -1,0 +1,97 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="transition_only_tooltip" style="display:none;background: #FFCCCC; border: 2px solid #ccc">
+  <p>
+    <%= image_tag "icon-warning-small.gif" %>
+    Sorry, you cannot drag card to any lane because group by property is transition only and there are no transitions for this property.
+  </p>
+</div>
+
+<%
+attrs = {
+  :id => 'swimming-pool',
+  :class => 'table-with-nothing-following-it swimming-pool touchable-wall',
+  :show_tooltip => group_by_transition_only_and_no_transition_using?,
+  :'data-column-aggregate-type' => @view.group_lanes.column_aggregate_by.aggregate_type.identifier,
+  :'data-column-aggregate-property' => @view.group_lanes.column_aggregate_by.property_definition.try(:name),
+  :'data-row-aggregate-type' => @view.group_lanes.row_aggregate_by.aggregate_type.identifier,
+  :'data-row-aggregate-property' => @view.group_lanes.row_aggregate_by.property_definition.try(:name)
+}
+content_tag(:table, attrs) do %>
+  <thead>
+    <tr>
+      <% if @view.groups.grouped? -%>
+        <th class="add_dimension">
+          <%= render(:partial => "lanes/add_group_lane", :locals => { :view => @view }) %>
+        </th>
+      <% end -%>
+      <% @view.groups.visibles(:lane).each do |lane| -%>
+        <% draggable = can_reorder_lane?(lane) ? 'draggable_lane' : ''  %>
+        <th id="<%= [lane.html_id, "header"].join("_") %>" data-lane-value="<%= lane.url_identifier %>" class='lane_header <%= draggable %>' >
+          <%= content_tag('div', render_flash_message(no_transition_on_property_value_error_message(lane), 'error-box'), :id => "#{lane.html_id}-invalid-drop-message", :style => 'display:none') %>
+          <%= render :partial => 'cards/header', :locals => {:target => lane, :should_render_wip_limit => lane.url_identifier.present? } %>
+
+        </th>
+      <% end -%>
+    </tr>
+  </thead>
+  <tbody>
+    <%- users_key_for_caching = KeySegments::AllUsers.new.to_s -%>
+    <%- dependencies_key_for_caching = KeySegments::AllDependencies.new.to_s -%>
+    <%- card_div_collection_cache = create_card_div_collection_cache(@view, users_key_for_caching, dependencies_key_for_caching) -%>
+    <% @view.groups.visibles(:row).each_with_index do |row, index| -%>
+    <% droppable_card_scope = "row_#{index}" -%>
+    <tr id="<%= droppable_card_scope %>" class="grid-row" row-id="<%= row.db_identifier %>" row_value="<%= row.url_identifier %>">
+      <% if @view.groups.grouped? -%>
+        <th id="<%= [row.html_id, "header"].join("_") %>" data-lane-value="<%= row.url_identifier %>" class="row_header">
+         <%= render(:partial => 'cards/header', :locals => {:target => row, :should_render_wip_limit => false}) if @view.groups.row_property_definition %>
+        </th>
+      <% end -%>
+      <% row.cells.each do |cell| %>
+        <td id='<%= cell.html_id %>' error_container_id='<%= "#{cell.lane.html_id}-invalid-drop-message" %>' class="cell clearfix" <%= rank_attribute(@project, cell.lane) %> <%= set_value_for_attribute(@project, cell.lane) %> lane-id="<%= cell.lane.value %>" lane_value="<%= cell.lane.url_identifier %>">
+
+          <% card_props = {} %>
+          <% if @view.group_lanes.lane_property_definition.try(:name) %>
+            <% card_props[@view.group_lanes.lane_property_definition.try(:name)] = cell.lane.url_identifier %>
+          <% end %>
+          <% if @view.group_lanes.row_property_definition.try(:name) %>
+            <% card_props[@view.group_lanes.row_property_definition.try(:name)] = row.url_identifier %>
+          <% end %>
+          <%= link_to_add_card_with_defaults("  ", {:class => "inplace-add fa fa-plus-circle"}, @view.to_params.merge(:controller => "cards", :action => "list"), card_props, true) %>
+          <% unless cell.cards.empty? -%>
+            <%= render :partial => 'cards/card_div', :collection => cell.cards, :as => :card, :locals => {droppable_card_scope: droppable_card_scope,
+                                                                                                          collection_cache: card_div_collection_cache,
+                                                                                                          caching: {users_key: users_key_for_caching,
+                                                                                                                    dependencies_key: dependencies_key_for_caching}} %>
+          <% end -%>
+
+        </td>
+      <% end %>
+    </tr>
+    <% end -%>
+  </tbody>
+<% end %>
+
+<% if @view.group_lanes.visibles(:lane).any? && (!@view.group_lanes.row_property_definition || @view.groups.visibles(:row).any?) %>
+      <%= javascript_with_rescue "MingleUI.grid.start(#{authorized?(:controller => :cards, :action => :update_property).to_json});" -%>
+<% end -%>
+<%= render :partial => 'cards/wip_limit_drop_down', locals: {view: @view} %>
+
+<%= render :partial => 'lanes/lane_actions', locals: {view: @view} %>
+
+<div class='card-place-holder' id="card_place_holder" style="display:none">
+</div>

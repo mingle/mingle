@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE section SYSTEM "mingle_help.dtd">
+<chapter title="How to size and layout your charts"> <subsection title="Data series, stacked bar and ratio bar charts">
+
+<p> You can use the following chart level parameters to help size and layout your data series, stacked bar and ratio bar charts. 
+<bullets> 
+<item> chart-height </item>
+<item> chart-width </item>
+<item> plot-height </item>
+<item> plot-width </item>
+<item> plot-x-offset</item>
+<item> plot-y-offset</item>
+<item> label-font-angle</item>
+<item> legend-top-offset</item>
+<item> legend-offset	</item>
+<item> legend-max-width </item></bullets>
+ </p>
+<screenshot alttext="Chart parameters" src="resources/images/chart_size_parameters.png"/>
+
+<note>To see a complete list of chart parameters take a look at our <cref topic="macro_reference">macro reference</cref> page.</note>
+
+</subsection>
+
+<subsection title="What to do when your x-axis labels cannot be seen">
+	<p>A common problem, especially when using cards as the value of a x-axis property, is that the x-axis labels will extend out of the chart area. </p>
+		<screenshot alttext="Data series chart with cut off x plot offset" src="resources/images/ratio_bar_chart_x_labels_restricted.png"/>
+	<p>There are a couple of ways that this can be resolved:
+	<bullets>
+		<item>Extend the <strong>chart-height</strong>, <strong>chart-width</strong> and <strong>plot-x-offset</strong> to allow for the extended names.</item>
+		<screenshot alttext="Data series chart with extended x plot offset" src="resources/images/ratio_bar_chart_labels_parameters.png"/>
+		<item>Rotate the x-axis labels using <strong>label-font-angle</strong>.</item>
+	</bullets>
+	</p>
+	<note> This chart has x-axis labels shown at an angle of 90 degrees. </note>
+	<screenshot alttext="Data series chart with rotated x axis labels" src="resources/images/ratio_bar_chart_labels_parameters_2.png"/>
+</subsection>
+
+<subsection title="Display chart legend inside the chart plot area">
+	<p>To show the chart legend inside the chart area use a negative <strong>legend-offset</strong>. For example, the following chart has a legend-offset of -150.</p>
+	<screenshot alttext="Data series chart with rotated x axis labels" src="resources/images/legend_offset_parameters.png"/>
+</subsection>
+
+<subsection title="Pie charts">
+	<p> You can use the following chart level parameters to help size and layout your pie chart. 
+	<bullets> 
+	<item> chart-height </item>
+	<item> chart-width </item>
+	<item> radius </item>
+	</bullets>
+	</p>
+	<p> For example, this pie chart has a radius of 20.</p>
+	<screenshot alttext="Pie chart parameters" src="resources/images/mini_pie_chart.png"/>
+</subsection>
+
+</chapter>
+
+
+

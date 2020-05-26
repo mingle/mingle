@@ -1,0 +1,33 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<h1>Export program</h1>
+
+<div class='info-box'>
+  <p>
+    <ul>
+      <p>When you export your program, only the plan and backlog will be exported; none of the projects in your program will be exported. For more information about migrating your program, please see <%= render_help_link('Program Export', :class => '') %>.</p>
+      <p>Exporting your program may take a long time. If you navigate away from the page while exporting your program, your program export will be aborted.</p>
+      <p>We highly recommend that you export your program when there is minimal or no activity on your Mingle instance, or during scheduled down time. If work continues on any part of your program (plan, backlog or projects) while your program is exporting, there may be inconsistencies between the original and exported versions.</p>
+      <p>Once exported, your program will no longer be connected to its original version; updates to the exported program will not be reflected in the original version.</p>
+    </ul>
+  </p>
+  </div>
+
+<% action_bar do %>
+    <%= link_to_remote 'Continue to export', {}, :method => :post, :class => 'link_as_button primary'%>
+  <%= link_to("Cancel", programs_path, :class => 'link_as_button') %>
+<% end %>

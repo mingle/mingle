@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Story Wall">
+
+    <p>Many agile teams like to use "information radiators" in their workspace. A story wall is a very common and effective information radiator that displays the status of each card in the current iteration or sprint. Typically, a story wall contains columns that represent a team's workflow, index cards representing the actual work, and other metadata to communicate the status of a project. The team moves a card through each column as it gets completed.</p>
+
+    <p>Here is an example of a team's physical story wall.</p>
+
+    <screenshot alttext="A physical story wall" src="resources/images/explore_mingle_story_wall_physical.jpg" />
+
+    <p>Mingle allows you to create a virtual story wall. Just like a physical card wall, you can create columns and cards, and drag and drop your cards as your team completes their work. Virtual card walls have some advantages over physical card walls. Information is not lost in case someone accidentally knocks index cards off the wall; team members who aren't physically located at the physical card wall can see a virtual card wall and interact with it; different team members can easily filter which cards they're looking at.</p>
+
+    <p>Here is the same story wall captured in Mingle. Many teams will have this displayed using a projector or a large monitor.</p>
+
+    <screenshot alttext="A physical story wall" src="resources/images/explore_mingle_story_wall_mingle.png" />
+
+	<section title="Multi-dimensional card walls">
+		<p>Mingle offers the ability to group cards by columns and rows to produce a flexible matrix that can cover a variety of use cases. A common scenario for Scrum teams would be to create a Scrum Task Board by grouping tasks by story and task status. An example image appears below.</p>
+		
+		<screenshot alttext="An Scrum Task Board" src="resources/images/scrum_task_board.png" />
+	</section>
+
+    <section title="Benefits of a virtual story wall">
+
+    <bullets>
+        <item>
+            You can slice and dice your Mingle story wall! 
+            <bullets>
+                <item>The <cref topic="grid_view#filter">filter cards by</cref> action allows you to easily exclude or include cards in your view. Your PM may want to see everything, your QA may only want to see high priority and open bugs, your developers may want to see what's on deck, etc.</item>
+                <item>The <cref topic="grid_view#group_cards">group by</cref> action allows you to change your rows and columns to any configured property, e.g. by status, owner, story points or priority. This is an extremely powerful feature that is not easily done with a physical card wall.</item>
+                <item>The <cref topic="grid_view#sort_cards">sort by</cref> action allows you to rearrange the cards in your story wall by a previous rank or property. This is a great way to make sure your team picks up the most important cards first.</item>
+                <item>The <cref topic="grid_view#color_cards">color by</cref> action allows you to quickly color the cards in your story wall, e.g. you may have different colors to represent priority.</item>
+            </bullets>
+        </item>
+        <item>
+            Reporting off physical index cards is a very tedious task. <cref topic="macro_reference">Mingle's custom reports</cref> are generated based on your cards so you do not need to duplicate your data or worry about your data sets getting out of sync.
+        </item>
+        <item>A virtual card wall works very will with distributed teams. Everyone views and works with the same wall.</item>
+    </bullets>
+    </section>
+	<section title="Quick view/edit cards" id="quick_view_edit_cards" file="quick_view_edit_cards">
+	</section>
+	<section title="Show avatars on cards" id="show_avartars_on_grid_view" file="show_avatars_on_grid_view">
+	</section>
+
+    <section title="Also see...">
+        <bullets>
+            <item><cref topic="grid_view">Card grid view</cref></item>
+            <item><cref topic="card_transitions">Card transitions</cref></item>
+            <item><cref topic="automated_transitions">Automated card transitions</cref></item>
+            <item><cref topic="explore_mingle_topic_workflow">Workflow</cref></item>
+			<item><cref topic="explore_mingle">Explore Mingle</cref></item>
+		        </bullets>
+		    </section>
+
+
+</topic>

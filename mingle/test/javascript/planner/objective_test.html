@@ -1,0 +1,493 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>JavaScript unit test file</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery.tipsy.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/tooltip.js" type="text/javascript"></script>
+
+  <script src="../../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../test_assets/unittest.js" type="text/javascript"></script>
+  <script src="../test_assets/unittest_ext.js" type="text/javascript"></script>
+
+  <script src="../../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/controls.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/slider.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/application.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/planner/planner_application.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/planner/timeline_status.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/planner/timeline/objectives_controller.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/planner/timeline.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/planner/timeline/main_view.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/planner/timeline/main_view_content.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/planner/timeline/objective_creation.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/planner/timeline/objective_editor.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/planner/timeline/plan_calendar.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/planner/timeline/objective.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/planner/timeline/popup.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/planner/timeline/objective_creation_controller.js" type="text/javascript"></script>
+
+  <link rel="stylesheet" href="../../../public/stylesheets/reset.css" type="text/css" />
+  <link rel="stylesheet" href="../test_assets/unittest.css" type="text/css" />
+</head>
+<body>
+
+<div id="content" style="margin-top: 100px">
+
+  <div id="header">
+    <h1>JavaScript unit test file</h1>
+    <p>
+      This file tests <strong>objective.js</strong>.
+    </p>
+  </div>
+
+  <style>
+  #date_header {
+    margin: 0;
+    padding: 0;
+  }
+
+  #date_header li {
+    display: inline;
+    float: left;
+    padding: 5px 0;
+    margin: 0;
+    text-align: center;
+    height: 11px;
+    line-height: 11px;
+    border-bottom: 1px solid #BBB;
+  }
+
+  .days #date_header li {
+    width: 100px;
+  }
+
+  .weeks #date_header li {
+    width: 210px;
+  }
+
+  #objective_container {
+    height: 420px;
+
+    /* we want no borders so that getWidth() and getDimensions() returns what we want */
+    border: none;
+  }
+
+  #objective_container .objective {
+    border-right: 1px solid black;
+    border-left: 1px solid black;
+    background: red;
+  }
+
+  #add_objective_panel input {
+    width: 100px;
+  }
+
+  #add_objective_panel {
+    position: absolute;
+    display: none;
+  }
+
+  .main_view .objective {
+    position: absolute;
+    background-color: #EEE;
+    min-height: 30px;
+  }
+
+  #main_view_content {
+    height: 70px;
+    float: left;
+    position: relative;
+    background-color: yellow;
+  }
+  </style>
+  <pre>
+           March
+    Su Mo Tu We Th Fr Sa
+           1  2  3  4  5
+     6  7  8  9 10 11 12
+    13 14 15 16 17 18 19
+    20 21 22 23 24 25 26
+    27 28 29 30 31
+  </pre>
+  <div id='test-content' style='padding: 0; margin: 0; left: 0px; top: 0px; position: absolute'>
+    <div id="timeline">
+      <div class="granularity-selector">
+        <a href="javascript:void(0)" id="days_selector" onclick="window.timeline.redraw('days'); return false;" class="selected">days</a>
+        <a href="javascript:void(0)" id="weeks_selector" onclick="window.timeline.redraw('weeks'); return false;">weeks</a>
+        <a href="javascript:void(0)" id="months_selector" onclick="window.timeline.redraw('months'); return false;" class="">months</a>
+        <a class="today" href="javascript:void(0)" id="today_selector" onclick="window.timeline.moveToToday(); return false;">today</a>
+      </div>
+      <div id='main_view' class="main_view" style='width: 1024px; overflow: hidden; position: relative; left: 0px; top: 0px'>
+        <div id='timeline-spinner'></div>
+        <div id='main_view_content' class="days">
+          <ul id="date_header"></ul>
+          <div id='objective_container' style="position: absolute; left: 0; top: 22px;"></div>
+
+          <div id="quick_info" class="quick_tip">
+            <div id="tip_content" class="quick_tip_content"></div>
+            <div id="tip_anchor" class="quick_tip_anchor"></div>
+          </div>
+
+          <div id="informing_message_box"></div>
+          <div id="objective_popup_panel" class="objective_popup_panel" style="display:none">
+            <div class="top_left top_arrow"></div>
+            <div class="top_right top_arrow"></div>
+            <div id="objective_popup_details" class="objective_popup_details">
+              <a class="close"></a>
+              <div id="objective_details_contents"></div>
+            </div>
+            <div class='bottom_left bottom_arrow'></div>
+            <div class='bottom_right bottom_arrow'></div>
+          </div>
+          <div id='add_objective_panel' class='add_objective_panel'>
+            <div class="objective_fields">
+              <label class="objective_name_label" for="objective_name">Name:</label>
+            </div>
+            <div class="top_left top_arrow"></div>
+            <div class="top_right top_arrow"></div>
+            Name: <input type="text" size="1" name="objective[name]" id="objective_name"><br/>
+            Start at: <input type="text" size="1" name="objective[start_at]" id="objective_start_at"><br/>
+            End at: <input type="text" size="1" name="objective[end_at]" id="objective_end_at"><br/>
+            Row: <input type="text" size="1" name="objective[vertical_position]" id="objective_vertical_position">
+            <div class='bottom_left bottom_arrow'></div>
+            <div class='bottom_right bottom_arrow'></div>
+          </div>
+        </div>
+        <div style='clear: both'></div>
+      </div>
+      <div class="overview">
+          <div class="viewport selected">
+          </div>
+      </div>
+    </div>
+  </div>
+  <!-- Log output -->
+  <div id="testlog"></div>
+
+</div>
+
+<script type="text/javascript">
+// <![CDATA[
+
+  SANDBOX_CONTENT = $('test-content').innerHTML;
+
+  new Test.Unit.Runner({
+    setup: function() {
+      $('test-content').update(SANDBOX_CONTENT);
+      Timeline.GRID_SIZE['weeks'] = 30;
+      Timeline.GRID_SIZE['days'] = 100;
+      this.plan = { start_at: '2011-03-06', end_at: '2011-03-26' };
+      this.mainViewContentElement = $('main_view_content');
+      this.timeline = new Timeline('timeline', this.plan, "2011-03-20");
+      this.mainViewContent = this.timeline.mainViewContent;
+      this.mainViewContent.buildViewColumns('days');
+      this.weekViewColumnWidth = 210;
+      this.dayViewColumnWidth = 100;
+      this.rowHeight = 30;
+      Timeline.EDITABLE = true;
+
+      this.assertObjectiveMatchesData = function(data, objective) { with(this) {
+        assertEqual(data.id, objective.objectiveId);
+        assertEqual(Timeline.DateUtils.toDate(data.start_at).toString(), objective.startDate.toString());
+        assertEqual(Timeline.DateUtils.toDate(data.end_at).toString(), objective.endDate.toString());
+        assertEqual(data.name, objective.name);
+        assertEqual(data.vertical_position, objective.verticalPosition);
+        assertEqual(data.url_identifier, objective.urlIdentifier);
+        assertEqual(data.total_work, objective.total_work);
+        assertEqual(data.work_done, objective.work_done);
+        assertEqual(data.late, objective.late);
+      }};
+
+      Images.path='/images/';
+      this.defaultData = $H({ id: 101, name: "objective", vertical_position: 0, url_identifier: 'objective_a', start_at: '2011-03-06', end_at: '2011-03-07', sync_finished: true });
+    },
+
+    teardown: function() {
+      this.mainViewContentElement.setStyle({
+        left: '0px'
+      });
+      this.mainViewContentElement.select('.place-holder').each(function(div) {
+        div.remove();
+      });
+      Draggable._dragging = {}; // Have to reset this collection, or else running the entire test suite will fail with unexpected results.
+    },
+
+    testRender: function() { with(this) {
+      ObjectivesController.objectivesUrl = "http://planner/plans"
+      var objectiveData = this.defaultData.merge({ total_work: 5, work_done: 4 }).toObject();
+      var objective = new Timeline.Objective(objectiveData, this.mainViewContent);
+      objective.render();
+      var objectiveDiv = $$('div.objective')[0];
+      var nameLink = objectiveDiv.select('span.name').first();
+      assertEqual("objective", nameLink.innerHTML);
+
+      var countLink = objectiveDiv.select('#work_' + objectiveData.url_identifier).first();
+      assertEqual('4 / 5', countLink.innerHTML);
+    }},
+
+    testRenderShouldHtmlEscapeObjectiveName: function() { with(this) {
+      ObjectivesController.objectivesUrl = "http://planner/plans"
+      var objectiveData = this.defaultData.merge({ name: "<i>fugacious" }).toObject();
+      var objective = new Timeline.Objective(objectiveData, this.mainViewContent);
+      objective.render();
+      var objectiveDiv = $$('div.objective')[0];
+      var nameLink = objectiveDiv.select('span.name').first();
+      assertEqual("&lt;i&gt;fugacious", nameLink.innerHTML);
+    }},
+
+    testMoveObjectiveRightInDailyViewShouldMoveStartOneDay: function() { with(this) {
+      var objectiveData = this.defaultData.merge({ start_at: "2011-03-07", end_at: "2011-03-08" }).toObject();
+      this.timeline.redraw('days');
+      this.timeline.mainViewContent.element.setStyle({
+        left:'0px'
+      });
+      var objective = new Timeline.Objective(objectiveData, this.mainViewContent);
+      objective.render();
+      var currentLeft = objective.element.cumulativeOffset()[0];
+      objective.element.setStyle({
+        left: (currentLeft + 100) + 'px'
+      });
+      objective.onMove();
+      assertEqual(new Date("2011/03/8").toString(), objective.toJson().start_at);
+      assertEqual(new Date("2011/03/9").toString(), objective.toJson().end_at);
+    }},
+
+    testMoveObjectiveLeftInWeekViewShouldPreserveStartingDayOfWeek: function() { with(this) {
+      var objectiveData = this.defaultData.merge({ start_at: "2011-03-16", end_at: "2011-03-18" }).toObject();
+      this.timeline.redraw('weeks');
+      var objective = new Timeline.Objective(objectiveData, this.mainViewContent);
+      objective.render();
+      objective.editor.saveObjective = function() {};
+
+      var newLeft = parseInt(objective.element.style.left, 10) - this.weekViewColumnWidth;
+      objective.element.style.left = newLeft + "px";
+      objective.onMove();
+
+      assertEqual(new Date("2011/03/09").toString(), objective.toJson().start_at);
+      assertEqual(new Date("2011/03/11").toString(), objective.toJson().end_at);
+    }},
+
+    testMoveObjectiveRightInWeekViewShouldPreserveStartingDayOfWeek: function() { with(this) {
+      var objectiveData = this.defaultData.merge({ start_at: "2011-03-07", end_at: "2011-03-08" }).toObject();
+      this.timeline.redraw('weeks');
+      var objective = new Timeline.Objective(objectiveData, this.mainViewContent);
+      objective.render();
+      objective.editor.saveObjective = function() {};
+
+      var newLeft = parseInt(objective.element.style.left, 10) + this.weekViewColumnWidth;
+      objective.element.style.left = newLeft + "px";
+      objective.onMove();
+
+      assertEqual(new Date("2011/03/14").toString(), objective.toJson().start_at);
+      assertEqual(new Date("2011/03/15").toString(), objective.toJson().end_at);
+    }},
+
+    testRemove: function() { with(this) {
+      var objectiveData = this.defaultData.toObject();
+      var objective = new Timeline.Objective(objectiveData, this.mainViewContent);
+      objective.render();
+      var objectiveDiv = $$('div.objective')[0];
+      assertVisible(objectiveDiv);
+      objective.remove();
+      assertNull($$('div.objective')[0]);
+    }},
+
+    testResizeWithRightHandleShouldSnapCorrectly: function() { with(this) {
+      var objectiveData = this.defaultData.toObject();
+      var objective = new Timeline.Objective(objectiveData, this.mainViewContent);
+      objective.render();
+
+      objective.editor.saveObjective = function() {};
+
+      assertEqual(200, objective.element.getWidth(), "objective " + objective.name + " is the right size");
+
+      var leftClick =  $H({ which: 1, button: 1 });
+      rightHandlePosition = objective.editor.rightHandle.cumulativeOffset()[0]
+      Event.triggerEvent(objective.editor.rightHandle, leftClick.update({type: 'mousedown', pageX: rightHandlePosition, pageY: 40}).toObject());
+
+      Event.triggerEvent(document, leftClick.update({ type: "mousemove", pageX: 400, pageY: 40 }).toObject());
+      Event.trigger(document, 'mouseup');
+
+      assertTooltip(objective.editor.rightHandle, "9 Mar 2011")
+
+      assertEqual(400, objective.element.getWidth(), "objective " + objective.name + " should be 4 days wide");
+    }},
+
+    testSnapShouldNotSnapToNextColumnWhenNotMovedBeyondTheThreshold: function() { with(this) {
+      var objectiveData = this.defaultData.toObject();
+      var objective = new Timeline.Objective(objectiveData, this.mainViewContent);
+      objective.render();
+      var mouseCoordinates = { x: 3, y: 3 }
+      var expectedSnappedCoordinates = [0, 0]
+      assertArrayEqual(expectedSnappedCoordinates, objective.snap(mouseCoordinates.x, mouseCoordinates.y));
+    }},
+
+    testSnapShouldSnapToNextColumnWhenMovedBeyondTheThreshold: function() { with(this) {
+      var objectiveData = this.defaultData.toObject();
+      var objective = new Timeline.Objective(objectiveData, this.mainViewContent);
+      objective.render();
+
+      var oneColumn = this.dayViewColumnWidth;
+      var mouseCoordinates = { x: Math.floor(1.5 * oneColumn), y: this.rowHeight }
+      var expectedSnappedCoordinates = [oneColumn * 2, this.rowHeight]
+
+      assertArrayEqual(expectedSnappedCoordinates, objective.snap(mouseCoordinates.x, mouseCoordinates.y));
+    }},
+
+    testSnapShouldNotSnapOutsideOfMainViewContentDailyView: function() { with(this) {
+      var objectiveData = this.defaultData.toObject();
+      this.timeline._render([objectiveData], "days");
+      this.timeline.redraw('days');
+      var objective = this.mainViewContent.objectives[0];
+      var containerSize = $('objective_container').getDimensions();
+
+      var outOfBoundsLeft = -1000;
+      var outOfBoundsTop = -1000;
+      var outOfBoundsBottom = containerSize.height + 1000;
+      var outOfBoundsRight = containerSize.width + 1000;
+
+      assertArrayEqual([0, 0], objective.snap(outOfBoundsLeft, 0), "can't go off the left edge");
+      assertArrayEqual([0, 0], objective.snap(0, outOfBoundsTop), "can't go off the top edge");
+      assertArrayEqual([0, containerSize.height - this.rowHeight], objective.snap(0, outOfBoundsBottom), "can't go off the bottom edge");
+      assertArrayEqual([containerSize.width - objective.element.getWidth(), 0], objective.snap(outOfBoundsRight, 0, true), "can't go off the right edge");
+    }},
+
+    testShouldShowEndDateTipWhenMouseOverRightHandle: function() { with(this) {
+      var objectiveData = this.defaultData.toObject();
+      var objective = new Timeline.Objective(objectiveData, this.mainViewContent);
+      objective.render();
+
+      assertTooltip(objective.editor.rightHandle, "7 Mar 2011")
+    }},
+
+    testShouldShowStartDateTipWhenMouseOverLeftHandle: function() { with(this) {
+      var objectiveData = this.defaultData.toObject();
+      var objective = new Timeline.Objective(objectiveData, this.mainViewContent);
+      objective.render();
+
+      assertTooltip(objective.editor.leftHandle, "6 Mar 2011")
+    }},
+
+    testShouldShowUpdatedStartDateTipWhenMouseOverLeftHandleAfterChangedStartDate: function() { with(this) {
+      var objectiveData = this.defaultData.toObject();
+      var objective = new Timeline.Objective(objectiveData, this.mainViewContent);
+      objective.render();
+
+      assertTooltip(objective.editor.leftHandle, "6 Mar 2011")
+
+      objective.startDate = Timeline.DateUtils.toDate("2011-03-01");
+      assertTooltip(objective.editor.leftHandle, "1 Mar 2011")
+    }},
+
+    testRefreshFromJson: function() { with(this) {
+      var objectiveData = this.defaultData.merge({ "late": false}).toObject();
+      var objective = new Timeline.Objective(objectiveData, this.mainViewContent);
+      this.assertObjectiveMatchesData(objectiveData, objective);
+
+      var updatedData = this.defaultData.merge({ "late": true }).toObject();
+
+      objective.refreshFromJson(updatedData);
+      this.assertObjectiveMatchesData(updatedData, objective);
+    }},
+
+    testWorkDoneCountDoesNotShowUpWhileWorkIsSynching: function() { with(this) {
+      ObjectivesController.objectivesUrl = "http://planner/plans"
+      var objectiveData = this.defaultData.merge({ sync_finished: false }).toObject();
+      var objective = new Timeline.Objective(objectiveData, this.mainViewContent);
+      objective.render();
+      var objectiveDiv = $$('div.objective')[0];
+      var nameLink = objectiveDiv.select('span.name').first();
+      assertEqual("objective", nameLink.innerHTML);
+
+      var countLink = objectiveDiv.select('#work_' + objectiveData.url_identifier).first();
+      assertEqual('<img class="spinner" src="/images/spinner.gif">', countLink.innerHTML);
+      assertTooltip(countLink, "Synching...");
+      $j(countLink).click();
+
+      assertEqual("", $('objective_details_contents').innerHTML)
+    }},
+
+    testWorkDoneCountShowUpAfterSynching: function() { with(this) {
+      ObjectivesController.objectivesUrl = "http://planner/plans"
+      var objectiveData = this.defaultData.merge({  total_work: 5, work_done: 4, sync_finished: false }).toObject();
+      var objective = new Timeline.Objective(objectiveData, this.mainViewContent);
+      objective.render();
+      var objectiveDiv = $$('div.objective')[0];
+      var nameLink = objectiveDiv.select('span.name').first();
+      assertEqual("objective", nameLink.innerHTML);
+
+      var countLink = objectiveDiv.select('#work_' + objectiveData.url_identifier).first();
+      assertEqual('<img class="spinner" src="/images/spinner.gif">', countLink.innerHTML);
+      assertTooltip(countLink, "Synching...");
+
+      objectiveData.sync_finished = true;
+      objective.refreshFromJson(objectiveData);
+      objective.updateWorkCount(countLink);
+
+      countLink = objectiveDiv.select('#work_' + objectiveData.url_identifier).first();
+      assertEqual('4 / 5', countLink.innerHTML);
+    }},
+
+    testAlertDoesNotShowUpWhileWorkIsSynchingEvenThoughItsLateBeforeSynching: function() { with(this) {
+      ObjectivesController.objectivesUrl = "http://planner/plans"
+      var objectiveData = this.defaultData.merge({ sync_finished: false, late: true }).toObject();
+      var objective = new Timeline.Objective(objectiveData, this.mainViewContent);
+      objective.render();
+      var objectiveDiv = $$('div.objective')[0];
+      var nameLink = objectiveDiv.select('span.name').first();
+      assertEqual("objective", nameLink.innerHTML);
+
+      var countLink = objectiveDiv.select('#work_' + objectiveData.url_identifier).first();
+      assertEqual('<img class="spinner" src="/images/spinner.gif">', countLink.innerHTML);
+      assertTooltip(countLink, "Synching...");
+
+      assertEqual(0, objectiveDiv.select('.late').size());
+    }},
+
+    testAlertShowUpAfterSynching: function() { with(this) {
+      ObjectivesController.objectivesUrl = "http://planner/plans"
+      var objectiveData = this.defaultData.merge({ sync_finished: false, late: false }).toObject();
+      var objective = new Timeline.Objective(objectiveData, this.mainViewContent);
+      objective.render();
+
+      var objectiveDiv = $$('div.objective')[0];
+      var nameLink = objectiveDiv.select('span.name').first();
+      assertEqual("objective", nameLink.innerHTML);
+
+      assertEqual(0, objectiveDiv.select('.late').size());
+
+      objectiveData.late = true;
+      objective.refreshFromJson(objectiveData);
+      objective.updateAlertSymbol();
+
+      assertEqual(1, objectiveDiv.select('.late').size());
+    }},
+  }, { testLog: "testlog", test : '' });
+
+// ]]>
+</script>
+</body>
+</html>

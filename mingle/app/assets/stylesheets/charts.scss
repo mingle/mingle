@@ -1,0 +1,141 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+.c3 {
+  text-align: center;
+  max-height: inherit !important;
+
+  .c3-tooltip-container {
+    position: fixed !important;
+    th, td {
+      text-align: left;
+      &:first-child {
+        text-align: center;
+      }
+    }
+
+    td.notes {
+      color: #999 !important;
+      font-style: italic;
+      font-weight: 400;
+    }
+  }
+  .c3-event-rect {
+    cursor: pointer;
+  }
+}
+
+.pie-chart,.ratio-bar-chart,.stacked-bar-chart, .data-series-chart, .cumulative-flow-graph, .daily-history-chart  {
+
+  div.title {
+    white-space: normal;
+    word-wrap: break-word;
+    text-align: center;
+    font-weight: 300;
+    width: inherit;
+  }
+
+  .c3-title{
+    fill: black;
+    font-weight:bold;
+  }
+
+  &.medium {
+    div.title {
+      font-size: 1.4em;
+    }
+
+    svg {
+      .c3-title {
+        font-size: 1.8em;
+      }
+      .c3-chart-arc text {
+        font-size: 1.2em;
+      }
+    }
+  }
+
+  &.large {
+    div.title {
+      font-size: 1.8em;
+    }
+
+    svg {
+      .c3-title {
+        font-size: 2.4em;
+      }
+
+      .c3-chart-arc text {
+        font-size: 1.6em;
+      }
+    }
+  }
+
+  &.small {
+    div.title {
+      font-size: 1.2em;
+    }
+
+    svg {
+      .c3-title {
+        font-size: 1.2em;
+      }
+
+      .c3-chart-arc text {
+        font-size: 0.8em;
+      }
+    }
+
+    .chart-progress-message {
+      font-size: 0.8em;
+    }
+  }
+}
+
+.daily-history-chart {
+  .c3 {
+    .c3-event-rect {
+      cursor: default !important;
+    }
+    .c3-target-thick-line-series .c3-lines path {
+      stroke-width: 3px;
+    }
+    .c3-target-translate-label-by--30-0 .c3-texts text {
+      transform: translate(-30px, 0)
+    }
+    .c3-target-translate-label-by-10-10 text{
+      transform: translate(10px,10px);
+    }
+    .c3-legend-item-Completion-Unknown line.c3-legend-item-tile{
+      stroke : black !important;
+    }
+    .dashed-guideline {
+      &.c3-xgrid-line line{
+        stroke: black;
+      }
+      line{
+        stroke-dasharray: 5,5;
+        stroke-width: 1.2px;
+      }
+      text{
+        stroke: #00000070;
+      }
+    }
+    .c3-target-mingle-chart-dashed-line-series{
+      stroke-dasharray: 2,2;
+    }
+  }
+}

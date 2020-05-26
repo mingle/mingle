@@ -1,0 +1,33 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% content_tag :div, :class => "search-result dependency-result", :id =>"#{dependency.number}_updated_info" do -%>
+  <i class="mng mng-dep-base"></i>
+  <h3>
+    <%= link_to_function "Dependency ##{dependency.number} #{dependency.name}".html_safe, "$j(this).showDependencyPopup();", { :"data-dependency-number" => dependency.number.gsub(/D/, "") } -%>
+  </h3>
+
+  <% dependency.properties.each do |name, value| %>
+    <p class="properties-and-tags"><%= raw "#{name.gsub(/_+/, " ").capitalize}: #{value}"-%></p>
+  <% end -%>
+
+  <p class="properties-and-tags">Raising card (<%= dependency.raised_by_project -%>): <%= raw dependency.raised_by_card -%></p>
+  <% if dependency.resolved_by_cards.any? -%>
+  <p class="properties-and-tags">Resolving cards (<%= dependency.resolved_by_project -%>): <%= raw dependency.resolved_by_cards.join(", ") -%></p>
+  <% end -%>
+
+  <p class="description"><%= raw dependency.content -%></p>
+<% end -%>

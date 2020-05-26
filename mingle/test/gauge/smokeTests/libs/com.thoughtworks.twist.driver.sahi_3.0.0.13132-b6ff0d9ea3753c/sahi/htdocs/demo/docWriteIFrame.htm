@@ -1,0 +1,21 @@
+<html>
+<head><title></title></head>
+<body>
+<script>
+function $(id){
+	return document.getElementById(id);
+}
+function oc(close){
+    $("iframe1").contentWindow.document.write("<a href='/demo/docWriteIFrame.htm'>My link</a><br/>Check me <input type=\"checkbox\" name=\"check1\" onclick='alert(window==top)'/><br/>");    
+    if (close) $("iframe1").contentWindow.document.close();
+}
+</script>
+<form name="f1">
+<input type="text" name="t1"><br/>
+<input type="button" value="Click me (doc closed)" onclick="oc(true)">
+<input type="button" value="Click me (doc not closed)" onclick="oc(false)">
+<br/>
+<iframe id="iframe1" src="blank.htm" height="300px" width="600px"></iframe>
+</form>
+</body>
+</html>

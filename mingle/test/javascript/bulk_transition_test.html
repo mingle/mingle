@@ -1,0 +1,220 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>JavaScript unit test file</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+  <script src="test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+
+  <script src="test_assets/unittest.js" type="text/javascript"></script>
+  <script src="test_assets/unittest_ext.js" type="text/javascript"></script>
+
+
+  <script src="../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/controls.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/builder.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+
+  <script src="../../app/assets/javascripts/alignment.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/application.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/bulk_transitions.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="assets/unittest.css" type="text/css" />
+  <link rel="stylesheet" href="test_assets/unittest.css" type="text/css" />
+</head>
+<body>
+
+<div id="content">
+
+  <div id="header">
+    <h1>JavaScript unit test file</h1>
+    <p>
+      This file tests the BulkTransitions class in <strong>application.js</strong>.
+    </p>
+  </div>
+
+  <div id="sandbox">
+
+    <form id="bulk-transition-form">
+      <input type="hidden" name="selected_cards" id="selected_cards">
+      <input type="hidden" name="all_cards_selected" id="all_cards_selected">
+      <input type="hidden" name="transition_id" id="transition_id">
+      <input type="hidden" name="favorite_id" id="favorite_id">
+    </form>
+    <form id="bulk-transition-require-comment-form">
+      <input type="hidden" value="" name="selected_cards" id="selected_cards">
+      <input type="hidden" name="all_cards_selected" id="all_cards_selected">
+      <input type="hidden" value="" name="transition_id" id="transition_id">
+      <input type="hidden" name="favorite_id" id="favorite_id">
+    </form>
+
+    <div class="slider-down" id="transition-selector">
+      <span class="no_transition_message">No available transitions for selected cards</span>
+
+      <ul class="transition-dropdown" id="bulk-transitions-options-container">
+      </ul>
+    </div>
+
+    <a onclick="; return false;" id="bulk_transitions" href="javascript:void(0)" class="link_as_button group-link">
+      <span class="dropdown">Transitions</span>
+    </a>
+
+    <form name="test_form" id="test_form">
+      <select name="transition" id="transition">
+      </select>
+      <input type="checkbox" name="checkbox_0" id="cb_0" value="10"/>
+      <input type="checkbox" name="checkbox_1" id="cb_1" value="20"/>
+      <input type="checkbox" name="checkbox_2" id="cb_2" value="30">
+      <input type="checkbox" name="checkbox_2" id="cb_3" value="40">
+      <input type="checkbox" name="does_not_match_pattern" id="does_not_match_pattern" value="122"/>
+      <input type="button" name="go_button" id="go-button" />
+    </form>
+
+  </div>
+
+  <!-- Log output -->
+  <div id="testlog"> </div>
+
+</div>
+
+<script type="text/javascript">
+// <![CDATA[
+  SANDBOX_CONTENT = $('sandbox').innerHTML;
+
+  new Test.Unit.Runner({
+
+    setup: function() {
+      $('sandbox').innerHTML = SANDBOX_CONTENT;
+
+      var checkBoxes = new CheckBoxes(document, 'checkbox_');
+      BulkTransitions.instance = new BulkTransitions(checkBoxes, 'bulk-transition-form', 'bulk-transition-require-comment-form');
+    },
+
+    testUpdateShouldPopulateTransitionOptionsWhenOneCardIsSelected: function() { with(this) {
+      $('cb_0').checked = true;
+      BulkTransitions.instance.updateTransitions({ '10' : [ { name: 'foo', html_id:'transition_123', id:'123'} ]});
+      assertEqual('<li id="transition_123"><a id="transition_123_link" href="javascript:void(0)" onclick="return false;">foo</a></li>', $('bulk-transitions-options-container').innerHTML);
+    }},
+
+    testUpdateShouldPopulateOnlyIntersectionOfTransitionOptionsWhenMultipleCardsAreSelected: function() { with(this) {
+      $('cb_0').checked = true;
+      $('cb_1').checked = true;
+      BulkTransitions.instance.updateTransitions({
+        '10' : [ { name: 'foo', html_id: "transition_123", id:'123' } ],
+        '20' : [ { name: 'foo', html_id: "transition_123", id:'123' } ]
+      });
+      assertEqual('<li id="transition_123"><a id="transition_123_link" href="javascript:void(0)" onclick="return false;">foo</a></li>', $('bulk-transitions-options-container').innerHTML);
+      assertNotVisible($('transition-selector').down('.no_transition_message'));
+    }},
+
+    testUpdateShouldNotShowTransitionOptionsAndShowNoTransitionMessageWhenSelectedCardHasNoTransitions: function() { with(this) {
+      $('cb_0').checked = true;
+      BulkTransitions.instance.updateTransitions({ '10' : [] });
+      assertHidden($('bulk-transitions-options-container'));
+      assertVisible($('transition-selector').down('.no_transition_message'));
+    }},
+
+    testUpdateShouldNotPopulateAnyLIAndShowNoTransitionMessageWhenNoTransitionAreIntersected: function() { with(this) {
+      $('cb_0').checked = true;
+      $('cb_1').checked = true;
+      BulkTransitions.instance.updateTransitions({
+        '10' : [ { name: 'foo', html_id: 'transition_123', id:'123' } ],
+        '20' : [ { name: 'bar', html_id: 'transition_123', id:'123' } ]
+      });
+      assertHidden($('bulk-transitions-options-container'));
+      assertVisible($('transition-selector').down('.no_transition_message'));
+    }},
+
+    testUpdateShouldPopulateMultipleLIWhenMultipleTransitionIntersectionAreFound: function() { with(this) {
+      $('cb_0').checked = true;
+      $('cb_1').checked = true;
+      BulkTransitions.instance.updateTransitions({
+        '10' : [ { name: 'foo', html_id: "transition_123", id:'123' }, { name: 'ten', html_id: "transition_123", id:'123' }, { name: 'bar', html_id: "transition_456", id:'456' } ],
+        '20' : [ { name: 'foo', html_id: "transition_123", id:'123' }, { name: 'twenty', html_id: "transition_123", id:'123' }, { name: 'bar', html_id: "transition_456", id:'456' } ]
+      });
+      assertEqual('<li id="transition_123"><a id="transition_123_link" href="javascript:void(0)" onclick="return false;">foo</a></li><li id="transition_456"><a id="transition_456_link" href="javascript:void(0)" onclick="return false;">bar</a></li>', $('bulk-transitions-options-container').innerHTML);
+    }},
+
+    testUpdateShouldNotShowAnyOptionsWhenIntersectionIsNotFoundOnAllCards: function() { with(this) {
+      $('cb_0').checked = true;
+      $('cb_1').checked = true;
+      $('cb_2').checked = true;
+      BulkTransitions.instance.updateTransitions({
+        '10' : [ { name: 'foo', html_id: 'transition_123', id:'123' }, { name: 'bar', html_id: 'transition_123', id:'123' } ],
+        '20' : [ { name: 'foo', html_id: 'transition_123', id:'123' }, { name: 'bar', html_id: 'transition_123', id:'123' } ],
+        '20' : [ ]
+      });
+      assertHidden($('bulk-transitions-options-container'));
+      assertVisible($('transition-selector').down('.no_transition_message'));
+    }},
+
+    testApplySubmitsRegularFormWhenSelectedTransitionDoesNotRequireComment: function() { with(this) {
+      var isSubmitted = false;
+      BulkTransitions.instance._submitRegularForm = function(theForm) { isSubmitted = true; }
+      $('cb_0').checked = true;
+      BulkTransitions.instance.updateTransitions({
+        '10' : [ { name: 'foo', require_comment: false, html_id: "transition_123", id:'123' } ]
+      });
+      Event.trigger($('transition_123').down(), "click");
+
+      assert(isSubmitted);
+    }},
+
+    testApplySubmitsRegularFormWhenSelectedTransitionRequiresComment: function() { with(this) {
+      var isSubmitted = false;
+      BulkTransitions.instance._submitCommentForm = function(theForm) { isSubmitted = true; }
+      $('cb_0').checked = true;
+      BulkTransitions.instance.updateTransitions({
+        '10' : [ { name: 'foo', require_comment: true, html_id: "transition_123", id:'123' } ]
+      });
+      Event.trigger($('transition_123').down(), "click");
+
+      assert(isSubmitted);
+    }},
+
+    testClickTransitionsButtonDoesNothingWhenButtonIsDisabled: function() { with(this) {
+      var ajaxFired = false;
+      BulkTransitions.instance._makeRequest = function() { ajaxFired = true; };
+      assert($('bulk_transitions').hasClassName('disabled'));
+
+      Event.trigger('bulk_transitions', 'click');
+      assert(!ajaxFired);
+      assertNotVisible($('bulk-transitions-options-container'));
+    }},
+
+    testClickTransitionsButtonWhenTransitionsAreAlreadyDisplayedDoesNotFireAjaxFetchAndHideDisplayingTransitionOptions: function() { with(this) {
+      $('cb_0').checked = true;
+      var ajaxFired = false;
+      BulkTransitions.instance._makeRequest = function() { ajaxFired = true; };
+      BulkTransitions.instance._evaluateTransitionButtonClickable();
+      assert(!$('bulk_transitions').hasClassName('disabled'));
+
+      Event.trigger('bulk_transitions', 'click');
+      assert(!ajaxFired);
+      assertNotVisible($('bulk-transitions-options-container'));
+    }},
+
+  }, { testLog : "testlog", test : '' });
+  // ]]>
+</script>
+</body>
+</html>

@@ -1,0 +1,208 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="MQL reference">
+		<section title="MQL syntax">
+		  <p>MQL is SQL-like in its syntax, but supports a rather specific subset of SQL functions and, we hope, is much simpler. </p>
+    		<note>While you should be inspired to use your knowledge of SQL to try things in MQL, please do not assume that anything that works in SQL will work in MQL. For example, you cannot do a JOIN using MQL.</note>
+	<subsection title="SELECT">
+		<p>Many of the macros allow/require you to specify the set of cards you wish to render using a MQL SELECT statement. A MQL SELECT is very similar to a SQL SELECT except that you are selecting card properties rather than database columns. </p>
+		<mql_example>SELECT 'iteration'</mql_example>
+	</subsection>
+		<subsection title="Conditions / WHERE" id="where">
+			<p>A WHERE clause can be added to any SELECT statement to restrict the set of cards. Where a macro calls for only a conditions clause, the inclusion of the WHERE keyword is optional.</p>
+			<p>In a condition clause the following operators are supported:</p>
+      <bullets>
+        <item>=</item>
+        <item>IS</item>
+        <item>!=</item>
+        <item>NOT</item>
+        <item>&gt;</item>
+        <item>&gt;=</item>
+        <item>&lt;</item>
+        <item>&lt;=</item>
+        <item>IN (...)</item>
+        <item>NOT (...IN (...))</item>
+        <item>AND</item>
+        <item>OR</item>
+        <item>( ... )</item>
+      </bullets>
+		</subsection>
+		<subsection title="How to form negative conditions">
+			<p>The following is the syntax for checking the value of a property which has not been set</p>
+      <bullets>
+        <item>WHERE Status IS NULL</item>
+        <item>WHERE Status = NULL</item>
+        <item>WHERE Status IS NOT NULL</item>
+        <item>WHERE NOT Status = NULL</item>
+        <item>WHERE Status != NULL</item>
+      </bullets>
+		</subsection>
+	<subsection title="Aggregation" id="aggregation">
+		<p>Where aggregation functions (AVG, COUNT, SUM) are supported you can select an aggregation function as one of your result set columns. 
+			If you are selecting only a single column and it is an aggregation, you must also specify a GROUP BY clause. </p>
+				<mql_example>SELECT "iteration", count(*)</mql_example>
+		<note>If your database supports aggregation functions other than AVG, COUNT, and SUM you may try them, but we cannot guarantee that they will work. Please be aware that MQL GROUP BY and ORDER BY work in the same way as SQL GROUP BY and ORDER BY. Please refer to SQL on how to use this.</note>
+	</subsection>
+	<subsection title="Numeric and date comparisons between properties"> 
+	  <p>Numeric and date property values, if they are of the same property type, can be compared with one another.</p>
+		<markup>table query: select number, name WHERE 'Due date' &lt; PROPERTY 'Date completed'</markup>  
+		<markup>table query: select number, name WHERE 'Actual Effort' &gt; PROPERTY 'Estimate'</markup> 
+		<note>Please note that keyword PROPERTY is used to reference second property for comparison.</note>
+	</subsection>
+	<subsection title="ORDER BY" id="order">
+		<p>The ORDER BY keyword is used to sort the result-set by a specified column. It sorts the records in ascending order by default. If you want to sort the records in a descending order, you can use the DESC keyword.</p>
+		<p>Example:</p>
+		<markup>table query: select number, name WHERE type = story ORDER BY name</markup> 
+	</subsection>	
+</section>
+<section title="MQL usage">
+  <p>This section is designed to explain how to use MQL in specific circumstances with specific examples. </p>
+	<subsection title="Managed Properties">
+		<p>Property names can always be quoted using single quotes. Property names containing spaces must always be quoted with single quotes.</p>
+		<mql_example>SELECT 'iteration', count(*) WHERE 'story status' = 'open'</mql_example>
+	</subsection>
+	<subsection title="Unmanaged Properties">
+		<p>Free text properties can be used in a manner similar to managed properties except there is no obvious concept of ordering in a text property. 
+			If a free text property is used to store purely numeric values, you can use the property in aggregate operations like AVG and SUM as well. Default comparison for text property values is alphabetic. 
+			On the other hand, default sort order is numeric if the property contains purely numeric values and you are doing a numeric comparison.</p>
+	</subsection>
+	<subsection title="Property values">		
+		List property values, similar to property names, can always be quoted using single quotes. Values that contain a space though, must always be quoted with single quotes. If you use any of the greater than or lesser than operators with a list property value, the positional ordering of the values is used to compare them. 
+				<markup>table query: SELECT number, name, status WHERE Type = Feature AND Risk &lt; Medium</markup>
+	</subsection>
+	<subsection title="User properties">
+		<p>When using user properties in MQL, the user's login should be used as the value. Operations such as greater than and lesser than are not supported for user property values. 
+		In addition, to specify a value representing the currently logged in user, use the CURRENT USER keywords.</p>
+		<example>
+			<markup>table query: SELECT number, name, status WHERE Owner = CURRENT USER</markup>
+		</example>
+	</subsection>
+	<subsection title="Date properties">
+		<p>All properties, except numeric ones can be compared to a date. Mingle does not restrict you to the project's date format. 
+			The newly introduced date properties will behave the same way. Operators such as greater than and less than work as expected in the context of dates. 
+			In addition to this, to specify a value representing the current day in the project time zone, use the TODAY keyword. 
+			Similar to user properties, you can also use special keywords like IS TODAY and IS NOT TODAY to express your intent more clearly.</p>
+		<example>
+			<markup>table query: SELECT number, name WHERE 'Completed On' IS TODAY</markup>
+		</example>
+		<note>The project time zone is used to determine TODAY.</note>
+	</subsection>
+	<subsection title="Relationship property values" id="relationship_property_values">
+		<p>There are two types of relationship properties - <strong>Card Relationship Property</strong> and <strong>Tree Relationship Property</strong>. Both of these relationship property values are cards. There are various ways to specify a card as a value of these properties. </p>
+		<bullets>
+			<item>
+				<strong>Use card name</strong>
+			</item>
+			<example>
+				<mql_example>WHERE type = story AND 'Iteration' = 'Iteration 1'</mql_example>
+				<p>where 'Iteration' is the tree relationship property name and 'Iteration 1' is the name of the iteration card.</p>
+				<item>
+					<strong>Use card number - NUMBER</strong>
+				</item>
+				<p>If we assume that the card with name 'Iteration 1' has card number 72, the above MQL could also be written as follows:</p>
+				<mql_example>WHERE type = story AND 'Iteration' = NUMBER 72</mql_example>
+				<p>where 'Iteration' is the tree relationship property name and 72 is the number of the iteration card. This syntax could be useful to disambiguate cards which have the same name, e.g. you could have two cards with the same name, 'Iteration 1' in two different releases.</p>
+				<note>To reference a card as the value of a relationship property you must either use NUMBER or the card name. You cannot combine these so for example, <mql_example>WHERE type = story AND 'Iteration' = '#72 Iteration 1'</mql_example> will <strong>not</strong> work.</note>
+				<item>
+					<strong>Compare multiple values - IN and NUMBERS IN</strong>
+				</item>
+				<p>To compare the value of a relationship property with multiple values, you can use the <mql_grammar>IN</mql_grammar> operator with either the name or number:</p>
+				<mql_example>WHERE type = story AND 'Iteration' IN ('Iteration 9', 'Iteration 10', 'Iteration 11')</mql_example>
+				<p>where 'Iteration' is the tree relationship property name and 'Iteration 9', 'Iteration 10' and 'Iteration 11' are the names of iteration cards.</p>
+				<p><mql_grammar>NUMBER IN</mql_grammar> or <mql_grammar>NUMBERS IN</mql_grammar> are also supported to compare multiple values.</p>
+				<mql_example>WHERE type = story AND 'Iteration' NUMBERS IN (71, 72, 73)</mql_example>
+				<p>where 'Iteration' is the tree relationship property name and 71, 72 and 73 are numbers of cards of type Iteration.</p>
+				<item>
+					<strong>Compare multiple values - Nested IN</strong>
+				</item>
+        <p>Mingle contains a feature to support nested <mql_grammar>IN</mql_grammar> MQL statements. This allows you to query for a set of cards based on conditions for a related card.</p>
+				<p>To compare the value of a relationship property with multiple values, you can use the nested <mql_grammar>IN</mql_grammar> operator with number:</p>
+				<mql_example>where type = task and 'release - story' IN (SELECT number WHERE type = story AND status = 'in development')</mql_example>
+				<p>where 'release - story' is a tree relationship property name. This query will return all tasks which are related to stories that are 'in development'.</p>
+				<p>Generally, you will want to use number as the property in the nested <mql_grammar>IN</mql_grammar>. However, you can also use name or related properties:</p>
+				<mql_example>where type = task AND 'release - story' IN (SELECT name WHERE type = story AND tagged with 'potential 3.3')</mql_example>
+				<p>where 'release - story' is a tree relationship property name. If there are stories with the same name, this will include the tasks for both stories even if only one of the stories is tagged with 'potential 3.3'. As mentioned above, this is rarely the desired behavior and you will want to use <mql_snippet>SELECT number</mql_snippet> rather than <mql_snippet>SELECT name</mql_snippet> in the nested <mql_grammar>IN</mql_grammar>.</p>
+        <warning>
+          <p><strong>Limitations</strong></p>
+          <p>
+              <bullets>
+              <item>This feature has only been tested for use with the <cref topic="macro_reference#table_query">table query macro</cref> and the <cref topic="mingle_api_execute_mql">execute_mql API</cref>. Other usages of nested <mql_grammar>IN</mql_grammar> in MQL <strong>may</strong> work. However, when using this feature in other areas, make sure to save your work beforehand, as the behavior is untested and the results undefined.</item>
+                <item>There is a known limitation with <cref topic="filter_list_by_mql">advanced MQL filters</cref> on card views. When Mingle metadata, e.g., properties, card types, etc., are modified these changes are reflected in saved views. For example, suppose a saved view has an advanced MQL filter of: <mql_example>'status' = 'in development'</mql_example> If the 'status' property is renamed to 'story status' the advanced MQL filter for the saved view will change to: <mql_example>'story status' = 'in development'</mql_example> Now suppose instead that a saved view has an advanced MQL filter of: <mql_example>'depends' IN (SELECT number WHERE 'status' = 'in development')</mql_example> If the 'status' property is renamed to 'story status' the advanced MQL filter will not change and will be in an invalid state - since the 'status' property in the nested <mql_grammar>IN</mql_grammar> is unrecognized. You will receive an error message on the saved view and will be able to change it manually.</item>
+              </bullets>
+          </p>
+        </warning>
+				<item>
+					<strong>Use THIS CARD </strong>
+				</item>
+				<p>You can use the THIS CARD keyword to specify a property's value as the current card when you are using MQL in any card description.</p>
+				<mql_example>WHERE type = story AND 'Depend on' = THIS CARD</mql_example>
+				<p>where the 'Depend on' is the card relationship property name and THIS CARD is pointing to the card this keyword is being used on. </p> 
+				<p>One example of where THIS CARD macro is useful is in card defaults. If you use the above MQL to create a chart in an Iteration card type default, then when a new Iteration card is created this chart will refer to the current card created. </p>
+					
+				<note>THIS CARD is not a valid keyword for use in MQL on pages, via the API, the MQL filter or conditional aggregates.</note>
+				<hint>To see THIS CARD in use in card defaults take a look at the <cref topic="standard_mingle_templates">Agile hybrid template</cref> Release and Iteration card defaults.</hint>
+				<item>
+					<strong>Use project variable</strong>
+				</item>
+				<mql_example>WHERE type is story AND 'Iteration' = ('Current Iteration') </mql_example>
+				<p>where Iteration is tree relationship property and 'Current Iteration' is name of the project variable. Note that the parenthesis should be used around the project variable name. In this example, the user created the project variable with the name as, 'Current Iteration', using single quotes. So in MQL syntax put parenthesis around the entire given project variable name.</p>
+			</example>
+		</bullets>
+				<note>Mingle does not support &gt; and &lt; for comparison of relationship properties.</note>
+	</subsection>
+	
+	<subsection title="Predefined properties">
+			<p>Predefined properties are special properties which are automatically assigned to any card. "Type" is a text property, "Name" is a text property, "Number" is a numeric property, "Created On" is a date property, "Modified On" is a date property and "Project" is a text property. These six predefined properties can be used in MQL.</p>
+			<note>Project can only be used in MQL select statements such as <mql_example>SELECT project</mql_example> Using it in MQL conditions such as <mql_example>WHERE Project = my_project</mql_example> is prohibited. </note>			
+	</subsection>
+  
+	<subsection title="Finding cards in a tree" id="from_tree">
+	 <p>The FROM TREE syntax can be used to select cards from a specific tree. The FROM TREE syntax must be used before the conditions WHERE clause.
+     <example>
+				<mql_example>SELECT name, number FROM TREE 'Planning' WHERE Type = Story</mql_example>
+     </example> 
+     The FROM TREE syntax can be used in the MQL filter in the following format. 
+     <mql_example>FROM TREE 'Release Planning' WHERE Type = Iteration AND Release = (Current Release)</mql_example>
+     	<note>You cannot select more than one tree using the FROM TREE syntax. </note>
+     </p>
+	</subsection>
+	<subsection title="Finding cards with tags" id="tagged_with">
+		<p> MQL can be used to find cards with certain tags.
+			<markup>table query: SELECT number, name WHERE TAGGED WITH 'bug'</markup> </p>
+		<p> Multiple tags can be specified to further restrict the query.
+			<markup>table query: SELECT number, name WHERE TAGGED WITH 'bug' AND tagged with 'open'</markup> </p>
+		<p> MQL can be used to find cards without certain tags.
+			<markup>table query: SELECT number, name WHERE NOT TAGGED WITH 'Image'</markup> </p>
+	</subsection>
+  
+    <subsection title="How to use MQL special keywords">
+		<p>TODAY and CURRENT USER are special keywords that are available for date and user properties. The examples below show their correct usage in MQL.</p>
+    <bullets>
+      <item>WHERE 'Fixed Date' IS TODAY</item>
+      <item>WHERE 'Fixed Date' = TODAY</item>
+      <item>WHERE Owner IS CURRENT USER</item>
+      <item>WHERE Owner = CURRENT USER</item>
+    </bullets>
+		<hint>Using single quotes or parenthesis around TODAY or CURRENT USER may not return correct result. </hint>
+		<note>Anonymous users cannot see charts created using CURRENT USER keyword.</note>
+	</subsection>
+	<subsection file="this_card_property"/>
+	<subsection file="mql_as_of"/>
+	</section>
+</topic>

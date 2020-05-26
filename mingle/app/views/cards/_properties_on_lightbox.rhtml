@@ -1,0 +1,28 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div class="card-properties prevent-inline-edit">
+  <% card.properties_with_value.each_with_index do |property, index| -%>
+  <% expandable = index >= 5 %>
+  <span class='property-in-popup <%= 'expandable' if expandable %>' style="<%= 'display:none;' if expandable %>">
+    <%=h property.name %>:<span class='emphasize' title='<%= "This value may be out of date. Refresh this popup to view updated properties." if property.stale? %>'><%=h truncate(property.display_value_with_stale_state) %></span>
+  </span>&nbsp;
+  <% end %>
+
+  <% if card.properties_with_value.size > 5 %>
+   <div class="show-more-card-properties fa fa-chevron-down"></div>
+  <% end %>
+</div>

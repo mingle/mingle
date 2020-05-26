@@ -1,0 +1,75 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="ft">
+  <div class="quick-add-card">
+    <%= render :partial => 'cards/quick_add_menu' %>
+  </div>
+  <%  if @controller.controller_name == 'cards' && @controller.action_name == "list" && params[:style] == 'grid' %>
+  <div class="team-list">
+    <%= render :partial => 'team/team_list' if in_project_context? %>
+  </div>
+  <% end %>
+  <% if invites_enabled? %>
+    <div class="invite-to-team">
+       <%= render :partial => 'team/invite_to_team' %>
+    </div>
+  <% end %>
+  <% if show_low_on_licenses_alert?  %>
+    <div class="low-on-licenses-alert">
+      <span> <%= license_alert_message %> </span>
+    </div>
+  <% end %>
+  <div class="also-viewing">
+    <li class='also-viewing'><div id="notification" class="also-viewing-box" style="display: none;"></div></li>
+  </div>
+
+  <div class="footer-links">
+    <ul id="support" class="clearfix">
+      <% if show_buy_button? && CurrentLicense.status.free_tier? && !MingleConfiguration.display_export_banner? %>
+        <li id="free-buy">
+          <%= link_to_remote "Buy", {:url => {:action => "edit", :controller => "account"}}, {:title => trial_status_message, :id => "buy"} %>
+        </li>
+      <% end %>
+      <% if MingleConfiguration.saas? && !User.current.anonymous? %>
+        <li>
+          <% ajax_link(:action => "new", :controller => "feedback") do %>
+            Contact us
+          <% end %>
+        </li>
+      <% end %>
+      <li>
+        <%= link_to "About", :controller => "about" %>
+      </li>
+      <li>
+        <% ajax_link(:action => "contact_us", :controller => "about") do %>
+          Help
+        <% end %>
+      </li>
+      <%= render :partial => "shared/hotkey_help_icon" %>
+      <%= render :partial => "shared/footer_notification" %>
+      <%= render :partial => 'shared/copyright' %>
+      <%= render :partial => 'shared/holiday_links' %>
+    </ul>
+  </div>
+
+</div>
+
+<%= javascript_with_rescue <<-JAVASCRIPT
+  $j(".invite-to-team").inviteToTeam();
+  $j("#ft .low-on-licenses-alert").showContactAdministratorMessage();
+  JAVASCRIPT
+%>

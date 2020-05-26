@@ -1,0 +1,49 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%
+  can_modify_membership = authorized?(:controller => 'team', :action => 'destroy')
+  update_group_memberships = authorized?(:controller => 'group_memberships', :action => 'update')
+%>
+
+<%= render :partial => 'shared/pagination_info', :locals => {:models => @users, :model_name => 'member'} %>
+<div class='table-action-panel'>
+    <%= render :partial => 'users/search', :locals => { :search_controller_name => 'team', :search_action_name => 'list', :tab => 'users_tab' } %>
+    <% if can_modify_membership %>
+    <% unless @users.empty? %>
+      <div class='select-all-none-panel'>
+        Select:
+        <%= link_to_function 'All', :id => "select_all" %>
+        <%= link_to_function 'None', :id => "select_none" %>
+      </div>
+    <% end %>
+  <form id="bulk-operations-form">
+  <div id="bulk-operations-panel" class="bulk-operations-panel">
+      <%= remove_link %>
+      <%= render :partial => 'group_selector' %>
+  </div>
+  </form>
+  <% end %>
+  <%= clear_float %>
+</div>
+<%= clear_float %>
+<% form_tag({}, :id => 'update_memberships',
+            :destroy_users_action => url_for(:action => 'destroy'),
+            :update_group_memberships => url_for(:controller => 'group_memberships', :action => 'update')) do %>
+    <%= hidden_field_tags_from_params_hash(:search => params[:search], :page => params[:page]) %>
+<%= render :partial => 'team/members' %>
+ <% end %>
+<%= render :partial => 'shared/pagination_info', :locals => {:models => @users, :model_name => 'member'} %>

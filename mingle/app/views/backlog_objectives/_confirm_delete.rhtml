@@ -1,0 +1,32 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id='confirm-delete-div'>
+  <% lightbox = Lightbox.with_close_link_and_close_button(self, 'Cancel', '', :id => "cancel_delete", :class => 'remove-button popup-close')
+     lightbox.header "Delete Feature"
+     lightbox.body do %>
+        <% form_tag(@destroy_params, {:id => 'delete-form'}) do -%><% end -%>
+        <%= render :partial => 'shared/irrecoverable_warning' %>
+        <% info_box do %>
+          <p>Deleting this feature will erase it completely from your backlog.</p>
+        <% end %>
+    <% end
+    lightbox.complete_action do -%>
+      <%= link_to_function 'Continue to delete', "disableLink('confirm_delete'); $('delete-form').submit()", {:id => "confirm_delete", :class => 'ok'} %>
+    <% end -%>
+</div>
+
+<%= javascript_with_rescue lightbox_fix_height_js('confirm-delete-div', 10, "'55em'") -%>

@@ -1,0 +1,62 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<p>
+  <label for='project-variable'>Name:</label>
+  <%= text_field 'project_variable', 'name' %>
+</p>
+
+<p class="checkbox_row">
+  <label for='project-variable'>How the variable name will appear: <span class="notes">(All names of project variables appear inside enclosing brackets)</span></label>
+  <span id='appeared_project_variable_name' class="project-variable-view"></span>
+</p>
+
+<h4>Data type:<%=spinner%></h4>
+
+<p class="checkbox_row">
+  <%= radio_button_for ProjectVariable::STRING_DATA_TYPE %>Text
+</p>
+<p class="checkbox_row">
+  <%= radio_button_for ProjectVariable::NUMERIC_DATA_TYPE %>Numeric
+</p>
+<p class="checkbox_row">  
+  <%= radio_button_for ProjectVariable::USER_DATA_TYPE %>Selected from team list
+</p>
+<p class="checkbox_row">
+  <%= radio_button_for ProjectVariable::DATE_DATA_TYPE %>Date
+</p>
+<p class="checkbox_row">
+  <%= radio_button_for ProjectVariable::CARD_DATA_TYPE %>Card
+</p>
+
+<div id="value_field_container">
+  <%= render :partial => @project_variable.value_field_container %>
+</div>
+
+<div id="available_property_definitions_container">
+  <%= render :partial => 'available_property_definitions' %>
+</div>
+
+<%= synchronized_inputs "#project_variable_name", "#appeared_project_variable_name", "TextTransforms.toPLVName", "text" %>
+
+<!-- The following is for when the page is refreshed by the user, and the selected radio button is out of sync with the params. -->
+<%= javascript_with_rescue "$('appeared_project_variable_name').innerHTML = '(' + $('project_variable_name').value.escapeHTML() + ')';\n" << ProjectVariable::DATA_TYPES.inject([]) { |conditions, data_type|
+  condition = "if ('#{@project_variable.data_type}' != '#{data_type}' && $('project_variable_data_type_#{data_type.downcase}').checked) {\n  "
+  condition << remote_function(:url => { :action => :select_data_type, :project_variable => {:data_type => data_type} }, :complete => '$("spinner").hide()', :before => '$("spinner").show()', :method => :get)
+  condition << '}'
+  conditions << condition
+}.join(' else ')
+%>

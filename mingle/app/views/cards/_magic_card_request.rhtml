@@ -1,0 +1,28 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="magic_card_request">
+  <% if authorized?(:controller => :cards, :action => :create) %>
+    <%= javascript_with_rescue <<-JAVASCRIPT
+      MagicCard.instance.request = function(parameters) {
+        var url = #{url_for({:from_url => @view.params_for_current_page.merge(:controller => 'cards')}.merge(:action => 'add_card_popup', :controller => "quick_add_cards", :project_id => @project.identifier, :use_filters => true, :favorite_id => params[:favorite_id])).to_json};
+        InputingContexts.push(new LightboxInputingContext());
+        new Ajax.Request(url, { parameters: parameters, method: 'get' });
+      }
+    JAVASCRIPT
+  %>
+  <%- end -%>
+</div>

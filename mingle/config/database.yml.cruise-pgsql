@@ -1,0 +1,34 @@
+<%= %{
+production:
+  adapter: jdbc
+  driver: org.postgresql.Driver
+  password: #{ENV['DATABASE_PASSWORD'] || 'tworker'}
+  url: jdbc:postgresql://#{ENV['PGHOST'] || 'localhost'}:5432/#{ENV['MINGLE_PRODUCTION_DB'] || 'mingle_production'}_#{ENV['CC_HOSTNAME']}
+  username:  #{ENV['DATABASE_USERNAME'] || 'tworker'}
+  pool: 12
+
+development:
+  adapter: jdbc
+  driver: org.postgresql.Driver
+  password: #{ENV['DATABASE_PASSWORD'] || 'tworker'}
+  url: jdbc:postgresql://#{ENV['PGHOST'] || 'localhost'}:5432/#{ENV['MINGLE_DEVELOPMENT_DB'] || 'mingle_development'}_#{ENV['CC_HOSTNAME']}
+  username:  #{ENV['DATABASE_USERNAME'] || 'tworker'}
+  pool: 12
+
+test:
+  adapter: jdbc
+  driver: org.postgresql.Driver
+  password: #{ENV['DATABASE_PASSWORD'] || 'tworker'}
+  url: jdbc:postgresql://#{ENV['PGHOST'] || 'localhost'}:5432/#{ENV['MINGLE_TEST_DB'] || 'mingle_test'}_#{ENV['CC_HOSTNAME']}
+  username:  #{ENV['DATABASE_USERNAME'] || 'tworker'}
+  pool: 12
+
+test_upgrade_export:
+  adapter: jdbc
+  driver: org.postgresql.Driver
+  password: #{ENV['DATABASE_PASSWORD'] || 'tworker'}
+  url: jdbc:postgresql://#{ENV['PGHOST'] || 'localhost'}:5432/#{ENV['MINGLE_TEST_UPGRADE_EXPORT_DB'] || 'mingle_test_upgrade_export'}_#{ENV['CC_HOSTNAME']}
+  username:  #{ENV['DATABASE_USERNAME'] || 'tworker'}
+  pool: 12
+}
+%>

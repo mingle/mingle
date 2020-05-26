@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Add all users as team members">	
+  <section title="How to add all users as team members when creating a project">
+    <p>When creating Mingle projects you can set an option to enroll all existing and new users of the Mingle instance as team members of this project from the Advanced settings section. You can select to add all team members as full or read only on the project.</p>
+    <screenshot src="resources/images/add_all_users_as_team_members_project_create.png"/>
+<p>When this option is selected the project will be created with all existing users as team members. If any new users are added they will also be added to this project. Manual management of the team on this project will be limited. Users may not be added or removed from the team manually but their role on the team (team member, read only team member or project admin) can be updated as usual.</p>
+<note> See <cref topic="user_roles">user roles</cref> for more details about access privileges in Mingle.</note>
+</section>
+		<section title="How to add all users as team members to an existing project">
+		<p>If you want all users of the Mingle instance to be members of an existing project you can enable this option via the specific project's team list. To find the team members page you can select the Project admin tab and select the Team link. </p>
+		<screenshot src="resources/images/add_all_users_as_team_members_team_list.png"/>
+		<p>When you select the enable all users as team members option from the team list you can specify whether to add all team members as full team members or read only team members. By selecting the "Enable enroll all users as team members" option you will instantly add any existing users as team members of this project. If any new users are added to the Mingle instance after this option was enabled they will automatically be added as team members to all projects for which this feature is enabled. </p>
+	</section>
+	<section title="How to stop adding all users as team members on an existing project">
+		<p>You can disable this option at any time from the project team members list. Disabling this option will leave all existing users as team members but any new users will not automatically be added to this team. Manual management of the team will be allowed and individual users can be manually added and removed from the project team as usual. </p>
+		<screenshot src="resources/images/disable_add_all_users_as_team_members_team_list.png"/>
+		</section>
+		<section title="Also see...">
+  		<bullets>
+  			<item>
+  				<cref topic="creating_user_profiles">Creating user profiles</cref>
+  			</item>
+  			<item>
+  				<cref topic="user_roles">About Mingle user roles</cref>
+  			</item>
+  			<item>
+  				<cref topic="managing_project_team_members">Managing project team members</cref>
+  			</item>
+			<item>
+				<cref topic="add_user_to_multiple_projects">Adding user to multiple projects</cref>
+			</item>
+  		</bullets>
+  	</section>
+</topic>
+
+

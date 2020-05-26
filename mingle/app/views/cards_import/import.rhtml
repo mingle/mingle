@@ -1,0 +1,38 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<h1>Import cards</h1>
+
+<% info_box do %>
+  <strong>How to import</strong>
+  <ul>
+    <li>First make sure you have a header row in the content you want to import</li>
+    <li>Copy all the cells (including the header row) from document to the clipboard</li>
+    <li>Paste them into the big text box below</li>
+    <li>Dates will be imported in the project's date format if there is any ambiguity. (e.g. '1/2/2007' will be interpreted as '2 Jan 2007' if the project date format is set to 'mm/dd/yyyy')</li>
+    <li>Any column that is an existing formula property will be ignored and recalculated after the import completes</li>
+    <li><%= link_to_function('Preview', "$('import_preview_form').onsubmit()") %> to see suggestions on how your data will be structured</li>
+  </ul>
+<% end %>
+
+<div id="preview_area"></div>
+<% form_remote_tag(:url => @view.to_params.merge(:action => 'preview'), :before => disable_links, :html => {:id => 'import_preview_form'}) do -%>
+  <div class="last_wrapper">
+  	<%= text_area_tag 'tab_separated_import', tab_separated_import_content, :rows =>15%>
+  </div>
+<% end -%>
+
+<%= render :partial => 'import_actions' %>

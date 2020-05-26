@@ -1,0 +1,28 @@
+Mingle Dependency Tracker Release Notes
+=======================================
+
+Release Notes for v1.1.1-14
+----------------------------
+
+Changes
+~~~~~~~
+* support for multi-project programs
+  - recording of cross-project dependencies
+  - program-level reporting
+* support for large projects
+  - ability to filter the cards displayed
+  - performance improvements
+
+Restrictions
+~~~~~~~~~~~~
+* [Story #675] In program mode, all users of the Dependency Tracker
+  must have at least readonly access to all projects in the program.
+
+Release Notes for v1.0.0-244
+-----------------------------
+
+Changes
+~~~~~~~
+* mixed card type dependencies
+* redesigned UI
+* Mingle 3.2 support

@@ -1,0 +1,98 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div class="bulk-inner">
+  <% unless (@tags_common_to_all + @tags_common_to_some).empty? -%>
+    <table>
+      <tbody>
+        <% if !@tags_common_to_all.empty? -%>
+        <tr>
+          <td class="bulk-tag-label generous-line-spacing">
+            All tagged:
+          </td>
+          <td>
+            <% @tags_common_to_all.each do |tag| -%>
+              <%=h tag.name %>
+              <%= link_to_function(image_tag('shared/icons/icon_close_14.png'), 
+                "$('bulk-remove-tag-tag-id').value = #{tag.id}; $('bulk-remove-tag-form').onsubmit();",
+                :id => "remove-tag-#{tag.id}") %>
+              &nbsp;
+            <% end -%>
+          </td>
+        </tr>
+        <% end -%>
+
+        <% if !@tags_common_to_some.empty? -%>
+        <tr>
+          <td class="bulk-tag-label generous-line-height">
+           Some tagged:
+          </td>
+            
+          <td class="generous-line-height">
+          <% @tags_common_to_some.each do |tag| -%>
+            <%=h tag.name %>
+            <%= link_to_function(image_tag('icon-remove.gif'), 
+                "$('bulk-remove-tag-tag-id').value = #{tag.id}; $('bulk-remove-tag-form').onsubmit();",
+                :id => "remove-tag-#{tag.id}") %>
+              &nbsp;
+          <% end -%>
+          </td>
+        </tr>
+        <% end -%>
+      </tbody>
+    </table>
+  <% end -%>
+
+  <% form_remote_tag(:before => "#{disable_links}$('actions-spinner').show();", :complete => "#{enable_links} if($('actions-spinner')) $('actions-spinner').hide();",
+        :url => {:action => 'bulk_add_tags'}, :html => {:id => 'bulk-add-tags-form'}) do -%>
+    <%= hidden_field_tag 'selected_cards', params[:selected_cards] %>
+    <%= hidden_field_tag 'favorite_id', params[:favorite_id] %>
+    <div id="tags-aciton-panel">
+      <%= submit_tag 'Add tags', :id => "submit_bulk_tags", :class => "primary" -%>
+      <%= button_to_function 'Close', 'bulkTaggingPanel.close();' %>
+    </div>
+    <div id="bulk-tags-input-panel">
+      <%= text_field_tag 'tags', '', :id => 'bulk_tags' -%>
+    </div>
+    <div id='bulk-tags-list' class='auto_complete'></div>
+    <%= hidden_view_tags @view, :include_page => true %>
+    <%= clear_float %>
+  <% end -%>
+
+  <%= javascript_with_rescue <<-JAVASCRIPT
+    var tags = #{@project.tags.used.map{|tag| tag.name}.to_json};
+    
+    new Autocompleter.Mingle(
+      'bulk_tags', 
+      $('bulk-tags-list'), 
+      tags,
+      { 
+        tokens             : [','], 
+        fullSearch         : true, 
+        partialSearch      : true, 
+        partialChars       : 1, 
+        afterUpdateElement : function(element, selectElement) { element.value += ', '; }
+      });
+    JAVASCRIPT
+-%>
+
+  <% form_remote_tag(:before => "#{disable_links}$('actions-spinner').show();", :complete => "#{enable_links} if($('actions-spinner')) $('actions-spinner').hide();",
+        :url => {:action => 'bulk_remove_tag'}, :html => {:id => 'bulk-remove-tag-form'}) do -%>
+    <%= hidden_field_tag 'tag_id', '', :id => 'bulk-remove-tag-tag-id' %>
+    <%= hidden_field_tag 'selected_cards', params[:selected_cards] %>
+    <%= hidden_view_tags @view, :include_page => true %>
+  <% end -%>
+</div>

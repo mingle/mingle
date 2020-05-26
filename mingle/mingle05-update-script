@@ -1,0 +1,25 @@
+#/bin/bash
+
+#Untar the mingle installer file.
+tar -xzvf /var/lib/go-agent/pipelines/Mingle05/mingle05_material/fileburst/pkg/mingle_unix_$APP_VERSION*.tar.gz
+
+#Stop the Mingle05 server.
+#sudo -u mingle /var/lib/mingle/binary/MingleServer --mingle.dataDir=/var/lib/mingle/data stop
+
+#Move the existing binary folder to another location.
+#sudo -u mingle mv /var/lib/mingle/binary /var/lib/mingle/binary_before_$APP_VERSION
+
+#Make a new binary foler.
+#sudo -u mingle mkdir /var/lib/mingle/binary
+
+#Copy the new binary to the mingle directory.
+#sudo -u mingle cp -prf /var/lib/go-agent/pipelines/Mingle05/mingle05_material/fileburst/pkg/mingle_$APP_VERSION/* /var/lib/mingle/binary/
+
+#Correct the permissions.
+#sudo -u root chown mingle.mingle /var/lib/mingle/binary -R
+
+#Start the Mingle05 server.
+#sudo -u mingle /var/lib/mingle/binary/MingleServer --mingle.dataDir=/var/lib/mingle/data start
+
+#Cleanup the Pkg folder.
+#rm -rf /var/lib/go-agent/pipelines/Mingle05/mingle05_material/fileburst/pkg/*

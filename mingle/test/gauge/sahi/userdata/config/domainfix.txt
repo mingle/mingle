@@ -1,0 +1,8 @@
+#full_domain js_domain(optional)
+#Eg.
+#sub1.example.com example.com
+#sub2.example.com
+#*.example.com
+
+*.example.com example.com
+*.facebook.com	facebook.com

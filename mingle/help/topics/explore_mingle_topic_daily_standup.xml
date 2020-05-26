@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Daily Standup">
+
+    <p>A Daily Standup is a short daily meeting where teams can share status and get help with any impediments to getting their job done. Everyone takes a turn talking about 1) What they did yesterday 2) What they'll work on today and 3) Anything that's blocking them from getting their work done. Long discussions are taken off-line and the meeting doesn't last more than a few minutes.</p>
+
+    <screenshot alttext="A Mingle story wall" src="resources/images/explore_mingle_daily_standup.jpg" />
+
+    <p>If your team participates in a daily standup, it's nice to have your <cref topic="explore_mingle_topic_story_wall">story wall</cref> displayed nearby. Why?</p>
+
+    <bullets>
+        <item>It can jog your team's memory on what they worked on</item>
+        <item>It gets everyone focused</item>
+        <item>It helps identify possible bottlenecks and impediments (which can help the team prioritize their day)</item>
+    </bullets>
+
+    <section title="Tips">
+        <bullets>
+            <item>Make sure it is viewable by everyone participating in your standup</item>
+            <item>Change your <cref topic="viewing_cards">card view</cref> (group by, sort by, color by, grid versus list versus hierarchy) based on your daily or weekly objective</item>            
+			<item>To jog your memory before standup, take a look at your Mingle project's <cref topic="viewing_project_changes">History tab</cref> and filter to show changes made by you in the last 24 hours.</item>
+        </bullets>
+    </section>
+
+	<section title="Also see...">
+        <bullets>
+	<item><cref topic="explore_mingle_topic_retrospective">Retrospectives</cref></item>
+		<item><cref topic="explore_mingle">Explore Mingle</cref></item>
+        </bullets>
+    </section>
+
+</topic>

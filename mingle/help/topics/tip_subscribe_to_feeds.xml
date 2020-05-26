@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE section SYSTEM "mingle_help.dtd">
+<chapter title="Subscribe to emails and feeds to notify you of changes in your Mingle project">
+<p> Receive notification of important changes in your Mingle project by email or Atom feed.</p>
+		<topic title= "Subscribe to a card or a wiki page">
+			<p>You can subscribe to individual cards or wiki pages to receive change notifications via <cref topic="subscribing_via_email">email</cref> or <cref topic="subscribing_via_feeds">Atom feed</cref>.</p>
+			<p><screenshot caption="Subscribe to email notification for a wiki page" alttext="email subscription confirmation for wiki page" src="resources/images/wiki_page_email_feed.png" /></p>
+		</topic>
+		
+		<topic title= "Subscribe to history - status change">
+			<p>Setup specific history filters (e.g.: Bugs that were reopened, Stories that failed customer sign off) and be notified of changes</p>
+			<p><screenshot alttext="Subscribe email notification for history filter" src="resources/images/filter_setting_for_history_feed.png" /></p>
+			<p><screenshot alttext="Subscribe email notification for history filter" src="resources/images/actual_email_feed_content.png" /></p>
+		</topic>
+		
+		<topic title = "Subscribe to history - newly created cards">
+			<p>Setup specific history filters (e.g.: newly created story, newly reported bug) and be notified of them</p>
+			<p><screenshot alttext="Subscribe email notification for new stories" src="resources/images/filter_setting_for_new_story_feed.png" /></p>
+			<p><screenshot alttext="Subscribe email notification for new stories" src="resources/images/actual_email_feed_content_for_new_story.png" /></p>
+		</topic>
+		
+			<section title="Also see...">
+			<bullets>
+								
+				<item>
+					<cref topic="subscribing_via_email">Subscribing to project changes by email</cref>
+				</item>
+
+				<item>
+					<cref topic="subscribing_via_feeds">Subscribing to project changes by feed</cref>
+				</item>
+			    <item><cref topic="explore_mingle">Explore Mingle</cref></item>
+			<item><cref topic="mingle_tips_and_tricks">More Tips and Tricks</cref></item>
+
+			</bullets>
+		</section>
+		
+</chapter>

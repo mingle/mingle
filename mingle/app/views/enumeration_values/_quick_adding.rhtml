@@ -1,0 +1,29 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% styled_box :class => 'basic-panel-one' do %>
+    
+    <% form_tag({:action => 'create', :validate => true}) do -%>
+      <%= hidden_field('enumeration', 'property_definition_id', :value => @prop_def.id)%>
+      
+      <%= submit_tag 'Add', :class => 'quick-add-add-btn', :id => 'submit-quick-add' %>
+      <div class="full_width_input_wrapper"><%= text_field 'enumeration', 'value', :class => 'quick-add-text-field', :id => 'enumeration_value_input_box' %></div>
+      
+      <%= javascript_with_rescue "$('enumeration_value_input_box').focus();" %>
+   	<% end -%>
+   	   	
+<% end  %>
+

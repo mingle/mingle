@@ -1,0 +1,39 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% if @cards.empty? %>
+  <%= render_flash_message(content_tag(:p, "There are no cards matching your criteria."), 'info-box') %>
+<% else %>
+  <p class="card-explorer-search-result-text-for-tree">	
+    <%= result_summary(@cards) %>
+  </p>
+  <div class="search-results-container">
+    <ul>
+      <% @cards.each do |card| %>
+      <li>
+        <%= link_to_function(card_link_text(card, 50), nil, :class => 'card_result', :card_number => card.number, :title => h(number_and_name(card))) do |page|
+              page.inputing_contexts.feed(
+                :name => truncate(number_and_name(card), :length => 50).to_s,
+                :number => card.number,
+                :name_without_number => card.name,
+                :value => @card_selector.card_result_value(card)
+              )
+        end %>
+      </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

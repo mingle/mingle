@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Creating a formula property">
+    <section title="Navigate to the New property definition page" collapsed="true">
+        <steps>
+            <item><cref topic="signing_in_and_out_of_mingle">Sign in</cref> to Mingle as a project administrator and open the project you want to change (if you're not already working in the project).</item>
+            <item>
+                <p>Click the <tab>Project admin</tab> tab.</p> 
+                <screenshot alttext="Project admin tab" src="resources/images/project_admin_tab.png" />
+                <p>Mingle displays the <strong>Project settings</strong> page.</p>
+                <note>if you are logged in as a project team member, Mingle displays the <strong>Team</strong> page.</note>
+                <screenshot alttext="Project admin menu - Properties link" src="resources/images/card_properties_link.png" />
+            </item>
+            <item>
+                <p>Click the <link>Card properties</link> link.</p>
+                <p>Mingle displays the <strong>Card properties</strong> page with all properties setup for this project.</p>
+                <screenshot alttext="Card properties page - new property" src="resources/images/card_properties_page.png" />
+            </item>
+            <item>
+                <p>Click the <link>Create new card property</link> link.</p>
+                <p>Mingle displays the <strong>New property definition</strong> page.</p>
+            </item>
+        </steps>
+    </section>
+    <screenshot alttext="New card property definition page" src="resources/images/new_card_property_definition.png" /> 
+    <section title="Define the formula property" id="define">
+        <steps>
+            <item>
+                <p>Select the <strong>Formula</strong> radio button</p>
+                <screenshot alttext="Formula property definition field" src="resources/images/formula_property_definition_field.png" />
+            </item>
+            <item>
+                <p>Enter the formula to be used in setting the property value.</p>
+                <p>You will need to enclose in quotes any property name that includes spaces or arithmetic symbols (such as + or -).</p>
+                <p>For example if the property name is: Estimate - initial; then you would need to enter "Estimate - initial" or 'Estimate - initial'.</p>
+				 <note>Numeric results will be a decimal number, and will display with the <cref topic="project_numeric_precision">chosen numeric precision</cref>.</note>       
+                <bullets title="Formulas can reference the following:">
+                    <item>Any numeric, aggregate or date property that is common to all of the Card Types that you want the formula property to apply to</item> 
+                	 <item>Any numeric constant e.g. 5, 1.25, and so on</item>
+                </bullets>
+                <bullets title="Formulas may not reference the following:">
+                	<item>Date constants, so you cannot hard-code a date as part of a formula</item>
+                    <item>Card properties which are not numeric or date based</item>
+                    <item>Card properties which are not available to all of the selected card types</item>
+                    <item>Other formula properties</item>
+					<item>Project level variables</item>
+                </bullets>
+                <bullets title="You can use the following arithmetic operators">
+                    <item><strong>/</strong> division</item>
+                    <item><strong>*</strong> multiplication</item>
+                    <item><strong>+</strong> addition</item>
+                    <item><strong>-</strong> subtraction</item>
+                    <item>operator precedence is <strong>/, *, +, -</strong> in this sequence</item>
+                    <item>you can use parenthesis <strong>( )</strong> to construct more complex expressions, e.g.: <formula>((a + b) * (c + d)) / (e + f)</formula></item>
+                </bullets>
+                <p>You might want to <cref topic="formula_property_examples">take a look at some examples.</cref></p>
+            </item>
+            <item>
+              <p>Select whether or not to replace any (not set) numeric property values with zero.</p>
+              <p>This option allows you to specify how numeric property values that are (not set) will affect the calculated value of the formula. By default, if the value of any property within a formula is (not set) then the result of the formula calculation will be (not set). You can change this behavior to replace (not set) values with zero. See <cref topic="formula_property_examples#replace_not_set">examples of how this option affects formula results</cref> to learn more about this option.</p>
+            </item>
+            <item>
+                <p>Select which card types the formula property should apply to</p>
+                <note>The card properties used in the formula must be common to all of the card types selected here</note>
+                <screenshot alttext="Card property page - make property available on card types" src="resources/images/make_property_available_for_card_type.png" />
+            </item>
+            <item>
+                <p>Click on the <link>Create property</link> link to save the formula property</p>
+                <screenshot alttext="Create property link" src="resources/images/create_card_property_link.png" />
+            </item>
+        </steps>
+    </section>
+	<section title="Also see...">
+		<bullets>
+			<item><cref topic="modifying_or_deleting_card_properties">Modifying or deleting card properties</cref></item>
+		</bullets>
+	</section>
+</topic>

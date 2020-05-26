@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Creating Mingle projects">
+	<todo>in progress</todo>
+	<p>Before your team can start using Mingle, you must create and configure a project. You must be a <cref topic="user_roles">Mingle administrator</cref> to create new projects, and you can create as many projects as you like.</p>
+	<p>Create new projects from the <strong>Current projects</strong> page. This is the first page you see after signing in to Mingle.</p>
+	<note>If you can't see any options to create new projects, you're not registered as Mingle administrator. 
+		Please contact a Mingle administrator to update your privileges.</note>
+	<section title="There are three ways you can create projects">
+		<subsection title="Create a new project from templates" file="creating_a_project_from_template" collapsed="true" />
+		<subsection title="Create a new project from scratch" file="creating_a_project_from_scratch" collapsed="true" />
+		<subsection title="Create a new project from importing existing projects" file="creating_a_project_from_importing_projects" collapsed="true" /> 
+			
+	</section>
+	
+	<p>After creating a new project you can also import existing card data from Microsoft Excel.</p>
+	<hint>It's a good idea to first add users to Mingle before creating a project. Until you've added users, you'll be unable to assign any team members.</hint>
+	<p>After you've created a project, you must configure the project accordingly. If you've imported an existing project or template, you may only have to modify a few properties and settings. However, if you create a new project from scratch, you must add all properties and settings manually.</p>
+	<section title="Also see...">
+		<bullets>
+			<item>
+				<cref topic="manage_templates_page">Creating and managing project templates</cref>
+			</item>
+			<item>
+				<cref topic="customizing_projects">Customizing projects</cref>
+			</item>
+			<item>
+				<cref topic="project_settings_page">Project settings</cref>
+			</item>
+			<item>
+				<cref topic="creating_card_properties">Creating card properties</cref>
+			</item>
+			<item>
+				<cref topic="quick_project_setup">Quick project setup</cref>
+			</item>
+			<item>
+				<cref topic="deleting_project_or_template">Deleting projects or templates</cref>
+			</item>
+		</bullets>
+	</section>
+</topic>

@@ -1,0 +1,28 @@
+production:
+  url: jdbc:postgresql://localhost:5432/mingle_development
+  adapter: jdbc
+  driver: org.postgresql.Driver
+  password: ''
+  username: <%= user %>
+  pool: 12
+development:
+  url: jdbc:postgresql://localhost:5432/mingle_development
+  adapter: jdbc
+  driver: org.postgresql.Driver
+  password: ''
+  username: <%= user %>
+  pool: 12
+test:
+  url: jdbc:postgresql://localhost:5432/mingle_test
+  adapter: jdbc
+  driver: org.postgresql.Driver
+  password: ''
+  username: <%= user %>
+  pool: 12
+test_upgrade_export:
+  url: jdbc:postgresql://localhost:5432/test_upgrade_export
+  adapter: jdbc
+  driver: org.postgresql.Driver
+  password: ''
+  username: <%= user %>
+  pool: 12

@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>JavaScript unit test file</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+  <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+  <script src="test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+
+  <script src="test_assets/unittest.js" type="text/javascript"></script>
+  <script src="test_assets/unittest_ext.js" type="text/javascript"></script>
+
+
+  <script src="../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/controls.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/builder.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+
+  <script src="../../public/javascripts/application.js" type="text/javascript"></script>
+
+  <script src="../../public/javascripts/drop_list/base.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/view/base.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/view/drop_down.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/view/drop_link.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/view/field.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/view/filter.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/view/inline_editor.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/view/layout.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/callback_action.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/basic_controller.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/filter_action.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/inline_edit_action.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/model.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/option.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list.js" type="text/javascript"></script>
+
+  <script src="../../public/javascripts/tree_config.js" type="text/javascript"></script>
+
+
+  <link rel="stylesheet" href="assets/unittest.css" type="text/css" />
+  <link rel="stylesheet" href="test_assets/unittest.css" type="text/css" />
+  <link rel="stylesheet" href="../../public/stylesheets/card_trees.css" type="text/css" />
+
+</head>
+<body>
+
+<div id="content" >
+  <div id="header">
+    <h1>JavaScript unit test file</h1>
+    <p>
+      This file tests <strong>TypeNode</strong> class in <strong>tree_config.js</strong>.
+    </p>
+  </div>
+  <!-- Log output -->
+  <div id="testlog"> </div>
+  <div style ='border:solid 1px' id='sandbox'>
+    <h3> sandbox: </h3>
+  <div>
+</div>
+
+
+<script type="text/javascript">
+// <![CDATA[
+
+  new Test.Unit.Runner({
+
+    setup: function() {
+      $('sandbox').innerHTML = "<input id='tree_name' name='tree[name]'></input>";
+      treeConfigView = new TreeConfigView('sandbox', [['story', 'story'], ['iteration', 'iteration'], ['release', 'release']]);
+      PropertyNameSuggestion.setup([]);
+    },
+
+    teardown: function() {
+    },
+
+    testShouldCreateFirstTypeNode: function() { with(this) {
+      assertEqual(0, $$('.type-node').size());
+      firstTypeNode = new TypeNode(treeConfigView, null, 0)
+      assertEqual(true, firstTypeNode.isFirst())
+      assertEqual(1, $$('.type-node').size());
+    }},
+
+    testShouldCreateNextTypeNode: function(){ with(this){
+      firstTypeNode = new TypeNode(treeConfigView, null, 0)
+      secondTypeNode = new TypeNode(treeConfigView, firstTypeNode, null, 1)
+      assertEqual(false, secondTypeNode.isFirst())
+      assertEqual(2, $$('.type-node').size())
+      expectTypeNodeIds = [firstTypeNode.getTypeNodeDivId(), secondTypeNode.getTypeNodeDivId()]
+      assertArrayEqual(expectTypeNodeIds, $$('.type-node').collect(function(typeNode){ return typeNode.id }))
+      assertEqual(1, $$('.relationship-connector').size())
+    }},
+
+    testShouldRenumberTypeNode: function(){ with(this){
+      typeNode = new TypeNode(treeConfigView, null, 0)
+      assertEqual(0, typeNode.getPosition())
+      assertEqual('type_node_0_container', $$('.type-node-container').first().id)
+      assertEqual('type_node_0', $$('.type-node').first().id)
+      assertEqual('card_types[0][card_type_name]', $$('.card-type-field').first().id)
+      assertEqual('card_types[0][card_type_name]', $$('.card-type-field').first().name)
+
+      typeNode.renumberNodeTo($('type_node_0_container'), 1)
+      assertEqual(1, typeNode.getPosition())
+      assertEqual('type_node_1_container', $$('.type-node-container').first().id)
+      assertEqual('type_node_1', $$('.type-node').first().id)
+      assertEqual('card_types[1][card_type_name]', $$('.card-type-field').first().id)
+      assertEqual('card_types[1][card_type_name]', $$('.card-type-field').first().name)
+
+    }},
+
+    testRenumberTypeNodeShoudAlsoRenumberRelationshipConnector: function(){with(this){
+      firstTypeNode = new TypeNode(treeConfigView, null, 0)
+      secondTypeNode = new TypeNode(treeConfigView, firstTypeNode, 1)
+      secondTypeNode.renumberNodeTo($('type_node_1_container'), 2)
+      assertEqual('relationship_connector_1', $$('.relationship-connector').first().id)
+    }},
+
+    testShoudBuildDropListModelWhenCreateTypeNode: function(){ with(this){
+      typeNode = new TypeNode(treeConfigView, null, 0)
+      assert(typeNode.getDropListModel())
+    }},
+
+    testShouldDestroyTypeNode: function(){ with(this){
+      typeNode = new TypeNode(treeConfigView, null, 0)
+      typeNode.destroy()
+      assertEqual(0, $$('.type-node').size())
+    }},
+
+    testShouldDeleteConnectorWhenDestoryFirstTypeNode: function(){ with(this){
+      firstTypeNode = new TypeNode(treeConfigView, null, 0)
+      secondTypeNode = new TypeNode(treeConfigView, firstTypeNode, 1)
+      assertEqual(1, $$('.relationship-connector').size())
+      firstTypeNode.destroy(secondTypeNode)
+      assert(secondTypeNode.isFirst())
+      assertEqual(0, $$('.relationship-connector').size())
+    }},
+
+    testShouldSetDefaultCardTypeForTypeNode: function(){ with(this){
+      typeNode = new TypeNode(treeConfigView, null, 0, 'release');
+      assertEqual('release', typeNode.getCardType());
+    }},
+
+    testShouldNotHasCardTypeWhenCardTypeIsNotSeted: function(){ with(this){
+       firstTypeNode = new TypeNode(treeConfigView, null, 0);
+       assert(!firstTypeNode.hasCardType());
+       secondTypeNode = new TypeNode(treeConfigView, firstTypeNode, null);
+       assert(!secondTypeNode.hasCardType());
+    }},
+
+    testShouldNotThrowErrorWhenChangingCardTypeAfterRemovedChildNode: function(){ with(this){
+      firstTypeNode = treeConfigView.createTypeNode(null, 'release');
+      secondTypeNode = treeConfigView.createTypeNode(firstTypeNode, 'iteration');
+      thirdTypeNode = treeConfigView.createTypeNode(secondTypeNode, 'story');
+      removeButton = $$("#" + thirdTypeNode.getTypeNodeDivId() + " .remove-button").first();
+      Event.trigger(removeButton, 'click');
+      droplist = secondTypeNode.getDropListModel();
+      droplist.fireEvent('changeSelection', droplist.selection);
+    }}
+
+  }, { testLog: "testlog", test: ''}).run;
+// ]]>
+</script>
+</body>
+</html>

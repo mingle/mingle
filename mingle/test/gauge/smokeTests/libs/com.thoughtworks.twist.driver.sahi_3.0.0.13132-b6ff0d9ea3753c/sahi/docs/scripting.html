@@ -1,0 +1,412 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <meta name="generator" content="HTML Tidy, see www.w3.org">
+    <title>Sahi - Scripting</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="sahi.css">
+</head>
+
+<body>
+<table width="100%">
+<tr>
+<td width="150px" valign="top">
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+
+    <div class="menu">
+        <ul>
+            <li><a href="index.html">Introduction</a></li>
+            <!--<li><a href="index.html#features">Features</a></li>-->
+
+        </ul>
+        <ul>
+            <li><a href="sahi_tutorial.html" target="_blank">Flash Tutorial</a></li>
+            <li><a href="screenshots.html">Screen Shots</a></li>
+        </ul>
+
+        <ul>
+            <li><a href="install.html">Downloading Sahi</a></li>
+
+            <li><a href="install.html#prereq">Prerequisites</a></li>
+
+            <li><a href="install.html#install">Installing Sahi</a></li>
+        </ul>
+
+        <ul>
+            <li><a href="using.html">Getting started</a></li>
+
+            <li><a href="using.html#record">Recording through Sahi</a></li>
+
+            <li><a href="using.html#playback">Playing back</a></li>
+
+            <li><a href="using.html#suites">Suites</a></li>
+
+            <li><a href="using.html#logging">Logging</a></li>
+        </ul>
+
+        <ul>
+            <li>Documentation:
+
+                <ul>
+                    <li><a href="http://sahi.co.in/w/apis">APIs</a></li>
+                    <li><a href="http://sahi.co.in/w/sahi-script">Scripting</a></li>
+                </ul>
+            </li>
+        </ul>
+
+        <ul>
+            <li><a href="http://sahi.co.in/w/Running+multiple+tests+in+batch+mode">Running in batch mode</a></li>
+        </ul>
+
+        <ul>
+            <li><a href="ide.html">Editor Support</a></li>
+        </ul>
+
+        <ul>
+            <li><a href="problems.html#problems">Problems</a></li>
+
+            <li><a href="problems.html#notyet">Not yet supported, but coming
+                in</a></li>
+        </ul>
+
+        <hr>
+
+        <ul>
+            <li><a href="http://sourceforge.net/projects/sahi" target="_blank">On Sourceforge</a></li>
+            <li><a href="http://sahi.co.in/forums/" target="_blank">Forums</a></li>
+            <li><a href="http://sourceforge.net/tracker/?group_id=151639&atid=781586" target="_blank">Report/View Bugs</a></li>
+            </li>
+        </ul>
+
+
+    </div>
+</td>
+<td valign="top">
+    <div class="content">
+        <div style="float:right;" width="100%" border="0">
+                <a href="http://sourceforge.net"><img src=
+                        "http://sourceforge.net/sflogo.php?group_id=151639&amp;type=3"
+                                                                        width="125" height="37" border="0"
+                                                                        alt="SourceForge.net Logo"></a>
+                    <br>
+            </div>
+        <h2>Sahi - Web Automation and Test Tool</h2><br/>
+        <div style="background-color:red;color:white;font-size:12pt;text-align:center;">
+		Documentation in this directory is not current.
+		Please visit <a style="color:white;font-size:12pt;" href="http://sahi.co.in/">http://sahi.co.in/</a> for the latest documentation.
+		</div>
+
+        <!--<h2> Sahi - Web Automation and Test Tool</h2>-->
+        <!--<br>-->
+        <!--<table width="100%">-->
+        <!--<tr>-->
+        <!--<td valign="top" align="left">-->
+        <!--<a class="top_menu" href="docs">Home</a>-->
+        <!--<a class="top_menu" href="docs">Why Sahi</a>-->
+        <!--<a class="top_menu" href="docs">Docs</a>-->
+        <!--<a class="top_menu" href="docs">Support</a>-->
+        <!--<a class="top_menu" href="docs">License</a>-->
+        <!--</td>-->
+        <!--</tr>-->
+        <!--</table>-->
+        <hr/>
+        <br/>
+
+        <h2 class="pageTitle">Scripting</h2>
+        <!--Scripting-->
+<a href="#about">About Sahi script</a><br>
+<a href="#variables">Variables</a><br>
+<a href="apis.html">Sahi APIs</a><br>
+ <a href="#functions">Functions</a><br>
+ <br>
+<h4><a name="about">About Sahi script</a></h4>
+
+<br>
+ While Sahi scripts can easily be recorded, as a project grows in
+size, the scripts may have to be more logically organized into
+functions and split into multiple files. The following section
+gives more details on the Sahi Script and the rules to follow. Sahi
+script is based on Javascript. The constructs of javascript, like
+functions, variables, loops, conditional statements etc. are all
+available in Sahi script<br>
+But the script is parsed and transformed slightly in the Sahi proxy
+server before it reaches the browser.<br>
+Details of how Sahi script executes is available <a href=
+"devnotes.html#delayed">here</a>.<br>
+<br>
+All calls to <a href="apis.html#scheduler">Scheduler Functions</a>
+(like _click, _setValue etc.),<br>
+are transformed into strings and added to an array.<br>
+They are executed later, sequentially, but with a slight delay
+between each call.<br>
+<br>
+Example:<br>
+<br>
+<pre class="code">
+_setValue(_textbox("name"), "Kamlesh");
+</pre>
+
+<br>
+<br>
+will be parsed and scheduled for execution later,<br>
+But<br>
+<br>
+<pre class="code">
+var $x = 10;
+</pre>
+
+<br>
+<br>
+will be executed immediately on <b>every</b> page load.<br>
+<br>
+ <br>
+<hr>
+<br>
+<h4><a name="variables">Rules for variable usage.</a></h4>
+
+<ul>
+<li><a href="#dollar">Variables which are used as parameters to
+Sahi APIs should start with a $ (dollar) sign.</a></li>
+
+<li><a href="#string">$ Variables passed to Sahi APIs can only
+represent string and numeric values.</a></li>
+
+<li><a href="#operation">Operations like $i++ or $i-- should not be
+performed inside the API call.</a></li>
+
+<li><a href="apis.html#global">For storing and retrieving
+properties of accessors, functions _getGlobal() and _setGlobal()
+should be used.</a></li>
+</ul>
+
+<br>
+<hr>
+<br>
+ 
+
+<h4><a name="dollar">Variables which are used as parameters to Sahi
+APIs should start with a $ (dollar) sign.</a></h4>
+
+<br>
+ eg.<br>
+<br>
+<pre class="code">
+var $name = "Kamlesh";                // Right way
+_setValue(_textbox("name1"), $name);  // Right way
+$name = "Raman";                      // Right way
+_setValue(_textbox("name2"), $name);  // Right way
+</pre>
+
+<br>
+is the right way to use variables.<br>
+<br>
+When done the wrong way, i.e., without $ prefix, <br>
+<br>
+<pre class="code">
+var nameWithoutDollar = "Kamlesh";                // Wrong way
+_setValue(_textbox("name1"), nameWithoutDollar);  // Wrong way
+nameWithoutDollar = "Raman";                      // Wrong way
+_setValue(_textbox("name2"), nameWithoutDollar);  // Wrong way
+</pre>
+
+<br>
+This is wrong, and will not work correctly. <br>
+While execution with nameWithoutDollar, both the _setValue calls
+will set the value to "Raman"!<br>
+This happens because the code gets converted to:<br>
+<br>
+ 
+
+<pre class="code">
+var nameWithoutDollar = "Kamlesh";
+sahiAdd("sahi_setValue(sahi_textbox(\"name1\"), nameWithoutDollar)", "aaTest.sah : 2")
+nameWithoutDollar = "Raman";
+sahiAdd("sahi_setValue(sahi_textbox(\"name2\"), nameWithoutDollar)", "aaTest.sah : 4")
+</pre>
+
+<br>
+ Notice that the 2nd and 4th lines actually schedule the strings
+for later execution using sahiAdd().<br>
+So the execution order is rather like:<br>
+<br>
+<pre class="code">
+var nameWithoutDollar = "Kamlesh";
+nameWithoutDollar = "Raman";
+// Some delay later
+sahi_setValue(sahi_textbox("name1"), nameWithoutDollar);
+// Some delay later
+sahi_setValue(sahi_textbox("name2"), nameWithoutDollar);
+</pre>
+
+<br>
+So when these eventually execute, the variable
+<b>nameWithoutDollar</b>, if available will contain the reassigned
+value of "Raman". <br>
+<br>
+ Also read <a href="devnotes.html#variable">Why do variables need
+to be prefixed with a dollar($) sign?</a> and <a href=
+"apis.html#scheduler">Scheduler Functions</a><br>
+<br>
+Variables which are not used as parameters in Sahi APIs need not
+start with a dollar.<br>
+ <br>
+<hr>
+<br>
+ <!--
+<h4><a name="assign">Returned values of accessor functions, or properties of elements returned by accessors, should not be assigned to variables.</a></h4>
+<br/>
+
+Example:<br/>
+<br/>
+    <pre class="code">
+    var $nameField = _textbox("name");
+    _setValue($nameField, "Kamlesh");
+    </pre>
+<br/>
+can cause problems on pages which do not have a textbox by id "name".<br/>
+<br/>
+It is advisable to use accessor functions in the same call as the action functions.<br/>
+Example<br/>
+<span class="code">_setValue(_textbox("name"), "Kamlesh");</span><br/>
+<br/>
+</div>
+
+<br/>
+<hr/>
+<br/>
+-->
+ 
+
+<h4><a name="string">$ Variables passed to Sahi APIs can only
+represent string and numeric values.</a></h4>
+
+<br>
+ As mentioned earlier, when variables are used, the transformation
+of script is as follows:<br>
+<pre class="code">
+var $linkText = "Link Test";
+_click(_link($linkText));
+</pre>
+
+<br>
+becomes<br>
+<pre class="code">
+var $linkText = "Link Test";
+sahiAdd("sahi_click(sahi_link("+s_v($linkText)+"));", "sahi_demo.sah : 4")
+</pre>
+
+<br>
+Since the statement is transformed into a string, only variables
+which are strings or numbers are possible.<br>
+<br>
+ <br>
+<hr>
+<br>
+ 
+
+<h4><a name="operation">Operations like $i++ or $i-- should be not
+be performed inside the API call.</a></h4>
+
+<br>
+Example<br>
+<br>
+<pre class="code">
+_setValue(_textbox("name"), "Kamlesh"+(++$i));
+</pre>
+
+is not valid;<br>
+<br>
+It should be broken into 2 steps, as follows<br>
+<br>
+<pre class="code">
+$i++;
+_setValue(_textbox("name"), "Kamlesh"+$i);
+</pre>
+
+<br>
+<br>
+will work correctly<br>
+<br>
+ <br>
+<hr>
+<br>
+<br>
+ 
+
+<h4><a name="functions">Function calls.</a></h4>
+
+<br>
+<h4><a name="variables">Rules for function usage.</a></h4>
+
+While the rules are the same as in javascript, a couple of points
+to note are:<br>
+<ul>
+<li><a href="#call">Functions can be scheduled for later execution
+by using "_call()"</a></li>
+
+<li><a href="#nocall">if a function calls Scheduler Functions from
+inside it, that function should not itself be scheduled using
+"_call()"</a></li>
+</ul>
+
+<h4><a name="call">Functions can be scheduled for later execution
+by using "_call()"</a></h4>
+
+<br>
+eg.<br>
+<br>
+<pre class="code">
+function createCustomer(){
+    __setValue(_text("name"), "cust1");     // double underscores. Not a Scheduler Action Function
+    __setValue(_Password("pwd"), "pwd1");   // double underscores. Not a Scheduler Action Function
+    __click(_submit());                     // double underscores. Not a Scheduler Action Function
+}
+_call(createCustomer());
+</pre>
+
+<br>
+This will schedule execution of createCustomer() till later. Note
+that all the Action Functions in <br>
+createCustomer() use __ (double underscores). This means that even
+though createCustomer() will be<br>
+called at its scheduled turn, all these functions inside will be
+executed immediately when <br>
+createCustomer() is executed.<br>
+<br>
+<h4><a name="nocall">if a function calls Scheduler Functions from
+inside it, that function should not itself be scheduled using
+"_call()".</a></h4>
+
+<br>
+Thus, if the same function existed like this:<br>
+<br>
+<pre class="code">
+function createCustomer(){
+    _setValue(_text("name"), "cust1");      //Scheduler Action Function
+    _setValue(_Password("pwd"), "pwd1");    //Scheduler Action Function
+    _click(_submit());                      //Scheduler Action Function
+}
+createCustomer(); // is Right
+//_call(createCustomer()); // is Wrong
+</pre>
+
+<br>
+<br>
+Read more about <a href="apis.html#scheduler">Scheduler
+Functions</a> <br>
+<hr>
+<br>
+
+
+    </div>
+</td>
+</tr>
+</table>
+Please send your feedback to <a href="http://sourceforge.net/users/narayanraman/">V Narayan Raman</a>.
+</body>
+</html>
+

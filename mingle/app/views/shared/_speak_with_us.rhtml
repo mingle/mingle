@@ -1,0 +1,67 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% title = title.blank? ? "Contact us" : title %>
+<div class="speak-with-us clearfix">
+  <% lightbox = Lightbox.with_close_link(self, 'Close', '')
+     lightbox.body do %>
+  <%= lightbox_close_button unless (defined?(hide_close_button) && hide_close_button) %>
+      <div id="speak-with-us-container">
+        <% form_tag(feedback_index_path, 'data-remote' => true, :id => 'speak-with-us') do %>
+        <h1><i class="fa fa-comments-o"></i><%= title %></h1>
+        <p class='email'>
+          <%= text_field_tag 'user-email', User.current.email , 'data-default-user-email' => User.current.email, :class => 'email-text-field', :type => 'email', :placeholder => 'Enter your email address.', :pattern => '([^@\s]+)@((?:[-_A-Za-z0-9]+\.)+[a-zA-Z]{2,})' %><span class="required">*</span>
+        </p>
+        <% if User.current.email %>
+          <div class="email-message">
+            This is the email we have on file for your account. If you'd like to change the email we will use to contact you about this form, please enter a new email address above. This will not change your account email.
+          </div>
+        <% end %>
+
+        <p>
+          <%= text_area_tag "message", "", :placeholder => "Please send us your comments, issues or feedback.", :class => 'feedback-message',
+          :rows => 15, :autofocus=>true %>
+        </p>
+        <div class="send-feedback">
+          <div class="left">
+            <%= submit_tag "Send", :class => "primary" %>
+          </div>
+          <div class="right">
+            <a href="https://twitter.com/intent/tweet?screen_name=thatsmingle" data-related="thatsmingle"><i class="fa fa-twitter"></i></a>
+          </div>
+          <div class="right required-field-notifier">
+            <span class="required">Required field</span>
+          </div>
+        </div>
+        <% end %>
+      </div>
+  <% end -%>
+</div>
+
+  <%= javascript_with_rescue <<-JAVASCRIPT
+      Mingle.feedbackForm.initialize();
+      !function(d,s,id){
+        var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';
+        if(!d.getElementById(id)){
+          js=d.createElement(s);
+          js.id=id;
+          js.src=p+'://platform.twitter.com/widgets.js';
+          fjs.parentNode.insertBefore(js,fjs);
+        }
+      }(document, 'script', 'twitter-wjs');
+
+JAVASCRIPT
+-%>

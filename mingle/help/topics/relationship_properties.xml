@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Relationship properties">
+	<section title="Introduction">
+		<p>There are two types of relationship properties; Card Relationship Property and Tree Relationship Property. Relationship properties are used to associate one card to another.</p>
+		
+		<subsection title="Card relationship properties">
+			<p>The card relationship properties allow users to create a link between any cards. It's not limited to any specific card type so user can link a story to another story, bug or task. One thing to note here is that card relationship properties do not require to create a tree - unlike tree relationship properties.</p>
+			<p>Please refer to the screenshot below. It shows that the current card has a dependency on ('Depend on' which is a card relationship property) another story, 'Story 1'.</p>
+			<screenshot alttext="Card view - relationship properties" src="resources/images/card_view_relationship_properties_1.png"/>
+		</subsection>
+		<subsection title="Tree relationship properties" id="tree">
+			<p>The tree relationship properties in a child card can reference its ancestors in a <cref topic="card_trees">card tree</cref>. This type of property is created and named as part of <cref topic="administering_card_trees">configuring a card tree</cref>, and they appear on cards visually grouped under the name of the card tree they belong to.</p>
+			<p>Please refer to the screenshot below. You can easily notice that the current card belongs to Epic 1 of Feature 1.</p>
+			<screenshot alttext="Card view - relationship properties" src="resources/images/card_view_relationship_properties_2.png"/>
+		</subsection>
+
+		<hint>
+		  <bullets>
+		    <item>Tree relationship properties cannot be marked as <cref topic="transition_only_properties">transition only</cref>.</item>
+		    <item>Users can navigate to the value of a card or tree relationship property using the icon next to the value on the card view. Clicking this icon will allow you to easily navigate to a card which is assigned as the value of a relationship property.</item>
+		  </bullets>
+		</hint>    
+		
+	</section>
+	<section title="Assigning a value to relationship properties">
+		<bullets>
+			<item><strong>In a card tree view</strong> - when you add a card to a tree by dragging it onto an existing parent card, the proper tree relationship properties are set automatically. You can also drag a child card from one parent to another and the appropriate tree relationship properties will be modified to refer to the new parent.</item>
+			<item><strong>From a card default</strong> - you can assign a specific card to card relationship properties or tree relationship properties from card defaults. Then when this type of card is created, new card will be obtain the assigned value.</item>
+			<item><strong>On a card view</strong> - you can manually set card relationship property or tree relationship property from the card view by clicking on it and selecting a new card reference from the displayed list.</item> 
+				<hint>
+				  <bullets>
+				    <item>For card relationship properties, entire cards that exist on current project will be available as a possible option.</item> 
+				    <item>For tree relationship properties, only cards of the appropriate type that are already in tree will appear as available values on <strong>filters</strong> (including history filters). Otherwise, any cards of the appropriate type will be available. Learn more about <cref topic="card_selection_widget">card selection widget</cref>.</item>
+				  </bullets>
+				</hint>    	
+			<item><strong>On card list or card grid view</strong> - you can bulk update card relationship properties or tree relationship properties. If different types of multiple cards are selected, only common properties will be listed on bulk edit action bar.</item>
+		      </bullets>  
+	</section>
+	<section title="Removing a relationship property">
+		<subsection title="Card relationship properties">
+			<p>You can delete card relationship properties from the card properties management page. When you click on 'delete' link, user will be taken to a warning page and get informed about the consequences of deleting a card relationship property. </p>
+		</subsection>
+		<subsection title="Tree relationship properties">
+			<p>The tree relationship properties for a card tree will be deleted from all cards if the tree itself is deleted. 
+				Likewise, if a card is removed from a tree, these properties will be removed from that card.</p>
+		</subsection>
+	</section>
+	<section title="Also see...">
+		<bullets>
+			<item>
+				<cref topic="card_trees">Card trees overview</cref>
+			</item>
+			<item>
+				<cref topic="creating_a_new_card_tree">Creating a card tree</cref>
+			</item>
+			<item>
+				<cref topic="card_properties">Card properties</cref>
+			</item>
+		</bullets>
+	</section>
+</topic>

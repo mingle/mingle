@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Modifying or deleting project variables">
+	<section title="Navigate to the project variables page..." collapsed="true">
+		<steps>
+			<item><cref topic="signing_in_and_out_of_mingle">Sign in</cref> to Mingle as a project administrator and open the project (if you're not already working in the project).</item>
+			<item>
+				<p>Click the <tab>Project admin</tab> tab.</p> 
+				<screenshot alttext="Project admin tab" src="resources/images/project_admin_tab.png" />
+				<p>Mingle displays the <strong>Project settings</strong> page.</p>
+				<note>if you are logged in as a project team member, Mingle displays the <strong>Team</strong> page.</note>
+				<screenshot alttext="Project admin menu - Project variables link" src="resources/images/project_variables_link.png" />
+			</item>
+			<item>
+				<p>Click the <link>Project variables</link> link.</p>
+				<p>Mingle displays the <strong>Project variables</strong> page with all project variables setup for this project.</p>
+			</item>
+		</steps>
+	</section>
+	<screenshot alttext="Project variables page" src="resources/images/project_variables_page.png" />
+	<section title="Modify a project variable...">
+		<subsection title="Open the Edit project variable page...">
+			<p>To modify a project variable, click on the <link>Edit</link> link to the left of the project variable name</p>
+			<p>Mingle displays the <strong>Edit project variable</strong> page.</p>
+		</subsection>
+		<screenshot alttext="Edit project variable dialog" src="resources/images/project_variable_edit_dialog.png" />
+		<subsection title="Renaming a project variable...">
+			<p>Type a <strong> new Name</strong> for the project variable.</p>
+			<p>This is the name which will identify the variable wherever it is used in the project, it should be as succinct and descriptive as possible.</p>
+			<p>The name should not be blank, should not contain <![CDATA["'&', '=', '#', '[' or ']'"]]> characters, and must be less than 40 characters in length.</p>
+			<p>Mingle will display how the project variable name will look - all project variable names are enclosed in parenthesis, e.g. (variable)</p>
+			<hint>While it is possible to use the same name for both a project variable and a card property, it's probably less confusing to avoid doing so.</hint>
+			<bullets title="Effect on pages">
+				<item><cref topic="working_with_pages">Mingle pages</cref> and <cref topic="creating_charts_and_tables_in_pages">tables/charts</cref> that reference the renamed project variable will no longer work. 
+					The MQL syntax will not be changed, so you will need to manually alter any affected pages to alter references to the new project variable name.</item>
+			</bullets>
+			<hint>
+				<p>A fast way to find all of the pages which use the project variable in MQL is to use the <cref topic="mingle_search">Mingle search</cref>.</p> 
+				<p>Simply type in the old name of the project variable e.g. "some project variable" and hit the <button>Search</button></p>
+				<p>Mingle will show all pages referencing the project variable - you can then open each of these pages for editing and make the appropriate changes.</p>
+				<p>Note that if your project variable name is a common word or phrase - you may get some additional pages that contain that word outside of MQL statements.</p>
+			</hint>
+		</subsection>
+		<subsection title="Changing the type of a project variable...">
+			<p>Select a <strong>new type</strong> for the project variable.</p>
+			<warning>Changing the type of a project variable is effectively the same as deleting it and creating a new one with the same name. 
+				See <strong>The effects of deleting a project variable</strong> below to understand the impact of changing the type of a project variable.</warning>
+			<bullets title="available types:">
+				<item><strong>Text</strong> - any text value</item>
+				<item><strong>Numeric</strong> - any numeric value</item>
+				<item><strong>Selected from team list</strong> - any project team member</item>
+				<item><strong>Date</strong> - any valid date</item>
+				<item><strong>Card</strong> - a reference to any card of the specified type</item>
+			</bullets>
+			<screenshot alttext="Update project variable confirmation page" src="resources/images/project_variable_update_warning.png" />
+		</subsection>
+		<subsection title="Change the value of a project variable ">
+			<p>Enter or select the <strong>new value</strong> you want to assign to the project variable.</p>
+		</subsection>
+		<subsection title="Change which card properties are linked to the project variable...">			
+			<p>The project variable will only be available in filter conditions, transitions and MQL queries for properties that it has been explicitly linked to.</p>
+			<note>Only properties which have the same data type as the project variable will be shown in the list</note>
+			<bullets title="Effects:">
+				<item><strong>Transitions</strong> - any transition which used the project variable to set a property which is no longer linked to that project variable will be deleted.</item>
+				<item><strong>Favorites and Tabs</strong> - any favorites or tabs which use the project variable to filter a property which is no longer linked to that project variable will be deleted.</item>
+				<item><strong>Pages</strong> - any MQL statement which use the project variable as part of a condition on a property which is no longer linked to that project variable will no longer work.</item>
+			</bullets>
+		</subsection>
+		<subsection title="Save your work...">
+			<p>Click on the <link>Save project variable</link> link to save the project variable</p>
+			<screenshot alttext="Save project variable link" src="resources/images/save_project_variable_link.png" />
+		</subsection>
+	</section>
+	<section title="Delete a project variable...">
+		<p>To <strong>delete a project variable</strong>, click on the <link>Delete</link> link to the left of the project variable name</p>
+		<p>If there are any transitions which reference the project variable, Mingle will display the <strong>Delete project variable</strong> confirmation page</p>
+		<screenshot alttext="Delete project variable confirmation page" src="resources/images/project_variable_delete_warning.png" />
+		<p>Review the confirmation message, and if you want to continue click on the <link>Continue to delete</link> link to permanently delete the project variable.</p>
+		<subsection title="The effects of deleting a project variable...">
+			<bullets title="Card properties using the project variable">
+				<item>There is no direct impact on card properties which are associated with the project variable.</item>
+			</bullets>
+			<bullets title="Card transitions">
+				<item>Any <cref topic="card_transitions">card transitions</cref> which assign the project variable to a card property will be deleted</item>
+			</bullets>
+			<bullets title="Favorites and tabs">
+				<item><cref topic="favorites_component">Favorites</cref> that include the deleted property as a display column or in a <cref topic="filter_list_by_component">filter condition</cref> will be deleted</item>
+				<item>Any <cref topic="creating_tabs_from_favorites">tabs</cref> based on those favorites will also be deleted</item>
+			</bullets>
+			<bullets title="Pages">
+				<item><cref topic="working_with_pages">Mingle pages</cref> and <cref topic="creating_charts_and_tables_in_pages">tables/charts</cref> that reference the deleted project variable will no longer work. 
+				The MQL syntax will not be changed, so you will need to manually alter any affected pages to remove references to the deleted project variable.</item>
+			</bullets>
+			<hint>
+				<p>A fast way to find all of the pages which use the project variable in MQL is to use the <cref topic="mingle_search">Mingle search</cref>.</p> 
+				<p>Simply type in the name of the project variable e.g. "some project variable" and hit the <button>Search</button></p>
+				<p>Mingle will show all pages referencing the project variable - you can then open each of these pages for editing and make the appropriate changes.</p>
+				<p>Note that if your project variable name is a common word or phrase - you may get some additional pages that contain that word outside of MQL statements.</p>
+			</hint>
+		</subsection>
+	</section>
+</topic>

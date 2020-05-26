@@ -1,0 +1,66 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+.avatars .slot img.moustache {
+  margin: 0 auto;
+  position: absolute;
+  top: 50%;
+  left: 5px;
+  width: 15px;
+  height: 7px;
+}
+
+#current-user {
+  div.holiday_profile {
+    display: inline-block;
+  }
+
+  img.moustache {
+    margin: 0 auto;
+    position: relative;
+    top: -15px;
+    left: 7px;
+    width: 15px !important;
+    height: 7px !important;
+    border-width: 0px !important;
+    border-radius: 0px !important;
+  }
+}
+
+#title {
+  .movember {
+    padding: 0px !important;
+    height: 50px;
+    background-color: #3FBEEA !important;
+  }
+
+  .logo img.movember {
+    padding: 5px 0px 5px 0px !important;
+    height: 41px !important;
+  }
+
+  .logo.halloween img {
+    background: black;
+  }
+
+  .christmas {
+    padding: 0px;
+  }
+
+  .logo img.christmas {
+    padding: 0px;
+  }
+}

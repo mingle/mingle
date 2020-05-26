@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_help.dtd">
+	<section title="How to install Mingle for Windows" collapsed="true">
+		<note>You must be logged in as a user with Admin privileges to install the Mingle service under Windows.</note>
+		<subsection title = "Installing Mingle for the first time" collapsed="false">
+		<steps>			
+			<item>Double-click the Mingle installer file and follow the prompts to install Mingle.</item>
+			<item>
+				<p>During installation, Mingle will ask you to:</p>		
+				<bullets>
+				  <item>select a destination directory. This is where Mingle will be installed.</item>
+					<item>select a data directory to store data. This is where Mingle will store project data including configuration files and attachments. It is not the database location.</item>
+					<item>select a swap directory to store temporary data. This will act as a tmp space in which to store intermediate data such as project exports (.mingle files) while they are being created, project import files that are being imported, excel import content that is being processed for preview and excel import content that is being processed for import.</item>
+					<item>select a config directory to store configuration data. This is where Mingle will store project configuration files such as database.yml. This is not the database location.</item>
+					<item>select a port from which to run Mingle. The default for this is '8080' but you can set it to any port that is not currently being used.</item>
+				</bullets>
+				<hint>If you have previously installed Mingle in the selected destination directory, all Mingle files from the existing instance will be deleted <strong>except</strong> log files, cache and any contents in /vendor/plugins.</hint>
+			</item>
+			<item>
+				<p>At the end of the installation, Mingle opens the <cref topic="completing_the_mingle_configuration_wizard">configuration wizard</cref> in your default web browser.</p>
+				<screenshot alttext="Welcome to Mingle" src="resources/images/installation/setup_wizard.png" />
+			</item>
+			<item>	If you have issues starting Mingle please refer to Mingle's <cref topic="troubleshooting_mingle_installation_and_upgrade">troubleshooting help</cref>.</item>
+		</steps>
+		</subsection>
+		
+		<subsection title="Installing Mingle when there is an existing installation of Mingle" collapsed="true">
+		 <p>Beginning with 2.3, Mingle allows the user to follow the Mingle installation process without restarting the computer even if Mingle is already installed. When you install the same or a newer version of Mingle at the same location as an existing installation of Mingle, the existing installation will be uninstalled before the new version is installed.</p>
+		 <steps>
+		 	<item>If any version of Mingle is already installed and is currently running, the server will be stopped and the existing installation of Mingle with be uninstalled.</item>
+		   	<item>If any version of Mingle is already installed but the server is not running, the existing installation of Mingle with be uninstalled.</item>
+		   	<item><p>Uninstalling Mingle involves deleting all Mingle related files <strong>except</strong>:</p>
+			  <bullets>
+				<item>The all contents of the data directory (and the database used)</item>
+				<item>The config directory</item>
+				<item>The swap directory</item>
+				<item>The installation folder log directory - contains all mingle log files</item>
+				<item>The /vendor/plugins directory - contains any custom plugins (if there are any)</item>
+				<item>The installation folder tmp directory - contains temporary files and cache</item>
+			  </bullets>
+			</item>
+		 </steps>
+		
+		</subsection>
+		</section>
+

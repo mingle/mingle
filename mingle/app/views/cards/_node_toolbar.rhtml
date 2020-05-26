@@ -1,0 +1,32 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% view_params = defined?(@view) ? @view.to_params : {} %>
+
+<div class="node-toolbar" id="<%=node.html_id%>_toolbar">
+  <% if node.can_be_parent? -%>
+    <%= link_to_function('Add new Card', show_quick_add_panel_function(node, tab_name, view_params), 
+          :title => (node.root? ? 'Create children for this tree' : 'Create children for this card'), 
+          :class => 'add-new-node-button no-popup',
+          :id => "node_add_new_cards_#{node.html_id}",
+          :accessing => ':show_tree_cards_quick_add') %>
+  <% end -%>
+  
+  <% unless node.root? -%>
+    <% remove_function = "if($('#{node.html_id}_inner_element')._isDragging) return;#{remove_card_from_tree_on_tree_view_action(node, tab_name, view_params)}" -%>
+    <%= link_to_function('Remove', remove_function, :accessing => ':remove_card_from_tree', :id => "node-#{node.html_id}-remove-link", :class => 'remove-tree-node-button no-popup', :title => 'Remove this node from tree') -%>
+  <% end -%>
+</div>

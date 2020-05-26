@@ -1,0 +1,73 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div class="copy-to-dialogue">
+  <% lightbox = Lightbox.with_close_link_and_close_button(self, 'Cancel', '', :class => 'remove-button popup-close')
+     lightbox.header "Copy to..."
+     lightbox.body do %>
+        <p class="hints">The projects shown have valid card types to copy to and you are eligible to copy to these projects.</p>
+        <%- if @projects.any? -%>
+          <div class='properties_widget'>
+            <span class='drop-list-panel'>
+              <span class='property-name'>Project</span>
+              <span class="colon">:</span>
+              <span class="drop_link_wrapper">
+              <%= hidden_field_tag 'selected_project_id', nil, :id =>"select_project_field" %>
+              <%= link_to_function '', nil, :id => 'select_project_drop_link'%>
+
+              <%-
+                drop_list_config = js_options({
+                  :html_id_prefix   => 'select_project',
+                  :select_options   => @projects.map { |project| [ project.name, project.identifier ] },
+                  :drop_link        => 'select_project_drop_link',
+                  :initial_selected => [@project.name, @project.identifier],
+                  :onchange         => %Q{
+                    if ($F('select_project_field').blank()) {
+                      $('continue-copy-to').disabled = true;
+                      $('continue-copy-to').addClassName('disabled');
+                    } else {
+                      $('continue-copy-to').disabled = false;
+                      $('continue-copy-to').removeClassName('disabled');
+                    }
+                  }
+                })
+              -%>
+              <%= javascript_with_rescue "(function() {var droplist = new DropList(#{drop_list_config}); droplist.onchange();})();" %>
+              </span>
+            </span>
+          </div>
+          <%= clear_float %>
+        <%- else -%>
+          <p class='hints'>
+            There is no valid target projects you can copy this card to. A valid target project should have a card type of type <%= @card.card_type.name.bold %> and you should be a Mingle administrator, full team member or Project administrator for that project. <%= render_help_link 'Copy Card', :class => '', :content => 'Help' %>
+          </p>
+        <%- end -%>
+    <% end
+    lightbox.complete_action do -%>
+      <%- javascript_submit_options = {:url => {
+            :project_id => @project.identifier,
+            :action     => 'confirm_copy',
+            :number     => @card.number },
+            :with       => "'selected_project_id=' + $F('select_project_field')",
+            :condition  => "!$(this).hasClassName('disabled')",
+            :before     => show_spinner,
+            :compelete  => hide_spinner,
+            :method     => :get
+          } -%>
+      <%= link_to_remote "Continue", javascript_submit_options, {:id => 'continue-copy-to', :class => "disabled save"} %>
+      <%= spinner %>
+   <% end -%>
+</div>

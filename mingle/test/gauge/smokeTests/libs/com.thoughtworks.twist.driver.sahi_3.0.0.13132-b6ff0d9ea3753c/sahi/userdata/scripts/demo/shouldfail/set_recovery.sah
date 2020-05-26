@@ -1,0 +1,10 @@
+_include ("../if_include.sah");
+function recover(){
+	_click(_link("Back"));
+	_click(_link("Link Test"));
+	_click(_link("Back"));
+}
+
+_setRecovery(recover);
+_click(_link("Form Test"));
+_click(_link("Link Test"));

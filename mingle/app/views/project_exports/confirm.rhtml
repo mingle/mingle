@@ -1,0 +1,28 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= render :partial => 'shared/admin_actions' %>
+
+<h1>Export project<%= " as a template" if export_as_template %></h1>
+
+<% info_box do %>
+  <p>Are you sure you want to export this project<%= " as a template" if export_as_template %>? This could take a very long time for large projects. If your project is large and the download exceeds 2GB you may need to contact your administrator to retrieve the file from the Mingle server.</p>
+<% end %>
+
+<% action_bar do %>
+  <%= link_to_remote("Continue to export", { :url => { :controller => 'project_exports', :action => 'create', :export_as_template => export_as_template } }, :class => 'ok') %>
+  <%= link_to("Cancel", project_admin_link_params, :class => 'cancel') %>
+<% end %>

@@ -1,0 +1,62 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= render :partial => "shared/macro_warnings", :locals => {:renderable => @page_version} %>
+
+<% @sidebar = capture do -%>
+  <%= render :partial => 'shared/favorites', :locals => {:allow_view_creation => false} %>
+
+  <%= render :partial => 'shared/page_view_history' %>
+
+  <%= lazy_loading_collapsible('History', {:controller => 'pages', :action => 'history', :page_identifier => @page_version.identifier},
+    :html => {:id => 'history'}, :style => {:collapsible_content_style => 'collapsible_content_light'}) %>
+
+  <%= render :partial => 'history/feed', :locals => {:request_params => history_filter_query_string(:page_identifier => @page_version.identifier)} %>
+<% end -%>
+
+<%= render :partial => 'shared/contextual_help', :locals => { :params_for_link => { :controller => 'pages', :action => 'show' } } %>
+<%= render :partial => 'show_actions', :locals => { :location => 'top' } %>
+
+<div id="content" class="wiki">
+  <div class="to-be-scrolled">
+      <div class="tags-container">
+        <% if @page_version.latest_version? %>
+          <%= tags_widget 'tag_list', @page %>
+        <% else %>
+          <%= render :partial => "shared/readonly_tags_panel", :locals => {:event  => @page_version} %>
+        <% end %>
+      </div>
+
+    <h1 id="page-name"><%= h @page_version.name %></h1>
+
+    <p id="version-info" class="version-info"><%= render :partial => 'shared/version_info', :locals => { :versionable => @page_version, :show_latest_url => page_show_url(:pagename => Page.name2identifier(@page_version.name)) } %></p>
+
+    <div id="page-content">
+      <%= render :partial => 'content', :locals => {:page_version => (@page_version.latest_version? ? @page : @page_version)} %>
+    </div>
+  </div>
+</div>
+
+<div id="attachments-container">
+  <%= render :partial => 'shared/attachments', :locals => { :attachable => @page_version.latest_version? ? @page : @page_version, :mode => "show", :"authorized_to_delete" => authorized_to_delete_attachments } %>
+</div>
+
+<%= render :partial => 'show_actions', :locals => { :location => 'bottom' } %>
+<%= enable_also_viewing %>
+<%= javascript_with_rescue <<-JAVASCRIPT
+  favoriteCheckboxes = new FavoriteCheckboxes();
+JAVASCRIPT
+%>

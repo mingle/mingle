@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>JavaScript unit test file</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <script src="../../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../test_assets/unittest.js" type="text/javascript"></script>
+  <script src="../test_assets/unittest_ext.js" type="text/javascript"></script>
+
+  <script src="../../../public/javascripts/planner/planner_application.js" type="text/javascript"></script>
+
+  <link rel="stylesheet" href="../assets/unittest.css" type="text/css" />
+  <link rel="stylesheet" href="../test_assets/unittest.css" type="text/css" />
+</head>
+<body>
+  <div style='position: relative; left: 0px; top: 0px; border: solid 1px red; height: 40px'>
+    <div id='element' style="left: 5px; top: 3px; position: absolute; margin: 0; padding: 0;">lala</div>
+  </div>
+
+
+<div id="content">
+
+  <div id="header">
+    <h1>JavaScript unit test file</h1>
+    <p>
+      This file tests <strong>rectangle.js</strong>.
+    </p>
+  </div>
+
+  <!-- Log output -->
+  <div id="testlog"> </div>
+
+</div>
+
+<script type="text/javascript">
+// <![CDATA[
+
+  new Test.Unit.Runner({
+    testCreateRectangleAsPoint: function() { with(this) {
+      var rect1 = new Rectangle({left: 10});
+      assertEqual(10, rect1.left);
+      assertEqual(0, rect1.width);
+    }},
+
+    testDistanceToSameRectangle: function() { with(this) {
+      var rect1 = new Rectangle({left: 10, width: 100});
+      assertEqual(0, rect1.distance(rect1).x);
+    }},
+
+    testDistanceToInsideRect: function() {with(this) {
+      var rect1 = new Rectangle({left: 10, width: 100});
+      var rect2 = new Rectangle({left: 11, width: 10});
+      assertEqual(0, rect1.distance(rect2).x);
+    }},
+
+    testDistanceToLeftOutsideRect: function() { with(this) {
+      var rect1 = new Rectangle({left: 10, width: 100});
+      var rect2 = new Rectangle({left: 9, width: 10});
+      assertEqual(-1, rect1.distance(rect2).x);
+    }},
+
+    testDistanceToRightOutsideRect: function() { with(this) {
+      var rect1 = new Rectangle({left: 10, width: 100});
+      var rect2 = new Rectangle({left: 11, width: 100});
+      assertEqual(1, rect1.distance(rect2).x);
+    }},
+
+    testYAxisDistance: function(){ with(this) {
+      var rect1 = new Rectangle({top: 10, height: 100});
+      var rect2 = new Rectangle({top: 11, height: 100});
+      assertEqual(0, rect1.distance(rect2).x);
+      assertEqual(1, rect1.distance(rect2).y);
+    }},
+
+    testElementRectangle: function() { with(this) {
+      var rect = $('element').cumulativeRectangle();
+      assertEqual($('element').cumulativeOffset()[0], rect.left);
+      assertEqual($('element').cumulativeOffset()[1], rect.top);
+      assertEqual($('element').getWidth(), rect.width);
+      assertEqual($('element').getHeight(), rect.height);
+    }},
+
+    testElementPositionedRectangle: function() { with(this) {
+      var rect = $('element').positionedRectangle();
+      assertEqual(3, rect.top);
+      assertEqual(5, rect.left);
+      assertEqual($('element').getWidth(), rect.width);
+      assertEqual($('element').getHeight(), rect.height);
+    }},
+
+    testShouldRaiseErrorWhenLineASubLineBThatInludesLineA: function() {with(this) {
+      var lineA = new Line(9, 1);
+      var lineB = new Line(8, 3);
+      try {
+        lineA.sub(lineB);
+        fail('line a is inside line b, should raise error');
+      } catch(e) {
+      }
+    }}
+
+  }, "testlog");
+// ]]>
+</script>
+</body>
+</html>

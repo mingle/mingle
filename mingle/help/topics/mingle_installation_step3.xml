@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Step 3 - Configuring the URL">
+  <p>Enter the URL information for your Mingle instance.</p>
+  <bullets>
+    <item><strong>Site URL</strong> is the URL that users of Mingle will use to access your Mingle instance. This URL is used in all outbound communication with Mingle users. For example, users can subscribe to email changes in Mingle. When Mingle sends an email about a change, the email will include links back to Mingle for additional information. These links are generated using the site URL that you enter here.</item>
+    <item><strong>Secure site URL</strong> is a secure (https) URL to your Mingle instance. This URL is used in secure outbound communications with external systems. For example, any <cref topic="what_is_oauth">OAuth</cref> communication will occur using the secure site URL. If the site URL that you entered is an https URL and you leave the secure site URL blank, then the site URL will be used as the secure site URL. If the site URL is not an https URL and you leave the secure site URL blank, then any functionality that requires secure communication will not be enabled. Currently, OAuth communication is the only area in Mingle which requires secure communication.</item>
+    <p>Additional information about the site URL and the secure site URL can be found in <cref topic="advanced_mingle_configuration#site_url">advanced mingle configuration</cref>.</p>
+    <warning>If you have an <cref topic="advanced_mingle_configuration#app_context">alternate app context</cref> configured, you should not include this in either the site URL or the secure site URL. For example, suppose you have an alternate app context of "/mingle" and the URL to open Mingle in your browser is, "http://your_mingle_server.com:8080/mingle" then your site URL should be, "http://your_mingle_server.com:8080".</warning>
+  </bullets>
+  <screenshot alttext="Configure the URL" src="resources/images/installation/configure_url.png"/>
+</topic>

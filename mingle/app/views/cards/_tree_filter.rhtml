@@ -1,0 +1,29 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% collapsible "Filter #{card_type.name} by... ", true do -%>
+  <div class="align-center" id="<%= card_type.html_id %>-filter-widget" ></div>
+
+  <%= clear_float %>
+  
+  <% if property_definitions_for_card_type(card_type, :tree => tree_config).size > 0 -%>
+    <div id="add_new_filter_for_<%= card_type.name %>_link" class="add-new-filter-link align-center">
+      <%= link_to_function('Add a filter', "window.mingle_filters_#{card_type.id}.addNewFilter()", :id => "add_a_filter_for_#{card_type.id}") %>
+    </div>
+  <% else -%>
+    <div id="no_filter_available_for_<%= card_type.name %>" class="notes" >No properties are available for <%= h card_type.name %></div>
+  <% end -%>
+<% end -%>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Transition only properties">
+ <section title="Introduction"> 
+  <p><strong>Transition only</strong> card properties can only be modified via <cref topic="card_transitions">transitions</cref>. If a property is marked "transition only," all team members must use the transition to set the value of the property; they cannot set the value of the property without using a transition.</p>
+  <p>The transition only feature lets you lock down the allowable state changes on the property to only those where an explicit transition is provided. It also allows you to set state-based access restrictions, since particular transitions can be restricted to specific users.</p> 
+  <p>For example, to restrict the allowable states that a defect can be in before it is marked "closed," you may require that the defect must first be in a "tested" state. You might also want to restrict the ability to close defects to specific team members. In this case, you could mark the status property as transition only, then provide transition restrictions allowing only certain users (such as your tester) to modify the status property.</p>
+  <hint>Project and Mingle admins are not required to use transitions; they can update the values of transition only properties from the card view. Team members, on the other hand, can only change transition only property values by using the transition; on the card view, they see transition only properties as read only.</hint>
+ </section>
+
+<section title="Set a property as transition only">
+ <p>To make a card property transition only, open the <strong>Customize card properties</strong> page by selecting <tab>Project admin</tab> tab &gt; <link>Card properties</link> link. Check the box in the <strong>Transition only</strong> column for the property you want to restrict.</p>
+ <p>You can uncheck the box in the <strong>Transition only</strong> column for a property to revert it to a generally accessible property.</p> 
+<hint><cref topic="formula_properties">Formula properties</cref> and <cref topic="card_relationship_properties">Relationship properties</cref> cannot be marked as transition only.</hint>  
+<screenshot src="resources/images/transition_only_property.png"/> <p>Once you mark a card property as transition only, you will need to define transitions for each allowable modification scenario for that property, and make those transitions available to the appropriate team member(s).</p>
+<p>You can uncheck the box in the Transition only column for a property to revert it to a generally accessible property.</p>
+</section>
+<section title="Also see..."> 
+  <bullets>
+    <item><cref topic="creating_card_properties">Create card properties</cref></item>
+    <item><cref topic="modifying_or_deleting_card_properties">Modify or delete card properties</cref></item>
+    <item><cref topic="automated_transitions">Automated transitions on the grid view</cref></item>
+    <item><cref topic="card_transitions">Card transitions</cref></item>
+  </bullets> 
+ </section>
+</topic>

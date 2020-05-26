@@ -1,0 +1,48 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<h1><%= @page_title = "Welcome to Mingle!" %></h1>
+
+<% warning_box do -%>
+  <p>Please note before proceeding, <strong>you need to have either a PostgreSQL or an Oracle (support limited to Mingle Plus only) database installed and setup</strong> (<%= render_help_link 'Connect Database', :content => 'help me with this', :class => "" %>)</p>
+  <p><%= check_box_tag 'database_ready', '1', database_ready?, :onclick => "$('next').disabled = !$('database_ready').checked" -%>  <%= label_tag 'database_ready', 'The database is setup and ready to go', :style => 'display:inline' %></p>
+<% end -%>
+
+<% info_box do %>
+ 
+<p>Once you have your database setup, this guide will walk you through the remaining steps to complete your installation of Mingle.</p>
+ 
+<p>This includes:</p>
+  
+
+  
+  <p><strong>Note</strong>: If you are upgrading to a new version of Mingle some of these steps are skipped.</p>
+  
+  <p><strong>We strongly recommend that you make a backup of your database and the Mingle data directory before starting the upgrade process.</strong> If for some reason the upgrade migration fails DO NOT ATTEMPT TO UPGRADE THE BROKEN DATABASE AGAIN. Restore your database from backup and rollback to your previous installation.</p>
+<% end %>
+
+  <div class="steps">
+    <%= render :partial => 'steps' %>
+  </div>
+  
+
+<% action_bar :class => "action-bar setup-pages" do %>
+  <% form_tag({:action => 'connect'}, {:id => 'wizard'}) do %>
+    <%= submit_tag "Continue", {:id => 'next', :class => 'primary', :disabled => !database_ready?} %>
+    <%= render_help_link 'Welcome to Mingle Page', :class => 'page-help-at-action-bar' %>
+  <% end %>
+<% end %>
+

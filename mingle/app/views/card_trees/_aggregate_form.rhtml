@@ -1,0 +1,61 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= hidden_field 'aggregate_property_definition', 'aggregate_card_type_id' %>
+<%= hidden_field 'aggregate_property_definition', 'tree_configuration_id' %>
+
+<p class="form_item">
+  <label>Name</label>
+  <%= text_field 'aggregate_property_definition', 'name' %>
+  <span id="no-name-text" style="display: none;"><%= @choose_name_text || "" %></span>
+</p>
+
+<div class="form_item">
+<%= select_tag 'aggregate_property_definition[aggregate_type]', options_for_select(aggregate_types, @aggregate_property_definition.aggregate_type ? @aggregate_property_definition.aggregate_type.identifier : nil) %>
+</div>
+
+<div class="form_item">
+<%= select_tag 'aggregate_property_definition[aggregate_scope_card_type_id]', options_for_select(aggregate_scopes, selected_aggregate_scope) %>
+<%= text_field 'aggregate_property_definition', 'aggregate_condition', :style => 'display: none;' -%>
+</div>
+
+<div class="form_item">
+<%= select_tag 'aggregate_property_definition[aggregate_target_id]', options_for_aggregate_property(@aggregate_property_definition.aggregate_scope, descendant_types) -%>
+</div>
+
+<%= javascript_with_rescue <<-JAVASCRIPT
+  var countIdentifier = '#{AggregateType::COUNT.identifier}';
+  var conditionIdentifier = '#{AggregateScope::DEFINE_CONDITION}';
+  var optionsForNotApplicableAggregateProperty = #{options_for_not_applicable_aggregate_property.to_json};
+  var descendantTypeIds = #{descendant_types.collect(&:id).to_json};
+      
+  var optionsForChildren = $H(#{type_id_to_child_options_map(descendant_types).to_json});
+  var optionsForDescendants = #{options_for_descendants(descendant_types).to_json};
+  var optionsForAggregateProperty = #{options_for_aggregate_property(child_type, descendant_types).to_json};
+  
+  aggregateDropdownChangeObserver = new AggregateDropdownChangeObserver(descendantTypeIds,
+                                                                        optionsForNotApplicableAggregateProperty,
+                                                                        optionsForChildren,
+                                                                        optionsForDescendants,
+                                                                        optionsForAggregateProperty,
+                                                                        countIdentifier,
+                                                                        conditionIdentifier);
+  Event.observe($('aggregate_property_definition_aggregate_type'), 'change', function(event) { aggregateDropdownChangeObserver.onAggregateTypeOrScopeChange(); });
+  Event.observe($('aggregate_property_definition_aggregate_scope_card_type_id'), 'change', function(event) { aggregateDropdownChangeObserver.onAggregateTypeOrScopeChange(); });
+  
+  aggregateDropdownChangeObserver.onAggregateTypeOrScopeChange();
+JAVASCRIPT
+-%>

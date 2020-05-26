@@ -1,0 +1,81 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div class="trial-feedback prevent-close">
+  <% lightbox = Lightbox.with_close_link(self, 'Close', '')
+     lightbox.body do %>
+  <%= lightbox_close_button %>
+      <div id="trial-feedback-container">
+        <% form_tag(trial_feedback_index_path, 'data-remote' => true, :id =>
+        'trial-feedback') do %>
+
+        <img class="avatar pull-left" src="/images/avatars/huimin.jpg" />
+        <h1 class="pull-left">
+          We'd love to hear why you signed up for Mingle!<br />
+           Is it because...
+        </h1>
+
+        <div class="clearfix"></div>
+        <div class="reasons">
+          <ul>
+            <li><%= radio_button_tag 'reason', 'right_tool_for_team' %> <label for="reason_right_tool_for_team">I'm trying to pick the right tool for my company or team</label></li>
+            <div class="team-size-feedback" style="display:none;">
+              <ul>
+                <li><%= radio_button_tag 'team_size', 'less_than_5' %> <label for="team_size_less_than_5">There's just a few of us. (Fewer than 5)</label></li>
+                <li><%= radio_button_tag 'team_size', 'less_than_20' %> <label for="team_size_less_than_20">We're a small-ish team. (Fewer than 20)</label></li>
+                <li><%= radio_button_tag 'team_size', 'more_than_20' %> <label for="team_size_more_than_20">A whole bunch! (More than 20)</label></li>
+              </ul>
+            </div>
+
+            <li><%= radio_button_tag 'reason', 'personal_use' %> <label for="reason_personal_use">I need something like this for my personal use </label></li>
+            <li><%= radio_button_tag 'reason', 'curious' %> <label for="reason_curious">I'm just curious </label> </li>
+            <li><%= radio_button_tag 'reason', 'another_reason' %> <label for="reason_another_reason"> Another reason </label></li>
+          </ul>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <h3>Anything you'd like to add?</h3>
+        <p>
+          <%= text_area_tag "message", "", :class => 'feedback-message',
+          :rows => 15, :autofocus=>true %>
+        </p>
+        <p>
+          <%= submit_tag "Send", :class => "primary send-feedback", :disabled => "disabled" %>
+        </p>
+        <% end %>
+      </span>
+  <% end -%>
+</div>
+
+<%= javascript_with_rescue  <<-JAVASCRIPT
+  $j("#reason_right_tool_for_team").click(function(event){
+    $j(".team-size-feedback").show();
+    $j(".send-feedback").attr('disabled', 'disabled');
+  });
+
+  $j("input:radio[name=team_size]").click(function(event){
+    $j(".send-feedback").removeAttr('disabled');
+  });
+
+  $j("#reason_personal_use, #reason_curious, #reason_another_reason").click(function(event){
+    $j("input:radio[name=team_size]").prop( "checked", false );
+    $j(".team-size-feedback").hide();
+    $j(".send-feedback").removeAttr('disabled');
+  });
+
+JAVASCRIPT
+-%>

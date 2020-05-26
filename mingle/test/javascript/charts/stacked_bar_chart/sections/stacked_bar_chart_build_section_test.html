@@ -1,0 +1,926 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Stacked Bar Chart Build Chart Section Test</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <script src="../../../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/thirdparty/jquery/jquery.tag-it.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/thirdparty/tinycolor.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+  <script src="../../../../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/ruby_to_js_date_format.js" type="text/javascript"></script>
+  <script src="../../../../../public/javascripts/smart_sort.js" type="text/javascript"></script>
+  <script src="../../../../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+
+  <script src="../../../../../public/javascripts/application.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/thirdparty/jquery/jquery.scrollintoview.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/drop_down.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/text_box.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/mingle_tag_storage.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/mingle_tageditor.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/tags_filter.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/url_helper.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/project_data_store.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/single_checkbox.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/group_parameter.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/parameter.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/pair_parameter.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/section_helpers.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/card_filter_value_wrapper.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/color_picker.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/color_selector.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/card_filter.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/property_definition_filter.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/card_type_filter.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/card_filters.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/mql_builder.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/sections/build_chart_section.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/stacked_bar_chart/xLabelTranslator.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/stacked_bar_chart/sections/build_chart_section.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/series.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/series_parameter.js" type="text/javascript"></script>
+
+  <script src="../../../test_assets/sinon-2.3.6.js" type="text/javascript"></script>
+  <script src="../../../test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+  <script src="../../../test_assets/qunit-phantom.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="../../../test_assets/qunit-1.21.0.css" type="text/css"/>
+
+</head>
+  <body>
+    <div id="qunit">
+    </div>
+    <div id="stacked_bar_chart_wizard"></div>
+    <script type="application/javascript">
+
+      var sandbox = sinon.sandbox.create(sinon.defaultConfig);
+      var propDef1 = {
+        name: 'prop1',
+        isNumeric: true,
+        isManaged: true,
+        dataType: 'numeric',
+        operatorOptions: [['is not', 'is not']],
+        propertyValueDetails: [{value: 'p1v2', position:2}, {value: 'p1v1', position:1}, {value: 'p1v3', position:3}]
+      };
+      var propDef2 = {
+        name: 'prop2',
+        dataType: 'string',
+        propertyValueDetails: [{value: 'p2v1'}, {value: 'p2v2'}]
+      };
+      var propDef3 = {
+        name: 'prop3',
+        isManaged: false,
+        dataType: 'string',
+        operatorOptions: [['is', 'is']],
+        propertyValueDetails: [{value: 'p3v1', position:2}, {value: 'p3v2', position:1}]
+      };
+      var propDef4 = {
+        name: 'prop4',
+        dataType: 'string',
+        propertyValueDetails: [{value: 'p4v1'}, {value: 'p4v2'}]
+      };
+      var propDef5 = {
+        name: 'prop5',
+        dataType: 'date'
+      };
+      var propDef6 = {
+        name: 'Owner',
+        dataType: 'user'
+      };
+      var propDef7 = {
+        name: 'Sprint',
+        dataType: 'card'
+      };
+      var expectedParamDefs = [
+        {
+          name: 'x-label-property',
+          initial_value: null,
+          allowed_values: [],
+          multiple_values_allowed: false,
+          input_type: 'dropdown',
+          label: 'Which property should each stack be based on?'
+        }, {
+          name: 'x-label-filters',
+          input_type: 'card-filters',
+          label: 'Filter X-axis values',
+          withoutCardTypeFilter: true,
+          options: {disabled: true}
+        }, {
+          name: 'build-chart-group-1',
+          input_type: 'group-parameter',
+          param_defs: [
+            {
+              name: 'x-label-start',
+              label: 'First X label',
+              input_type: 'dropdown',
+              initial_value: null,
+              allowed_values: [],
+              multiple_values_allowed: false,
+              placeholder: 'X label start'
+            },
+            {
+              name: 'x-label-end',
+              label: 'Last X label',
+              input_type: 'dropdown',
+              initial_value: null,
+              allowed_values: [],
+              multiple_values_allowed: false,
+              placeholder: 'X label end'
+            },
+            {
+              name: 'x-label-interval',
+              label: 'X label interval',
+              input_type: 'dropdown',
+              initial_value: null,
+              allowed_values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+              multiple_values_allowed: false,
+              placeholder: 'X label interval'
+            }
+          ]
+        },
+        {
+          name: 'cumulative',
+          input_type: 'single-checkbox',
+          label: 'Make this a cumulative chart',
+          checked: ''
+        }
+      ], currentProjectData = {
+        identifier: 'sample_project',
+        dateFormat: '%Y/%m/%d',
+        cardTypes: [
+          {
+            id: 1,
+            name: "Story",
+            propertyDefinitions: [propDef1, propDef2, propDef3, propDef5, propDef6, propDef7]
+          },
+          {
+            id: 2,
+            name: "Card",
+            propertyDefinitions: [propDef1, propDef3, propDef4, propDef5, propDef6, propDef7]
+          },
+          {
+            id: 3,
+            name: "Sprint",
+            propertyDefinitions: [propDef1, propDef3, propDef4]
+          }
+        ],
+        cardTypeNames: [
+          "Story",
+          "Release",
+          "Sprint"
+        ],
+        tags: [],
+        team: [
+          {name: 'User1', login: 'user1'},
+          {name: 'User2', login: 'user2'}
+        ]
+      }, projectDataStore = new ProjectDataStore(currentProjectData), accessibleProjects = [
+        {name: 'Sample Project', identifier: 'sample_project'},
+        {name: 'Sample Project 2', identifier: 'sample_project2'}
+      ];
+
+      QUnit.module('Stacked Bar Chart Build Chart Section', {
+        beforeEach: function () {
+          MingleUI.EasyCharts.chartType = 'stacked-bar-chart';
+          sandbox.spy(MingleUI.EasyCharts, 'Parameter');
+          this.onUpdate = sandbox.spy();
+          this.onComplete = sandbox.spy();
+          this.container = $j('#stacked_bar_chart_wizard');
+          this.callbacks = {
+            onUpdate: this.onUpdate,
+            onComplete: this.onComplete
+          };
+          this.projectData = projectDataStore.dataFor(currentProjectData.identifier);
+          this.selectedCardTypes = ['Story', 'Card'];
+          this.section = new MingleUI.EasyCharts.StackedBarChart.Sections.BuildChartSection(
+              {project: currentProjectData.identifier}, this.callbacks, projectDataStore);
+          this.customUpdateHandlerSpy = sandbox.spy(this.section,'customUpdateHandler');
+          sandbox.stub(projectDataStore, 'accessibleProjects').returns(accessibleProjects);
+        },
+        afterEach: function () {
+          this.container.empty();
+          sandbox.restore();
+        }
+
+      }, function () {
+        QUnit.module('Common Test');
+        QUnit.test('testShouldAddTitle', function (assert) {
+          var titleContainer = this.section.htmlContainer.find('div.section-title-container');
+
+          assert.equal(titleContainer.text(), '2Build the chart');
+          assert.equal(titleContainer.find('span.section-number').text(), '2');
+          assert.equal(titleContainer.find('span.section-title').text(), 'Build the chart');
+        });
+
+        QUnit.module('Disabled Section',{
+          beforeEach:function(){
+            this.container.append(this.section.htmlContainer);
+          }
+        });
+        QUnit.test('testShouldInitializeDisabledSection', function (assert) {
+          assert.ok(this.section.htmlContainer.hasClass('disabled'));
+        });
+
+        QUnit.test('testIsValidShouldReturnFalse', function (assert) {
+          assert.notOk(this.section.isValid());
+        });
+
+        QUnit.test('testIsEnabledShouldReturnFalse', function (assert) {
+          assert.notOk(this.section.isEnabled());
+        });
+
+        QUnit.test('testValuesShouldReturnEmptyObject', function (assert) {
+          assert.deepEqual(this.section.values(), {});
+        });
+
+        QUnit.test('testEnableShouldAddCustomizeSectionButton', function (assert) {
+          assert.notOk(this.section.htmlContainer.find('button.enable-customize-section').is(':visible'));
+
+          this.section.enableWith(this.projectData, this.selectedCardTypes, {tags: ['tag1']});
+          this.section.htmlContainer.find('div#stacked_bar_chart_build_chart_section_x_label_property_parameter .parameter .options-container li:contains("prop1")').click();
+          this.section.htmlContainer.find('button.add-a-series').click();
+
+          assert.ok(this.section.htmlContainer.find('button.enable-customize-section').is(':visible'));
+
+        });
+
+
+        QUnit.module('Enabled Section',{
+          beforeEach: function () {
+
+            this.server = sandbox.useFakeServer();
+            this.server.respondWith("GET", "/api/v2/projects/sample_project/cards/execute_mql.json?mql=SELECT+DISTINCT+'prop1'+WHERE+'prop3'+%3D+'p3v1'",
+                [200, {"Content-Type": "application/json"}, JSON.stringify([{'prop1':'p1v1'},{'prop1':'p1v2'}])]);
+            this.server.respondWith("GET", "/api/v2/projects/sample_project/cards/execute_mql.json?mql=SELECT+DISTINCT+'prop1'+WHERE+%22Type%22+%3D+%22Story%22+AND+TAGGED+WITH+%22tag1%22",
+                [200, {"Content-Type": "application/json"}, JSON.stringify([{'prop1':'p1v1'},{'prop1':'p1v2'},{'prop1':'p1v3'}])]);
+            this.server.respondWith("GET", "/api/v2/projects/sample_project/cards/execute_mql.json?mql=SELECT+DISTINCT+'prop5'+WHERE+%22Type%22+%3D+%22Story%22+AND+TAGGED+WITH+%22tag1%22",
+                [200, {"Content-Type": "application/json"}, JSON.stringify([{'prop5':'2016-10-23'},{'prop5':'2017-02-02'},{'prop5':'2017-01-01'},{'prop5':'2017-06-23'}])]);
+            this.server.respondWith("GET", "/api/v2/projects/sample_project/cards/execute_mql.json?mql=SELECT+DISTINCT+'OWNER'+WHERE+%22Type%22+%3D+%22Story%22+AND+TAGGED+WITH+%22tag1%22",
+                [200, {"Content-Type": "application/json"}, JSON.stringify([{Owner:null},{Owner:'user1'},{Owner:'user2'}])]);
+
+            var fakeFilter = {
+              isValid: function () {
+                return true
+              },
+
+              isForCardProperty: function() {
+                return false;
+              },
+
+              property: {
+                value: function () {
+                 return 'Type';
+                }
+              },
+
+              operator: {
+                value: function () {
+                  return 'eq';
+                }
+              },
+
+              value: {
+                value: function () {
+                  return 'Story';
+                }
+              }
+            };
+            this.section.enableWith(this.projectData, this.selectedCardTypes, {filters: [fakeFilter], tags: ['tag1']});
+            this.container.append(this.section.htmlContainer);
+          }
+        });
+
+        QUnit.test('testEnabledWithShouldRemoveDisabledClass', function (assert) {
+          assert.notOk(this.section.htmlContainer.hasClass('disabled'));
+        });
+
+        QUnit.test('testIsEnabledShouldReturnTrue', function (assert) {
+          assert.ok(this.section.isEnabled());
+        });
+
+        QUnit.test('testIsValidShouldReturnFalseWhenLabelPropertyNotSelected', function (assert) {
+          assert.notOk(this.section.isValid());
+        });
+
+        QUnit.test('testShouldAddXLabelsPropertyDropdown', function (assert) {
+
+          var propertyDropDownParams = MingleUI.EasyCharts.Parameter.args[0];
+
+          assert.equal(MingleUI.EasyCharts.Parameter.callCount, 7);
+          assert.equal(propertyDropDownParams[0], 'stacked_bar_chart_build_chart_section');
+          assert.deepEqual(propertyDropDownParams[1], expectedParamDefs[0]);
+          assert.equal(typeof propertyDropDownParams[2].onUpdate, 'function');
+
+          assert.equal(this.section.htmlContainer.find('#stacked_bar_chart_build_chart_section_x_label_property_parameter .parameter-label').text(),expectedParamDefs[0].label);
+          assert.equal(this.section.htmlContainer.find('div#stacked_bar_chart_build_chart_section_x_label_property_parameter .parameter .options-container').text(), 'prop1prop3prop5OwnerSprint');
+        });
+
+        QUnit.test('testShouldAddXLabelFilters', function (assert) {
+
+          var propertyDropDownParams = MingleUI.EasyCharts.Parameter.args[1];
+
+          assert.equal(MingleUI.EasyCharts.Parameter.callCount, 7);
+          assert.ok(MingleUI.EasyCharts.Parameter.args[1][1].options.disabled);
+          assert.equal(propertyDropDownParams[0], 'stacked_bar_chart_build_chart_section');
+          assert.deepEqual(propertyDropDownParams[1], expectedParamDefs[1]);
+          assert.equal(typeof propertyDropDownParams[2].onUpdate, 'function');
+
+          assert.equal(this.section.htmlContainer.find('#stacked_bar_chart_build_chart_section_x_label_filters_parameter .parameter-label').text(),expectedParamDefs[1].label);
+          assert.equal(this.section.htmlContainer.find('div#stacked_bar_chart_build_chart_section_x_label_filters_parameter .card-filter-container .part-container .disabled').length, 3);
+
+        });
+
+        QUnit.test('testShouldAddXLabelStart', function (assert) {
+
+          assert.equal(this.section.htmlContainer.find('#build_chart_group1_first_x_label_parameter .parameter-label').text(),expectedParamDefs[2].param_defs[0].label);
+          assert.equal(this.section.htmlContainer.find('div#build_chart_group1_first_x_label_parameter .parameter .selected-value').text(), '(not set)');
+          assert.ok(this.section.htmlContainer.find('#build_chart_group1_first_x_label_parameter .parameter').hasClass('disabled'));
+        });
+
+        QUnit.test('testShouldAddXLabelEnd', function (assert) {
+
+          assert.equal(this.section.htmlContainer.find('#build_chart_group1_last_x_label_parameter .parameter-label').text(),expectedParamDefs[2].param_defs[1].label);
+          assert.equal(this.section.htmlContainer.find('div#build_chart_group1_last_x_label_parameter .parameter .selected-value').text(), '(not set)');
+          assert.ok(this.section.htmlContainer.find('div#build_chart_group1_last_x_label_parameter .parameter').hasClass('disabled'));
+        });
+
+        QUnit.test('testShouldAddXLabelInterval', function (assert) {
+
+          assert.equal(this.section.htmlContainer.find('#build_chart_group1_x_label_interval_parameter .parameter-label').text(),expectedParamDefs[2].param_defs[2].label);
+          assert.equal(this.section.htmlContainer.find('div#build_chart_group1_x_label_interval_parameter .parameter .selected-value').text(), '1');
+          assert.equal(this.section.htmlContainer.find('div#build_chart_group1_x_label_interval_parameter .parameter .options-container').text(), expectedParamDefs[2].param_defs[2].allowed_values.join(''));
+          assert.ok(this.section.htmlContainer.find('div#build_chart_group1_x_label_interval_parameter .parameter').hasClass('disabled'));
+        });
+
+        QUnit.test('testShouldAddCheckedCumulativeOption', function (assert) {
+
+          var cumulativeOptionParameter = this.section.htmlContainer.find('#stacked_bar_chart_build_chart_section_cumulative_parameter.inline-parameter');
+          assert.equal(cumulativeOptionParameter.find('.parameter-label').text(),expectedParamDefs[3].label);
+          assert.ok(cumulativeOptionParameter.find('input').is(':checked'));
+        });
+
+        QUnit.test('testShouldEnableDisabledParametersOnXLabelPropertySelection', function (assert) {
+
+          var propertyDropDownParams = MingleUI.EasyCharts.Parameter.args[1];
+
+          assert.equal(MingleUI.EasyCharts.Parameter.callCount, 7);
+          assert.ok(MingleUI.EasyCharts.Parameter.args[1][1].options.disabled);
+          assert.equal(propertyDropDownParams[0], 'stacked_bar_chart_build_chart_section');
+          assert.deepEqual(propertyDropDownParams[1], expectedParamDefs[1]);
+          assert.equal(typeof propertyDropDownParams[2].onUpdate, 'function');
+          this.section.htmlContainer.find('div#stacked_bar_chart_build_chart_section_x_label_property_parameter .parameter .drop-down-toggle').click();
+          this.section.htmlContainer.find('div#stacked_bar_chart_build_chart_section_x_label_property_parameter .parameter .options-container li:first-child()').click();
+
+          assert.equal(this.onUpdate.args[0][0], this.section);
+          assert.equal(this.section.htmlContainer.find('#stacked_bar_chart_build_chart_section_x_label_filters_parameter .parameter-label').text(),expectedParamDefs[1].label);
+          assert.equal(this.section.htmlContainer.find('div#stacked_bar_chart_build_chart_section_x_label_filters_parameter .card-filter-container .part-container .drop-down-toggle').length, 3);
+          assert.equal(this.section.htmlContainer.find('div#stacked_bar_chart_build_chart_section_x_label_filters_parameter .card-filter-container .part-container .disabled').length, 0);
+
+          assert.equal(this.section.htmlContainer.find('div#build_chart_group1_first_x_label_parameter .parameter .selected-value').text(), '(not set)');
+          assert.notOk(this.section.htmlContainer.find('#build_chart_group1_first_x_label_parameter .parameter').hasClass('disabled'));
+
+          assert.equal(this.section.htmlContainer.find('div#build_chart_group1_last_x_label_parameter .parameter .selected-value').text(), '(not set)');
+          assert.notOk(this.section.htmlContainer.find('#build_chart_group1_last_x_label_parameter .parameter').hasClass('disabled'));
+          assert.equal(this.onUpdate.callCount, 1);
+        });
+
+        QUnit.test('testShouldFirstXLabelANdLastXLabelShouldHaveValueAsUserDisplayNameForUserTypeXLabelProperty', function (assert) {
+
+          var propertyDropDownParams = MingleUI.EasyCharts.Parameter.args[1];
+
+          assert.equal(MingleUI.EasyCharts.Parameter.callCount, 7);
+          assert.ok(MingleUI.EasyCharts.Parameter.args[1][1].options.disabled);
+          assert.equal(propertyDropDownParams[0], 'stacked_bar_chart_build_chart_section');
+          assert.deepEqual(propertyDropDownParams[1], expectedParamDefs[1]);
+          assert.equal(typeof propertyDropDownParams[2].onUpdate, 'function');
+          this.section.htmlContainer.find('div#stacked_bar_chart_build_chart_section_x_label_property_parameter .parameter .drop-down-toggle').click();
+
+          this.section.htmlContainer.find('div#stacked_bar_chart_build_chart_section_x_label_property_parameter .parameter .options-container li span[title="Owner"]').click();
+          this.server.respond();
+
+
+          assert.equal(this.onUpdate.args[0][0], this.section);
+
+          var xLabelValues = this.section.htmlContainer.find('div#build_chart_group1_first_x_label_parameter .parameter .options-container li span');
+          assert.equal($j(xLabelValues[0]).text(), '(not set)');
+          assert.equal($j(xLabelValues[1]).text(), 'User1');
+          assert.equal($j(xLabelValues[2]).text(), 'User2');
+        });
+
+        QUnit.test('testShouldUpdateXLabelStartAndEndOptionsWhenXLabelFiltersChanged', function (assert) {
+
+          var propertyDropDownParams = MingleUI.EasyCharts.Parameter.args[1];
+
+          assert.equal(MingleUI.EasyCharts.Parameter.callCount, 7);
+          assert.ok(MingleUI.EasyCharts.Parameter.args[1][1].options.disabled);
+          assert.equal(propertyDropDownParams[0], 'stacked_bar_chart_build_chart_section');
+          assert.deepEqual(propertyDropDownParams[1], expectedParamDefs[1]);
+          assert.equal(typeof propertyDropDownParams[2].onUpdate, 'function');
+          this.section.htmlContainer.find('div#stacked_bar_chart_build_chart_section_x_label_property_parameter .parameter .drop-down-toggle').click();
+          this.section.htmlContainer.find('div#stacked_bar_chart_build_chart_section_x_label_property_parameter .parameter .options-container li span[title="prop1"]').click();
+          assert.ok(this.section.isValid());
+
+
+          assert.equal(this.onUpdate.args[0][0], this.section);
+          this.section.htmlContainer.find('div#card_filter_1_property .drop-down-toggle').click();
+          this.server.respond();
+
+          this.section.htmlContainer.find('div#card_filter_1_property .options-container li span[title="prop3"]').click();
+          var xLabelValues = this.section.htmlContainer.find('div#build_chart_group1_first_x_label_parameter .parameter .options-container li span');
+          assert.equal(xLabelValues.size(), 4);
+          assert.equal($j(xLabelValues[0]).text(), '(not set)');
+          assert.equal($j(xLabelValues[1]).text(), 'p1v1');
+          assert.equal($j(xLabelValues[2]).text(), 'p1v2');
+
+          assert.equal($j(xLabelValues[3]).text(), 'p1v3');
+          this.section.htmlContainer.find('div#card_filter_1_value .drop-down-toggle').click();
+          this.section.htmlContainer.find('div#card_filter_1_value .options-container li span[title="p3v1"]').click();
+          this.section.htmlContainer.find('div#card_filter_1_value .drop-down-toggle').click();
+          this.server.respond();
+          var done = assert.async(1);
+
+          setTimeout(function() {
+            var xLabelValues = this.section.htmlContainer.find('div#build_chart_group1_first_x_label_parameter .parameter .options-container li span');
+            assert.equal(this.server.requestCount, 2);
+            assert.equal(xLabelValues.size(), 4);
+            assert.equal($j(xLabelValues[0]).text(), '(not set)');
+            assert.equal($j(xLabelValues[1]).text(), 'p1v1');
+            assert.equal($j(xLabelValues[2]).text(), 'p1v2');
+            assert.equal(this.onUpdate.callCount, 3);
+            done();
+          }.bind(this));
+
+        });
+
+        QUnit.test('testShouldTriggerOnUpdateCallbackWhenXLabelRangeFiltersChanged', function (assert) {
+
+          this.section.htmlContainer.find('div#stacked_bar_chart_build_chart_section_x_label_property_parameter .parameter .drop-down-toggle').click();
+          this.section.htmlContainer.find('div#stacked_bar_chart_build_chart_section_x_label_property_parameter .parameter .options-container li:first-child()').click();
+          assert.equal(this.onUpdate.args[0][0], this.section);
+
+          this.section.htmlContainer.find('#build_chart_group1_first_x_label_parameter .drop-down-toggle').click();
+          this.section.htmlContainer.find('#build_chart_group1_first_x_label_parameter .options-container li span[title="p1v1"]').click();
+          assert.equal(this.onUpdate.args[1][0], this.section);
+
+          this.section.htmlContainer.find('#build_chart_group1_last_x_label_parameter .drop-down-toggle').click();
+          this.section.htmlContainer.find('#build_chart_group1_last_x_label_parameter .options-container li span[title="p1v2"]').click();
+          assert.equal(this.onUpdate.args[2][0], this.section);
+
+          this.section.htmlContainer.find('#build_chart_group1_x_label_interval_parameter .drop-down-toggle').click();
+          this.section.htmlContainer.find('#build_chart_group1_x_label_interval_parameter .options-container li span[title="2"]').click();
+          assert.equal(this.onUpdate.args[3][0], this.section);
+
+          assert.equal(this.onUpdate.callCount, 4);
+        });
+
+        QUnit.test('testShouldTriggerOnUpdateCallbackWhenCumulativeCheckBoxChanged', function (assert) {
+
+          this.section.htmlContainer.find('div#stacked_bar_chart_build_chart_section_x_label_property_parameter .parameter .drop-down-toggle').click();
+          this.section.htmlContainer.find('div#stacked_bar_chart_build_chart_section_x_label_property_parameter .parameter .options-container li:first-child()').click();
+          assert.equal(this.onUpdate.args[0][0], this.section);
+
+          this.section.htmlContainer.find('input[name="cumulative"]').click();
+          assert.equal(this.onUpdate.args[1][0], this.section);
+
+          assert.equal(this.onUpdate.callCount, 2);
+        });
+
+        QUnit.test('testValuesShouldReturnXLabelPropertyAndEmptyXLabelFiltersWhenFiltersAreNotSelected', function (assert) {
+
+          this.section.htmlContainer.find('div#stacked_bar_chart_build_chart_section_x_label_property_parameter .parameter .drop-down-toggle').click();
+          this.section.htmlContainer.find('div#stacked_bar_chart_build_chart_section_x_label_property_parameter .parameter .options-container li:first-child()').click();
+
+
+          assert.deepEqual(this.section.values(),{xLabelProperty:'prop1',xLabelFilters:[], xLabelInterval:'1', firstXLabel:null,lastXLabel:null} );
+        });
+
+        QUnit.test('testValuesShouldReturnXLabelPropertyAndXLabelFiltersWhenFiltersAreSelected', function (assert) {
+
+          this.section.htmlContainer.find('div#stacked_bar_chart_build_chart_section_x_label_property_parameter .parameter .drop-down-toggle').click();
+          this.section.htmlContainer.find('div#stacked_bar_chart_build_chart_section_x_label_property_parameter .parameter .options-container li:first-child()').click();
+
+          this.section.htmlContainer.find('div#card_filter_1_property .drop-down-toggle').click();
+          this.section.htmlContainer.find('div#card_filter_1_property .options-container li span[title="prop3"]').click();
+          this.section.htmlContainer.find('div#card_filter_1_value .drop-down-toggle').click();
+          this.section.htmlContainer.find('div#card_filter_1_value .options-container li span[title="p3v1"]').click();
+
+          var values = this.section.values();
+          assert.equal(values.xLabelProperty,'prop1');
+          assert.equal(values.xLabelFilters[0].getMql(), '"prop3" = "p3v1"');
+        });
+
+        QUnit.test('testValuesShouldReturnXLabelPropertyWithFirstXLabelLastXLabelAndXLabelIntervalWhenSelected', function (assert) {
+
+          this.section.htmlContainer.find('div#stacked_bar_chart_build_chart_section_x_label_property_parameter .parameter .drop-down-toggle').click();
+          this.section.htmlContainer.find('div#stacked_bar_chart_build_chart_section_x_label_property_parameter .parameter .options-container li:first-child()').click();
+
+          this.section.htmlContainer.find('#build_chart_group1_first_x_label_parameter .drop-down-toggle').click();
+          this.section.htmlContainer.find('#build_chart_group1_first_x_label_parameter .options-container li span[title="p1v1"]').click();
+
+          this.section.htmlContainer.find('#build_chart_group1_last_x_label_parameter .drop-down-toggle').click();
+          this.section.htmlContainer.find('#build_chart_group1_last_x_label_parameter .options-container li span[title="p1v2"]').click();
+
+          this.section.htmlContainer.find('#build_chart_group1_x_label_interval_parameter .drop-down-toggle').click();
+          this.section.htmlContainer.find('#build_chart_group1_x_label_interval_parameter .options-container li span[title="2"]').click();
+
+          var expected = {
+            xLabelProperty: 'prop1',
+            xLabelFilters: [],
+            firstXLabel:'p1v1',
+            lastXLabel:'p1v2',
+            xLabelInterval:'2'
+          };
+          assert.deepEqual(this.section.values(),expected );
+        });
+
+        QUnit.test('testShouldFetchPropertyValuesFromServerWhenNotPresent', function (assert) {
+
+          this.section.htmlContainer.find('div#stacked_bar_chart_build_chart_section_x_label_property_parameter .parameter .drop-down-toggle').click();
+          this.section.htmlContainer.find('div#stacked_bar_chart_build_chart_section_x_label_property_parameter .parameter .options-container li span[title="prop5"]').click();
+          this.server.respond();
+          var optionsFromServer = this.section.htmlContainer.find('#build_chart_group1_first_x_label_parameter .options-container li span');
+          assert.equal($j(optionsFromServer.get(0)).text(), "(not set)");
+          var expectedDate = new Date('2016-10-23').format('yyyy/mm/dd');
+          assert.equal($j(optionsFromServer.get(1)).attr('title'), expectedDate);
+          assert.equal($j(optionsFromServer.get(1)).text(), expectedDate);
+
+          expectedDate = new Date("2017-01-01").format('yyyy/mm/dd');
+          assert.equal($j(optionsFromServer.get(2)).attr('title'),  expectedDate);
+          assert.equal($j(optionsFromServer.get(2)).text(), expectedDate );
+
+          expectedDate = new Date("2017-02-02").format('yyyy/mm/dd');
+          assert.equal($j(optionsFromServer.get(3)).attr('title'), expectedDate);
+          assert.equal($j(optionsFromServer.get(3)).text(), expectedDate);
+
+          expectedDate = new Date("2017-06-23").format('yyyy/mm/dd');
+          assert.equal($j(optionsFromServer.get(4)).attr('title'), expectedDate);
+          assert.equal($j(optionsFromServer.get(4)).text(), expectedDate);
+        });
+
+        QUnit.test('testShouldResetXLabelRangeFiltersOnXLabelPropertyChange', function (assert) {
+
+          this.section.htmlContainer.find('div#stacked_bar_chart_build_chart_section_x_label_property_parameter .parameter .drop-down-toggle').click();
+          this.section.htmlContainer.find('div#stacked_bar_chart_build_chart_section_x_label_property_parameter .parameter .options-container li:first-child()').click();
+
+          this.section.htmlContainer.find('#build_chart_group1_first_x_label_parameter .drop-down-toggle').click();
+          this.section.htmlContainer.find('#build_chart_group1_first_x_label_parameter .options-container li span[title="p1v1"]').click();
+
+          this.section.htmlContainer.find('#build_chart_group1_last_x_label_parameter .drop-down-toggle').click();
+          this.section.htmlContainer.find('#build_chart_group1_last_x_label_parameter .options-container li span[title="p1v2"]').click();
+
+          var expected = {
+            xLabelProperty: 'prop1',
+            xLabelFilters: [],
+            firstXLabel:'p1v1',
+            lastXLabel:'p1v2',
+            xLabelInterval:'1'
+          };
+          assert.deepEqual(this.section.values(),expected );
+
+          this.section.htmlContainer.find('div#stacked_bar_chart_build_chart_section_x_label_property_parameter .parameter .drop-down-toggle').click();
+          this.section.htmlContainer.find('div#stacked_bar_chart_build_chart_section_x_label_property_parameter .parameter .options-container li span[title="prop3"]').click();
+
+          expected = {
+            xLabelProperty: 'prop3',
+            xLabelFilters: [],
+            xLabelInterval:'1',
+            firstXLabel:null,
+            lastXLabel:null,
+            seriesParameter: {}
+          };
+
+          assert.deepEqual(this.section.values(),expected );
+        });
+
+        QUnit.test('testShouldSmartSortXLabelForCardProperty', function (assert) {
+          var data = [{Sprint: '#1 1 Sprint'}, {Sprint: '#2 12 Sprint'}, {Sprint: '#10 Sprint 2'}, {Sprint: '#5 A 10 Sprint'}, {Sprint: '#12 A Sprint 02'}];
+          this.server.respondWith('GET', '/api/v2/projects/sample_project/cards/execute_mql.json?mql=SELECT+DISTINCT+\'Sprint\'+WHERE+%22Type%22+%3D+%22Story%22+AND+TAGGED+WITH+%22tag1%22',
+              [200, {'Content-Type': 'application/json'}, JSON.stringify(data)]);
+
+          this.section.htmlContainer.find('div#stacked_bar_chart_build_chart_section_x_label_property_parameter .parameter .drop-down-toggle').click();
+          this.section.htmlContainer.find('div#stacked_bar_chart_build_chart_section_x_label_property_parameter .parameter .options-container li span[title="Sprint"]').click();
+
+          this.server.respond();
+          var firstXLabel = this.section.htmlContainer.find('#build_chart_group1_first_x_label_parameter .options-container li span');
+          assert.equal($j(firstXLabel.get(1)).text(), '#1 1 Sprint');
+          assert.equal($j(firstXLabel.get(2)).text(), '#2 12 Sprint' );
+          assert.equal($j(firstXLabel.get(3)).text(), '#5 A 10 Sprint');
+          assert.equal($j(firstXLabel.get(4)).text(), '#12 A Sprint 02' );
+          assert.equal($j(firstXLabel.get(5)).text(), '#10 Sprint 2' );
+        });
+
+        QUnit.test('testUpdateSelectedFiltersShouldResetXLabelRangeFiltersValues', function (assert) {
+          var data = [{Sprint: '#1 1 Sprint'}, {Sprint: '#2 12 Sprint'}, {Sprint: '#10 Sprint 2'}, {Sprint: '#5 A 10 Sprint'}, {Sprint: '#12 A Sprint 02'}];
+          var data2 = [{Sprint: '#1 1 Sprint'}, {Sprint: '#2 12 Sprint'}, {Sprint: '#5 A 10 Sprint'}, {Sprint: '#12 A Sprint 02'}];
+          this.server.respondWith('GET', '/api/v2/projects/sample_project/cards/execute_mql.json?mql=SELECT+DISTINCT+\'Sprint\'+WHERE+%22Type%22+%3D+%22Story%22+AND+TAGGED+WITH+%22tag1%22',
+              [200, {'Content-Type': 'application/json'}, JSON.stringify(data)]);
+          this.server.respondWith('GET', "/api/v2/projects/sample_project/cards/execute_mql.json?mql=SELECT+DISTINCT+'Sprint'+WHERE+%22Type%22+%3D+%22Story%22+AND+TAGGED+WITH+%22tag2%22",
+              [200, {'Content-Type': 'application/json'}, JSON.stringify(data2)]);
+
+          this.section.htmlContainer.find('div#stacked_bar_chart_build_chart_section_x_label_property_parameter .parameter .drop-down-toggle').click();
+          this.section.htmlContainer.find('div#stacked_bar_chart_build_chart_section_x_label_property_parameter .parameter .options-container li span[title="Sprint"]').click();
+
+          this.server.respond();
+          this.section.htmlContainer.find('#build_chart_group1_first_x_label_parameter .options-container li span[title="#1 1 Sprint"]').click();
+          this.section.htmlContainer.find('#build_chart_group1_last_x_label_parameter .options-container li span[title="#10 Sprint 2"]').click();
+
+          var values = this.section.values();
+          assert.equal(values.firstXLabel, "#1 1 Sprint");
+          assert.equal(values.lastXLabel, "#10 Sprint 2");
+          assert.equal(this.section.htmlContainer.find('#build_chart_group1_first_x_label_parameter .selected-value').text(),'#1 1 Sprint' );
+          assert.equal(this.section.htmlContainer.find('#build_chart_group1_last_x_label_parameter .selected-value').text(),'#10 Sprint 2'  );
+
+          this.section.updateSelectedFilters(['tag2'],'tags');
+          this.server.respond();
+          assert.equal(this.section.htmlContainer.find('#build_chart_group1_first_x_label_parameter .selected-value').text(),'#1 1 Sprint' );
+          assert.equal(this.section.htmlContainer.find('#build_chart_group1_last_x_label_parameter .selected-value').text(),'(not set)' );
+          values = this.section.values();
+
+          assert.equal(3, this.onUpdate.callCount);
+          assert.equal(values.firstXLabel, "#1 1 Sprint");
+          assert.notOk(values.lastXLabel);
+        });
+
+        QUnit.test('testShouldNotTriggerOnUpdateWhenCumulativeIsChangedAndXLabelPropertyIsNotSetAndUpdateValues', function (assert) {
+          this.section.htmlContainer.find('input[name="cumulative"]').click();
+
+          assert.equal(this.onUpdate.callCount, 0);
+          assert.notOk(this.section.values().cumulative);
+
+          this.section.htmlContainer.find('input[name="cumulative"]').click();
+
+          assert.equal(this.onUpdate.callCount, 0);
+          assert.ok(this.section.values().cumulative);
+        });
+
+        QUnit.module('Enabled Section With Series', {
+          beforeEach: function () {
+            this.server = sandbox.useFakeServer();
+            sandbox.spy(MingleUI.EasyCharts,'SeriesParameter');
+            this.seriesSpy = sandbox.spy(MingleUI.EasyCharts, 'Series');
+            this.server.respondWith("GET", "/api/v2/projects/sample_project/cards/execute_mql.json?mql=SELECT+DISTINCT+'prop1'+WHERE+'prop3'+%3D+'p3v1'",
+                [200, {"Content-Type": "application/json"}, JSON.stringify([{'prop1': 'p1v1'}, {'prop1': 'p1v2'}])]);
+            this.server.respondWith("GET", "/api/v2/projects/sample_project/cards/execute_mql.json?mql=SELECT+DISTINCT+'prop5'",
+                [200, {"Content-Type": "application/json"}, JSON.stringify([{'prop5': '2016-10-23'}, {'prop5': '2017-02-02'}, {'prop5': '2017-01-01'}, {'prop5': '2017-06-23'}])]);
+            this.server.respondWith("GET", "/api/v2/projects/sample_project/cards/execute_mql.json?mql=SELECT+DISTINCT+'OWNER'",
+                [200, {"Content-Type": "application/json"}, JSON.stringify([{Owner: null}, {Owner: 'user1'}, {Owner: 'user2'}])]);
+            this.section.enableWith(this.projectData, this.selectedCardTypes);
+            var seriesParameter = MingleUI.EasyCharts.SeriesParameter.returnValues[0];
+            this.seriesParameterUpdateSpy =  sandbox.spy(seriesParameter,'update');
+            this.container.append(this.section.htmlContainer);
+            this.section.htmlContainer.find('div#stacked_bar_chart_build_chart_section_x_label_property_parameter .parameter .drop-down-toggle').click();
+            this.section.htmlContainer.find('div#stacked_bar_chart_build_chart_section_x_label_property_parameter .parameter .options-container li span[title="prop1"]').click();
+          }
+        });
+
+        QUnit.test('testShouldPassSeriesConfigToSeriesParameter', function (assert) {
+          var expectedSeriesConfig = { 'trend-line':{isRequired:false}, 'burn-down':{isRequired:false}};
+          var actualSeriesConfig = MingleUI.EasyCharts.SeriesParameter.args[0][2].seriesConfig;
+          assert.deepEqual(actualSeriesConfig, expectedSeriesConfig);
+        });
+
+        QUnit.test('testShouldAddSeriesAndButtonProceedToStep3', function (assert) {
+          var data = {
+            number: 1,
+            currentProject: 'sample_project',
+            projectDataStore:projectDataStore,
+            cardFilters: [
+              {
+                property: 'Type', values: ['Story', 'Card'], operator: 'is'
+              }
+            ],
+            config: {
+              "trend-line": {
+                isRequired: false
+              },
+              "burn-down": {
+                isRequired: false
+              }
+            },
+            property: 'prop1',
+            colors: []
+          };
+          this.section.htmlContainer.find('button.add-a-series').click();
+          var seriesParameter = this.section.htmlContainer.find('div.series-parameter');
+
+          assert.ok(seriesParameter.find('#series_1').is(':visible'));
+
+          assert.deepEqual(this.seriesSpy.args[0][0], data);
+          assert.ok(this.section.htmlContainer.find('button.enable-customize-section').is(':visible'));
+
+        });
+
+        QUnit.test('testShouldTriggerCustomizeChartCallBackWhenProceedToStepThreeIsClicked', function (assert) {
+          this.section.htmlContainer.find('button.add-a-series').click();
+
+          assert.ok(this.section.htmlContainer.find('button.enable-customize-section').is(':visible'));
+
+          this.section.htmlContainer.find('button.enable-customize-section').click();
+
+          assert.equal(this.callbacks.onComplete.callCount, 1);
+          assert.notOk(this.section.htmlContainer.find('button.enable-customize-section').is(':visible'));
+
+          this.section.htmlContainer.find('button.add-a-series').click();
+          assert.notOk(this.section.htmlContainer.find('button.enable-customize-section').is(':visible'));
+        });
+
+        QUnit.test('testShouldNotCreateAddSeriesButtonWhenXLabelPropertyIsNotSelected', function (assert) {
+          this.section.disable();
+          this.section.enableWith(this.projectData, this.selectedCardTypes);
+
+          assert.notOk(this.section.htmlContainer.find('button.add-a-series').is(':visible'));
+
+        });
+
+        QUnit.test('testDisableShouldRemoveSeriesAndValues', function (assert) {
+
+          this.section.htmlContainer.find('button.add-a-series').click();
+          var seriesParameter = this.section.htmlContainer.find('div.series-parameter');
+
+          assert.ok(seriesParameter.is(':visible'));
+          assert.ok(seriesParameter.find('#series_1').is(':visible'));
+
+          this.section.disable();
+
+          assert.notOk(seriesParameter.is(':visible'));
+          assert.notOk(seriesParameter.find('#series_1').is(':visible'));
+          assert.ok(this.section.htmlContainer.hasClass('disabled'));
+          assert.deepEqual(this.section._values, {});
+        });
+
+        QUnit.test('testEnableInsertShouldBeTrueOnlyIfSeriesParameterIsValid', function (assert) {
+          this.section.htmlContainer.find('button.add-a-series').click();
+
+          assert.notOk(this.section.enableInsert());
+
+          var seriesParameterContainer = this.section.htmlContainer.find('div.series-parameter');
+          seriesParameterContainer.find('#series_1_property_parameter .drop-down-handle').click();
+          seriesParameterContainer.find('#series_1_property_parameter .options-container li span[title="prop1"]').click();
+
+          assert.ok(this.section.enableInsert());
+        });
+
+        QUnit.test('testEnableInsertShouldReturnFalseWhenXLabelPropertyIsReset', function (assert) {
+          this.section.htmlContainer.find('button.add-a-series').click();
+
+          var seriesParameterContainer = this.section.htmlContainer.find('div.series-parameter');
+          seriesParameterContainer.find('#series_1_property_parameter .drop-down-handle').click();
+          seriesParameterContainer.find('#series_1_property_parameter .options-container li span[title="prop1"]').click();
+
+          assert.ok(this.section.enableInsert());
+
+          this.section.htmlContainer.find('div#stacked_bar_chart_build_chart_section_x_label_property_parameter .parameter .drop-down-toggle').click();
+          this.section.htmlContainer.find('div#stacked_bar_chart_build_chart_section_x_label_property_parameter .parameter .options-container li span[title="prop3"]').click();
+
+          assert.notOk(this.section.enableInsert());
+          assert.deepEqual(this.section._values.seriesParameter, {});
+        });
+
+        QUnit.test('testShouldIncreaseSeriesCount', function (assert) {
+          var data = {
+            number: 1,
+            currentProject: 'sample_project',
+            projectDataStore:projectDataStore,
+            cardFilters: [
+              {
+                property: 'Type', values: ['Story', 'Card'], operator: 'is'
+              }
+            ],
+            config: {
+              "trend-line": {
+                isRequired: false
+              },
+              "burn-down": {
+                isRequired: false
+              }
+            },
+            property: 'prop1',
+            colors: []
+          };
+          this.section.htmlContainer.find('button.add-a-series').click();
+          var seriesParameter = this.section.htmlContainer.find('div.series-parameter');
+
+          assert.ok(seriesParameter.is(':visible'));
+          assert.ok(seriesParameter.find('#series_1').is(':visible'));
+
+          assert.deepEqual(this.seriesSpy.args[0][0], data);
+
+          this.section.htmlContainer.find('button.add-a-series').click();
+
+          assert.ok(seriesParameter.find('#series_2').is(':visible'));
+
+          data.number = 2;
+          assert.deepEqual(this.seriesSpy.args[1][0], data);
+        });
+
+        QUnit.test('testShouldTriggerOnUpdateCallWhenSeriesParameterIsChanged', function (assert) {
+
+          this.section.htmlContainer.find('button.add-a-series').click();
+          var seriesParameterContainer = this.section.htmlContainer.find('div.series-parameter');
+          assert.equal(this.onUpdate.callCount, 1);
+          seriesParameterContainer.find('#series_1_property_parameter .drop-down-handle').click();
+          seriesParameterContainer.find('#series_1_property_parameter .options-container li span[title="prop1"]').click();
+          var seriesData = this.customUpdateHandlerSpy.args[1][0].value();
+
+          assert.equal(this.onUpdate.callCount, 2);
+          assert.equal(this.customUpdateHandlerSpy.callCount, 2);
+          assert.equal(this.customUpdateHandlerSpy.args[1][0].name, 'seriesParameter');
+          assert.equal(seriesData['Series 1'].label, 'Series 1');
+          assert.equal(seriesData['Series 1'].property, 'prop1');
+
+        });
+
+        QUnit.test('testShouldInvokeUpdateMethodOnSeriesParameterWhenXLabelPropertyIsChanged', function (assert) {
+          this.section.htmlContainer.find('button.add-a-series').click();
+
+          assert.equal(this.onUpdate.callCount, 1);
+
+          this.section.htmlContainer.find('div#stacked_bar_chart_build_chart_section_x_label_property_parameter .parameter .drop-down-toggle').click();
+          this.section.htmlContainer.find('div#stacked_bar_chart_build_chart_section_x_label_property_parameter .parameter .options-container li:contains("prop3")').click();
+
+          assert.equal(this.seriesParameterUpdateSpy.callCount, 1);
+
+          assert.equal(this.seriesParameterUpdateSpy.args[0][0], 'prop3');
+
+        });
+
+        QUnit.test('testShouldUpdatePropertyForAllSeriesWhenXLabelPropertyIsChanged', function (assert) {
+          this.section.htmlContainer.find('button.add-a-series').click();
+          var series = MingleUI.EasyCharts.Series.returnValues[0];
+          sinon.spy(series, 'updateProperty');
+          var seriesParameterContainer = this.section.htmlContainer.find('div.series-parameter');
+          seriesParameterContainer.find('#series_1_property_parameter .drop-down-handle').click();
+          seriesParameterContainer.find('#series_1_property_parameter .options-container li span[title="prop1"]').click();
+
+          assert.equal(this.section.values().seriesParameter['Series 1'].property, 'prop1');
+          assert.equal(this.section.values().seriesParameter['Series 1'].label, 'Series 1');
+          assert.equal(this.section.values().seriesParameter['Series 1'].combine, 'overlay-bottom');
+          assert.equal(this.section.values().seriesParameter['Series 1'].hidden, false);
+          assert.notOk(this.section.values().seriesParameter['Series 1'].project);
+          assert.deepEqual(this.section.values().seriesParameter['Series 1'].filters[0].getMql(), '"Type" IN ("Story","Card")');
+
+          this.section.htmlContainer.find('div#stacked_bar_chart_build_chart_section_x_label_property_parameter .parameter .drop-down-toggle').click();
+          this.section.htmlContainer.find('div#stacked_bar_chart_build_chart_section_x_label_property_parameter .parameter .options-container li span[title="prop3"]').click();
+
+          assert.equal(this.section.htmlContainer.find('#series_1_property_parameter .drop-down .selected-value').text(), '(not set)');
+          assert.equal(series.updateProperty.callCount, 1);
+          assert.equal(series.updateProperty.args[0], 'prop3');
+        });
+
+        QUnit.module('Enabled Section With Different Series Config', {
+          beforeEach: function () {
+            var options = {seriesConfig:{group:{isRequired:false, values:{combine:{isRequired:false}}}}};
+            this.container.empty();
+            sandbox.restore();
+            sandbox.spy(MingleUI.EasyCharts, 'Parameter');
+            sandbox.spy(MingleUI.EasyCharts,'SeriesParameter');
+            this.onUpdate = sandbox.spy();
+            this.onComplete = sandbox.spy();
+            this.container = $j('#stacked_bar_chart_wizard');
+            this.callbacks = {
+              onUpdate: this.onUpdate,
+              onComplete: this.onComplete
+            };
+            this.projectData = projectDataStore.dataFor(currentProjectData.identifier);
+            this.selectedCardTypes = ['Story', 'Card'];
+            this.section = new MingleUI.EasyCharts.StackedBarChart.Sections.BuildChartSection(
+                {project: currentProjectData.identifier}, this.callbacks, projectDataStore,options);
+            this.customUpdateHandlerSpy = sandbox.spy(this.section,'customUpdateHandler');
+            sandbox.stub(projectDataStore, 'accessibleProjects').returns(accessibleProjects);
+          }
+        });
+
+        QUnit.test('testShouldInvokeSeriesParameterWithCorrectSeriesConfig', function (assert) {
+          assert.equal(MingleUI.EasyCharts.SeriesParameter.callCount, 0);
+
+          this.section.enableWith(this.projectData, this.selectedCardTypes);
+
+          assert.equal(MingleUI.EasyCharts.SeriesParameter.callCount, 1);
+          assert.deepEqual(MingleUI.EasyCharts.SeriesParameter.args[0][2].seriesConfig, {group:{isRequired:false, values:{combine:{isRequired:false}}}});
+        });
+
+
+
+      });
+    </script>
+  </body>
+</html>

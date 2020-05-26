@@ -1,0 +1,34 @@
+<!--[if lte IE 6]>
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<style type="text/css" media="screen">
+.sub-tree .last .card-wrapper {
+  _background: white url(<%= image_path('bg-tree-connector-line-last.png') %>) no-repeat left 50%;
+}
+<% css_rule_for_ie = '' %>
+<% @view.workspace.tree_configuration.all_card_types.each do |card_type| %>
+<% css_rule_for_ie += ' .sub-tree' %>
+.sub-tree .last <%= css_rule_for_ie %> .card-wrapper {
+  _background: white url(<%= image_path('bg-tree-connector-line-cross.png') %>) no-repeat left 50%;
+}
+<% css_rule_for_ie += ' .last' %>
+.sub-tree .last <%= css_rule_for_ie %> .card-wrapper {
+  _background: white url(<%= image_path('bg-tree-connector-line-last.png') %>) no-repeat left 50%;
+}
+<% end %>
+</style>
+<![endif]-->

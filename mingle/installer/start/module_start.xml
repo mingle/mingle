@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<project name="module_start" default="compile.module.start">
+    <dirname property="module.start.basedir" file="${ant.file.module_start}"/>
+
+    <property name="module.jdk.home.start" value="${project.jdk.home}"/>
+    <property name="module.jdk.bin.start" value="${project.jdk.bin}"/>
+    <property name="module.jdk.classpath.start" value="${project.jdk.classpath}"/>
+
+    <property name="compiler.args.start" value="${compiler.args}"/>
+
+    <property name="start.output.dir" value="${module.start.basedir}/../../tmp/classes/production/start"/>
+    <property name="start.testoutput.dir" value="${module.start.basedir}/../../tmp/classes/test/start"/>
+    <property name="start.log.dir" value="${module.start.basedir}/../../log"/>
+
+    <path id="start.module.bootclasspath">
+        <!-- Paths to be included in compilation bootclasspath -->
+    </path>
+
+    <path id="start.module.classpath">
+        <fileset dir="${module.start.basedir}/../../vendor/java" includes="**/*.jar"/>
+        <fileset dir="${module.start.basedir}/../../development/build_java" includes="**/*.jar"/>
+        <fileset dir="${module.start.basedir}/../../lib" includes="version.jar"/>
+    </path>
+
+    <path id="junit.test.classpath">
+        <pathelement path="${start.output.dir}"/>
+        <pathelement path="${start.testoutput.dir}"/>
+        <path refid="start.module.classpath"/>
+    </path>
+
+    <path id="start.runtime.module.classpath">
+        <pathelement location="${start.output.dir}"/>
+        <pathelement location="${start.testoutput.dir}"/>
+        <path refid="start.module.classpath"/>
+    </path>
+
+    <path id="version.jar.classpath">
+    <pathelement location="lib/version.jar"/>
+
+    </path>
+
+    <patternset id="excluded.from.module.start">
+        <patternset refid="ignored.files"/>
+    </patternset>
+
+    <patternset id="excluded.from.compilation.start">
+        <patternset refid="excluded.from.module.start"/>
+    </patternset>
+
+    <path id="start.module.sourcepath">
+        <dirset dir="${module.start.basedir}">
+            <include name="src"/>
+        </dirset>
+    </path>
+
+    <path id="start.module.test.sourcepath">
+        <dirset dir="${module.start.basedir}">
+            <include name="test"/>
+        </dirset>
+    </path>
+
+    <target name="compile.module.start" depends="compile.module.start.production,compile.module.start.tests"
+            description="Compile module start"/>
+
+    <target name="compile.module.start.production" description="Compile module start; production classes" depends="assemble-version-jar">
+        <mkdir dir="${start.output.dir}"/>
+        <javac source="1.8" target="1.8" destdir="${start.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}"
+                memorymaximumsize="${compiler.max.memory}" fork="true">
+            <compilerarg line="${compiler.args.start}"/>
+            <bootclasspath refid="start.module.bootclasspath"/>
+            <classpath refid="version.jar.classpath"/>
+            <classpath refid="start.module.classpath"/>
+            <src refid="start.module.sourcepath"/>
+            <patternset refid="excluded.from.compilation.start"/>
+        </javac>
+
+        <copy todir="${start.output.dir}">
+            <fileset dir="${module.start.basedir}/src">
+                <patternset refid="compiler.resources"/>
+                <type type="file"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="compile.module.start.production_without_gui" description="Compile module start; production classes" depends="assemble-version-jar">
+        <mkdir dir="${start.testoutput.dir}"/>
+        <javac source="1.8" target="1.8" destdir="${start.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}"
+               memorymaximumsize="${compiler.max.memory}" fork="true">
+            <compilerarg line="${compiler.args.start}"/>
+            <bootclasspath refid="start.module.bootclasspath"/>
+            <classpath refid="start.module.classpath"/>
+            <src refid="start.module.sourcepath"/>
+            <patternset refid="excluded.from.compilation.start"/>
+        </javac>
+
+        <copy todir="${start.testoutput.dir}">
+            <fileset dir="${module.start.basedir}/src">
+                <patternset refid="compiler.resources"/>
+                <type type="file"/>
+            </fileset>
+        </copy>
+    </target>
+
+
+    <target name="run_java_tests" depends="compile.module.start.tests">
+        <mkdir dir="test/reports"/>
+        <junit printsummary="yes" haltonfailure="yes">
+            <classpath refid="junit.test.classpath"/>
+            <formatter type="plain" usefile="false"/>
+            <formatter type="xml" />
+            <batchtest fork="yes" todir="test/reports">
+                <fileset dir="${module.start.basedir}/test">
+                    <include name="**/*Test.java"/>
+                    <exclude name="**/ServerTest.java"/>
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
+
+    <target name="run_fast_java_tests" depends="compile.module.start.tests">
+        <junit printsummary="yes" haltonfailure="yes">
+            <classpath refid="junit.test.classpath"/>
+            <formatter type="plain" usefile="false"/>
+            <formatter type="xml" usefile="true"/>
+            <batchtest fork="yes" todir="test/reports">
+                <fileset dir="${module.start.basedir}/test">
+                    <include name="**/*Test.java"/>
+                    <exclude name="**/ServerTest.java"/>
+                    <exclude name="**/*SlowTest.java"/>
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
+
+    <target name="compile.module.start.tests" depends="compile.module.start.production_without_gui"
+            description="compile module start; test classes" unless="skip.tests">
+        <mkdir dir="${start.testoutput.dir}"/>
+        <javac source="1.8" target="1.8" destdir="${start.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}"
+               memorymaximumsize="${compiler.max.memory}" fork="true">
+            <compilerarg line="${compiler.args.start}"/>
+            <classpath refid="junit.test.classpath"/>
+            <src refid="start.module.test.sourcepath"/>
+            <patternset refid="excluded.from.compilation.start"/>
+        </javac>
+
+        <copy todir="${start.testoutput.dir}">
+            <fileset dir="${module.start.basedir}/test">
+                <patternset refid="compiler.resources"/>
+                <type type="file"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="clean.module.start" description="cleanup module">
+        <delete dir="${start.output.dir}"/>
+        <delete dir="${start.testoutput.dir}"/>
+    </target>
+
+    <target name="mingle-properties-jar" depends="clean, compile.module.start.production">
+        <jar destfile="lib/mingle-properties.jar" basedir="${start.output.dir}"
+             includes="com/thoughtworks/mingle/MinglePropertiesFactory.class,
+         com/thoughtworks/mingle/DataDirectory.class,
+         com/thoughtworks/mingle/ConfigDirectory.class,
+         com/thoughtworks/mingle/MingleProperties.class,
+         com/thoughtworks/mingle/LogDirectory.class,
+         com/thoughtworks/mingle/SwapDirectory.class,
+         com/thoughtworks/mingle/security/MingleSSLValidations.class,
+         com/thoughtworks/mingle/security/MingleSSLValidations$ValidationException.class,
+         com/thoughtworks/mingle/util/MingleConfigUtils.class" >
+        </jar>
+    </target>
+
+    <target name="dual-app-dispatcher-jar" depends="clean, compile.module.start.production">
+        <jar destfile="lib/dual-app-dispatcher.jar" basedir="${start.output.dir}"
+             includes="com/thoughtworks/mingle/multiapp/*.class" >
+        </jar>
+    </target>
+</project>

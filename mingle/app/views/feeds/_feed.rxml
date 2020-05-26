@@ -1,0 +1,70 @@
+# Copyright 2020 ThoughtWorks, Inc.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+
+xml.instruct!
+xml.feed 'xmlns' => 'http://www.w3.org/2005/Atom', 'xmlns:mingle' => Mingle::API.ns do
+  xml.title feed.title
+  options = {
+    :controller => feed.deliverable.kind_of?(Program) ? "program_feeds" : "feeds",
+    :action => 'events',
+    :format => 'xml',
+    :api_version => 'v2',
+    :"#{feed.deliverable.class.name.downcase}_id" => feed.deliverable.identifier,
+    :only_path => false
+  }
+
+  xml.id url_for(options)
+  xml.link :href => url_for(options), :rel => 'current'
+  xml.link :href => url_for(options.merge(:page => feed.current_page)), :rel => 'self'
+  xml.link :href => url_for(options.merge(:page => feed.previous_page)), :rel => 'next' if feed.previous_page # Phoenix: feeds pagination is different from the regular pagination in Mingle, the order is reversed
+  xml.link :href => url_for(options.merge(:page => feed.next_page)), :rel => 'previous' if feed.next_page # Phoenix: feeds pagination is different from the regular pagination in Mingle, the order is reversed
+  xml.updated feed.updated.xmlschema
+
+  feed.entries.each do |entry|
+    cache_xml(Keys::EventFeedEntry.new.path_for(feed.deliverable, entry)) do
+      xml.entry do
+        xml.id url_for(:controller => 'events', :action => 'index', :only_path => false, :id => entry.id)
+        xml.title entry.title
+        xml.updated entry.updated.xmlschema
+
+        xml.author do
+          xml.name(entry.author.name)
+          xml.email(entry.author.email) unless entry.author.email.blank?
+          if author_link = entry.author.resource_link
+            xml.uri author_link.xml_href(self, 'v2')
+          end
+
+          if icon_path = entry.author.icon_path
+            xml.tag!('mingle:icon', path_to_url(icon_path))
+          end
+        end
+        write_entry_links(xml, entry.source_link, Mingle::API.ns("event-source"))
+        write_entry_links(xml, entry.version_link, Mingle::API.ns("version"))
+
+        entry.related_cards.each do |card|
+          write_entry_links(xml, card.resource_link, Mingle::API.ns("related"))
+        end if entry.related_cards
+
+        entry.categories.each do |category|
+          xml.category :term => category, :scheme => Mingle::API.ns("categories")
+        end
+
+        xml.content :type => 'application/vnd.mingle+xml' do
+          entry.content_xml(self, :builder => xml)
+        end
+      end
+    end
+  end
+end

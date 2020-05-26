@@ -1,0 +1,18 @@
+function check(){
+	_click(_link("Prompt Page"));
+	_expectPrompt("Some prompt?", "abc")
+	_click(_button("Click For Prompt"));
+	_assertNotNull(_textbox("t1"));
+	_assertEqual("abc", _textbox("t1").value);
+	_click(_link("Back"));
+	_wait(2000);
+	_assertEqual("Some prompt?", _lastPrompt());
+	_clearLastPrompt();
+	_assertEqual(null, _lastPrompt());
+}
+
+check();
+_click(_link("Frames Test"));
+check();
+_click(_link("IFrames Test"));
+check();

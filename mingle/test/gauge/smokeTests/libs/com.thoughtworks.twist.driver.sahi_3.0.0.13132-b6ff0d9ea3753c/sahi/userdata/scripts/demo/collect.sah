@@ -1,0 +1,36 @@
+_navigateTo("/demo/count.htm");
+
+_assertEqual(4, _count("_link", "group 0 link"));
+
+var $c = _count("_link", "group 0 link");
+_assertEqual(4, $c);
+
+
+_assertEqual(5, _count("_link", "/group 1/"));
+
+var $c = _count("_link", "/group 1/");
+_assertEqual(5, $c);
+
+
+_assertEqual(2, _count("_link", "/group 1/", _in(_div("div1"))));
+
+var $c = _count("_link", "/group 1/", _in(_div("div1")));
+_assertEqual(2, $c);
+
+var $els = _collect("_link", "/group 1/");
+var $len = $els.length;
+_assertEqual(5, $len);
+_assertEqual("group 1 link1", _getText($els[0]));
+_assertEqual("group 1 link2", _getText($els[1]));
+
+
+var $els = _collect("_link", "/group 1/", _in(_div("div1")));
+var $len = $els.length;
+_assertEqual(2, $len);
+_assertEqual("group 1 link3", _getText($els[0]));
+_assertEqual("group 1 link4", _getText($els[1]));
+
+
+var $els = _collect("_link", "/group 333/", _in(_div("div1")));
+var $len = $els.length;
+_assertEqual(0, $len);

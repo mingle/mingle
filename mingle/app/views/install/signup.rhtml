@@ -1,0 +1,67 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<h1>Setting up Mingle: Step 6 - Setup the first user account</h1>
+
+<% info_box do %>
+  <p>Please provide details for your first user - <b>do note that this initial user will be a Mingle administrator by default.</b></p>
+  
+  <p>As a Mingle administrator a user has full access and control over all the projects hosted on this instance of Mingle. You can manage users and their roles from the 'Manage users' link on the project list page.</p>
+
+<% end %>
+
+  <div class="current-signup">
+    <%= render :partial => 'steps' %>
+  </div>
+  
+<% form_tag({ :action => 'do_signup' }, { :class => 'install_form' }) do %>
+  <p>
+    <label for="user_login">Sign-in name:<span class='required'>*</span> <span class="notes">(used every time you sign in to Mingle)</span></label>
+    <%= error_message_on 'user', 'login', :prepend_text => 'Sign-in name ', :css_class => 'field_error' %>
+    <%= text_field "user", "login", :size => 80 %>
+  </p>
+  
+  <p>
+    <label for="user_name">Display name:<span class='required'>*</span> <span class="notes">(used as display name in Mingle, i.e. this is the name other Mingle users see)</span></label>
+    <%= error_message_on 'user', 'name', :prepend_text => 'Display name ', :css_class => 'field_error'%>
+    <%= text_field "user", "name", :size => 80 %>
+  </p>
+
+  <p>
+    <label for="user_email">Email: <span class="notes">(used if you subscribe to alerts, etc. - should be of the form sam@email.com)</span></label>
+    <%= error_message_on 'user', 'email', :prepend_text => 'Email ', :css_class => 'field_error' %>
+    <%= text_field "user", "email", :size => 40, :length => 255 %>
+  </p>
+
+  <p>
+    <label for="user_password">Choose password:<span class='required'>*</span> <span class="notes"><%=user_password_note_messages %></span></label>
+    <%= error_message_on 'user', 'password', :prepend_text => 'Password ', :css_class => 'field_error' %>
+    <%= password_field "user", "password", :size => 25 %>
+  </p>
+
+  <p>
+    <label for="user_password_confirmation">Confirm password:<span class='required'>*</span></label>
+    <%= error_message_on 'user', 'password_confirmation', :prepend_text => 'Password confirmation ', :css_class => 'field_error' %>
+    <%= password_field "user", "password_confirmation", :size => 25 %>
+  </p>
+
+  <p><span class="required">*</span> indicates a required field</p>
+
+  <% action_bar :class => "action-bar setup-pages" do %>
+    <%= submit_tag 'Continue', :class => 'primary' %>
+    <%= render_help_link 'Set up the first user account', :class => 'page-help-at-action-bar' %>
+  <% end %>
+<% end %>

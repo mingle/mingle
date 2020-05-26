@@ -1,0 +1,41 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= render :partial => 'shared/top_level_header_pills', :locals => { :selected_tab => 'admin' } %>
+
+<h1>Data Fixes</h1>
+<table id="data-fixes">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Required</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% DataFixes.list.each do |df| %>
+    <tr data-required-status-url="<%= url_for(:controller => "data_fixes", :action => "required", :fix => df) %>">
+      <td class="name"><%= df["name"] %></td>
+      <td class="description"><%= df.delete("description").html_safe %></td>
+      <td class="required"><%= spinner %></td>
+      <td class="action">
+        <%= button_to (df["queued"] ? "Enqueue" : "Apply"), { :controller => "data_fixes", :action => "apply", :fix => df}, { :disabled => false } %>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

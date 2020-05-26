@@ -1,0 +1,63 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+  #saas-tos {
+    #yui-main .yui-b {
+      width: 100%;
+    }
+    #graphic-dialog {
+      h1 {
+        font-size: 48px;
+      }
+      width: 100%;
+      line-height: 64px;
+      font-size: 28px;
+      margin-top: 0px;
+      margin-left: 0;
+      margin-right: 0;
+
+      .login-logo {
+        width: 400px;
+      }
+
+      form {
+        width: 100%;
+        font-size: 28px;
+        line-height: 72px;
+        #saas_tos_accepted {
+          -webkit-transform: scale(2,2);
+          margin: 25px 15px 5px 0px;
+        }
+        input {
+          font-size: 48px;
+          line-height: 56px;
+          -webkit-appearance: none;
+        }
+        .login_button {
+          padding: 5px 40px;
+          font-size: 18px;
+        }
+        #continue {
+          line-height: 48px;
+          font-size: 18px;
+          padding: 5px 20px;
+        }
+      }
+    }
+  }
+}

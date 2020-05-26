@@ -1,0 +1,286 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>JavaScript unit test file</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+  <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+
+  <script src="test_assets/unittest.js" type="text/javascript"></script>
+  <script src="test_assets/unittest_ext.js" type="text/javascript"></script>
+
+
+  <script src="../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/controls.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/builder.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+
+  <script src="../../public/javascripts/application.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/transition_workflow_generator.js" type="text/javascript"></script>
+
+  <link rel="stylesheet" href="test_assets/unittest.css" type="text/css" />
+</head>
+<body>
+  <div id="content" >
+    <div id="header">
+      <h1>JavaScript unit test file</h1>
+      <p>
+        This file tests <strong>TransitionWorkflowGenerator</strong> class in <strong>transition_workflow_generator.js</strong>.
+      </p>
+    </div>
+    <!-- Log output -->
+    <div id="testlog"> </div>
+
+    <div style ='border:solid 1px' id='sandbox'>
+      <h3> sandbox: </h3>
+
+      <div id="flash"></div>
+      <a class='generate_transitions' href='/'>Top Generate transitions</a>
+      <a class='cancel' href='/'>Top Cancel</a>
+
+      <form>
+        <ul>
+          <li>
+            <label for="card_type">Select card type:</label>
+            <select name="workflow[card_type_id]" id="card_type_id">
+              <option value="" selected>Select...</option>
+              <option value="1">Story</option>
+              <option value="2">Bug</option>
+              <option value="3">No Properties</option>
+            </select>
+          </li>
+
+          <li>
+            <label for="property_definitions">Select property:</label>
+            <select name="workflow[property_definition_id]" id="property_definition_id">
+              <option value="" selected>Select...</option>
+            </select>
+            <img id="preview_spinner" class="spinner" style="display: none;" src="/images/spinner.gif"/>
+          </li>
+        </ul>
+      </form>
+
+      <div id="preview_transitions">
+      </div>
+
+      <a class='generate_transitions' href='/'>Bottom Generate transitions</a>
+      <a class='cancel' href='/'>Bottom Cancel</a>
+    </div>
+
+  <script type="text/javascript">
+  // <![CDATA[
+    SAND_BOX_CONTENT = $('sandbox').innerHTML;
+
+    CARD_TYPES = {
+      STORY : '1', BUG : '2', NO_PROPERTIES : '3'
+    };
+
+    PROPERTIES = {
+      STATUS  : { id : '101', name : 'Status' },
+      RELEASE : { id : '100', name : 'Release' }
+    };
+
+    CARD_TYPE_PROPERTY_MAPPING = {
+      '1' : [ PROPERTIES.RELEASE, PROPERTIES.STATUS ],
+      '2' : [ PROPERTIES.RELEASE ],
+      '3' : []
+    };
+
+    new Test.Unit.Runner({
+
+      setup: function() {
+        $('sandbox').innerHTML = SAND_BOX_CONTENT;
+        this.cardTypeSelect = $('card_type_id');
+        this.propertySelect = $('property_definition_id');
+        this.spinner = $('preview_spinner');
+        this.topGenerateTransitionLink = $$('.generate_transitions').first();
+        this.bottomGenerateTransitionLink = $$('.generate_transitions').last();
+        this.topCancelLink = $$('.cancel').first();
+        this.bottomCancelLink = $$('.cancel').last();
+        var extensions = {
+          enable : function() {
+            this.writeAttribute('href', '/');
+            this.removeClassName('disabled');
+          },
+
+          disable: function() {
+            this.writeAttribute('href', null);
+            this.addClassName('disabled');
+          },
+        };
+
+        Object.extend(this.topGenerateTransitionLink, extensions);
+        Object.extend(this.bottomGenerateTransitionLink, extensions);
+        this.generator = new TransitionWorkflowGenerator('card_type_id', 'property_definition_id', 'preview_transitions', 'preview_spinner', '.generate_transitions', '.cancel', CARD_TYPE_PROPERTY_MAPPING, {
+          prompt       : 'Select...',
+          previewUrl   : '/preview',
+          returnUrl    : '/transition/list' });
+      },
+
+      teardown: function() {
+        // Need to stop observing click events of other tests so that testDisableGenerateTransitionsMakesAllGenerateTransitionElementsReadonlyAndNotRespondToClick will be accurate.
+        this.topGenerateTransitionLink.stopObserving('click');
+        this.bottomGenerateTransitionLink.stopObserving('click');
+      },
+
+      testPropertyDropDownIsDisabledOnPageEntry: function() { with(this) {
+        assertDisabled(this.propertySelect);
+      }},
+
+      testTopAndBottomGenerateTransitionsLinkAreDisabledOnPageEntry: function() { with(this) {
+        assertHyperlinkDisabled(this.topGenerateTransitionLink);
+        assertHyperlinkDisabled(this.bottomGenerateTransitionLink);
+      }},
+
+      testOnCardTypeChangeEnablesAndRefreshesPropertiesDropDownOptions: function() { with(this) {
+        this.cardTypeSelect.setValue(CARD_TYPES.STORY);
+        Event.trigger(this.cardTypeSelect, 'change');
+        assertArrayEqual(['Select...', 'Release', 'Status'], $A(this.propertySelect.options).pluck('innerHTML'));
+        assertArrayEqual(['', '100', '101'], $A(this.propertySelect.options).pluck('value'));
+        assertEnabled(this.propertySelect);
+      }},
+
+      testOnCardTypeChangeDisableGenerateTransitionsLink: function() { with(this) {
+        this.topGenerateTransitionLink.enable();
+        this.bottomGenerateTransitionLink.enable();
+        this.cardTypeSelect.setValue(CARD_TYPES.STORY);
+        Event.trigger(this.cardTypeSelect, 'change');
+        assertHyperlinkDisabled(this.topGenerateTransitionLink);
+        assertHyperlinkDisabled(this.bottomGenerateTransitionLink);
+      }},
+
+      testOnCardTypeChangeRefreshesPropertiesDropDownWithOnlySelectAvailable: function() { with(this) {
+        this.cardTypeSelect.setValue(CARD_TYPES.NO_PROPERTIES);
+        Event.trigger(this.cardTypeSelect, 'change');
+        assertArrayEqual(['Select...'], $A(this.propertySelect.options).pluck('innerHTML'));
+        assertArrayEqual([''], $A(this.propertySelect.options).pluck('value'));
+      }},
+
+      testOnCardTypeChangeToNotSelectedClearOutExistingPreviewTransitionsAndDisablePropertyDefinitionDropDown: function() { with(this) {
+        $('preview_transitions').update('Lorem ipsum');
+        $('flash').update('Lorem ipsum');
+        this.cardTypeSelect.setValue('');
+        Event.trigger(this.cardTypeSelect, 'change');
+        assertBlank($('preview_transitions').innerHTML);
+        assertBlank($('flash').innerHTML);
+        assertDisabled(this.propertySelect);
+      }},
+
+      testOnPropertyChangeMakesAjaxCall: function() { with(this) {
+        var onPropertyChangeCalled = false;
+        var queryStringParams = {};
+        var onCreate = null;
+        var onComplete = null;
+        this.generator._remoteCall = function(url, requestParams) {
+           onPropertyChangeCalled = true;
+           queryStringParams = requestParams['parameters'].toQueryParams();
+           onCreate = requestParams.onCreate;
+           onComplete = requestParams.onComplete;
+        }
+        this.cardTypeSelect.setValue(CARD_TYPES.STORY);
+        Event.trigger(this.cardTypeSelect, 'change');
+        this.propertySelect.setValue(PROPERTIES.RELEASE.id);
+        Event.trigger(this.propertySelect, 'change');
+        assert(onPropertyChangeCalled);
+        assertNotVisible(this.spinner);
+        onCreate();
+        assertVisible(this.spinner);
+        onComplete();
+        assertNotVisible(this.spinner);
+        assertEqual(CARD_TYPES.STORY, queryStringParams['workflow[card_type_id]']);
+        assertEqual(PROPERTIES.RELEASE.id, queryStringParams['workflow[property_definition_id]']);
+      }},
+
+      testOnPropertyChangeToNotSelectedClearOutExistingPreviewTransitionsAndDoNotMakeAjaxCall: function() { with(this) {
+        var onPropertyChangeCalled = false;
+        this.generator._remoteCall = function(url, requestParams) {
+           onPropertyChangeCalled = true;
+        }
+        this.cardTypeSelect.setValue(CARD_TYPES.STORY);
+        Event.trigger(this.cardTypeSelect, 'change');
+        $('preview_transitions').update('Lorem ipsum');
+        $('flash').update('Lorem ipsum');
+        this.propertySelect.setValue('');
+        Event.trigger(this.propertySelect, 'change');
+        assertEqual(false, onPropertyChangeCalled);
+        assertBlank($('preview_transitions').innerHTML);
+        assertBlank($('flash').innerHTML);
+        assertHyperlinkDisabled(this.topGenerateTransitionLink);
+        assertHyperlinkDisabled(this.bottomGenerateTransitionLink);
+      }},
+
+      testEnableGenerateTransitionsEnablesAllGenerateTransitionsLinksCorrectly: function() { with(this) {
+        var links = $A([this.topGenerateTransitionLink, this.bottomGenerateTransitionLink]);
+        links.invoke('disable');
+        this.cardTypeSelect.value = CARD_TYPES.STORY;
+        Event.trigger(this.cardTypeSelect, 'change');
+        this.propertySelect.value = PROPERTIES.STATUS.id;
+        this.generator.enableGenerateTransitions();
+        links.each(function(link) {
+          assertHyperlinkEnabled(link, { href : '/transition/list?filter[card_type_id]=' + CARD_TYPES.STORY + '&filter[property_definition_id]=' + PROPERTIES.STATUS.id });
+          assertObserverExists(link, 'click');
+        });
+      }},
+
+      testEnableGenerateTransitionsObservingElementsWillSubmitFormOnClick: function() { with(this) {
+        var links = $A([this.topGenerateTransitionLink, this.bottomGenerateTransitionLink]);
+        this.generator.enableGenerateTransitions();
+        links.each(function(link) {
+          var submitted = false;
+          this.generator._submitForm = function() { submitted = true; };
+          var preventDefaultCalled = false;
+          Event.trigger(link, 'click', { preventDefault : function() { preventDefaultCalled = true; } });
+          assertEqual(true, submitted, "Link " + link.innerHTML + " click did not submit the form.");
+          assertEqual(true, preventDefaultCalled, "Link default form behavior to redirect must be prevented as generate action also takes care of redirect.");
+        }, this);
+      }},
+
+      testDisableGenerateTransitionsMakesAllGenerateTransitionElementsReadonlyAndNotRespondToClick: function() { with(this) {
+        var links = $A([this.topGenerateTransitionLink, this.bottomGenerateTransitionLink]);
+        this.generator.enableGenerateTransitions();
+        this.generator.disableGenerateTransitions();
+        links.each(function(link) {
+          assertHyperlinkDisabled(link);
+          assertObserverNotExist(link, 'click');
+        });
+      }},
+
+      testCancelLinkRedirectsWithSelectedCardTypeAndProperty: function() { with(this) {
+        var clickHandler = (Element.getStorage(this.topCancelLink).get("click") || []).first();
+        this.cardTypeSelect.value = CARD_TYPES.STORY;
+        Event.trigger(this.cardTypeSelect, 'change');
+        this.propertySelect.value = PROPERTIES.STATUS.id;
+        clickHandler({ element : function() { return this.topCancelLink; }.bind(this) });
+        assertMatch(/\/transition\/list\?/, this.topCancelLink.href);
+        var params = this.topCancelLink.href.toQueryParams();
+        assertEqual(2, $H(params).size());
+        assertEqual(CARD_TYPES.STORY, params['filter[card_type_id]']);
+        assertEqual(PROPERTIES.STATUS.id, params['filter[property_definition_id]']);
+      }},
+
+    }, { testLog: "testlog", test: "" }).run;
+  // ]]>
+  </script>
+</body>
+</html>

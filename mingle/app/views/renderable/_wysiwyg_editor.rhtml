@@ -1,0 +1,47 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="content-panel-container">
+  <%- model_name = renderable.class.name.underscore
+      editable_id = "#{model_name}_#{field_name}"
+      autosave_key = if(renderable.respond_to?(:number))
+        url_for(:action => 'show', :number => renderable.number)
+      elsif(renderable.respond_to?(:identifier))
+        url_for(:action => 'show', :identifier => renderable.identifier)
+      else
+        "/projects/#{@project.identifier}/card_defaults/#{renderable.id}"
+      end
+      -%>
+  <%= ckeditor_text_area_tag renderable, "#{model_name}[#{field_name}]", nil, {:id => editable_id} %>
+</div>
+
+<%= javascript_with_rescue <<-JAVASCRIPT
+  CKEDITOR.config.autosave_SaveKey = "#{autosave_key}";
+  CKEDITOR.config.autosave_delay = 2;
+  CKEDITOR.config.autosave_saveDetectionSelectors = "a.save,a.add,a.cancel";
+  CKEDITOR.replace('#{editable_id}', {
+    toolbar: '#{ @disallow_inline_image ? "base" : "with_image_upload" }',
+    on: {
+      instanceReady: function (event) {
+        event.editor.resize('100%', 500);
+        event.editor.setData(#{renderable.formatted_content_editor(self).html_safe.to_json});
+        $j('iframe.cke_wysiwyg_frame').contents().find('#renderable-contents').css('-webkit-transform', 'translate3d(0,0,0)');
+      }
+    },
+    filebrowserUploadUrl: '#{project_attachments_path(@project.identifier, :attachable => { :type => model_name, :id => renderable.id }, :authenticity_token => form_authenticity_token)}'
+  });
+JAVASCRIPT
+%>

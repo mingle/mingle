@@ -1,0 +1,170 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta name="generator" content="HTML Tidy, see www.w3.org">
+<title></title>
+<script type="text/javascript">
+function linkClick(){
+    var performDefault = true;
+    if (this.prevClick){
+        performDefault = this.prevClick();
+    }
+    if (performDefault != false){
+        window.location.href = this.href;
+    }
+}
+
+function abc(){
+    //sahiSimulateClick(document.links[0]);
+//  sahiSimulateEvent(document.getElementById("tb"), "click");
+    var el = document.images[0];
+    var el = document.getElementById("sp2");
+//  el.click();
+//  return;
+    var n = el;
+    while (n != null){
+        if (n.tagName && n.tagName == "A"){
+            n.prevClick = n.onclick;
+            n.onclick = linkClick;
+        }
+        n = n.parentNode;
+    }
+    sahiSimulateEvent(el, "focus");
+    sahiSimulateEvent(el, "mousedown");
+    sahiSimulateEvent(el, "mouseup");
+    sahiSimulateEvent(el, "click");
+    sahiSimulateEvent(el, "blur");
+    var n = el;
+    while (n != null){
+        if (n.tagName && n.tagName == "A"){
+            n.onclick = n.prevClick;
+        }
+        n = n.parentNode;
+    }
+}
+
+function log(s){
+    document.getElementById("log1").innerHTML+=s+"<br>";
+}
+
+
+function sahiSimulateEvent(el, type){
+    if(document.createEvent){
+        var evt = document.createEvent("MouseEvents");
+        evt.initMouseEvent(type,
+        true, //can bubble
+        true,
+        document.defaultView,
+        1,
+        findPosX(el), //screen x
+        findPosY(el), //screen y
+        findPosX(el), //client x
+        findPosY(el), //client y
+        false,
+        false,
+        false,
+        false,
+        0,
+        el);
+        el.dispatchEvent(evt);
+    }else{
+        var evt = document.createEventObject();
+        // Set an expando property on the event object. This will be used by the
+        // event handler to determine what element was clicked on.
+        evt.clientX = findPosX(el);
+        evt.clientY = findPosY(el);
+        evt.button=1;
+        el.fireEvent("on"+type,evt);
+        evt.cancelBubble = true;
+    }
+}
+
+function aa1(el){
+    if (el.click) el.click(); //IE has a click
+    else if (el.dispatchEvent) // For FF
+    {
+        var evt = el.ownerDocument.createEvent('MouseEvents');
+        evt.initMouseEvent('click', true, true,
+            el.ownerDocument.defaultView, 1,
+            0, 0, 0, 0,
+            false, false, false, false,
+            1, el);
+        el.dispatchEvent(evt);
+    }
+}
+function testEvent(e){
+    if (!e) e = window.event;
+    if (e.srcElement){
+        log("1 "+e.srcElement.tagName+" "+e.srcElement + " " +e.clientX+" "+e.clientY);
+    }
+    if (e.target){
+        log("2 "+e.target.tagName+" "+e.target+" "+e.clientX+" "+e.clientY);
+//      log("2 "+e.target+" "+e.clientX);
+//      sahiList(e);
+    }
+}
+function sahiList(el, p){
+    var s="";
+    var j=0;
+    for (var i in el){
+        if (!p || (""+i).indexOf(p)!=-1){
+            s+=i+",";
+            j++;
+            if (j%4==0) s+="\n";
+        }
+    }
+    alert(s);
+}
+function findPosX(obj)
+{
+    var curleft = 0;
+    if (obj.offsetParent)
+    {
+        while (obj.offsetParent)
+        {
+            curleft += obj.offsetLeft
+            obj = obj.offsetParent;
+        }
+    }
+    else if (obj.x)
+        curleft += obj.x;
+    return curleft + 2;
+}
+
+function findPosY(obj)
+{
+    var curtop = 0;
+    if (obj.offsetParent)
+    {
+        while (obj.offsetParent)
+        {
+            curtop += obj.offsetTop
+            obj = obj.offsetParent;
+        }
+    }
+    else if (obj.y)
+        curtop += obj.y;
+    return curtop + 2;
+}
+window.setTimeout("abc()", 1000);
+
+</script>
+</head>
+<body onclick="testEvent(event)">
+<a href="ext/yahoo_menu.htm" onclick=
+"testEvent(event)">yahoo_menu</a><br>
+<input id="tb" type="button" onclick="testEvent(event)" value=
+"Test"><br>
+<a href="http://localhost:10000/demo" onclick=
+"testEvent(event)">Click me</a><br>
+<input type="button" value="Control"><br>
+<!--a href="http://localhost:10000/demo" onclick="return false"><img src="add.gif" id="img1"></a-->
+<a href="javascript:alert(1212)" onclick="return true"><img src=
+"add.gif" id="img1"></a> <a href="http://localhost:10000/demo"
+target="_blank"><span id="sp2">SPAN CLICK</span></a> <br>
+<br>
+<br>
+<div id="log1"></div>
+</body>
+</html>
+

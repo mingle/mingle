@@ -1,0 +1,202 @@
+#  Copyright 2020 ThoughtWorks, Inc.
+#  
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Affero General Public License as
+#  published by the Free Software Foundation, either version 3 of the
+#  License, or (at your option) any later version.
+#  
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Affero General Public License for more details.
+#  
+#  You should have received a copy of the GNU Affero General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+project:
+  name: Your First Project
+  identifier: your_first_project
+  current_user_as_member: true
+ordered_tab_identifiers: ['Card Wall' , 'Reports']
+card_types:
+  - name: Story
+property_definitions:
+  - name: Estimate
+    data_type: numeric
+    is_managed: "true"
+    card_types:
+      - name: Story
+    property_value_details:
+      - value: 2
+        position: 1
+      - value: 4
+        position: 2
+      - value: 6
+        position: 3
+      - value: 8
+        position: 4
+  - name: Status
+    data_type: string
+    is_managed: "true"
+    card_types:
+      - name: Story
+    property_value_details:
+      - value: New
+        color: '#ff0077'
+        position: 1
+      - value: In progress
+        color: '#7700ff'
+        position: 2
+      - value: Complete
+        color: '#0d86ff'
+        position: 3
+  - name: Priority
+    data_type: string
+    is_managed: "true"
+    card_types:
+      - name: Story
+    property_value_details:
+      - value: Must
+        color: '#e60f00'
+        position: 1
+      - value: Should
+        color: '#ffa04d'
+        position: 2
+      - value: Could
+        color: '#fbff8c'
+        position: 3
+  - name: Owner
+    data_type: user
+    card_types:
+      - name: Story
+cards:
+  - name: "Welcome to Mingle"
+    description: |-
+      <p>Mingle makes it easy for you and your team to get things done. You can create cards like this one to represent work you have planned.</p>
+      <p>The cards position on your wall represents the status of work. You can use the default columns...</p>
+        <ul>
+          <li>New</li>
+          <li>In Progress</li>
+          <li>Complete</li>
+        </ul>
+      <p>or click the "+" button near the column headers to create your own.</p>
+      <p>We hope you enjoy using Mingle, and remember, if you have any questions or want to leave feedback, you can click the "Contact us" text in the lower right-hand corner of your browser.</p>
+    card_type_name: Story
+    project_card_rank: 1
+    tags:
+      Important: green
+    properties:
+      Status: New
+      Priority: Must
+      Estimate: 2
+      Owner: (current user)
+tabs:
+  - name: Card Wall
+    style: grid
+    filters:
+      - '[Type][is][Story]'
+    color_by: Priority
+    group_by:
+      lane: Status
+    lanes: 'New,In progress,Complete'
+    project_landing_tab: true
+
+pages:
+  - name: 'Reports'
+    favorite: true
+    content: |-
+      <h2 style="font-family: georgia, 'times new roman', times, serif; font-size: 1.27em; font-style: italic; margin: 10px 0px;">Mingle gives you all the tools you need to visualize your teams work.</h2>
+
+      <p>&nbsp;</p>
+
+      <p>You can create&nbsp;<strong>burn-ups</strong> or for more in-depth charting like<strong> forecasting</strong> and <strong>cumulative</strong> flows.</p>
+
+      <p><img src="http://in-app-public-files.cdn.mingle.thoughtworks.com/reports/charts.png"></img></p>
+
+      <p>Using Mingle's query language, you can access&nbsp;<strong>all of your project data</strong>&nbsp;to create the reports that your team needs.</p>
+
+      <p>&nbsp;</p>
+
+      <p style="font-family: georgia, 'times new roman', times, serif; font-size: 1.27em; font-style: italic; margin: 10px 0;">Cycle Time helps your team improve</p>
+
+      <p><img src="http://in-app-public-files.cdn.mingle.thoughtworks.com/reports/cycletime.png"></img></p>
+
+      <p>Once you start working in Mingle, our built-in Cycle Time reporting is really easy and fun to use while providing awesome insight.</p>
+
+      <p>Watch this video we made about our <a href="http://bit.ly/1mB2AqZ">Cycle Time Analytics</a>&nbsp;to find out more.</p>
+
+      <p>&nbsp;</p>
+
+      <p style="font-family: georgia, 'times new roman', times, serif; font-size: 1.27em; font-style: italic; margin: 10px 0;">Get started with reporting</p>
+
+      <p>We've created two basic charts to get your team started with reporting.</p>
+
+      <p>&nbsp;</p>
+
+
+      <div class="yui-g">
+        <div class="yui-u first">
+          <div class="dashboard-half-panel">
+            <h2>Priority of new cards</h2>
+            {{ stack-bar-chart
+                  conditions: type = story
+                  label: 'Card priority'
+                  y-title: 'Number of Cards'
+                  chart-height: 418
+                  chart-width: 450
+                  plot-height: 300
+                  plot-width: 325
+                  cumulative: false
+                  series:
+                    - label: Must
+                      data: SELECT priority, count(*) where priority = Must
+                      color: #E5AD3E
+                    - label: Should
+                      data: SELECT priority, count(*) where priority = Should
+                      color: #2A7E93
+                    - label: Could
+                      data: SELECT priority, count(*) where priority = Could
+                      color: #7A2962
+            }}
+          </div>
+        </div>
+
+        <div class="yui-u">
+          <div class="dashboard-half-panel">
+            <h2>Team burn-up chart</h2>
+            <div class="dashboard-content">
+            {{ daily-history-chart
+                chart-width: 500
+                plot-width: 300
+                plot-height: 300
+                chart-height: 400
+                plot-x-offset: 100
+                aggregate: count(*)
+                start-date: <%= (Time.now - 15.days).utc.strftime('%d %B, %Y') %>
+                end-date: <%= (Time.now - 15.days + 6.months).utc.strftime('%d %B, %Y') %>
+                chart-conditions: type = story
+                x-labels-step: 14
+                x-title: Date
+                y=title: Story counts
+                series:
+                  - conditions: type = story
+                    label: Total Scope
+                    color: black
+                    line-width: 2
+                  - conditions: type = story and status = complete
+                    label: Completed
+                    color: #FF0000
+                    line-width: 2
+            }}
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <p>&nbsp;</p>
+
+      <p style="line-height: 19.600000381469727px; color: rgb(0, 0, 0); font-family: 'Helvetica Neue', Arial, Helvetica; font-size: 14px;">For help creating charts for your own reporting, check out our&nbsp;<a href="http://bit.ly/1lGKna6" target="_blank">help</a>&nbsp;or email us at&nbsp;<a href="mailto:mingle.feedback@thoughtworks.com?subject=Help%20with%20reporting%20and%20charts">mingle.feedback@thoughtworks.com</a>.</p>
+
+      <p style="line-height: 19.600000381469727px; color: rgb(0, 0, 0); font-family: 'Helvetica Neue', Arial, Helvetica; font-size: 14px;">For even more powerful reports and analytics use the&nbsp;<a href="http://bit.ly/1f81i6D" target="_blank">API</a>.</p>
+
+      <p style="line-height: 19.600000381469727px; color: rgb(0, 0, 0); font-family: 'Helvetica Neue', Arial, Helvetica; font-size: 14px;">Share it&nbsp;<a href="http://bit.ly/1prTxx0" target="_blank">@thatsmingle</a>.</p>

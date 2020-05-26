@@ -1,0 +1,37 @@
+#  Copyright 2020 ThoughtWorks, Inc.
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Affero General Public License as
+#  published by the Free Software Foundation, either version 3 of the
+#  License, or (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Affero General Public License for more details.
+#
+#  You should have received a copy of the GNU Affero General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+---
+development:
+  adapter: 'postgresql'
+  url: jdbc:postgresql://localhost:5432/mingle_development
+  database: mingle_development
+  username: <%= ENV['USER'] %>
+  password:
+  pool: 12
+
+production:
+  adapter: <%= (ENV['DB_URL'] || java.lang.System.getProperty('DB_URL')).to_s =~ /jdbc:postgresql:/ ? 'postgresql' : "#{ Rails.version.to_i > 2 ? 'oracle_enhanced' : 'jdbc' }" %>
+  url: <%= ENV['DB_URL'] || java.lang.System.getProperty('DB_URL') %>
+  username: <%= ENV['DB_USER_NAME'] || java.lang.System.getProperty('DB_ADMIN_USER') %>
+  password: <%= ENV['DB_USER_PASSWORD'] || java.lang.System.getProperty('DB_ADMIN_PASSWORD') %>
+  pool: <%= java.lang.System.getProperty('jruby.max.runtimes') || 12 %>
+
+test:
+  adapter: 'postgresql'
+  url: jdbc:postgresql://localhost:5432/mingle_test
+  database: mingle_test
+  username: <%= ENV['USER'] %>
+  password:
+  pool: 12

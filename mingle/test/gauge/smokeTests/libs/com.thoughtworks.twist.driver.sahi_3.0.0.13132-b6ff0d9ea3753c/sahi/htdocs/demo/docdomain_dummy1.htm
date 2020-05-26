@@ -1,0 +1,17 @@
+<html>
+<head><title>Dummy1</title></head>
+<body>
+<script>
+document.domain = "example.com";
+function oc(){
+    alert(document.f1.t1.value());
+}
+</script>
+Dummy1
+<form name="f1">
+<input type="text" name="t1"><br/>
+<input type="button" value="Click me" onclick="oc()">
+</form>
+<a href="http://dummy2/demo/diffDomain_dummy2.htm">dummy2</a>
+</body>
+</html>

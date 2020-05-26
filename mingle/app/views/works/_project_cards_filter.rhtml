@@ -1,0 +1,41 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id='project_cards_filter'>
+  <% form_tag cards_program_plan_objective_works_path(@plan.program, @objective), :method => 'get', :id => 'change_project_form' do -%>
+    <% drop_down_options = @project ? { :selected => @project.identifier } : { :prompt => 'Select...' } %>
+
+    Projects: <%= collection_select nil, :project_id, @sorted_projects, :identifier, :name, drop_down_options, :id => 'project_id', :name => 'project_id' %>
+    <%= spinner(:id => 'add_work_form_select_project_spinner') %>
+  <% end -%>
+  <% if @project %>
+    <%- @project.with_active_project do |project| -%>
+      <%= render :partial => 'works/filter' %>
+    <%- end -%>
+  <%- end -%>
+</div>  
+
+<%= javascript_with_rescue <<-JAVASCRIPT
+  Event.observe(window, 'unload', function() {
+    $('project_id').options[0].selected = true;
+    $('add_work_form_select_project_spinner').hide();
+  });
+  $('project_id').observe('change', function(event) {
+    $('add_work_form_select_project_spinner').show();
+    $('change_project_form').submit();
+  });
+JAVASCRIPT
+%>

@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE subsection SYSTEM "mingle_help.dtd">
+<subsection title="Table - based on a favorite" collapsed="true" id="table_view">
+	<markup_reference
+		title="Render a table containing all cards that are a part of the favorite named 'Release One'. Quotes may be omitted if the favorite name does not contain any spaces.">
+    <note>
+	      Macro markup is space sensitive and we advise you to stick to the indentation scheme specified in the example. If you add project as a parameter this needs to be added to a new line as shown in the markup below.	  	</note>
+		<icon alttext="Table view toolbar icon" src="resources/images/toolbar_table_view_icon.png" />
+		<markup>
+	table view: 'Release One'
+	project: project_one
+		</markup>
+		<preview>
+			<screenshot alttext="Example table - from view" src="resources/images/tables_view_example.png" />
+		</preview>
+	</markup_reference>
+	<table caption="Parameters">
+		<header-row>
+			<col-header>Name</col-header>
+			<col-header>Meaning</col-header>
+			<col-header>Required</col-header>
+			<col-header>Default value</col-header>
+		</header-row>
+			<row>
+			<label>view</label>
+			<col>A previously saved favorite, the contents of which will be shown in the table.</col>
+			<col>One, and only one of <cref topic="markup_table_query">query</cref> or view is required.</col>
+			<col />
+		</row>
+			<row>
+  			<label>project</label>
+  			<col>Any valid project identifier, specifying which project’s view will be displayed. Authorization will be enforced upon view. That is, if a user does not have access to a project, that data series will not be included in the chart for that user. Default is the project to which the page or card containing the macro belongs.</col>
+  			<col>No</col>
+  			<col>Default is the project to which the page or card containing the macro belongs to.</col>
+  		</row>
+	</table>
+</subsection>

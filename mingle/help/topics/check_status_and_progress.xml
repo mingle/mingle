@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "check_status_and_progress.dtd">
+<chapter title="Check the status and progress of your plan" >
+      <section title="Glance at the progress of your objective" collapsed="true">
+	      <p>Mingle Plus makes it easy to quickly check the status and progress of your program's plan using three primary indicators:</p>
+	            <bullets>
+		            <bullets>
+		               <item><strong>Work count ratio: </strong>Mingle Plus provides a ratio of work items complete to total work items on each objective in your program's plan:</item>
+				             <screenshot src="resources/images/work_count_ratio.png"/>
+				<note>Mingle Plus currently supports work item count only; it does not currently support sum of story point estimates.</note>
+				       <item><strong>Project progress bar: </strong>Drilling into your objective, you can see how work items are distributed across projects and how much progress has been made in each  project:</item>
+					         <screenshot src="resources/images/project_progress_bar.png"/>
+					   <item><strong>Alerts: </strong>Mingle Plus provides alerts when an objective has been running for more than 10% of its planned duration, and a project within that objective is either forecasted to be late or has not yet started.</item>
+						     <screenshot src="resources/images/alerts.png"/>			
+			        </bullets>
+				</bullets>
+      </section>
+      <section title="Check for schedule changes" collapsed="true" id="schedule_changes">
+	         <p>Mingle Plus helps you check for schedule changes by forecasting when a project may complete. Using total average velocity to date, we generate forecasts about your project's likelihood to be late in three scenarios: no scope change, 50% increase in scope, and 150% increase in scope. Alerts are triggered if your project is forecasted to finish late with no change in scope.</p>
+	 						<screenshot src="resources/images/forecasting_chart.png"/>		
+      </section>
+      <section title="View work in an objective" collapsed="true">
+	         <p>To view the status of work in your objective, click on the “View Work” button on your objective pop-over. You can filter your view to focus on work from a specific project or on status.</p>
+		                    <screenshot src="resources/images/view_work_button.png"/>	
+		                    <screenshot src="resources/images/view_work.png"/>	
+      </section>
+</chapter>

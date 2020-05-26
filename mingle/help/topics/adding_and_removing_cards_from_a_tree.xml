@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Adding and removing cards from a tree">
+	<section title="Adding cards...">
+		<p>There are several ways to add or remove cards from a tree.</p>
+		<subsection title="In the tree view - using the card explorer..." file="card_explorer"/>
+		<subsection title="From a card view...">
+			<p>You can add a card to a tree by selecting a parent card in the appropriate relationship property. 
+    			The relationship properties for a tree are grouped in a named box in the card view.</p>
+			<screenshot alttext="card view - edit relationship property for tree" src="resources/images/card_view_tree_property.png"/>
+			<p>Unlike other card properties, when you click on the relationship property, you are presented with a popup <cref topic="card_selection_widget">card selection widget</cref> showing all available parent cards. These parent cards are the cards of the appropriate type that are already in the tree, so if you don't see the one you're looking for - it may not yet have been added to the tree itself.</p>
+			<screenshot alttext="card view - select card popup for relationship property" src="resources/images/card_view_select_card_popup.png"/>
+			<p>Click on the story you want and Mingle will return you to the card view.</p>
+		</subsection>
+		<subsection title="In bulk edit mode...">
+			<p>In <cref topic="updating_cards_in_bulk">bulk edit mode</cref> you can change relationship properties, allowing you to add a number of cards to a single parent in a tree in one action.</p>
+		</subsection>
+		<subsection title="Using a transition...">
+			<p>You can create a <cref topic="creating_card_transitions">card transition</cref> to assign a card into a tree by setting the corresponding relationship property.</p>
+		</subsection>
+		<subsection title="Using a card default">
+			<p>You can specify a <cref topic="card_defaults">default value</cref> for a relationship property to automatically add a newly created card into a tree.</p>
+		</subsection>
+	</section>
+	
+	<section title="Removing cards...">
+		<p>You can remove cards from a <cref topic="tree_view">tree view</cref> and a card view. 
+		In both views the cards can then be removed by clicking on the <img alttext="remove icon" src="resources/images/widgets/x_icon.png"/>. In the tree view this is in the top right corner of the card image. In the card view this is by the tree name and <cref topic="relationship_properties">relationship properties</cref> section of the card. Once clicked, if a card has no children in the tree it will immediately be removed from the tree.</p>
+		<p>If a card has children, you will be prompted with the following options</p>
+		<screenshot alttext="Card tree view - remove card having children confirmation dialog" src="resources/images/card_trees_delete_card_confirm.png"/>
+		<bullets>
+			<item><strong>This card and its children</strong> - removes the selected card and any child cards from the tree (along with any children of the child cards etc...)</item>
+			<item><strong>Just this card</strong> - removes only the selected card, any child cards are re-assigned to the parent of the selected card.</item>
+			<item><strong>Cancel</strong> - cancels the removal action.</item>
+		</bullets>
+		<hint>You can use the card locater to quickly scroll the tree view to the card you're looking for.</hint>
+	</section>
+	<note>Once a card has been added to a tree, changing the relationship properties to (not set) will not remove it from the tree. 
+		Instead it will move to be directly associated with the root node of the tree (no parent). 
+		To remove a card from a tree, you must view use the remove button in the <cref topic="tree_view">tree view</cref> or card view as described above.</note>
+		
+	<section title="Deleting cards...">
+		<p>Mingle 2.2 introduced the ability to permanently delete any card that belongs to a tree.  Previously, a card could not be deleted from a project if it belonged to any tree. Notice the 'Delete' link on card is now enabled. </p>
+		<screenshot src="resources/images/delete_card_belong_to_tree.png"/>
+		<p>All children of a deleted card will still remain in the tree but will be moved one level up in tree hierarchy and the corresponding tree relationship properties on these children will be set to (not set).</p>
+		<info>Only project or Mingle admins can delete cards. Read more about <cref topic="user_roles">user roles</cref>.</info>
+		<warning>Please note the difference between 'Removing a card from tree' and 'Deleting a card from tree'. The former is simply removing a card from tree but the card will remain in project. The latter permanently deletes a card from the project as well as from a tree.</warning>
+	</section>
+</topic>

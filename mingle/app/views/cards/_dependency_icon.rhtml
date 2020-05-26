@@ -1,0 +1,50 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% if CurrentLicense.status.enterprise? -%>
+
+  <%-
+  num_raised = card.raised_dependencies.count
+  num_resolving = card.dependencies_resolving.count
+  dependency_icon_tooltip = if num_raised > 0
+                              if num_resolving > 0
+                                "Raising and resolving dependencies"
+                              else
+                                "Raising dependency"
+                              end
+                            elsif num_resolving > 0
+                              "Resolving dependency"
+                            end
+  raising_class = "fa-stack-1x mng #{num_raised > 0 ? "mng-dep-raised " + card.raised_dependencies_status.downcase : "mng-dep-raised-o"}"
+  resolving_class = "fa-stack-1x mng #{num_resolving > 0 ? "mng-dep-resolving " + card.dependencies_resolving_status.downcase : "mng-dep-resolving-o"}"
+  on_card_list_view = controller_name == 'cards' && defined?(@view) && @view.style.to_s == 'list'
+-%>
+  <% if on_card_list_view %>
+    <%- if (num_raised + num_resolving) > 0 -%>
+      <span class="fa-stack card-dependency-icon" title="<%= dependency_icon_tooltip if dependency_icon_tooltip %>">
+      <%= content_tag(:i, "", :class => raising_class) %>
+      <%= content_tag(:i, "", :class => resolving_class) %>
+      </span>
+    <%- end -%>
+  <% else %>
+    <span class="fa-stack card-dependency-icon" title="<%= dependency_icon_tooltip if dependency_icon_tooltip %>">
+      <%- if (num_raised + num_resolving) > 0 -%>
+        <%= content_tag(:i, "", :class => raising_class) %>
+        <%= content_tag(:i, "", :class => resolving_class) %>
+      <%- end -%>
+    </span>
+  <% end %>
+<% end -%>

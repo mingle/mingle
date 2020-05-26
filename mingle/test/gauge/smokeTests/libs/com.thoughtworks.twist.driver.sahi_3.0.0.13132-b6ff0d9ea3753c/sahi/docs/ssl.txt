@@ -1,0 +1,14 @@
+Statements for SSL key generation:
+keytool -genkey -alias sahi -keyalg RSA -validity 10000000 -keystore keystore 
+keytool -list -v -keystore keystore
+keytool -export -alias sahi -keystore keystore -rfc -file sahi.cer
+keytool -import -alias sahicert -file sahi.cer -keystore truststore
+keytool -list -v -keystore truststore
+
+
+
+
+No prompt creation
+keytool -genkey -alias sahi  -keypass sahipassword -storepass sahipassword -keyalg RSA -validity 10000000 -keystore keystore -dname "CN=confluence.wazokazi.com, OU=Sahi, O=Sahi, L=Bangalore, S=Karnataka, C=IN"
+keytool -export -alias sahi  -keypass sahipassword -storepass sahipassword -keystore keystore -rfc -file sahi.cer
+keytool -noprompt -import -alias sahicert  -keypass sahipassword -storepass sahipassword -file sahi.cer -keystore truststore

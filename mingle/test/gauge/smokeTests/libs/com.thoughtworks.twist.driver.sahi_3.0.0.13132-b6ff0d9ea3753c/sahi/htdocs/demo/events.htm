@@ -1,0 +1,59 @@
+<html>
+<head><title></title></head>
+<body>
+<script>
+function clearMe(){
+	document.f1.log.value = "";
+}
+function logEvent(e){
+	if (!e) e = window.event;
+	log(list(e));
+	log("\n------\n");
+	
+}
+function log(s){
+	document.f1.log.value += s;
+}
+function list(el){
+    var s = "";
+    var f = "";
+    var j = 0;
+    if (typeof el == "array"){
+        for (var i=0; i<el.length; i++) {
+            s += i + "=" + el[i];
+        }
+    }
+    if (typeof el == "object") {
+        for (var i in el) {
+            try {
+                if (el[i] && el[i] != el) {
+                    if (("" + el[i]).indexOf("function") == 0) {
+                        f += i + "\n";
+                    } else {
+                        if (typeof el[i] == "object" && el[i] != el.parentNode) {
+                            s += i + "={{" + el[i] + "}};\n";
+                        }
+                        s += i + "=" + el[i] + ";\n";
+                        j++;
+                    }
+                }
+            } catch(e) {
+                s += "" + i + "\n";
+            }
+        }
+    } else {
+        s += el;
+    }
+    return s + "\n\n-----Functions------\n\n" + f;
+	
+}
+</script>
+<form name="f1">
+<textarea rows="5" cols="80" name="input" onkeyup="logEvent(event)" onkeydown="logEvent(event)" onkeypress="logEvent(event)"></textarea>
+<br/>
+<input type="button" value="Clear me" onclick="clearMe()">
+<br/>
+<textarea rows="30" cols="80" name="log"></textarea>
+</form>
+</body>
+</html>

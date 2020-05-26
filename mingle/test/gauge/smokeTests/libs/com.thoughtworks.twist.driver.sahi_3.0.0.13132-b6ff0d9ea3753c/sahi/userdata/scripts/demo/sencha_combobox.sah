@@ -1,0 +1,33 @@
+_setStrictVisibilityCheck(true);
+
+_navigateTo("http://dev.sencha.com/deploy/dev/examples/form/combos.html");
+
+function chooseState($textboxId, $state){
+	_click(_image("s.gif", _near(_textbox($textboxId))));
+	_click(_div($state));
+	_assertEqual($state, _getValue(_textbox($textboxId)));
+}
+
+chooseState("local-states", "California");
+chooseState("local-states-with-qtip", "Colorado");
+chooseState("array-states", "Arizona");
+
+_navigateTo("http://dev.sencha.com/deploy/dev/examples/grid/edit-grid.html");
+
+function chooseLight($plant, $light){
+	var $div = _div(0, _near(_div($plant)), _under(_div("Light").parentNode));
+	_click($div);
+	_click(_image("s.gif[1]"));
+	_click(_div($light, _in(_div("x-combo-list-inner"))));
+	_assertEqual($light, _getText($div));
+}
+
+_click(_cell("OK"));
+
+chooseLight("Adder's-Tongue", "Sunny");
+chooseLight("Anemone", "Shade");
+chooseLight("Bee Balm", "Sun or Shade");
+
+
+
+_setStrictVisibilityCheck(false);

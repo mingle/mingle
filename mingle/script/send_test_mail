@@ -1,0 +1,83 @@
+#!/usr/bin/env ruby
+
+# Copyright 2020 ThoughtWorks, Inc.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+
+begin
+  unless RUBY_PLATFORM =~ /java/
+    RAILS_ENV = ARGV[0]
+    RAILS_ROOT = ARGV[1].dup
+    MINGLE_DATA_DIR = ARGV[2]
+    CONTEXT_PATH = ARGV[3]
+    require File.join(RAILS_ROOT, 'config', 'environment')
+
+    email_to = ARGV[4]
+    sender_name = ARGV[5]
+    email_from = ARGV[6]
+
+    smtp_address = ARGV[7]
+    smtp_port    = ARGV[8]
+    smtp_domain  = ARGV[9]
+    smtp_tls     = ARGV[10]
+    smtp_user_name = ARGV[11]
+    smtp_password  = ARGV[12]
+
+    site_url_protocol = ARGV[13]
+    site_url_host = ARGV[14]
+    site_url_port = ARGV[15]
+
+    verify_delivery = Boolean(ARGV[16])
+  end
+
+  smtp_settings = {
+    :address        => smtp_address,
+    :port           => smtp_port.to_i,
+    :domain         => smtp_domain,
+    :tls            => Boolean(smtp_tls)
+  }
+
+  if smtp_user_name.present?
+    smtp_settings.merge!({
+      :user_name      => smtp_user_name,
+      :password       => smtp_password,
+      :authentication => :plain
+    })
+  end
+
+  ActionMailer::Base.default_url_options[:protocol]  = site_url_protocol
+  ActionMailer::Base.default_url_options[:host]      = site_url_host
+  ActionMailer::Base.default_url_options[:port]      = site_url_port.to_i
+  ActionMailer::Base.default_url_options[:only_path] = false
+  ActionMailer::Base.smtp_settings = smtp_settings
+  SmtpTestMailer.deliver_test(email_to, sender_name, email_from)
+
+  if verify_delivery && ActionMailer::Base.deliveries.size != 1
+    fail "Failed to verify delivery. Mail was not delivered."
+  end
+
+  if RUBY_PLATFORM =~ /java/
+    return 0  # in java, running in script container, we need a return value
+  end
+rescue => e
+  $stderr.puts(e)
+  $stderr.puts(e.backtrace.join("\n\t"))
+  if RUBY_PLATFORM =~ /java/
+    return -1
+  else
+    exit(-1)
+  end
+ensure
+  CACHE.shutdown
+end

@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Grid view">
+	<section title="Viewing cards in a grid">
+		<p>Mingle's grid view lets you view cards as they might appear as real cards on a wall or whiteboard. 
+		You can drag and drop cards to update their status, or assign cards to a developer, or close an issue - in fact however your team chooses to work.</p>
+		<p>To view cards in a grid, <cref topic="finding_cards_to_work_with">select the cards you want to work with</cref> and then click the <link>Grid</link> link.</p>
+		<hint>A great way to use the Grid view is in <cref topic="maximizing_card_views">maximized mode</cref> with a projector. This helps your team collaborate on project kickoffs, iteration planning, project priorities, backlog items and when assigning tasks to team members. 
+		This is similar to using a whiteboard or card wall to move cards around.</hint>
+	</section>
+	<section title="How to view cards in a grid" collapsed="true">
+		<steps>
+			<item><cref topic="signing_in_and_out_of_mingle">Sign in</cref> to Mingle and open the project for which to view cards in a grid (if you're not currently working in the project).</item>
+			<item>
+				<p>Click the <tab>All</tab> tab.</p>
+				<p>You can also click any other tab that displays cards.</p>
+				<screenshot alttext="All tab - list view with grid link highlighted" src="resources/images/list_view_highlight_grid_button.png"/>
+			</item>
+			<item>
+				<p><cref topic="filter_list_by_component">Filter the card list</cref> to isolate the cards you want to work with. In the image above, the list has been filtered to show only cards of type story, which are open.</p>
+				<p>If you have existing similar <cref topic="managing_favorites_and_tabs">tabs or favorites</cref> setup, you can select one of these as a starting point and then change the filters.</p>
+			</item>
+			<item>
+				<p>Click the <link>Grid</link> link. Mingle displays all cards on the page in a grid format.</p>
+			</item>			
+		</steps>
+	</section>
+	<section title="What can you do on the Grid view?" file="what_you_can_do_on_the_grid_view"/>
+	<section title="Also see...">
+			<bullets>
+				<item>
+					<cref topic="automated_transitions">Automated transitions on the grid view</cref>
+				</item>
+				<item>
+					<cref topic="explore_mingle_topic_story_wall">Story Wall</cref>
+				</item>
+				<item> <video url="https://thoughtworks.wistia.com/medias/02eunyo04b">A video of how to set up grid view to track progress.</video> </item>
+
+			</bullets>
+	</section>
+	
+</topic>

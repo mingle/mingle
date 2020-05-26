@@ -1,0 +1,19 @@
+_click(_link("Link Test"));
+_click(_link("Back"));
+_click(_link("Window Open Test With Title"));
+_popup("With Title")._click(_link("Form Test"));
+_popup("With Title")._setValue(_textbox("t1"), "a");
+_popup("With Title")._setValue(_textbox(1), "f");
+_popup("With Title")._setValue(_textbox("name"), "v");
+_click(_link("Frames Test"));
+_click(_link("Table Test"));
+
+_selectWindow("With Title");
+_click(_link("Back"));
+_click(_link("Break Frames"));
+_popup("Sahi Tests")._click(_link("Close Self"));
+_selectWindow();
+
+
+_assertNotNull(_cell("CellWithId"));
+_assertEqual("Cell with id", _getCellText(_cell("CellWithId")));

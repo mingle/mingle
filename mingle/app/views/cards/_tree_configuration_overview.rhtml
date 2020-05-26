@@ -1,0 +1,40 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<a title="View the configuration of this tree" id="tree-configure-widget-button"  class="tree-config hide-on-maximized">View tree configuration</a>
+<div id="tree-configure-overview" style="display: none;">
+  <b class="dialog-arrow"></b>
+    <h3>Current Tree Configuration</h3>
+    <% if authorized?(:controller => 'card_trees', :action => 'edit') 
+        card_controller_url = url_for(@view.to_params.merge(:controller => 'cards', :escape => false))
+    -%>
+      <div class="edit_tree"><span><%= link_to 'configure', edit_card_tree_path(:id => @view.workspace.tree_configuration.id, :from_url => card_controller_url) %></span></div>
+    <% end -%>
+    
+    <div id="tree-configure">
+    
+    <% @view.workspace.tree_configuration.all_card_types.each_with_index do |type, index| %>
+      <%= vertical_line unless index == 0 %>
+      <div class='type-node'>
+        <div <%= card_color_border_by_type(type) %>>
+        <span><%= h type.name %></span>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<%= javascript_with_rescue "TreeView.initWidget('tree-configure-overview', 'tree-configure-widget-button')" %>

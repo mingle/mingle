@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Tags Filter Test</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery.tag-it.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/tinycolor.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+  <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+
+  <script src="../../public/javascripts/application.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/project_data_store.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/mingle_tag_storage.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/mingle_tageditor.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/tags_filter.js" type="text/javascript"></script>
+
+  <script src="test_assets/sinon-2.3.6.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="test_assets/qunit-1.21.0.css" type="text/css"/>
+  <script src="test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+  <script src="test_assets/qunit-phantom.js" type="text/javascript"></script>
+
+</head>
+<body>
+<div id="qunit">
+</div>
+<div id="tags_filter_container">
+
+</div>
+
+<script type="text/javascript">
+
+  var currentProjectData = {
+    identifier: 'currentProject',
+    cardTypes: [],
+    team: [],
+    tags: [
+      {name: 'tag1', color: 'red'},
+      {name: 'tag2', color: 'green'},
+      {name: 'tag3', color: 'blue'}
+    ]
+  }, projectDataStore = new ProjectDataStore(currentProjectData);
+
+  function addAndAssertTag(tagEditorWidget, tag) {
+    var input = tagEditorWidget.find('input.ui-autocomplete-input[type=text]');
+
+    input.val(tag).blur();
+    this.ok(tagEditorWidget.find('span.tagit-label:contains("' + tag + '")')[0]);
+  }
+
+  QUnit.module("Tags Filter Without Initial Tags", {
+    beforeEach: function() {
+      this.onUpdate = sinon.spy();
+      this.tagsFilter = new MingleUI.TagsFilter('tagsFilter',$j('#tags_filter_container'), projectDataStore.dataFor(currentProjectData.identifier), {onUpdate: this.onUpdate});
+      this.tagsEditorWidget = this.tagsFilter.htmlContainer.find('ul.tags-filter');
+    }
+  });
+
+  QUnit.test('testShouldInitializeTagsWithCorrectDataAndProjectIdentifier', function(assert) {
+    var tagEditorData = this.tagsEditorWidget.data();
+
+    assert.equal(tagEditorData.projectIdentifier, currentProjectData.identifier);
+    currentProjectData.tags.each(function (tag) {
+      assert.ok(this.tagsEditorWidget.tageditor('projectTags').tagExists(tag.name));
+    }.bind(this));
+  });
+
+  QUnit.test('testShouldNotBeAbleToAddNewTags', function(assert) {
+    addAndAssertTag.call(assert, this.tagsEditorWidget, currentProjectData.tags[0].name);
+
+    this.tagsEditorWidget.find('input.ui-autocomplete-input[type=text]').val('tagged').blur();
+    assert.notOk(this.tagsEditorWidget.find('span.tagit-label:contains("tagged")')[0]);
+  });
+
+  QUnit.test('testResetShouldRemoveAllTags', function(assert) {
+    var input = this.tagsEditorWidget.find('input.ui-autocomplete-input[type=text]');
+    addAndAssertTag.call(assert, this.tagsEditorWidget, currentProjectData.tags[0].name);
+    addAndAssertTag.call(assert, this.tagsEditorWidget, currentProjectData.tags[1].name);
+
+    this.tagsFilter.reset({identifier: 'secondProject', tags: [{name: 'sptag1', color: 'red'},{name: 'sptag2', color: 'white'}]});
+    var tagEditorWidget = this.tagsFilter.htmlContainer.find('ul.tags-filter'), widgetData = tagEditorWidget.data();
+
+    assert.notOk(tagEditorWidget.find('span.tagit-label:contains("' + currentProjectData.tags[0].name + '")')[0]);
+    assert.notOk(tagEditorWidget.find('span.tagit-label:contains("' + currentProjectData.tags[1].name + '")')[0]);
+    assert.equal(widgetData.projectIdentifier, 'secondProject');
+    addAndAssertTag.call(assert, tagEditorWidget, 'sptag1');
+  });
+
+  QUnit.test('testShouldTriggerOnUpdateWhenTagIsAdded', function(assert) {
+    var input = this.tagsEditorWidget.find('input.ui-autocomplete-input[type=text]');
+
+    addAndAssertTag.call(assert, this.tagsEditorWidget, currentProjectData.tags[0].name);
+    assert.equal(this.onUpdate.callCount, 1);
+  });
+
+  QUnit.test('testShouldTriggerOnUpdateEventWhenTagIsRemoved', function(assert) {
+    var input = this.tagsEditorWidget.find('input.ui-autocomplete-input[type=text]');
+    addAndAssertTag.call(assert, this.tagsEditorWidget, currentProjectData.tags[0].name);
+    var tag = this.tagsEditorWidget.find('span.tagit-label:contains("' + currentProjectData.tags[0].name + '")');
+    assert.equal(this.onUpdate.callCount, 1);
+
+    tag.next('a.tagit-close').click();
+    assert.notOk(this.tagsEditorWidget.find('span.tagit-label:contains("' + currentProjectData.tags[0].name + '")')[0]);
+    assert.equal(this.onUpdate.callCount, 2);
+  });
+
+  QUnit.test('testValueShouldReturnAllTheTags', function (assert) {
+    var input = this.tagsEditorWidget.find('input.ui-autocomplete-input[type=text]');
+    addAndAssertTag.call(assert, this.tagsEditorWidget, currentProjectData.tags[0].name);
+    addAndAssertTag.call(assert, this.tagsEditorWidget, currentProjectData.tags[1].name);
+
+    assert.deepEqual(this.tagsFilter.value(), [currentProjectData.tags[0].name, currentProjectData.tags[1].name]);
+  });
+
+  QUnit.module("Tags Filter With Initial Tags", {
+    beforeEach: function() {
+      this.onUpdate = sinon.spy();
+      this.tagsFilter = new MingleUI.TagsFilter('TagsFilter', $j('#tags_filter_container'),
+          projectDataStore.dataFor(currentProjectData.identifier), {
+            onUpdate: this.onUpdate,
+            initialTags: ['tag1', 'tag3']
+          });
+      this.tagsEditorWidget = this.tagsFilter.htmlContainer.find('ul.tags-filter');
+    }
+  });
+
+  QUnit.test('testShouldAddInitialTags', function (assert) {
+    assert.ok(this.tagsEditorWidget.find('span.tagit-label:contains("tag1")')[0]);
+    assert.ok(this.tagsEditorWidget.find('span.tagit-label:contains("tag3")')[0]);
+  });
+
+  QUnit.test('testShouldNotTriggerOnUpdate', function (assert) {
+    assert.equal(this.onUpdate.callCount, 0);
+  });
+
+</script>

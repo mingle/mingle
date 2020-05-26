@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta name="generator" content="HTML Tidy, see www.w3.org">
+<script type="text/javascript" language="JavaScript">
+
+
+var nav4 = window.Event ? true : false;
+
+function modifiers(e) {
+  if (nav4) {
+     document.keys.alt.checked = e.modifiers & Event.ALT_MASK;
+     document.keys.control.checked = e.modifiers & Event.CONTROL_MASK;
+     document.keys.shift.checked = e.modifiers & Event.SHIFT_MASK;
+     document.keys.meta.checked = e.modifiers & Event.META_MASK;
+  } else {
+     document.keys.alt.checked = window.event.altKey;
+     document.keys.control.checked = window.event.ctrlKey;
+     document.keys.shift.checked = window.event.shiftKey;
+     document.keys.meta.checked = false;
+  }
+  return false;
+}
+
+function getMod(e){
+    alert(e.altKey);
+}
+
+</script>
+
+<title></title>
+</head>
+<body>
+<p>Hold one or more modifier keys and click <span onmousedown=
+"return getMod(event)" onclick="return false">here</span>.<br>
+</p>
+
+<form name="keys"><input type="checkbox" name="alt"> Alt <input
+type="checkbox" name="control"> Control <input type="checkbox"
+name="meta"> Meta <input type="checkbox" name="shift"> Shift</form>
+</body>
+</html>
+

@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE section SYSTEM "mingle_help.dtd">
+<topic title="Hierarchy view">
+  <section title="Viewing cards in a hierarchy">
+    <screenshot alttext="Hierarchy button" src="resources/images/hierarchy_view_link.png" />
+    <p>Mingle's Hierarchy view displays cards in a tree as a hierarchical list. The following screenshot shows an example of the hierarchy view. In this example, Release 1 has been expanded to show the iterations in the release. Iteration 2 has also been expanded to show the stories in that iteration. Iteration 1 is collapsed to hide the stories in that iteration.</p>
+    <screenshot alttext="Hierarchy view example" src="resources/images/hierarchy_view_example.png" />
+    <p>To view cards in a hierarchy, select the card tree in the <strong>Select tree</strong> control, <cref topic="tree_filter">select the cards you want to work with</cref> and then click the <link>Hierarchy</link> link.</p>
+    <note>The <button>hierarchy view</button> button is only available when you have a card tree selected.</note>
+  </section>
+  <section title="How to view cards in a hierarchy" collapsed="true">
+    <steps>
+      <item><cref topic="signing_in_and_out_of_mingle">Sign in</cref> to Mingle and open the project for which to view cards in a hierarchy (if you're not currently working in the project).</item>
+      <item>
+        <p>Click the <tab>All</tab> tab.</p>
+        <p>You can also click any other tab that displays cards.</p>
+      </item>
+      <item>
+        <p>Select the card tree that contains the cards you want to work with.</p>
+        <screenshot alttext="Select tree" src="resources/images/select_card_tree_in_header.png" />
+      </item>
+      <item>
+        <p><cref topic="tree_filter">Filter the card list</cref> to isolate the cards you want to work with. In the image below, the list has been filtered to show only cards in the current release and iteration.</p>
+        <screenshot alttext="Tree filter" src="resources/images/tree_filter_example.png" />
+        <p>If you have existing similar <cref topic="managing_favorites_and_tabs">tabs or favorites</cref> setup, you can select one of these as a starting point and then change the filters.</p>
+      </item>
+      <item>
+        <p>Click the <link>Hierarchy</link> link. Mingle displays all cards on the page in a hierarchical list.</p>
+        <screenshot alttext="Hierarchy view with filter" src="resources/images/hierarchy_view_with_filter.png"/>
+      </item>
+    </steps>
+  </section>
+  <section title="What can you do on the Hierarchy view?" file="what_you_can_do_on_the_hierarchy_view"/>
+</topic>

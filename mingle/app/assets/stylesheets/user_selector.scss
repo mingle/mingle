@@ -1,0 +1,77 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+.user-selector-lightbox {
+  .lightbox_content {
+    padding: 0;
+  }
+
+  .search-form {
+    padding: 7px;
+    background-color: #eee;
+    border-bottom: 1px solid #aaa;
+    line-height: 36px;
+    font-size: 16px;
+    position: relative;
+
+    .search-field {
+      font-size: 16px;
+      padding: 3px 35px 3px 3px;
+      height: 28px;
+      width: 100%;
+    }
+    .indicator {
+      position: absolute;
+      top: 13px;
+      right: 15px;
+    }
+  }
+  .search-results {
+    min-height: 300px;
+    overflow: auto;
+    margin: 0;
+    .users {
+      list-style-type: none;
+      font-size: 12px;
+      margin: 0;
+      .user {
+        border-bottom: 1px solid #eee;
+        height: 38px;
+        padding: 7px 10px;
+        cursor: pointer;
+        margin: 0;
+        &:hover {
+          background-color: #ffec80;
+        }
+        span {
+          margin-left: 5px;
+        }
+      }
+    }
+    .load-more {
+      text-align: center;
+    }
+  }
+  .pagination-info {
+    height: 40px;
+    text-align: center;
+    background-color: #eee;
+    line-height: 40px;
+    font-size: 12px;
+    border-top: 1px solid #aaa;
+    margin-top: 0;
+  }
+}

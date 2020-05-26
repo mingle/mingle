@@ -1,0 +1,301 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>Cumulative Flow Graph Build Chart Section Test</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <script src="../../../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js"
+            type="text/javascript"></script>
+    <script src="../../../../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js"
+            type="text/javascript"></script>
+    <script src="../../../../../app/assets/javascripts/thirdparty/jquery/jquery.tag-it.js"
+            type="text/javascript"></script>
+    <script src="../../../../../app/assets/javascripts/thirdparty/tinycolor.js" type="text/javascript"></script>
+    <script src="../../../../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+    <script src="../../../../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+    <script src="../../../../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+    <script src="../../../../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+    <script src="../../../../../public/javascripts/smart_sort.js" type="text/javascript"></script>
+    <script src="../../../../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+
+    <script src="../../../../../public/javascripts/application.js" type="text/javascript"></script>
+    <script src="../../../../../app/assets/javascripts/thirdparty/jquery/jquery.scrollintoview.js"
+            type="text/javascript"></script>
+    <script src="../../../../../app/assets/javascripts/drop_down.js" type="text/javascript"></script>
+    <script src="../../../../../app/assets/javascripts/text_box.js" type="text/javascript"></script>
+    <script src="../../../../../app/assets/javascripts/mingle_tag_storage.js" type="text/javascript"></script>
+    <script src="../../../../../app/assets/javascripts/mingle_tageditor.js" type="text/javascript"></script>
+    <script src="../../../../../app/assets/javascripts/tags_filter.js" type="text/javascript"></script>
+    <script src="../../../../../app/assets/javascripts/url_helper.js" type="text/javascript"></script>
+    <script src="../../../../../app/assets/javascripts/project_data_store.js" type="text/javascript"></script>
+    <script src="../../../../../app/assets/javascripts/single_checkbox.js" type="text/javascript"></script>
+    <script src="../../../../../app/assets/javascripts/easy_charts/group_parameter.js" type="text/javascript"></script>
+    <script src="../../../../../app/assets/javascripts/easy_charts/parameter.js" type="text/javascript"></script>
+    <script src="../../../../../app/assets/javascripts/easy_charts/trend_line_parameter.js" type="text/javascript"></script>
+    <script src="../../../../../app/assets/javascripts/easy_charts/pair_parameter.js" type="text/javascript"></script>
+    <script src="../../../../../app/assets/javascripts/easy_charts/section_helpers.js" type="text/javascript"></script>
+    <script src="../../../../../app/assets/javascripts/easy_charts/card_filter_value_wrapper.js"
+            type="text/javascript"></script>
+    <script src="../../../../../app/assets/javascripts/easy_charts/property_definition_filter.js" type="text/javascript"></script>
+    <script src="../../../../../app/assets/javascripts/color_picker.js" type="text/javascript"></script>
+    <script src="../../../../../app/assets/javascripts/color_selector.js" type="text/javascript"></script>
+    <script src="../../../../../app/assets/javascripts/easy_charts/card_filter.js" type="text/javascript"></script>
+    <script src="../../../../../app/assets/javascripts/easy_charts/card_type_filter.js" type="text/javascript"></script>
+    <script src="../../../../../app/assets/javascripts/easy_charts/card_filters.js" type="text/javascript"></script>
+    <script src="../../../../../app/assets/javascripts/easy_charts/mql_builder.js" type="text/javascript"></script>
+    <script src="../../../../../app/assets/javascripts/easy_charts/sections/build_chart_section.js"
+            type="text/javascript"></script>
+    <script src="../../../../../app/assets/javascripts/easy_charts/stacked_bar_chart/xLabelTranslator.js"
+            type="text/javascript"></script>
+    <script src="../../../../../app/assets/javascripts/easy_charts/stacked_bar_chart/sections/build_chart_section.js"
+            type="text/javascript"></script>
+    <script src="../../../../../app/assets/javascripts/easy_charts/cumulative_flow_graph/sections/build_chart_section.js"
+            type="text/javascript"></script>
+    <script src="../../../../../app/assets/javascripts/easy_charts/series.js" type="text/javascript"></script>
+    <script src="../../../../../app/assets/javascripts/easy_charts/series_parameter.js" type="text/javascript"></script>
+
+    <script src="../../../test_assets/sinon-2.3.6.js" type="text/javascript"></script>
+    <script src="../../../test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+    <script src="../../../test_assets/qunit-phantom.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="../../../test_assets/qunit-1.21.0.css" type="text/css"/>
+
+</head>
+<body>
+<div id="qunit">
+</div>
+<div id="cumulative_flow_graph_wizard"></div>
+<script type="application/javascript">
+
+  var sandbox = sinon.sandbox.create(sinon.defaultConfig);
+  var propDef1 = {
+    id:1,
+    name: 'nonTreeProp1',
+    isNumeric: true,
+    isManaged: true,
+    dataType: 'numeric',
+    treeSpecial:false,
+    operatorOptions: [['is not', 'is not']],
+    propertyValueDetails: [{value: 'p1v2', position: 2}, {value: 'p1v1', position: 1}, {value: 'p1v3', position: 3}]
+  },propDef2 = {
+    id:2,
+    name: 'treeProp1',
+    isNumeric: true,
+    isManaged: true,
+    dataType: 'card',
+    treeSpecial:true,
+    validCardTypeName:'Sprint',
+    operatorOptions: [['is not', 'is not']]
+  },propDef3 = {
+        id:3,
+        name: 'nonTreeProp2',
+        isNumeric: false,
+        isManaged: true,
+        dataType: 'string',
+        treeSpecial:false,
+        operatorOptions: [['is not', 'is not']],
+        propertyValueDetails: [{value: 'p3v2', position: 2}, {value: 'p3v1', position: 1}, {value: 'p3v3', position: 3}]
+      },propDef4 = {
+    id:4,
+    name: 'cardProp1',
+    dataType: 'card',
+    treeSpecial:false,
+    operatorOptions: [['is not', 'is not']]
+  },propDef5 = {
+    id:5,
+    name: 'Owner',
+    dataType: 'user'
+  };
+  var expectedParamDefs = [
+    {
+      name: 'x-label-property',
+      initial_value: null,
+      allowed_values: [],
+      multiple_values_allowed: false,
+      input_type: 'dropdown',
+      label: 'Which property should the X-axis labels be based on?'
+    }, {
+      name: 'x-label-filters',
+      input_type: 'card-filters',
+      label: 'Filter X-axis values',
+      withoutCardTypeFilter: true,
+      options: {disabled: true}
+    }, {
+      name: 'build-chart-group-1',
+      input_type: 'group-parameter',
+      param_defs: [
+        {
+          name: 'first-x-label',
+          label: 'First X label',
+          input_type: 'dropdown',
+          initial_value: null,
+          allowed_values: [],
+          multiple_values_allowed: false,
+          placeholder: 'X label start'
+        },
+        {
+          name: 'last-x-label',
+          label: 'Last X label',
+          input_type: 'dropdown',
+          initial_value: null,
+          allowed_values: [],
+          multiple_values_allowed: false,
+          placeholder: 'X label end'
+        },
+        {
+          name: 'x-label-interval',
+          label: 'X label interval',
+          input_type: 'dropdown',
+          initial_value: 1,
+          allowed_values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+          multiple_values_allowed: false,
+          placeholder: 'X label interval'
+        }
+      ],
+      options: {disabled: true}
+    }
+  ], currentProjectData = {
+    identifier: 'sample_project',
+    dateFormat: '%Y/%m/%d',
+    cardTypes: [
+      {
+        id: 1,
+        name: "Story",
+        propertyDefinitions: [propDef1, propDef2, propDef4, propDef5]
+      },
+      {
+        id: 2,
+        name: "Sprint",
+        propertyDefinitions: [propDef3]
+      }
+    ],
+    cardTypeNames: ["Story","Sprint"],
+    tags: [],
+    team: [{login:'user1',name:'User1'},{login:'user2',name:'User2'},{login:'user3',name:'User3 (bullshit)'}]
+  }, projectDataStore = new ProjectDataStore(currentProjectData), accessibleProjects = [
+    {name: 'Sample Project', identifier: 'sample_project'},
+    {name: 'Sample Project 2', identifier: 'sample_project2'}
+  ];
+  QUnit.dump.maxDepth = 10;
+  QUnit.module('Cumulative Flow Graph Build Chart Section', {
+    beforeEach: function () {
+      MingleUI.EasyCharts.chartType = 'cumulative-flow-graph';
+      sandbox.spy(MingleUI.EasyCharts, 'Parameter');
+      this.server = sandbox.useFakeServer();
+      this.onUpdate = sandbox.spy();
+      this.onComplete = sandbox.spy();
+      this.container = $j('#cumulative_flow_graph_wizard');
+      this.callbacks = {
+        onUpdate: this.onUpdate,
+        onComplete: this.onComplete
+      };
+      this.projectData = projectDataStore.dataFor(currentProjectData.identifier);
+      sandbox.spy(this.projectData, 'propertyDefinitionValues');
+      sandbox.spy(this.projectData, 'executeMql');
+      this.selectedCardTypes = ['Story'];
+      this.stackedBarChartBuildChartSectionSpy = sandbox.spy(MingleUI.EasyCharts.StackedBarChart.Sections, 'BuildChartSection');
+      this.section = new MingleUI.EasyCharts.CumulativeFlowGraph.Sections.BuildChartSection(
+          {project: currentProjectData.identifier}, this.callbacks, projectDataStore);
+      this.customUpdateHandlerSpy = sandbox.spy(this.section, 'customUpdateHandler');
+      sandbox.stub(projectDataStore, 'accessibleProjects').returns(accessibleProjects);
+      var fakeFilter = {
+        isValid: function () {
+          return true
+        },
+
+        isForCardProperty: function() {
+          return false;
+        },
+
+        property: {
+          value: function () {
+            return 'Type';
+          }
+        },
+
+        operator: {
+          value: function () {
+            return 'eq';
+          }
+        },
+
+        value: {
+          value: function () {
+            return 'Story';
+          }
+        }
+      };
+      this.section.enableWith(this.projectData, this.selectedCardTypes, {filters: [fakeFilter], tags: ['tag1']});
+      this.container.append(this.section.htmlContainer);
+    },
+    afterEach: function () {
+      this.container.empty();
+      sandbox.restore();
+    }
+
+  }, function () {
+    QUnit.test('testShouldInvokeStackedBarChartBuildChartSection', function (assert) {
+      var expectedOptions = {
+        seriesConfig: {
+          'trend-line': {isRequired: false },
+          'burn-down': {isRequired: false},
+          enableSeriesTypeCustomization: true,
+          'aggregate-pair': {
+            isRequired: true,
+            label: "What determines the Y-axis values?"
+          },
+          group: {
+            isRequired: true,
+            values: {
+              'series-type': {
+                isRequired: true,
+                initialValue: 'Area'
+              }
+            }
+          }
+        },
+        parameterDefinitions:expectedParamDefs
+      };
+      assert.equal(this.stackedBarChartBuildChartSectionSpy.callCount, 1);
+      assert.deepEqual(this.stackedBarChartBuildChartSectionSpy.args[0][0], {project: currentProjectData.identifier});
+      assert.deepEqual(this.stackedBarChartBuildChartSectionSpy.args[0][2], projectDataStore );
+      assert.deepEqual(this.stackedBarChartBuildChartSectionSpy.args[0][3], expectedOptions);
+    });
+
+    QUnit.test('testValuesShouldHaveCumulativeTrue', function (assert) {
+      var expectedValues = {
+        xLabelInterval: "1",
+        cumulative: true
+      };
+      assert.deepEqual(this.section.values(), expectedValues );
+    });
+
+    QUnit.test('testShouldHaveDefaultSeriesTypeArea', function (assert) {
+      var xLabelPropertyContainer = this.container.find('div#cumulative_flow_graph_build_chart_section_x_label_property_parameter');
+      xLabelPropertyContainer.find('.parameter .drop-down-toggle').click();
+      xLabelPropertyContainer.find('.parameter .options-container li:first-child()').click();
+      this.container.find('.add-a-series').click();
+      var seriesTypeParameterContainer = this.container.find('div#group1_series_type_parameter');
+      assert.deepEqual(seriesTypeParameterContainer.find('.selected-value').text(), 'Area' );
+    });
+
+  });
+</script>
+</body>
+</html>

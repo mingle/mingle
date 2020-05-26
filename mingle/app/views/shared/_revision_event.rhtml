@@ -1,0 +1,31 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="revision-<%= event.number %>" class="event revision-event">
+  <div class="user-icon">
+    <span class="event-type"></span>
+    <%= image_tag_for_user_icon(event.mingle_user, :size => '24x24') %>
+  </div>
+  <div class="event-content">
+    <h3>
+      <%= link_to "#{event.short_name}", repository_revision_url(:rev => event.identifier) %>
+      <p class="notes">(<%= "#{repository_vocabulary['committed']} by #{event.user} #{date_time_lapsed_in_words(event.updated_at, event.project.date_format, event.project.time_zone)}" %>)</p>
+    </h3>
+    <ul class="change">
+      <li><%= replace_card_links(h(truncate(event.commit_message, :length => 255))) %></li>
+    </ul>
+  </div>
+</div>

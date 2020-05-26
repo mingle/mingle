@@ -1,0 +1,66 @@
+<html>
+<!--SAHI_INJECT_START-->
+<script>/*<![CDATA[*//*---->*/__sahiDebugStr__="";__sahiDebug__=function(s){__sahiDebugStr__+=(s+"\n");};/*--*//*]]>*/</script>
+<script src="/_s_/spr/domainfix.js"></script>
+<script src='/_s_/spr/concat.js' id='_sahi_concat'></script>
+<script src='http://sahi.example.com/_s_/dyn/SessionState/state.js'></script>
+<script src='/_s_/spr/language_pack.js' id='langpack'></script>
+<script>/*<![CDATA[*//*---->*/_sahi.createCookie('sahisid', _sahi.sid);_sahi.loadXPathScript()/*--*//*]]>*/</script>
+<script>/*<![CDATA[*//*---->*/eval(_sahi.sendToServer("/_s_/dyn/Player_script/script.js"));/*--*//*]]>*/</script>
+<script src='/_s_/spr/playback.js'></script>
+<!--SAHI_INJECT_END-->
+<head><title>Android Launcher</title></head>
+<body style="width:300px;"">
+<script>
+function sahiIsIE(){
+    var browser = navigator.appName;
+    return browser == "Microsoft Internet Explorer";
+}
+function sahiCreateRequestObject(){
+    var obj;
+    if(sahiIsIE()){
+        obj = new ActiveXObject("Microsoft.XMLHTTP");
+    }else{
+        obj = new XMLHttpRequest();
+    }
+    return obj;
+}
+function sahiSendToServer(url){
+	try {
+	    var rand = (new Date()).getTime() + Math.floor(Math.random() * (10000));
+	    var http = sahiCreateRequestObject();
+	    url = url + (url.indexOf("?") == -1 ? "?" : "&") + "t=" + rand;
+	    var post = url.substring(url.indexOf("?") + 1);
+	    url = url.substring(0, url.indexOf("?"));
+	    http.open("POST", url, false);
+	    http.send(post);
+	    return http.responseText;
+	} catch(ex) {
+		alert(ex);
+	}
+}
+function onScriptFormSubmit(f) {
+//    resetStep();
+    var starturl = encodeURIComponent(f.starturl.value);
+   	var dirPath = encodeURIComponent("D:/dev/sahi/sahi_993/userdata/scripts/");
+   	var file = encodeURIComponent(f.filebox.value);
+   	var pbURL = "/_s_/dyn/Player_setScriptFile?dir="+dirPath+"&file="+file+"&starturl="+starturl+"&manual=0";
+   	//window.setTimeout("location.reload()", 100);
+   	sahiSendToServer(pbURL);
+   	window.setTimeout("playNow()");
+}
+function playNow(){
+	_sahi.playManual(0);
+}
+</script>
+<form name="f" >
+Test:<br/>
+<input type="text" name="filebox" value="android.sah"/><br/>
+Start URL:<br/>
+<input type="text" name="starturl" value="http://gramam/demo/training/" style="width:250px"/><br/>
+<input type="button" value="Play" onclick="onScriptFormSubmit(this.form)"/>
+<br/><br/>
+<img src="/_s_/spr/images/sahi_logo_web.png"/>
+</form>
+</body>
+</html>

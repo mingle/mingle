@@ -1,0 +1,21 @@
+== Postgres environment setup on mac
+. Before installing, verify if there is postgresql running on your machine. If it is already running, then verify if it is 9.x version. If it is not 9.x version, then you need to manage two versions of postgres services. Since postgresql uses port number 5432, and two versions can't use the same port. Either one of the version should use other port or run only one version. Managing both versions of the posgresql and troubleshooting is out of scope of the documentation.
+. Install postgresql@9.6 on mac using homebrew
+. Start the postgres services by running `brew services start postgresql@9.6` at command line
+. Verify the installation by just running `psql`
+  * psql shall be installed at `/usr/local/Cellar/postgresql@9.6/9.6.16/bin/psql`
+  * If you experience any unix socket error on port 5432
+      ** Stop the postgres service by `brew services stop postgresql@9.6`
+      ** Then initial db may not be created or when /usr/local/var/postgres directory is not available
+      ** Create the initial db by following the below commands
++
+[source,bash]
+----
+sudo mkdir /usr/local/var/postgresql@9.6
+sudo chown -R $(whoami):admin /usr/local/var/postgresql@9.6
+sudo chmod -R 755 /usr/local/var/postgresql@9.6
+initdb /usr/local/var/postgresql@9.6 -E utf8
+----
+. Start the postgresql services after creating the above initial db
+. Create initial database `createdb $(whoami)`
+. Once again verify installation by running `psql`. Expectation is that you must be landed in the postgresql command prompt.

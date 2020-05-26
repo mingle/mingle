@@ -1,0 +1,32 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% if MingleConfiguration.holiday_effects? && !User.current.anonymous?%>
+  <li>
+    <% word = MingleConfiguration.show_holiday_fun?(user_preference(:i_hate_holidays)) ? "Disable holiday theme" : "Enable holiday theme" %>
+    <% holiday = MingleConfiguration.show_holiday_fun?(user_preference(:i_hate_holidays)) ? MingleConfiguration.latest_holiday : ""%>
+    <%=  link_to word,
+      :url => { :action => "update_holiday_effects_preference", :controller => "user_display_preference", :holiday => holiday},
+      :complete => "location.reload()", remote: true  %>
+  </li>
+
+  <% if MingleConfiguration.show_holiday_fun?(user_preference(:i_hate_holidays)) && MingleConfiguration.holiday_tweet && !MingleConfiguration.holiday_tweet.empty? %>
+    <li>
+      <% tweet_params = {:text => MingleConfiguration.holiday_tweet} %>
+      <%= link_to "", "https://twitter.com/intent/tweet/?#{tweet_params.to_query}", :class => "twitter-icon", :target => '_blank' %>
+    </li>
+  <% end %>
+<% end %>

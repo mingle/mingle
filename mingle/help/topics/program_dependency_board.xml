@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "backlog.dtd">
+<chapter title="Program Dependency Board" id="mingle_plus">
+	    <p>The Program Dependency Board allows you to manage all dependencies within your program in one central location. The board will help you understand the progress of your dependencies at a high level.</p>
+	    <p>The board's swimlanes are grouped by the dependency status.</p>
+	    	<bullets>
+	    		<item><strong>A new dependency has a raising card linked to it and has yet to be accepted by the resolving project.</strong></item> 
+	    		<item><strong>An accepted dependency means that the resolving project has accepted the dependency by linking resolving card(s) to it.</strong></item>
+	    		<item><strong>A resolved dependency means that the resolving project has completed the dependency.</strong></item>
+	    	</bullets> 
+	    <p>The board rows are grouped by all of the projects within your program.</p>
+	
+		<screenshot alttext="Program dependency board" src="resources/images/program_dependency_board.png" />
+
+		<section title="Filtering the Program Dependency Board">
+
+		<p>The Program Dependency Board can be filtered by using the toggle and project drop down at the top left corner of the board. Toggle between raising or resolving dependencies based on the conversations you are having with your teams.</p>
+
+	 	<screenshot alttext="Program dependency board filters gif" src="resources/images/program_dependency_board_filters.gif" />
+	 	</section>
+</chapter>

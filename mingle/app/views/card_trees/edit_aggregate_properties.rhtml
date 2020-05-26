@@ -1,0 +1,63 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= render :partial => 'edit_aggregate_action_bar' %>
+
+<div id='content'>
+  <h1>Configure aggregate properties</h1>
+
+  <h2><%= h @tree.name %></h2>
+
+  <div id='tree_config_view'>
+  
+    <% card_types = config_card_types(@tree)%>
+    <% card_types.each_with_index do |card_type, index| %>
+      <div id='type_node_<%= index %>_container' class='type-node-container'>
+        <% unless index== 0 %>
+          <div id="relationship_connector_<%= index %>" class="relationship-connector">
+            <div class="vertical-line"></div>
+            <div class="relationship-property">
+              <%= @tree.tree_relationship_name(card_types[index -1]) %>
+            </div>
+          </div>
+        <% end %>
+        
+        <div class='type-node' id="<%="node-#{card_type.id}"%>">
+          <span class="select-type">
+            <%= h card_type.name %>
+          </span>
+          <%= link_to_remote('Edit aggregates', 
+                  { :url => {:action => 'show_add_aggregate_form', :tree_configuration_id => @tree.id},
+                    :with => "'aggregate_card_type=' + #{card_type.id.to_json}",
+                    :before => show_spinner("spinner-#{card_type.id}"),
+                    :complete => "#{hide_spinner("spinner-#{card_type.id}")};
+                     aggregatePopupHandler.popup($('node-#{card_type.id}'), $('edit-aggregate-popup'));
+                    " },
+                :class => 'aggregates-edit-link', :title  => 'Edit aggregate properties', :id => "edit-aggregates-link-#{card_type.id}") unless index == card_types.size - 1 %>
+          <%= spinner(:id => "spinner-#{card_type.id}") %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <div id="edit-aggregate-popup" style="display: none;">
+  </div>
+
+</div>
+
+<%= render :partial => 'edit_aggregate_action_bar' %>
+<%= javascript_with_rescue "aggregatePopupHandler = new AggregatePopupHandler();" -%>
+<%= javascript_with_rescue "$('edit-aggregates-link-#{escape_javascript(params['popup_card_type_id'])}').onclick();" if params['popup_card_type_id'] -%>

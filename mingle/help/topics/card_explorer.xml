@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE subsection SYSTEM "mingle_help.dtd">
+<subsection title="Using the card explorer">
+	<p>The card explorer allows you to quickly find cards and add them to a tree.</p>
+	<screenshot alttext="card tree - card explorer" src="resources/images/card_trees_tree_view_card_explorer.png" />	
+	<bullets>
+		<item>Cards which are already in the tree appear in the explorer grayed out.</item>
+		<item>Cards not already in the tree appear colored by card type, and can be selected and dragged into the tree</item>
+		<item>Up to 50 cards will be shown in the card explorer - you may need to restrict the list using filters as described below if the card you want is not displayed.</item>
+	</bullets>
+	<p>You can filter the cards that appear in the explorer by adding filter conditions in the <tab>Filter</tab> tab just as you do for the tree filter described above. In addition, you can use the <tab>Search</tab> tab to find cards matching any text.</p>
+	<steps title="To add cards to the tree">
+		<item>
+			<p>Center the tree view onto the card you want to use as the parent for the new cards. 
+				If the cards are of the top level type, then you should drop them onto the tree root</p>
+			<screenshot alttext="card tree - add top level card from explorer" src="resources/images/card_trees_tree_view_add_top_level_card.png" />
+		</item>
+		<item>
+			<bullets title="Select one or more cards in the explorer list">
+				<item>To select a single card, just left click on it anywhere and you can drag it.</item>
+				<item>To select multiple cards, check the box next to each card and then left click inside any one of them to drag the set.</item>
+				<item>You can use the <link>Select All / None</link> links to select all or none of the available cards in the list.</item>
+			</bullets>
+			<screenshot alttext="card tree - select cards in explorer" src="resources/images/card_trees_tree_view_card_explorer_cards_selected.png" />
+		</item>
+		<item>
+			<p>Drag the selected cards onto the tree view, and drop them on the chosen parent card.</p>
+			<screenshot alttext="card tree - add new cards from explorer" src="resources/images/card_trees_tree_view_drop_cards.png" />
+			<note>
+				<p>If a card can act as a parent of the cards you are dragging, the card will visually indicate this when you drag the cards over the target parent card (see the screenshot above). If you attempt to drop the new cards onto a card which cannot act as a parent for all of the selected cards, then the target parent card will not indicate that it can be a parent card. If you drop cards onto a card that cannot be a parent card for all of the dragged cards, Mingle will not add any of the dragged cards as children of the parent card.</p>
+			</note>
+		</item>
+	</steps>		
+	<p>The newly added cards will have the relationship properties set to refer to their parent card in the tree, and any <cref topic="aggregate_properties">aggregate properties</cref> defined on that tree will be recalculated in the background.</p>
+</subsection> 
+
+

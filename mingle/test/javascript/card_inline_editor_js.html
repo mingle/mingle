@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>
+      JavaScript unit test file
+    </title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+    <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+    <script src="test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+
+    <script src="test_assets/unittest.js" type="text/javascript"></script>
+    <script src="test_assets/unittest_ext.js" type="text/javascript"></script>
+
+
+    <script src="../../public/javascripts/card_inline_editor.js" type="text/javascript"></script>
+
+    <link rel="stylesheet" href="test_assets/unittest.css" type="text/css" />
+  </head>
+  <body>
+    <div id="content">
+      <div id="header">
+        <h1>
+          JavaScript unit test file
+        </h1>
+        <p>
+          This file tests <strong>card_inline_editor.js</strong>.
+        </p>
+      </div>
+      <!-- Log output -->
+      <div id="testlog"></div>
+      <div style='border:solid 1px' id='sandbox'>
+        <h3>
+          sandbox:
+        </h3>
+<!--Test fixture -->
+
+       <form class="test-form">
+          <div class="actions">
+            <div class="button-with-progress-bar">
+
+              <div class="progress progress-striped active progress-save-button">
+                <div class="progress-bar" role="progressbar">
+                  <span class="sr-only">saving...</span>
+                </div>
+              </div>
+
+              <a id="abcd1234" href='javascript:void(0)' onclick='; return false;' class="save-content primary link_as_button save-button">Save</a>
+            </div>
+
+            <div class="button-with-progress-bar">
+
+              <div class="progress progress-striped active progress-close-after-save-button">
+                <div class="progress-bar" role="progressbar">
+                  <span class="sr-only">saving and closing...</span>
+                </div>
+              </div>
+
+              <a href='javascript:void(0)' onclick='; return false;' class="close-after-save-button save-content link_as_button">Save and Close</a>
+            </div>
+
+          </div>
+        </form>
+
+<!--End Test fixture -->
+      </div>
+    </div>
+    <p>
+      <script type="text/javascript">
+// <![CDATA[
+
+  SAND_BOX_CONTENT = $('sandbox').innerHTML;
+  new Test.Unit.Runner({
+
+    setup: function() {
+      $('sandbox').innerHTML = SAND_BOX_CONTENT;
+      var form = $j('.test-form');
+      form.inlineEditForm({});
+      $j('.progress-save-button').hide();
+      $j('.progress-close-after-save-button').hide();
+    },
+
+//Pending these tests since event.trigger does cannot click on the button.
+    xtestShowProgressBarOnClickingSaveButton: function() { with(this) {
+      assertNotVisible($$('.progress-save-button')[0]);
+      Event.trigger($j('.save-button').first(), 'click');
+      assertVisible($$('.progress-save-button')[0]);
+    }},
+
+    xtestShowProgressBarOnClickingSaveAndCloseButton: function() { with(this) {
+      assertNotVisible($j('.progress-close-after-save-button')[0]);
+      Event.trigger($j('.close-after-save-button').first(), 'click');
+      assertVisible($j('.progress-close-after-save-button')[0]);
+    }},
+
+  }, { testLog: "testlog", test : "" }).run;
+// ]]>
+</script>
+    </p>
+  </body>
+</html>

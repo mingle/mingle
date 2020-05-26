@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Displaying Go gadgets in Mingle">
+  <p>Before a user can use the <cref topic="markup_go_pipeline_status">Go pipeline status macro</cref> to display Go pipeline status gadgets in Mingle, both the Mingle and Go administrators must do a bit of configuration. Go must be configured to be an OAuth provider. Mingle must be configured as an OAuth-capable gadget rendering server. OAuth trust, by way of client ID and client secret, must be established. These configuration steps, as well as a troubleshooting guide, are provided on this page.</p>
+    <hint>A big part of the OAuth protocol depends upon Go and Mingle being configured with some special URLs that match exactly. And these URLs must be HTTPS endpoints. The Mingle administrator should double check that a secure site URL has been properly specified, via either the mingle.siteURL or mingle.secureSiteURL property, in the mingle.properties file. This configuration setting is discussed in the <cref topic="advanced_mingle_configuration">"Configuring site URLs" section of the Advanced Mingle Configuration page</cref>. The Go administrator should make a similar check of his Go configuration (although the mechanism for specifying site URLs differs in Go).</hint>
+    
+  <section title="Step 1 - Configure Go as OAuth 2.0 Provider" collapsed="true">
+
+    <p>A Mingle user is only allowed to see Go Pipelines in Mingle that he would normally be allowed to see in Go. That is, when Mingle show's Go data in its pages, the Go authorization rules are not relaxed to allow all members of that Mingle project to automatically see the pipeline. In order to make this work, Mingle and Go use OAuth 2.0 (v9) as a means of allowing the Mingle user to establish his identity in Go.</p>
+    <p>The first step of allowing Mingle and Go to use OAuth for this gadget is to configure Go as an OAuth 2.0 (v9) Provider. This step must be performed by a Go administrator.</p>
+    <p>
+      <cref topic="what_is_oauth">What is OAuth?</cref>
+    </p>
+    <subsection title="1.1 - Capture Mingle OAuth Redirect URI" collapsed="false">
+      <p>Before configuring Go, a bit of information must be captured from Mingle: the Mingle OAuth Redirect URI. If the Go administrator and Mingle administrator are not the same person, the Go admin will need to ask the Mingle admin for this piece of information. In Mingle, logged in as an administrator, go to the home page that lists all projects. In the administration menu at the top of the page, Click the 'Manage OAuth enabled gadget providers' link. On this page, in the blue info box, you'll see the OAuth Redirect URL. Copy and paste this URL to a scratch pad for use in the next step. Below is an example screenshot of Mingle displaying its OAuth Redirect URI. (Please do not attempt to derive your own redirect URI from this screenshot.)</p>
+      <screenshot alttext="Mingle's OAuth Redirect URI." src="resources/images/mingle_oauth_redirect_uri.png"/>
+    </subsection>
+    <subsection title="1.2 - Create OAuth client entry in Go" collapsed="false">
+      <p>In Go, logged in as Go administrator, go to the "Admin &gt; OAuth Clients" tab. Click on the "Add Client" button at the bottom of the page to create the new entry in Go allowing Mingle as an OAuth client. In the first field, enter a description of the OAuth client, most likely something like "Mingle" and in the second field, OAuth Redirect URI, enter the Mingle URL you captured in the previous step.</p>
+      <screenshot alttext="Go's Create New OAuth Client Form" src="resources/images/go_enter_new_oauth_client_info.png"/>
+      <p>Click the Submit button and note that Go has generated "Client ID" and "Client Secret" fields. Below is a listing similar to what you will see after you have successfully created the entry for a new OAuth client to Go. Copy and paste these values to a scratch pad for the next section. You will also need to copy the Authorization URL (in the blue info box) on this page. If the Go administrator and Mingle administrator are not the same people, the Go administrator will need to securely communicate these values to the Mingle administrator.</p>
+      <screenshot alttext="Go's OAuth Client Listing" src="resources/images/go_oauth_client_listing.png"/>
+    </subsection>
+  </section>
+  
+  <section title="Step 2 - Step 2 - Configure Mingle to render gadgets from Go" collapsed="true">
+    <p>In Go, we have just created an entry for a new OAuth client. Mingle is that client. You must now configure the Mingle half of that trust relationship. In Mingle, logged in as an administrator, go to the home page that lists all projects. In the administration menu at the top of the page, Click the 'Manage OAuth enabled gadget providers' link. Click the 'Add Provider' button to create the new entry. Enter something along the lines of "Go" for the Name. Be sure that whatever you enter for Name is something that your users will recognize. For the OAuth Authorize URL, OAuth Client ID, and OAuth Client Secret fields enter the exact values you captured above in step 1.2.</p>
+    <screenshot src="resources/images/mingle_create_new_oauth_gadget_provider.png" alttext="Mingle's Create New OAuth-capable Gadget Provder Form." />
+    <p>Click submit to save the new entry.</p>
+  </section>
+  
+  <section title="Step 3 - Verify" collapsed="true">
+    <p>The final step is to verify by testing an integration. Go to the reference for the <cref topic="markup_go_pipeline_status">Go pipeline status macro</cref> and see if you can embed a Go status gadget in one of your pages. If the integration fails, please read through the troubleshooting section below.</p>
+  </section>
+  
+  <section title="Troubleshooting" collapsed="true">
+    As you are configuring an integration, something might go wrong. Here are some of the more common issues seen with this integration.
+    <subsection title="'Manage OAuth enabled gadget providers' link shows 'HTTPS' error">
+      <p>If you click on the 'Manage OAuth enabled gadget providers' link and see the error below you have not configured Mingle correctly for HTTPS.</p>
+      <screenshot src="resources/images/https_only_error.png" alttext="HTTP only error." />
+      <p>To rectify this issue please <cref topic="configuring_ssl_access">configure your Mingle instance for SSL connections</cref></p>
+    </subsection>    
+    <subsection title="Macro does not render user authorization message... instead you see 'BAD_OAUTH_CONFIGURATION: There is no OAuth enabeld gadget provider...">
+      <p>If users are seeing the error below rather than an opportunity to authorize the gadget provider to send Mingle data on your behalf there are two possible problems.</p>
+      <screenshot src="resources/images/gadget_provider_not_configured.png" alttext="No gadget provider configured." />
+      <p>The first possibility is that there simply is not a configured gadget provider. That is, a Mingle user attempted to use the pipeline macro without the Mingle administrator having properly configured the Go entry on the OAuth enabled gadget providers page.</p>
+      <p>The second possibility is that the Go hostname specified in the macro markup does not match the hostname specified for the value of the gadget provider's OAuth Authorization URL on the OAuth enabled gadget providers page. Please make sure that these values match.</p>
+    </subsection>
+    <subsection title="Authorization popup shows gadget provider configuration error" >
+      <p>If, on clicking on the Authorize link, the popup opens but shows this error</p>
+      <screenshot src="resources/images/gadget_provider_configuration_error.png" alttext="Gadget provider configuration error." />
+      <p>One possible cause is that there is a mismatch between the redirect URI displayed on the Mingle OAuth enabled gadget providers page and the redirect URI the Go administrator entered while creating the OAuth Client entry for Mingle. Double check that the values are identical.</p>
+      <p>Another possible cause is that there is a mismatch between the OAuth Client ID displayed on the Go OAuth Clients page and the value that the Mingle administrator entered while creating the gadget provider entry for Go. Double check that the values are identical.</p>
+      <hint>When this error is showing in the authorization popup take a look at the value in the browser's address bar. There is most likely a fairly readable error code contained in the address that will reveal the specific configuration error.</hint>
+    </subsection>
+    <subsection title="User clicks 'Yes' on authorization popup but gadget still not showing" >
+      <p>If, upon clicking Yes in the authorization popup, the user sees the error below showing invalid client credentials, there is a mismatch between the OAuth Client Secret values. Double check that the OAuth Client Secret displayed on the GO OAuth Clients page is identical to the value that the Mingle administrator entered while creating the gadget provider entry for Go. Note that this error is not a reference to the user's credentials, but to the OAuth trust between Mingle and Go.</p>
+      <screenshot src="resources/images/mismatched_client_secret_error.png" alttext="Mismatched OAuth client secrets." />
+      <p>If the gadget is showing a "500" error such as below there are a number of possible problems. Note that due to the various ways the gadget protocol can fail, this "500" error might show up in different formats. Any error showing the "500" error should be diagnosed as follows.</p>
+      <screenshot src="resources/images/gadget_500_error.png" alttext="Mismatched OAuth client secrets." />
+      <p>The first step to diagnose this error is to get more detail. If you have access to the Mingle log file you should be able to see more detail there. If you do not have access to the log file you can use the generic <cref topic="markup_opensocial_gadget">OpenSocial gadget macro</cref> rather than Go-specific macro in order to turn on debug options, similar to below.</p>
+      <code>
+          gadget
+            url: https://go.example.com:8154/go/gadgets/pipeline.xml
+            nocache: 1
+            debug: 1
+            preferences:
+              pipelineName: BuildAndTest
+      </code>
+      <p>Using this macro markup should reveal extra detail on the "500" error, similar to below.</p>
+      <screenshot src="resources/images/gadget_500_with_detail.png" alttext="Mismatched OAuth client secrets." />     
+    </subsection>
+    <subsection title="I've debugged the 500 error and I see 'SSL' in the error detail" />
+      <p>OAuth data access occurs via SSL. This requires that Mingle trusts Go's SSL certificate. If you see errors similar to below you likely need to take steps to allow Mingle to trust Go's SSL certificate.</p>
+      <screenshot src="resources/images/gadget_with_ssl_detail.png" alttext="Mismatched OAuth client secrets." />
+      <p>Above is what an SSL error looks like using the debug gadget markup. Below is what you might see in the Mingle server log.</p>
+      <code>
+        [2010-12-08 16:32:10,376] [btpool0-7] [org.apache.commons.httpclient.HttpMethodDirector] I/O exception (javax.net.ssl.SSLException) caught when processing request: java.lang.RuntimeException: Unexpected error: java.security.InvalidAlgorithmParameterException: the trustAnchors parameter must be non-empty
+      </code>
+      <p>If you are seeing the above errors you need to import Go's SSL certificate into Mingle's trust store. The first step is to acquire Go's certificate as a file. One option is to simply ask the Go administrator for the certificate. Another option is to open a Go page in Firefox. Then click on the lock icon in the lower right. Click on the View Certificate button and goto the Details tab. You now see an Export button that will allow you save the certificate as a file.</p>
+      <p>If you are running Mingle on OS X you are just about done with this step. Java actually delegates to the OS X keychain, so you can simply run the Keychain Access program and import the certificate. Restart Mingle after importing the certificate.</p>
+      <p>For Linux and Windows systems there is a bit more work to import the certificate into Mingle's trust store. The first step is to locate the 'keytool' command line program on the computer that hosts Mingle. The keytool program ships with the Java JRE and as Mingle runs on Java, keytool should be there.</p>
+      <p>On Windows, Mingle bundles its own JRE. keytool is located at MINGLE_INSTALL_DIR/jre/bin/keytool. You will need to use the full path to the program to execute it on the command line.</p>
+      <p>If you are running Mingle on Linux there is a good chance that keytool is already on your path and you don't need to locate the program. Simply type 'which keytool' at the command prompt. If you see a path to keytool, you are ready to go. If not, you'll need to locate it in the bin folder of your java installation and then use the full path to execute the program.</p>
+      <p>Now we need to create a new trust store file into which we will import the certificate, and place that store in a location that will survive both Mingle and Java upgrades. We recommend placing the trust store file in your Mingle 'config' directory. We also recommend using the default trust store that ships with Java as the starting point for your trust store. If you wish to do this, simply copy the default Java trust store to the Mingle 'config' folder. On Windows the default store is at MINGLE_INSTALL_DIR/jre/lib/security/cacerts. On Linux the default store is at JAVA_HOME/lib/security/cacerts. If you do not wish to start with this file, but to create a new store, you can create the trust store file as part of the import command.</p>
+      <p>Import the certificate with the following command, where MINGLE_CONFIG_DIR and PATH_TO_CERT need to be substituted with acutal values. Also note that if keytool is not on your path, you'll need to specify the full path to the keytool program in your terminal. You will be asked for the password for the trust store. If you are importing into a copy of the default Java trust store, the password is 'changeit'. If you are creating a new trust store during the import you will be asked for a password, but that is actually keytool asking you to set a new password. You will also be asked to confirm the password.</p>
+      <markup>
+        keytool -importcert -keystore MINGLE_CONFIG_DIR/cacerts -file PATH_TO_CERT
+      </markup>
+      <p>Now that you have created a new trust store for Mingle, you'll need to update mingle.properties such that Mingle can use this trust store.</p>
+      <markup>
+        -Djavax.net.ssl.trustStore=PATH_TO_TRUST_STORE_FILE
+        -Djavax.net.ssl.trustStorePassword=TRUST_STORE_PASSWORD  
+      </markup>
+      <p>Finally, restart Mingle and then retry the gadget.</p>
+      <markup>
+        NativeException (org.apache.commons.httpclient.HttpClientError: java.security.KeyStoreException: problem accessing trust storejava.io.IOException: Keystore was tampered with, or password was incorrect):
+      </markup>
+      <hint>Official Oracle documentation for keytool and certificate management is located at <exref url="http://download.oracle.com/javase/6/docs/technotes/tools/solaris/keytool.html" /></hint>
+        
+    </subsection
+  </section>
+  
+  <section title="Also see" file="go_integration_related_topics" collapsed="false"/>
+  
+</topic>

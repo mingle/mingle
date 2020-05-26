@@ -1,0 +1,11 @@
+function testDragDropXY($draggable, $droppable, $isRelative) {
+	var $arr = _position($droppable);
+	var $x = $arr[0] + 2;
+	var $y = $arr[1] + 2;
+	_dragDropXY($draggable, $x, $y, $isRelative);
+}
+
+_navigateTo("http://www.snook.ca/technical/mootoolsdragdrop/");
+testDragDropXY(_div("Drag me"), _div("Item 2"), false);
+_assertExists(_div("dropped"));
+_assertNotExists(_div("Item 2"));

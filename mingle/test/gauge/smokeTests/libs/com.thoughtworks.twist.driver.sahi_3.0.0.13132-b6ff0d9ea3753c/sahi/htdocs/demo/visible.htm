@@ -1,0 +1,45 @@
+<html>
+<head><title></title></head>
+<script>
+function byId(id){
+	return document.getElementById(id);
+}
+</script>
+<div id="ud">using display</div>
+<div id="uv">using visibility</div>
+<form name="f1">
+<input type="button" value="Display none" onclick="byId('ud').style.display='none'">
+<br/>
+<input type="button" value="Display block" onclick="byId('ud').style.display='block'">
+<br/>
+<input type="button" value="Display inline" onclick="byId('ud').style.display='inline'">
+<br/>
+<input type="button" value="Visibility hidden" onclick="byId('uv').style.visibility='hidden'">
+<br/>
+<input type="button" value="Visibility visible" onclick="byId('uv').style.visibility='visible'">
+</form>
+
+<div style="display:none">
+	<div style="display:block" id="nestedBlockInNone">
+		nested block in none
+	</div>
+</div>
+
+<div style="display:none;position:absolute;">
+	<div style="display:block;position:absolute;" id="absoluteNestedBlockInNone">
+		nested block in none
+	</div>
+</div>
+
+<div style="z-index:-10;position:absolute;top:400px;width:100px;background-color:red;">
+	<div style="display:block" id="nestedZdown">
+		nested z down
+	</div>
+</div>
+<div style="z-index:1;position:absolute;top:400px;width:100px;background-color:red;">
+	<div style="display:block" id="nestedZup">
+		nested z up
+	</div>
+</div>
+
+</html>

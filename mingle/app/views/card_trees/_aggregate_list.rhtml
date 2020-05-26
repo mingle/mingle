@@ -1,0 +1,47 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<ul class="aggregate-list list_table">
+  <li class="header"><span>Aggregate property</span></li>
+  <ul class="items">
+  <% if aggregates.empty? %>
+    <li class="no-aggregates-hint">This card type currently has no aggregate properties.</li>
+  <% end %>
+
+  <% aggregates.smart_sort_by(&:name).each_with_index do |aggregate, index|
+    link_handler_id = "modify-aggregate-#{aggregate.id}"
+    link_handler_name = "linkHandler#{aggregate.id}"
+    spinner_id = "spinner-#{aggregate.id}" %>
+    <li id="<%= link_handler_id %>" class="<%= cycle('odd', 'even') -%>">
+      <%= link_to_remote('Delete',
+              { :url => {:action => 'delete_aggregate_property_definition', :id => aggregate},
+                :before => "#{link_handler_name}.disableLinks(); #{show_spinner(spinner_id)}",
+                :complete => "aggregatePopupHandler.popup($('node-#{@aggregate_property_definition.aggregate_card_type.id}'), $('edit-aggregate-popup'), false);#{hide_spinner(spinner_id)}" },
+              { :class => "delete-agregate" , :id => "delete-aggregate-property-#{aggregate.id}"}) %>
+      <%= link_to_remote('Edit',
+              { :url => {:action => 'show_edit_aggregate_form', :id => aggregate},
+                :before => "#{link_handler_name}.disableLinks(); #{show_spinner(spinner_id)}",
+                :complete => "aggregatePopupHandler.popup($('node-#{@aggregate_property_definition.aggregate_card_type.id}'), $('edit-aggregate-popup'), false); #{hide_spinner(spinner_id)}" },
+              { :class => "edit-agregate", :id => "edit-aggregate-property-#{aggregate.id}"}) %>
+      <span id="aggregate_description_<%= index -%>" ><%= aggregate_description(aggregate) %></span>
+      <%= spinner(:id => spinner_id) %>
+    </li>
+    <%# background colour of overlay cannot be transparent, otherwise this will not disable links on IE6 %>
+    <div id="<%= link_handler_id %>_overlay" style='background-color: white; opacity: 0.1; display:none; position:absolute'></div>
+    <%= javascript_with_rescue "#{link_handler_name} = new LinkHandler(['#{link_handler_id}']);" %>
+  <% end %>
+  </ul>
+</ul>

@@ -1,0 +1,152 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Git Configuration API">
+  <section title="Structure of a git configuration resource">
+    <p>The structure of a Git configuration resource, and its attributes are described below, along with their data type. Also included with each attribute is whether you are allowed to update the value. System generated field like <strong>id</strong> are provided only as information about the Git configuration and cannot be updated through the API.</p>
+    
+    <api_attributes title="Git configuration resource xml - attributes">
+      <api_attribute name="id" type="Integer" readonly="true">system assigned unique identifier for a Git configuration resource. This is not a project id.</api_attribute>
+	    <api_attribute name="marked_for_deletion" type="Boolean">Git configuration is a special resource which is not explicitly deleted by the user. Set this flag to true to let Mingle know that this resource needs to be deleted, and the server will delete it asynchronously.</api_attribute>
+	    <api_attribute name="project" type="Resource"><strong>name</strong> and <strong>identifier</strong> of a project this Git configuration is for; both strings.</api_attribute>
+      <api_attribute name="repository_path" type="String">the Git repository path.</api_attribute>
+  	  <api_attribute name="username" type="String" />
+      <api_attribute name="password" type="String" writeonly="true">this field will not be returned on a GET for security reasons.</api_attribute>
+    </api_attributes>
+  </section>
+
+  <section title="Get the Git configuration for a project">  
+    <api_reference title="Get Git configurations">
+      <p><strong>Reference</strong></p>
+      <code>
+    Request Method: GET
+    URL: /api/v2/projects/project_identifier/git_configurations.xml
+    Parameters: NA
+      </code>
+
+      <p><strong>Example</strong></p>
+      <code>
+    GET
+
+    http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/git_configurations.xml
+      </code>
+
+      <p><strong>Explanation</strong></p>
+      <p>The above is an example of a GET request to a Mingle server running at your.mingle.server, port 8080. The request locates the Git configuration a project with the identifier of "test_project". You have to either have "Mingle administrator" or "Project administrator" permissions to make this call.</p>
+
+      <p><strong>Result</strong></p>
+      Upon execution, you should get an xml document that looks something like the following:
+      <code>
+          <![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<git_configurations type="array">
+  <git_configuration>
+    <id type="integer">23</id>
+    <marked_for_deletion type="boolean">false</marked_for_deletion>
+    <project>
+      <name>test project</name>
+      <identifier>test_project</identifier>
+    </project>
+    <repository_path>git://path/to/your/repository</repository_path>
+    <username>git_user_name</username>
+  </git_configuration>
+</git_configurations>
+
+]]>
+      </code>  
+    </api_reference>
+  </section>
+  <section title="Create a Git configuration">
+    <api_reference title="Create a Git configuration">
+      <p><strong>Reference</strong></p>
+      <code>
+    Request Method: POST
+    URL: /api/v2/projects/project_identifier/git_configurations.xml
+    Parameters: 
+    git_configuration[username]
+    git_configuration[password]
+    git_configuration[repository_path]
+      </code>
+
+      <p><strong>Example</strong></p>
+      <code>
+    POST
+
+    http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/git_configurations.xml
+
+    git_configuration[username]=git_user
+    git_configuration[password]=t0p53cr3t
+    git_configuration[repository_path]=git://path/to/your/repository
+      </code>
+
+      <p><strong>Explanation</strong></p>
+      <p>The above is a POST to create a new git_configuration resource. The request creates a new Git configuration for a project with the identifier of "test_project". You have to either have "Mingle administrator" or "Project administrator" permissions to make this call.</p>
+
+      <p><strong>Result</strong></p>
+      If you were authorized to perform the operation, and the operation succeeded, you will be returned a location attribute in the http header of the response, which is a url from which you can get the card resource that was created.
+    </api_reference>
+  </section>  
+  <section title="Update a Git configuration">
+    <api_reference title="Update a Git configuration">
+      <p><strong>Reference</strong></p>
+      <code>
+    Request Method: PUT
+    URL: /api/v2/projects/project_identifier/git_configurations/id.xml
+    Parameters: 
+    git_configuration[username]
+    git_configuration[password]
+    git_configuration[repository_path]
+    git_configuration[marked_for_deletion]
+      </code>
+
+      <p><strong>Example</strong></p>
+      <code>
+    PUT
+
+    http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/git_configurations/24.xml
+
+    git_configuration[username]=git_user
+    git_configuration[password]=t0p53cr3t
+    git_configuration[repository_path]=git://new_path/to/your/new_repository
+      </code>
+
+      <p><strong>Explanation</strong></p>
+      <p>The above is a PUT to update the git_configuration resource with a system generated <strong>id</strong> of 24 for a project "test_project". It will change the repository path to "git://new_path/to/your/new_repository". The existing repository configuration will be marked for deletion and a new one will be created with this configuration instead. You have to either have "Mingle administrator" or "Project administrator" permissions to make this call.</p>
+
+      <p><strong>Result</strong></p>
+      <p>If you have sufficient permissions to perform the action and the action was successful, you should get an xml document that looks something like the following. The id is changed to 25, which means you got the new configuration resource just created and the old one has been marked for deletion.</p>
+      <code>
+          <![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>          
+<git_configurations type="array">
+  <git_configuration>
+    <id type="integer">25</id>
+    <marked_for_deletion type="boolean">false</marked_for_deletion>
+    <project url="http://localhost:8080/api/v2/projects/test_project.xml">
+      <name>test project</name>
+      <identifier>test_project</identifier>
+    </project>
+    <repository_path>git://new_path/to/your/new_repository</repository_path>
+    <username>git_user</username>
+  </git_configuration>
+</git_configurations>
+          ]]>
+      </code>
+    </api_reference>
+  </section>
+</topic>

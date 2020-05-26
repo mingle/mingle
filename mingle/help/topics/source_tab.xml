@@ -1,0 +1,124 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Source tab">
+	<section title="What you can do on this page">
+		<p>
+			The <tab>Source</tab> tab lets you browse the project source repository. 
+			Mingle automatically scans all files in the repository (based on the directory path specified under <tab>Project admin</tab> tab,  <link>Project settings</link> link), and displays all revisions on the <tab>History</tab> tab.
+		</p>
+	
+		<section title="With Subversion configured" collapsed="true">
+  		<bullets title="The Source tab shows">			
+  			<item>the file size of each file</item>
+  			<item>revision numbers against each directory and file</item>
+  			<item>commit messages (including <cref topic="card_keywords">links to cards</cref> if they were entered in the commit message)</item>
+  			<item>when the source file(s) were committed</item>
+  			<item>the name or id of the person who committed the source file(s) (you can <cref topic="managing_your_user_profile">setup your source repository user name</cref> in your user profile).</item>
+  		</bullets>
+			
+  			<p>Click on a <cref topic="revisions_page">revision number</cref> to view the source files that were changed in the revision and the actual changes against the previous version (diffs).</p>
+  			<bullets>
+  			<item><cref topic="linking_source_files_to_cards">Linking source files to cards using card keywords</cref></item>
+  			<item><cref topic="setup_source_repository_integration">Setting up the source repository integration</cref></item>
+  			</bullets>
+  			<hint>You can view all source revisions on the History tab. If you enter a card number in a commit message (using the correct card keywords) the messages in Mingle will contain links to those cards. 
+  				Viewing a linked card's history displays the source revision number (which you can then click to view other changes for the revision).
+  			</hint>
+		</section>
+		
+		<section title="With Perforce configured" collapsed="true">
+  		<bullets title="The Source tab shows">			
+  			<item>revision numbers against each file</item>
+  			<item>file sizes against each file</item>
+  			<item>when the source file(s) were submitted, and whether they were added or modified</item>
+  			<item>the latest changelist that the file was a part of</item>
+  			</bullets>
+			
+  			<p>Click on a <cref topic="revisions_page">changelist number</cref> to view the source files that were changed in the changelist and the actual changes against the previous version (diffs).</p>
+  			<bullets>
+  			<item><cref topic="linking_source_files_to_cards">Linking source files to cards using card keywords</cref></item>
+  			<item><cref topic="setup_source_repository_integration">Setting up the source repository integration</cref></item>
+  			</bullets>
+  			<hint>You can view all changelists on the History tab. If you enter a card number in a submit message (using the correct card keywords) the messages in Mingle will contain links to those cards. 
+  				Viewing a linked card's history displays the source revision number (which you can then click to view other changes for the revision).
+  			</hint>
+		</section>
+		
+		<section title="With Mercurial configured" collapsed="true">
+		<bullets title="The Source tab shows">	
+			<item>Age - when the source file(s) were committed</item>
+			<item>Most Recent Committer - the name or id of the person who committed the source file(s) (you can <cref topic="managing_your_user_profile">setup your source repository user name</cref> in your user profile).</item>		
+			<item>Most Recent Changeset - changeset against each directory and file</item>
+			<item>Description - commit messages (including <cref topic="card_keywords">links to cards</cref> if they were entered in the commit message)</item>		
+		</bullets>
+
+			<p>Click on a <cref topic="revisions_page">changeset number</cref> to view the source files that were changed in the changeset and the actual changes against the previous version (diffs).</p>
+			<bullets>
+			<item><cref topic="linking_source_files_to_cards">Linking source files to cards using card keywords</cref></item>
+			<item><cref topic="setup_source_repository_integration">Setting up the source repository integration</cref></item>
+			</bullets>
+			<hint>You can view all source changesets on the History tab. If you enter a card number in a commit message (using the correct card keywords) the messages in Mingle will contain links to those cards. 
+				  Viewing a linked card's history displays the source changeset number (which you can then click to view other changes for the changeset).
+			</hint>
+		</section>
+
+    <section title="With Git configured" collapsed="true">
+      <bullets title="The Source tab shows">  
+        <item>Age - when the source file(s) were committed</item>
+        <item>Most Recent Committer - the name or id of the person who committed the source file(s) (you can <cref topic="managing_your_user_profile">setup your source repository user name</cref> in your user profile).</item>   
+        <item>Most Recent Changeset - changeset against each directory and file</item>
+        <item>Description - commit messages (including <cref topic="card_keywords">links to cards</cref> if they were entered in the commit message)</item>   
+      </bullets>
+
+      <p>Click on a <cref topic="revisions_page">changeset number</cref> to view the source files that were changed in the changeset and the actual changes against the previous version (diffs).</p>
+      <bullets>
+      <item><cref topic="linking_source_files_to_cards">Linking source files to cards using card keywords</cref></item>
+      <item><cref topic="setup_source_repository_integration">Setting up the source repository integration</cref></item>
+      </bullets>
+      <hint>You can view all source changesets on the History tab. If you enter a card number in a commit message (using the correct card keywords) the messages in Mingle will contain links to those cards. 
+          Viewing a linked card's history displays the source changeset number (which you can then click to view other changes for the changeset).
+      </hint>
+    </section>
+
+	<section title="With Team Foundation Server (TFS) configured" collapsed="true">
+      	<hint>Mingle does not currently support Team Foundation Server (TFS) repository browsing, so you will see no information displayed on the Source tab. You can view all source changesets on the History tab. If you enter a card number in a commit message (using the correct card keywords) the messages in Mingle will contain links to those cards. Viewing a linked card's history displays the source changeset number (which you can then click to view changes for the changeset). 
+	<br></br>
+		If you click on the changeset link on the History tab or on a card-specific History tab, you will be taken to the Source tab, where you will see the information below for that specific changeset. However, because Mingle does not currently support them, you will not see source diffs related to the specific changeset on the Source tab.
+      </hint>
+<bullets title="The Source tab shows (for a specific changeset)">  
+	        <item>Time - when the source file was committed</item>
+	        <item>Author - the name or id of the person who committed the source file (you can <cref topic="managing_your_user_profile">setup your source repository user name</cref> in your user profile).</item>   
+	        <item>Message - commit messages (including <cref topic="card_keywords">links to cards</cref> if they were entered in the commit message)</item>   
+		    <item>Changes - type of change against each directory and file</item>
+	      </bullets>
+    </section>
+
+	</section>
+	
+	<section title="Also see...">
+		<bullets>
+			<item><cref topic="setup_source_repository_integration">Setting up your source integration</cref></item>
+			<item><cref topic="updating_card_keywords">Updating card keywords</cref></item>
+			<item><cref topic="viewing_project_changes">Viewing project updates (History tab)</cref></item>
+			<item><cref topic="customizing_projects">Customizing projects</cref></item>
+		</bullets>
+	</section>
+</topic>
+
+

@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="SCM Integration for Mingle Onsite">    
+	<note>
+	  <item>To set up source repository integration for Mingle in the cloud, please <cref topic="setup_source_repository_integration_saas">go here</cref>.</item>
+	  <item>Your source files should be <exref url="http://www.utf-8.com/">encoded in UTF-8</exref> in order for Mingle's integration to work properly.Otherwise you may see odd characters showing up in the Mingle Source tab as Mingle is unable to decode the file correctly.</item>
+	</note>  
+    <section title="Getting started">
+        <p>To connect your project to your source repository, select the <tab>Project admin</tab> tab, <link>Project repository settings</link> link. Mingle will display the <strong>Configure project repository</strong> page</p>
+        <p>Select a version control system from the list presented</p>
+        <screenshot alttext="Select version control system list" src="resources/images/source_control_select_system.png"></screenshot>
+        <p>Then follow the instructions below to configure integration with your chosen repository</p>
+    </section>
+		<section title="Mercurial configuration" file="setup_mercurial_configuration" collapsed="false" />
+     	<section title="Perforce configuration" file="setup_perforce_configuration" collapsed="false" />
+    	<section title="Subversion configuration" file="setup_subversion_configuration" collapsed="false" />
+     	<section title="Git configuration" file="setup_git_configuration" collapsed="false" />
+     	<section title="Team Foundation Server (TFS) configuration" file="setup_tfs_configuration" collapsed="false" />
+	<section title="Checking that source repository integration is working correctly">
+		<p>
+			To verify that the source repository integration is correctly configured, open the Mingle <tab>Source tab</tab>. 
+			You should see a series of links that represent the subdirectories within your source repository. 
+			You can drill down inside these links to find specific files.
+		</p>
+		<p>
+			Because Mingle does not currently support TFS repository browsing, to verify that the TFS repository integration is correctly configured, open the Mingle History tab. To view changesets, filter history to only show updates to changesets and select the "In all history" sub-tab.
+		</p>
+		<screenshot alttext="TFS In all history sub tab" src="resources/images/TFS_In_all_history_sub_tab.png"></screenshot>	
+		<p>
+			Within a few minutes of saving your new source configuration you will start seeing revisions or changesets in your project history. (For large repositories, the sync process will take a while before changesets are seen on cards.) You can use the <cref topic="card_keywords">card keywords</cref> feature to integrate your revisions with individual card history. You can change these keywords at any time and the revision-to-card links will be completely rebuilt, starting with the first revision. 
+		</p>
+		<p>
+			If you start with a working or legacy repository, you can tweak the keywords to match any patterns you may have used in those older commit messages.
+		</p>
+	</section>
+	<section title="Also see...">
+		<bullets>
+			<item><cref topic="source_tab">Viewing project source files in the Source tab</cref></item>
+			<item><cref topic="viewing_project_changes">Viewing project changes in the History tab</cref></item>
+			<item><cref topic="card_keywords">Using card keywords</cref></item>
+		</bullets>
+	</section>
+</topic>
+
+

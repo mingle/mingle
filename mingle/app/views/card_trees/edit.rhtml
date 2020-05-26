@@ -1,0 +1,36 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= render :partial => 'shared/contextual_help' %>
+
+<%= render :partial => 'edit_action_bar', :locals => {:position => "top"} %>
+
+<% if defined?(@submit_update_permanently) -%>
+  <%= render :partial => 'shared/irrecoverable_warning' %>
+  <% info_box do %>
+    <p>We recommend that you review the following changes that will result from this reconfiguration of <%= @tree.name.bold %>:</p>
+    <%= render :partial => 'tree_configured_card_type_usage_info' %>
+  <% end %>
+<% end -%>
+
+<div id='content' <%= raw("class='invisible'") if defined?(@submit_update_permanently) %>>
+  <h1>Configure card tree</h1>
+  <% form_tag({:action => 'update', :id => @tree}, {:id => 'tree_update_form'}) do %>
+    <%= render :partial => 'form' %>
+  <% end %>
+</div>
+
+<%= render :partial => 'edit_action_bar' %>

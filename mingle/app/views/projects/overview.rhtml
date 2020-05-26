@@ -1,0 +1,59 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= render :partial => "shared/macro_warnings", :locals => {:renderable => @overview_page} %>
+
+<% @sidebar = capture do -%>
+	<%= render :partial => 'shared/favorites' %>
+
+	<% if @overview_page -%>
+	  <%= render :partial => 'shared/page_view_history' %>
+
+    <%= lazy_loading_collapsible('History', {:controller => 'pages', :action => 'history', :page_identifier => @overview_page.identifier},
+      :html => {:id => 'history'}, :style => {:collapsible_content_style => 'collapsible_content_light'}) %>
+    <%= render :partial => 'history/feed', :locals => {:request_params => history_filter_query_string(:page_identifier => @overview_page.identifier)} %>
+	<% end -%>
+<% end -%>
+
+<%= render :partial => 'shared/contextual_help', :locals => { :params_for_link => { :controller => 'projects', :action => 'show' } } %>
+<% if @overview_page -%>
+	<%= render :partial => 'show_actions', :locals => {:location => 'top'} %>
+
+  <div id="content" class="wiki">
+    <div class="to-be-cropped">
+      <div class="tags-container" name="tags-container">
+        <%= tags_widget 'tag_list', @overview_page_version %>
+      </div>
+      <div id='page-content'>
+        <%= render :partial => 'content', :locals => {:overview_page_version => @overview_page_version}%>
+      </div>
+    </div>
+  </div>
+  <div id="attachments-container">
+    <%= render :partial => 'shared/attachments', :locals => { :attachable => @overview_page_version, :mode => "show", :"authorized_to_delete" => authorized_to_delete_attachments } %>
+	</div>
+
+	<%= render :partial => 'show_actions', :locals => {:location => 'bottom'} %>
+<% else -%>
+  <%= title_with_help_link('Welcome...', 'Overview Tab', :content => 'Help')%>
+
+  <% info_box do %>
+    <% create_link_options = {:controller => 'pages', :action => 'new', :pagename => @project.overview_page_identifier} %>
+  	<p id="info">
+  	  This project does not have an overview page <% if authorized?(create_link_options) %>-<% end %> <%= link_to 'why not create it...', create_link_options %>
+  	</p>
+	<% end  %>
+<% end -%>

@@ -1,0 +1,62 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id='confirm-copy-div'>
+  <%-  lightbox = Lightbox.with_close_link_and_close_button(self, 'Cancel', '', :id => 'cancel-copying', :class => 'remove-button popup-close')
+       lightbox.header "Copy card"
+       lightbox.body do -%>
+       <div class='info-box'>
+        <p>We recommend that you review the following things before copying card <%= @card.number_and_name.bold %>:</p>
+        <ul>
+          <%- unless copier.within_same_project? -%>
+            <%- with_options :partial => 'property_value_not_copied_message' do |message| -%>
+              <%= message.render :locals => { :introduction => 'Property', :properties => properties = copier.setting_to_not_set_properties_for(EnumeratedPropertyDefinition), :reason => " because the requisite #{'value'.plural(properties.size)} #{'does'.plural(properties.size)} not exist in #{@selected_project.name.bold} and the #{'property'.plural(properties.size)} #{'is'.plural(properties.size)} locked" } %>
+              <%= message.render :locals => { :introduction => 'User property', :properties => properties = copier.setting_to_not_set_properties_for(UserPropertyDefinition),
+                                                    :reason => " because the requisite team #{'member'.plural(properties.size)} #{'does'.plural(properties.size)} not exist in #{@selected_project.name.bold}" } %>
+              <%= message.render :locals => { :introduction => 'Card property', :properties => copier.never_copiable_properties_for(CardRelationshipPropertyDefinition) } %>
+              <%= message.render :locals => { :introduction => 'Tree membership and tree relationship property', :properties => copier.never_copiable_properties_for(TreeRelationshipPropertyDefinition) } %>
+              <%= message.render :locals => { :introduction => 'Aggregate property', :properties => copier.never_copiable_properties_for(AggregatePropertyDefinition) } %>
+              <%= message.render :locals => { :introduction => 'Formula property', :properties => copier.never_copiable_properties_for(FormulaPropertyDefinition) } %>
+            <%- end -%>
+          <%- end -%>
+
+          <%- warnings = copier.missing_attachments.map(&:file_name) -%>
+          <%- content_tag :li do -%>File <%= 'attachment'.plural(warnings.size) %> <%= warnings.bold.to_sentence(:last_word_connector => ' and ') %> will not be copied because the requisite source <%= 'file'.plural(warnings.size) %> <%= 'is'.plural(warnings.size) %> missing.
+          <%- end if warnings.any? -%>
+
+          <%- unless copier.within_same_project? -%>
+            <li>Any properties that do not exist in project <%= @selected_project.name.bold %> will <b>not</b> be copied.</li>
+
+            <%- warnings = copier.hidden_properties_that_will_be_copied.map(&:name) -%>
+            <%- content_tag :li do -%>Hidden <%= 'property'.plural(warnings.size) %> <%= warnings.bold.to_sentence(:last_word_connector => ' and ') %> will be copied.
+            <%- end if warnings.any? -%>
+          <%- end -%>
+
+        </ul>
+      </div>
+      <% end
+         lightbox.complete_action do %>
+         <%= link_to_remote 'Continue to copy', {
+                    :url => {:action => 'copy', :number => @card.number, :selected_project_id => @selected_project.identifier},
+                    :method   => :post,
+                    :before   => show_spinner,
+                    :complete => hide_spinner
+           }, :class => 'ok' %>
+         <%= spinner %>
+     <% end %>
+</div>
+
+<%= javascript_with_rescue lightbox_fix_height_js('confirm-copy-div', 30, "'55em'") -%>

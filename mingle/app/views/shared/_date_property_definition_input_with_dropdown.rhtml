@@ -1,0 +1,78 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%
+  options[:display_value] ||= '(not set)'
+  initial_selection = initial_value_for_drop_list([options[:display_value], options[:value]], options[:select_options])
+  link_class = options[:read_only] ? "transition-hidden-protected" : ""
+  calendar_image_title = options[:read_only] ? '' : 'Pick a date'
+-%>
+
+  <span id="<%= options[:html_id_prefix] %>_span" class="date-property">
+    <%= link_to_function(h(initial_selection.first), nil, :id => "#{options[:html_id_prefix]}_drop_link", :without_href => true, :class => link_class) %>
+    <% unless options[:read_only] %>
+      <%= image_tag("icon-calendar.png", :border => 0, :id => "#{options[:html_id_prefix]}_calendar", :alt => 'Calendar picker', :title => calendar_image_title) %>
+    <% end %>
+    <%= hidden_field_tag(options[:field_name], initial_selection.last, :id =>"#{options[:html_id_prefix]}_field") %>
+  </span>
+
+<%
+  dl_options = {
+    :select_options                 => options[:select_options],
+    :html_id_prefix                 => options[:html_id_prefix],
+    :onchange                       => options[:onchange],
+    :initial_selected               => initial_selection,
+    :support_inline_edit            => options[:support_inline_edit],
+    :support_filter                 => options[:support_filter],
+    :inline_add_option_action_title => options[:new_value_message],
+    :numeric                        => prop_def.numeric?,
+    :appended_actions               => options[:appended_actions]
+  }
+-%>
+
+<% unless options[:read_only] %>
+
+  <%= javascript_with_rescue <<-JAVASCRIPT
+    var #{options[:html_id_prefix]}_datePropertyEditor = new DatePropertyEditor('#{options[:html_id_prefix]}', '#{options[:value]}', '#{options[:not_set_display_name]}', 'drop_link', 'field', #{js_options dl_options})
+
+    function #{options[:html_id_prefix]}_update(calendar) {
+      #{options[:html_id_prefix]}_datePropertyEditor._onUpdateFromCalendarWidget(calendar);
+    }
+
+    Calendar.setup(
+      {
+        inputField  : "#{options[:html_id_prefix]}_field",
+        ifFormat    : "%Y-%m-%d",
+        displayArea : "#{options[:html_id_prefix]}_drop_link",
+        daFormat    : #{@project.date_format.to_json},
+        button      : "#{options[:html_id_prefix]}_calendar",
+        align       : "Br",
+        electric    : false,
+        showOthers  : true,
+        weekNumbers : false,
+        firstDayOfWeek : 0,
+        onUpdate    : #{options[:html_id_prefix]}_update
+      }
+    );
+JAVASCRIPT
+-%>
+  
+  <%= javascript_with_rescue <<-JAVASCRIPT
+    var droplist = new DropList(#{js_options(dl_options)})
+    #{"window.droplists.push(droplist);" if options[:add_droplists_to_array]}
+  JAVASCRIPT
+  -%>
+<% end %>

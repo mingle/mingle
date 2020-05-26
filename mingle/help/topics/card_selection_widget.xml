@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Selecting a card as a value for properties">
+	<p>This card selection widget is used to select a card as a value of either <cref topic="relationship_properties">card relationship properties or tree relationship properties</cref>.</p>
+	<bullets title = "Locations where you will use this widget for selecting values for relationship properties:">
+		<item>Card view</item>
+		<item>Card type defaults</item>
+		<item>All filters (including history filters)</item>
+		<item>Transition create and update pages</item>
+		<item>Popups for required or optional relationship properties while invoking transitions</item>
+		<item>Project level variable create and update pages</item>
+	</bullets>
+	<p>This card selection widget provides two ways to find a card: via filtering and via text search. The logic is similar to finding cards on 'Find Card to drop' tab on the tree view.</p>
+	<screenshot src="resources/images/card_view_select_card_popup.png"/>
+	<subsection title = "Filters">
+		<p>You can use this filter just like any other filters in Mingle, by adding or removing filter criteria to narrow down results. Only the most relevant 50 cards will be returned.</p> 
+		<screenshot src="resources/images/card_selection_widget_filter.png"/>
+		<hint>Note that only cards of one card type are available if this widget is prompted for tree relationship properties since only one card type is valid as a value of each tree relationship property.</hint>
+	</subsection>
+	
+	<subsection title = "Search">
+		<p>This search works similarly to other search features in Mingle. If you enter a card number with the hash ('#') symbol preceding it (e.g. '# 42'), this will return only one card with the exact match (provided a card with this number exists the in the project).</p>
+		<screenshot src="resources/images/card_selection_widget_search.png"/>
+	</subsection>
+	
+	<hint>For card relationship properties, all existing cards for the current project, regardless of their card type, will be available as possible values in all locations mentioned above.</hint>
+	<hint>For tree relationship properties, only cards that are already members of the tree and are the appropriate card type will be available as possible values in the <strong>filters</strong> (including history filters).  Otherwise, any cards of the appropriate card type, regardless of their tree membership, will be available in the remaining locations mentioned above. </hint>
+	
+</topic>

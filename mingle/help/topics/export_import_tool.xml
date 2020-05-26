@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Export and Import Tool">
+    	
+	<p>This tool can be found in &#60;MINGLE_HOME&#62;/tools directory where &#60;MINGLE HOME&#62; is the directory where Mingle is installed.</p> 
+		   
+		          <p>To use this tool please follow the instructions in the &#60;MINGLE_HOME&#62;/tools/export_import/readme.txt.</p>
+		         
+		        <note><p>As outlined in readme.txt if using this tool to migrate from one database to another you should:</p> 
+		           <bullets>
+		         <item>complete the Mingle installation process using the new database settings in their entirety, including creation of an initial user, before running this tool</item>
+		           <item>license the new instance</item>
+		          <item>create any users who are not associated with a project manually, using Mingle, as they will not be imported with the projects</item> 
+		           <item>review the templates after the import has completed to remove any duplicates of the standard templates that may have been installed</item>
+		            </bullets></note>
+
+<hint>The tool can be used to export all projects on any database and therefore, if you wish to easily export all projects for archive purposes this tool can be used.</hint>
+    
+</topic>
+
+

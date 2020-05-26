@@ -1,0 +1,24 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<tr class="<%=row_class(member) %>" id="<%= member.html_id %>">
+  <% content_tag "td", :class => 'email', :accessing => 'group_memberships:update' do %>
+    <%= check_box_tag('selected_users[]', member.id, false, :id => "selected_membership_#{member.id}", :class => 'select-membership') %>
+  <% end %>
+  <td><%= member.name %></td>
+  <td><%= member.login %></td>
+  <%= content_tag "td", h(member.email), :class => 'email', :accessing => 'team:show_member_email' %>
+</tr>

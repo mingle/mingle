@@ -1,0 +1,57 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= render :partial => 'shared/admin_actions'%>
+
+<%= render :partial => "card_trees/list_action_bar" %>
+
+<h1>Card trees</h1>
+
+<div id="content">
+  <table class="table-with-nothing-following-it highlightable-table">
+    <thead>
+        <tr class="table-top">
+            <th>Name</th>
+            <th>Structure</th>
+            <th>Description</th>
+            <th class="last">&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+      <% if @trees.empty? -%>
+        <tr>
+          <td colspan="4" class="italic-light align-center last">There are currently no trees to list. You can create a new tree from the action bar.</td>
+        </tr>
+      <% else -%>
+        <% @trees.smart_sort_by(&:name).each_with_index do |card_tree, index| -%>
+          <tr class="<%= cycle('odd', 'even') %>">
+            <td id='<%= "card-tree-name-row-#{index}" %>' title="<%= h card_tree.name %>"> <%= h truncate(card_tree.name, :length => 40) %></td>
+            <td> <%= h tree_structure_desc(card_tree) %> </td>
+            <td> <%= h card_tree.description %></td>
+            <td class="align-right standard-link-spacing last">
+              <%= link_to 'Tree view', card_tree_path(:tree_name => card_tree.name) %>
+              <%= link_to 'Hierarchy view', card_hierarchy_path(:tree_name => card_tree.name) %>
+              <%= link_to 'Configure', :action => 'edit', :id => card_tree %>
+              <%= link_to('Delete', :action => 'confirm_delete', :id => card_tree) %>
+            </td>
+          </tr>
+        <% end -%>
+      <% end -%>  
+    </tbody>
+  </table>
+</div>
+
+<%= render :partial => "card_trees/list_action_bar" %>

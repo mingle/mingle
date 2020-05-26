@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+/**
+ * Copyright  2006  V Narayan Raman
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<project name="project" default="all">
+    <property file="sample.properties"/>
+    <taskdef name="sahi" classname="net.sf.sahi.ant.RunSahiTask" classpath="${sahidir}/lib/ant-sahi.jar"/>
+
+    <target name="run-ff-tests">
+        <sahi suite="${suite}"
+              browser="${ff-exe}"
+              baseurl="${baseurl}"
+              sahihost="localhost"
+              sahiport="9999"
+              failureproperty="sahi.failed"
+	          haltonfailure="false"
+              browserProcessName="firefox.exe"
+              browseroption="-profile ${basedir}/userdata/browser/ff/profiles/sahi$threadNo -no-remote"
+              threads="3">
+            <report type="html"/>
+            <report type="junit" logdir="${junit-log-dir}"/>
+            <createissue tool="jira"/>
+        </sahi>
+    </target>
+
+    <target name="run-ie-tests">
+        <antcall target="proxyon"/>
+        <sahi suite="${suite}"
+              browser="${ie-exe}"
+              baseurl="${baseurl}"
+              sahihost="localhost"
+              sahiport="9999"
+              failureproperty="sahi.failed"
+              haltonfailure="false"
+              browserProcessName="iexplore.exe"
+        	  browseroption="-nomerge"
+              threads="3">
+            <report type="html"/>
+            <report type="junit" logdir="${junit-log-dir}"/>
+            <createissue tool="jira"/>
+        </sahi>
+        <antcall target="proxyoff"/>
+    </target>
+
+    <target name="stopserver">
+        <echo message="Dummy Stop Server: Modify target to stop your own application server."/>
+        <get dest="stopserver.htm" src="http://localhost:10000/dyn/stopserver" ignoreerrors="true"/>
+        <delete file="stopserver.htm"/>
+    </target>
+
+    <target name="startserver">
+        <echo message="Dummy Start Server: Modify target to start your own application server."/>
+        <java classname="net.sf.sahi.WebServer" fork="true" dir="bin"
+              jvmargs="-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5006">
+            <classpath location="lib/sahi.jar"/>
+        </java>
+    </target>
+
+    <target name="all">
+        <parallel>
+            <sequential>
+                <waitfor maxwait="15" maxwaitunit="second" checkevery="100">
+                    <http url="${server-ping-url}"/>
+                </waitfor>
+                <antcall target="sahi-tests"/>
+            </sequential>
+            <antcall target="startsahi"/>
+            <antcall target="startserver"/>
+        </parallel>
+    </target>
+
+    <target name="sahi-tests" depends="run-ie-tests, stopsahi, stopserver, failsahi">
+    </target>
+
+    <target name="failsahi" if="sahi.failed">
+        <fail message="Sahi tests failed!"/>
+    </target>
+
+    <target name="startsahi" description="starts proxy">
+        <java classname="net.sf.sahi.Proxy" fork="true">
+            <!--<env key="MOZ_NO_REMOTE" value="1"/>-->
+            <classpath location="${sahidir}/lib/sahi.jar">
+                <pathelement location="${sahidir}/extlib/rhino/js.jar"/>
+                <pathelement location="${sahidir}/extlib/apc/commons-codec-1.3.jar"/>
+                <fileset dir="${sahidir}/extlib" includes="*.jar"/>
+            </classpath>
+            <arg value="${sahidir}" id="basePath"/>
+            <arg value="${sahidir}/userdata" id="userdataPath"/>
+        </java>
+    </target>	
+
+    <target name="stopsahi" description="stop sahi server">
+        <sahi stop="true" sahihost="localhost" sahiport="9999"/>
+    </target>
+
+    <target name="proxyon">
+        <exec executable="${sahidir}/tools/toggle_IE_proxy.exe">
+            <arg value="enable"/>
+        </exec>
+    </target>
+
+    <target name="proxyoff">
+        <exec executable="${sahidir}/tools/toggle_IE_proxy.exe">
+            <arg value="disable"/>
+        </exec>
+    </target>
+
+</project>

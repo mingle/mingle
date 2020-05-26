@@ -1,0 +1,42 @@
+#  Copyright 2020 ThoughtWorks, Inc.
+#  
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Affero General Public License as
+#  published by the Free Software Foundation, either version 3 of the
+#  License, or (at your option) any later version.
+#  
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Affero General Public License for more details.
+#  
+#  You should have received a copy of the GNU Affero General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+first:
+  tag_id: 1
+  taggable_type: Card
+  taggable_id: 1
+another:
+  tag_id: 2
+  taggable_type: Card
+  taggable_id: 1
+qa_one_status_fixed:
+  tag_id: 7
+  taggable_type: Card
+  taggable_id: 3
+qa_one_iteration_1:
+  tag_id: 5
+  taggable_type: Card
+  taggable_id: 3
+qa_two_iteration_1:
+  tag_id: 5
+  taggable_type: Card
+  taggable_id: 4
+qa_three_priority_low:
+  tag_id: 8
+  taggable_type: Card
+  taggable_id: 5
+qa_four_iteration_2:
+  tag_id: 6
+  taggable_type: Card
+  taggable_id: 6

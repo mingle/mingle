@@ -1,0 +1,137 @@
+<html>
+<head>
+    <title>
+        Event Viewer
+    </title>
+</head>
+
+<script type="text/javascript">
+    function getTarget(e){
+        var targ;
+        if (!e) e = window.event;
+        var evType = e.type;
+        if (e.target) targ = e.target;
+        else if (e.srcElement) targ = e.srcElement;
+        if (targ.nodeType == 3) // defeat Safari bug
+            targ = targ.parentNode;
+        return targ;
+    }
+
+    function sahiList(el, p) {
+        var s = "";
+        var j = 0;
+        for (var i in el) {
+            if (!p || ("" + i).indexOf(p) != -1) {
+                try{
+	                if (typeof el[i] != "function") {
+	                    s += i + "=" + el[i] + ",";
+	                }
+                }catch(e){}
+                j++;
+                //                if (j % 4 == 0)
+                s += "\n";
+            }
+        }
+        return s;
+    }
+
+    function onEv(e, n) {
+        if (!e) e = window.event;
+        if (!n) n = "ta" + (getTarget(e).name.indexOf("1")!=-1 ? 1 : 2);
+        document.f1.elements[n].value = sahiList(e);
+    }
+    function diff() {
+        document.f1.d1.value = "";
+        document.f1.d2.value = "";
+        var x1 = document.f1.ta1.value.replace(/\r/g, '').split("\n");
+        var x2 = document.f1.ta2.value.replace(/\r/g, '').split("\n");
+        for (var i = 0; i < x1.length; i++) {
+            if (x1[i] != x2[i]) {
+                document.f1.d1.value += "\n" + x1[i];
+                document.f1.d2.value += "\n" + x2[i];
+            }
+        }
+    }
+    function changeElEv() {
+        clearEvents();
+        eval("document.f1." + document.f1.el.value + "1." + document.f1.ev.value + " = onEv");
+        eval("document.f1." + document.f1.el.value + "2." + document.f1.ev.value + " = onEv");
+    }
+    function clearEvents() {
+        var els = document.f1.el.options;
+        for (var i = 0; i < els.length; i++) {
+            var evs = document.f1.ev.options;
+            for (var j = 0; j < evs.length; j++) {
+                eval("document.f1." + els[i].value + "1." + evs[j].value + " = null");
+                eval("document.f1." + els[i].value + "2." + evs[j].value + " = null");
+            }
+        }
+    }
+
+</script>
+
+<body>
+
+<form name="f1">
+    <select name="el" onchange="changeElEv()">
+        <option value="t">t</option>
+        <option value="b">b</option>
+        <option value="rb">rb</option>
+        <option value="db">db</option>
+    </select>
+    <select name="ev" onchange="changeElEv()">
+        <option value="onclick">onclick</option>
+        <option value="ondblclick">ondblclick</option>
+        <option value="onkeydown">onkeydown</option>
+        <option value="onkeypress">onkeypress</option>
+        <option value="onkeyup">onkeyup</option>
+        <option value="onmousedown">onmousedown</option>
+        <option value="onmousemove">onmousemove</option>
+        <option value="onmouseout">onmouseout</option>
+        <option value="onmouseover">onmouseover</option>
+        <option value="onmouseup">onmouseup</option>
+    </select>
+    <input type="button" value="Clear All" onclick="form.reset()">
+    <table width="80%">
+        <tr>
+            <td>
+                <input type="text" name="t1" onkeypress="onEv(event, 'ta1')">
+                <input type="button" name="b1" value="Click" onclick="onEv(event, 'ta1')">
+                <span onmousedown="onEv(event, 'ta1')">Click</span>
+                <input type="button" name="rb1" value="Right Click" oncontextmenu="onEv(event, 'ta1')">
+                <span oncontextmenu="onEv(event, 'ta1')">Right Click</span>
+                <input type="button" name="db1" value="Double Click" ondblclick="onEv(event, 'ta1')">
+            </td>
+            <td>
+            </td>
+            <td>
+                <input type="text" name="t2" onkeypress="onEv(event, 'ta2')">
+                <input type="button" name="b2" value="Click" onclick="onEv(event, 'ta2')">
+                <span onmousedown="onEv(event, 'ta2')">Click</span>
+                <input type="button" name="rb2" value="Right Click" oncontextmenu="onEv(event, 'ta2')">
+                <span oncontextmenu="onEv(event, 'ta2')">Right Click</span>
+                <input type="button" name="db2" value="Double Click" ondblclick="onEv(event, 'ta2')">
+            </td>
+        </tr>
+        <tr>
+            <td align="center">
+                <br>
+                <textarea name="ta1" rows="25" cols="75"></textarea>
+                <textarea name="d1" rows="10" cols="75"></textarea>
+            </td>
+            <td align="center">
+                <input type="button" value="Diff" onclick="diff()">
+            </td>
+            <td align="center">
+                <br>
+                <textarea name="ta2" rows="25" cols="75"></textarea>
+                <textarea name="d2" rows="10" cols="75"></textarea>
+            </td>
+        </tr>
+    </table>
+</form>
+
+</body>
+
+
+</html>

@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Viewing cards">
+    <section title="Introduction">
+        <p>Mingle gives you many different options for grouping and sorting cards according to the information you need to know.</p>
+        <bullets title="There are a number of ways you can view cards">
+            <item>in a <cref topic="list_view">list</cref> (default view). This view simply lists cards and is similar to Microsoft Excel. From here you can add or remove columns that represent the card properties. Click on column names to re-sort the list according to the column value.</item>
+            <item>in a <cref topic="grid_view">grid</cref>. This lets you view cards as you would physically view index cards on a whiteboard. You can group cards by a selected card property and color cards by a second property. Click and drag cards to update the selected property value.</item>
+            <item>in a <cref topic="tree_view">tree</cref>. This lets you view relationships between cards as an inverted tree shape.</item>
+            <item>in a <cref topic="hierarchy_view">hierarchy</cref>. This view lets you view relationships between cards as an explorer-like hierarchy.</item>
+        </bullets>
+        
+        <p>Mingle always remembers any changes you make to card views or filters within a tab. For example, say you're working within the All tab and you change the view from List view to Grid view, and select a few card filters. 
+            If you click on another tab, and then later click back on the All tab, it will appear as you left it with the view and filters intact until you reset the view using the icon on the tab.</p>
+        
+        <p>This only applies to your current login session. While you're logged in, any changes other users make will not affect how cards appear to you. 
+            When you log out (or if Mingle logs you out), Mingle 'forgets' the way you left card views and resets views and filters to the defaults for each tab.</p>
+        
+        <hint>For details about editing and manipulating cards, see <cref topic="working_with_cards">Working with cards</cref>.</hint>
+    </section>
+    <section title="Also see...">
+        <bullets>  
+            <item><cref topic="finding_cards_to_work_with">Finding cards to work with</cref></item>
+            <item><cref topic="filter_list_by_component">Filter card list</cref></item>
+            <item><cref topic="list_view">Viewing cards in a list</cref></item>
+            <item><cref topic="grid_view">Viewing cards in a grid</cref></item>
+            <item><cref topic="tree_view">Viewing cards in a tree</cref></item>
+            <item><cref topic="hierarchy_view">Viewing cards in a hierarchy</cref></item>
+            <item><cref topic="maximizing_card_views">Maximizing card views</cref></item>
+            <item><cref topic="creating_a_favorite_card_view">Creating a favorite card view</cref></item>
+            <item><cref topic="viewing_card_history_and_murmurs">Viewing card history and murmurs</cref></item>
+            <item><cref topic="favorites_component">Viewing favorites</cref></item>
+            <item><cref topic="card_types">Applying color to card types</cref></item>
+			<item><cref topic="explore_mingle_topic_whats_a_card">What's a card?</cref></item>
+<item><cref topic="explore_mingle">Explore Mingle</cref></item>
+        </bullets>
+    </section>    
+</topic>

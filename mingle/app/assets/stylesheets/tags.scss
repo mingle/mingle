@@ -1,0 +1,244 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+/* Custom properties (tag groups) */
+
+.tag-editor input {
+	display: block;
+}
+
+/* Adding and editing tags - sidebar and in main */
+
+#tag_list-tags-editor-container img.hide-when-print,
+.tags-editor img {
+  display: none; /* hide the old tags icon */
+}
+
+.tags-editor .removable-tag img {
+  display: inline;
+}
+
+.tags-editor a.open-edit-link {
+  display: block;
+  padding: 4px;
+  text-decoration: none;
+  color: #333;
+  font-size: 11px;
+}
+
+#tag_list-tags-editor-container,
+#tagged_with-tags-editor-container {
+  padding:4px 4px 4px 4px;
+}
+
+
+#card .tags-container {
+    padding: 0 10px;
+}
+
+.wiki .tags-container {
+  border: 1px dashed #CCC;
+  border-width: 1px 0 1px 0;
+}
+
+#input_filter_tags {
+  margin-bottom: 10px;
+  display: block;
+}
+
+.tags-container {
+
+    .input-type-button,.input-type-link {
+        margin-top: 10px;
+    }
+
+    .input-type-text {
+        margin-top: 5px;
+        width: 100%;
+    }
+
+
+    a {
+        color: #333;
+    }
+
+}
+
+#tag-list li {
+	float: left;
+	list-style-type: none;
+	margin-right: 10px;
+}
+
+.tag-list
+{
+  display: inline;
+  font-weight: bold;
+}
+
+.tag-list-icon
+{
+  background-repeat:no-repeat;
+}
+
+.tags-editor-box
+{
+  background-color: #F1F0EC;
+  border: 2px solid #888;
+  padding: 5px;
+  margin-bottom: 5px;
+}
+
+#tag_list-tags-editor-container .edit-container .readonly-tags {
+  display: block;
+  min-height: 15px;
+}
+
+#tag_list-tags-editor-container .edit-container .readonly-tags .removable-tag-list-panel{
+  padding: 0 0 0 20px;
+}
+
+.removable-tag {
+  display: block;
+  float: left;
+  margin-right: 15px;
+  white-space: nowrap;
+}
+
+.removable-tag img {
+  margin-top: -1px;
+}
+
+.tag_group_list
+{
+  margin: 10px;
+}
+
+/* This is the containing block */
+.tag_group_list span
+{
+	display: block;
+	float: left;
+	margin: 0.2em 0em;
+	width: 19em;
+}
+
+/* This is the property label */
+.tag_group_list span span
+{
+  color: #fff;
+  float: left;
+  margin: 0em;
+  overflow: hidden;
+  text-align: right;
+  width: 8em;
+}
+
+.tag_group_list span img
+{
+  margin-left: 5px; /* This targets the remove icon against a tag */
+  cursor: pointer;
+}
+
+.tag_group_list span a
+{
+  float: left;
+  margin-left: 5px;
+  width: 10em;
+  color: #fff;
+}
+
+.tag_group_list input
+{
+	border: none; /* Hides the input element associated with the tag's pseudo drop-down */
+}
+
+.tag_group_list a {
+	color: #00f;
+	cursor: pointer;
+}
+
+.tag_group_list ul
+{
+	margin-left: 2px; /* !!!!!!!! */
+}
+
+.tag_group_list li {
+	list-style:none;
+	cursor:default;
+}
+
+.tag_group_list div
+{
+	position:absolute;
+	border: 1px solid;
+	background-color: #fff;
+}
+
+.tag_group_list ul li.selected { background-color: #ffb;}
+
+#tag-form
+{
+    float: left;
+    width: 100%;
+}
+
+table#tag_groups .vertical-grip a
+{
+	background: #F1F0EC url(../images/icon-vertical-grip.png) no-repeat scroll center right;
+	color: #660000;
+	padding: 5px 18px;
+	text-decoration: none;
+	width: 100%;
+}
+
+#tags-aciton-panel {
+  padding: 0;
+  margin: 0;
+  float: right;
+}
+
+#tags-aciton-panel input {
+  margin: 0 0 0 5px;
+}
+
+#bulk-tags-input-panel
+{
+  padding: 0;
+  margin: 0;
+  position: relative;
+  margin-right: 260px;
+}
+
+#bulk_tags {
+  width: 100%;
+}
+
+#sidebar {
+    .tags-container {
+        background-color: transparent;
+        border: none;
+        padding: 0;
+
+        .input-type-link {
+            display: block;
+        }
+    }
+
+    .tag_group_list {
+        margin: 0em;
+    }
+}

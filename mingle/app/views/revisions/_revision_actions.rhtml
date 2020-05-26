@@ -1,0 +1,30 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% action_bar do %>
+  <%= render_help_link 'Revision', :class => 'page-help-at-action-bar', :content => 'Help' %>
+  <%= link_to_revisions(:class => 'revision') %>
+  <%= link_to('Source', url_for(:project_id => @project.identifier, :controller => 'source', :action => 'index', :rev => @project.repository_vocabulary['head']), :class => 'source action-bar-separator') %>
+  
+	<% if @mingle_revision -%>
+	  <% if !@mingle_revision.first? -%>
+	    <%= link_to("Previous #{repository_vocabulary['revision']}", {:rev => @mingle_revision.previous_revision_identifier}, {:class => 'back'}) %>
+	  <% end -%>
+	  <% if !@mingle_revision.last? -%>
+	    <%= link_to("Next #{repository_vocabulary['revision']}", {:rev => @mingle_revision.next_revision_identifier}, {:class => 'forward'}) %>
+	  <% end -%> 
+	<% end -%> 
+<% end %>

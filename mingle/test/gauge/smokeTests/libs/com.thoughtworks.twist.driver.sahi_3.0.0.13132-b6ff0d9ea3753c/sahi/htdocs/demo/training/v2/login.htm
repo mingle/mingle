@@ -1,0 +1,52 @@
+<!--
+/**
+ * Copyright  2006  V Narayan Raman
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<html>
+<head><title>Login</title></head>
+<body>
+<script>
+function login(){
+	if (document.loginForm.user.value == "test" && document.loginForm.password.value == "secret"){
+		window.location.href = "books.htm"
+	} else {
+		document.getElementById("errorMessage").style.display = "block";
+	}
+}
+</script>
+
+<br/><br/>
+<center>
+<div style="width:300px;text-aslign:left;background-color: #ded;border: 1px solid orange;padding:30px;">
+<b>Sahi Training Site</b><br/><br/>
+<form name="loginForm" onsubmit="return false;">
+<div id="errorMessage" style="display:none;color:red;">Invalid username or password</div>
+<table class="test">
+<tr><td>Username</td><td><input type="text" name="user" value=""></td></tr>
+<tr><td>Password</td><td><input type="password" name="password" value=""></td></tr>
+<tr><td>&nbsp;</td><td><input type="submit" value="Login" class="button" onclick="login()"></td></tr>
+</table>
+</form>
+Not a user? <a href="register.htm">Register</a>
+</div>
+<br/><br/><br/>
+Use test/secret to login
+</center>
+
+<br/>
+<br/>
+</body>
+</html>

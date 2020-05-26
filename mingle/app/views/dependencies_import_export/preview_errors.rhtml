@@ -1,0 +1,32 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="dependencies-import-preview">
+  <%= render :partial => 'shared/top_level_header_pills', :locals => { :selected_tab => 'admin' } %>
+
+  <%= render :partial => 'dependencies_import_export/progress_indicator', :locals => {:title => 'Resolve Errors'} -%>
+
+  <div class="import-message">
+    The original raising card for these dependencies were not found. If you do not select a raising card to link the dependency to, they will be ignored during import.
+  </div>
+  <% form_tag({:action => 'preview', :id => @asynch_request.id}, {:method => 'post'}) do -%>
+    <%= render :partial => 'dependencies_import_export/import_preview_table', :locals => { :dependencies =>  @asynch_request.dependencies_errors, :allow_raising_card_edit => true } %>
+    <div class="actions">
+      <%= link_to 'Cancel', {:action => 'index'}, {:class => 'cancel'} %>
+      <%= submit_tag "Save and continue", :class => "save" %>
+    </div>
+  <% end %>
+</div>

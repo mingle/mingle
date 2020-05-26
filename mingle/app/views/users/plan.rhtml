@@ -1,0 +1,46 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= render :partial => 'shared/top_level_header_pills', :locals => { :selected_tab => 'admin' } %>
+
+<h1>Service plan</h1>
+
+<h2>Plan details</h2>
+
+<ul class='plain-list'>
+  <li name='product-edition'>Product Edition:<span class="bold-value"><%= CurrentLicense.registration.edition_display_name %></span></li>
+
+  <li name='expiration-date'><span class="key">Expiration Date:</span><span class="bold-value"><%= CurrentLicense.registration.expiration_date %></span></li>
+
+  <li name='max-active-users'><span class="key">Max Active Full Users:</span><span class="bold-value"><%= CurrentLicense.registration.max_active_full_users %></span></li>
+
+  <li name='max-light-users'><span class="key">Max Active Light Users:</span><span class="bold-value"><%= CurrentLicense.registration.max_active_light_users %></span></li>
+
+  <li name='allow-anonymous'><span class="key">Allow Anonymous Users:</span><span class="bold-value"><%= CurrentLicense.registration.allow_anonymous? %></span></li>
+
+</ul>
+
+<h2>Current plan usage</h2>
+<ul class='plain-list'>
+  <li name='current-active-users'><span class="key">Active Full Users:</span><span class="bold-value"><%= User.activated_full_users %></span></li>
+
+  <li name='current-light-users'><span class="key">Active Light Users:</span><span class="bold-value"><%= User.activated_light_users %></span>
+    <% if CurrentLicense.registration.full_users_used_as_light? && (User.activated_full_users < CurrentLicense.registration.max_active_full_users) %>
+      &nbsp;(<span name='borrowed'><%= CurrentLicense.registration.full_users_used_as_light %></span> using full user <%= 'seat'.plural(CurrentLicense.registration.full_users_used_as_light) %>)
+    <% end %>
+  </li>
+
+</ul>

@@ -1,0 +1,46 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<h1>Setting up Mingle: Step 5 - Review the License</h1>
+
+<% info_box do %>
+  <p>Please take time to review the ThoughtWorks End User License Agreement and indicate your acceptance at the bottom to proceed.</p>
+
+
+  
+  <p><b>Note</b>: If you are upgrading you are being asked to accept this license because it has changed.</p>  
+<% end %>
+
+  <div class="current-eula">
+    <%= render :partial => 'steps' %>
+  </div>
+
+<% styled_box :class => 'basic-panel-one' do %>
+  <%= render :partial => 'eula' %>
+<% end %>
+
+<% form_tag(:action => 'eula_accepted') do %>
+  <p>
+    <%= check_box_tag 'eula_accepted', 'eula_accepted', false, 
+              {:id => 'eula_accepted', :onclick => "$('next').disabled = !this.checked"} %>
+    <label for="eula_accepted" class="license-acceptance">Accept license as above</label>
+  </p>
+  
+  <% action_bar :class => "action-bar setup-pages" do %>
+    <%= submit_tag "Continue", {:id => 'next', :disabled => true, :class => 'primary'} %>
+    <%= render_help_link 'Review the License', :class => 'page-help-at-action-bar' %>
+  <% end %>
+<% end %>

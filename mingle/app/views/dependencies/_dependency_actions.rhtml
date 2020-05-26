@@ -1,0 +1,44 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div class="actions" id="dependency-actions">
+  <% if authorized?('dependencies:update') || authorized?('program_dependencies:dependencies') %>
+    <%= link_to_function('Edit', "javascript:void(0)", :class => 'primary link_as_button view-mode-only enter-edit' ) %>
+  <% end %>
+  <div class="edit-mode-only">
+    <%= link_to 'Save', "javascript:void(0)",  {:class => 'save-content primary link_as_button save-button'} %>
+    <%= link_to 'Cancel', "javascript:void(0)", {:class => 'cancel-edit link_as_button'} %>
+  </div>
+
+  <% if project_selected? && on_resolving_project? -%>
+    <% if @dependency.status == Dependency::NEW || @dependency.status == Dependency::ACCEPTED %>
+      <%= link_to_function "Accept", "javascript:void(0)", { :class => "view-mode-only link_as_button link-card-icon", :accessing => "dependencies:link_cards_popup" } %>
+    <% end %>
+
+    <% if @dependency.status == Dependency::RESOLVED %>
+      <%= link_to_function "Accept", "javascript:void(0)", { :class => "view-mode-only link_as_button disabled", :accessing => "dependencies:link_cards_popup" } %>
+    <% end %>
+
+    <% if @dependency.status == Dependency::ACCEPTED || @dependency.status == Dependency::RESOLVED %>
+      <%= link_to_function @dependency.status == Dependency::ACCEPTED ? "Resolve" : "Unresolve", "javascript:void(0)", {:accessing => "dependencies:toggle_resolved", :class => "view-mode-only link_as_button toggle-resolved", "data-toggle-resolved-url" => url_for(:action => :toggle_resolved, :dependency => {:number => @dependency.number })} %>
+    <% end %>
+  <% end -%>
+
+  <% if project_selected? && on_raising_project? -%>
+    <%= link_to "Delete", {:controller => "dependencies", :action => "confirm_delete", :number => @dependency.number}, :class => "view-mode-only link_as_button delete", :accessing => "dependencies:confirm_delete", :"data-remote" => true %>
+  <% end -%>
+
+</div>

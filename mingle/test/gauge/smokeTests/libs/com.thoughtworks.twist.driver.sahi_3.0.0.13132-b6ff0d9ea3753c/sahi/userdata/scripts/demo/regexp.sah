@@ -1,0 +1,18 @@
+_navigateTo("/demo/regexp.htm");
+
+_assertEqual(_div("Inner"), _div(/Inner/));
+_assertEqual("Inner", _getText(_div(/Inner/)));
+_assertEqual(_div("Inner[1]"), _div("/Inner/[1]"));
+
+_assertEqual("Inner", _getText(_div("/Inner/")));
+_assertEqual("Inner", _getText(_div("/Inner/[1]")));
+
+_assertEqual("Inner", _getText(_div("/Inner/")));
+
+_assert(_link("/Vi/[0]").href.indexOf("0.htm")!=-1);
+_assert(_link("View[1]").href.indexOf("1.htm")!=-1);
+_assert(_link("/Vi/[2]").href.indexOf("2.htm")!=-1);
+_assert(_link("View[3]").href.indexOf("3.htm")!=-1);
+
+
+

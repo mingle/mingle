@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Card properties page"><warning>Card properties describe how
+Mingle manages project workflow. Adding, changing or deleting card properties
+has a major impact on the project team. Ensure you understand card properties
+before changing values on this page.</warning> <section
+title="What you can do on this page"> <p>The Card properties page is where you
+can view, add, delete or edit the <cref
+topic="card_properties">properties</cref> (variables) that can be attached to
+cards, e.g. software feature, status, priority, iteration.</p> <p>From this
+page you can edit property names, show or hide properties (so they're
+conditionally visible/invisible on cards), mark properties as <cref
+topic="transition_only_properties">transition only</cref>, and lock or unlock
+properties.</p> 
+
+<section title="Attributes of card properties" file="attributes_card_properties"/>
+
+<bullets title="Also see...">
+    <item><cref topic="card_property_types">Types of card
+    property</cref></item>
+
+    <item><cref topic="creating_card_properties">Creating card
+    properties</cref></item>
+
+    <item><cref topic="modifying_or_deleting_card_properties">Updating and
+    deleting card properties</cref></item>
+
+    <item><cref topic="maintain_card_property_values">Maintaining card
+    property values</cref></item>
+  </bullets> </section> <section title="Also see..."> <bullets>
+    <item><cref topic="aggregate_properties">Aggregate
+    properties</cref></item>
+
+    <item><cref topic="card_types">Card types</cref></item>
+
+    <item><cref topic="project_variables">Project variables</cref></item>
+
+    <item><cref topic="card_defaults">Card defaults</cref></item>
+  </bullets> 
+</section></topic>

@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Team favorites component">
+
+	<section title="Introduction" file="introduction_to_team_favorites" collapsed ="true"/>
+
+	<section title="What you can do">
+		<p>The team favorites component lets you open a previously saved team favorite or save the current view as a team favorite. If you save the current view with the same name as a previously saved team favorite, Mingle updates the existing team favorite.</p>			
+		<hint>You can create new tabs in Mingle based on team favorites. When you create a tab based on a favorite, you will no longer see that favorite in the list of favorites.</hint>
+		<bullets>
+			<item><cref topic="creating_a_favorite_card_view">Saving a card view as a team favorite</cref></item>
+			<item><cref topic="managing_favorites_and_tabs">Managing team favorites and tabs</cref></item>
+		</bullets>
+	</section>
+	<section title="Also see...">
+		<bullets>
+			<item><cref topic="creating_a_favorite_card_view">Creating a team favorite card view</cref></item>
+			<item><cref topic="creating_a_favorite_wiki_page">Creating a team favorite wiki page</cref></item>
+			<item><cref topic="creating_tabs_from_favorites">Creating tabs from team favorites</cref></item>
+			<item><cref topic="updating_a_favorite_and_a_tab">Updating a favorite and a tab</cref></item>
+			<item><cref topic="managing_favorites_and_tabs">Managing team favorites and tabs</cref></item>
+			<item><cref topic="managing_my_favorites">Managing my favorites</cref></item>
+			<item><cref topic="customizing_projects">Customizing projects</cref></item>
+		</bullets>
+	</section>
+</topic>

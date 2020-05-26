@@ -1,0 +1,31 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="<%= macro_def.name %>_series-container-<%= series_number %>" class="series-container" style="display:none;">
+  <h3>
+    <span class="series_label">Series level options</span>
+    <a href="#" id="<%= macro_def.name %>_add_series_button_<%= series_number %>" class="add_series_link" onclick="$(this).fire('<%= macro_def.name %>:add-series'); return false;"><%= image_tag 'shared/icons/icon_add_shared_16.png', :title => "Add another series"%></a>
+    <a href="#" id="<%= macro_def.name %>_remove_series_button_<%= series_number %>" class="remove_series_link" onclick="$(this).fire('<%= macro_def.name %>:remove-series'); return false;"><%= image_tag 'shared/icons/icon_close_16.png', :title => "Remove this series"%></a>
+  </h3>
+
+  <div class="series-content">
+    <%= render :partial => 'multiple_parameter_input', :locals => {:macro_def_name => macro_def.name + '_series_' + series_number} %>
+    <% macro_def.series_parameter_definitions.each_with_index do |param_def, index| %>
+      <%= render :partial => 'parameter_definition_input', :locals => {:macro_def => macro_def, :param_def => param_def, :param_name => "macro_editor[#{macro_def.name}][series][#{series_number}][#{param_def.parameter_name}]", :param_id => "#{macro_def.name}_series_#{series_number}_#{param_def.parameter_name}_parameter_container", :input_id => "#{macro_def.name}_series_#{series_number}_#{param_def.parameter_name}_parameter" }%>
+    <% end %>
+  </div>
+
+</div>

@@ -1,0 +1,22 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div class="card-type-editor-container <%= @dependency.status.downcase %>" id="dependency-type">
+  <span class="card-type-name">DEPENDENCY</span>
+  <% if defined?(displaying_older_version) && displaying_older_version %>
+    <span id="old-version-note">( v<%= dependency.version if dependency.respond_to? :version %> Old version <%= date_time_lapsed_in_words_for_project(dependency.updated_at) %> - <span class="latest-version-link"> <%= link_to_function "Show latest", "$j(this).showLatestDependency();", { :"data-dependency-number" => dependency.number, :"data-dependency-popup-url" => url_for(:controller =>"dependencies", :action => "popup_show") } %> </span> )</span>
+  <% end %>
+</div>

@@ -1,0 +1,69 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% if card_candidates.empty? && cards_in_tree.empty? -%>
+  <div id="card-explorer-search-result-for-tree" class="card-explorer-search-result-for-tree">
+    <div style="float: left;">
+      <%= search.no_result_message %>
+    </div>
+    <div style="float: right;">
+      <%= link_to_function "Refresh", execute_refresh, :class => "refresh-search-results-on underline-link" %>
+    </div>
+    <div class="clear-both"></div>
+  </div>
+<% else -%>
+
+  <div id="card-explorer-search-result-for-tree" class="card-explorer-search-result-text-for-tree">  
+    <%= search.describe_results %>
+    <%= spinner :id => 'tree_pagination_spinner' %>
+  </div>
+
+  <div class="card-explorer-search-result-for-tree-actions-bar">
+    <div style="float: right;">
+      <%= link_to_function "Refresh", execute_refresh, :class => "refresh-search-results-on underline-link" %>
+    </div>
+    
+    <div class='<%= prefix %>-select-none-all-panel' style='<%= having_draggable_results?(card_candidates, cards_in_tree) ? 'float: left' : 'display: none'  %>'>
+      Select: <%= link_to_function 'All', "checkBoxes.checkAll();", :id => "select_all", :href => 'javascript:void(0)', :class => '' %>
+      <%= link_to_function 'None', "checkBoxes.uncheckAll();", :id => "select_none", :href => 'javascript:void(0)', :class => '' %>
+    </div>
+    <div class="clear-both"></div>
+  </div>
+
+  <div id="<%="#{prefix}_results_for_tree" %>" class="search-results-container">
+    <ul>
+      <% card_candidates.each do |card| -%>
+        <li id="<%="#{prefix}_card_child_candidate_#{card.number}" %>" title="<%=h card.name.gsub(/["]/, '\'') %>" class='card-child card-child-candidate <%= "cardtype_#{card.card_type_id}" %>' number='<%= card.number %>'>
+          <%= check_box_tag("checkbox[#{card.number}]", card.number, false, :class => 'draggable') %>
+          <%= render :partial => 'card_child', :locals => {:card => card} %>
+        </li>
+      <% end -%>
+      
+      <% cards_in_tree.each do |card| -%>
+        <li id="<%= "#{prefix}_card_child_candidate_#{card.number}" %>" class='card-child card-child-disabled <%= "cardtype_#{card.card_type_id}" %>' title="<%=h card.name.gsub(/["]/, '\'') %>" number='<%= card.number %>'>
+          <%= check_box_tag("checkbox[#{card.number}]", card.number, false, :disabled => true, :class => 'draggable') %>
+          <%= render :partial => 'card_child', :locals => {:card => card} %>
+        </li>
+      <% end -%>
+    </ul>
+  </div>  
+<% end -%>
+<%= javascript_with_rescue <<-JAVASCRIPT
+  #{card_candidates.collect {|card| "TreeView.registerDraggable('#{prefix}', #{card.number});"}.join("\n")}
+  #{cards_in_tree.collect {|card| "TreeView.registerPrefix('#{prefix}');"}.join("\n")}
+  checkBoxes = new CheckBoxes($(this.document), 'checkbox', {'ignoreDisabledCheckbox' : true});
+JAVASCRIPT
+-%>

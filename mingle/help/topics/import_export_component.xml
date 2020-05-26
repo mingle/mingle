@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Import / Export component" id="import_export" >
+	<section title="What you can do">
+		<p>The Import / Export component lets you export the cards in the current view, or import a list of cards.</p>
+		<p>
+    	<screenshot alttext="Excel Import" src="resources/images/import_from_excel_link.png"/>
+    </p>
+
+    <subsection title="Export cards">
+      <p>Mingle displays all exported cards in tab delimited format which you can copy and paste into an open document.</p>
+      <hint>We recommend using Google Spreadsheet, LibreOffice Calc or OpenOffice Calc. MS Excel may distort your export if card description is included.</hint>
+      <p>Mingle exports only those cards in the current view, not all cards in the project. When working in a <cref topic="list_view">list view</cref>, the card export doesn't take into account any cards you've selected. Mingle exports all cards in the view, not just those that display on the first page, if there are more than 25 cards in the view.</p>
+      
+      <subsection title="Options">
+        <p>When you export cards, you can specify what card data to export. The options you choose are remembered and used as default values when you export cards in the future.</p>
+        <note>Select "All" columns if you want to export tags.</note>
+        <screenshot alttext="Export options" src="resources/images/excel_export_options.png"/>
+        <p>The follow options are available:</p>
+        <bullets>
+          <item>On the <cref topic="list_view">list view</cref> and <cref topic="hierarchy_view">hierarchy view</cref>, you can select whether to export all columns, or only the columns that are displayed in the card list. This option is not applicable for the <cref topic="grid_view">grid view</cref> or the <cref topic="tree_view">tree view</cref>.</item>
+          <item>Select whether or not to include the card description in the export.</item>
+        </bullets>
+      </subsection>
+      <subsection title="Export checklists">
+        <p>Checklist items are now exported to the csv file as new columns (Completed items and Incomplete items).</p>
+      </subsection>
+    </subsection>
+		<subsection title="Import cards">
+			<p>When importing cards, Mingle displays a large blank field which lets you paste copied cells from your tab-separated-value document. By following the onscreen instructions Mingle will guide you through the import process. </p> 
+			<p>
+      	<screenshot alttext="Import cards" src="resources/images/import_from_excel_text_area.png"/>
+      </p>
+
+      <hint>
+        <bullets>
+          <item>If you are importing new cards Mingle will automatically assign card numbers to newly created cards.</item>
+          <item>If you wish to update existing cards ensure that any previous card numbers are included in the imported data.</item>  
+        </bullets>    
+      </hint>
+
+      <p>A common use of the import functionality is to introduce specific cards from one Mingle project to another. If you are using the import in this way ensure that any card numbers that were exported from the original project are removed from the import. Card numbers are not unique across projects and you may update existing cards instead of creating new cards if you do not remove the card numbers. </p>
+      
+      <subsection title="Import checklists" collapsed="true" id="import_checklist">
+        <p>Now you can include your checklist items along with the card export/import to csv.</p>
+            <p>While importing a .csv, the row headers can be selected as below under the card preview section:</p>
+            <screenshot alttext="Import checklist" src="resources/images/import_checklist.png"/>
+            <p>Once you have successfully imported the cards into Mingle, you can compare the checklist items on the associated card.</p>
+            <screenshot alttext="Card checklist" src="resources/images/checklist_card.png"/> 
+      </subsection>
+
+      <subsection title="Import tags" collapsed = "true" id="import_tags">
+        <p>To import new or existing <cref topic="working_with_tags">tags</cref> include a "tags" column in your tab-separated-value document. When you import the document, the tags will be added to any new and existing cards referenced in your tab-separated-value document. Once imported, new tag values will be available to add to cards and pages throughout your project.</p> 
+      </subsection>  
+      <subsection title="Import cards to a tree"  collapsed = 'true' id="import_cards_to_a_tree">
+        <p>You can import cards to an existing tree. To make this work, you need: </p>
+           <bullets>
+              <item>Include a column using the tree name as column header, and the corresponding row values set to ‘Yes’</item>
+              <item>Include all relationship properties which belong to the tree</item>
+            </bullets>
+            <p>Here is an example:</p>
+            <steps>
+              <item>This a tree called “Release tree:</item>
+              <screenshot alttext="Release tree" src="resources/images/release_tree_to_imported_to.png"/>           
+              <item>Copy and paste these cells from your source file on importing page:</item>
+              <screenshot alttext="Cells for importing" src="resources/images/excel_cells_for_importing.png"/>           
+              <item>Select the tree on the importing preview page</item>
+              <screenshot alttext="Import preview page" src="resources/images/select_tree_to_import.png"/>            
+              <item>A new card is created and added to the tree</item>
+              <screenshot alttext="" src="resources/images/tree_with_card_imported.png"/>
+            </steps>
+            
+      </subsection>
+		</subsection>
+	</section>
+</topic>

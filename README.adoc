@@ -1,0 +1,16 @@
+== Mingle [Archived]
+
+This is the root repository for Mingle, an Agile Project Management product originally created at ThoughtWorks. The structure is as follows:
+
+* mingle - The main directory that contains source and build instructions.
+* mingle-rails5 - This directory contains newer features that were built on Rails 5.
+
+== Documentation
+
+Follow the documentation available at link:mingle/README.adoc[mingle README] and link:mingle-rails5/README.md[mingle-rails5 README] to setup for development.
+
+To generate installers run the command `./generate-installers.sh`. Make sure the pre-requisites mentioned in the READMEs are installed.
+
+== Support
+
+This project is not active any more. Any support email addresses found in the codebase are not valid any more.

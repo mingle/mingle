@@ -1,0 +1,163 @@
+#  Copyright 2020 ThoughtWorks, Inc.
+#  
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Affero General Public License as
+#  published by the Free Software Foundation, either version 3 of the
+#  License, or (at your option) any later version.
+#  
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Affero General Public License for more details.
+#  
+#  You should have received a copy of the GNU Affero General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+---
+daily_history_calculation:
+  command: DailyHistoryChartProcessor.run_once(:batch_size => 1000)
+  interval: 5
+  minIdle: 2
+  parallelizable: true
+  worker_count: 2
+sync_objective_work:
+  command: SyncObjectiveWorkProcessor.run_once(:batch_size => 1000)
+  interval: 120
+  minIdle: 2
+  worker_count: 1
+rebuild_objective_snapshots:
+  command: ObjectiveSnapshotProcessor.run_once(:batch_size => 1000)
+  interval: 60
+  minIdle: 2
+  worker_count: 1
+  parallelizable: true
+export_projects:
+  command: ProjectExportProcessor.run_once(:batch_size => 1)
+  interval: 5
+  minIdle: 2
+  worker_count: 1
+  parallelizable: true
+export_dependencies:
+  command: DependenciesExportProcessor.run_once(:batch_size => 1)
+  interval: 5
+  minIdle: 2
+  worker_count: 1
+  parallelizable: true
+preview_dependency_imports:
+  command: DependenciesImportPreviewProcessor.run_once(:batch_size => 1)
+  interval: 5
+  minIdle: 2
+  worker_count: 1
+import_dependencies:
+  command: DependenciesImportProcessor.run_once(:batch_size => 1)
+  interval: 5
+  minIdle: 2
+  worker_count: 1
+export_programs:
+  command: ProgramExportProcessor.run_once(:batch_size => 1)
+  interval: 5
+  minIdle: 2
+  worker_count: 1
+  parallelizable: true
+import_projects:
+  command: ProjectImportProcessor.run_once(:batch_size => 1)
+  interval: 5
+  minIdle: 2
+  worker_count: 1
+import_programs:
+  command: ProgramImportProcessor.run_once(:batch_size => 1)
+  interval: 5
+  minIdle: 2
+  worker_count: 1
+preview_card_imports:
+  command: CardImportPreviewProcessor.run_once(:batch_size => 1)
+  interval: 5
+  minIdle: 2
+  worker_count: 1
+  parallelizable: true
+import_cards:
+  command: CardImportProcessor.run_once(:batch_size => 1)
+  interval: 5
+  minIdle: 2
+  worker_count: 1
+link_cards_and_murmurs:
+  command: CardMurmurLinkProcessor.run_once(:batch_size => 10)
+  interval: 10
+  minIdle: 4
+  worker_count: 1
+  parallelizable: true
+cache_revisions:
+  command: RevisionsHeaderCaching.run_once(:batch_size => 100)
+  interval: 10
+  minIdle: 4
+  worker_count: 1
+cache_revision_content:
+  command: RevisionsContentCaching.run_once(5, false)
+  interval: 60
+  minIdle: 4
+  worker_count: 1
+feeds_cache_populating:
+  command: FeedsCachePopulatingProcessor.run_once(:batch_size => 1000)
+  interval: 10
+  minIdle: 4
+  worker_count: 1
+full_text_search_indexing_processors:
+  command: FullTextSearch.run_once(:batch_size => 50)
+  interval: 5
+  minIdle: 4
+  worker_count: 1
+  parallelizable: true
+history_generation:
+  command: HistoryGeneration.run_once(:batch_size => 1000)
+  interval: 5
+  minIdle: 4
+  worker_count: 1
+  parallelizable: true
+compute_aggregates:
+  command: AggregateComputation.run_once(:batch_size => 10)
+  interval: 5
+  minIdle: 4
+  worker_count: 1
+  parallelizable: true
+send_history_notifications:
+  command: HistoryNotificationProcessor.run_once(:batch_size => 1000)
+  interval: 300
+  minIdle: 4
+  worker_count: 1
+send_murmur_notifications:
+  command: MurmurNotificationProcessor.run_once(:batch_size => 100)
+  interval: 5
+  minIdle: 4
+  worker_count: 1
+send_live_notifications:
+  command: LiveEventsNotificationProcessor.run_once(:batch_size => 1000)
+  interval: 5
+  minIdle: 2
+  worker_count: 1
+elastic_search_reindex_verification:
+  command: FullTextSearch.rebuild_index_if_missing
+  interval: 5
+  runOnce: true
+  minIdle: 1
+  worker_count: 1
+send_mixpanel_events:
+  command: EventsTracker.run_once(:batch_size => 100)
+  interval: 5
+  minIdle: 2
+  worker_count: 1
+run_queued_data_fixes:
+  command: DataFixesProcessor.run_once(:batch_size => 10)
+  interval: 5
+  minIdle: 1
+  worker_count: 1
+  parallelizable: false
+alert_sales_team_for_licenses:
+  command: LicenseAlertProcessor.run_once
+  interval: 5
+  minIdle: 1
+  worker_count: 1
+  parallelizable: false
+create_murmur_replies:
+  command: MurmurReplyProcessor.run_once(:batch_size => 100)
+  interval: 2
+  minIdle: 1
+  worker_count: 1

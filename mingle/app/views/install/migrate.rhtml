@@ -1,0 +1,36 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<h1>Setting up Mingle: Step 2 - Setup the database</h1>
+
+<% info_box do %>
+  <p>Mingle will now setup your database. This could take a little while.</p>
+  
+
+  
+  <p><b>Note</b>: If you are upgrading to a new version of Mingle this step will connect to your Mingle database and upgrade your existing projects. This could take a few minutes.</p>
+<% end %>
+
+  <div class="current-migrate">
+    <%= render :partial => 'steps' %>
+  </div>
+
+<% action_bar :class => "action-bar setup-pages" do %>
+  <% form_tag({:action => 'do_migrate'}, {:id => 'wizard'}) do %>
+    <%= submit_tag "Continue", {:id => 'next', :class => 'primary'} %>
+    <%= render_help_link 'Set up the database', :class => 'page-help-at-action-bar' %>
+  <% end %>
+<% end %>

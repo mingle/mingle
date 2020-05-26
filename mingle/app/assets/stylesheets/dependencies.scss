@@ -1,0 +1,904 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+.dependencies-drop-down {
+  .dependencies-popover {
+    @include popover($direction: left,
+    $width: auto,
+    $height: auto,
+    $popOffset: auto,
+    $triangleOffset: 3px);
+    cursor: default;
+
+    .dependencies-caret {
+      cursor: pointer;
+      font-size: 12px;
+      margin-left: 5px;
+    }
+
+    .content {
+      box-sizing: content-box;
+      width: 149px;
+
+      input, select {
+        width: 100%;
+      }
+
+      /* this forces the jQuery DatePicker widget to apply a z-index greater than the lightbox */
+      [name="dependencies[desired_end_date]"] {
+        position: relative;
+        z-index: 20000;
+      }
+
+      [name="dependencies[description]"] {
+        font-family: inherit;
+        width: 100%;
+        height: 65px;
+      }
+    }
+  }
+
+  .dependency-subsection h3 {
+    position: relative;
+    margin: 0;
+
+    i {
+      width: inherit;
+      font-size: 12px;
+      left: 3px;
+      top: 2px;
+    }
+
+    .subsection-title {
+      padding-left: 21px;
+      font-weight: bold;
+    }
+  }
+
+  ul.dependencies {
+    margin: 0 0 10px 0;
+
+    li {
+      padding-left: 21px;
+      list-style: none;
+      text-decoration: none;
+      font-size: 14px;
+      cursor: pointer;
+    }
+  }
+}
+
+.dependency-subsection.raising {
+  i.fa-long-arrow-right {
+    transform: rotate(-30deg);
+    -webkit-transform: rotate(-30deg);
+  }
+}
+
+.dependency-subsection.resolving {
+    i.fa-long-arrow-right {
+      transform: rotate(30deg);
+      -webkit-transform: rotate(30deg);
+    }
+}
+
+.ui-datepicker {
+  .ui-icon-circle-triangle-e {
+    text-indent: 4px;
+    visibility: hidden;
+
+    &:before {
+      @include fa_icon($fa-var-chevron-right);
+      vertical-align: middle;
+      visibility: visible;
+    }
+  }
+
+  .ui-icon-circle-triangle-w {
+    text-indent: 3px;
+    visibility: hidden;
+
+    &:before {
+      @include fa_icon($fa-var-chevron-left);
+      vertical-align: middle;
+      visibility: visible;
+    }
+  }
+}
+
+#lightbox.add-cards-dependencies-lightbox {
+  width: 400px !important;
+}
+
+#link-cards-popup {
+  @include search-cards;
+
+  .link-cards-container {
+    .link-message {
+      font-size: 13px;
+    }
+
+    .desired-completion-date {
+      border-bottom: 1px solid #CCC;
+      padding: 10px 0px;
+      font-size: 14px;
+    }
+
+    label {
+      font-size: 14px;
+
+      i {
+        font-size: 12px;
+      }
+    }
+
+    .cards-to-link {
+      padding-top: 10px;
+
+      .add-card {
+        cursor: pointer;
+      }
+
+      ul.cards {
+        list-style: none;
+
+        .add-card-field {
+          display: none;
+
+          input {
+            width: 240px;
+          }
+          .remove-card {
+            cursor: pointer;
+          }
+        }
+
+        li {
+          list-style: none;
+
+          i {
+            padding-left: 5px;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+}
+
+#dependency-add-hide-column {
+  @include popover($direction: up,
+  $width: 203,
+  $height: auto,
+  $popOffset: 58px,
+  $triangleOffset: 51px);
+
+  cursor: pointer;
+  float: right;
+  padding: 10px 0;
+  margin-left: 15px;
+
+  .content {
+    padding: 0px;
+
+    .apply-columns {
+      margin: 10px auto;
+      display: block;
+    }
+
+    ul {
+      list-style: none;
+      border-bottom: 1px solid #CCC;
+      margin: 0px;
+
+      li {
+        padding: 5px 10px;
+
+        label {
+          display: inline;
+          margin-left: 4px;
+        }
+      }
+    }
+  }
+}
+
+.new-dependencies-link {
+  background: white;
+  border: 1px solid $HIGHLIGHT_COLOR;
+  border-radius: 24px;
+  line-height: 24px;
+  font-weight: bold;
+  display: inline-block;
+  margin-left: 10px;
+  margin-top: 2px;
+
+  color: $HIGHLIGHT_COLOR;
+
+  &:visited, &:active {
+    color: $HIGHLIGHT_COLOR;
+  }
+
+  &:hover {
+    background: $HIGHLIGHT_COLOR;
+    color: white;
+  }
+
+  &[data-dep-count]{
+    &:before {
+      content: attr(data-dep-count) " new dependencies to accept";
+      margin-left: 10px;
+    }
+
+    &:after {
+      @include fa_icon($fa-var-arrow-right);
+      margin: 0 5px;
+    }
+  }
+
+  &[data-dep-count="1"]:before {
+    content: attr(data-dep-count) " new dependency to accept";
+  }
+
+  &[data-dep-count="0"] {
+    display: none;
+  }
+}
+
+#dependency-filter-container {
+  margin-top: 2px;
+  margin-bottom: 12px;
+  float: left;
+
+  .filter-name {
+    line-height: 26px;
+    padding: 7px 7px 7px 0;
+  }
+}
+
+
+#dependencies {
+  th {
+    font-size: 14px;
+    color: #666;
+
+    a {
+      text-decoration: none;
+    }
+
+    &[data-column="number"] {
+      width: 10em;
+      text-align: left;
+    }
+
+    &[data-column="desired_end_date"] {
+      width: 15em;
+    }
+
+    &[data-column="raising_project"], &[data-column="resolving_project"],
+    &[data-column="raising_card"], &[data-column="resolving_cards"], &[data-column="raising_user"] {
+      width: 20em;
+    }
+  }
+
+  tr.dependencies-status {
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+
+    td {
+      color: #666;
+      background: $MINGLE_PRIMARY_DEEMPHASIZED;
+
+      .fa-play {
+        transform: rotate(90deg);
+      }
+    }
+  }
+
+  tbody.collapsed {
+    background: none;
+
+    tr.dependencies-row, .message-empty {
+      display: none;
+    }
+
+    tr.dependencies-status {
+      td {
+        .fa-play {
+          transform: rotate(0deg);
+        }
+      }
+    }
+  }
+
+  tbody {
+    .dependencies-row {
+
+      &:nth-of-type(even) td {
+        background: #fff;
+      }
+
+      &:nth-of-type(odd) td {
+        background: #f6f6f6;
+      }
+
+      td.load-more {
+        background: #fff;
+        text-align: center;
+      }
+
+      [data-column="resolving_cards"] {
+        ul, li {
+          list-style: none;
+          margin: 0;
+          padding: 0;
+        }
+      }
+
+      [data-column="number"], [data-column="name"] {
+        font-weight: bold;
+      }
+    }
+
+    .dependencies-row + .message-empty {
+      display: none;
+    }
+  }
+}
+
+#card_list_view {
+  .card-name {
+    .card-dependency-icon {
+      margin-left: -7px;
+      margin-top: -9px;
+      float: none;
+      height: 0.5em;
+    }
+  }
+}
+
+.card-dependency-icon {
+  float: right;
+  clear: both;
+  cursor: default;
+
+  line-height: 1em;
+  width: 1em;
+  height: 1em;
+
+  color: #C3C3C3;
+  font-size: 16px;
+
+  .new {
+    color: $MINGLE_NEW_DEPENDENCY_COLOR;
+  }
+
+  .accepted {
+    color: $MINGLE_ACCEPTED_DEPENDENCY_COLOR;
+  }
+
+  .resolved {
+    color: $MINGLE_RESOLVED_DEPENDENCY_COLOR;
+  }
+}
+
+.lightbox {
+  .lightbox_content.new {
+    border-left: 10px solid $MINGLE_NEW_DEPENDENCY_COLOR;
+    .card-type-editor-container, .latest-version-link a {
+      background-color: $MINGLE_NEW_DEPENDENCY_COLOR;
+      color: $MINGLE_NEW_DEPENDENCY_TEXT_COLOR;
+    }
+  }
+
+  .lightbox_content.accepted {
+    border-left: 10px solid $MINGLE_ACCEPTED_DEPENDENCY_COLOR;
+    .card-type-editor-container, .latest-version-link a {
+      background-color: $MINGLE_ACCEPTED_DEPENDENCY_COLOR;
+      color: $MINGLE_ACCEPTED_DEPENDENCY_TEXT_COLOR;
+    }
+  }
+
+  .lightbox_content.resolved {
+    border-left: 10px solid $MINGLE_RESOLVED_DEPENDENCY_COLOR;
+    .card-type-editor-container, .latest-version-link a {
+      background-color: $MINGLE_RESOLVED_DEPENDENCY_COLOR;
+      color: $MINGLE_RESOLVED_TEXT_COLOR;
+    }
+  }
+
+  .dependency-popup-lightbox {
+
+    #dependency-type {
+      #old-version-note {
+        padding: 2px;
+        font-weight: 600;
+
+        .latest-version-link {
+          font-weight: 600;
+          text-decoration: underline;
+        }
+      }
+    }
+    .dependency-title {
+      padding: 0px 5px;
+      margin-right: 20px;
+      overflow-y: visible;
+
+      h1 {
+        color: #000;
+        border: none;
+        margin: 0;
+        overflow-x: hidden;
+      }
+
+      .dependency-name {
+        padding: 4px;
+      }
+
+      input[name='dependency[name]'] {
+        border: 1px dashed #bbb;
+        font-size: 21px;
+        font-weight: 300;
+        width: 85%;
+      }
+
+      .dependency-number {
+        font-weight: bold;
+
+        &:before {
+          content: "#";
+        }
+      }
+    }
+
+    .view-mode .dependency-content-container {
+      height: 345px;
+    }
+
+    .dependency-content-container {
+      overflow: auto;
+      padding: 0px 5px;
+      position: relative;
+      margin-bottom: 5px;
+
+      textarea[name="dependency[description]"] {
+        height: 330px;
+      }
+
+      .dependency-content-heading {
+        font-size: 16px;
+        padding: 5px 0;
+        color: rgb(102, 102, 102);
+
+        .select-new-resolving-project-drop-down {
+          @include popover($direction: none,
+          $width: auto,
+          $height: auto,
+          $popOffset: 0px,
+          $triangleOffset: 0px);
+
+          .popover-content {
+            padding: 0px;
+            font-size: 12px;
+            width: 133px;
+            word-wrap: break-word;
+
+            .new-resolving-projects li {
+              padding: 10px;
+
+              &:hover {
+                background-color: #eee;
+              }
+            }
+
+            ul, li {
+              margin: 0px;
+              list-style: none;
+            }
+          }
+        }
+
+        .icon {
+          padding-right: 4px;
+          width: 16px;
+          height: 16px;
+        }
+
+        .heading-text{
+          padding-left: 18px;
+
+          .link-card-icon {
+            cursor: pointer;
+            font-size: 12px;
+            margin-left: 5px;
+          }
+        }
+
+        .dependency-icon {
+          .fa-stack-1x {
+          width: 16px;
+          }
+        }
+
+        .fa-spinner {
+          font-size: 14px; // multiples of 7px generally avoids spin-wobble on font awesome icons
+          display: none;
+        }
+      }
+
+      .card-list {
+        text-decoration: none;
+        font-size: 14px;
+        padding: 0 0 0 15px;
+        margin: 0 0 20px 10px;
+
+        li {
+          list-style: none;
+          padding-bottom: 5px;
+          margin: 0px;
+
+          .unlink-card {
+            cursor: pointer;
+            color: #666666;
+            font-size: 12px;
+            padding-left: 3px;
+          }
+
+          .card-number {
+            font-weight: bold;
+
+            &:before {
+              content: "#";
+            }
+          }
+        }
+      }
+
+      .dependency-description-content {
+        padding-left: 25px;
+      }
+    }
+
+    .dependency-properties {
+      position: relative;
+      margin-top: 0px;
+      padding: 10px 10px 0 10px;
+      background-color: #eee;
+
+      .dependency-property {
+        display: block;
+        float: left;
+        margin-bottom: 15px;
+        padding-left: 5px;
+        padding-right: 20px;
+
+        .property-name, .property-value {
+          margin: 0;
+          float: left;
+          line-height: 20px;
+        }
+
+        .property-name {
+          margin-right: 5px;
+        }
+      }
+
+      .resolved.highlight {
+        background-color: $MINGLE_RESOLVED_DEPENDENCY_COLOR
+      }
+
+      .new.highlight {
+        background-color: $MINGLE_NEW_DEPENDENCY_COLOR
+      }
+
+      .accepted.highlight {
+        background-color: $MINGLE_ACCEPTED_DEPENDENCY_COLOR
+      }
+      .highlight {
+        font-weight: inherit;
+      }
+
+
+      .dependency-date-property {
+
+        .hidden-input {
+          visibility: hidden;
+          width: 0px
+        }
+
+        .property-value {
+          button {
+            border: none;
+            padding: 0px;
+            margin: 0px;
+            color: $MINGLE_PRIMARY_COLOR;
+            font-family: Helvetica, Arial, 'Lucida Grande', sans-serif;
+            font-size: 12px;
+            text-transform: none;
+            text-align: left;
+            line-height: 20px;
+
+            &:hover {
+              background-color: #eee;
+            }
+
+            &:after {
+              padding-left: 5px;
+              @include fa_icon($fa-var-calendar);
+            }
+          }
+        }
+      }
+    }
+
+    #dependency-actions {
+      margin-top: 10px;
+
+      .progress {
+        padding-right: 5px;
+      }
+    }
+  }
+}
+
+.dependencies-export-import {
+
+  h1 {
+    border-bottom: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  th {
+    width: 50%;
+    border-top: none;
+    border-right: none;
+  }
+
+  td {
+    border-bottom: none;
+    border-right: none;
+  }
+
+  .export-section {
+
+    .selectable-project.select-all-projects {
+      padding-bottom: 5px;
+      font-weight: bold;
+    }
+
+    .selectable-project {
+      padding: 3px 0;
+
+      .project-name {
+        cursor: pointer;
+      }
+
+      a {
+        color: #333;
+        text-decoration: none;
+      }
+
+      input {
+        cursor: pointer;
+      }
+    }
+
+    .dependencies-export-form {
+      h4 {
+        margin-bottom: 10px;
+      }
+
+      .export-dependencies {
+        margin-top: 8px;
+      }
+    }
+  }
+
+  .import-section {
+    .warning-box {
+      font-size: 12px;
+    }
+  }
+}
+
+#dependencies-import-preview {
+
+  thead {
+    tr th:first-child {
+      width: 1px;
+      white-space: nowrap;
+
+      [data-tooltip] {
+        white-space: normal;
+
+        &:after {
+          font-size: 11px;
+          font-weight: normal;
+          width: 180px;
+          margin-left: -21px;
+        }
+      }
+    }
+  }
+
+  tfoot {
+    text-align: center;
+    font-weight: bold;
+    font-size: 12px;
+    display: none;
+
+    td {
+      padding: 10px 0;
+    }
+  }
+
+  .paginated {
+    /* hide rows after the 10th row */
+    tbody tr:nth-of-type(10) ~ tr {
+      display: none;
+    }
+
+    tfoot {
+      display: table-footer-group;
+    }
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .import-preview-header {
+    display: -ms-flexbox; // IE 10
+    display: -webkit-flex; // old Safari
+    display: flex;
+
+    -ms-align-items: flex-start;
+    -webkit-align-items: flex-start;
+    align-items: flex-start;
+
+    -ms-justify-content: space-between;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+    margin: 0 0 10px;
+
+    .title {
+      border: none;
+      padding: 0;
+      margin: 0;
+      margin-top: 10px;
+      white-space: nowrap;
+    }
+
+    .import-progress {
+      margin: 0;
+      padding: 0;
+      margin-right: 50%;
+      transform: translate3D(50%, -16%, 0);
+    }
+
+    border-bottom: 1px dashed #ccc;
+
+    .import-progress {
+      list-style: none;
+      list-style-image: none;
+      min-width: 450px;
+
+      li {
+        float: left;
+        margin-right: 50px;
+        text-align: center;
+      }
+
+      .step-name {
+        display: table-cell;
+        vertical-align: bottom;
+        text-align: center;
+        width: 100px;
+      }
+      .step-num {
+        font-size: 14px;
+        border: 1px solid #888;
+        color: black;
+        border-radius: 50%;
+        width: 22px;
+        height: 22px;
+        line-height: 20.5px;
+        display: inline-block;
+        margin-top: 5px;
+        position: relative;
+
+        &:after {
+          content: "";
+          display: block;
+          background: #888;
+          height: 1.5px;
+          width: 130px;
+          position: absolute;
+          bottom: 10px;
+          left: 21px;
+        }
+      }
+
+      li:last-of-type .step-num:after {
+        display: none;
+      }
+
+      .step-num {
+        background-color: $MINGLE_RESOLVED_DEPENDENCY_COLOR;
+
+        &:after {
+          background-color: $MINGLE_RESOLVED_DEPENDENCY_COLOR;
+        }
+      }
+    }
+
+    &[data-current-step="Resolve Errors"] {
+      .import-progress li:last-of-type .step-num {
+        background-color: white;
+      }
+
+      .import-progress li:nth-of-type(2) .step-num:after {
+        background-color: #888;
+      }
+    }
+
+  }
+
+
+  .import-message {
+    border: 1px solid $HIGHLIGHT_COLOR;
+    padding: 5px;
+    margin-bottom: 15px;
+    font-weight: 600;
+  }
+
+  table {
+    border: 1px solid #DDD;
+    border-collapse: collapse;
+    margin: 0;
+    width: 100%;
+
+    th {
+      font-size: 14px;
+    }
+
+    ul {
+      list-style: none;
+      margin: 0;
+      li {
+        margin: 0;
+      }
+    }
+
+    .raising-card .card-select {
+      cursor: pointer;
+      .summary {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .actions {
+    margin: 10px 0 10px 0;
+    .save {
+      float: right;
+      margin: 0;
+    }
+  }
+}

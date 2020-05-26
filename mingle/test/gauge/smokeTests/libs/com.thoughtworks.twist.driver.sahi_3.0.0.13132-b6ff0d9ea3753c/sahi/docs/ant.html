@@ -1,0 +1,302 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <meta name="generator" content="HTML Tidy, see www.w3.org">
+    <title>Sahi - Ant Integration</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="sahi.css">
+</head>
+
+<body>
+<table width="100%">
+<tr>
+<td width="150px" valign="top">
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+
+    <div class="menu">
+        <ul>
+            <li><a href="index.html">Introduction</a></li>
+            <!--<li><a href="index.html#features">Features</a></li>-->
+
+        </ul>
+        <ul>
+            <li><a href="sahi_tutorial.html" target="_blank">Flash Tutorial</a></li>
+            <li><a href="screenshots.html">Screen Shots</a></li>
+        </ul>
+
+        <ul>
+            <li><a href="install.html">Downloading Sahi</a></li>
+
+            <li><a href="install.html#prereq">Prerequisites</a></li>
+
+            <li><a href="install.html#install">Installing Sahi</a></li>
+        </ul>
+
+        <ul>
+            <li><a href="using.html">Getting started</a></li>
+
+            <li><a href="using.html#record">Recording through Sahi</a></li>
+
+            <li><a href="using.html#playback">Playing back</a></li>
+
+            <li><a href="using.html#suites">Suites</a></li>
+
+            <li><a href="using.html#logging">Logging</a></li>
+        </ul>
+
+        <ul>
+            <li>Documentation:
+
+                <ul>
+                    <li><a href="http://sahi.co.in/w/apis">APIs</a></li>
+                    <li><a href="http://sahi.co.in/w/sahi-script">Scripting</a></li>
+                </ul>
+            </li>
+        </ul>
+
+        <ul>
+            <li><a href="http://sahi.co.in/w/Running+multiple+tests+in+batch+mode">Running in batch mode</a></li>
+        </ul>
+
+        <ul>
+            <li><a href="ide.html">Editor Support</a></li>
+        </ul>
+
+        <ul>
+            <li><a href="problems.html#problems">Problems</a></li>
+
+            <li><a href="problems.html#notyet">Not yet supported, but coming
+                in</a></li>
+        </ul>
+
+        <hr>
+
+        <ul>
+            <li><a href="http://sourceforge.net/projects/sahi" target="_blank">On Sourceforge</a></li>
+            <li><a href="http://sahi.co.in/forums/" target="_blank">Forums</a></li>
+            <li><a href="http://sourceforge.net/tracker/?group_id=151639&atid=781586" target="_blank">Report/View Bugs</a></li>
+            </li>
+        </ul>
+
+
+    </div>
+</td>
+<td valign="top">
+    <div class="content">
+        <div style="float:right;" width="100%" border="0">
+                <a href="http://sourceforge.net"><img src=
+                        "http://sourceforge.net/sflogo.php?group_id=151639&amp;type=3"
+                                                                        width="125" height="37" border="0"
+                                                                        alt="SourceForge.net Logo"></a>
+                    <br>
+            </div>
+        <h2>Sahi - Web Automation and Test Tool</h2><br/>
+        <div style="background-color:red;color:white;font-size:12pt;text-align:center;">
+		Documentation in this directory is not current.
+		Please visit <a style="color:white;font-size:12pt;" href="http://sahi.co.in/">http://sahi.co.in/</a> for the latest documentation.
+		</div>
+
+        <!--<h2> Sahi - Web Automation and Test Tool</h2>-->
+        <!--<br>-->
+        <!--<table width="100%">-->
+        <!--<tr>-->
+        <!--<td valign="top" align="left">-->
+        <!--<a class="top_menu" href="docs">Home</a>-->
+        <!--<a class="top_menu" href="docs">Why Sahi</a>-->
+        <!--<a class="top_menu" href="docs">Docs</a>-->
+        <!--<a class="top_menu" href="docs">Support</a>-->
+        <!--<a class="top_menu" href="docs">License</a>-->
+        <!--</td>-->
+        <!--</tr>-->
+        <!--</table>-->
+        <hr/>
+        <br/>
+
+        <h2 class="pageTitle">Ant Integration</h2>
+        <!--Ant Integration-->
+<h3>Sahi</h3>
+
+<h3>Description</h3>
+
+<p>Runs a suite of sahi files. This opens multiple browser windows
+, executes sahi scripts, and logs the results. The build can be
+made to fail based on a failureproperty.</p>
+
+<h3>Parameters</h3>
+
+<table border="1" cellpadding="2" cellspacing="0">
+<tr>
+<td><b>Attribute</b></td>
+<td><b>Description</b></td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>suite</td>
+<td>path to suite file</td>
+<td></td>
+</tr>
+
+<tr>
+<td>browser</td>
+<td>Path to browser executable</td>
+<td></td>
+</tr>
+
+<tr>
+<td>baseurl</td>
+<td>url relative to which all urls to be tested will be
+resolved</td>
+<td></td>
+</tr>
+
+<tr>
+<td>sahihost</td>
+<td>IP or hostname of server where sahi is running</td>
+<td></td>
+</tr>
+
+<tr>
+<td>sahiport</td>
+<td>port where sahi is running</td>
+<td></td>
+</tr>
+
+<tr>
+<td>failureproperty</td>
+<td>Name of property which will be set to false in case build
+fails.</td>
+<td></td>
+</tr>
+
+<tr>
+<td>haltonfailure</td>
+<td>Takes "true" or "false". Specifies if build should stop
+executing other tests if one test fails.</td>
+<td></td>
+</tr>
+
+<tr>
+<td>threads</td>
+<td>Number of simultaneous browser instances where sahi tests will
+be run. Do not use this property if using firefox.</td>
+<td>optional</td>
+</tr>
+
+<tr>
+<td>logdir</td>
+<td>Directory to output this suite's results. If absent, uses the default playback logs dir.</td>
+<td>optional</td>
+</tr>
+</table>
+
+<br>
+<br>
+ 
+
+<h3>Example</h3>
+
+build xml for running the sample web server bundled with sahi.<br>
+<br>
+The demo could be run by running "ant -f demo.xml sahitests" from
+the sahi base folder. 
+
+<pre style=
+"background-color:lightgreen;border:20px solid lightgreen;width:1000px">
+
+&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+&lt;project name="demo" default="sahitests"&gt;
+    &lt;taskdef name="sahi" classname="net.sf.sahi.ant.RunSahiTask" classpath="lib/ant-sahi.jar"/&gt;
+
+    &lt;target name="sahitests" description="start the server and run sahi tests"&gt;
+        &lt;parallel&gt;
+            &lt;sequential&gt;
+                &lt;waitfor maxwait="3" maxwaitunit="minute" checkevery="100"&gt;
+                    &lt;http url="http://localhost:10000/demo/index.htm"/&gt;
+                &lt;/waitfor&gt;
+</pre>
+
+<pre style="font-weight:bold;border:0px solid lightgreen;">
+                &lt;antcall target="proxyon"/&gt;
+</pre>
+
+<pre style="font-weight:bold;border:0px solid lightgreen;">
+                &lt;sahi suite="../scripts/demo.suite"
+                    browser="C:\\Program Files\\Internet Explorer\\iexplore.exe"
+                    baseurl="http://localhost:10000/demo/"
+                    sahihost="localhost"
+                    sahiport="9999"
+                    failureproperty="sahi.failed"
+                    haltonfailure="false"
+                    threads="2"
+                    logdir="D:\demo\logs"
+                    /&gt;
+</pre>
+
+<pre style="font-weight:bold;border:0px solid lightgreen;">
+                &lt;antcall target="proxyoff"/&gt;
+</pre>
+
+<pre>
+                &lt;antcall target="stop-web"/&gt;
+                &lt;antcall target="failsahi"/&gt;
+            &lt;/sequential&gt;
+            &lt;antcall target="start-web"/&gt;
+        &lt;/parallel&gt;
+    &lt;/target&gt;
+
+    &lt;target name="failsahi" if="sahi.failed"&gt;
+        &lt;fail message="Sahi tests failed!"/&gt;
+    &lt;/target&gt;
+
+    &lt;target name="start-web" description="starts web"&gt;
+        &lt;java classname="net.sf.sahi.WebServer" fork="true" dir="bin" &gt;
+            &lt;classpath location="lib/sahi.jar"/&gt;
+        &lt;/java&gt;
+    &lt;/target&gt;
+
+    &lt;target name="stop-web" description="stop web server"&gt;
+        &lt;get dest="stopserver.htm" src="http://localhost:10000/dyn/stopserver" ignoreerrors="true" /&gt;
+        &lt;delete file="stopserver.htm"/&gt;
+    &lt;/target&gt;
+
+
+    &lt;target name="sahireport" description="show report"&gt;
+        &lt;exec command="C:\\Program Files\\Internet Explorer\\iexplore.exe file:///C:/my/sahi/logs/playback/"/&gt;
+    &lt;/target&gt;
+
+    &lt;target name="start" description="starts proxy"&gt;
+        &lt;java classname="net.sf.sahi.Proxy" fork="true" dir="bin"&gt;
+            &lt;classpath location="lib/sahi.jar"/&gt;
+        &lt;/java&gt;
+    &lt;/target&gt;
+
+    &lt;target name="proxyon"&gt;
+        &lt;exec executable="tools/toggle_IE_proxy.exe"&gt;
+            &lt;arg value="enable"/&gt;
+        &lt;/exec&gt;
+    &lt;/target&gt;
+    
+    &lt;target name="proxyoff"&gt;
+        &lt;exec executable="tools/toggle_IE_proxy.exe"&gt;
+            &lt;arg value="disable"/&gt;
+        &lt;/exec&gt;
+    &lt;/target&gt;
+
+&lt;/project&gt;
+
+</pre>
+
+
+    </div>
+</td>
+</tr>
+</table>
+Please send your feedback to <a href="http://sourceforge.net/users/narayanraman/">V Narayan Raman</a>.
+</body>
+</html>
+

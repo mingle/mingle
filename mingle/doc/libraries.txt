@@ -1,0 +1,10 @@
+Ruby on Rails (http://rubyonrails.org)
+Ruby (http://ruby-lang.org)
+RedCloth
+rake (http://rake.rubyforge.org)
+mongrel (http://mongrel.rubyforge.org)
+crypt (http://crypt.rubyforge.org)
+Ploticus (http://ploticus.sourceforge.net)
+Postgresql
+Bitstream Vera fonts
+ChartDirector (http://www.chartdir.com/)

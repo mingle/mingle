@@ -1,0 +1,35 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% @cards.each_with_index do |card, index| -%>
+  <tr class="card-row" id="<%= card.html_id %>">
+    <td class="checkbox hide-on-maximized"><%= check_box_tag "checkbox_#{index}", card.id, @view.card_selection.include?(card) %></td>
+    <% url = template_url.gsub(/cards\/0/, "cards/" << card.number.to_s) %>
+    <td class="number">
+      <a href="<%= url %>" id="card-number-<%= card.number %>" class="number"><%= h card.number %></a>
+    </td>
+    <td class="card-name">
+      <%= render :partial => "cards/dependency_icon", :locals => { :card => card } %>
+      <a href="<%= url %>">
+        <%= h card.name %>
+      </a>
+    </td>
+
+    <% @view.column_property_definitions.each do |prop_def| -%>
+      <td id='<%= "#{prop_def.html_id}-cell-for-card-#{card.number}" %>'><%= h_or_nbsp(card.property_value(prop_def)) %></td>
+    <% end -%>
+  </tr>
+<% end -%>

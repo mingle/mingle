@@ -1,0 +1,182 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Mingle CAS Authentication">
+  <p>This authentication plugin supports the JA-SIG Central Authentication Service.</p>
+  <section title="Installation">
+    
+    <steps>
+		<item>  
+		  Before you can use Mingle CAS authentication, you must first complete 
+      the standard Mingle installation and configuration. Make sure that you setup a 
+      user with both full Mingle administrative privileges and a login that is also 
+      contained in your CAS System.
+    </item>
+		
+		<item>
+		  Stop Mingle server.
+		</item>
+		
+		<item>
+		  <p>Edit <i>mingle_data_directory</i>/config/auth_config.yml to contain your configuration:</p>
+		  <p>Please for all options include the slash in cas_uri</p>
+		</item>
+		
+	  <p></p>
+	  <strong>Option One:</strong>
+	  <p>
+	    If your CAS server use secure connection (i.e., HTTPS) with a certification signed by a 
+      commercial signer, use the following configuration:
+    </p>
+		<markup>
+authentication: cas
+cas_settings:
+  cas_host: cas.example.com
+  cas_uri: /cas
+  cas_port: 443</markup>
+		<p></p>
+		
+	  <p></p>
+	  <strong>Option Two:</strong>
+	  <p>
+	    If your CAS Server use secure connection (i.e., HTTPS) with a self-signed certification,
+      use the following configuration:
+    </p>
+		<markup>
+authentication: cas
+cas_settings:
+  cas_host: cas.example.com
+  cas_uri: /cas
+  cas_port: 443
+  cas_root_cert_path: /etc/pki/cacert/cacert.pem</markup>
+		<p></p>
+
+
+	  <p></p>
+	  <strong>Option Three:</strong>
+	  <p>
+	    If your CAS Server use secure connection (i.e., HTTPS), but you do not care to validate 
+      the certification, use the following configuration:
+    </p>
+		<markup>
+authentication: cas
+cas_settings:
+  cas_host: cas.example.com
+  cas_uri: /cas
+  cas_port: 443
+  cas_trust_all_certs: true</markup>
+		<p></p>
+
+  <p></p>
+  <strong>Option Four:</strong>
+  <p>
+    If your CAS server is using a self-signed certificate, you can import your CAS server's certificate 
+    and/or your CA Root certificate into your Java keystore:  
+  </p>
+
+	<markup>
+keytool -import -trustcacerts -alias "My Root Certificate" -file cacert.crt -keystore /usr/java/default/jre/lib/security/cacerts</markup>	
+	
+  <warning>
+    Please check where is your Java keystore located.  In the example above, 
+    the Java keystore is under /usr/java/default/jre/lib/security/cacerts
+  </warning>
+
+  <p>
+    You can then use the same settings as option one above:
+  </p>
+  
+  	<markup>
+authentication: cas
+cas_settings:
+  cas_host: cas.example.com
+  cas_uri: /cas
+  cas_port: 443</markup>
+		<p></p>
+	
+    	
+    <item>
+      <p>
+        Notice the first line of each configuration above, as of 2.0.1 it is now necessary 
+        to explicitly state an authentication of type 'cas' in order to use the CAS authentication plugin.  
+      </p>
+      
+      <p>  
+        If you have enabled basic authentication, you will not be able to use the CAS plugin for 
+        basic authentication, so you will need to specify either 'ldap' or 'mingle' authentication:
+      </p>
+    </item> 
+    
+      <p></p>
+  		<markup>
+basic_authentication_enabled: true
+basic_authentication: ldap
+authentication: cas 
+cas_settings:
+  cas_host: ...
+  ...
+ldap_settings: 
+  ldapserver: ...
+  ...</markup>
+  		<p></p>
+  	 
+		<item>
+		  Start Mingle server.
+		</item>
+		
+		<item>
+		  Go to any Mingle page and you should be redirected to your CAS login page. After entering
+      you username and CAS password, you will be redirected to Mingle and will be logged
+      in as the user you setup in Step 1. This user will still have full Mingle admin
+      privileges.  This user can make future Mingle users Mingle admins if you wish to grant others
+      that privilege.
+    </item>
+		
+		<item>
+		  <p>
+		    Any users enrolled in your CAS
+        system can now login to Mingle. When they login to Mingle, a Mingle account will be
+        automatically created if it does not already exist. Once a user has logged in for the
+        first time s/he can be granted access to projects.
+      </p>
+
+          <note>If the maximum number of Mingle users has been added to the Mingle instance, Mingle will not create accounts for new users logging in via CAS. These users will be informed that the instance has reached the maximum number of users. When the maximum number of users is increased or existing users are deleted or deactivated, Mingle will automatically create accounts for new users again. </note>
+    
+	</item>
+
+	</steps>
+</section>
+
+<section title="Uninstall">
+  
+  <p>
+    Should you ever wish to turn off CAS authentication, simply change the values of 'authentication'
+    and 'basic_authentication' in the config/auth_config.yml file to the type of authentication you wish
+    to switch to, either 'ldap' or 'mingle'. After restarting the Mingle server, users will then be able to use the 
+    Mingle password recovery feature in order to set a Mingle password. 
+  </p>
+  
+  <warning>
+    If you are going to turn off CAS authentication, be absolutely sure that you configure 
+    Mingle SMTP successfully before turning off CAS authentication. This will ensure that the password 
+    recovery feature is available, allowing users to continue to use Mingle with Mingle's built-in 
+    authentication mechanism.
+  </warning>
+   
+</section>
+</topic>

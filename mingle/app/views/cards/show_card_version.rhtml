@@ -1,0 +1,122 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= render :partial => "shared/macro_warnings", :locals => {:renderable => @card} %>
+<% @sidebar = capture do %>
+  <%= render :partial => 'shared/favorites' %>
+  <%= render :partial => 'discussion_and_comments', :locals => {:card => @card, :history => @history, :allow_direct_comments => true, :show_history => true }%>
+  <%= render :partial => 'history/feed', :locals => {:request_params => history_filter_query_string(:card_number => @card.number)} if @displaying_latest_version -%>
+<% end %>
+
+<%= render :partial => 'shared/contextual_help', :locals => { :params_for_link => { :controller => 'cards', :action => 'show' } } %>
+<%= render :partial => 'card_version_show_action', :locals => {:location => 'top'} %>
+
+<div id='renderable-contents'>
+  <div id="card">
+    <div id="card-top">
+      <div id="card-index">
+          #<%= h @card_version.number %>
+      </div>
+      <h1 id='card-short-description'>
+        <%= h @card_version.name %>
+      </h1>
+      <p id="version-info" class="version-info"><%= render :partial => 'shared/version_info', :locals => { :versionable => @card_version, :show_latest_url => card_show_url(:number => @card_version.number) } %></p>
+    </div>
+
+    <div class="tags-container">
+      <%= render :partial => 'shared/readonly_tags_panel', :locals => {:event => @card_version} %>
+    </div>
+    <div class="card-content-container">
+      <%= render :partial => 'dependencies', :locals => { :card => @card_version } %>
+      <div id="content" class="wiki">
+        <%= raw @card_version.formatted_content(self) %>
+      </div>
+    </div>
+
+    <div id="card-bottom-cover" class="show_card_version_page">
+      <div id="card-bottom">
+        <h2 class="print-only">Properties</h2>
+
+        <div id = 'edit-card-types' class='card_type_widget properties_widget'>
+          <div id="show-type" class='properties_widget'>
+            <span>
+              <% prop_def = @project.card_type_definition %>
+              <span><%=h prop_def.name + ':' %></span>
+              <%= link_to_function h(@card_version.card_type.name),
+                    :class => 'readonly-link',
+                    :id => prop_def.html_id.downcase,
+                    "data-read-only" => true %>
+            </span>
+          </div>
+        </div>
+
+        <div id='show-properties-container'>
+          <div id="show-properties" class='properties_widget'>
+            <% @card_version.property_definitions_without_tree.each do |prop_def| %>
+              <% if prop_def.is_a?(CardRelationshipPropertyDefinition) %>
+                <%= render :partial => 'readonly_tree_relationship_property_definition',
+                          :locals => { :prop_def => prop_def, :display_value => @card_version.display_value(prop_def), :property_value => @card_version.property_value(prop_def) } %>
+              <% else %>
+                <%= render :partial => 'readonly_property_definition',
+                          :locals => {:prop_def => prop_def, :display_value =>@card_version.display_value(prop_def) } %>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+        <%= clear_float %>
+
+        <% @card_version.available_tree_configurations.each do |tree_configuration| %>
+          <div class='properties_widget tree_properties_widget'>
+          <div class="tree_group">
+            <% if @displaying_latest_version %>
+              from <%= show_go_to_tree_link(CardsHelper::CARD_SHOW_MODE, tree_configuration) %>
+            <% else %>
+              from <%= tree_configuration.name.bold %>
+            <% end %>
+            <%= show_tree_belonging_information_and_actions(CardsHelper::CARD_SHOW_MODE, @card_version, tree_configuration) if @displaying_latest_version %>
+          </div>
+          <% tree_configuration.relationships_available_to(@card_version).each do |prop_def|%>
+            <%= render :partial => 'readonly_tree_relationship_property_definition',
+                       :locals => { :prop_def => prop_def, :display_value => @card_version.display_value(prop_def), :property_value => @card_version.property_value(prop_def) } %>
+          <% end %>
+          <% tree_configuration.aggregate_property_definitions_available_to(@card_version).each do |prop_def| %>
+            <%= render :partial => 'readonly_property_definition',
+                      :locals => {:prop_def => prop_def, :display_value =>@card_version.display_value(prop_def) } %>
+          <% end %>
+          </div>
+          <%= clear_float %>
+        <% end %>
+        <%- if @card_version.latest_version? -%>
+          <%= render(:partial => 'cards_plans/plans', :locals => {:card => @card, :project => @project, :editing => false }) %>
+        <%- end -%>
+        <%= clear_float %>
+      </div>
+    </div>
+  </div>
+
+  <div id="attachments-container">
+    <%= render :partial => "shared/attachments", :locals => { :attachable => @card_version, :mode => "show", :"authorized_to_delete" => authorized_to_delete_attachments } %>
+  </div>
+
+  <div id="comments-for-print" class="print-only">
+    <h2><%= comments_and_murmurs_tab_title %></h2>
+    <div id="comments-container-for-print">
+      <%= render :partial => 'discussions', :locals => {:card => @card, :discussion => @card.discussion} %>
+    </div>
+  </div>
+</div>
+
+<%= render :partial => 'card_version_show_action', :locals => {:location => 'bottom'} %>

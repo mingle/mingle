@@ -1,0 +1,45 @@
+#  Copyright 2020 ThoughtWorks, Inc.
+#  
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Affero General Public License as
+#  published by the Free Software Foundation, either version 3 of the
+#  License, or (at your option) any later version.
+#  
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Affero General Public License for more details.
+#  
+#  You should have received a copy of the GNU Affero General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+log4j.rootCategory=INFO, MINGLE_LOG_FILE, CONSOLE
+
+log4j.appender.CONSOLE=org.apache.log4j.ConsoleAppender
+log4j.appender.CONSOLE.layout=org.apache.log4j.PatternLayout
+log4j.appender.CONSOLE.layout.ConversionPattern=[%-d{ISO8601}] [%t] %m%n
+
+log4j.appender.MINGLE_LOG_FILE=org.apache.log4j.RollingFileAppender
+log4j.appender.MINGLE_LOG_FILE.File=./log/mingle.log
+log4j.appender.MINGLE_LOG_FILE.MaxFileSize=10MB
+log4j.appender.MINGLE_LOG_FILE.MaxBackupIndex=10
+
+log4j.appender.MINGLE_LOG_FILE.layout=org.apache.log4j.PatternLayout
+log4j.appender.MINGLE_LOG_FILE.layout.ConversionPattern=[%-d{ISO8601}] %m%n
+
+log4j.logger.org.apache=INFO
+log4j.logger.org.mortbay.log=INFO
+#This class has NoClassDefFoundError output which is looking for a test class of Camel, let's ignore them.
+log4j.logger.org.apache.camel.util.ResolverUtil=ERROR
+# This class on 5.2 gives TransportDisposed error. Suppressing it.
+#   ref: http://issues.apache.org/activemq/browse/AMQ-2273, http://www.mail-archive.com/users@activemq.apache.org/msg12457.html
+log4j.logger.org.apache.activemq.AdvisoryConsumer=ERROR
+# This camel namespace emits a "NoClassDefFoundError: javax/xml/stream/XMLEventWriter" error on quick add a card.
+log4j.logger.org.apache.camel.impl.converter=ERROR
+log4j.logger.org.springframework=INFO
+# disable commons client warning
+log4j.logger.org.apache.commons.httpclient=ERROR
+log4j.logger.com.thoughtworks.mingle=INFO
+log4j.logger.com.thoughtworks.mingle.jobs=INFO
+log4j.logger.com.thoughtworks.mingle.pool=INFO
+log4j.logger.com.thoughtworks.mingle.servlet=INFO
+log4j.logger.com.thoughtworks.mingle.murmurs=INFO

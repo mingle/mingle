@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE subsection SYSTEM "mingle_help.dtd">
+<subsection title="Create a new project from importing existing projects" collapsed="true">
+ <steps>
+	<item><p>You can create a new project by importing an existing Mingle project. Assuming you have already exported the Mingle project, you can click the <link>Import project</link> link on the <strong>Current projects</strong> page (the first page you see after installation or logging on - click the <strong>Mingle logo</strong> to display this page).</p>
+		<screenshot alttext="Empty all projects page" src="resources/images/installation/create_new_project_via_import_projects.png"/>
+	</item>
+	
+	<item><p>Choose the project export file and provide a project name and identifier.</p>
+		<screenshot alttext="New project from template" src="resources/images/installation/import_project.png"/>
+	</item>
+	
+	<item><p>Click the 'Import project' link to complete the project creation.</p>
+		<screenshot alttext="New project from template" src="resources/images/installation/complete_importing_project.png"/>
+	</item>
+  
+ </steps>
+  <note>Any users in the imported project that don't already exist in your Mingle instance will be created. User passwords are not exported with a project. Therefore, a Mingle administrator will need to create a new password for these newly created users on the <cref topic="manage_users_page">manage users page</cref>, unless you use external authentication such as LDAP.</note>
+</subsection>

@@ -1,0 +1,30 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<ul>
+	<% for attachment in attachable.attachments %>
+	  <li>
+	    <span id='attachment_container_<%=attachment.id %>' style="display: inline;">
+				<%= link_to(attachment.file_name, project_attachment_path(:id => attachment.id), :target => 'blank')%>
+		    <%= link_to_function content_tag(:i, nil, :id => "remove_attachment_#{attachment.id}", :class => 'fa fa-times-circle attachment-remove').html_safe, "Element.hide('attachment_container_#{attachment.id}'); Element.show('attachment_#{attachment.id}_message'); $('deleted_attachment_#{attachment.id}').value = true" %>
+	      <%= hidden_field_tag "deleted_attachments[#{attachment.file_name}]", false, :id => "deleted_attachment_#{attachment.id}" %>
+	    </span>
+	    <span id='attachment_<%=attachment.id %>_message' style="display: none;" class="notes">
+	      (attachment deleted upon save)
+	    </span>
+	  </li>
+	<% end %>
+</ul>

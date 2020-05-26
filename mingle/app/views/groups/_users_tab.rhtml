@@ -1,0 +1,59 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% form_tag({ :controller => 'group_memberships', :action => 'update' }, :id => 'update_memberships') do %>
+  <% user_can_edit = authorized?(:controller => 'group_memberships', :action => 'update') %>
+
+  <%= render :partial => 'shared/pagination_info', :locals => {:models => @users, :model_name => 'group member'} %>
+
+  <% if user_can_edit %>
+    <div class='table-action-panel'>
+      <% unless @users.empty? %>
+        <div class='select-all-none-panel'>
+          Select:
+          <%= link_to_function 'All', :id => "select_all" -%>
+          <%= link_to_function 'None', :id => "select_none" -%>
+        </div>
+      <% end -%>
+      <div id="bulk-operations-panel" class="bulk-operations-panel">
+        <%= link_to_function 'Remove', "if(!this.hasClassName('disabled')) { this.up('form').submit(); }", :class => 'link_as_button', :id => 'remove_from_group' %>
+        <%= hidden_field_tag 'removes[]', @group.id %>
+      </div>
+      <%= clear_float -%>
+    </div>
+    <%= javascript_with_rescue "new CheckboxController([$('remove_from_group')], $$('.select-membership'));" %>
+  <% end %>
+  <table id='group-members' class="highlightable-table">
+    <thead>
+      <tr class="table-top">
+        <%= content_tag("th", '&nbsp;'.html_safe, :class => 'checkbox', :accessing => 'group_memberships:update') %>
+        <th>Display name</th>
+        <th>Sign-in name</th>
+        <%= content_tag "th", "Email", :accessing => 'team:show_member_email' %>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% if @users.empty? -%>
+        <td colspan='<%= user_can_edit ? 4 : 3 %>' class="italic-light align-center last">There are currently no group members to list.</td>
+      <% else -%>
+        <%= render :partial => 'member', :collection => @users %>
+      <% end -%>
+    </tbody>
+  </table>
+  
+  <%= render :partial => 'shared/pagination_info', :locals => {:models => @users, :model_name => 'group member'} %>
+<% end %>

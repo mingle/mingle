@@ -1,0 +1,227 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>JavaScript unit test file</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+  <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+  <script src="test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+
+  <script src="test_assets/unittest.js" type="text/javascript"></script>
+  <script src="test_assets/unittest_ext.js" type="text/javascript"></script>
+
+
+  <script src="../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/controls.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/builder.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+
+  <script src="../../public/javascripts/application.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/tree_config.js" type="text/javascript"></script>
+
+
+  <link rel="stylesheet" href="assets/unittest.css" type="text/css" />
+  <link rel="stylesheet" href="test_assets/unittest.css" type="text/css" />
+  <link rel="stylesheet" href="../../public/stylesheets/card_trees.css" type="text/css" />
+
+</head>
+<body>
+
+<div id="content" >
+  <div id="header">
+    <h1>JavaScript unit test file</h1>
+    <p>
+      This file tests <strong>InPlaceTextAreaEditor</strong> class in <strong>application.js</strong>.
+    </p>
+  </div>
+  <!-- Log output -->
+  <div id="testlog"> </div>
+  <div style ='border:solid 1px' id='sandbox'>
+    <h3> sandbox: </h3>
+
+    <div id='read_view' style='width:200px;height:150px;border:1px solid'>
+      <span id="filter_mql_edit_icon" class="none-content">edit</span>
+    </div>
+
+    <div id='edit_view' style='display:none'>
+      <form id='update_form'>
+        <textarea></textarea>
+        <fieldset>
+          <button class='finish-editing'>Submit</button>
+          <button class='cancel-editing'>Cancel</button>
+        </fieldset>
+      </form>
+    </div>
+  <div>
+</div>
+
+
+<script type="text/javascript">
+// <![CDATA[
+  SAND_BOX_CONTENT = $('sandbox').innerHTML;
+
+  new Test.Unit.Runner({
+    setup: function(){
+      $('sandbox').innerHTML = SAND_BOX_CONTENT;
+      this.callLog = 0;
+      $('update_form').onsubmit = function(){ this.callLog += 1; return false; }.bind(this);
+      this.editor = new InplaceTextareaEditor('read_view', 'edit_view', 'Click here to input MQL');
+      this.textarea = $('edit_view').down('textarea');
+      this.submitButton = $('edit_view').down('.finish-editing');
+      this.cancelButton = $('edit_view').down('.cancel-editing');
+    },
+
+    testShouldShowDefaultMessageOnReadViewWhensetRailsEscapedContentToBlank: function() { with(this) {
+      this.editor.setRailsEscapedContent('');
+      assertEqual('editClick here to input MQL', $('read_view').innerHTML.stripTags());
+      assertEqual("", textarea.value)
+
+      this.editor.setRailsEscapedContent("             ");
+      assertEqual('editClick here to input MQL', $('read_view').innerHTML.stripTags());
+      assertEqual("", textarea.value)
+
+      this.editor.setRailsEscapedContent(null);
+      assertEqual('editClick here to input MQL', $('read_view').innerHTML.stripTags());
+      assertEqual("", textarea.value)
+    }},
+
+    testShouldBringContentSetToEditView: function(){ with(this) {
+      this.editor.setRailsEscapedContent('hello world');
+      Event.trigger('read_view', 'click');
+      assertEqual('hello world', textarea.value);
+    }},
+
+    testShouldUnEscapeRailsEscapedContent: function() { with(this) {
+      this.editor.setRailsEscapedContent('&quot;Type&quot; is Card');
+      assertEqual('"Type" is Card', textarea.value);
+      Event.trigger(submitButton, 'click');
+      assertEqual('edit"Type" is Card', $('read_view').innerHTML.stripTags());
+    }},
+
+    testShouldInvokeSubmitCallbackWhenUserFinishEdit: function() { with(this) {
+      assertEqual(0, callLog);
+      Event.trigger('read_view', 'click');
+      assertEqual(0, callLog);
+      textarea.value = 'haha';
+      Event.trigger(submitButton, 'click');
+      assertEqual(1, callLog);
+    }},
+
+    testClickOnReadViewShouldShowEditView: function() { with(this) {
+      Event.trigger('read_view', 'click');
+      assert(!$('read_view').visible());
+      assert($('edit_view').visible());
+    }},
+
+    testShouldSetFocusOnTextAreaWhenSwitching: function(){ with(this) {
+      if(Prototype.Browser.IE) return;
+      var textareaHasFocus = false;
+      Event.observe(textarea, 'focus', function(event) {
+        textareaHasFocus = true;
+      });
+
+      Event.trigger('read_view', 'click');
+      assert(textareaHasFocus);
+    }},
+
+    testShouldGoBackToReadViewWhenClickingSubmitButton: function(){ with(this){
+      Event.trigger('read_view', 'click');
+      Event.trigger($('edit_view').down('.finish-editing'), 'click');
+      assert($('read_view').visible());
+      assert(!$('edit_view').visible());
+    }},
+
+    testShouldBringChangesBackToReadViewAfterSubmit: function(){ with(this){
+      Event.trigger('read_view', 'click');
+      textarea.value = 'haha';
+      Event.trigger(submitButton, 'click');
+      assertEqual('edithaha', $('read_view').innerHTML.stripTags());
+    }},
+
+    testShouldCorrectlyEscapeBiggerThanAndLess: function(){ with(this){
+      textarea.value = 'anything > others';
+      Event.trigger(submitButton, 'click');
+      assertEqual('editanything &gt; others', $('read_view').rawHTML().stripTags());
+    }},
+
+    testShouldClearMqlNoticeMessageWhenSwitchingToEditView: function(){ with(this){
+      Event.trigger('read_view', 'click');
+      assertEqual('', textarea.value);
+    }},
+
+    testShouldShowMqlNoticeMessageWhenEditViewInputIsBlank: function(){ with(this){
+      textarea.value = '';
+      Event.trigger(submitButton, 'click');
+      assertEqual('editClick here to input MQL', $('read_view').rawHTML().stripTags());
+    }},
+
+    testShouldShowEditButtonInMqlViewAfterSubmit: function(){ with(this){
+      this.editor.setRailsEscapedContent('hello world')
+      Event.trigger('read_view', 'click');
+      assertEqual('hello world', textarea.value);
+      Event.trigger(submitButton, 'click');
+      assertEqual(1, $('read_view').select('.none-content').size());
+    }},
+
+    testShouldShowEditButtonInMqlViewAfterSubmitEmptyMQL: function(){ with(this){
+      this.editor.setRailsEscapedContent('hello world')
+      Event.trigger('read_view', 'click');
+      assertEqual('hello world', textarea.value);
+      textarea.value = '';
+      Event.trigger(submitButton, 'click');
+      assertEqual(1, $('read_view').select('.none-content').size());
+    }},
+
+    testShouldBackToReadViewAfterClickedCancelButton: function(){ with(this){
+      this.editor.setRailsEscapedContent('hello world')
+      Event.trigger('read_view', 'click');
+      assertEqual('hello world', textarea.value);
+      Event.trigger(cancelButton, 'click');
+      assert($('read_view').visible());
+      assert(!$('edit_view').visible());
+      assertEqual('edithello world', $('read_view').innerHTML.stripTags());
+    }},
+
+    testShouldRestoreOriginalContentInEditViewAfterClickedCancelButton: function(){ with(this){
+      this.editor.setRailsEscapedContent('hello world');
+      Event.trigger('read_view', 'click');
+      textarea.value = '123j901294k3tkjgfkljfklgfldjdflkdf';
+      Event.trigger(cancelButton, 'click');
+      assertEqual('edithello world', $('read_view').innerHTML.stripTags());
+    }},
+
+    testShouldShowMQLNoticeMessageWhenUserCancelEditingEmptyMQL: function(){ with(this){
+      textarea.value = '';
+      Event.trigger(submitButton, 'click');
+      assertEqual('editClick here to input MQL', $('read_view').innerHTML.stripTags());
+      Event.trigger('read_view', 'click');
+      Event.trigger(cancelButton, 'click');
+      assertEqual('editClick here to input MQL', $('read_view').innerHTML.stripTags());
+    }}
+
+  }, { testLog: "testlog", test: ""}).run;
+// ]]>
+</script>
+</body>
+</html>

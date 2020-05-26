@@ -1,0 +1,215 @@
+<!--
+/**
+ * Copyright  2006  V Narayan Raman
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<html>
+<head><title>Configure Sahi</title></head>
+<script type="text/javascript" src="/_s_/spr/util.js"></script>
+<style>
+body, body * {
+	font-family: verdana;
+	font-size: 9pt;
+}
+body {	
+	margin: 10px;
+}
+.hitab {color:brown;text-decoration:none;font-weight:bold;font-size:14px;}
+.dimtab {color:3333FF;text-decoration:underline;}
+li {margin:10px}
+</style>
+<script>
+function init(){
+	var tabGroup = new TabGroup("tabGroup", ["tbrowser_types", "tuserdata", "texclude_inject", "tdownload_urls", "tdownload_contenttypes", "tblock_ssl_domains"], "tbrowser_types");
+}
+//TabGroup Start
+function $(id){
+	return document.getElementById(id);
+}
+var getTarget = function (e) {
+    var targ;
+    if (!e) e = window.event;
+    if (e.target) targ = e.target;
+    else if (e.srcElement) targ = e.srcElement;
+    if (targ.nodeType == 3) // defeat Safari bug
+        targ = targ.parentNode;
+    return targ;
+};
+
+TabGroup = function(name, ids, defaultId){
+	this.name = name;
+	this.ids = [];
+	this.defaultId = defaultId;
+	this.addAll(ids);
+	this.show(this.defaultId);	
+	TabGroup.instances[TabGroup.instances.length] = this;
+};
+TabGroup.instances = [];
+TabGroup.prototype.addAll = function(ids){
+	for ( var i = 0; i < ids.length; i++) {
+		this.add(ids[i]);
+	}
+};
+TabGroup.prototype.add = function(id){
+	this.ids[this.ids.length] = id;
+	$(id).onclick_ = $(id).onclick;
+	$(id).onclick = null;
+	this.addEvent($(id), "click", this.wrap(this.onclick, this));
+};
+TabGroup.prototype.addEvent = function (el, ev, fn) {
+    if (!el) return;
+    if (el.attachEvent) {
+        el.attachEvent("on" + ev, fn);
+    } else if (el.addEventListener) {
+        el.addEventListener(ev, fn, false);
+    }
+};
+TabGroup.prototype.wrap = function (fn, el) {
+	if (!el) el = this;
+	return function(){fn.apply(el, arguments);};
+};
+TabGroup.prototype.onclick = function(e){
+	var el = getTarget(e);
+	var thisId = el.id;
+	this.show(thisId, true);
+};
+TabGroup.prototype.show = function(thisId, isEvent){
+	if (!thisId || !$(thisId)) thisId = this.defaultId;
+	if (!thisId) return;
+	
+	for ( var i = 0; i < this.ids.length; i++) {
+		var id = this.ids[i];
+		if (!$(id)) continue;
+		$(id+"box").style.display = (id == thisId) ? "block" : "none";
+		$(id).className = "dimTab";
+	}
+	var el = $(thisId);
+	el.className = "hiTab";
+//	if (el.onclick && !isEvent) el.onclick();
+	if (el.onclick_) el.onclick_();
+	this.selectedTab = thisId;
+	currentActiveTab = this.selectedTab;
+};
+TabGroup.prototype.getSelectedTab = function (e) {
+	return this.selectedTab;
+};
+TabGroup.prototype.showDefault = function (force) {
+	if (force || this.selectedTab == null) this.show();
+};
+TabGroup.getState = function(){
+	var s = [];
+	for (var i=0; i<TabGroup.instances.length; i++){
+		var tg = TabGroup.instances[i];
+		s[s.length] = {id:tg.name, value:tg.getSelectedTab(), type:"tab"};
+	}
+	return s;
+};
+TabGroup.showDefaults = function(){
+	for (var i=0; i<TabGroup.instances.length; i++){
+		TabGroup.instances[i].showDefault();
+	}
+};
+// TabGroup End
+
+var g_file;
+function loadFile(fileName){
+	var file = "config/" + fileName;
+	g_file = file;
+	var textFile = sahiSendToServer("/_s_/dyn/ConfigureUI_readFile?fileName="+file);
+	$("editor").value = textFile;
+}
+function save(){
+	try{
+		var saveInfo = document.getElementById('saveInfo');
+		saveInfo.style.display='block';
+		setTimeout("saveInfo.style.display='none'",3000);
+	sahiSendToServer("/_s_/dyn/ConfigureUI_saveFile?fileName="+encodeURIComponent(g_file)+
+			"&contents="+encodeURIComponent($("editor").value));
+	}catch(e){alert(e)}
+}
+</script>
+<body onload="init()">
+<h1>Configure Sahi</h1>
+<br/><br/>
+<table><tr><td style="vertical-align:top;">
+<div style="float:left;width:250px;height:500px;line-height:22px;">
+<img src="/_s_/spr/images/sahi_os_logo2.png"/><br/><br/>
+<a href="#" id="tbrowser_types" onclick="loadFile('browser_types.xml');">browser_types.xml</a><br/>
+<a href="#" id="tuserdata" onclick="loadFile('userdata.properties');">userdata.properties</a><br/>
+<a href="#" id="texclude_inject" onclick="loadFile('exclude_inject.txt');">exclude_inject.txt</a><br/>
+<a href="#" id="tdownload_urls" onclick="loadFile('download_urls.txt');">download_urls.txt</a><br/>
+<a href="#" id="tdownload_contenttypes" onclick="loadFile('download_contenttypes.txt');">download_contenttypes.txt</a><br/>
+<a href="#" id="tblock_ssl_domains" onclick="loadFile('block_ssl_domains.txt');">block_ssl_domains.txt</a><br/>
+
+
+<div style="background-color:lightblue;margin:50px 20px 10px 0px;padding:10px">
+<div id="tbrowser_typesbox" class="content" style="display:none">
+<h2>browser_types.xml</h2>
+browser_types.xml configures the various browsers that Sahi can use. 
+Note that browser options for various browsers are different and it 
+is advisable to use the defaults provided and only change the paths where needed.
+</div>
+
+<div id="tuserdatabox" class="content" style="display:none">
+<h2>userdata.properties</h2>
+Sahi can be configured using two files:
+<ol style="margin:5px;padding:5px;">
+<li>sahi/userdata/config/ userdata.properties</li>
+<li>sahi/config/sahi.properties (<a href="/_s_/dyn/ConfigureUI_view?fileName=config/sahi.properties&useBase=true" target="_blank">View</a>)</li>
+</ol>
+Sahi first looks for a property in userdata.properties, and if not found, looks for it in sahi.properties.<br/>
+It is recommended to modify/add properties to userdata.properties. <br/>
+Every property in sahi.properties can be overridden in userdata.properties
+<br/><br/>
+</div>
+
+<div class="content" id="texclude_injectbox" style="display:none">
+<h2>exclude_inject.txt</h2>
+Sahi controls the browser by injecting javascript into web pages. 
+However there are various requests like XMLHttpRequests, javascript, css, etc. where Sahi should not inject its code.
+While this is correctly detected and handled in most cases, there are instances where one may need to explicitly ask Sahi not to inject code.
+In such instances, patterns can be added to exclude_inject.txt. When a URL matches this pattern, Sahi will NOT inject its code.
+</div>
+
+<div class="content" id="tdownload_urlsbox" style="display:none">
+<h2>download_urls.txt</h2>
+Sahi automatically downloads and saves files into sahi/usedata/temp/downloads directory. 
+If Sahi is unable to detect a request as a download, you can force it to download the file by adding URL patterns to this file. 
+</div>
+
+<div id="tdownload_contenttypesbox" style="display:none">
+<h2>download_contenttypes.txt</h2>
+Sahi automatically downloads and saves files into sahi/usedata/temp/downloads directory. 
+If Sahi is unable to detect a request as a download, you can force it to download the file by adding relevant content-types to this file. 
+</div>
+
+<div id="tblock_ssl_domainsbox" style="display:none">
+<h2>block_ssl_domains.txt</h2>
+If a domain is added here, any HTTPS calls to this domain will return a 404 error.
+Browsers like firefox make HTTPS requests to addons.mozilla.org and sb-ssl.google.com which can hang playback. 
+Adding these domains to block_ssl_domains.txt will prevent hangs.
+</div>
+
+</div>
+<div style="display:none;background:#F8FFA1;border:solid 1px red;margin:30px 20px 10px 0px;padding:10px" id="saveInfo"> Your configuration has been saved. Please restart Sahi</div>
+</div>
+</td><td>
+<div style="float:left;width:770px;height:800px;line-height:22px;">
+<textarea style="width:750px;height:85%;" id="editor" wrap="off" spellcheck="false"></textarea><br/>
+<input type="button" value="Save" onclick="save()"/>
+</div>
+</td></tr></table>
+</body>
+</html>

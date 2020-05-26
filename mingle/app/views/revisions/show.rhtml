@@ -1,0 +1,43 @@
+<!-- must force inclusions of revisions.css, as not all scms have a RevisionsController,
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+   e.g., Hg will have a ChangesetsController -->
+<%- content_for :stylesheets do -%>
+  <%= stylesheet_link_tag 'revisions' %>
+<%- end -%>
+
+<%= render :partial => 'revisions/revision_actions' if @mingle_revision %>
+
+<% if @mingle_revision -%>
+	<h1><%= @mingle_revision.name %></h1>
+
+	<%= render :partial  => "revisions/show", :locals => {:mingle_revision => @mingle_revision,
+		:revision => @revision, :project => @project, :view_cache => @view_cache}%>
+
+	<%= render :partial => 'revisions/revision_actions' %>
+<% end -%>
+<% if @revision_show_error -%>
+  <% warning_box do %>
+    <p id="revision-error-message"><%= @revision_show_error %></p>
+    <p>You may want to:</p>
+    <ul class="disc">
+      <li>View the list of <%= link_to_revisions %></li>
+      <li>View the <%= link_to('Source tree', url_for(:project_id => @project.identifier, :controller => 'source', :action => 'index', :rev => @project.repository_vocabulary['head'])) %></li>
+    </ul>
+    <%= clear_float %>
+  <% end -%>
+<% end -%>

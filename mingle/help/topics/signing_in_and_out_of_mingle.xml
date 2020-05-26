@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Signing in and out of Mingle">
+	<section title="Introduction">	
+		<p>You must sign in to Mingle before you can work on a project. 
+			Your Mingle project administrator (or project manager) will give you the URL from where to access Mingle for your organization.</p>
+		<p>Please note that your session will expire after four hours. Nor will Mingle require a password reset after a certain period of time.</p>
+		
+		<note>Before you can sign in to Mingle, a Mingle administrator must <cref topic="creating_user_profiles">add you as a user</cref>. 
+			Then, before you can view any projects, a project administrator must <cref topic="managing_project_team_members">add you as a project team member</cref>.</note>
+	</section>
+	<section title="Signing in">		
+		<p>To sign in to Mingle, type your username and password as advised by your Mingle administrator and click the <button>Sign in</button> button.</p>
+		<screenshot alttext="Mingle sign in dialog" src="resources/images/new_login.png" />			
+		<p>After signing in, Mingle displays all projects available to you or the overview page of the last visited project.
+		If you can't see the project you want to access, ask your project administrator to grant you access as a team member.</p>
+		<hint>After 10 failed login attempts, you will be prevented from making further attempts for some time.</hint>
+	</section>
+	<section title="Signing out">	
+		<p>To sign out of Mingle, click the <link>Sign out</link> link at the top right of the page.</p>
+		<screenshot alttext="Mingle sign out link" src="resources/images/sign_out.png"></screenshot>		
+		<hint>Mingle may sign you out automatically after a certain amount of idle time as a security measure.</hint>
+	</section>
+	<section title="If you've forgotten your password?">	
+		<p>On the Mingle Sign in page, click the <link>'Forgotten your password?'</link> link.</p>		
+		<p>This displays the Recover your password page.</p>
+			<screenshot alttext="Recover password page" src="resources/images/recover_password.png"></screenshot>
+		<p>	Type your user name and click the <button>Recover password</button> button to send an email to the Mingle administrator(s) who will then reset your password and email you when this has been done. The Mingle administrator details were setup during <cref topic="completing_the_mingle_configuration_wizard">initial installation</cref>. Mingle administrators can manage user details from the <strong>Current projects</strong> page <link>Manage users</link> link.</p>
+	</section>
+	
+	<section title="Also see...">	
+		<bullets>
+			<item><cref topic="user_roles">About Mingle user roles</cref></item>
+			<item><cref topic="managing_your_user_profile">Managing your user profile</cref></item>
+		</bullets>
+	</section>
+</topic>

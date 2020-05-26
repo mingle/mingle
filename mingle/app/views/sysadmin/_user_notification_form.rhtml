@@ -1,0 +1,56 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% form_tag({:action => action}, :class => "user-notifications-form") do %>
+  <fieldset>
+    <legend>Set a user notification</legend>
+    <label>
+      <span class="required">Heading:</span>
+      <%= text_field_tag(:user_notification_heading, MingleConfiguration.user_notification_heading, :required => "") %>
+    </label>
+
+    <label>
+      <span class="required">Content:</span>
+      <%= text_area_tag(:user_notification_body, MingleConfiguration.user_notification_body, :required => "") %>
+    </label>
+
+    <label>
+      <span>Avatar URL (optional):</span>
+      <%= text_field_tag(:user_notification_avatar, MingleConfiguration.user_notification_avatar, :type => "url") %>
+    </label>
+
+    <label>
+      <span>"Read more" URL (optional):</span>
+      <%= text_field_tag(:user_notification_url, MingleConfiguration.user_notification_url, :type => "url") %>
+    </label>
+
+    <% if MingleConfiguration.saas? -%>
+      <h4>Twitter button configuration (optional)</h4>
+      <label>
+        <span>Twitter message PLEASE PRE-FLIGHT THIS ON TEST SITE TO ENSURE YOU DON'T GO OVER THE 140 CHAR LIMIT:</span>
+        <%= text_field_tag(:tweet_message, MingleConfiguration.tweet_message, :maxlength => 140) %>
+      </label>
+
+      <label>
+        <span>Blog post url:</span>
+        <%= text_field_tag(:tweet_url, MingleConfiguration.tweet_url, :type => "url") %>
+      </label>
+    <% end -%>
+  </fieldset>
+
+  <span class="required note">* Required fields</span>
+  <%= submit_tag("Save") %>
+<% end %>

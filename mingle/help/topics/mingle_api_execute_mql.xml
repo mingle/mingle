@@ -1,0 +1,136 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Execute MQL API">
+  <section title="MQL">
+    <p>MQL is Mingle's SQL-like query language. Execute MQL API allows you to use MQL queries via the API. </p>
+  
+    <p>We recommend that you familiarize yourself with some <cref topic="mql_reference">MQL</cref> before using it via the API.</p>
+  </section>
+
+  <section title="Structure of the Execute MQL result resource">
+    <p>Unlike other APIs the structure of what is returned in a result resource will differ depending on the MQL that is specified in the request. In general the structure will reflect the properties that were requested in the MQL. For example, if you select for number and name, the results returned will have the attributes number and name.</p> 
+
+	<p>Results will be returned in XML format by default. However, Mingle can also return the result in JSON or JSONP format.</p>
+	
+  </section>
+
+  <note>Unless otherwise specified the following examples show the results in XML format.</note>
+  
+  <section title="Using Execute MQL to get a specific set of properties for a specific set cards">
+    <p><strong>Reference</strong></p>
+    <code>
+    Request Method: GET
+    URL: /api/v2/projects/<subst>project_identifier</subst>/cards/execute_mql.xml
+
+    mql: MQL select statement. String.
+    </code>
+
+    <p><strong>Example</strong></p>
+    <code>
+    GET
+
+    http://localhost:8080/api/v2/projects/new/cards/execute_mql.xml
+
+    mql=SELECT number, name WHERE 'Iteration - Scheduled' = (Current Iteration)
+    </code>
+
+    <p><strong>Explanation</strong></p>
+    <p>The above is an example of a GET request to retrieve a specific set of card where "'Iteration - Scheduled' = (Current Iteration)" from the project with identifier "new". This will return the number and name of cards that match the MQL conditions supplied.</p>
+
+    <p><strong>Result</strong></p>
+    <p>If you were authorized to perform the operation, and the operation succeeded, you will be returned an array of results resources.</p>
+
+    <code>
+<![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<results type="array">
+  <result>
+    <number>77</number>
+    <name>Whitespace created when just checking properties</name>
+  </result>
+  <result>
+    <number>74</number>
+    <name>File audit results beginning to outgrow the audit control and cut off text.</name>
+  </result>
+...
+</results>
+]]>
+    </code>
+  </section>
+
+  <section title="Using Execute MQL to get the results of a value query">
+    <p><strong>Reference</strong></p>
+
+    <code>
+    Request Method: GET
+    URL: /api/v2/projects/<subst>project_identifier</subst>/cards/execute_mql.xml
+
+    mql: MQL select statement. String.
+    </code>
+
+    <p><strong>Example</strong></p>
+    <code>
+    GET
+
+    http://localhost:8080/api/v2/projects/new/cards/execute_mql.xml
+
+    mql=SELECT COUNT(*) WHERE Type = story
+    </code>
+
+    <p><strong>Explanation</strong></p>
+    <p>The above is an example of a GET request to retrieve a specific value from the project with identifier "new". This will return a count of cards that match the MQL conditions supplied.</p>
+
+    <p><strong>Result</strong></p>
+    <p>If you were authorized to perform the operation, and the operation succeeded, you will be returned a results resource.</p>
+
+    <code>
+<![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<results type="array">
+  <result>
+    <count>64</count>
+  </result>
+</results>
+]]>
+    </code>
+  </section>
+
+	<section title ="How to return a result in JSON format" collapsed = "false">
+		<p><strong>Reference</strong></p>
+		<code>
+		URL: /api/v2/projects/project_identifier/cards/execute_mql.json
+		
+		mql: SELECT number, name WHERE type = Story
+		</code>
+		<p><strong>Explanation</strong></p>
+	    <p>The above is an example of a GET request to retrieve a specific set of cards where type is 'Story'. This will return the number and name of any cards of type 'Story' in JSON format.</p>
+	</section>
+	
+	<section title ="How to return a result in JSONP format" collapsed = "false">		
+		<p><strong>Reference</strong></p>
+		<code>
+		URL: /api/v2/projects/project_identifier/cards/execute_mql.json
+		
+		callback: displayCards
+		mql: SELECT number, name WHERE type = Story
+		</code>
+		<p><strong>Explanation</strong></p>
+	    <p>The above is an example of a GET request to retrieve a specific set of cards where type is 'Story'. This will return the number and name of any cards of type 'Story' in JSON format. Mingle will prefix this result with the callback function which you have provided.</p>
+	</section>
+</topic>

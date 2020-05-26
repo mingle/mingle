@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_help.dtd">
+<chapter title="What's new in Mingle">
+  <topic title="Changes in Release 19.1" file="whats_new_in_release_19_1" collapsed="false"/>
+  <topic title="Changes in Release 18.2" file="whats_new_in_release_18_2" collapsed="true"/>
+  <topic title="Changes in Release 18.1" file="whats_new_in_release_18_1" collapsed="true"/>
+  <topic title="Changes in Release 17" file="whats_new_in_release_17" collapsed="true"/>
+  <topic title="Changes in Release 16.2" file="whats_new_in_release_16_2" collapsed="true"/>
+  <topic title="Changes in Release 16.1" file="whats_new_in_release_16_1" collapsed="true"/>
+  <topic title="Changes in Release 15.2" file="whats_new_in_release_15_2" collapsed="true"/>
+  <topic title="Changes in Release 15.1" file="whats_new_in_release_15_1" collapsed="true"/>
+  <topic title="Changes in Release 14.2" file="whats_new_in_release_14_2" collapsed="true"/>
+  <topic title="Changes in Release 14.1" file="whats_new_in_release_14_1" collapsed="true"/>
+  <topic title="Changes in Release 13.3" file="whats_new_in_release_13_4" collapsed="true"/>
+  <topic title="Changes in Release 13.3" file="whats_new_in_release_13_3" collapsed="true"/>
+  <topic title="Changes in Release 13.2" file="whats_new_in_release_13_2" collapsed="true"/>
+  <topic title="Changes in Release 13.1" file="whats_new_in_release_13_1" collapsed="true"/>
+  <topic title="Changes in Release 12.4" file="whats_new_in_release_12_4" collapsed="true"/>
+  <topic title="Changes in Release 12.3" file="whats_new_in_release_12_3" collapsed="true"/>
+  <topic title="Changes in Release 12.2" file="whats_new_in_release_12_2" collapsed="true"/>
+  <topic title="Changes in Release 12.1" file="whats_new_in_release_12_1" collapsed="true"/>
+</chapter>

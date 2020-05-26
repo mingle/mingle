@@ -1,0 +1,140 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="What's new in Release 14.2">
+	<p>For <cref topic="mingle_onsite">Mingle onsite</cref> customers, please review the <cref topic="upgrading_from_previous_versions">upgrade instructions</cref> before moving to Mingle 14.2</p>
+	<note>
+	  <item>All of the features below are already available for our Mingle in the cloud customers.</item>
+  </note>
+
+	<section title="Sticky Column Headers">
+	  <p>Is your screen too small to show all existing cards on your wall? Can’t remember which swim lane they’re in when you’ve scrolled to the bottom of the wall? Now, your column headers stick so you always know where you—and your cards—are. <exref url="/mingle/news/2014/08/06/Four-Small-Improvements.html">Read more here</exref>.</p>
+	</section>
+
+	<section title="Quick Add + Card to any Column">
+    <p>Want to add a card to your wall on the fly? Now, you can add a card to any column by clicking on the blue “+” that appears when you hover over any column. <cref topic="creating_cards_with_plus_sign">Read more here</cref>.</p>
+  </section>
+
+	<section title="Drag and Drop Avatars">
+	  <p>In <cref topic ="whats_new_in_release_14_1">Mingle 14.1</cref>, we added avatars so you can see your smiling faces on your card wall. Now in 14.2 you can easily change who's working on what with an easy drag and drop interaction. <cref topic="show_avatars_on_grid_view">Learn more about avatars</cref>.</p>
+	  <p><screenshot alttext="Murmurs in use" src="resources/images/drag_and_drop_avatars.gif"/></p>
+	</section>
+
+	<section title="Invite team by email">
+	  <p>Now you can invite your team with a simple email! Just click on the pink user + icon in the bottom tray and invite away! <exref url="/mingle/news/2014/03/18/Invite-Your-Team-By-Email.html">Read more here</exref>.</p>
+	  <p><screenshot src="resources/images/invite_by_email.png"/></p>
+	</section>
+
+	<section title="Reorder and Rename Columns and Tabs">
+	  <p>To help you more easily configure Mingle to support how your team works as you evolve and improve over time, we've made it much easier to rename and reorder both columns and tabs. Now, you can simply drag project columns and tabs to reorder them. And, to rename them, just click on the pencil, which appears when you hover over any column or tab.</p>
+	  <p><screenshot alttext="Murmurs in use" src="resources/images/tactile_tabs.gif"/></p>
+	</section>
+
+	<section title="New Scrum Template">
+	  <p>New Scrum template features include: more out-of-the-box reports, a Story Map, Release Planning, an Estimation board, a Sprint board, and even a Retrospective board! <exref url="/mingle/news/2014/08/20/New-Scrum-Template.html">Read more here</exref> and learn more about <cref topic="standar_mingle_templates">Mingle templates</cref>.</p>
+	</section>
+
+	<section title="Expand and Collapse Properties on Card Preview">
+	  <p>Want to see all of the properties on your card preview to get more detail? Just expand the property drop-down arrow to see all of your card’s property values. And collapse it to return to the single line of properties so you can refocus on your discussion on your card’s content. (Please note only properties whose values are set will appear on the card preview.) <exref url="/mingle/news/2014/08/06/Four-Small-Improvements.html">Read more here</exref>.</p>
+	</section>
+
+	<section title="Recover Unsaved Changes">
+	  <p>Mingle now knows when you have unsaved changes and asks if you want to recover them. <exref url="/mingle/news/2014/05/22/Whats-New-Today-May22.html">Read more here</exref>.</p>
+
+	  <p><screenshot alttext="Murmurs in use" src="resources/images/recover_changes.png"/></p>
+
+	</section>
+
+	<section title="Git and GitHub integration">
+	  <p>Mingle in the cloud now supports both <cref topic="setup_git_configuration_saas">Git</cref> and <cref topic="setup_github_configuration_saas">GitHub</cref> integration. When you integrate either with Mingle, your commits will appear as <cref topic="murmurs">Murmurs</cref>. And if you reference a specific card number in your commit message, it will appear as a murmur on the individual card as well. <exref url="/mingle/news/2014/07/17/Murmurs-Help-You-Stay-In-Sync.html">Read more here</exref>.</p>
+	</section>
+
+	<section title="New and Improved Murmurs">
+	  <p>We've done a lot of work with <cref topic="murmurs">Murmurs</cref> to make them a central communication channel for you and your team. Here are the highlights:</p>
+	    <bullets>
+	      <item><strong>Email notifications when you murmur @someone</strong>: Now you get an email when you’re murmured at so you don’t miss a beat. Just @ the team member you’re murmuring with and they’ll get an email. Whether outside the office or simply not in Mingle at the moment, these notifications help make sure you know what’s going on with your team.</item>
+	      <item><strong>Autocomplete @teammate</strong>: To help you murmur with your team, Mingle will autocomplete the name of the team member you’re murmuring at, saving you time and making sure there are no typos :) Just select the name you’re looking for as soon as it appears and you’re set. They’ll receive an email as soon as you’ve murmured your message.</item>
+	      <item><strong>@team and @group</strong>: Sometimes you need to talk with your entire team or specific groups in your project (devs or QAs, for example). When you murmur @team, everyone on your team receives an email. And if you’ve defined groups in your project, Mingle will automatically know so you can murmur a specific message to a single group and everyone in that group will know!</item>
+	      <item><strong>New location</strong>: We moved Murmurs to give it a more prominent location in your project. You'll now see it next to the search bar instead of among your tabs.</item>
+	      <item><strong>Murmurs only; no more comments</strong>: Previously, Comments and Murmurs were distinct concepts in Mingle. We’ve combined them now as just Murmurs. You can still add a message directly to a card, but instead of that message living deep within the card – and therefore hard to quickly see for the rest of your team – it will now show up in your team’s Murmur stream. This way everyone sees it and has shared context about what is going on.</item>
+	    </bullets>
+	</section>
+
+	<section title="Navigation and UI Improvements">
+	  <p>We published an entire <exref url="/mingle/news/2014/05/15/Whats-New-Today-May15.html">post</exref> about it, but here's a quick rundown of the navigation and UI improvements available in Mingle 14.2:</p>
+	  <bullets>
+	      <item><strong>Quick project navigation</strong>: switch between projects by selecting the project drop down menu next to your project name in the Mingle header.</item>
+	      <item><strong>Better default avatars</strong>: if you haven't set your avatar, Mingle will default it to the first initial of your name, making it easier to know who's who on your team.</item>
+	      <item><strong>Pick a color with 1-click</strong>: we've made it easier to choose colors for everything (from property values to card types) in your Mingle project. With a more limited and aesthetic palette, you can select a color with just one click.</item>
+	      <item><strong>A card wall that looks more like a card wall</strong>: we've added more contrast and streamlined our card wall to remove linear distractions and make it appear more like the card wall it is.</item>
+	      <item><strong>Quick navigation to everything cards</strong>: now you can quickly navigate to to your project’s card types, properties, transitions, trees, and keywords to make larger underlying changes to card settings. Just click on the gear on the card preview. (Unlike the above, this functionality is highlighted in <exref url="/mingle/news/2014/08/06/Four-Small-Improvements.html">this post</exref>.)</item>
+	  </bullets>
+	</section>
+
+	<section title="End of Life for Jabber Integration and Support for Older Browsers">
+	  <p>14.2 marks the end of life for Jabber integration and support for older browsers. <exref url="/mingle/news/2014/08/29/EOL-Jabber-older-browsers.html">Read more here</exref>.</p>
+	</section>
+
+	<section title="Bug fixes">
+	  <p>The following bugs have been fixed with 14.2:</p>
+	    <bullets>
+			 <item>Tab reorder doesn't persist</item>
+			 <item>Help popup styling missing if opened from programs</item>
+			 <item>Help link is broken on setup mingle screen</item>
+			 <item>-Dmingle.port required to start Mingle even when using SSL</item>
+			 <item>Unable to start mingle with no HTTP port (ssl.port only)</item>
+			 <item>@user login Murmur does not work when user name is email</item>
+			 <item>Special headers break how search box and Murmurs are aligned on the header</item>
+			 <item>Card under the "X" remove user icon got assigned user property with the user</item>
+			 <item>Tree view card icons style is broken because we removed card div border for Grid view</item>
+			 <item>Data corruption after tree structure (remove one middle card type)</item>
+			 <item>5xx error when user accesses /profile/show page as anonymous user and site is enabled anonymous user access</item>
+			 <item>"!" output from a macro got rendered as an image tag</item>
+			 <item>Project drop-down list is hidden behind Copy To popup</item>
+			 <item>Tab rename box broken in tree view</item>
+			 <item>Drag + Drop in card trees is inconsistent</item>
+			 <item>When tab name is long it continues out of tab and covers other tabs</item>
+			 <item>Card deletion times out on large projects</item>
+			 <item>Macro editor doesn't wrap correctly</item>
+			 <item>Remove table layout and neat to fix card content breaking layout</item>
+			 <item>Indentation and Bullet Points Broken in CKEditor</item>
+			 <item>Can't save resize image</item>
+			 <item>.msg attachments cannot be read</item>
+			 <item>Renaming wiki (using tab rename) orphans attachments</item>
+			 <item>Tab reorder doesn't persist if there are over 10+ tabs</item>
+			 <item>Can't recognize card number inside [" and "] in Murmurs</item>
+			 <item>Daily History Charts don't render in IE9 and IE10</item>
+			 <item>Import Project button should be disabled before user select a file when importing project</item>
+			 <item>Can't import project that tab has been reordered</item>
+			 <item>Scripts in cards are not visible in quick edit.</item>
+			 <item>Team favorites redirect to overview page upon save</item>
+			 <item>Magic card disappears if user hits escape on add card window</item>
+			 <item>Admin not able to change password of other users (asks for current password)</item>
+			 <item>Unable to add card using + icon next to quick Add Card</item>
+			 <item>Project drop-down for non-admin mingle user</item>
+			 <item>WYSIWYG inline image attachment broken</item>
+			 <item>Header styles in HTML editor are not WYSIWYG</item>
+			 <item>Print CSS causes stacktrace</item>
+			 <item>500 error when try to create project with some non-English characters</item>
+			 <item>UI broken on export to excel page</item>
+			 <item>Edit chart lightbox breaks on long error</item>
+		
+  	  </bullets>
+	</section>
+
+</topic>

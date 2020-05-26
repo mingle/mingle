@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Creating charts and tables">
+    <section title="Introduction">
+        <p>Mingle supports the creation of graphs, charts and tables in cards and pages by querying your Mingle database to graphically display up-to-date project information. You can create these by hand or with Mingle's <cref topic="mingle_macro_builder">Macro Builder</cref>, which allows you to insert and customize templates for graphs, charts and tables. To see all chart options and example markup look in the specific sections below.</p>
+    </section>
+	<section title="Charts" file="charts"/>
+    <section title="Creating tables">
+    	<subsection title="Table - based on a query" file="markup_table_query" collapsed="true" />
+    	<subsection title="Table - based on a favorite" file="markup_table_view" collapsed="true" />
+    	<subsection title="Pivot table" file="markup_pivot_table" collapsed="true" />
+    </section>
+    <section title="Putting more than one chart, graph or table on a page or card">
+    	<p>You can use one or two column layout blocks to organize information in a page or card. In Mingle this kind of layout is often referred to as a dashboard.</p>
+    	<p>You can take a look at this <cref topic="project_overview_page_example">example project overview page</cref> to see how that might look with some charts and tables included.</p>
+    	<subsection title="One-column layout" file="markup_one_column_layout" collapsed="true"/>
+    	<subsection title="Two-column layout" file="markup_two_column_layout" collapsed="true"/>
+    	<subsection title="Mixed column layout" file="markup_mixed_column_layout" collapsed="true"/>
+    </section>
+    <section title="Also see...">
+        <bullets>
+        	<item><cref topic="finding_a_page">Finding a page to edit</cref></item>
+            <item><cref topic="macro_reference">Reference of all Mingle macros</cref></item>
+            <item><cref topic="mql_reference">Use MQL queries in pages</cref></item>
+            <item><cref topic="attaching_and_inserting_objects_and_links">Attaching files and adding links</cref></item>
+        	<item><cref topic="project_overview_page_example">Project overview page example</cref></item>
+            <item><cref topic="cross_project_reporting">Cross project reporting</cref></item>
+			<item><cref topic="explore_mingle_topic_tracking_release">Tracking releases, sprints and iterations</cref></item>
+        </bullets>
+    </section>
+</topic>

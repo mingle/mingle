@@ -1,0 +1,320 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Card Filter Test</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery.tag-it.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/tinycolor.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+  <script src="../../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+
+  <script src="../test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../../../app/assets/javascripts/ui_utils.js" type="text/javascript"></script>
+
+  <script src="../../../public/javascripts/application.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/drop_down.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/text_box.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/mql_builder.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/card_filter.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/card_filter_value_wrapper.js" type="text/javascript"></script>
+
+  <script src="../test_assets/sinon-2.3.6.js" type="text/javascript"></script>
+  <script src="../test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+  <script src="../test_assets/qunit-phantom.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="../test_assets/qunit-1.21.0.css" type="text/css"/>
+
+</head>
+<body>
+<div id="qunit">
+</div>
+<div id="card_filter_container"></div>
+
+<script type="text/javascript">
+  var operators = {
+    eq: ['is', 'is'],
+    gt: ['is greater than', 'is greater than'],
+    lt: ['is less than', 'is less than'],
+    ne: ['is not', 'is not']
+  }, propDefData = {
+      prop1: {
+        name: 'prop1',
+        isNumeric: true,
+        isManaged: true,
+        propertyValueDetails: [{value: '1'}, {value: '2'}, {value: '3'}],
+        operatorOptions: [operators.eq, operators.gt, operators.lt]
+      },
+      prop2: {
+        name: 'prop2',
+        isNumeric: true,
+        isManaged: false,
+        operatorOptions: [operators.eq, operators.gt, operators.lt]
+      },
+      Sprint: {
+        name: 'Sprint',
+        dataType: 'card',
+        treeSpecial: true,
+        isNumeric: false,
+        isManaged: false,
+        propertyValuesDescription: 'Some card property',
+        operatorOptions: [operators.eq, operators.ne]
+      }
+  };
+
+  function selectValue(dropDown, value) {
+    dropDown.htmlContainer.find('#{name}_{value}'.supplant({name: dropDown.name, value: value.toSnakeCase()})).click();
+  }
+
+  QUnit.module("Card Filter", {
+    beforeEach: function () {
+      this.container = $j('#card_filter_container');
+      sinon.spy(MingleUI.EasyCharts, 'CardFilterValueWrapper');
+      this.data = {
+        propertyDefinitions: propDefData,
+        project: {identifier: 'projectIdentifier', dateFormat: '%d/%m/%Y'},
+        enableThisCardOption: true,
+        onUpdate: function (filter) {
+          this.updatedFilter = filter;
+        }.bind(this),
+        onRemove: function (filter) {
+          this.removedFilter = filter;
+        }.bind(this)
+      };
+      this.cardFilter = new MingleUI.EasyCharts.CardFilter(1, 'card_filter', this.data);
+      this.container.append(this.cardFilter.htmlContainer);
+    },
+    afterEach: function () {
+      this.container.empty();
+      MingleUI.EasyCharts.CardFilterValueWrapper.restore();
+    }
+  });
+
+  QUnit.test('testShouldAddPropertyDropDown', function (assert) {
+    assert.equal(this.cardFilter.property.name, "cardFilter1Property");
+    assert.equal(this.cardFilter.property._optionsContainer.text(), 'prop1prop2Sprint');
+    assert.equal(this.cardFilter.property._valueContainer.text(), '(select)');
+    assert.equal(this.cardFilter.property.htmlContainer[0], this.container.find('div#card_filter_1_property')[0]);
+  });
+
+  QUnit.test('testShouldAddOperatorDropDown', function (assert) {
+    assert.equal(this.cardFilter.operator.name, "cardFilter1Operator");
+    assert.equal(this.cardFilter.operator._optionsContainer.text(), 'isis not');
+    assert.equal(this.cardFilter.operator.value(), 'eq');
+    assert.equal(this.cardFilter.operator.htmlContainer[0], this.container.find('div#card_filter_1_operator')[0]);
+  });
+
+  QUnit.test('testShouldAddValueDropDown', function (assert) {
+    assert.equal(this.cardFilter.value.htmlContainer.find('.options-container').text(), '');
+    assert.equal(this.cardFilter.value.htmlContainer.find('.selected-value').text(), '(any)');
+    assert.equal(this.cardFilter.value.htmlContainer[0], this.container.find('div#card_filter_1_value')[0]);
+    assert.ok(MingleUI.EasyCharts.CardFilterValueWrapper.calledOnce);
+    assert.equal(MingleUI.EasyCharts.CardFilterValueWrapper.args[0].length, 3);
+    var wrapperOptions = MingleUI.EasyCharts.CardFilterValueWrapper.args[0][2];
+    assert.deepEqual(wrapperOptions.project, {identifier: 'projectIdentifier', dateFormat: this.data.project.dateFormat});
+    assert.equal(wrapperOptions.propertyDefinition, undefined);
+    assert.equal(wrapperOptions.enableThisCardOption, true);
+    assert.equal(typeof wrapperOptions.onValueChange, 'function');
+  });
+
+  QUnit.test('testFilterShouldBeRemovableByDefault', function (assert) {
+    assert.ok(this.cardFilter.htmlContainer.find('.remove-filter')[0]);
+    assert.notOk(this.removedFilter);
+    this.cardFilter.htmlContainer.find('.remove-filter').click();
+
+    assert.ok(this.container.is(':empty'));
+    assert.equal(this.removedFilter, this.cardFilter);
+  });
+
+  QUnit.test('testFilterShouldNotBeRemovableWhenIsRemovableOptionIsFalse', function (assert) {
+    this.container.empty();
+    var data = {
+      propertyDefinitions: propDefData,
+      projectIdentifier: 'projectIdentifier',
+      isRemovable: false
+    };
+    this.cardFilter = new MingleUI.EasyCharts.CardFilter(1, 'card_filter', data);
+    this.container.append(this.cardFilter.htmlContainer);
+
+    assert.notOk(this.cardFilter.htmlContainer.find('.remove-filter')[0]);
+  });
+
+  QUnit.test('testShouldUpdateValuesAndOperatorOptionsOnChangeOfProperty', function (assert) {
+    assert.equal(this.cardFilter.value.htmlContainer.find('.options-container').text(), '');
+    assert.equal(this.cardFilter.operator._optionsContainer.text(), 'isis not');
+
+    selectValue(this.cardFilter.property, 'prop1');
+
+    assert.equal(this.cardFilter.value.htmlContainer.find('.options-container').text(), '123');
+    assert.equal(this.cardFilter.value.htmlContainer.find('.selected-value').text(), '(any)');
+
+    assert.equal(this.cardFilter.operator.value(), 'eq');
+    assert.equal(this.cardFilter.operator._optionsContainer.text(), 'isis greater thanis less than');
+  });
+
+  QUnit.test('testIsValidShouldReturnFalseWhenPropertyIsNotSelected', function (assert) {
+    assert.notOk(this.cardFilter.isValid());
+  });
+
+  QUnit.test('testIsValidShouldReturnFalseWhenValueIsNotSelected', function (assert) {
+    selectValue(this.cardFilter.property, 'prop1');
+
+    assert.notOk(this.cardFilter.isValid());
+  });
+
+  QUnit.test('testIsValidShouldReturnTrueWhenPropertyAndValueAreSelected', function (assert) {
+    selectValue(this.cardFilter.property, 'prop1');
+    this.container.find('#cardFilter1Value_2').click();
+
+    assert.ok(this.cardFilter.isValid());
+  });
+
+  QUnit.test('testGetMqlShouldReturnEmptyStringWhenInvalid', function (assert) {
+    selectValue(this.cardFilter.property, 'prop1');
+
+    assert.equal(this.cardFilter.getMql(), '');
+  });
+
+  QUnit.test('testGetMqlShouldReturnConditionAsStringWhenValid', function (assert) {
+    selectValue(this.cardFilter.property, 'prop1');
+    this.container.find('#cardFilter1Value_2').click();
+
+    assert.equal(this.cardFilter.getMql(), '"prop1" = 2');
+  });
+
+  QUnit.test('testShouldTriggerOnUpdateCallbackWhenAnythingChanges', function (assert) {
+    var eventTriggered = false;
+
+    selectValue(this.cardFilter.property, 'prop1');
+    assert.equal(this.updatedFilter, this.cardFilter);
+    this.updatedFilter = null;
+
+    selectValue(this.cardFilter.operator, 'lt');
+    assert.equal(this.updatedFilter, this.cardFilter);
+    this.updatedFilter = null;
+
+    this.container.find('#cardFilter1Value_2').click();
+    assert.equal(this.updatedFilter, this.cardFilter);
+  });
+
+  QUnit.test('testShouldNotAllowMultipleValuesForRelativeOperator', function(assert) {
+    selectValue(this.cardFilter.property, 'prop1');
+    selectValue(this.cardFilter.operator, 'lt');
+    this.container.find('#cardFilter1Value_1').click();
+
+    assert.equal(this.cardFilter.getMql(), '"prop1" < 1');
+
+    this.container.find('#cardFilter1Value_2').click();
+
+    assert.equal(this.cardFilter.getMql(), '"prop1" < 2');
+  });
+
+  QUnit.test('testShouldAddContextualValueForCardProperties', function(assert) {
+    this.cardFilter.value = {
+      isValid: function() { return true; } ,
+      value: function() { return ['463']; },
+      update: function() { }
+    };
+    selectValue(this.cardFilter.property, 'Sprint');
+
+    assert.equal(this.cardFilter.getMql(), '"Sprint" = NUMBER 463');
+  });
+
+  QUnit.test('testShouldAllowMultipleValuesForComparativeOperator', function (assert) {
+    selectValue(this.cardFilter.property, 'prop1');
+    this.container.find('#cardFilter1Value_1').click();
+
+    assert.equal(this.cardFilter.getMql(), '"prop1" = 1');
+
+    this.container.find('#cardFilter1Value_2').click();
+
+    assert.equal(this.cardFilter.getMql(), '"prop1" IN (1,2)');
+  });
+
+  QUnit.test('testIsForCardPropertyShouldReturnTrueWhenSelectedPropertyIsCardProperty', function (assert) {
+    selectValue(this.cardFilter.property, 'prop1');
+
+    assert.notOk(this.cardFilter.isForCardProperty());
+
+    selectValue(this.cardFilter.property, 'Sprint');
+
+    assert.ok(this.cardFilter.isForCardProperty());
+  });
+
+  QUnit.test('testRemoveShouldRemoveTheFilterIfRemovableAndNotTriggerRemoveCallback', function (assert) {
+    assert.ok(this.cardFilter.htmlContainer.find('.remove-filter')[0]);
+    assert.notOk(this.removedFilter);
+    this.cardFilter.remove();
+
+    assert.ok(this.container.is(':empty'));
+    assert.notOk(this.removedFilter);
+  });
+
+  QUnit.test('testRemoveShouldRemoveTheFilterIfRemovableAndNotTriggerRemoveCallback', function (assert) {
+    assert.ok(this.cardFilter.htmlContainer.find('.remove-filter')[0]);
+    assert.notOk(this.removedFilter);
+    this.cardFilter.remove();
+
+    assert.ok(this.container.is(':empty'));
+    assert.notOk(this.removedFilter);
+  });
+
+  QUnit.test('testShouldSelectInitialPropertyOperatorAndValueWhenInitialDataIsGiven', function (assert) {
+    this.container.empty();
+    var data = {
+      propertyDefinitions: propDefData,
+      projectIdentifier: 'projectIdentifier',
+      initialData: {property: 'Sprint', values: [['#4 Sprint X', '4'],['#2 Sprint Two', '2']], operator: operators.ne[0]}
+    };
+    this.cardFilter = new MingleUI.EasyCharts.CardFilter(1, 'card_filter', data);
+    this.container.append(this.cardFilter.htmlContainer);
+
+    assert.equal(this.cardFilter.property._valueContainer.text(), 'Sprint');
+    assert.equal(this.cardFilter.property.value(), 'Sprint');
+    assert.equal(this.cardFilter.value.htmlContainer.find('ul.options-container').text(), '#4 Sprint X#2 Sprint TwoSelect a card');
+    assert.ok(this.cardFilter.isValid());
+  });
+
+
+  QUnit.test('testShouldInitializeDisabledFilter', function (assert) {
+    this.container.empty();
+    var data = {
+      propertyDefinitions: {},
+      projectIdentifier: 'projectIdentifier',
+      disabled:true
+    };
+    this.cardFilter = new MingleUI.EasyCharts.CardFilter(1, 'card_filter', data);
+    this.container.append(this.cardFilter.htmlContainer);
+
+    assert.equal(this.cardFilter.property._valueContainer.text(), '(select)');
+    assert.equal(this.cardFilter.operator._valueContainer.text(), 'is');
+    assert.equal(this.cardFilter.value.htmlContainer.text(), '(any)');
+    assert.notOk(this.cardFilter.property.value());
+    assert.equal(this.cardFilter.value.htmlContainer.find('ul.options-container').text(), '');
+    assert.notOk(this.cardFilter.isValid());
+    assert.ok(this.cardFilter.property.htmlContainer.hasClass('disabled'));
+    assert.ok(this.cardFilter.value.htmlContainer.hasClass('disabled'));
+    assert.ok(this.cardFilter.operator.htmlContainer.hasClass('disabled'));
+  });
+
+</script>
+</body>
+</html>

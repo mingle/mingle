@@ -1,0 +1,45 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<tr class="<%= cycle('even', 'odd')%>" id="source_list_<%= node.name %>">
+  <% if node.dir? -%>
+  	<td> 	<%= link_to node.name, {:path => node.path_components, :rev => view_revision}, {:class => 'folder node-link'} %> </td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td class="last">&nbsp;</td>	
+	
+	<% else -%>
+	
+  	<td><%= link_to node.name, {:path => node.path_components, :rev => view_revision}, { :class => 'file node-link'} %> </td>
+  	
+  	<td> <%=h node.file_info.head_rev %></td>
+
+  	<td style='text-align:right'><%= h node.file_length %>&nbsp;</td>
+  	
+  	<td><%= time_ago_in_words node.last_modified_time %></td>
+  	
+  	<td>
+  	  <%= link_to h(node.file_info.head_change), changelist_url(:rev => node.file_info.head_change) %>
+  	</td>
+    
+    <td><%=h node.file_info.head_action %></td>
+    
+    <td class="last"><%=replace_card_links(h(node.file_info.head_type)) %></td>
+  <% end -%>
+</tr>

@@ -1,0 +1,192 @@
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+v1<?xml version="1.0"?>
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Card Types API">
+	
+	<section title="Card types">
+		<p>Card types are the various things you track in your project. For example a newly started project under active development could have card types such as story, risk, defect etc.,  while a project in maintenance mode might have bug, issue, enhancement, feature request etc. The card types API allows you to get access to the card types that are available in your project and their associated card properties.</p>
+	</section>
+
+	<section title = "Structure of a card type resource">
+		<p>The structure of the card type resource, and its attributes are described below, along with their data types. Also included with each attribute is whether you are allowed to update the value. </p>
+
+		<api_attributes title="card type resource xml - attributes">
+			<api_attribute name="id" type="Integer" readonly="true">the system generated id for a card type.</api_attribute>
+			<api_attribute name="name" type="String" />
+			<api_attribute name="color" type="String">the color of the card type in RGB color model.</api_attribute>
+			<api_attribute name="position" type="Integer">the order of the card type in a project. User can change this position.</api_attribute>
+			<api_attribute name="property_definitions" type="Array">return attributes of the properties that are available for this card type, with a link to the full property definition resource.</api_attribute>
+	  </api_attributes>
+	</section>
+	
+  	<section title = "Get all card types that exist in a project">
+		<p>You can get card types that are available in a project. Any properties that are available for each card type will be provided as well.</p>
+
+	    <p><strong>Reference</strong></p>
+	    <code>
+	      Request Method: GET
+	      URL: /api/v2/projects/project_identifier/card_types.xml
+	      Parameters: N/A
+	    </code>
+
+	    <p><strong>Example</strong></p>
+	    <code>
+	      GET
+
+	      http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/card_types.xml
+
+	    </code>
+
+	    <p><strong>Explanation</strong></p>
+	    <p>The above is an example of a GET to list all card types that exist in a project with identifier "test_project". The request is made with the authorization credentials of yourname/password.</p>
+
+		<p><strong>Result</strong></p>
+	    <p>If you were authorized to perform the operation, and the resource was available, you should get an xml document that looks something like the following.</p>
+	
+		<code>
+<![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<card_types type="array">
+  <card_type>
+    <id type="integer">32</id>
+    <name>Story</name>
+    <color>#c526ff</color>
+    <position type="integer">1</position>
+    <property_definitions type="array">
+      <property_definition url="http://localhost:8080/api/v2/projects/simple/property_definitions/107.xml">
+        <name>Status</name>
+        <position nil="true"></position>
+        <data_type>string</data_type>
+        <is_numeric type="boolean">false</is_numeric>
+      </property_definition>
+      <property_definition url="http://localhost:8080/api/v2/projects/simple/property_definitions/109.xml">
+        <name>Priority</name>
+        <position nil="true"></position>
+        <data_type>string</data_type>
+        <is_numeric type="boolean">false</is_numeric>
+      </property_definition>
+    </property_definitions>
+  </card_type>
+  <card_type>
+    <id type="integer">33</id>
+    <name>Bug</name>
+    <color>
+    </color>
+    <position type="integer">2</position>
+    <property_definitions type="array">
+      <property_definition url="http://localhost:8080/api/v2/projects/simple/property_definitions/107.xml">
+        <name>Status</name>
+        <position nil="true"></position>
+        <data_type>string</data_type>
+        <is_numeric type="boolean">false</is_numeric>
+    </property_definitions>
+  </card_type>
+</card_types>
+
+	        ]]>
+	      </code>
+	
+	</section>
+	
+	<section title = "Get a single card type">
+	    <p><strong>Reference</strong></p>
+	    <code>
+	      Request Method: GET
+	      URL: /api/v2/projects/project_identifier/card_types/card_type_id.xml
+	      Parameters: NA
+	    </code>
+
+	    <p><strong>Example</strong></p>
+	    <code>
+	      GET
+
+	      http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/card_types/32.xml
+
+	    </code>
+
+	    <p><strong>Explanation</strong></p>
+	    <p>The above is an example of a GET to list a card type with the id 32; in a project with the identifier "test_project". The request is made with the authorization credentials of yourname/password.</p>
+
+		<p><strong>Result</strong></p>
+	    <p>If you were authorized to perform the operation, and the resource was available, you should get an xml document that looks something like the following.</p>
+	
+		<code>
+	<![CDATA[
+    <?xml version="1.0" encoding="UTF-8"?>
+    <card_type>
+      <id type="integer">32</id>
+      <name>Story</name>
+      <color>#c526ff</color>
+      <position type="integer">1</position>
+      <property_definitions type="array">
+        <property_definition url="http://localhost:8080/api/v2/projects/simple/property_definitions/107.xml">
+          <name>Status</name>
+          <position nil="true"></position>
+          <data_type>string</data_type>
+          <is_numeric type="boolean">false</is_numeric>
+        </property_definition>
+        <property_definition url="http://localhost:8080/api/v2/projects/simple/property_definitions/109.xml">
+          <name>Priority</name>
+          <position nil="true"></position>
+          <data_type>string</data_type>
+          <is_numeric type="boolean">false</is_numeric>
+        </property_definition>
+      </property_definitions>
+    </card_type>
+  	  ]]>
+      	</code>
+	</section>
+
+	<section title= "Create a card type">
+	    <p><strong>Reference</strong></p>
+	    <code>
+	      Request Method: POST
+	      URL: /api/v2/projects/project_identifier/card_types.xml
+	      Parameters: 
+	         card_type[name]: Required
+	         card_type[property_definitions][][name]: String
+	         card_type[color]
+	    </code>
+
+	    <p><strong>Example</strong></p>
+	    <code>
+          POST
+
+          http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/card_types.xml
+	
+          card_type[name]=Story
+          card_type[property_definitions][][name]=Status
+          card_type[color]=red
+	    </code>
+
+	    <p><strong>Explanation</strong></p>
+	    <p> The above is an example of a POST request to a Mingle server running at your.mingle.server, port 8080. The request is made with the authorization credentials of yourname/password. Upon execution of this request, the post parameters will be used to create a card type on the project with identifier "test_project". The card type name will be "Story" and the card type color will be "red". The card type will also be associated with the "Status" card property.</p>
+
+		<hint>You can assign multiple card properties by providing multiple card property parameters when you create a new card type.</hint>
+		
+		<hint>Just like in Mingle, the color parameter accepts the '# + hex' format.</hint>
+		
+		<p><strong>Result</strong></p>
+	    <p>If you were authorized to perform the operation, and the operation succeeded, you will be returned a location attribute in the http header of the response, which is a url from which you can get the card type resource that was created.
+		</p>
+		
+	</section>
+
+
+
+</topic>

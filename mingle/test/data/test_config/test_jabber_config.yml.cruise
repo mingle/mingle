@@ -1,0 +1,4 @@
+host: fmtstdmngjab02.thoughtworks.com
+conference_service: <%= ENV['HOSTNAME'].split(".").first %>.fmtstdmngjab02
+mingle_server_bot_login: mingle.robot
+mingle_server_bot_password: tw0rk3r

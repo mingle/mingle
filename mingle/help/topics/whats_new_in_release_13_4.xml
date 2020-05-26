@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="What's new in Release 13.4">
+	<p>Please review the <cref topic="upgrading_from_previous_versions">upgrade instructions</cref> before moving to Mingle 13.4.</p>
+	<section title="Grid view direct manipulation">
+	  <p>Focusing on usability around our grid view, we've made a lot of great changes to improve your experience using it as your central work space. With 13.4 you can now do the following with direct manipulation:</p>
+	    <bullets>
+	      <bullets>
+	        <item>Add a new column</item>
+	        <item>Show an existing column</item>
+	        <item>Hide a column</item>
+	        <item>Reorder columns</item>
+	        <item>Edit column name</item>
+	      </bullets>
+	    </bullets>
+	    <screenshot src="resources/images/new_gridview.png" />
+	  <p>Learn more about how to <cref topic="what_you_can_do_on_the_grid_view#update_columns">update your columns</cref>.</p>
+	</section>
+
+	<section title="One click to save a tab">
+	  <p>You can now save or reset a tab view with a single click:</p>
+	    <screenshot src="resources/images/new_tab.png" />
+	  <p>Read more about <cref topic="managing_favorites_and_tabs">managing favorites and tabs</cref>.</p>
+	</section>
+
+	<section title="Preview image on grid view">
+	  <p>Have a mock-up that captures the gist of your story? Now you can see it in the mini card preview on the <cref topic="what_you_can_do_on_the_grid_view#view_cards">grid view</cref>.</p>
+	  <screenshot src="resources/images/mini_card_image_preview.png" />
+	</section>
+
+
+
+
+	<section title="New project creation page">
+	  <p>When you <cref topic="creating_mingle_projects">create a new project</cref>, you'll now see updated graphics for our <cref topic="standard_mingle_templates">standard templates</cref>. Easy visuals can help you decide which template may be best for your team to get started. You can always change whatever template you choose as your team's process evolves.</p>
+	      <screenshot src="resources/images/new_project.png" />
+	</section>
+
+	<section title="Performance Improvements">
+	  <p>We've refactored how we process resource intensive jobs, including <cref topic ="markup_daily_history_chart">daily history charts</cref>, <cref topic ="subscribing_via_email">email notifications</cref>, and <cref topic ="check_status_and_progress#schedule_changes">objective forecasting charts</cref>. With these performance improvements, you should now see these jobs are completed and rendered faster.</p>
+	</section>
+
+	<section title="End of life Oracle 10g">
+	  <p>With Mingle 13.4, ThoughtWorks Studios will no longer provide support for Oracle 10g. Please read the full <exref url="http://support.thoughtworks.com/entries/22084495-End-of-life-for-Oracle-10g-support-in-Mingle-Onsite-13-4">community announcement</exref> for details.</p>
+	</section>
+
+	<section title="Bug Fixes">
+	    <p>The following bugs have been fixed with 13.4:</p>
+		     <bullets>
+		       <bullets>
+		            <item>Export and import a project from postgresql to oracle with a long user property definition name will have 5xx error on card show page</item>
+                <item>Project export threading issue cause create project from template failure</item>
+                <item>[LDAP] Parentheses in Full Name When Using Group Authorization</item>
+                <item>Creating charts and table link is broken</item>
+                <item>Attachment url validation does not work for additional attachments dir</item>
+                <item>CKEditor does not cache js/imgs when there is no changes</item>
+                <item>Incorrect mime.type for .xlsx and .docx files e.g. new Excel and Doc file formats not stored correctly</item>
+                <item>Migrating to WYSIWYG breaks with URL having macro embedded</item>
+                <item>Could not find Objective by ID</item>
+                <item>Sign in name on password recovery page is case sensitive</item>
+                <item>Project export fails due to problem resetting column information</item>
+                <item>Prevent double save on project edit</item>
+                <item>Undefined method [] for nil:NilClass on dependency tracker on card default</item>
+                <item>Property values with comma cannot be added in the grid view lane</item>
+                <item>'Prevention from clickjacking/UI Dressing attacks' on Mingle app</item>
+                <item>XSS security vulnerability for view name</item>
+                <item>Delete obsolete card types</item>
+                <item>Secure cookies</item>
+                <item>‘&amp;’ is not recognized when creating a favorite view</item>
+                <item>Side panel does not remember user preference</item>
+                <item>Property values with comma cannot be added in the grid view lane</item>
+                <item>Prevent from clickjacking/UI dressing attacks on mingle</item>
+
+		       </bullets>
+		     </bullets>
+	</section>
+</topic>

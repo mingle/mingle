@@ -1,0 +1,37 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= content_tag :div, :class => "profile_utilities", :"data-recent-users" => users_data(User.current.recent_users(@project)).to_json, :"data-user-display-preference-url" => update_user_display_preference_path do %>
+  <ul class="<%= User.current.anonymous? ? 'login-panel' : '' %>">
+    <% unless User.current.anonymous? -%>
+      <li id="current-user" class="current-user">
+        <% if MingleConfiguration.show_holiday_fun?(user_preference(:i_hate_holidays)) && MingleConfiguration.latest_holiday_name == 'movember' %>
+          <%= link_to "#{content_tag(:div, "#{image_tag_for_user_icon(User.current)} #{image_tag('/images/moustache.png', :class => 'moustache')}".html_safe, :class => 'holiday_profile')} #{content_tag(:span, h(User.current.name))}".html_safe,
+                      {:controller => 'profile', :action => 'show', :id => User.current }, {:class => 'profile', :title => 'Profile for ' + User.current.name } %>
+        <% else %>
+          <%= link_to "#{image_tag_for_user_icon(User.current)} #{content_tag(:span, h(User.current.name))}".html_safe, user_profile_path(User.current.id), { :class => 'profile', :title => 'Profile for ' + User.current.name } %>
+        <% end %>
+      </li>
+      <li class="logout">
+        <%= link_to 'Sign out', logout_profile_path, { :id => 'logout', :accesskey => 'l' } %>
+      </li>
+    <% else %>
+      <li id="login">
+        <%= link_to('Sign in', login_profile_path(:'return-to' => params), {:id => 'nav-login', :accesskey => 'l', :class => 'sign-in'}) unless disallow_sign_in? %>
+      </li>
+    <% end -%>
+  </ul>
+<% end -%>

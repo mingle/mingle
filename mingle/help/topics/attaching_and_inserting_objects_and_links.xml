@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Attaching and inserting objects and links">
+    <section title="Introduction">  
+      <bullets title="While editing a Mingle card, dependency, or page, you can:">   
+            <item>Attach links to websites, cards, dependencies, and pages</item>
+            <item>Insert images and other graphics</item>
+            <item>Attach other files (e.g. Microsoft Word documents)</item>
+      </bullets>
+      <subsection title="Attachments" file="markup_attach_file" collapsed="true"/>
+      <subsection title="Images" file="markup_inline_image" collapsed="true"/>
+      <subsection title="Links" file="markup_linking" collapsed="true"/>
+    </section>
+</topic>
+
+

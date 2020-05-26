@@ -1,0 +1,173 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>JavaScript unit test file</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+
+  <script src="test_assets/unittest.js" type="text/javascript"></script>
+  <script src="test_assets/unittest_ext.js" type="text/javascript"></script>
+
+  <script src="../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/controls.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/builder.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+
+  <script src="../../public/javascripts/application.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/card_list_view/rails_params.js" type="text/javascript"></script>
+
+  <link rel="stylesheet" href="assets/unittest.css" type="text/css" />
+  <link rel="stylesheet" href="test_assets/unittest.css" type="text/css" />
+</head>
+<body>
+
+<div id="content">
+
+  <div id="header">
+    <h1>JavaScript unit test file</h1>
+    <p>
+      This file tests RailsParams in <strong>card_list_view</strong>.
+    </p>
+  </div>
+
+  <!-- Log output -->
+  <div id="testlog"> </div>
+
+  <div id='sandbox'>
+    <h3> sandbox: </h3>
+  </div>
+
+</div>
+
+<script type="text/javascript">
+
+
+// <![CDATA[
+  new Test.Unit.Runner({
+    testGenerateQueryStringForPlainKeyValue: function() { with(this) {
+      assertEqual("a=b&c=d", new RailsParams({'a': 'b', 'c': 'd'}).toQueryString());
+    }},
+
+    testGenerateQueryStringForBooleanValue: function() { with(this) {
+      assertEqual("a=true", new RailsParams({'a': true }).toQueryString());
+    }},
+
+    testGenerateQueryStringForArrayValue: function() { with(this) {
+      assertEqual("a[]=b&a[]=c", new RailsParams({'a': ['b', 'c']}).toQueryString());
+    }},
+
+    testGenerateQueryStringForHashValue: function() { with(this) {
+      assertEqual("a[b]=c", new RailsParams({'a': {'b': 'c'}}).toQueryString());
+    }},
+
+    testGenerateQueryStringForNestedHashValue: function() { with(this) {
+      assertEqual("a[b][d]=2&a[c][e]=3", new RailsParams({'a': {'b': {d:2},'c':{e:3}}}).toQueryString());
+    }},
+
+    testShouldEncodingKeyForQueryString: function() { with(this) {
+      assertEqual("a%25=b", new RailsParams({'a%': 'b'}).toQueryString());
+    }},
+
+    testShouldEncodingValueForQueryString: function() { with(this) {
+      assertEqual("a=b%25", new RailsParams({'a': 'b%'}).toQueryString());
+    }},
+
+    testShouldEncodingArrayValueForQueryString: function() { with(this) {
+      assertEqual("a[]=b%25&a[]=c%25", new RailsParams({'a': ['b%', 'c%']}).toQueryString());
+    }},
+
+    testShouldEncodingHashKeyAndValueForQueryString: function() { with(this) {
+      assertEqual("a[b]=c%25", new RailsParams({'a': {'b': 'c%'}}).toQueryString());
+      assertEqual("a[b%25]=c", new RailsParams({'a': {'b%': 'c'}}).toQueryString());
+    }},
+
+    testShouldIgnoreBlankValue: function() { with(this) {
+      assertEqual("", new RailsParams({'a': undefined}).toQueryString());
+      assertEqual("b=c", new RailsParams({'a': undefined, 'b': 'c'}).toQueryString());
+      assertEqual("b=c", new RailsParams({'a': null, 'b': 'c'}).toQueryString());
+      assertEqual("b=c", new RailsParams({'a': '', 'b': 'c'}).toQueryString());
+      assertEqual("b=c", new RailsParams({'a': '  ', 'b': 'c'}).toQueryString());
+    }},
+
+    testMergeGenerateAnotherRailsParamsWithValueOverwrite: function(){with(this) {
+      assert(new RailsParams({'a': 'x', 'c': 'd'}).equal(new RailsParams({'a': 'b', 'c': 'd'}).merge({'a': 'x'})));
+    }},
+
+    testMergeShouldAddNewValueIfKeyNotExist: function() {with(this){
+      assert(new RailsParams({'a': 'b', 'c': 'd', 'e': 'f'}).equal(new RailsParams({'a': 'b', 'c': 'd'}).merge({'e': 'f'})));
+    }},
+
+    testMergeNothingShouldReturnSameArray: function() { with(this) {
+      assert(new RailsParams({'a': 'b', 'c': 'd'}).equal(new RailsParams({'a': 'b', 'c': 'd'}).merge(undefined)));
+      assert(new RailsParams({'a': 'b', 'c': 'd'}).equal(new RailsParams({'a': 'b', 'c': 'd'}).merge(null)));
+      assert(new RailsParams({'a': 'b', 'c': 'd'}).equal(new RailsParams({'a': 'b', 'c': 'd'}).merge({})));
+    }},
+
+    testExcludeShouldCreateNewParamArrayWithoutExcludedKeys: function() { with(this) {
+      assert(new RailsParams({'a': 'b'}).equal(new RailsParams({'a': 'b', 'c': 'd'}).exclude(['c'])));
+    }},
+
+    testExcludeNothingShouldReturnSameArrary: function() { with(this) {
+      assert(new RailsParams({'a': 'b', 'c': 'd'}).equal(new RailsParams({'a': 'b', 'c': 'd'}).exclude(undefined)));
+      assert(new RailsParams({'a': 'b', 'c': 'd'}).equal(new RailsParams({'a': 'b', 'c': 'd'}).exclude(null)));
+      assert(new RailsParams({'a': 'b', 'c': 'd'}).equal(new RailsParams({'a': 'b', 'c': 'd'}).exclude([])));
+    }},
+
+    testExcludeKeyNotIncludedArrayShouldReturnSameArray: function() { with(this) {
+      assert(new RailsParams({'a': 'b'}).equal(new RailsParams({'a': 'b'}).exclude(['c'])));
+    }},
+
+    testIteratorPlainKeyValueParams: function() { with(this) {
+      var iteratoredParams = $A();
+      new RailsParams({'a': 'b', 'c': 'd'}).each(function(pair){
+        iteratoredParams.push(pair);
+      })
+      var expected = Object.toJSON([['a', 'b'], ['c', 'd']]);
+      var actual = Object.toJSON(iteratoredParams);
+      assertEqual(expected, actual);
+    }},
+
+    testIteratorArrayValueParams: function() { with(this) {
+      var iteratoredParams = $A();
+      new RailsParams({'a': ['b', 'c']}).each(function(pair){
+        iteratoredParams.push(pair);
+      })
+      var expected = Object.toJSON([['a[]', 'b'], ['a[]', 'c']]);
+      var actual = Object.toJSON(iteratoredParams);
+      assertEqual(expected, actual);
+    }},
+
+    testShouldNotEncodeWhenIterateParams: function() { with(this) {
+      var iteratoredParams = $A();
+      new RailsParams({'a': 'b%'}).each(function(pair){
+        iteratoredParams.push(pair);
+      });
+      var expected = Object.toJSON([['a', 'b%']]);
+      var actual = Object.toJSON(iteratoredParams);
+      assertEqual(expected, actual);
+    }},
+
+  }, { testLog: "testlog", test: ""});
+// ]]>
+</script>
+</body>
+</html>

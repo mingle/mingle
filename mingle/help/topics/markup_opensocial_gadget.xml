@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="OpenSocial gadget macro">
+  <markup_reference title="This macro allows the display of an OpenSocial gadget within a Mingle card or page. This macro can also be useful when troubleshooting the display of Go content in Mingle.">
+    <markup>
+      gadget
+        url: http://hosting.gmodules.com/ig/gadgets/file/112581010116074801021/hamster.xml
+        view: home
+        _noCache: 1
+        _debug: 1
+        preferences:
+          bgColor: orange
+    </markup>
+    
+    <p>If the provider of the gadget content is using OAuth 2.0 to protect that content, your Mingle administrator can <cref topic="configuring_oauth_enabled_gadgets"> configure Mingle to act as an OAuth 2.0 capable rendering server</cref> in order to allow your Mingle users to access the protected gadget content.</p>
+    
+    <p>At this point in time, Mingle does not support the rendering of gadgets protected by version 1.0a of OAuth.</p> 
+    
+    <p><cref topic="what_is_opensocial">What is OpenSocial?</cref></p>
+    
+    <table caption="Parameters">
+      <header-row>
+        <col-header>Name</col-header>
+        <col-header>Meaning</col-header>
+        <col-header>Required</col-header>
+        <col-header>Default value</col-header>
+      </header-row> 
+      <row>
+        <label>url</label>
+        <col>The URL for the gadget specification XML</col>
+        <col>Yes</col>
+        <col>N/A</col>
+      </row>
+      <row>
+        <label>view</label>
+        <col>The specified view for the gadget.</col>
+        <col>It depends. Only some gadgets make use of this parameter.</col>
+        <col>N/A</col>
+      </row>
+      <row>
+        <label>_noCache</label>
+        <col>Whether to use the gadget rendering server's cache of static content, including the gadget spec XML. It is highly recommended to only use this when troubleshooting. Setting this to 1 will severely degrade Gadget and overall Mingle performance. Valid values are 0 and 1.</col>
+        <col>No</col>
+        <col>0</col>
+      </row>		
+      <row>
+        <label>_debug</label>
+        <col>Whether to show detailed error messages. It is highly recommended to only use this when troubleshooting. Valid values are 0 and 1.</col>
+        <col>No</col>
+        <col>0</col>
+      </row>		
+      <row>
+        <label>preferences</label>
+        <col>Any additional gadget settings, known as user preferences. Note that the preferences must be indented by 2 spaces as is common with Mingle macro markup.</col>
+        <col>Depends upon the individual gadget's requirements.</col>
+        <col>N/A</col>
+      </row>		
+      		
+    </table>
+      
+  </markup_reference>
+          
+</topic>

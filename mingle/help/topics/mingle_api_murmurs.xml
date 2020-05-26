@@ -1,0 +1,412 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Murmurs API">
+  	<section title="Murmurs">
+    <p>Once enabled for your project, the <cref topic="murmurs">murmurs</cref> API can be used to get any Murmurs that are posted to your project and also create a new murmur.</p>
+	<note>
+		<bullets>
+			<item>None of the Murmurs API capability is available if Murmurs is disabled for your project.</item>
+			<item>Please note that all POST and PUT requests must be in XML format by default. This is not illustrated in the examples here. To specify parameters as shown in the examples you will have to set the request header for Content-Type to "application/x-www-form-urlencoded".</item>
+		</bullets>	
+	</note>	
+    </section>
+	
+	<section title = "Structure of a murmurs resource">
+		<p>The structure of the murmurs resource, and its attributes are described below, along with their data type. Also included with each attribute is whether you are allowed to update the value. </p>
+	
+    <api_attributes title="murmurs resource xml - attributes">
+      <api_attribute name="id" type="Integer" readonly="true">the system generated id for a murmur. This id is globally unique.</api_attribute>
+      <api_attribute name="author" type="Resource">details of the user who has created a murmur.</api_attribute>
+      <api_attribute name="body" type="String">the content of a murmur</api_attribute>
+      <api_attribute name="created_at" type="Datetime" readonly="true">date and time of a murmur creation.</api_attribute>
+      <api_attribute name="is_truncated" type="Boolean">indicates if the murmur body is truncated. If the body is truncated, you will need to request that specific murmur to see the full murmur body.</api_attribute>
+    </api_attributes>
+		    
+	</section>
+
+	<section title = "Post a new murmur">
+		<p><strong>Reference</strong></p>
+		<code>
+			Request Method: POST
+			URL: /api/v2/projects/project_identifier/murmurs.xml
+			Parameters: 
+
+			murmur[body]: String.
+        </code>
+
+		<p><strong>Example</strong></p>
+		<code>
+		  POST
+
+		  http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/murmurs.xml
+
+		  murmur[body]="hello there"
+		</code>
+		
+		<p><strong>Explanation</strong></p>
+		<p>The above is an example of a POST to create a new murmur in a project with identifier "test_project". The request is made with the authorization credentials of yourname/password.</p>
+		
+		<p><strong>Result</strong></p>
+		<p>If you were authorized to perform the operation, and the resource was available, you should get an xml document that looks something like the following.</p>
+		
+		<code>
+		<![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<murmur>
+  <id type="integer">83</id>
+  <author url="http://localhost:8080/api/v2/users/1.xml">
+    <id type="integer">1</id>
+    <name>bonna</name>
+    <login>bonna</login>
+    <email>bonna@youremail.com</email>
+    <light type="boolean">false</light>
+    <icon_path>/user/icon/1/bonnafide.jpg</icon_path>
+    <activated type="boolean">true</activated>
+    <admin type="boolean">true</admin>
+    <version_control_user_name>bonna</version_control_user_name>
+  </author>
+  <body>hello there</body>
+  <created_at type="datetime">2009-10-30T10:03:12Z</created_at>
+  <is_truncated type="boolean">false</is_truncated>
+</murmur>
+]]>
+        </code>
+    </section>
+
+	<section title = "Get a list of murmurs">
+		<p>You can list all murmurs that are posted to your projects.</p>
+		<p><strong>Reference</strong></p>
+		<code>
+		  Request Method: GET
+		
+		  URL: /api/v2/projects/project_identifier/murmurs.xml
+		  
+		  Parameters: NA
+		</code>
+
+		<p><strong>Example</strong></p>
+		<code>
+		  GET
+
+		  http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/murmurs.xml
+		</code>
+		<p><strong>Explanation</strong></p>
+		<p>The above is an example of a GET to list all murmurs in a project with identifier "test_project". The request is made with the authorization credentials of yourname/password.</p>
+
+		<p><strong>Result</strong></p>
+		<p>If you were authorized to perform the operation, and the resource was available, you should get an xml document that looks something like the following.</p>
+		<code>
+<![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<murmurs type="array">
+  <murmur>
+    <id type="integer">83</id>
+    <author url="http://localhost:8080/api/v2/users/1.xml">
+      <id type="integer">1</id>
+      <name>bonna</name>
+      <login>bonna</login>
+      <email>bonna@youremail.com</email>
+      <light type="boolean">false</light>
+      <icon_path>/user/icon/1/bonnafide.jpg</icon_path>
+      <activated type="boolean">true</activated>
+      <admin type="boolean">true</admin>
+      <version_control_user_name>bonna</version_control_user_name>
+    </author>
+    <body>hello there</body>
+    <created_at type="datetime">2009-10-30T10:03:12Z</created_at>
+    <is_truncated type="boolean">false</is_truncated>
+  </murmur>
+   ...
+  <murmur>
+    <id type="integer">71</id>
+    <author url="http://localhost:8080/api/v2/users/2.xml">
+      <id type="integer">2</id>
+      <name>gilbert</name>
+      <login>gilbert</login>
+      <email>gilbert@youremail.com</email>
+      <light type="boolean">false</light>
+      <icon_path>/user/icon/2/gilbert.jpg</icon_path>
+      <activated type="boolean">true</activated>
+      <admin type="boolean">true</admin>
+      <version_control_user_name nil="true">gilbert</version_control_user_name>
+    </author>
+    <body>Story #1 is dev complete.</body>
+    <created_at type="datetime">2009-10-28T09:10:59Z</created_at>
+    <is_truncated type="boolean">false</is_truncated>
+  </murmur>
+</murmurs>
+]]>
+	    </code>
+</section>
+	
+	<section title = "Get a single murmur">
+		<p><strong>Reference</strong></p>
+		<code>
+		  Request Method: GET
+		
+		  URL: /api/v2/projects/project_identifier/murmurs/murmur_id.xml
+		  
+		  Parameters: NA
+		</code>
+		
+		<p><strong>Example</strong></p>
+		<code>
+		  GET
+
+		  http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/murmurs/71.xml
+		</code>
+		<p><strong>Explanation</strong></p>
+		<p>The above is an example of a GET to view a specific murmur with an id of 71 in a project with identifier "test_project". The request is made with the authorization credentials of yourname/password.</p>
+
+		<p><strong>Result</strong></p>
+		<p>If you were authorized to perform the operation, and the resource was available, you should get an xml document that looks something like the following.</p>
+		<code>
+	<![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<murmur>
+  <id type="integer">71</id>
+  <author url="http://localhost:8080/api/v2/users/2.xml">
+    <id type="integer">2</id>
+    <name>gilbert</name>
+    <login>gilbert</login>
+    <email>gilbert@youremail.com</email>
+    <light type="boolean">false</light>
+    <icon_path>/user/icon/2/gilbert.jpg</icon_path>
+    <activated type="boolean">true</activated>
+    <admin type="boolean">true</admin>
+    <version_control_user_name nil="true">gilbert</version_control_user_name>
+  </author>
+  <body>Story #1 is dev complete.</body>
+  <created_at type="datetime">2009-10-28T09:10:59Z</created_at>
+  <is_truncated type="boolean">false</is_truncated>
+</murmur>
+]]>
+		</code>
+    </section>
+	
+	<section title = "Get a list of murmurs that are associated with a specific card">
+		<p>Any murmurs that contain the 'card keyword + card number', e.g. story 1, #1, will appear on that cards' "Murmurs" section. </p>
+		<note>The tab called "Murmurs" will only appear if Murmurs is enabled for your project.</note>
+		<p><strong>Reference</strong></p>
+		<code>
+		  Request Method: GET
+
+		  URL: /api/v2/projects/project_identifier/cards/card_number/murmurs.xml
+
+		  Parameters: NA
+		</code>
+
+		<p><strong>Example</strong></p>
+		<code>
+		  GET
+
+		  http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/cards/1/murmurs.xml
+		</code>
+		<p><strong>Explanation</strong></p>
+		<p>The above is an example of a GET to list all murmurs on a card with a <strong>card number</strong> of 1 in project with identifier "test_project". The request is made with the authorization credentials of yourname/password.</p>
+
+		<p><strong>Result</strong></p>
+		<p>If you were authorized to perform the operation, and the resource was available, you should get an xml document that looks something like the following. </p>
+		<code>
+<![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<murmurs type="array">
+  <murmur>
+    <id type="integer">82</id>
+    <author url="http://localhost:8080/api/v2/users/3.xml">
+      <id type="integer">3</id>
+      <name>brad</name>
+      <login>brad</login>
+      <email>brad@youremail.com</email>
+      <light type="boolean">false</light>
+      <icon_path nil="true"></icon_path>
+      <activated type="boolean">true</activated>
+      <admin type="boolean">false</admin>
+      <version_control_user_name nil="true"></version_control_user_name>
+    </author>
+    <body>I completed testing for a story #1.</body>
+    <created_at type="datetime">2009-10-30T09:29:44Z</created_at>
+    <is_truncated type="boolean">false</is_truncated>
+  </murmur>
+   ...
+  <murmur>
+    <id type="integer">71</id>
+    <author url="http://localhost:8080/api/v2/users/2.xml">
+     <id type="integer">2</id>
+     <name>gilbert</name>
+     <login>gilbert</login>
+     <email>gilbert@youremail.com</email>
+     <light type="boolean">false</light>
+     <icon_path>/user/icon/2/gilbert.jpg</icon_path>
+     <activated type="boolean">true</activated>
+     <admin type="boolean">true</admin>
+     <version_control_user_name nil="true">gilbert</version_control_user_name>
+    </author>
+    <body>Story #1 is dev complete.</body>
+    <created_at type="datetime">2009-10-28T09:10:59Z</created_at>
+    <is_truncated type="boolean">false</is_truncated>
+  </murmur>
+</murmurs>
+]]>
+		</code>
+    </section>
+
+	<section title = "Get a list of murmurs since a specific murmur">
+
+		<p><strong>Reference</strong></p>
+		<code>
+    Request Method: GET
+
+    URL: /api/v2/projects/project_identifier/murmurs.xml
+
+    Parameters:
+    since_id: murmur id
+		</code>
+
+		<p><strong>Example</strong></p>
+		<code>
+    GET
+
+    http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/murmurs.xml
+
+    since_id=71
+		</code>
+		<p><strong>Explanation</strong></p>
+		<p>The above is an example of a GET to list 25 murmurs in project with identifier "test_project" since the murmur with id 71. The request is made with the authorization credentials of yourname/password.</p>
+
+		<p><strong>Result</strong></p>
+		<p>If you were authorized to perform the operation, and the resource was available, you should get an xml document that looks something like the following. </p>
+		<code>
+<![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<murmurs type="array">
+  <murmur>
+    <id type="integer">106</id>
+    <author url="http://localhost:8080/api/v2/users/3.xml">
+      <id type="integer">3</id>
+      <name>brad</name>
+      <login>brad</login>
+      <email>brad@youremail.com</email>
+      <light type="boolean">false</light>
+      <icon_path nil="true"></icon_path>
+      <activated type="boolean">true</activated>
+      <admin type="boolean">false</admin>
+      <version_control_user_name nil="true"></version_control_user_name>
+    </author>
+    <body>I completed testing for a story #1.</body>
+    <created_at type="datetime">2009-10-30T09:29:44Z</created_at>
+    <is_truncated type="boolean">false</is_truncated>
+  </murmur>
+   ...
+  <murmur>
+     <id type="integer">74</id>
+     <author url="http://localhost:8080/api/v2/users/2.xml">
+       <id type="integer">2</id>
+       <name>gilbert</name>
+       <login>gilbert</login>
+       <email>gilbert@youremail.com</email>
+       <light type="boolean">false</light>
+       <icon_path>/user/icon/2/gilbert.jpg</icon_path>
+       <activated type="boolean">true</activated>
+       <admin type="boolean">true</admin>
+       <version_control_user_name nil="true">gilbert</version_control_user_name>
+     </author>
+     <body>Story #1 is dev complete.</body>
+     <created_at type="datetime">2009-10-28T09:10:59Z</created_at>
+     <is_truncated type="boolean">false</is_truncated>
+  </murmur>
+</murmurs>
+]]>
+		</code>
+    </section>
+	<section title = "Get a list of murmurs before a specific murmur">
+
+		<p><strong>Reference</strong></p>
+		<code>
+    Request Method: GET
+
+    URL: /api/v2/projects/project_identifier/murmurs.xml
+
+    Parameters:
+    before_id: murmur id
+		</code>
+
+		<p><strong>Example</strong></p>
+		<code>
+    GET
+
+    http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/murmurs.xml
+    
+    before_id=71
+		</code>
+		<p><strong>Explanation</strong></p>
+		<p>The above is an example of a GET to list 25 murmurs in project with identifier "test_project" before the murmur with id 71. The request is made with the authorization credentials of yourname/password.</p>
+
+		<p><strong>Result</strong></p>
+		<p>If you were authorized to perform the operation, and the resource was available, you should get an xml document that looks something like the following. </p>
+		<code>
+<![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<murmurs type="array">
+  <murmur>
+    <id type="integer">70</id>
+    <author url="http://localhost:8080/api/v2/users/3.xml">
+      <id type="integer">3</id>
+      <name>brad</name>
+      <login>brad</login>
+      <email>brad@youremail.com</email>
+      <light type="boolean">false</light>
+      <icon_path nil="true"></icon_path>
+      <activated type="boolean">true</activated>
+      <admin type="boolean">false</admin>
+      <version_control_user_name nil="true"></version_control_user_name>
+    </author>
+    <body>I completed testing for a story #1.</body>
+    <created_at type="datetime">2009-10-30T09:29:44Z</created_at>
+    <is_truncated type="boolean">false</is_truncated>
+  </murmur>
+   ...
+  <murmur>
+    <id type="integer">23</id>
+    <author url="http://localhost:8080/api/v2/users/2.xml">
+      <id type="integer">2</id>
+      <name>gilbert</name>
+      <login>gilbert</login>
+      <email>gilbert@youremail.com</email>
+      <light type="boolean">false</light>
+      <icon_path>/user/icon/2/gilbert.jpg</icon_path>
+      <activated type="boolean">true</activated>
+      <admin type="boolean">true</admin>
+      <version_control_user_name nil="true">gilbert</version_control_user_name>
+    </author>
+    <body>Story #1 is dev complete.</body>
+    <created_at type="datetime">2009-10-28T09:10:59Z</created_at>
+    <is_truncated type="boolean">false</is_truncated>
+  </murmur>
+</murmurs>
+]]>
+		</code>
+    </section>
+    <section title="Also see...">
+    <bullets>
+    	<item><cref topic="mingle_api_murmurs_channels">Managing project Murmurs settings via API</cref></item>
+    </bullets>
+    </section>
+
+</topic>

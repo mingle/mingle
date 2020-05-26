@@ -1,0 +1,147 @@
+<html>
+<head>
+<title>Sahi Test Runner</title>
+</head>
+<body>
+<style>
+body * {font-family:verdana;font-size:9pt;}
+td {vertical-align:top; border:1px solid gray;padding:10px;}
+</style>
+<h3>Sahi Integration with Test Management Tools</h3>
+<div>
+<table>
+<tr><td>TestCase</td><td>Run</td><td>Last Run Result</td></tr>
+<tr><td>Check Login Works with test/secret</td><td><a href="http://localhost:9999/_s_/dyn/Suite_startPreconfiguredBrowser?suite=scripts%2Fdemo%2Fintegration.sah&base=http%3A%2F%2Fsahi.co.in%2Fdemo%2Ftraining%2F&browserType=firefox&threads=3&html=logs%2Fplayback%2Fexample&junit=logs%2Fplayback%2Fexample_junit&initJS=%24user%3D'test'%3B%24pwd%3D'secret'%3B&extraInfo=some%20extra%20information" target="hiddenIFrame">Run</a></td><td>Last Run Result</td></tr>
+</table>
+</div>
+
+<br/><br/><hr/><br/><br/>
+
+<h3>Generate URL</h3>
+<form name="runForm" method="post">
+<table>
+<tr><td><b>Sahi test or suite path</b><br/>
+Relative paths are resolved relative to userdata directory
+</td><td>
+<input type="text" name="suite" value="scripts/demo/integration.sah" style="width:300px;"/>
+</td></tr>
+<tr><td><b>Base URL</b>
+<br/>The start URL of the web application under test
+</td><td>
+<input type="text" name="base" value="http://sahi.co.in/demo/training/" style="width:300px;"/>
+</td></tr>
+<tr><td><b>Init JS</b>
+<br/>Javascript that will be evaled before a script is run.
+<br/>Can be used for initializing variables</td><td>
+<input type="text" name="initJS" value="$user='test';$pwd='secret';" style="width:300px;"/>
+</td></tr>
+<tr><td><b>Extra Info</b>
+<br/>Any extra information;
+<br/>Can be used to pass back Test Manager information<br/> like userId, testCaseId etc.
+<br/>This is accessible in the script as _sahi.getExtraInfo()
+</td><td>
+<input type="text" name="extraInfo" value="some extra information" style="width:300px;"/>
+</td></tr>
+</table>
+<br/>
+
+<div id="checkboxes"></div>
+<input type="button" onclick="generateURL()" value="Generate URL"/>
+<input type="button" onclick="run()" value="Run"/>
+<br/>
+<textarea name="runUrl" style="width:700px;height:100px;"></textarea>
+</form>
+<iframe id="iframe1" style="display:none"></iframe>
+<iframe id="hiddenIFrame" name="hiddenIFrame" style="display:none"></iframe>
+<a href="http://localhost:9999/_s_/dyn/Log_viewLogs/example/index.htm" target="_blank">Show logs</a>
+<div id="browser_template" style="display:none">
+<form name="$form_name">
+<fieldset>
+<legend>$name</legend>
+<table>
+<tr><td>Browser executable path</td><td>
+<input type="text" name="browser" value="$exe_path" style="width:500px;"/>
+</td></tr>
+<tr><td>No of threads to run in (for suites)</td><td>
+<input type="text" name="threads" value="3" style="width:30px;"/>
+</td></tr>
+<tr><td>Browser process name</td><td>
+<input type="text" name="browserProcessName" value="$exe"/>
+</td></tr>
+<tr><td>Browser option</td><td>
+<input type="text" name="browserOption" value="$browser_option" style="width:500px;"/>
+</td></tr>
+<tr><td></td><td>
+</td></tr>
+</table>
+</fieldset>
+</form><br/>
+</div>
+
+<script>
+var browsers = new Array();
+browsers[0] = {name:"Firefox", browser_type:"firefox"};
+browsers[1] = {name:"Internet Explorer", browser_type: "ie"};
+browsers[2] = {name:"Chrome", browser_type:"chrome"};
+
+
+
+function $(id){return document.getElementById(id);}
+function hide(id){$(id).style.display="none";}
+function show(id){$(id).style.display="block";}
+function renderBrowserSettings(){	
+	var c = "";    
+	for (var i=0; i<browsers.length; i++){
+		var br = browsers[i];
+		c += '<label><input type="radio" name="browserType" value="'+i+'">'+ br.name +'</label>';
+	}
+	$("checkboxes").innerHTML = c;
+	document.runForm.browserType[0].checked = true;
+}
+renderBrowserSettings();
+function generateURL(){
+	var f = document.runForm;
+	var j = 0;	
+	for (var i=0; i < f.browserType.length; i++) {
+		if (f.browserType[i].checked) {
+			j = i;
+			break;
+		}
+	}
+	var br = browsers[j];
+	var url = "http://localhost:9999/_s_/dyn/Suite_startPreconfiguredBrowser?" +
+	// the path to suite; can be a relative path, relative to userdata directory
+	"suite="+encodeURIComponent(f.suite.value) +
+	// base is the base URL of the web app under test
+	"&base=" + encodeURIComponent(f.base.value) + 
+	// browserType is the name of the browser you wish to use, as described in userdata/config/browser_types.xml
+	"&browserType=" + encodeURIComponent(br.browser_type) + 
+	// Number of concurrent browsers to open when running a suite
+	"&threads=3" +
+	// Directory where logs are to be generated. You can modify it to correspond to your Test Management tool's logs directory
+	// Relative paths are relative to userdata directory
+	"&html=" + encodeURIComponent("logs/playback/example") +
+	// Directory where JUnit style logs are generated
+	// Relative paths are relative to userdata directory
+	"&junit=" + encodeURIComponent("logs/playback/example_junit") +
+	// Any Javascript that needs to be executed before a script. 
+	// If initJS="$x=25" is passed, $x with value 25 will be available to all scripts
+	"&initJS="+ encodeURIComponent(f.initJS.value)+
+	// Any extra information. Is accessible via _sahi.getExtraInfo() 
+	"&extraInfo="+ encodeURIComponent(f.extraInfo.value)+
+	"";
+	
+	f.runUrl.value = url;
+}
+function run(){
+	generateURL();
+	$('iframe1').src = document.runForm.runUrl.value;
+}
+</script>
+<br/>
+<br/>
+
+
+</body>
+</html>
+

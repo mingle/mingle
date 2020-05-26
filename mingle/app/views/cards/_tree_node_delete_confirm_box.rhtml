@@ -1,0 +1,31 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% styled_box(:style => "display:none;", :id => "confirm-box", :class => "confirm-box fake_lightbox") do -%>
+  <div class="lightbox_header">
+  <h2>Remove Card</h2>
+  <a class="popup-close" href="javascript:ConfirmBox.cancel()">close</a></div>
+  <p>
+  Warning: This card has one or more children. You can remove the parent card and its children, or just the parent card.
+  </p>
+  <div class="lightbox_actions">
+    <div class="action-bar">
+      <input type="button" id="family" class="primary" value="Remove Parent and Children" onclick="ConfirmBox.confirm(0)"/>
+      <input type="button" id="parent" id="" value="Remove Parent Card" onclick="ConfirmBox.confirm(1)"/>
+      <input type="button" value="Cancel" onclick="ConfirmBox.cancel()"/>
+    </div>
+  </div>
+<% end -%>

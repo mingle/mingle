@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<section title="What can you do on the Hierarchy view?">
+  <subsection title="Filter cards" file="tree_filter" collapsed="true" />
+  <subsection file="creating_cards_with_quick_add" id="create_cards_using_quick_add" collapsed="true"/>
+  <subsection title="Drill down into the hierarchy" collapsed="true">
+    <p>You can display children cards in the hierarchy by clicking on the show/hide children widget displayed to the left of the name of any card which has children. The expand/collapse state of the show/hide widget will be retained and any <cref topic="creating_a_favorite_card_view">favorites created from the view</cref> will display the widget in the user selected state.</p>
+  </subsection>
+  <subsection title="Add columns to the view" collapsed="true">
+    <p>As in the <cref topic="list_view">List view</cref>, you can add columns to the hierarchy view by clicking on the <link>Add / remove columns</link> in the header.</p>
+    <p>Click on the name of the property you want to add and it will be added to the view. 
+    Clicking on the name of a property which is already displayed will remove it from the view.</p>
+    <note>If a card type in the hierarchy doesn't use a property, a black cell will be displayed for that column next to those cards.</note>
+  </subsection>
+  <subsection title='Sort cards' collapsed="true">
+    <p>As in the <cref topic="list_view">List view</cref>, you can sort the columns to the hierarchy view by clicking on the column header. 
+    <screenshot alttext="Card tree - hierarchy view page, column sort, iterations not shown" src="resources/images/hierarchy_sort_single_iteration.png" /></p>
+    <p> Unlike the list view, when sorting by type specific properties, such as 'planning estimate' which may only apply to stories, if parent levels of the tree are shown, the cards will be sorted within the parent i.e. the hierarchy structure will remain.</p>
+    <screenshot alttext="Card tree - hierarchy view page, column sort, iterations shown" src="resources/images/hierarchy_sort_multiple_iterations.png" />
+  </subsection>
+  <subsection title="Maximize the view" collapsed="true">
+    <p>The card hierarchy view can be viewed in the <cref topic="maximizing_card_views">maximized mode</cref>. This will allow for cleaner, more useful views when working with your Mingle cards.
+    </p>
+  </subsection>
+  <subsection title="Create favorites" id="create_favorite" collapsed="true">
+    <p>If you've found a card hierarchy view that your team will use regularly, you can <cref topic="creating_a_favorite_card_view">save this view</cref>. You can then <cref topic="creating_tabs_from_favorites">turn this into a tab</cref>.</p>
+    <p>You can also create <cref topic="managing_my_favorites">personal favorites</cref> from card hierarchy views.</p>
+  </subsection>
+  <subsection title="Import / Export cards" id="import_export" collapsed="true">
+    <p><cref topic="import_export_component">The Import / Export component</cref> lets you export the cards in the current hierarchy, or import a list of cards from Excel.</p>
+  </subsection>
+</section>

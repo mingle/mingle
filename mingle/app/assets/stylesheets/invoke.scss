@@ -1,0 +1,127 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+#invoke {
+  display: none;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 9000000;
+
+  form {
+    margin: 75px auto;
+    margin-bottom: 10px;
+    width: 50%;
+    background: rgba(50,50,50,0.6);
+    color: #bbb;
+  }
+}
+
+#keyboard-help {
+  display: none;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 9000001;
+
+  .keys {
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-family: "Lucida Console", Monaco, monospace;
+
+    border-radius: 0.5em;
+    border: none;
+    width: 75%;
+    margin: 50px auto;
+    padding: 2em;
+
+    th, td {
+      border: none;
+      background: rgba(0,0,0,0.7);
+      color: yellow;
+      font-weight: 300;
+      font-size: 150%;
+    }
+
+    thead th:only-child {
+      padding: 2em;
+      padding-bottom: 1em;
+      border-radius: 0.5em 0.5em 0 0;
+      padding-bottom: 0;
+      text-align: center;
+    }
+
+    td {
+      padding: 0.5em 2em;
+      padding-left: 1em;
+
+      &.combo {
+        padding-right: 1em;
+        padding-left: 2em;
+        white-space: nowrap;
+      }
+    }
+
+    tbody {
+      tr:last-child td {
+        padding-bottom: 2em;
+      }
+
+      tr:last-child td:first-child {
+        border-radius: 0 0 0 0.5em;
+        padding-left: 2em;
+      }
+
+      tr:last-child td:last-child {
+        border-radius: 0 0 0.5em 0;
+
+      }
+    }
+
+  }
+}
+
+.hotkey-notify {
+  color: #fd0;
+  cursor: pointer;
+
+  // place on upper left corner of keyboard icon
+  margin-top: 0.15em;
+  margin-left: -0.55em;
+
+  // don't alter page flow/layout and don't take any space
+  position: absolute;
+
+  &:before {
+    text-shadow: 0px 0px 10px rgba(255, 221, 2, 0.8);
+  }
+
+  &.fa-spin {
+    -webkit-animation-duration: 5s;
+    animation-duration: 5s;
+  }
+}
+
+// footer button
+.hotkey-help {
+  font-size: 1.5em;
+  line-height: inherit;
+  cursor: pointer;
+}

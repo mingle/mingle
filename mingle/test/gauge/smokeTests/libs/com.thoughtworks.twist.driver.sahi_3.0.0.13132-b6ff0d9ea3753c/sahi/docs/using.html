@@ -1,0 +1,278 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <meta name="generator" content="HTML Tidy, see www.w3.org">
+    <title>Sahi - Record and Playback</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="sahi.css">
+</head>
+
+<body>
+<table width="100%">
+<tr>
+<td width="150px" valign="top">
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+
+    <div class="menu">
+        <ul>
+            <li><a href="index.html">Introduction</a></li>
+            <!--<li><a href="index.html#features">Features</a></li>-->
+
+        </ul>
+        <ul>
+            <li><a href="sahi_tutorial.html" target="_blank">Flash Tutorial</a></li>
+            <li><a href="screenshots.html">Screen Shots</a></li>
+        </ul>
+
+        <ul>
+            <li><a href="install.html">Downloading Sahi</a></li>
+
+            <li><a href="install.html#prereq">Prerequisites</a></li>
+
+            <li><a href="install.html#install">Installing Sahi</a></li>
+        </ul>
+
+        <ul>
+            <li><a href="using.html">Getting started</a></li>
+
+            <li><a href="using.html#record">Recording through Sahi</a></li>
+
+            <li><a href="using.html#playback">Playing back</a></li>
+
+            <li><a href="using.html#suites">Suites</a></li>
+
+            <li><a href="using.html#logging">Logging</a></li>
+        </ul>
+
+        <ul>
+            <li>Documentation:
+
+                <ul>
+                    <li><a href="http://sahi.co.in/w/apis">APIs</a></li>
+                    <li><a href="http://sahi.co.in/w/sahi-script">Scripting</a></li>
+                </ul>
+            </li>
+        </ul>
+
+        <ul>
+            <li><a href="http://sahi.co.in/w/Running+multiple+tests+in+batch+mode">Running in batch mode</a></li>
+        </ul>
+
+        <ul>
+            <li><a href="ide.html">Editor Support</a></li>
+        </ul>
+
+        <ul>
+            <li><a href="problems.html#problems">Problems</a></li>
+
+            <li><a href="problems.html#notyet">Not yet supported, but coming
+                in</a></li>
+        </ul>
+
+        <hr>
+
+        <ul>
+            <li><a href="http://sourceforge.net/projects/sahi" target="_blank">On Sourceforge</a></li>
+            <li><a href="http://sahi.co.in/forums/" target="_blank">Forums</a></li>
+            <li><a href="http://sourceforge.net/tracker/?group_id=151639&atid=781586" target="_blank">Report/View Bugs</a></li>
+            </li>
+        </ul>
+
+
+    </div>
+</td>
+<td valign="top">
+    <div class="content">
+        <div style="float:right;" width="100%" border="0">
+                <a href="http://sourceforge.net"><img src=
+                        "http://sourceforge.net/sflogo.php?group_id=151639&amp;type=3"
+                                                                        width="125" height="37" border="0"
+                                                                        alt="SourceForge.net Logo"></a>
+                    <br>
+            </div>
+        <h2>Sahi - Web Automation and Test Tool</h2><br/>
+        <div style="background-color:red;color:white;font-size:12pt;text-align:center;">
+		Documentation in this directory is not current.
+		Please visit <a style="color:white;font-size:12pt;" href="http://sahi.co.in/">http://sahi.co.in/</a> for the latest documentation.
+		</div>
+
+        <!--<h2> Sahi - Web Automation and Test Tool</h2>-->
+        <!--<br>-->
+        <!--<table width="100%">-->
+        <!--<tr>-->
+        <!--<td valign="top" align="left">-->
+        <!--<a class="top_menu" href="docs">Home</a>-->
+        <!--<a class="top_menu" href="docs">Why Sahi</a>-->
+        <!--<a class="top_menu" href="docs">Docs</a>-->
+        <!--<a class="top_menu" href="docs">Support</a>-->
+        <!--<a class="top_menu" href="docs">License</a>-->
+        <!--</td>-->
+        <!--</tr>-->
+        <!--</table>-->
+        <hr/>
+        <br/>
+
+        <h2 class="pageTitle">Record and Playback</h2>
+        <!--Record and Playback-->
+<h4><a name="started">Getting started</a></h4>
+
+<b>Starting Sahi:</b><br>
+<p>Windows:<br>
+    - Go to &lt;sahi_root&gt;\bin and run sahi.bat<br>
+    Linux<br>
+    - Go to &lt;sahi_root&gt;/bin and run sahi.sh<br>
+    Note that by default Sahi uses port 9999. This can be modified
+    through <a href="props.html">sahi.properties</a></p>
+
+<br>
+<b>Configuring the browser:</b><br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Firefox:</b><br>
+<ul type="square">
+    <li>Go to Tools &gt; Options &gt; General &gt; Connection Settings
+        &gt;</li>
+
+    <li>Set to "Manual Proxy Configuration"</li>
+
+    <li>Set "HTTP Proxy" to "localhost"</li>
+
+    <li>Set "Port" to "9999". (This setting can be modified through
+        &lt;sahi_root&gt;/config/<a href=
+            "props.html">sahi.properties</a>)</li>
+
+    <li>Do the same for "SSL Proxy" too, if you wish to record and playbacl https sites</li>
+
+    <li>Keep "Use the same proxy for all protocol" unchecked as Sahi
+        does not understand protocols other than HTTP</li>
+
+    <li>NOTE: "No Proxy for" should NOT have localhost in it.</li>
+</ul>
+
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Internet Explorer:</b><br>
+<ul type="square">
+    <li>Go to Tools &gt; Internet Options &gt; Connections &gt; LAN
+        Settings &gt;</li>
+
+    <li>In "Proxy server" section, Check "Use a proxy server for your
+        LAN"</li>
+
+    <li>Set "Address" to "localhost"</li>
+
+    <li>Set "Port" to "9999"</li>
+
+    <li>Leave "Bypass proxy server for local addresses" unchecked</li>
+
+    <li>OK &gt; OK : )</li>
+</ul>
+
+While working with Sahi it may become annoying to have to switch
+between proxy and no proxy, or to another proxy.<br>
+There are a few plugins/freeware available on the net to ease
+this.<br>
+My personal favorite while working on Firefox is "Proxy Button". It
+helps in a single click toggling of proxy.<br>
+These tools can considerably enhance the experience of using
+Sahi.<br>
+<br>
+<br>
+<b><a name="demo">Starting the bundled demo web server if needed,
+    for learning and understanding Sahi APIs:</a></b><br>
+Windows:<br>
+- Go to &lt;sahi_root&gt;\bin and run web.bat<br>
+Linux<br>
+- Go to &lt;sahi_root&gt;/bin and run web.sh<br>
+Go to url http://localhost:10000/demo/index.htm and play around
+with the different pages.<br>
+It gives a fair idea of how elements are accessed through Sahi.<br>
+<br>
+Note that by default Sahi uses port 9999 and the web server uses
+port 10000 (sahi's port + 1). <br>
+These can be modified through <a href=
+        "props.html">sahi.properties</a> <br>
+(<a href="#top">Top</a>) <br>
+<h4><a name="record">Recording through Sahi</a></h4>
+
+<ul type="square">
+    <li>Press <a href="props.html#hotkey">ALT</a> and double click on
+        the window which you want to record.</li>
+
+    <li>On the popup that appears, give a name for the script you wish
+        to generate, and click 'Record'</li>
+
+    <li>Most actions on the page will now get recorded.</li>
+
+    <li>Moving the mouse over any html element while pressing Ctrl key
+        will show the javascript accessor info in the popup.</li>
+
+    <li>Clicking the "Add Assertions" button generates assertions for
+        the element. These assertions can be added to the script by
+        clicking "Add to Script"</li>
+</ul>
+
+The script being generated can be viewed by opening the
+&lt;script_name&gt;.sah file in the scripts directory.<br>
+The script can be edited even while recording, so that logical
+segregation into functions etc. can be done as recording
+happens.<br>
+
+
+<ul type="square">
+    <li>Once done, click stop.</li>
+</ul>
+
+Note that custom code can be tested, by entering code in the
+"debug" textarea and clicking on "Test -&gt;". <br>
+The command will be executed and the result will be displayed in
+the textbox near the "Test -&gt;" button.<br>
+Once confirmed that the desired result has been achieved, that code
+snippet can be added to the recording by clicking "Append to
+Recording"<br>
+<br>
+You could use the <a href="#demo">demo application</a> bundled with
+Sahi to get your feet wet.<br>
+(<a href="#top">Top</a>) <br>
+<h4><a name="playback">Playing back</a></h4>
+
+<ul type="square">
+    <li>Open (alt-dblclick) the popup window.</li>
+
+    <li>Select script file from the dropdown.</li>
+
+    <li>Or go to the "[from url]" section and specify the full url of
+        the script file. (eg.
+        http://<i>proxyhost:proxyport</i>/_s_/scrcipts/<i>scriptName</i>.sah)</li>
+
+    <li>Click 'Set'.</li>
+
+    <li>Wait for the pages to reload.</li>
+
+    <li>Click 'Play'.</li>
+</ul>
+
+(<a href="#top">Top</a>) <br>
+<h4><a name="suites">Suites</a></h4>
+
+Multiple tests can be run through ant or a batch file/shell script.<br>
+Read more <a href="http://sahi.co.in/w/Running+multiple+tests+in+batch+mode">here</a><br>
+
+(<a href="#top">Top</a>)
+<h4><a name="logging">Logging</a></h4>
+
+Logs are created in "logs/playback/" directory.<br>
+Log results can be accessed on the browser through http://localhost:9999/logs/ <br>
+(<a href="#top">Top</a>) <br>
+
+
+    </div>
+</td>
+</tr>
+</table>
+Please send your feedback to <a href="http://sourceforge.net/users/narayanraman/">V Narayan Raman</a>.
+</body>
+</html>
+

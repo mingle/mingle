@@ -1,0 +1,27 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id=<%= date_type %> class="dependency-property dependency-date-property">
+  <span class="property-name"><%= property_name %></span>
+  <span class="property-value">
+    <% date = @dependency.send date_type %>
+    <% if allowed_to_edit %>
+      <input class="hidden-input" data-date-field=<%= date_type %>  data-initial-date="<%=  formatted_date(date, date_format_context) %>" data-edit-url=<%= url_for(:controller => controller_name, :action => 'update', :id => @dependency.id)%>/>
+    <% else %>
+      <%= date ? formatted_date(date, date_format_context) : '(not set)' %>
+    <% end %>
+  </span>
+</div>

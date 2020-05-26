@@ -1,0 +1,46 @@
+<html>
+<head>
+<title>Doc Write IE</title>
+</head>
+<body>
+<script>
+function whichChoice(v){
+	document.getElementById("textbox").value = v;
+}
+function ModalDialogShow(Title,BodyText,Buttons,EventHandler){
+	Title = ':: Alert ::';
+	BodyText = 'Credit Check is not done for this SSN! Do you want to skip the Credit Check ?'
+	Buttons = '<input style="font-family: Verdana; font-size: 11px" type="button" value="Yes" name="Yes" onClick="CloseForm(\'Yes\');"> <input style="font-family: Verdana; font-size: 11px" type="button" value="No" name="OK" onClick="CloseForm(\'OK\');">';
+   //ModalDialogRemoveWatch();
+   //ModalDialog.eventhandler = EventHandler;
+   var args='width=290,height=110,left=325,top=300,toolbar=0,';
+   args+='location=0,status=0,menubar=0,scrollbars=0,resizable=0'; 
+   ModalDialogWindow=window.open("","",args);
+   ModalDialogWindow.document.open();
+   ModalDialogWindow.document.write('<html>');
+   ModalDialogWindow.document.write('<head>');
+   ModalDialogWindow.document.write('<title>' + Title + '</title>');
+   ModalDialogWindow.document.write('<script' + ' language=JavaScript>');
+   ModalDialogWindow.document.write('function CloseForm(Response) ');
+   ModalDialogWindow.document.write('{ ');
+   ModalDialogWindow.document.write(' window.opener.whichChoice(Response); ');
+   ModalDialogWindow.document.write(' window.close(); ');
+   ModalDialogWindow.document.write('} ');
+   ModalDialogWindow.document.write('</script' + '>');       
+   ModalDialogWindow.document.write('</head>');  
+   ModalDialogWindow.document.write('<body bgcolor="#ECE9D8" onblur="window.focus();">');
+   ModalDialogWindow.document.write('<table border=0 width="95%" align=center cellspacing=0 cellpadding=2>');
+   ModalDialogWindow.document.write('<tr><td align=center>' +'<font style="font-family: Verdana; font-size: 11px" color="#000000">'+ BodyText + '</font></td></tr>');
+   ModalDialogWindow.document.write('<tr><td align=left><br></td></tr>');
+   ModalDialogWindow.document.write('<tr><td align=center>' + Buttons + '</td></tr>');
+   ModalDialogWindow.document.write('</body>');
+   ModalDialogWindow.document.write('</html>');
+   ModalDialogWindow.document.close();
+   ModalDialogWindow.focus();
+   //ModalDialogInterval = window.setInterval("ModalDialogMaintainFocus()",5);
+}
+</script>
+<input type="text" id="textbox" name="textbox" value=""/>
+<input type="button" value="Open Write" onclick="ModalDialogShow()"/>
+</body>
+</html>

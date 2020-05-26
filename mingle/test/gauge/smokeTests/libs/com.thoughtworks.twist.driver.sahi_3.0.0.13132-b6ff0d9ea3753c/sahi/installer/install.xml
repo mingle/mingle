@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+
+<installation version="1.0">
+
+	<info>
+		<appname>Sahi</appname>
+		<appversion>3.5</appversion>
+		<authors>
+			<author name="Tyto Software Pvt. Ltd." email="info@tytosoftware.com" />
+		</authors>
+		<url>http://sahi.co.in/</url>
+		<javaversion>1.5</javaversion>
+	</info>
+
+	<variables>
+		<variable name="install_name" value="sahi" />
+		<variable name="DesktopShortcutCheckboxEnabled" value="true" />
+	</variables>
+	<guiprefs width="600" height="380" resizable="yes">
+		<laf name="liquid">
+			<param name="decorate.frames" value="yes" />
+			<os family="windows" />
+			<os family="unix" />
+			<os family="mac" />
+		</laf>
+		<modifier key="useButtonIcons" value="yes" />
+		<modifier key="useLabelIcons" value="yes" />
+		<modifier key="layoutAnchor" value="CENTER" />
+		<modifier key="labelGap" value="2" />
+		<modifier key="useHeadingPanel" value="yes" />
+		<modifier key="paragraphYGap"  value="10" />
+		<modifier key="useHeadingPanel" value="false" />
+	</guiprefs>
+
+	<locale>
+		<langpack iso3="eng" />
+	</locale>
+
+	<resources>
+		<res id="Installer.image" src="htdocs/spr/images/installer_logo_sq.png" />
+		<res id="HTMLLicencePanel.licence" src="docs/licenses/sahi/license.htm" />
+		<res id="HTMLInfoPanel.info" src="NOTICE.htm" />
+		<res src="installer/Win_shortcut_specification.xml" id="shortcutSpec.xml">
+			<os family="windows" />
+		</res>
+		<res src="installer/Unix_shortcut_specification.xml" id="Unix_shortcutSpec.xml">
+			<os family="unix" />
+		</res>
+		<res src="installer/TargetPanel.dir.windows.txt" id="TargetPanel.dir.windows">
+			<os family="windows" />
+		</res>
+		<res src="installer/TargetPanel.dir.txt" id="TargetPanel.dir">
+			<os family="unix" />
+			<os family="mac" />
+		</res>
+	</resources>
+
+	<panels>
+		<panel classname="HelloPanel" />
+		<panel classname="HTMLInfoPanel" />
+		<panel classname="HTMLLicencePanel" />
+		<panel classname="TargetPanel" />
+		<panel classname="PacksPanel" />
+		<panel classname="InstallPanel" />
+		<panel classname="ShortcutPanel" />
+		<panel classname="FinishPanel" />
+	</panels>
+
+	<packs>
+		<pack name="Sahi Core" required="yes">
+			<description>The Core Sahi files. Includes Java Driver also.</description>
+			<file src="demo.xml" targetdir="$INSTALL_PATH" />
+			<file src="NOTICE.txt" targetdir="$INSTALL_PATH" />
+			<file src="NOTICE.htm" targetdir="$INSTALL_PATH" />
+			<file src="batch_runners" targetdir="$INSTALL_PATH" />
+			<file src="bin" targetdir="$INSTALL_PATH" />
+			<executable targetfile="$INSTALL_PATH/bin/dashboard.sh">
+				<os family="unix" />
+				<os family="mac" />
+			</executable>
+			<executable targetfile="$INSTALL_PATH/bin/sahi.sh">
+				<os family="unix" />
+				<os family="mac" />
+			</executable>
+			<executable targetfile="$INSTALL_PATH/bin/web.sh">
+				<os family="unix" />
+				<os family="mac" />
+			</executable>
+			<file src="config" targetdir="$INSTALL_PATH" />
+			<file src="docs" targetdir="$INSTALL_PATH" />
+			<file src="extlib" targetdir="$INSTALL_PATH" />
+			<file src="htdocs" targetdir="$INSTALL_PATH" />
+			<file src="lib" targetdir="$INSTALL_PATH" />
+		</pack>
+		<pack name="Tools" required="yes">
+			<description>Contains executables to switch System proxy settings on windows</description>
+			<file src="tools" targetdir="$INSTALL_PATH" />
+		</pack>
+		<pack name="Userdata" required="yes">
+			<description>All user created data resides here.</description>
+			<file src="userdata" targetdir="$INSTALL_PATH" />
+			<executable targetfile="$INSTALL_PATH/userdata/bin/start_dashboard.sh" keep="true">
+				<os family="unix" />
+				<os family="mac" />
+			</executable>
+			<executable targetfile="$INSTALL_PATH/userdata/bin/start_sahi.sh" keep="true">
+				<os family="unix" />
+				<os family="mac" />
+			</executable>
+			<executable targetfile="$INSTALL_PATH/userdata/bin/start_web.sh" keep="true">
+				<os family="unix" />
+				<os family="mac" />
+			</executable>
+			<executable targetfile="$INSTALL_PATH/userdata/bin/testrunner.sh" keep="true">
+				<os family="unix" />
+				<os family="mac" />
+			</executable>
+		</pack>
+		<pack name="Sample Java Project" required="no">
+			<description>Contains a sample Java project using the Java driver of Sahi.</description>
+			<file src="sample_java_project" targetdir="$INSTALL_PATH" />
+		</pack>
+		<pack name="Ruby" required="no">
+			<description>Contains Ruby driver, tests and sample files</description>
+			<file src="ruby" targetdir="$INSTALL_PATH" />
+		</pack>		
+		<pack name="Source" required="no">
+			<description>Contains source code. (Does not include 3rd party jars)</description>
+			<file src="build.xml" targetdir="$INSTALL_PATH" />
+			<file src="src" targetdir="$INSTALL_PATH" />
+			<file src="test" targetdir="$INSTALL_PATH" />
+			<fileset dir="docs" targetdir="$INSTALL_PATH/docs">
+				<include name="src/**/*.*"/>
+			</fileset>
+		</pack>
+		<pack name="Editor support files" required="no">
+			<description>Editor support files for Notepad++ and Textpad</description>
+			<file src="editors" targetdir="$INSTALL_PATH" />
+		</pack>
+	</packs>
+
+	<native type="izpack" name="ShellLink.dll" />
+	<native type="izpack" name="ShellLink_x64.dll" />
+
+</installation>

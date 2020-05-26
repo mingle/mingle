@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Cross project card and page linking">
+	
+	<p><cref topic="card_keywords">Card keyword</cref> linking supports cross project card and page linking. In order to create cross project linking, simply precede the card or page link with the project identifier of the project the card or page belongs to.</p>
+	
+	<p>For example, if you have a project with the identifier "event_management_project" and you want to create a link to card 123 in "event_management_project" from another project, you can type the following to create a link from your current project to the "event_management_project" card number 123 (note that <strong>no brackets are required</strong>):
+		<markup>event_management_project/#123</markup> 
+	</p>
+	
+	<p>To link from a card or page in your Mingle project to a page in another Mingle project, just use the project identifier before the page name (note that <strong>brackets are required</strong>): 
+		<markup>[[project_identifier/page]]</markup> 
+	</p>
+	
+	<note>
+		<bullets>
+			<item>You can create card and page links using any of the location project's card keywords. For example, if the current project where you are creating the card or page link has the keywords "card" and "story" but not "bug", and the card or page you are linking to belongs to a project where "bug" is a keyword, you would be able to use the "bug" keyword to link to that project's card or page.</item>
+			<item>If cross project card and page links are created, users who do not have permission to view those cards or pages will be prevented from viewing them.</item>
+			<item>If you have <cref topic="setup_source_repository_integration">integrated your source repository</cref> with Mingle, you can link your commit messages to cards and pages in other projects by using cross project linking.</item>
+		</bullets>
+	</note>	
+	<p>See <cref topic="markup_linking">inline links</cref> to learn how to link to other resources in your Mingle project.</p>	
+</topic>
+
+
+
+

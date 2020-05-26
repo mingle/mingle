@@ -1,0 +1,31 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="card_new_comment" style="<%= allow_direct_comments ? '' : 'display: none;'%>">
+  <%- form_tag( {:action => 'add_comment', :card_id => card, :validate => true}, {:id => 'discussion-form'}) do -%>
+    <%= text_area_tag 'comment[content]', nil, :rows => 5, :id => 'card_comment', 'data-users-url' => at_user_suggestion_path, 'data-at-login-autocomplete' => true %>
+
+    <div class="comment-controls">
+      <%= submit_to_remote "Add comment",
+                  add_comment_button_name,
+                  :url => {:action => 'add_comment', :card_id => card},
+                  :before => "$('spinner-for-comments').show(); $('add_comment').disabled = true;",
+                  :complete => "$('spinner-for-comments').hide(); $('add_comment').disabled = false; $('card_comment').clear();",
+                  :html => {:id => 'add_comment'} %>
+      <%= spinner :id => 'spinner-for-comments' %>
+     </div>
+  <%- end -%>
+</div>

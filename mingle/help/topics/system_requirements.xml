@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="System requirements">
+  <section title="Browser requirements" id="browser_requirements">
+    <p>For the best experience possible, we suggest using <strong>Chrome</strong>.</p>
+    <p>If you’re using the latest version of Firefox, Safari, or Internet Explorer, you shouldn’t experience significant issues. To report any browser specific issues, please contact our <exref url="@tw_studios_mingle_support_url@">support team</exref>.</p>
+  </section>
+
+    <section title="Database requirements" id="database">
+        <p>Before installing Mingle, you must <cref topic="configuring_a_database_for_use_with_mingle">install a database</cref>. Mingle currently supports:</p>
+        <bullets>
+            <item>PostgreSQL 9.6 <strong>(Recommended)</strong></item>     
+            <item>Oracle 10g and 11g R2 and 12c (enterprise edition). Support for Oracle is limited to <strong>Mingle Plus</strong> only.</item>
+        </bullets>
+    </section>
+
+    <section title="Server requirements">
+  
+     <subsection title="Hardware requirements">
+        <p>Hardware requirements will vary based upon number of concurrent users. The following hardware specifications should be sufficient for most organizations with 80 users or less. For guidance on larger installations, see below.</p>
+            <bullets>
+                <item><strong>CPU: </strong>4 cores, each >= 2GHz</item>
+                <item><strong>Disk: </strong>5GB Initial, regular monitoring and backups recommended based on usage.</item>
+                <item><strong>Memory: </strong>2 GB RAM, of which 1 GB can be dedicated to Mingle</item>
+            </bullets>
+            <p>If Mingle and the database server run on the same machine, the minimum requirements will be correspondingly higher.</p>
+        </subsection>
+
+      <subsection title="Operating System" id="operating_system">
+            <warning>If you are using an OS not listed below (e.g. Solaris), you should assume that it is not supported.</warning>
+            <bullets>
+                <item>Windows</item>
+                  <bullets>
+                    <item>Windows Server 2003 (64-bit)</item>
+                    <item>Windows Server 2008 (64-bit)</item>
+                    <item>Windows Server 2012 (64-bit)</item>
+                  </bullets>
+                <item>Mac OS X</item>
+                  <bullets>
+                    <item>Snow Leopard (10.6) or greater</item>
+                    <item>Java Development Kit (JDK) version 1.8 - 64-bit JDK and Oracle JDK only. Starting with Java 8, the JCE framework will enforce the restrictions specified in the installed jurisdiction policy files. To counter this, we recommend installing an unlimited strength policy JCE jar applicable to your Java version from <exref url="http://www.oracle.com/technetwork/java/javase/downloads/index.html">here</exref>.
+                    </item>
+                  </bullets>
+                <item>Linux</item>
+                  <bullets>
+                    <item>We strongly recommend using the latest version of either CentOS, Red Hat (RHEL), or Ubuntu.</item>
+                    <item>Java Development Kit (JDK) version 1.8 - 64-bit JDK and Oracle JDK only. Starting with Java 8, the JCE framework will enforce the restrictions specified in the installed jurisdiction policy files. To counter this, we recommend installing an unlimited strength policy JCE jar applicable to your Java version from <exref url="http://www.oracle.com/technetwork/java/javase/downloads/index.html">here</exref>.
+                    </item>
+                  </bullets>
+              </bullets>
+      </subsection>
+    <subsection title="Virtual Machines" id="virtual_machines" collapsed="true">
+      <p>
+        Mingle can run on any virtual machine which provides any of the above operating systems with resources equivalent to those specified in the hardware requirements. While the usual caveats apply regarding the effect of virtualization overhead on performance, we strongly recommend that the VM running Mingle is given dedicated memory and CPU cores from the host machine so that its performance is not hampered by other hosted VMs.
+      </p>
+    </subsection>
+    <subsection title="Also see...">
+      <bullets>
+        <bullets>
+            <item><cref topic="mingle_onsite">Mingle Onsite</cref></item>
+            <item><cref topic="configuring_mingle_authentication">Authentication configuration</cref></item>
+            <item><cref topic="configuring_a_database_for_use_with_mingle">Configuring a database for use with Mingle</cref></item>
+          </bullets>
+      </bullets>
+    </subsection>
+  </section>
+</topic>

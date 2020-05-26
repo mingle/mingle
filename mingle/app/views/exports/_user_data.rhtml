@@ -1,0 +1,43 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="user-data" class="export-checklist-section">
+  <h2>
+    User Data
+  </h2>
+  <p class="section-description">
+    Details of all the users who have accounts in Mingle (both active and deactivated), and their profile images.  </p>
+  <div id="users-and-project-admins">
+    <div class="export-data-type">
+      <p class="data-type-name">All users and project administrators</p>
+      <p class="data-type-info" style="color:#bbb"><%= users_count %> users, <%= admins_count %> project administrators</p>
+    </div>
+    <div class="export-checkbox">
+      <%= check_box_tag 'all_users_and_projects_admins', nil, @export_config[:all_users_and_projects_admins], :id => "users_and_admins_checkbox" %>
+      <%= label_tag "export", "Export" %>
+    </div>
+  </div>
+  <div id="user-icons" style="background: #eee;">
+    <div class="export-data-type">
+      <p class="data-type-name">All users icons</p>
+      <p class="data-type-info" style="color:#bbb"><%= user_icons_count %> profile images</p>
+    </div>
+    <div class="export-checkbox">
+      <%= check_box_tag 'user_icons', nil, @export_config[:user_icons], :id => "user_icons_checkbox" %>
+      <%= label_tag "export", "Export" %>
+    </div>
+  </div>
+</div>

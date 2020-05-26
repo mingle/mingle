@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <meta name="generator" content="HTML Tidy, see www.w3.org">
+    <title>Sahi - Introduction</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="sahi.css">
+</head>
+
+<body>
+<table width="100%">
+<tr>
+<td width="150px" valign="top">
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+
+    <div class="menu">
+        <ul>
+            <li><a href="index.html">Introduction</a></li>
+            <!--<li><a href="index.html#features">Features</a></li>-->
+
+        </ul>
+        <ul>
+            <li><a href="sahi_tutorial.html" target="_blank">Flash Tutorial</a></li>
+            <li><a href="screenshots.html">Screen Shots</a></li>
+        </ul>
+
+        <ul>
+            <li><a href="install.html">Downloading Sahi</a></li>
+
+            <li><a href="install.html#prereq">Prerequisites</a></li>
+
+            <li><a href="install.html#install">Installing Sahi</a></li>
+        </ul>
+
+        <ul>
+            <li><a href="using.html">Getting started</a></li>
+
+            <li><a href="using.html#record">Recording through Sahi</a></li>
+
+            <li><a href="using.html#playback">Playing back</a></li>
+
+            <li><a href="using.html#suites">Suites</a></li>
+
+            <li><a href="using.html#logging">Logging</a></li>
+        </ul>
+
+        <ul>
+            <li>Documentation:
+
+                <ul>
+                    <li><a href="http://sahi.co.in/w/apis">APIs</a></li>
+                    <li><a href="http://sahi.co.in/w/sahi-script">Scripting</a></li>
+                </ul>
+            </li>
+        </ul>
+
+        <ul>
+            <li><a href="http://sahi.co.in/w/Running+multiple+tests+in+batch+mode">Running in batch mode</a></li>
+        </ul>
+
+        <ul>
+            <li><a href="ide.html">Editor Support</a></li>
+        </ul>
+
+        <ul>
+            <li><a href="problems.html#problems">Problems</a></li>
+
+            <li><a href="problems.html#notyet">Not yet supported, but coming
+                in</a></li>
+        </ul>
+
+        <hr>
+
+        <ul>
+            <li><a href="http://sourceforge.net/projects/sahi" target="_blank">On Sourceforge</a></li>
+            <li><a href="http://sahi.co.in/forums/" target="_blank">Forums</a></li>
+            <li><a href="http://sourceforge.net/tracker/?group_id=151639&atid=781586" target="_blank">Report/View Bugs</a></li>
+            </li>
+        </ul>
+
+
+    </div>
+</td>
+<td valign="top">
+    <div class="content">
+        <div style="float:right;" width="100%" border="0">
+                <a href="http://sourceforge.net"><img src=
+                        "http://sourceforge.net/sflogo.php?group_id=151639&amp;type=3"
+                                                                        width="125" height="37" border="0"
+                                                                        alt="SourceForge.net Logo"></a>
+                    <br>
+            </div>
+        <h2>Sahi - Web Automation and Test Tool</h2><br/>
+        <div style="background-color:red;color:white;font-size:12pt;text-align:center;">
+		Documentation in this directory is not current.
+		Please visit <a style="color:white;font-size:12pt;" href="http://sahi.co.in/">http://sahi.co.in/</a> for the latest documentation.
+		</div>
+
+        <!--<h2> Sahi - Web Automation and Test Tool</h2>-->
+        <!--<br>-->
+        <!--<table width="100%">-->
+        <!--<tr>-->
+        <!--<td valign="top" align="left">-->
+        <!--<a class="top_menu" href="docs">Home</a>-->
+        <!--<a class="top_menu" href="docs">Why Sahi</a>-->
+        <!--<a class="top_menu" href="docs">Docs</a>-->
+        <!--<a class="top_menu" href="docs">Support</a>-->
+        <!--<a class="top_menu" href="docs">License</a>-->
+        <!--</td>-->
+        <!--</tr>-->
+        <!--</table>-->
+        <hr/>
+        <br/>
+
+        <h2 class="pageTitle">Introduction</h2>
+        <!--Introduction-->
+Sahi is an automation and testing tool for web applications, with
+the facility to record and playback scripts.<br>
+Developed in java and javascript, this tool uses simple javascript
+to execute events on the browser. <br>
+Features include, in-browser controls, text based scripts, ant
+support for playback of suites of tests,<br>
+and multi threaded playback. It supports HTTP and HTTPS.<br>
+ <br>
+ Sahi runs as a proxy server and the browser needs to use the sahi
+server as its proxy.<br>
+Sahi then injects javascript so that it can access elements in the
+webpage.<br>
+This makes the tool independent of the website/ web
+application.<br>
+ <br>
+<h4><a name="features">Features</a></h4>
+
+<ul>
+<li>Recording of browser actions.</li>
+
+<li>Playback of recorded/scripted actions.</li>
+
+<li>Accessor Viewer for identifying html elements for
+scripting</li>
+
+<li>Easily editable scripts (text files)</li>
+
+<li>Simple APIs</li>
+
+<li>Integrates with ant builds</li>
+
+<li>Logging/reports</li>
+
+<li>Script is in javascript hence supports concepts and constructs
+that javascript supports</li>
+
+<li>Support for global variables stored across pages in a test and
+across tests in a suite.</li>
+
+<li>Script refactorable into functions and files.</li>
+
+<li>Scripts runnable through url.</li>
+
+<li style="list-style: none">Bugs can be recorded by testers and
+the sahi script can be published on a web server.<br>
+This url can be included in bug reports.<br>
+Developers can reproduce the bug by pointing to that url in the bug
+report.<br>
+</li>
+
+<li>Scripts automatically available to others through HTTP</li>
+
+<li>Very lightweight</li>
+
+<li>Tests do not need the browser window to be in focus.</li>
+
+<li>Suites can run in multiple threads thus reducing the test
+execution time.</li>
+
+<li>Supports external proxy and HTTPS.</li>
+</ul>
+<br/>
+    </div>
+</td>
+</tr>
+</table>
+Please send your feedback to <a href="http://sourceforge.net/users/narayanraman/">V Narayan Raman</a>.
+</body>
+</html>
+

@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Add user to multiple projects">
+	<section title="How to add user to multiple projects" file="adding_user_to_multiple_projects"/>
+	<section title="Also see...">
+	<bullets>
+		<item>
+			<cref topic="managing_project_team_members">Managing project team members</cref>
+		</item>
+		<item>
+			<cref topic="add_all_users_as_team_members">Adding all users as team member</cref>
+		</item>
+		<item>
+			<cref topic="user_roles">About Mingle user roles</cref>
+		</item>
+	</bullets>
+</section>
+</topic>
+

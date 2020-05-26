@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="What's new in Release 12.3">
+  <p>Please review the <cref topic="upgrading_from_previous_versions">upgrade instructions</cref> before moving to Mingle 12.3.</p>
+  <section title="Migrate your plan">
+    <p>You can now <cref topic="export_import_plan">export and import your plan</cref> among different Mingle Plus instances.</p>
+  </section>
+  <section title="Auto-sync feedback">
+    <p>When you apply or modify your <cref topic="define_your_plan#autosync">auto-sync</cref> filter, you’ll now see a spinner until the objective work count ratio is updated so you get the most accurate and up-to-date information about your objective.</p>
+  <screenshot src="resources/images/auto_sync_spinner.png"/>
+  </section>
+  <section title="Daily history chart improvements">
+    <p>We have optimized when we re-generate the <cref topic="markup_daily_history_chart">daily history chart</cref> cache to improve your chart viewing experience.</p>
+  </section>
+  <section title="New pie chart">
+    <p>We’ve converted our <cref topic="markup_pie_chart">pie charts</cref> from Chart Director to High Charts to improve our UI aesthetic and to provide the foundation for future chart enhancements.</p>
+    <screenshot src="resources/images/charts_pie_chart_example.png"/>
+  </section>
+  <section title="End of Life of Mingle API Version 1">
+    <p>With Mingle 12.3, ThoughtWorks Studios will no longer provide support for Version 1 of the Mingle API. If you are currently using Version 1 of the API, you will need to update to Version 2. If you are using <exref url="@tw_mingle_help_base_url@mingle_api.html">our latest APIs</exref>, you do not need to make any changes.</p>
+    <p>For more information about this change, please see <exref url="http://support.thoughtworks.com/entries/22029412-end-of-life-for-version-1-of-the-mingle-api"> our related community post.</exref></p>
+  </section>
+  <section title="Bug Fixes">
+    <p>The following bugs have been fixed with 12.3:</p>
+	     <bullets>
+	       <item>Table query and chart rendering errors if the card contains "&lt;=" symbol in the description</item>
+         <item>Inability to run Mingle as root</item>
+         <item>Fail to install Mingle with an empty database</item>
+         <item>Card name with a quote will result in a 503 (service unavailable)</item>
+         <item>Mingle server script returns wrong server status</item>
+         <item>Large card defaults can overrun URL size limits</item>
+         <item>Turning on property indexing will cause ActiveMQ to fill and fail</item>
+	     </bullets>
+  </section>
+</topic>

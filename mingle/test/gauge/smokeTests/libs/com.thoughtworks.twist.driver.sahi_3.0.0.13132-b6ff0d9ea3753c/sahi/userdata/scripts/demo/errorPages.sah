@@ -1,0 +1,14 @@
+_navigateTo("/demo/errorPages.htm");
+_click(_link("404 Page"));
+//_assertEqual("404 Not Found", _title()); // Works on localhost only
+_navigateTo("/demo/errorPages.htm");
+_click(_link("500 Page"));
+//_assertEqual("Sahi - 500 Error", _title()); // Works on localhost only
+_navigateTo("/demo/ajax5xx.htm");
+_click(_button("Ajax Get"));
+_assertEqual("500\n", _textarea("resp").value);
+_click(_button("Clear"));
+_assertEqual("", _textarea("resp").value);
+_click(_button("Ajax Post"));
+_assertEqual("500\n", _textarea("resp").value);
+_navigateTo("/demo/");

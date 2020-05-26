@@ -1,0 +1,52 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div class="bulk-inner">
+  <% card_selection_count = @card_selection.count %>
+  <p class="bulk-info">Properties from the <b><%= card_selection_count %></b> selected <%= 'card'.plural(card_selection_count) %>:</p>
+
+  <% form_remote_tag(:before => "$('actions-spinner').show(); linkHandler.disableLinks();", :complete => "if($('actions-spinner')) $('actions-spinner').hide(); linkHandler.enableLinks();",
+        :url => {:action => 'bulk_set_properties'}, :html => {:id => 'bulk-set-properties-form'}) do -%>
+    <%= hidden_field_tag 'selected_cards', params[:selected_cards] %>
+    <%= hidden_field_tag 'favorite_id', params[:favorite_id] %>
+    <%= hidden_view_tags @view, :include_page => true %>
+    <%= hidden_field_tag 'changed_property' %>
+
+    <div id='properties_widget' class='properties_widget'>
+
+      <div id = 'bulk-edit-card-types' class='card_type_widget'>
+        <%= render bulk_edit_card_type_property_editor(@card_selection) -%>
+      </div>
+
+      <% @card_selection.property_definitions.each do |prop_def| -%>
+        <%= render bulk_edit_property_editor(prop_def, @card_selection) -%>
+      <% end -%>
+    </div>
+  <% end -%>
+</div>
+<%= clear_float %>
+<%# background colour of overlay cannot be transparent, otherwise this will not disable links on IE6 %>
+<div id="properties_widget_overlay" style='background-color: white; opacity: 0.1; display:none; position:absolute'></div>
+<%= render :partial => 'change_card_type_confirmation', :locals => {
+  :multiple => card_selection_count > 1,
+  :on_cancel_javascript => "#{remote_function(:url => params, :before => '$(\'actions-spinner\').show(); linkHandler.disableLinks();', :complete => 'if($(\'actions-spinner\')) $(\'actions-spinner\').hide(); linkHandler.enableLinks();')}",
+  :on_continue_javascript =>  "$('bulk-set-properties-form').onsubmit(); InputingContexts.pop();" } %>
+
+<%= javascript_with_rescue <<-JAVASCRIPT
+  DropList.View.Layout.fix();
+  linkHandler = new LinkHandler(['properties_widget']);
+JAVASCRIPT
+-%>

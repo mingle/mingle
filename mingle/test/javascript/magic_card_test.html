@@ -1,0 +1,388 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>
+      JavaScript unit test file
+    </title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/mingle_ui.js" type="text/javascript"></script>
+
+    <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+    <script src="../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+    <script src="test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+
+    <script src="test_assets/unittest.js" type="text/javascript"></script>
+    <script src="test_assets/unittest_ext.js" type="text/javascript"></script>
+
+
+    <script src="../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/controls.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/builder.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+
+
+    <script src="../../public/javascripts/module.js" type="text/javascript"></script>
+    <script src="../../public/javascripts/dragdrop_ext.js" type="text/javascript"></script>
+    <script src="../../public/javascripts/jsloader.js" type="text/javascript"></script>
+    <script src="../../public/javascripts/application.js" type="text/javascript"></script>
+    <script src="../../public/javascripts/swimming_pool.js" type="text/javascript"></script>
+    <script src="../../public/javascripts/card_drag_options.js" type="text/javascript"></script>
+    <script src="../../public/javascripts/card_popup.js" type="text/javascript"></script>
+
+    <script src="../../public/javascripts/magic_card.js" type="text/javascript"></script>
+
+    <link rel="stylesheet" href="test_assets/unittest.css" type="text/css" />
+    <style type="text/css" media="screen">
+      div.card-icon {
+        width:80px;
+        height:40px;
+        border:1px solid;
+      }
+      .magic_card {
+        background: #fff;
+        margin: 0;
+        padding: 0;
+        height: 32px;
+        width: 49px;
+        position: absolute;
+      }
+
+      table {
+        background-color: #ffffff;
+      }
+
+
+      .card-place-holder {
+        background-color: gray;
+        height: 30px;
+        width: 45px;
+      }
+
+      .cell {
+        height:100%;
+        padding: 0;
+        margin: 0;
+        vertical-align: top;
+        border-right: 2px solid #fff;
+        border: 1px solid;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div id="content">
+      <div id="header">
+        <h1>
+          JavaScript unit test file
+        </h1>
+        <p>
+          This file tests <strong>SwimmingPool</strong> class in <strong>swimming_pool.js</strong>.
+        </p>
+      </div>
+      <div style='border:solid 1px' id='sandbox'>
+        <h3> sandbox: </h3>
+        <table id='empty-table'></table>
+        <table id='swimming-pool' style='width:80%;height:300px;table-layout:fixed;border: 1px solid'>
+          <thead>
+            <tr>
+              <th>(blank)</th>
+              <th>
+                <span>not set</span>
+              </th>
+              <th>
+                <span>new</span>
+              </th>
+              <th>
+                <span>open</span>
+              </th>
+              <th>
+                <span>in progress</span>
+              </th>
+              <th>
+                <span>in test</span>
+              </th>
+              <th>
+                <span>closed</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style='border: 1px solid' id='row_0_card' row_value='#123'>
+              <th id="row_header">
+                Row Header
+              </th>
+              <td id='lane_not_set' class='cell' lane_value=''>
+                <div class='card-icon row_0_card' id='card_3'>card 3<img id='card_3_spinner' /></div>
+              </td>
+              <td id='lane_new' class='cell' lane_value='new'>
+                <div class='card-icon row_0_card' id='card_1'>card 1<img id='card_1_spinner' /></div>
+                <div class='card-icon row_0_card' id='card_2'>card 2<img id='card_2_spinner' /></div>
+              </td>
+              <td id='lane_open' class='cell' lane_value='open'>
+              </td>
+              <td id='lane_in_progress' class='cell' lane_value='in-progress'>
+              </td>
+              <td id='lane_in_test' class='cell' lane_value='in-test'>
+              </td>
+              <td id='lane_closed' class='cell' lane_value='closed'>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class='card-place-holder' id="card_place_holder" style="display:none"></div>
+        <div id='magic_card_container'>
+          <div class='magic_card' id="magic_card_thumbnail">
+            <div style='border-left: 5px solid blue;height: 100%;width: 100%; background-color: green'></div>
+          </div>
+        </div>
+      </div>
+      <!-- Log output -->
+      <div id="testlog"></div>
+    </div>
+    <script type="text/javascript">
+// <![CDATA[
+  SAND_BOX_CONTENT = $('sandbox').innerHTML;
+
+  EventStub = Class.create({
+    pointerX : function() { return 0; },
+    pointerY : function() { return 0; }
+  });
+
+  Ajax.Request.prototype.request = Ajax.Request.prototype.__request;
+  Ajax.Updater.prototype.request = Ajax.Updater.prototype.__request;
+
+  new Test.Unit.Runner({
+
+    setup: function() {
+      $('sandbox').innerHTML = SAND_BOX_CONTENT;
+      this.magicCard = new MagicCard('magic_card_thumbnail');
+      this.magicCard.laneName = 'status'
+      this.magicCard.rowName = 'story'
+      this.magicCard.initDroppables('swimming-pool');
+      this.requestParameters;
+      this.magicCard.getDroppingCardDimensions = function() {
+        return {width: $('card_1').getWidth(), height: $('card_1').getHeight()};
+      };
+      this.magicCard.request = function(params) {
+        this.requestParameters = params;
+      }.bind(this);
+    },
+
+    teardown :function(){
+      Droppables.drops = [];
+      this.magicCard.destroy();
+    },
+
+    testDragMagicCardToALaneShouldInheritLanePropertyForCreatingCard: function() { with(this) {
+      var dest = $('lane_in_progress').cumulativeOffset();
+      dragAndDrop(magicCard.element, [dest[0] + 1, dest[1] + 1], function() {
+        expected = 'card_properties[status]=in-progress&card_properties[story]=#123';
+        assertEqual(expected, decodeURIComponent(requestParameters));
+      });
+    }},
+    testMagicCardShouldIgnoreRowValueWhenRowNameIsBlank: function() { with(this) {
+      this.magicCard.rowName = null;
+      var dest = $('lane_open').cumulativeOffset();
+      dragAndDrop(magicCard.element, [dest[0] + 1, dest[1] + 1], function() {
+        expected = 'card_properties[status]=open';
+        assertEqual(expected, decodeURIComponent(requestParameters));
+      });
+    }},
+
+    testMagicCardShouldIgnoreLaneValueWhenLaneNameIsBlank: function() { with(this) {
+      this.magicCard.laneName = null;
+      var dest = $('lane_open').cumulativeOffset();
+      dragAndDrop(magicCard.element, [dest[0] + 1, dest[1] + 1], function() {
+        expected = 'card_properties[story]=#123';
+        assertEqual(expected, decodeURIComponent(requestParameters));
+      });
+    }},
+
+    testShouldNotRevertAfterDropTheMagicCard: function() { with(this) {
+      var dest = $('lane_open').cumulativeOffset();
+      dragAndDrop(magicCard.element, [dest[0] + 1, dest[1] + 1], function() {
+        wait(1500, function() {
+          magicCard.element.show();
+          assertArrayEqual([dest[0] + 1, dest[1] + 1], magicCard.element.cumulativeOffset());
+        });
+      });
+    }},
+
+    testShouldRevertMagicCardWhenDropCardOutsideOfSwimmingPool: function() { with(this) {
+      var dest = $('lane_new').cumulativeOffset();
+      dragAndDrop(magicCard.element, [dest[0], dest[1] - 100], function() {
+        wait(1500, function() {
+          var expected = $('magic_card_container').cumulativeOffset();
+          var result = magicCard.element.cumulativeOffset();
+          assert(result.top > expected.top - 10)
+          assert(result.top < expected.top + 10)
+          assert(result.left > expected.left - 10)
+          assert(result.left < expected.left + 10)
+        });
+      });
+    }},
+
+    testShouldBeAbleToManuallyRevertMagicCard: function() { with(this) {
+      var dest = $('lane_in_progress').cumulativeOffset();
+      dragAndDrop(magicCard.element, [dest[0] + 1, dest[1] + 1], function() {
+        magicCard.revert();
+        wait(1500, function() {
+          assertArrayEqual($('magic_card_container').cumulativeOffset(), magicCard.element.cumulativeOffset());
+        });
+      });
+    }},
+
+    testShouldStillBeAbleToAutoRevertAfterManualRevert: function() { with(this) {
+      var dest = $('lane_in_progress').cumulativeOffset();
+      dragAndDrop(magicCard.element, [dest[0] + 1, dest[1] + 1], function() {
+        magicCard.revert();
+        wait(1500, function() {
+          var dest = $('lane_new').cumulativeOffset();
+          dragAndDrop(magicCard.element, [dest[0], dest[1] - 100], function() {
+            wait(1500, function() {
+              assertArrayEqual($('magic_card_container').cumulativeOffset(), magicCard.element.cumulativeOffset());
+            });
+          });
+        });
+      });
+    }},
+
+    testShouldBeAbleToManulRevertAfterManualRevertAndDragDropAgain: function() { with(this) {
+      var dest = $('lane_in_progress').cumulativeOffset();
+      dragAndDrop(magicCard.element, [dest[0] + 1, dest[1] + 1], function() {
+        magicCard.revert();
+        wait(1500, function() {
+          var dest = $('lane_in_progress').cumulativeOffset();
+          dragAndDrop(magicCard.element, [dest[0] + 1, dest[1] + 1], function() {
+            magicCard.revert();
+            wait(1500, function() {
+              assertArrayEqual($('magic_card_container').cumulativeOffset(), magicCard.element.cumulativeOffset());
+            });
+          });
+        });
+      });
+    }},
+
+    testShouldResizeMagicToSwimmingCardSizeAfterDraggedOutOfOriginalPosition: function() { with(this) {
+      var originalPosition = $('magic_card_container').cumulativeOffset();
+      this.dragTo(magicCard.element, [originalPosition[0] + 100, originalPosition[1] - 100]);
+      wait(1500, function() {
+        assertEqual($('card_1').getHeight(), magicCard.element.getHeight());
+        assertEqual($('card_1').getWidth(), magicCard.element.getWidth());
+      });
+    }},
+
+    testShouldResizeMagicBackWhenRevertingMagicCard: function() { with(this) {
+      var originalHeight = magicCard.element.getHeight();
+      var originalWidth = magicCard.element.getWidth();
+      var dest = $('lane_new').cumulativeOffset();
+      dragAndDrop(magicCard.element, [dest[0], dest[1] - 100], function() {
+        wait(1500, function() {
+          assertEqual(originalHeight, magicCard.element.getHeight());
+          assertEqual(originalWidth, magicCard.element.getWidth());
+        });
+      });
+    }},
+
+    testMagicCardShouldBeInOriginalPositionWheneverRevertMagicCard: function() { with(this) {
+      var dest = $('lane_in_progress').cumulativeOffset();
+      dragAndDrop(magicCard.element, [dest[0] + 1, dest[1] + 1], function() {
+        magicCard.revert();
+        wait(1500, function() {
+          magicCard.revert();
+          wait(1500, function() {
+            assertArrayEqual($('magic_card_container').cumulativeOffset(), magicCard.element.cumulativeOffset());
+          });
+        });
+      });
+    }},
+
+    testShouldMarkMagicCardDroppableWhenDraggingOutOfMagicCardContainer: function() { with(this) {
+      assertEqual(false, magicCard.droppable);
+      var originalPosition = $('magic_card_container').cumulativeOffset();
+      var originalHeight = magicCard.element.getHeight();
+      dragTo(magicCard.element, [originalPosition.left, originalPosition.top - originalHeight/2]);
+      assertEqual(false, magicCard.droppable);
+      dragTo(magicCard.element, [originalPosition.left, originalPosition.top - originalHeight - 1]);
+      wait(1500, function() {
+        assertEqual(true, magicCard.droppable);
+        dragTo(magicCard.element, [originalPosition.left, originalPosition.top - 2]);
+        assertEqual(false, magicCard.droppable);
+      })
+    }},
+
+    testShouldDisplayAPlaceHolderInLaneWhenPlaceHolderSpecified: function() { with(this) {
+      this.magicCard.placeHolder = new CardPlaceHolder($('card_place_holder'), '.card-icon');
+      var originalPosition = $('magic_card_container').cumulativeOffset();
+      this.dragTo(magicCard.element, [originalPosition[0] + 100, originalPosition[1] - 100]);
+      wait(100, function() {
+        assertEqual($('lane_not_set'), $('card_place_holder').parentNode);
+        assert($('card_place_holder').visible());
+      });
+    }},
+
+    testShouldDisplayAPlaceHolderAtTheEndOfTheLaneWhenMagicCardIsUnderLastCardInTheLane: function() { with(this) {
+      this.magicCard.placeHolder = new CardPlaceHolder($('card_place_holder'), '.card-icon');
+      var originalPosition = $('magic_card_container').cumulativeOffset();
+      this.dragTo(magicCard.element, [originalPosition[0] + 100, originalPosition[1] - 100]);
+      wait(100, function() {
+        assertArrayEqual([$('card_3'), $('card_place_holder')], $('lane_not_set').select('div'));
+      });
+    }},
+
+    testShouldPutPlaceHolderInClosestPositionRelatedToMagicCard: function() { with(this) {
+      this.magicCard.placeHolder = new CardPlaceHolder($('card_place_holder'), '.card-icon');
+      var card2Position = $('card_2').cumulativeOffset();
+      this.dragTo(magicCard.element, [card2Position[0] + 10, card2Position[1] - 10]);
+      wait(100, function() {
+        assertArrayEqual([$('card_1'), $('card_place_holder'), $('card_2')], $('lane_new').select('div'));
+        assert($('card_place_holder').visible());
+      });
+    }},
+
+    testShouldHidePlaceHolderWhenMoveMagicCardOutOfLanes: function() { with(this) {
+      this.magicCard.placeHolder = new CardPlaceHolder($('card_place_holder'), '.card-icon');
+      var originalPosition = $('magic_card_container').cumulativeOffset();
+      this.dragTo(magicCard.element, [originalPosition[0] + 100, originalPosition[1] - 100]);
+      this.dragTo(magicCard.element, [originalPosition[0] + 100, originalPosition[1] + 50]);
+
+      wait(100, function() {
+        assertEqual($('lane_not_set'), $('card_place_holder').parentNode);
+        assert(!$('card_place_holder').visible());
+      });
+    }},
+
+    testShouldLockMagicCardWhenNoDroppablesInitialized: function() { with(this) {
+      this.magicCard.initDroppables('empty-table');
+      assertEqual(null, this.magicCard.draggable);
+
+      this.magicCard.initDroppables('not-exist');
+      assertEqual(null, this.magicCard.draggable);
+    }},
+
+  }, { testLog: "testlog", test : '' }).run;
+
+// ]]>
+</script>
+  </body>
+</html>

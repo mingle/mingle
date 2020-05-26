@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_help.dtd">
+<topic title="Configuring SSL Access" id="configure_ssl">
+  <p>You can turn on HTTPS access by configuring a few properties in mingle.properties as follows:</p>
+  <markup>
+-Dmingle.ssl.port=8443
+-Dmingle.ssl.keystore=/PATH/TO/KEYSTORE
+-Dmingle.ssl.keystorePassword=PASSWORD_TO_ACCESS_KEYSTORE
+-Dmingle.ssl.keyPassword=KEY_PASSPHRASE</markup>
+  <p>You can have both HTTP and HTTPS enabled for Mingle by setting proper values for both the -Dmingle.port property and the entire -Dmingle.ssl.* section.</p>
+  <hint>Mingle 15.1 and above does not allow you to set both HTTP and HTTPS concurrently.</hint>
+  <p>You can disable HTTP or HTTPS by not setting either of -Dmingle.port or -Dmingle.ssl.port.</p>
+  <p>If neither -Dmingle.port nor -Dmingle.ssl.port is given, a default of "8080" for -Dmingle.port will be used.</p>
+  <p>Your keystore (mingle.ssl.keystore) is a file in which keys and certificates are stored. Mingle requires access to it to provide secure HTTPS connections. Your certificate will need to be imported into this keystore. You can find more information on creating and managing a keystore <exref url="http://download.oracle.com/javase/6/docs/technotes/tools/windows/keytool.html">here</exref>.</p>
+  <p>We recommend storing your keystore in a directory outside of Mingle's install folder so that the keystore does not need to be moved during subsequent Mingle upgrades.</p>
+  <p>Your keystore file is password protected, so you need to provide your keystore password as mingle.ssl.keystorePassword.</p>
+  <p>The mingle.ssl.keyPassword entry should contain your key's password.</p>
+  <hint>These properties are only used to configure the SSL port to which Mingle binds on its host machine. Be sure to also configure -Dmingle.siteURL (see <cref topic="advanced_mingle_configuration">advanced configuration</cref>) to match the new HTTPS URL.</hint>
+</topic>

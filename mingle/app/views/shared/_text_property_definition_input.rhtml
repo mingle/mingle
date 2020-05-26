@@ -1,0 +1,45 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% options[:not_set_display_name] ||= '(not set)' %>
+
+<a id="<%= options[:html_id_prefix] %>_edit_link" style="display:inline;" <% if options[:read_only] %>class = "transition-hidden-protected"<% end %>>
+  <% display_value = options[:value].blank? ? options[:not_set_display_name] : options[:display_value] %>
+  <% if options[:stale] %>
+    <span id='<%= "#{options[:html_id_prefix]}_stale" %>' class='stale' title='<%= "This value may be out of date. Refresh this page to view updated aggregates." %>'>* <%= h display_value %></span>
+  <% else %>
+    <%= h display_value %>
+  <% end %>
+</a> 
+<%= text_field_tag options[:field_name], 
+      property_value_for_inline_editor(options[:value], options[:is_mixed_value]),
+      :id => "#{options[:html_id_prefix]}_editor", 
+      :class => "inline-editor", 
+      :style =>"display:none;" %>
+
+<% unless options[:read_only] %>
+
+  <% dl_options = {:onchange => options[:onchange], :is_mixed_value => options[:is_mixed_value]} -%>
+
+  <%# every value to_s first to make sure we will not output nil  %>
+
+  <%= javascript_with_rescue %{
+    new TextPropertyEditor(#{(options[:html_id_prefix] + "_edit_link").inspect},
+      #{(options[:html_id_prefix] + "_editor").inspect},
+      #{options[:value].to_s.inspect}, #{options[:not_set_display_name].to_s.inspect}, #{js_options dl_options})
+  }%>
+
+<% end %>

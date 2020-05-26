@@ -1,0 +1,449 @@
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<project default="vmware_image" basedir=".">
+  
+    <target name="vmware_image" depends="vmware_image_base,vmware_image_creator"/>
+
+
+    <target name="vmware_image_creator" depends="vmware_image_base">
+      <exec executable="git" outputproperty="gitrevision" >
+        <arg line="log -n1 --pretty=format:%h"/>
+      </exec>
+      <!-- nscd look up the virtual partition, need restart everytime we create the virtual directory for the vm -->
+      <exec executable="sudo" >
+        <arg line="/sbin/service nscd stop"/>
+      </exec> 
+      <exec executable="sudo" dir="tmp">
+        <arg line="/usr/bin/appliance-creator -n mingle --config vmimage_base.ks --logfile=mingle-vm.log --vmem=1536 --version=${INSTALLER_VERSION} --outdir=."/>
+      </exec> 
+      <exec executable="/usr/bin/virt-convert" dir="tmp">
+        <arg line="-i virt-image -o vmx mingle/mingle.xml mingle_${INSTALLER_VERSION}/mingle.vmx"/>
+      </exec> 
+      <exec executable="/bin/tar" dir="tmp">
+        <arg line="zcvf mingle_vmware_${INSTALLER_VERSION}_${gitrevision}.tar.gz mingle_${INSTALLER_VERSION}"/>
+      </exec> 
+
+      <mkdir dir="${INSTALLER_PATH}/${INSTALLER_VERSION}"/>
+      <move file="tmp/mingle_vmware_${INSTALLER_VERSION}_${gitrevision}.tar.gz" todir="${INSTALLER_PATH}/${INSTALLER_VERSION}"/>
+      <delete dir="tmp/mingle" quiet="true" />
+      <delete dir="tmp/mingle_${INSTALLER_VERSION}" quiet="true" />
+      <echo file="tmp/installers_link.html">
+&lt;p/&gt;&lt;p/&gt;If you are not authorized to download the installer, please contact mingle-dev@thoughtworks.com.&lt;br/&gt;They will need to add you to the &lt;b&gt;MingleCIBuildDownloadGroup&lt;/b&gt; in Corporate Active Directory&lt;br/&gt;before you can access the installer download site&lt;p/&gt;&lt;p/&gt;&lt;p/&gt;
+
+&lt;a href="${INSTALLER_DOWNLOAD_URL}/${INSTALLER_VERSION}/mingle_vmware_${INSTALLER_VERSION}_${gitrevision}.tar.gz"&gt;mingle_vmware_${INSTALLER_VERSION}_${gitrevision}.tar.gz&lt;/a&gt;&lt;p/&gt;
+
+      </echo>
+      <echo file="tmp/installer_links.txt">${INSTALLER_DOWNLOAD_URL}/${INSTALLER_VERSION}/mingle_vmware_${INSTALLER_VERSION}_${gitrevision}.tar.gz</echo>
+      <exec executable="sudo" >
+        <arg line="/sbin/service nscd start"/>
+      </exec> 
+    </target>
+
+    <target name="vmware_image_base">
+      <echo message="Install and configurate base OS"/>
+      <delete dir="tmp" quiet="true" />
+      <mkdir dir="tmp"/>
+      <mkdir dir="tmp/mingle"/>
+      <mkdir dir="tmp/mingle_${INSTALLER_VERSION}"/>
+      <delete dir="tmp/vmimage_base.ks" quiet="true" />
+      <exec executable="git" outputproperty="gitrevision" >
+        <arg line="log -n1 --pretty=format:%h"/>
+      </exec>
+      <echo file="tmp/vmimage_base.ks">
+lang C
+keyboard us
+timezone US/Central
+auth --useshadow --enablemd5
+selinux --disabled
+firewall --disabled
+bootloader --timeout=1 --append="acpi=off rhgb quiet vga=0x340"
+network --bootproto=dhcp --device=eth0 --onboot=on
+services --enabled=network
+# Uncomment the next line
+# to make the root password be thincrust
+# By default the root password is emptied
+#rootpw --iscrypted $1$uw6MV$m6VtUWPed4SqgoW6fKfTZ/
+
+#
+# Partition Information. Change this as necessary
+# This information is used by appliance-tools but
+# not by the livecd tools.
+#
+part / --size 2048 --fstype ext3 --ondisk sda
+
+#
+# Repositories
+#
+#repo --name=released --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-10&amp;arch=$basearch
+repo --name=released --baseurl=http://fmtsd01.thoughtworks.com/fedora/releases/10/Everything/i386/os
+
+# To include updates, use the following "repo" (enabled by default)
+#repo --name=updates --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f10&amp;arch=$basearch
+repo --name=f10-updates --baseurl=http://fmtsd01.thoughtworks.com/fedora/updates/10/i386
+
+#
+# Add all the packages after the base packages
+#
+%packages --excludedocs --nobase
+bash
+kernel
+grub
+e2fsprogs
+passwd
+policycoreutils
+chkconfig
+rootfiles
+yum
+vim-minimal
+acpid
+vixie-cron
+
+#needed to disable selinux
+system-config-securitylevel-tui
+
+#Allow for dhcp access
+dhclient
+iputils
+
+#
+# Packages to Remove
+#
+
+# no need for kudzu if the hardware doesn't change
+-kudzu
+-prelink
+-setserial
+-ed
+
+# Remove the authconfig pieces
+-authconfig
+-rhpl
+-wireless-tools
+
+# Remove the kbd bits
+#-kbd
+#-usermode
+
+# these are all kind of overkill but get pulled in by mkinitrd ordering
+-mkinitrd
+-kpartx
+-dmraid
+-mdadm
+-lvm2
+-tar
+
+# selinux toolchain of policycoreutils, libsemanage, ustr
+-policycoreutils
+-checkpolicy
+-selinux-policy*
+-libselinux-python
+-libselinux
+openssh-server
+openssh
+postgresql-server
+kbd
+plymouth-plugin-spinfinity
+
+%end
+
+#
+# Add custom post scripts after the base post.
+#
+%post
+
+#
+# Postgresql data dir configuration
+#
+/bin/mkdir -p /var/lib/pgsql
+/bin/chown postgres:postgres /var/lib/pgsql
+/bin/su -l postgres -c "/usr/bin/initdb -D /var/lib/pgsql/data --locale=en_US.UTF-8 --encoding=UNICODE"
+/sbin/chkconfig postgresql on
+
+#
+# Postgresql networking configuration
+#
+/bin/cat &lt;&lt; EOF &gt; /var/lib/pgsql/data/pg_hba.conf
+local all all trust
+host all all 127.0.0.1/32 trust
+host all all ::1/128 trust
+EOF
+
+
+#
+# Postgresql user/db creation
+#
+/bin/chown postgres:postgres /var/lib/pgsql/data/pg_hba.conf
+/etc/init.d/postgresql start
+/bin/su - postgres -c "/usr/bin/createuser -s mingle"
+/usr/bin/createdb -U mingle -E UTF-8 -O mingle mingle
+/etc/init.d/postgresql stop
+
+#
+# Postgresql vacuum cron job configuration
+#
+/bin/cat &lt;&lt; EOF &gt; /var/lib/pgsql/vacuum_cron.sh
+#!/bin/bash
+databases=`/usr/bin/psql -q -c "\l" | /bin/sed -n 4,/\eof/p | /bin/grep -v rows\) | /bin/awk {'print \$1'}`
+for i in \$databases; do
+        if [ \$i != 'template0' -a \$i != 'template1' -a \$i != 'postgres' ]
+        then
+                /usr/bin/vacuumdb -z \$i &gt;/dev/null 2&gt;&amp;1
+        fi
+done
+EOF
+/bin/chown postgres:postgres /var/lib/pgsql/vacuum_cron.sh
+/bin/chmod 755 /var/lib/pgsql/vacuum_cron.sh
+/bin/mkdir -p /var/spool/cron
+/bin/chown root:root /var/spool/cron
+/bin/chmod 700 /var/spool/cron
+/bin/cat &lt;&lt; EOF &gt; /var/spool/cron/postgres
+30 4 * * * /var/lib/pgsql/vacuum_cron.sh
+EOF
+/bin/chown root:root /var/spool/cron/postgres
+/bin/chmod 600 /var/spool/cron/postgres
+
+#
+# Mingle create mingle service account
+#
+/usr/sbin/useradd -c "Mingle Daemon" -d /var/lib/mingle -m -s /bin/bash mingle
+%end
+
+
+%post --nochroot
+
+#
+# Install Mingle and JDK
+#
+/usr/bin/wget http://fmtsd01.thoughtworks.com/java/tgz/jre1.6.0_18.tgz
+/bin/tar zxvf jre1.6.0_18.tgz -C $INSTALL_ROOT/usr/local
+/bin/rm -rf jre1.6.0_18.tgz
+/usr/bin/wget --no-check-certificate --http-user=${INSTALLER_DOWNLOAD_USER} --http-password=${INSTALLER_DOWNLOAD_PASSWORD} ${INSTALLER_DOWNLOAD_SERVER}/${INSTALLER_VERSION}/mingle_unix_${INSTALLER_VERSION}_${gitrevision}.tar.gz
+/bin/tar zxvf mingle_unix_${INSTALLER_VERSION}_${gitrevision}.tar.gz -C $INSTALL_ROOT/var/lib/mingle
+/bin/rm -rf mingle_unix_${INSTALLER_VERSION}_${gitrevision}.tar.gz
+
+#
+# Custom splash screen
+#
+/bin/cp -f ../vendor/vmware/spinfinity.so $INSTALL_ROOT/usr/lib/plymouth/spinfinity.so
+/bin/cp -f ../vendor/vmware/bg.png  $INSTALL_ROOT/usr/share/plymouth/spinfinity/bg.png
+
+/bin/cat &lt;&lt; EOF &gt; $INSTALL_ROOT/var/lib/plymouth/boot-duration
+0.024:RCkernelparam
+0.024:RChostname
+0.025:RCmountfs
+0.029:RCswap
+0.031:network
+0.081:rsyslog
+0.085:mdmonitor
+0.086:messagebus
+0.090:netfs
+0.093:acpid
+0.095:udev-post
+0.099:postgresql
+0.125:exim
+0.142:crond
+0.145:local
+0.147:mingle
+EOF
+%end
+
+%post
+/usr/sbin/plymouth-set-default-plugin spinfinity
+# plymouth-update-initrd will not work, use mkinitrd directly
+#/usr/libexec/plymouth/plymouth-update-initrd
+/sbin/mkinitrd -f /boot/initrd-2.6.27.41-170.2.117.fc10.i686.img 2.6.27.41-170.2.117.fc10.i686
+
+
+#
+# Mingle data-dir setup
+#
+/bin/mkdir -p /var/lib/mingle/data/config
+/bin/cat &lt;&lt; EOF &gt; /var/lib/mingle/data/config/auth_config.yml
+password_format:
+basic_authentication_enabled: true
+basic_authentication:
+authentication:
+ldap_settings:
+  #ldapserver:
+  #ldapport:
+  #ldapbinduser:
+  #ldapbindpasswd:
+  #ldapbasedn:
+  #ldapfilter:
+  #ldapobjectclass:
+  #ldap_map_fullname:
+  #ldap_map_mail:
+  #ldapgroupobjectclass:
+  #ldapgroupdn:
+  #ldapgroupattribute:
+cas_settings:
+  #cas_port:
+  #cas_host:
+  #cas_uri:
+EOF
+/bin/cat &lt;&lt; EOF &gt; /var/lib/mingle/data/config/broker.yml
+username: mingle
+password: password
+uri: vm://localhost?create=false&amp;jms.prefetchPolicy.all=0
+EOF
+/bin/cat &lt;&lt; EOF &gt; /var/lib/mingle/data/config/database.yml
+---
+production:
+  driver: org.postgresql.Driver
+  password: ""
+  username: mingle
+  adapter: jdbc
+  url: jdbc:postgresql://localhost:5432/mingle
+EOF
+/bin/cat &lt;&lt; EOF &gt; /var/lib/mingle/data/config/smtp_config.yml
+smtp_settings:
+  #domain:
+  #authentication:
+  #user_name:
+  #password:
+  address: localhost
+  port: 25
+  tls: false
+site_url: http://localhost:8080
+sender:
+  address: mingle@localhost.localdomain
+  name: Mingle Administrator
+EOF
+/bin/cat &lt;&lt; EOF &gt; /var/lib/mingle/data/config/mingle.properties
+#Refer to the mingle.properties.example file in your Mingle installation folder to see other properties that can be set to configure Mingle
+-Dmingle.swapDir=/var/lib/mingle/data/tmp
+-Dmingle.appContext=/
+-Dmingle.memcachedPort=11211
+-Dmingle.port=8080
+-Dmingle.logDir=/var/lib/mingle/data/log
+-Dmingle.memcachedHost=127.0.0.1
+EOF
+
+#
+# Mingle log setup
+#
+/bin/mkdir -p /var/lib/mingle/data/log
+
+/bin/chown -R mingle:mingle /var/lib/mingle
+
+
+#
+#
+#
+/bin/cat &lt;&lt; EOF &gt; /etc/sysconfig/mingle
+MINGLE_USER=mingle
+export MINGLE_USER
+MINGLE_DATADIR=/var/lib/mingle/data
+export MINGLE_DATADIR
+MINGLE_HOME=/var/lib/mingle/mingle_${INSTALLER_VERSION}
+export MINGLE_HOME
+JAVA_HOME=/usr/local/jre1.6.0_18
+export JAVA_HOME
+PATH=\$JAVA_HOME/bin:$PATH
+export PATH
+EOF
+
+
+
+/bin/cat &lt;&lt; EOF &gt; /etc/init.d/mingle
+#!/bin/bash
+#
+# chkconfig: - 99 01
+# description: JRuby Mingle
+#
+
+# source function library
+. /etc/rc.d/init.d/functions
+
+# pull in sysconfig settings
+if [ -f /etc/sysconfig/mingle ] ; then
+        . /etc/sysconfig/mingle
+fi
+
+[ -z "\$MINGLE_USER" ] &amp;&amp; MINGLE_USER=nobody
+
+RETVAL=0
+
+start(){
+        su - \$MINGLE_USER -c "\$MINGLE_HOME/MingleServer --mingle.dataDir=\$MINGLE_DATADIR start"
+        echo "Waiting for Mingle to start."
+        /usr/bin/tail -f \$MINGLE_DATADIR/log/mingle.log |
+        while read -r line
+        do
+                [[ "\$line" != *Started\\ SelectChannelConnector\\@0.0.0.0:8080* ]] &amp;&amp; continue
+                        echo "Mingle Started"
+                        sleep 10
+			/usr/bin/curl -m 60 http:\/\/localhost:8080
+                exit
+        done
+}
+
+stop(){
+        su - \$MINGLE_USER -c "\$MINGLE_HOME/MingleServer --mingle.dataDir=\$MINGLE_DATADIR stop"
+}
+
+case "\$1" in
+        start)
+                start
+                ;;
+        stop)
+                stop
+                ;;
+        restart)
+                stop
+                start
+                ;;
+        *)
+                echo \$"Usage: \$0 {start|stop|restart}"
+                RETVAL=1
+esac
+exit \$RETVAL
+EOF
+
+/bin/chmod 755 /etc/init.d/mingle
+/sbin/chkconfig mingle on
+
+
+#
+# Output Mingle version and the VM IP in the login screen
+#
+/bin/cat &lt;&lt; EOF &gt;&gt; /etc/rc.local
+echo "Mingle ${MINGLE_VERSION}" &gt; /etc/issue
+echo "" &gt;&gt; /etc/issue
+/sbin/ifconfig | grep "inet addr" | grep -v "127.0.0.1" | awk '{ print \$2 }' | awk -F: '{ print "To access Mingle please browse to http://"\$2":8080" }' &gt;&gt; /etc/issue
+echo "" &gt;&gt; /etc/issue
+EOF
+
+#
+# Create empty mingle.log file for OS to check Mingle status
+# TODO: Barrow to review to use curl
+#
+/bin/mkdir -p /var/lib/mingle/data/log
+/bin/cat &lt;&lt; EOF &gt; /var/lib/mingle/data/log/mingle.log
+EOF
+/bin/chown -R mingle:mingle /var/lib/mingle/data/log/mingle.log
+
+/sbin/chkconfig iptables off
+/sbin/chkconfig ip6tables off
+/sbin/chkconfig sshd off
+
+%end
+
+      </echo>
+</target>
+
+</project>

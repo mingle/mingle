@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<shortcuts>
+  <skipIfNotSupported/>
+  <defaultCurrentUser/>
+  <programGroup defaultName="Sahi"
+                location="startMenu"/>
+  <shortcut
+    name="Start Sahi"
+    target="$INSTALL_PATH\userdata\bin\start_dashboard.bat"
+    commandLine=""
+    workingDirectory="$INSTALL_PATH\userdata\bin"
+    description="Start Sahi Dashboard"
+    iconFile="$INSTALL_PATH\htdocs\spr\images\sahi_os_icon.ico"
+    iconIndex="0"
+    initialState="noShow"
+    programGroup="yes"
+    desktop="yes"
+    applications="no"
+    startMenu="no"
+    startup="no">
+  </shortcut>
+</shortcuts>

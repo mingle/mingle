@@ -1,0 +1,74 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<h1>Setting up Mingle: Step 1 - Connect Mingle to your database</h1>
+
+<% info_box do %>
+  <p>You need to have a database for use with Mingle. If you have not already installed a database you will need to do so before completing this step. <b>It is strongly recommended that the database used for Mingle is empty</b>. For more detailed help on installing a database for use with Mingle, click <%= render_help_link 'Connect Database', :content => 'here', :class => "" %>.</p>
+  <p>You can specify a database that has been previously used by Mingle, it will be upgraded automatically to the latest version.</p>
+  <p>Create a user that is to be used by Mingle to connect to the database. <b>This user needs to have full DBA privileges for the database.</b></p>
+  <p>Please provide the connection details for the database server, the name of the database on that server and the username and password for the Mingle database user.</p>
+  
+<% end %>
+
+  <div class="current-connect">
+    <%= render :partial => 'steps' %>
+  </div>
+  
+<% form_tag({ :action => 'do_connect' }, { :class => 'install_form' }) do %>
+  <p>
+    <label for="config_database_type">Database:<%= required_label %> <span class="notes">(the type of database you want Mingle to connect to)</span></label>
+    <%= error_message_on 'config', 'database_type', :prepend_text => 'Database ', :css_class => 'field_error' %>
+    <%= select_tag 'database_type', options_for_select(@configs.collect{|c| [c.database_type_label, c.database_type]}, params[:database_type]), :onchange => "window.location = '#{url_for :action => 'connect'}?database_type=' + this.value" %>
+  </p>
+
+  <p>
+    <label for="config_host"><%= @config.labels.host %>:<%= required_label %> <span class="notes">(the hostname of the server running <%= @config.database_type %>)</span></label>
+    <%= error_message_on 'config', 'host', :prepend_text => "#{@config.labels.host} ", :css_class => 'field_error' %>
+    <%= text_field "config", "host", :class => "large" %>
+  </p>
+  
+  <p>
+    <label for="config_port"><%= @config.labels.port %>: <span class="notes">(the port that the database server listens to requests on, leave blank to use the default port for <%= @config.database_type %>)</span></label>
+    <%= error_message_on 'config', 'port', :prepend_text => "#{@config.labels.port} ", :css_class => 'field_error' %>
+    <%= text_field "config", "port", :class => "large" %>
+  </p>
+  
+  <p>
+    <label for="config_database"><%= @config.labels.name %>:<%= required_label %> <span class="notes">(the name of the database Mingle should use)</span></label>
+    <%= error_message_on 'config', 'database', :prepend_text => "#{@config.labels.name} ", :css_class => 'field_error' %>
+    <%= text_field "config", "database", :class => "large" %>
+  </p>
+  
+  <p>
+    <label for="config_username"><%= @config.labels.username %>:<%= required_label %> <span class="notes">(the username of the user Mingle should connect as, needs DBA privileges)</span></label>
+    <%= error_message_on 'config', 'username', :prepend_text => "#{@config.labels.username} ", :css_class => 'field_error' %>
+    <%= text_field "config", "username", :class => "large" %>
+  </p>
+  
+  <p>
+    <label for="config_password"><%= @config.labels.password %>:<%= required_label if @config.requires_password? %> <span class="notes">(the password Mingle should use to connect)</span></label>
+    <%= error_message_on 'config', 'password', :prepend_text => "#{@config.labels.password} ", :css_class => 'field_error' %>
+    <%= password_field "config", "password", :class => "large" %>
+  </p>
+  
+  <p><%= required_label %> indicates a required field</p>
+
+  <% action_bar :class => "action-bar setup-pages" do %>
+    <%= submit_tag 'Continue', :class => 'primary' %>
+    <%= render_help_link 'Connect Mingle to your database', :class => 'page-help-at-action-bar' %>
+  <% end %>
+<% end %>

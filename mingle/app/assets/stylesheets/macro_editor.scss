@@ -1,0 +1,589 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+@mixin fixed_width($width) {
+  min-width: $width;
+  width: $width;
+  max-width: $width;
+}
+
+%c3_chart_preview {
+  margin: 0 0 0 0 !important;
+  svg rect {
+    width: 100%;
+    height: 100%;
+  }
+
+  .c3-tooltip-container th, .c3-tooltip-container td {
+    padding: 5px 7px;
+    color: #333;
+    vertical-align: top;
+  }
+
+  .c3-tooltip-container th {
+    font-weight: bold;
+  }
+}
+
+#macro_editor {
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  li {
+    list-style-position: outside;
+  }
+
+  .color-palette-container.toggled-on {
+    .color_block {
+      &:hover {
+        cursor: not-allowed;
+      }
+      display: inline-block;
+      height: 16px;
+      width: 16px;
+      padding: 0 !important;
+      border: 1px solid #ccc;
+      line-height: 16px;
+      font-size: 0.75em;
+      font-weight: bold;
+      text-align: center;
+    }
+  }
+
+}
+
+.macro-edit-panel {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+#macro_editor {
+  p {
+    clear: both;
+    padding-bottom: 10px;
+  }
+  h3 {
+    border-top: 1px dotted #CCC;
+    font-size: 12px;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: Arial, Helvetica;
+    padding: 10px 0;
+    margin: 0;
+  }
+}
+
+label[for=macro_type] {
+  border-top: 1px dotted #CCC;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-family: Arial, Helvetica;
+  padding: 10px 0;
+  margin: 0;
+  border-top: 0;
+}
+
+#macro_editor {
+  label.color-popup-label {
+    text-align: left;
+    width: auto;
+  }
+  .simple-parameter-text-field {
+    width: 32em;
+  }
+  li {
+    .parameter-inputs {
+      position: relative;
+      float: left;
+      width: 80%;
+    }
+    .optional-paramater-control {
+      position: relative;
+      float: right;
+      width: 20%;
+    }
+  }
+  input[type="hidden"] {
+    display: none;
+  }
+  .example {
+    display: block;
+    margin-top: 5px;
+    font-size: 11px;
+  }
+  label:after {
+    content: ':';
+  }
+  input, select {
+    display: inline;
+  }
+}
+
+.series_label {
+  padding-right: 1em;
+}
+
+.series-container {
+  margin-top: 1em;
+}
+
+a {
+  &.remove-optional-parameter, &.optional-parameter-add-button {
+    background: left 50% no-repeat;
+    text-indent: -1000px;
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: middle;
+    height: 16px;
+    width: 16px;
+    margin-left: 5px;
+  }
+  &:focus {
+    &.remove-optional-parameter, &.optional-parameter-add-button {
+      -moz-outline: none;
+    }
+  }
+  &.optional-parameter-add-button {
+    background-image: url(../images/shared/icons/icon_add_shared_16.png);
+  }
+  &.remove-optional-parameter {
+    background-image: url(../images/shared/icons/icon_close_16.png);
+  }
+}
+
+#wysiwyg_macro_editor_dialog {
+  #macro_editor {
+    min-width: 500px;
+    max-width: 600px;
+    max-height: 400px;
+    overflow: auto;
+    padding-right: 10px;
+    a {
+      color: #0076ba;
+      text-decoration: none;
+      &:visited {
+        color: #0076ba;
+        text-decoration: none;
+      }
+    }
+    label {
+      display: block;
+      padding-bottom: 5px;
+    }
+    .required {
+      color: #CC0000;
+    }
+  }
+  #macro_preview {
+    td, th {
+      padding: 7px 10px;
+    }
+  }
+  #macro_editor {
+    .example {
+      color: #999;
+      font-style: italic;
+    }
+    input {
+      background-color: white;
+    }
+  }
+  #preview_panel_container {
+    border-style: solid;
+    border-width: 1px;
+
+    #macro_preview {
+      @extend %c3_chart_preview;
+    }
+  }
+  #macro_editor .preview-panel {
+    min-height: 275px;
+  }
+}
+
+.macro.error, #macro_preview .error {
+  padding: 3px 0 6px 3px;
+  max-width: 540px;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  /* CSS3 */
+  white-space: -moz-pre-wrap;
+  /* Firefox */
+}
+
+#wysiwyg_macro_editor_dialog .dropdown-panel {
+  background: white;
+}
+
+#wysiwyg_macro_editor_dialog_for_easy_chart {
+  #easy_chart_macro_editor {
+    width: 910px;
+    min-height: 500px;
+    overflow-x: hidden;
+    padding-left: 10px;
+    .calendar * {
+      text-align: center;
+    }
+
+    a {
+      color: #0076ba;
+      text-decoration: none;
+      &:visited {
+        color: #0076ba;
+        text-decoration: none;
+      }
+      &.easy-chart-toggle {
+        text-decoration: underline;
+      }
+    }
+    label {
+      display: block;
+      padding-bottom: 2px;
+    }
+    .required {
+      color: #CC0000;
+    }
+    p {
+      clear: both;
+      padding-bottom: 10px;
+    }
+
+    h3 {
+      font-size: 12px;
+      text-transform: uppercase;
+      font-weight: bold;
+      font-family: Arial, Helvetica;
+      padding: 10px 0;
+      margin: 0;
+      cursor: default;
+
+      &.preview {
+        text-transform: none;
+        float: left;
+        padding: 0 0 5px 0;
+      }
+
+      &.section-toggle {
+        margin: 10px 0 10px 0;
+        padding: 0;
+        &:before {
+          font-size: 14px;
+          display: inline-block;
+          width: 15px;
+        }
+      }
+
+      &.section-expand:before {
+        @include fa-icon($fa-var-caret-right);
+
+      }
+
+      &.section-collapse:before {
+        @include fa-icon($fa-var-caret-down);
+      }
+
+      &.disabled {
+        color: #b6b6b6;
+      }
+    }
+    .help-text {
+      color: #999;
+      font-size: 0.9em;
+      font-style: italic;
+    }
+    #macro_editor_preview_form_container {
+      display: inline-block;
+      vertical-align: top;
+      min-width: 425px;
+      max-width: 425px;
+      max-height: 460px;
+      position: relative;
+      .parameter-input {
+        margin-bottom: 10px;
+        padding-left: 5px;
+      }
+
+      #conditions {
+        .drop-down-container {
+          @include fixed_width(150px);
+        }
+
+        .pair-parameters-input {
+          margin-bottom: 10px;
+          padding-left: 5px;
+
+          .parameter-input {
+            margin-bottom: 0;
+            padding-left: 0;
+          }
+
+          .pair-connector {
+            display: inline-block;
+            vertical-align: top;
+            padding-top: 3px;
+            width: auto;
+            span {
+              padding: 2px 4px 2px 4px;
+            }
+          }
+        }
+      }
+
+      #additional_conditions {
+        padding-left: 5px;
+        div.chart-conditions-header .chart-condition-label {
+          width: 120px;
+          display: inline-block;
+          padding-bottom: 2px;
+        }
+
+        .condition-container {
+          a {
+            overflow: hidden;
+            display: inline-block;
+            vertical-align: top;
+            height: 20px;
+            width: 20px;
+            padding: 0;
+            margin: 2px 0 0 5px;
+            &.remove-additional-condition {
+              background: url(../images/shared/icons/icon_close_16.png) no-repeat;
+            }
+
+            &.add-additional-condition {
+              margin-left: 0px;
+              background: url(../images/shared/icons/icon_add_shared_16.png) no-repeat;
+            }
+          }
+          div.chart-condition {
+            min-width: 305px;
+            display: inline-block;
+            .part-container {
+              width: 120px;
+              display: inline-block;
+              vertical-align: top;
+              .drop-down-container {
+                @include fixed_width(110px);
+              }
+            }
+          }
+        }
+
+        div.chart-conditions-header .chart-condition-label, div.chart-condition .part-container {
+          &.operator {
+            width: 43px;
+            .drop-down-container {
+              @include fixed_width(35px);
+            }
+          }
+
+          &.property-value {
+            width: 140px;
+            .drop-down-container {
+              @include fixed_width(140px);
+            }
+
+            input[type=text] {
+              box-sizing: border-box;
+              width: 140px;
+              height: 20px;
+            }
+          }
+        }
+        .parameter-input {
+          margin-top: 10px;
+          padding-left: 0;
+        }
+      }
+
+      #chart_properties {
+        .grouped-parameters {
+          li.grouped-input {
+            width: 30%;
+            display: inline-block;
+            .drop-down-container {
+              @include fixed_width(120px);
+            }
+          }
+        }
+      }
+    }
+    #charts_macro_mql_container {
+      display: inline-block;
+      vertical-align: top;
+
+      .charts-macro-mql {
+        border: solid rgba(179, 177, 177, 0.6) 1px;
+        min-width: 425px;
+        min-height: 400px;
+        box-sizing: border-box;
+        padding-left: 3px
+      }
+
+      .mql-edit-warning {
+        padding: 0 0 5px 0;
+
+        .help-text {
+          padding-left: 0;
+          &:before {
+            @include fa-icon($fa-var-warning);
+          }
+        }
+      }
+    }
+    div#easy_charts_preview_panel_container {
+      display: inline-block;
+      position: absolute;
+      left: 455px;
+      top: 51px;
+      #macro_preview {
+        min-width: 462px;
+        max-width: 462px;
+        min-height: 400px;
+        max-height: 400px;
+        box-sizing: border-box;
+        border: solid rgba(179, 177, 177, 0.6) 1px;
+        padding: 10px;
+        margin: auto;
+        overflow-x: auto;
+        overflow-y: auto;
+        position: relative;
+
+        #edit_mql_easy_charts {
+          text-align: right;
+
+          button {
+            text-transform: none;
+            font-weight: bold;
+          }
+        }
+
+        .pie-chart {
+
+          &.small {
+            margin: 0px !important;
+
+            div.title {
+              position: inherit;
+              left: 100px;
+              top: 85px;
+              font-size: 1.2em;
+            }
+
+            svg {
+              position: absolute !important;
+              top: 50%;
+              left: 50%;
+              transform: translateY(68%);
+            }
+          }
+
+          &.medium {
+            div.title {
+              font-size: 1.4em;
+            }
+
+            svg {
+              position: absolute !important;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, 10%);
+            }
+          }
+
+          &.large {
+            div.title {
+              display: inherit;
+              font-size: 1.8em;
+            }
+
+            svg {
+              position: static !important;
+              transform: translate(0, 0) !important;
+            }
+          }
+        }
+
+        @extend %c3_chart_preview;
+      }
+    }
+    button {
+      display: inline-block;
+      padding: 5px;
+      border: 1px solid #b6b6b6;
+      text-align: center;
+      border-radius: 3px;
+      text-transform: none;
+      font-weight: bold;
+      margin-top: 10px;
+      color: #333;
+      min-width: 70px;
+      background: #e4e4e4;
+      background-image: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#e4e4e4));
+      background-image: -moz-linear-gradient(top, #fff, #e4e4e4);
+
+      &:hover {
+        border-color: #9e9e9e;
+        background: #ccc;
+        background-image: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#ccc));
+        background-image: -moz-linear-gradient(top, #f2f2f2, #ccc);
+        background-image: -webkit-linear-gradient(top, #f2f2f2, #ccc);
+      }
+    }
+
+    button#edit_mql {
+      float: right;
+    }
+
+    .page-help-at-action-bar {
+      float: right;
+      padding: 0 0 5px 0;
+    }
+
+    .ui-helper-hidden-accessible {
+      border: 0;
+      clip: rect(0 0 0 0);
+      height: 1px;
+      margin: -1px;
+      overflow: hidden;
+      padding: 0;
+      position: absolute;
+      width: 1px;
+    }
+
+    ul.ui-autocomplete {
+      position: absolute !important;
+      padding: 2px;
+      background: white;
+      border: 1px solid #aaaaaa;
+      border-radius: 4px;
+      li {
+        display: block;
+        a { color: black; }
+      }
+    }
+  }
+}
+
+.cke_reset_all table.cke_dialog .cke_dialog_body .cke_dialog_footer .cke_dialog_footer_buttons.shift-left {
+  display : inline-block;
+  width: 100%;
+  padding-left: 10px;
+}
+

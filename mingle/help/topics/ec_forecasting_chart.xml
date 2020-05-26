@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Easy chart for Forecasting charts">
+    <p>The forecasting chart is an extension of the daily history chart and shows when your team may deliver -- based on your definition of “done” -- in relation to changes (0%, 50% or 150%) in remaining scope.</p>
+    <p>You can use the forecasting chart to help answer the question: "When will we be done?" Because the forecasting is based on the average actual velocity to date, you might not see the forecasting dates at the very beginning of your release/iteration. However, as your team progresses, the historical information will be captured, which will allow Mingle to calculate and present the forecasting information for you.</p>
+        <screenshot alttext="Example forecasting chart" src="resources/images/ec_forecasting_chart_intro.png" />
+    <strong><p>CREATE A FORECASTING CHART</p></strong>
+    <p>To create a forecasting chart on a page or a card, follow these steps:</p>
+    <bullets>
+        <item>In the editor, click on the Daily History chart button.</item>
+        <item>In the Easy Charts form, start by selecting the data that will go into your chart. This is similar to the filters you use to make various views in Mingle.</item>
+        <screenshot alttext="Forecasting chart section1" src="resources/images/ec_forecasting_chart_section1.gif"/>
+            <p>Click on <i>Proceed to Step 2</i> when you’re done with this step.</p>
+        <item>Next, build the chart. </item>
+        <p>Please set a valid start and end date for your chart along with the x-label interval between two x-labels.</p>
+        <p>Select the aggregation for this chart. It could be the number of cards or an aggregation of numeric type card property.</p>
+        <screenshot alttext="Forecasting chart section2" src="resources/images/ec_forecasting_chart_section2.gif"/>
+        <item>The Forecasting chart requires that you specify atleast two series. Click on the Add a Series button to get started. Once, you add the second series, you will see an option to convert this chart to a Forecasting chart. Select the corresponding checkbox and define the series that would be your Total Scope and Completion.</item>
+            <p>You can customize how this series should look. When you’re done, you could either Add Another Series, or Proceed to Step 3.</p>
+            <screenshot alttext="Forecasting chart section3" src="resources/images/ec_forecasting_chart_section3.gif"/>
+        <item>Customize how you want the chart to look. You can select a size, the angle of the X-axis labels, and a color for the series. Additionally, you can give the chart, the X-axis and the Y-axis titles of your choice.</item>
+        <p>Click on Insert to complete the chart and insert it into the page or card. </p>
+        <item>Forecasting chart uses your project’s history to plot the chart. It looks at the events in your project. You will see the chart trying to prepare the data after you save it on a page/card. On refreshing the page, you will see the chart making progress for the series that you have added.</item>
+        <screenshot alttext="Forecasting chart section4" src="resources/images/ec_forecasting_chart_section4.gif"/>
+    </bullets>
+    <strong>Notes</strong>
+    <bullets>
+        <item>You can use project variables in your chart setup. For instance, if you’d like the data series chart to represent work for the current iteration at any point of time, you can do so without having to update the chart each iteration! You will have to use the project variables by editing the MQL after the chart is created.</item>
+    
+        <item>If you’re inserting a daily history chart into a card description, you can refer to the card itself in your chart setup by selecting THIS CARD as a property value. For instance, if you want a forecasting chart in a Release card to represent the number of story cards, use Release is THIS CARD in the filters.</item>
+        <screenshot alttext="Data series section5" src="resources/images/ec_forecasting_chart_using_thiscard.gif"/>
+    </bullets>
+    <p>
+        <strong>CUSTOMIZE USING MQL:</strong>
+    </p>
+    <p>You can build or further customize a forecasting chart using Mingle Query Language. Here’s a sample MQL snippet:</p>
+    <markup>
+    daily-history-chart
+    aggregate: count(*)
+    chart-conditions: type = story  AND status > new AND release = (current release)
+    start-date: 16-january-2012
+    end-date: 14-may-2012
+    x-labels-step: 28
+    chart-height: 310
+    chart-width: 800
+    plot-width: 610
+    y-title: Estimate
+    scope-series: All Stories
+    completion-series: Completed Stories
+    series:
+    - label: All Stories
+      color: #808080
+      line-width: 2
+    - label: Completed Stories
+      color: red
+      conditions: 'status' = 'closed'
+      line-width: 2
+    </markup>
+    <p>Some additional customizations you can set up in MQL are:</p>
+    <bullets>
+        <item>Use relationship operators on non-numeric properties (where ‘Due Date’ is greater than ‘Release Date’)</item>
+        <item>Custom chart width and height</item>
+        <item>Custom colours</item>
+    </bullets>
+</topic>

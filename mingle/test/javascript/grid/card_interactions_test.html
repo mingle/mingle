@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>MingleUI.grid.AbstractCardInteraction (and descendants) Test</title>
+
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/big.min.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/grid/card_interactions.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/live/view.js" type="text/javascript"></script>
+
+  <link rel="stylesheet" href="../test_assets/qunit-1.21.0.css" type="text/css"/>
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture">
+  <div id="flash"></div>
+  <table id="grid-3x3">
+    <thead>
+      <tr>
+        <th><!-- unused --></th>
+        <th class="lane_header" data-lane-value="">(not set)</th>
+        <th class="lane_header" data-lane-value="New">New</th>
+        <th class="lane_header" data-lane-value="In Progress">In Progress</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="grid-row" row_value="">
+        <th class="row_header" data-lane-value="">(not set)</th>
+        <td class="cell" lane_value=""></td>
+        <td class="cell" lane_value="New"></td>
+        <td class="cell" lane_value="In Progress"></td>
+      </tr>
+      <tr class="grid-row" row_value="Low">
+        <th class="row_header" data-lane-value="">Low</th>
+        <td class="cell" lane_value=""></td>
+        <td class="cell" lane_value="New"></td>
+        <td class="cell" lane_value="In Progress"></td>
+      </tr>
+      <tr class="grid-row" row_value="High">
+        <th class="row_header" data-lane-value="High">High</th>
+        <td class="cell" lane_value=""></td>
+        <td class="cell" lane_value="New"></td>
+        <td class="cell" lane_value="In Progress"></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<script src="../test_assets/jquery.mockjax.js" type="text/javascript"></script>
+<script src="../test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+<script src="../test_assets/qunit-phantom.js" type="text/javascript"></script>
+<script type="text/javascript">
+  "use strict";
+
+  /* disable any animations if defined */
+  if (jQuery.fx) jQuery.fx.off = true;
+
+  QUnit.module("AbstractCardInteraction tests", function abstractCardInteractionTests() {
+    QUnit.test("getPosition()", function (assert) {
+      var FunStrategy = $.extend(Object.create(MingleUI.grid.AbstractCardInteraction.prototype), {
+        params: function(card) { return card.data("card-number"); }
+      });
+
+      var wall = { grid: $("#grid-3x3"), strategy: FunStrategy };
+
+      var card = buildCard(2);
+      var cell = findCell("Low", "New");
+      cell.append(card);
+
+      var position = FunStrategy.getPosition(card, cell);
+      var expected = JSON.stringify({"row": "Low", "cell": "New", "params": 2});
+      assert.equal(position, expected, "getPosition() serializes cell by row_value and lane_value coordinates");
+
+      cell = findCell("", "In Progress");
+      card = buildCard(5);
+      cell.append(card);
+
+      position = FunStrategy.getPosition(card, cell);
+      expected = JSON.stringify({"row": "", "cell": "In Progress", "params": 5});
+      assert.equal(position, expected, "do it again with different data to prove it's not a canned response :)")
+    });
+
+    QUnit.test("insertIntoSortedPosition()", function (assert) {
+      var FunStrategy = Object.create(MingleUI.grid.AbstractCardInteraction.prototype);
+      var wall = { grid: $("#grid-3x3"), strategy: FunStrategy };
+
+      var cell = findCell("", "");
+
+      cell.append([
+        cardWithSortPos(6, -10),
+        cardWithSortPos(8, 3.1),
+        cardWithSortPos(4, 3.2),
+        cardWithSortPos(2, 6)
+      ]);
+
+      FunStrategy.insertIntoSortedPosition(cardWithSortPos(20, 3.15), cell);
+      assert.deepEqual(cardNumbersIn(cell), [6, 8, 20, 4, 2], "inserts card according to its sort value");
+
+      FunStrategy.insertIntoSortedPosition(cardWithSortPos(5, -7.25), cell);
+      assert.deepEqual(cardNumbersIn(cell), [6, 5, 8, 20, 4, 2], "works with negative values too");
+    });
+
+    QUnit.test("revertPosition()", function (assert) {
+      var FunStrategy = $.extend(Object.create(MingleUI.grid.AbstractCardInteraction.prototype), {
+        relocateCardToCell: function fakeRelocate(card, cell, parsedPosition) {
+          cell.append(card);
+          card.data("reverted-to", parsedPosition); // expose this to assertions
+        },
+
+        params: function(card) { return card.data("card-number"); }
+      });
+
+      var wall = { grid: $("#grid-3x3"), strategy: FunStrategy };
+      var card = buildCard(1);
+
+      var targetCell = findCell("Low", "").append(card);
+      var revertToCell = findCell("Low", "In Progress");
+
+      var originalPosition = FunStrategy.getPosition(card, revertToCell);
+
+      assert.ok($.contains(targetCell[0], card[0]), "baseline check - card is indeed a child of targetCell")
+
+      FunStrategy.revertPosition(wall, card, originalPosition);
+
+      assert.notOk($.contains(targetCell[0], card[0]), "card is no longer in targetCell");
+      assert.ok($.contains(revertToCell[0], card[0]), "card has been moved to revertToCell");
+
+      assert.equal(JSON.stringify(card.data("reverted-to")), originalPosition, "deserializes position and calls relocateCardToCell()");
+    });
+
+    QUnit.module("onDropCard() tests", {
+      beforeEach: function() {
+        $.mockjax.clear();
+      },
+      afterEach: function() {
+        $.mockjax.clear();
+      }
+    }, function basicDropCardTests() {
+      QUnit.test("basic happy path", function (assert) {
+        var FunStrategy = $.extend(Object.create(MingleUI.grid.AbstractCardInteraction.prototype), {
+          relocateCardToCell: function fakeRelocate(card, cell, parsedPosition) {
+            cell.append(card);
+            card.data("reverted-to", parsedPosition); // expose this to assertions
+          },
+
+          params: function(card) { return card.data("card-number"); }
+        });
+
+        var wall = {
+          grid: $("#grid-3x3"),
+          strategy: FunStrategy,
+          onUpdateCard: function(card) {
+            card.data("updated", true);
+          },
+          findDescendantsOfCard: function fakeCardFinder(card) {
+            return $(".does-not-exist");
+          }
+        };
+
+        var card = buildCard(2), card5 = buildCard(5);
+        var cell = cellForDrop("High", "New");
+        card.data("starting-position", FunStrategy.getPosition(card, cellForDrop("High", "")));
+        $("#flash").text("should clear flash message");
+
+        assert.notOk(card.data("updated"), "baseline - onUpdateCard() not called yet");
+        assert.ok($("#flash").text().length > 0, "baseline - #flash not empty");
+
+        var done = assert.async();
+        $.mockjax({
+          url: "/dropCardTo/High/New",
+          responseTime: 0,
+          type: "POST",
+          onAfterComplete: performAssertions
+        });
+
+        FunStrategy.onDropCard(wall, card, cell.append(card)); // dropped!
+
+        function performAssertions() {
+          assert.notOk(card.is(".operating"), "card should not be marked as operating");
+          assert.equal(typeof card.data("starting-position"), "undefined", "starting-position data should be cleared");
+          assert.equal(typeof card.data("reverted-to"), "undefined", "card was not reverted to initial position");
+          assert.ok(card.data("updated"), "calls onUpdateCard()");
+          assert.equal($("#flash").text(), "", "flash message should be cleared out onDropCard()")
+          assert.ok($.contains(cell[0], card[0]), "card stays in target cell")
+
+          done();
+        }
+      });
+
+      QUnit.test("moves descendant cards as well", function (assert) {
+
+        var card3 = cardWithSortPos(3, 9);
+        var card4 = cardWithSortPos(4, 2, [3]);
+        var card5 = cardWithSortPos(5, 4);
+        var card6 = cardWithSortPos(6, 6, [3]);
+        var card7 = cardWithSortPos(7, 8, [5]);
+        var card8 = cardWithSortPos(8, 10);
+
+        cellForDrop("", "In Progress").append(card4).append(card3);
+        cellForDrop("High", "New").append(card5).append(card7)
+        cellForDrop("High", "").append(card6).append(card8);
+
+        var FunStrategy = $.extend(Object.create(MingleUI.grid.AbstractCardInteraction.prototype), {
+          relocateCardToCell: function fakeRelocate(card, cell, parsedPosition) {
+            cell.append(card);
+            card.data("reverted-to", parsedPosition); // expose this to assertions
+          },
+
+          params: function(card) { return card.data("card-number"); }
+        });
+
+        var wall = {
+          grid: $("#grid-3x3"),
+          strategy: FunStrategy,
+          onUpdateCard: function(card) {
+            card.data("updated", true);
+          },
+          findDescendantsOfCard: function fakeCardFinder(card) {
+            return $([card4, card6, card7]);
+          }
+        };
+
+        var card = cardWithSortPos(2, 11);
+        var cell = cellForDrop("High", "New");
+        card.data("starting-position", FunStrategy.getPosition(card, cellForDrop("High", "")));
+        $("#flash").text("should clear flash message");
+
+        assert.notOk(card.data("updated"), "baseline - onUpdateCard() not called yet");
+        assert.ok($("#flash").text().length > 0, "baseline - #flash not empty");
+
+        var done = assert.async();
+        $.mockjax({
+          url: "/dropCardTo/High/New",
+          responseTime: 0,
+          type: "POST",
+          onAfterComplete: performAssertions
+        });
+
+        FunStrategy.onDropCard(wall, card, cell.append(card)); // dropped!
+
+        function performAssertions() {
+          assert.notOk(card.is(".operating"), "card should not be marked as operating");
+          assert.equal(typeof card.data("starting-position"), "undefined", "starting-position data should be cleared");
+          assert.equal(typeof card.data("reverted-to"), "undefined", "card was not reverted to initial position");
+          assert.ok(card.data("updated"), "calls onUpdateCard()");
+          assert.equal($("#flash").text(), "", "flash message should be cleared out onDropCard()");
+          assert.ok($.contains(cell[0], card[0]), "card stays in target cell");
+          assert.ok($.contains(cell[0], card6[0]), "card 6 moves because it descends from dropped card");
+          assert.ok($.contains(cell[0], card7[0]), "card 7 descends from dropped card, but shouldn't move because it is already in target column");
+          assert.ok($.contains(cell[0], card5[0]), "card 5 shouldn't be touched; not a descendant");
+          assert.ok($.contains(cellForDrop("", "New")[0], card4[0]), "card 4 moves to same column (but different row) because it descends from dropped card");
+          assert.ok($.contains(cellForDrop("", "In Progress")[0], card3[0]), "card 3 shouldn't be touched; not a descendant");
+          assert.ok($.contains(cellForDrop("High", "")[0], card8[0]), "card 8 shouldn't be touched; not a descendant");
+
+          done();
+        }
+      });
+
+      QUnit.test("immediate fail (http 400/500, http 200 with explicit force-revert) will revert card to starting-position", function (assert) {
+        var FunStrategy = $.extend(Object.create(MingleUI.grid.AbstractCardInteraction.prototype), {
+          relocateCardToCell: function fakeRelocate(card, cell, parsedPosition) {
+            cell.append(card);
+            card.data("reverted-to", parsedPosition); // expose this to assertions
+          },
+
+          params: function(card) { return {number: card.data("card-number")}; }
+        });
+
+        var wall = {
+          grid: $("#grid-3x3"),
+          strategy: FunStrategy,
+          onUpdateCard: function(card) {
+            card.data("updated", true);
+          },
+          findDescendantsOfCard: function fakeCardFinder(card) {
+            return $(".does-not-exist");
+          }
+        };
+
+        var card2 = buildCard(2), card5 = buildCard(5);
+        var cell1 = cellForDrop("High", "New");
+        var cell2 = cellForDrop("High", "In Progress");
+        var initialPosition = FunStrategy.getPosition(card2, cellForDrop("High", ""));
+        card2.data("starting-position", initialPosition);
+
+        assert.notOk(card2.data("updated"), "baseline (card 2) - onUpdateCard() not called yet");
+
+        var done1 = assert.async();
+        var done2 = assert.async();
+
+        $.mockjax({
+          url: "/dropCardTo/High/New",
+          data: {number: 2},
+          responseTime: 0,
+          type: "POST",
+          status: 500, // send immediate failure
+          onAfterComplete: performAssertionsFor500
+        });
+
+        $.mockjax({
+          url: "/dropCardTo/High/In Progress",
+          data: {number: 5},
+          responseTime: 0,
+          type: "POST",
+          status: 200, // request was successful, but give instructions to revert
+          responseText: "findCard(5).data('force-revert', true);",
+          onAfterComplete: performAssertionsForDirective
+        });
+
+        assert.notOk(card5.data("updated"), "baseline (card 5) - onUpdateCard() not called yet");
+        FunStrategy.onDropCard(wall, card2, cell1.append(card2)); // dropped!
+
+        card5.data("starting-position", initialPosition);
+        FunStrategy.onDropCard(wall, card5, cell2.append(card5)); // dropped!
+
+        var cardsUsedInRequests = $.map($.mockjax.mockedAjaxCalls(), function(c, i) { return c.data.number + " => " + c.url.split("/").pop(); });
+        assert.deepEqual(cardsUsedInRequests, ["2 => New", "5 => In Progress"], "should make requests for both card 2 and card 5");
+
+        function performAssertionsFor500() {
+          assert.notOk(card2.is(".operating"), "card 2 should not be marked as operating");
+          assert.equal("undefined", typeof card2.data("starting-position"), "card 2 starting-position data should be cleared");
+          assert.notOk(card2.data("updated"), "failures will NOT call onUpdateCard()");
+          assert.equal(JSON.stringify(card2.data("reverted-to")), initialPosition, "relocateCardToCell() uses card 2 position info");
+          assert.ok($.contains(findCell("High", "")[0], card2[0]), "card 2 was reverted to cell as specified by starting-position");
+
+          done1();
+        }
+
+        function performAssertionsForDirective() {
+          assert.notOk(card5.is(".operating"), "card 5 should not be marked as operating");
+          assert.equal("undefined", typeof card5.data("starting-position"), "card 5 starting-position data should be cleared");
+          assert.ok(card5.data("updated"), "200 status still calls onUpdateCard(), even when instructed to revert card 5");
+          assert.equal(JSON.stringify(card5.data("reverted-to")), initialPosition, "relocateCardToCell() uses card 5 position info");
+          assert.ok($.contains(findCell("High", "")[0], card5[0]), "card 5 was reverted to cell as specified by starting-position");
+
+          done2();
+        }
+      });
+
+      QUnit.test("deferred success from lightbox", function (assert) {
+        var FunStrategy = $.extend(Object.create(MingleUI.grid.AbstractCardInteraction.prototype), {
+          relocateCardToCell: function fakeRelocate(card, cell, parsedPosition) {
+            cell.append(card);
+            card.data("reverted-to", parsedPosition); // expose this to assertions
+          },
+
+          params: function(card) { return {number: card.data("card-number")}; }
+        });
+
+        var wall = {
+          grid: $("#grid-3x3"),
+          strategy: FunStrategy,
+          onUpdateCard: function(card) {
+            card.data("updated", true);
+          },
+          findDescendantsOfCard: function fakeCardFinder(card) {
+            return $(".does-not-exist");
+          }
+        };
+
+        var card = buildCard(2);
+        var cell = cellForDrop("High", "New");
+        var initialPosition = FunStrategy.getPosition(card, cellForDrop("High", ""));
+        card.data("starting-position", initialPosition);
+
+        var done = assert.async();
+
+        $.mockjax({
+          url: "/dropCardTo/High/New",
+          data: {number: 2},
+          responseTime: 0,
+          type: "POST",
+          status: 200, // request was successful, but final outcome depends on lightbox
+          responseText: "findCard(2).data('defer-to-lightbox', true);",
+          onAfterComplete: setupLightboxSuccessResponse
+        });
+
+        assert.notOk(card.data("updated"), "baseline - onUpdateCard() not called yet");
+        FunStrategy.onDropCard(wall, card, cell.append(card)); // dropped!
+
+        function setupLightboxSuccessResponse() {
+          assert.ok(card.data("defer-to-lightbox"), "lightbox flag is set");
+          assert.ok(card.is(".operating"), "card is marked as operating while lightbox is open");
+          assert.notOk(card.data("updated"), "onUpdateCard() not called yet because waiting on lightbox");
+          card.on("grid:transition", performAssertions); // hook up assertions to run after lightbox response handler
+
+          card.trigger("grid:transition"); // run handler
+        }
+
+        function performAssertions() {
+          assert.notOk(card.is(".operating"), "card is no longer marked as operating after receiving lightbox response");
+          assert.equal("undefined", typeof card.data("starting-position"), "card starting-position data should be cleared");
+          assert.ok(card.data("updated"), "called onUpdateCard()");
+
+          done();
+        }
+      });
+
+      QUnit.test("deferred failure/cancel from lightbox", function (assert) {
+        var FunStrategy = $.extend(Object.create(MingleUI.grid.AbstractCardInteraction.prototype), {
+          relocateCardToCell: function fakeRelocate(card, cell, parsedPosition) {
+            cell.append(card);
+            card.data("reverted-to", parsedPosition); // expose this to assertions
+          },
+
+          params: function(card) { return {number: card.data("card-number")}; }
+        });
+
+        var wall = {
+          grid: $("#grid-3x3"),
+          strategy: FunStrategy,
+          onUpdateCard: function(card) {
+            card.data("updated", true);
+          },
+          findDescendantsOfCard: function fakeCardFinder(card) {
+            return $(".does-not-exist");
+          }
+        };
+
+        var card = buildCard(2);
+        var cell = cellForDrop("High", "New");
+        var initialPosition = FunStrategy.getPosition(card, cellForDrop("High", ""));
+        card.data("starting-position", initialPosition);
+
+        var done = assert.async();
+
+        $.mockjax({
+          url: "/dropCardTo/High/New",
+          data: {number: 2},
+          responseTime: 0,
+          type: "POST",
+          status: 200, // request was successful, but final outcome depends on lightbox
+          responseText: "findCard(2).data('defer-to-lightbox', true);",
+          onAfterComplete: setupLightboxFailureResponse
+        });
+
+        assert.notOk(card.data("updated"), "baseline - onUpdateCard() not called yet");
+        FunStrategy.onDropCard(wall, card, cell.append(card)); // dropped!
+
+        function setupLightboxFailureResponse() {
+          assert.ok(card.data("defer-to-lightbox"), "lightbox flag is set");
+          assert.ok(card.is(".operating"), "card is marked as operating while lightbox is open");
+          assert.notOk(card.data("updated"), "onUpdateCard() not called yet because waiting on lightbox");
+          card.data("force-revert", true);
+          card.on("grid:transition", performAssertions); // hook up assertions to run after lightbox response handler
+
+          card.trigger("grid:transition"); // run handler
+        }
+
+        function performAssertions() {
+          assert.notOk(card.is(".operating"), "card is no longer marked as operating after receiving lightbox response");
+          assert.equal("undefined", typeof card.data("starting-position"), "card starting-position data should be cleared");
+          assert.ok(card.data("updated"), "called onUpdateCard()");
+          assert.ok($.contains(cellForDrop("High", "")[0], card[0]), "card was reverted to cell as specified by starting-position");
+          assert.equal(JSON.stringify(card.data("reverted-to")), initialPosition, "revert received serialized starting-position");
+          done();
+        }
+      });
+
+    });
+
+  });
+
+  QUnit.module("RankedStrategy tests", function rankedStrategyTests() {
+    QUnit.test("params() and getPosition()", function (assert) {
+      var cell = cellForDrop("Low", "In Progress");
+      var card = buildCard(4);
+      cell.append(buildCard(2)).append(card).append(buildCard(6));
+      var expected = {
+        "card_number": 4,
+        "rerank[leading_card_number]": 2,
+        "rerank[following_card_number]": 6
+      };
+      assert.equal(JSON.stringify(MingleUI.grid.RankedStrategy.params(card)), JSON.stringify(expected), "params should include card number, and neighbors");
+
+      var expectedPosition = JSON.stringify({
+        row: "Low",
+        cell: "In Progress",
+        params: expected
+      });
+      assert.equal(MingleUI.grid.RankedStrategy.getPosition(card, cell), expectedPosition, "position adds params to cell coordinates");
+    });
+
+    QUnit.test("relocateCardToCell()", function (assert) {
+      var cell = cellForDrop("Low", "In Progress");
+      var otherCell = cellForDrop("Low", "New");
+      var card = buildCard(4);
+      cell.append(buildCard(2)).append(card).append(buildCard(6));
+
+      var startingPosition = MingleUI.grid.RankedStrategy.getPosition(card, cell);
+      otherCell.append(card);
+
+      assert.notOk($.contains(cell[0], card[0]), "card is not in original cell");
+
+      MingleUI.grid.RankedStrategy.relocateCardToCell(card, cell, JSON.parse(startingPosition));
+      assert.ok($.contains(cell[0], card[0]), "card is moved back to original cell");
+      assert.deepEqual(cardNumbersIn(cell), [2, 4, 6], "card is moved into position specified by leading_card_number and following_card_number");
+    });
+  });
+
+  QUnit.module("UnankedStrategy tests", function rankedStrategyTests() {
+    QUnit.test("params() and getPosition()", function (assert) {
+      var cell = cellForDrop("Low", "In Progress");
+      var card = buildCard(4);
+      cell.append(buildCard(2)).append(card).append(buildCard(6));
+      var expected = { "card_number": 4 };
+      assert.equal(JSON.stringify(MingleUI.grid.UnrankedStrategy.params(card)), JSON.stringify(expected), "params only include card number");
+
+      var expectedPosition = JSON.stringify({
+        row: "Low",
+        cell: "In Progress",
+        params: expected
+      });
+      assert.equal(MingleUI.grid.UnrankedStrategy.getPosition(card, cell), expectedPosition, "position adds params to cell coordinates");
+    });
+
+    QUnit.test("relocateCardToCell()", function (assert) {
+      var cell = cellForDrop("Low", "In Progress");
+      var card = cardWithSortPos(2, 5);
+
+      var card3 = cardWithSortPos(3, 9);
+      var card4 = cardWithSortPos(4, 2);
+      var card5 = cardWithSortPos(5, 4);
+      var card6 = cardWithSortPos(6, 6);
+      var card7 = cardWithSortPos(7, 8);
+      var card8 = cardWithSortPos(8, 10);
+
+      cell.append([card3, card4, card5, card6, card7, card8].sort(function(a, b) {
+        var s1 = parseInt(a.find(".card-inner-wrapper").data("sort-pos"), 10);
+        var s2 = parseInt(b.find(".card-inner-wrapper").data("sort-pos"), 10);
+
+        return s1 - s2;
+      }));
+
+      var startingPosition = MingleUI.grid.UnrankedStrategy.getPosition(card, cell);
+
+      var otherCell = cellForDrop("Low", "New");
+      otherCell.append(card);
+
+      assert.notOk($.contains(cell[0], card[0]), "card is not in original cell");
+
+      MingleUI.grid.UnrankedStrategy.relocateCardToCell(card, cell, JSON.parse(startingPosition));
+      assert.ok($.contains(cell[0], card[0]), "card is moved back to original cell");
+      assert.deepEqual(cardNumbersIn(cell), [4, 5, 2, 6, 7, 3, 8], "card is moved into sorted position");
+    });
+  });
+
+  function cardNumbersIn(cell) {
+    return $.map(cell.find(".card-icon"), function (el, i) { return $(el).data("card-number"); });
+  }
+
+  function findCard(number) {
+    return $(".card-icon[data-card-number='" + number + "']");
+  }
+
+  function cardWithSortPos(cardNumber, sortValue, ancestors /* optional */) {
+    var card = buildCard(cardNumber, ancestors);
+    card.find(".card-inner-wrapper").attr("data-sort-pos", sortValue)
+    return card;
+  }
+
+  function buildCard(cardNumber, ancestors /* optional */) {
+    var card = $("<div class='card-icon'/>").attr("data-card-number", cardNumber);
+    card.append(
+      $("<div class='card-inner-wrapper'/>").append(
+        $("<span class='card-name'/>").text("Card " + cardNumber)
+      )
+    );
+
+    if (!!ancestors) {
+      card.attr("ancestor_numbers", ancestors.join(","));
+    }
+
+    return card;
+  }
+
+  function cellForDrop(row, lane) {
+    return findCell(row, lane).attr("set_value_for_url", ["/dropCardTo", row, lane].join("/"));
+  }
+
+  function findCell(row, lane) {
+    return $(".grid-row[row_value='" + row + "']").find(".cell[lane_value='" + lane + "']");
+  }
+
+</script>
+</body>
+</html>

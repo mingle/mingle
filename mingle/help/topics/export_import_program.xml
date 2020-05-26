@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "export_import_program.dtd">
+<chapter title="Export and import your program" id="export_import_program">
+	    <p></p>
+		<p>This export/import functionality allows you to move your program from one instance to another, pre-existing instance.</p>
+            <note>
+                <bullets>
+                     <item>Program export/import functionality is only supported if both instances have Mingle Plus licenses.</item>
+                     <item>Only one program can be exported and imported at a time.</item>
+                     <item>All program team members can export a program.</item>
+                     <item>Only Mingle admins can import a program.</item>
+                </bullets>
+            </note>
+        <p>Please contact our <exref url="@tw_studios_mingle_support_url@">support team</exref> if you would like assistance migrating your program.</p>
+        <section title="Export your program" collapsed="true" >
+             <p>You can export your program by selecting “<strong>Export</strong>” from the Program Admin carrot drop-down menu.</p>
+                   <screenshot src="resources/images/export_program_from_admin.png"/>
+             <p>This will take you to a confirmation page, with additional information about exporting your program:</p>
+	                   <screenshot src="resources/images/export_program_confirmation.png"/>
+		     <p>Exporting your program exports the backlog and plan only; none of the projects in your program will be exported. We therefore suggest the following:</p>
+		         <p><strong>STEP 1</strong>: Export all projects that are part of your Program</p>
+                    <bullets>
+                       <item>You can do this one by one or, if all projects in your instance are part of your program, altogether using our <cref topic="export_import_tool">export tool</cref>.</item>
+                    </bullets>
+                 <p><strong>STEP 2</strong>: Export your program</p>
+                    <bullets>
+                       <item>The exported file will have a ‘.program’ extension.</item>
+                    </bullets>
+        </section>
+        <section title="Import your program" collapsed="true" >
+             <p>You can import your program from the Mingle Programs landing page.</p>
+				<note>
+					<bullets>
+						<item>Only Mingle admins can import a program.</item>
+						<item>If you are importing a .plan file (available in <cref topic="whats_new_in_release_12_3">Mingle 12.3</cref> only) the following instructions still apply. Your plan will be imported into a program.</item>
+					</bullets>
+				</note>		
+                   <screenshot src="resources/images/import_program_button.png"/>
+             <p>Because exported program files do not contain the Mingle project files that belong to the program, and to facilitate mapping between your program and its projects, you must follow this import sequence during a scheduled downtime or when there is minimal activity:</p>
+		         <p><strong>STEP 1</strong>: Import <i>all</i> projects that are part of your program</p>
+                    <bullets>
+                       <item>You can do this one by one or, if all projects in your instance are part of your program, altogether using our <cref topic="export_import_tool">import tool</cref>.</item>
+                       <item>Please ensure that all imported projects retain the same name and do not duplicate any project names in the instance you’re importing to. If project names on the new instance do not match the project names in your program, your program import will fail.</item>
+                    </bullets>
+                    <note>
+	                    <bullets>
+		                    <item>If the names of work items in your program’s plan do not match those in the project from which they were added, your program import will fail.</item>
+	                        <item>If there are any structural changes to your projects, your program import will fail.</item>
+	                        <item>Project cards will not display any program related information until the program that the project belongs to is imported.</item>
+	                    </bullets>
+	                </note>
+                 <p><strong>STEP 2</strong>: Import your program</p>
+                    <bullets>
+                       <item>Please note that your program will receive a unique name if it duplicates the name of a Program already on the instance you’re importing to. We therefore suggest that you make sure your program retains a unique name.</item>
+                    </bullets>
+        </section>
+</chapter>

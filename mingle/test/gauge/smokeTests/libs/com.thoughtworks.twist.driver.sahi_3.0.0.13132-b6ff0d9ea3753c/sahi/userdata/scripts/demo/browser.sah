@@ -1,0 +1,9 @@
+<browser>
+function getFirstLink(){
+	return document.links[0];
+}
+</browser>
+
+_click(getFirstLink());
+_click(getFirstLink());
+_click(getFirstLink());

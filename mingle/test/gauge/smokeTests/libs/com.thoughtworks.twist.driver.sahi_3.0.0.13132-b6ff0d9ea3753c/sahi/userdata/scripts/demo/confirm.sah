@@ -1,0 +1,37 @@
+function check(){
+	//_expectConfirm("Some question?", true)
+	_click(_link("Confirm Page"));
+	_click(_button("Click For Confirm"));
+	_assertNotNull(_textbox("t1"));
+	_assertEqual("oked", _textbox("t1").value);
+	_click(_link("Back"));
+	_click(_link("Confirm Page"));
+	_wait(1000);
+	_assertEqual("Some question?", _lastConfirm());
+	_clearLastConfirm();
+	_assertEqual(null, _lastConfirm());
+	
+	
+	_expectConfirm("Some question?", false);
+	_click(_button("Click For Confirm"));
+	_assertNotNull(_textbox("t1"));
+	_assertEqual(_textbox("t1").value, "canceled");
+	_assertEqual("Some question?", _lastConfirm());
+	_clearLastConfirm();
+	_assertEqual(null, _lastConfirm());
+	
+	_expectConfirm("Some question?", true);
+	_click(_button("Click For Confirm"));
+	_assertNotNull(_textbox("t1"));
+	_assertEqual("oked", _textbox("t1").value);
+	_assertEqual(_lastConfirm(), "Some question?");
+	_clearLastConfirm();
+	_assertEqual(null, _lastConfirm());
+	_click(_link("Back"));
+}
+
+check();
+_click(_link("Frames Test"));
+check();
+_click(_link("IFrames Test"));
+check();

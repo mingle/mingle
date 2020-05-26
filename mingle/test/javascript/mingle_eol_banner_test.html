@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Mingle EOL Banner Test</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+
+  <script src="../../app/assets/javascripts/thirdparty/calendar.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/mingle_eol_banner.js" type="text/javascript"></script>
+
+
+  <script src="./test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+  <script src="./test_assets/qunit-phantom.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="./test_assets/qunit-1.21.0.css" type="text/css"/>
+
+</head>
+<body>
+<div id="qunit">
+</div>
+<div id="card_filter_container"></div>
+
+<script type="text/javascript">
+
+  QUnit.test('testRemainingTimeForMingleEolShouldReturn_11_MonthsAnd_30_Days', function (assert) {
+    assert.equal(remainingTimeForMingleEol(new Date('7/31/2019'), new Date('08/01/2018')), '11 months and 30 days');
+  });
+
+  QUnit.test('testRemainingTimeForMingleEolShouldReturn_11_MonthsAnd_1_Day', function (assert) {
+    assert.equal(remainingTimeForMingleEol(new Date('7/31/2019'), new Date('08/30/2018')), '11 months and 1 day');
+  });
+
+  QUnit.test('testRemainingTimeForMingleEolShouldReturn_7_Months', function (assert) {
+    assert.equal(remainingTimeForMingleEol(new Date('7/31/2019'), new Date('12/31/2018')), '7 months');
+  });
+
+  QUnit.test('testRemainingTimeForMingleEolShouldReturn_6_MonthsAnd_30_Days', function (assert) {
+    assert.equal(remainingTimeForMingleEol(new Date('7/31/2019'), new Date('01/01/2019')), '6 months and 30 days');
+  });
+
+  QUnit.test('testRemainingTimeForMingleEolShouldReturn_20_Days', function (assert) {
+    assert.equal(remainingTimeForMingleEol(new Date('7/31/2019'), new Date('07/11/2019')), '20 days');
+  });
+
+  QUnit.test('testRemainingTimeForMingleEolShouldReturn_1_Day', function (assert) {
+    assert.equal(remainingTimeForMingleEol(new Date('7/31/2019'), new Date('07/30/2019')), '1 day');
+  });
+
+  QUnit.test('testRemainingTimeForMingleEolShouldReturn_1_Month', function (assert) {
+    assert.equal(remainingTimeForMingleEol(new Date('7/31/2019'), new Date('06/30/2019')), '1 month');
+  });
+
+  QUnit.test('testRemainingTimeForMingleEolShouldReturn_1_MonthAnd_20_Day', function (assert) {
+    assert.equal(remainingTimeForMingleEol(new Date('7/31/2019'), new Date('06/10/2019')), '1 month and 20 days');
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>JavaScript unit test file</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+
+  <script src="../test_assets/unittest.js" type="text/javascript"></script>
+  <script src="../test_assets/unittest_ext.js" type="text/javascript"></script>
+
+
+  <script src="../../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/controls.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/builder.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+
+  <script src="../../../public/javascripts/application.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/drop_list.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/tree_config.js" type="text/javascript"></script>
+
+
+  <link rel="stylesheet" href="../assets/unittest.css" type="text/css" />
+  <link rel="stylesheet" href="../test_assets/unittest.css" type="text/css" />
+  <link rel="stylesheet" href="../../../public/stylesheets/card_trees.css" type="text/css" />
+
+</head>
+<body>
+
+<div id="content" >
+  <div id="header">
+    <h1>JavaScript unit test file</h1>
+    <p>
+      This file tests <strong>TreeConfigView</strong> class in <strong>tree_config.js</strong>.
+    </p>
+  </div>
+  <!-- Log output -->
+  <div id="testlog"> </div>
+
+  <div style ='border:solid 1px' id='sandbox'>
+    <h3> sandbox: </h3>
+
+    <select id="aggregate_property_definition_aggregate_type"></select>
+
+    <select id="aggregate_property_definition_aggregate_scope_card_type_id" name="aggregate_property_definition[aggregate_scope_card_type_id]">
+      <option selected="selected" value="Choose a scope...">Choose a scope...</option>
+      <option value="">All descendants</option>
+      <option value="2">Story</option>
+      <option value="Define condition... (for example: type = story AND status = open)">Define condition... (for example: type = story AND status = open)</option>
+    </select>
+    <select id="aggregate_property_definition_aggregate_target_id" name="aggregate_property_definition[aggregate_target_id]">
+      <option selected="selected" value="">What you want to aggregate...</option>
+      <option value="2">size</option>
+    </select>
+    <input id="aggregate_property_definition_aggregate_condition" type="text" style="display: none;" size="30" name="aggregate_property_definition[aggregate_condition][]"/>
+
+   </div>
+
+</div>
+
+
+<script type="text/javascript">
+// <![CDATA[
+
+  SAND_BOX_CONTENT = $('sandbox').innerHTML;
+
+  DEFINE_CONDITION = 'Define condition... (for example: type = story AND status = open)';
+  CHOOSE_A_SCOPE = 'Choose a scope...';
+
+  AGGREGATE_CONDITION_ELEMENT_ID = 'aggregate_property_definition_aggregate_condition';
+  AGGREGATE_TARGET_ID_ELEMENT_ID = 'aggregate_property_definition_aggregate_target_id';
+
+  new Test.Unit.Runner({
+
+    setup: function() {
+      $('sandbox').innerHTML = SAND_BOX_CONTENT;
+      optionsForSelect = function(selected, options) {
+        return options.map(function(item) {
+          if (item.first() == selected) {
+            selected = ' selected="selected"';
+          } else {
+            selected = ''
+          }
+          return '<option value="' + item.first() + '"' + selected + '>' + item.last() + '</option>';
+        }).join("\n")
+      }
+      this.descendantOptions = [["",  "What you want to aggregate..."],
+                                ["39", "Planning Estimate"],
+                                ["48", "Actual Effort"],
+                                ["54", "Build completed"],
+                                ["79", "Story Time-To-Life"],
+                                ["59", "Task Estimate"],
+                                ["53", "Build reported"],
+                                ["65", "Defect Estimate"],
+                                ["78", "Defect Time-To-Life"]]
+      this.optionsForDescendants = optionsForSelect("", this.descendantOptions);
+      this.aggregateDropdownChangeObserver = new AggregateDropdownChangeObserver(new Array(), null, null, this.optionsForDescendants, null, null, DEFINE_CONDITION);
+      this.setScope = function(scope) {
+        $('aggregate_property_definition_aggregate_scope_card_type_id').value = scope;
+        this.aggregateDropdownChangeObserver.onAggregateTypeOrScopeChange();
+      }
+      this.setCondition = function(condition) {
+        $(AGGREGATE_CONDITION_ELEMENT_ID).value = condition;
+      }
+    },
+
+    teardown: function() {
+    },
+
+    testSelectingScopeShouldShowOrHideConditions: function() { with(this){
+      assertNotVisible(AGGREGATE_CONDITION_ELEMENT_ID);
+      this.setScope(DEFINE_CONDITION);
+      assertVisible(AGGREGATE_CONDITION_ELEMENT_ID);
+      this.setScope(CHOOSE_A_SCOPE);
+      assertNotVisible(AGGREGATE_CONDITION_ELEMENT_ID);
+    }},
+
+    testShouldClearConditionWhenSelectNonConditionScope: function() { with(this) {
+      this.setScope(DEFINE_CONDITION);
+      this.setCondition("some aggregation");
+      this.setScope(CHOOSE_A_SCOPE);
+      assertEqual('', $(AGGREGATE_CONDITION_ELEMENT_ID).value);
+    }},
+
+    testChangingScopeFromConditionToNonConditionAndBackShouldNotClearConditionText: function() { with(this) {
+      this.setScope(DEFINE_CONDITION);
+      this.setCondition("some aggregation");
+      this.setScope(CHOOSE_A_SCOPE);
+      this.setScope(DEFINE_CONDITION);
+      assertEqual('some aggregation', $(AGGREGATE_CONDITION_ELEMENT_ID).value);
+    }},
+
+    // Bug 7218
+    testChangingScopeToConditionsShouldMakeAllAggregatesAvailableToSelect: function() { with(this) {
+      this.setScope(DEFINE_CONDITION);
+      assertEqual(this.descendantOptions.length, $(AGGREGATE_TARGET_ID_ELEMENT_ID).options.length);
+    }},
+
+  }, { testLog: "testlog", test: ''}).run;
+// ]]>
+</script>
+</body>
+</html>

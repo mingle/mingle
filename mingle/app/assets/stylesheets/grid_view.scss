@@ -1,0 +1,1046 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+.debug .card-inner-wrapper::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  text-align: right;
+  text-shadow: 0 0 8px #000, 0 0 8px #000;
+  color: yellow;
+  font-size: 120%;
+  font-weight: bold;
+  content: attr(data-sort-pos);
+  clear: both;
+  visibility: visible;
+}
+
+.card-icon {
+  -ms-touch-action: none;
+
+  position: relative;
+  display: inline;
+  float: left;
+  cursor: move;
+  margin: 4px;
+  background-color: #FFFFFF;
+  border: none;
+  color: #333;
+
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+
+  -webkit-box-shadow: 2px 3px 2px 0 rgba(50, 50, 50, 0.36);
+  -moz-box-shadow: 1px 1px 2px 0 rgba(50, 50, 50, 0.36);
+  box-shadow: 1px 1px 2px 0 rgba(50, 50, 50, 0.36);
+
+  .update-error {
+    right: -170px;
+    bottom: -30px;
+    width: 160px;
+
+    i.fa {
+      margin: 0 5px;
+    }
+
+    @include bubble(left, 8px, 22px);
+  }
+
+  .card-inner-wrapper {
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+
+  .colored-tags {
+    text-align: center;
+    z-index: 1;
+    width: 100%;
+    top: calc(50% - 9px);
+    left: 0;
+    display: block;
+    position: absolute;
+    color: #fff;
+    font-weight: bold;
+    font-size: 80%;
+    padding: 4px;
+    opacity: 0.8;
+    margin-left: auto;
+    margin-right: auto;
+    @include transform(rotate(45deg) translate(-26.45%, 10px));
+    @include transform-origin(0 50%);
+  }
+
+  &:hover .colored-tags {
+    opacity: 0.13;
+    transition-property: opacity;
+    transition-duration: 0.3s;
+  }
+
+  .full-team-list {
+    @include popover($direction: left,
+    $width: 200px,
+    $height: 265px,
+    $popOffset: 122px,
+    $triangleOffset: 91px);
+
+    position: absolute;
+    top: 100%;
+    bottom: 0;
+    right: 0;
+
+    // keep avatars from popping out of vertical alignment
+    // by anchoring on the right side only, and giving a min-width
+    left: auto;
+    min-width: 95px;
+
+    .content {
+      padding-bottom: 0;
+    }
+
+    .card-assign {
+      overflow: hidden;
+      height: 100%;
+      .unassign {
+        text-align: center;
+        position: absolute;
+        width: 178px;
+        bottom: 8px;
+
+        a {
+          font-size: 14px;
+        }
+      }
+
+      .property-assignment-selector {
+        .selected-property {
+          font-family: Helvetica, Arial, "Lucida Grande", sans-serif;
+          font-size: 15px;
+          font-weight: 500;
+          margin-left: 2px;
+
+          &:after {
+            @include fa_icon($fa-var-angle-down);
+            color: black;
+            font-size: 20px;
+            position: absolute;
+            top: 9px;
+            right: 10px;
+          }
+        }
+
+        .property-list {
+          border: 1px;
+          position: absolute;
+          left: 8px;
+          font-family: Helvetica, Arial, "Lucida Grande", sans-serif;
+          font-size: 14px;
+          background: white;
+          width: 180px;
+          border: gray 1px solid;
+          margin: 0;
+          list-style: none;
+
+          .property-to-assign-to {
+            list-style: none;
+            font-family: Helvetica, Arial, "Lucida Grande", sans-serif;
+            font-size: 14px;
+            font-weight: initial;
+            padding-left: 5px;
+            text-align: middle;
+            margin: 0;
+            display: block;
+          }
+
+          .property-to-assign-to:hover {
+            background-color: #f6f6f6;
+          }
+        }
+
+        .property-list.closed {
+          display: none;
+        }
+      }
+
+      input.search-for-team-members {
+        margin: 10px 0 5px 0;
+        width: 100%;
+        background: url("../images/shared/icons/icon_search.png") no-repeat right 2px center;
+      }
+
+      .assign-team-member {
+        form {
+          width: 140px;
+          margin: 0 auto;
+        }
+
+        .cancel {
+          cursor: pointer;
+          color: #000000;
+          margin-right: 5px;
+          margin-top: 3px;
+          vertical-align: text-bottom;
+        }
+
+        input[type="text"] {
+          width: 115px;
+          -moz-box-shadow: none;
+          -webkit-box-shadow: none;
+          box-shadow: none;
+          outline: none;
+          border: none;
+          background-color: inherit;
+          border-bottom: 1px solid #000;
+
+        }
+
+        .invite-team-member {
+          width: 70%;
+          margin: 10px 20px;
+        }
+      }
+
+      .users {
+        overflow-y: scroll;
+        overflow-x: hidden;
+        ul {
+          margin: 0 auto;
+          width: 126px;
+          height: 155px;
+          li {
+            display: inline-block;
+            .avatar, .invite-avatar {
+              cursor: pointer;
+              margin: 5px;
+              width: 32px;
+              height: 32px;
+              border-radius: 50%;
+            }
+
+            .invite-avatar {
+              margin-right: 1.67px;
+              overflow: hidden;
+              font-size: 39px;
+              color: $MINGLE_PRIMARY_COLOR;
+              line-height: 33px;
+            }
+          }
+
+          li.invite-item.selected, li.invite-item:hover {
+            margin: 3px -0.34px 3px 3px;
+          }
+
+          li.selected, li:hover {
+            border: 2px dotted gray;
+            border-radius: 50%;
+            margin: 3px;
+
+            .avatar, .invite-avatar {
+              margin: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .avatars {
+    position: absolute;
+    bottom: 3px;
+    right: 3px;
+
+    div.slot.current-property {
+      border: 2px dotted gray;
+      border-radius: 50%;
+    }
+
+    div.slot {
+      background: #efefef url(../images/avatars/default_avatar.png) no-repeat;
+      background-size: 100%;
+      box-shadow: inset 1px 1px 1px #c5c5c5;
+      margin: 2px;
+      display: block;
+      padding: 0;
+      float: left;
+      position: relative;
+      width: 26px;
+      height: 26px;
+      border-radius: 13px;
+      border-width: 1px;
+      border-style: solid;
+      border-color: #eee;
+      transition-property: left;
+      transition-duration: 0.5s;
+
+      &.error {
+        border-color: red;
+      }
+
+      .avatar {
+        width: 100%;
+        height: 100%;
+        border: none;
+        border-radius: 50%;
+      }
+
+      @for $i from 1 through 5 {
+        &:nth-last-child(#{$i}) {
+          left: #{($i - 1) * 12}px;
+        }
+      }
+    }
+  }
+
+  &:hover, &.icon-hover, &.operating {
+    div.avatars div.slot {
+      left: 0;
+    }
+  }
+
+  &.icon-hover div.avatars div.slot {
+    border-style: dotted;
+    border-color: #bbb;
+
+    &.selected {
+      border-width: 2px;
+      border-color: #aaa;
+    }
+  }
+
+}
+
+.card-rank-placeholder,
+.card-icon {
+  width: calc(95% - 10px);
+  min-width: 90px;
+  max-width: 200px;
+
+  // may help leverage GPU for animation
+  transform: translateZ(0);
+  backface-visibility: hidden;
+
+  &:before {
+    float: left;
+    content: "";
+    width: 0;
+    height: 0;
+    // use padding-bottom to set the height because unlike the "height" property, padding
+    // is based on the width of the container (i.e. the card itself)
+    padding-bottom: 61.803398875%; // 100.0% / $GOLDEN_RATIO <- IE11 misinterprets calc(100% / #{$GOLDEN_RATIO}), using percent with respect to height rather than width
+  }
+
+  &:after {
+    content: "";
+    clear: both;
+
+    position: absolute;
+    z-index: -1;
+    left: 50%;
+    right: 50%;
+    top: 0;
+
+    // alternative: linear-gradient(45deg, #0E9054, #feab3a);
+    background-image: -ms-linear-gradient(45deg, #CEE83A, #3AFE6D);
+    background-image: -moz-linear-gradient(45deg, #CEE83A, #3AFE6D);
+    background-image: -webkit-linear-gradient(45deg, #CEE83A, #3AFE6D);
+    background-image: linear-gradient(45deg, #CEE83A, #3AFE6D);
+
+    height: 3px;
+    opacity: 0.5;
+
+    -webkit-transition-property: left, right;
+    transition-property: left, right;
+    -webkit-transition-duration: 0.2s;
+    transition-duration: 0.2s;
+    -webkit-transition-timing-function: ease-out;
+    transition-timing-function: ease-out;
+
+  }
+
+  &.operating {
+    &:after {
+      -webkit-animation: hue 1s infinite linear;
+      animation: hue 1s infinite linear;
+      left: 0;
+      right: 0;
+      z-index: 5;
+    }
+  }
+
+  &.wobble {
+    -webkit-animation-duration: 0.5s;
+    animation-duration: 0.5s;
+  }
+}
+
+// IE (all versions, but not MS Edge) does not support filters (e.g. hue-rotate)
+_:-ms-fullscreen, :root .card-icon.operating::after {
+  animation: ieonly-alternative 1s infinite linear;
+}
+
+@-webkit-keyframes hue {
+  from {
+    -webkit-filter: hue-rotate(0deg);
+    filter: hue-rotate(0deg);
+  }
+
+  to {
+    -webkit-filter: hue-rotate(-360deg);
+    filter: hue-rotate(-360deg);
+  }
+}
+
+@keyframes hue {
+  from {
+    -webkit-filter: hue-rotate(0deg);
+    filter: hue-rotate(0deg);
+  }
+
+  to {
+    -webkit-filter: hue-rotate(-360deg);
+    filter: hue-rotate(-360deg);
+  }
+}
+
+@keyframes ieonly-alternative {
+  from {
+    background-position: 0 0;
+  }
+
+  to {
+    background-position: 200px 0;
+  }
+}
+
+// Remove this after finishing touch screen support for card wall
+.lowest-rank-card-place-holder,
+.card-place-holder {
+  cursor: move;
+  margin: 5px;
+  overflow: hidden;
+  background-color: #999;
+  border: 1px solid #666;
+
+  width: calc(73% - 10px);
+  min-width: 75px;
+  max-width: 200px;
+
+  &:before {
+    float: left;
+    content: "";
+    width: 0;
+    height: 0;
+    // use padding-bottom to set the height because unlike the "height" property, padding
+    // is based on the width of the container (i.e. the card itself)
+    padding-bottom: 61.803398875%;
+  }
+
+  &:after {
+    content: " ";
+    display: block;
+    clear: both;
+    height: 0;
+    width: 0;
+    overflow: hidden;
+    visibility: hidden;
+  }
+
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+}
+// End Remove
+
+.too_many_cards_on_grid {
+  color: #444;
+  font-size: 18px;
+  text-align: center;
+  font-weight: bold;
+  padding-top: 55px;
+  padding-bottom: 144px;
+}
+
+.swimming-pool {
+  table-layout: fixed;
+  width: 100%;
+  min-height: 400px;
+
+  margin: 0 !important;
+  padding-bottom: 0;
+
+  vertical-align: top;
+  font-size: 100%;
+
+  border-spacing: 0;
+  border: none;
+}
+
+table.swimming-pool, .swimming-pool tbody {
+  border-collapse: separate;
+}
+
+.swimming-pool tr {
+  background-color: transparent;
+}
+
+.rank-is-on {
+  background-color: #E3F0F3;
+}
+
+.swimming-pool tbody td,
+.swimming-pool tbody th {
+  background-color: #f3f3f3;
+  border: 5px solid #FFF;
+  border-bottom: 0;
+  padding: 5px;
+}
+
+.swimming-pool thead th, .dragged-column th.lane_header {
+  -ms-touch-action: none;
+  background-color: #FAFAFA;
+  border: 5px solid #FFF;
+  border-top: none;
+  padding: 15px 5px;
+  text-align: center;
+  position: relative;
+  vertical-align: middle;
+}
+
+.wip-violation {
+  @include fieldWithErrors();
+  background-color: #ECCACA !important;
+}
+
+.wip-violation-icon {
+  @include error-icon();
+  background-position: right 5px top 5px !important;
+  background-color: #ECCACA !important;
+}
+
+div.lane_header {
+  .wip-popover {
+    @include popover($direction: up,
+    $width: auto,
+    $height: auto,
+    $popOffset: 0px,
+    $triangleOffset: 140px);
+
+    .content {
+      min-width: 300px;
+      z-index: 100;
+      form {
+        margin-bottom: 10px;
+
+        input {
+          vertical-align: middle;
+          line-height: 22px;
+          min-width: 0;
+        }
+
+        input[type=text] {
+          width: 210px;
+          color: $MINGLE_SECONDARY_COLOR;
+          font-size: 19px;
+          padding: 5px;
+        }
+
+        input[type=submit].primary {
+          margin: 0;
+          line-height: normal;
+          width: auto;
+        }
+      }
+      .error-highlight {
+        @include fieldWithErrors();
+      }
+      .wip-info{
+        padding:10px;
+        text-align: center;
+      }
+      .wip-limits-section {
+        #select_aggregate_property_wip_drop_link {
+          &:before {
+            content: 'Of  ';
+          }
+        }
+
+      input {
+          width: 48px;
+          height:24px;
+        }
+        margin-bottom:10px;
+
+      }
+      input[type=submit] {
+        width: 48px;
+        height:24px;
+      }
+    }
+
+    p {
+      &.notes:before {
+       @include fa_icon($fa-var-exclamation-triangle);
+        font-size: 14px;
+        vertical-align: text-bottom;
+      }
+      font-size: 11px;
+      font-weight: 400;
+      line-height: 22px;
+    }
+  }
+}
+
+.swimming-pool thead.fixed {
+  top: 0;
+  position: fixed;
+  z-index: 100;
+}
+
+.tiny-cards {
+  thead th.lane_header {
+    width: 110px;
+  }
+}
+
+table.dragged-column td {
+  background-color: #f3f3f3;
+  border: 5px solid #FFF;
+  border-bottom: 0;
+  padding: 5px;
+}
+
+.swimming-pool th:hover {
+  .hide-lane, .editable_lane:after, .editable-wip:after, .readonly-wip:after {
+    visibility: visible;
+  }
+}
+
+.swimming-pool td:last-child,
+.swimming-pool th:last-child {
+  border-right: none;
+}
+
+td.lane-wrapper {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  vertical-align: top;
+  border-right: 1px dotted #CCC;
+  background-color: transparent;
+  border-top: 0;
+}
+
+.lane-wrapper:last-child {
+  border-right: 0;
+}
+
+.swimming-pool .cell {
+  height: 66px;
+}
+
+.swimming-pool .cell-highlighted {
+  background-color: #cee7ed !important;
+}
+
+.swimming-pool th {
+  font-weight: bold;
+  font-size: 11px;
+  background: transparent;
+  width: auto;
+
+  -webkit-touch-callout: none;
+
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+
+  &.row_header {
+    position: relative;
+    border-left: none;
+  }
+
+  &.row_header, &.add_dimension {
+    width: 85px;
+    background-color: #FAFAFA;
+    vertical-align: middle;
+  }
+}
+
+.swimming-pool .column-placeholder {
+  position: absolute;
+  z-index: 99;
+  border: 5px solid white;
+  border-top: none;
+  border-bottom: none;
+
+  overflow: hidden;
+  background-color: #999;
+  padding: 1px;
+  -moz-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.swimming-pool th div.header-title, div.lane-aggregate {
+  display: inline;
+  overflow: hidden;
+  overflow-wrap: break-word;
+}
+
+th .lane-card-number,
+th .row-card-number {
+  font-weight: normal;
+  padding: 0 5px 0 5px;
+  display: inline-block;
+}
+
+th .lane-card-number.aggregate {
+  font-size: 11px;
+}
+
+th .hide-lane {
+  float: left;
+  font-size: 13px;
+  cursor: pointer;
+  color: rgb(200, 200, 200);
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  visibility: hidden;
+}
+
+.rank_wrapper {
+  display: inline-block;
+  float: left;
+  line-height: 18px;
+}
+
+.grid-results {
+  overflow-x: scroll;
+}
+
+.swimming-pool {
+
+  .card-rank-placeholder {
+    float: left;
+    cursor: move;
+    margin: 4px;
+    padding: 0;
+    border: none;
+  }
+
+  th {
+
+    form {
+      display: inline;
+    }
+
+    input {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 11px;
+    }
+
+    .header-title {
+      font-size: 13px;
+    }
+
+    .editable_lane {
+      cursor: pointer;
+      padding: 8px; /*easier to click*/
+
+      &:after {
+        @include fa_icon($fa-var-pencil);
+        color: #c8c8c8;
+        font-size: 14px;
+        position: absolute;
+        top: 4px;
+        right: 2px;
+        visibility: hidden;
+        @include transition-property(visibility);
+        @include transition-delay(200ms);
+      }
+    }
+
+    .wip-enabled.editable_lane {
+      &:after {
+        position: inherit;
+        padding-right: 0;
+      }
+    }
+
+    .editable-wip {
+      cursor: pointer;
+      padding: 8px; /*easier to click*/
+      display: inline-block;
+
+      &:after {
+        @include fa_icon($fa-var-pencil);
+        color: #c8c8c8;
+        font-size: 14px;
+        position: relative;
+        visibility: hidden;
+        padding-left:5px;
+        @include transition-property(visibility);
+        @include transition-delay(200ms);
+      }
+
+      &.hide {
+        display: none;
+      }
+    }
+    .readonly-wip {
+      cursor: pointer;
+      padding: 8px; /*easier to click*/
+      display: inline-block;
+
+      &:after {
+        @include fa_icon($fa-var-info-circle);
+        color: #c8c8c8;
+        font-size: 14px;
+        position: relative;
+        visibility: hidden;
+        padding-left:5px;
+        @include transition-property(visibility);
+        @include transition-delay(200ms);
+      }
+
+      &.hide {
+        display: none;
+      }
+    }
+
+    .editing {
+      padding: 0;
+
+      &:after {
+        @include fa_icon($fa-var-times);
+        font-size: 14px;
+        position: relative;
+        padding-left: 8px;
+      }
+    }
+  }
+
+  .inplace-add {
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    display: block;
+    margin: 0 auto;
+    color: $MINGLE_PRIMARY_COLOR;
+    font-size: 2em;
+    padding: 4px 0;
+    visibility: hidden;
+    background-color: rgb(226, 226, 226);
+    background-color: rgba(226, 226, 226, 0.5);
+  }
+
+  .cell {
+    padding: 0;
+
+    &:hover {
+      .inplace-add {
+        visibility: visible;
+      }
+    }
+  }
+
+  .add_dimension {
+    text-align: center;
+
+    .fa-plus-circle, .fa-refresh {
+      color: #9E9E9E;
+      font-size: 20px;
+    }
+
+    .fa-refresh {
+      color: $MINGLE_PRIMARY_COLOR;
+    }
+
+    input {
+      font-size: 11px;
+
+      &.inline-editor {
+        min-width: 150px;
+      }
+    }
+
+    a {
+      cursor: pointer;
+    }
+  }
+
+  .add-dimension-drop-down {
+    @include popover($direction: up,
+      $width: auto,
+      $height: auto,
+      $popOffset: 0,
+      $triangleOffset: 0,
+      $triangleSize: 0
+    );
+
+    text-align: left;
+    a {
+      text-decoration: none;
+    }
+
+    .new-property {
+      display: block;
+      cursor: pointer;
+      font-weight: 300;
+      margin-bottom: 6px;
+      padding: 0 7px;
+
+      line-height: 14px;
+      vertical-align: middle;
+
+      i {
+        color: $MINGLE_PRIMARY_COLOR;
+        font-size: 14px;
+        vertical-align: middle;
+      }
+    }
+
+    &[data-lane-inline-create="false"] [grid-axis="lane"], &[data-row-inline-create="false"] [grid-axis="row"] {
+      .new-property {
+        display: none;
+      }
+    }
+
+    .content {
+      width: 150px;
+      padding: 10px 0;
+    }
+
+    .create {
+      display: none;
+      padding: 0 7px;
+    }
+
+    .filter-values {
+      fieldset {
+        margin-bottom: 5px;
+        padding: 0 7px;
+      }
+
+      input[type=text] {
+        width: 100%;
+        padding-right: 16px;
+        background: url("../images/shared/icons/icon_search.png") no-repeat right 2px center;
+      }
+    }
+
+    ul {
+      &.properties, &.choices {
+        margin: 0;
+        padding: 0;
+        max-height: 300px;
+        overflow: auto;
+        list-style: none;
+        width: 100%;
+        font-weight: 300;
+
+        li {
+          margin: 0;
+          padding: 0;
+          padding-right: 1px;
+        }
+
+        .ui-corner-all {
+          border-bottom-left-radius: 0;
+          border-bottom-right-radius: 0;
+          border-top-left-radius: 0;
+          border-top-right-radius: 0;
+        }
+
+        a {
+          display: block;
+          padding: 3px 7px;
+          border: none;
+          border-top: 1px solid transparent;
+          border-bottom: 1px solid transparent;
+          cursor: pointer;
+
+          &:hover, &.ui-state-focus {
+            background-color: lighten(#ffec80, 10%);
+            font-weight: 300;
+            color: #666;
+          }
+        }
+      }
+
+      &.choices {
+        margin: 0;
+      }
+    }
+
+    [grid-axis=""] .choices ~ * {
+      display: none;
+    }
+
+    [grid-axis="lane"], [grid-axis="row"] {
+      .choices {
+        display: none;
+      }
+    }
+
+    .create-new-value {
+
+      .filter-values {
+        display: none;
+      }
+
+      .create {
+        display: block;
+
+        strong {
+          display: block;
+          margin-bottom: 3px;
+        }
+      }
+    }
+
+  }
+
+}
+
+.draggable_lane {
+  cursor: move;
+}
+
+.ui-sortable-helper {
+     opacity: 0.7;
+     filter: alpha(opacity = 70);
+}
+
+.ui-sortable-placeholder {
+     -moz-box-shadow: 4px 5px 4px #C6C6C6 inset;
+     -webkit-box-shadow: 4px 5px 4px #C6C6C6 inset;
+     box-shadow: 4px 5px 4px #C6C6C6 inset;
+     border-bottom: 1px solid #CCCCCC;
+     border-top: 1px solid #CCCCCC;
+     visibility: visible !important;
+     background: #EFEFEF !important;
+     visibility: visible !important;
+     * {
+       opacity: 0.0;
+       visibility: hidden;
+     }
+     width: 0px;
+}

@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="tfs-classpath">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/mingle-tfs-adapter.jar!/" />
+      <root url="file://$PROJECT_DIR$/vendor/tfs-sdk" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/vendor/tfs-sdk" recursive="false" />
+  </library>
+</component>

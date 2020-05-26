@@ -1,0 +1,48 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%- cards_pluralize = @card ? 1 : 2 %>
+
+<div id='confirm-delete-div'>
+  <% lightbox = Lightbox.with_close_link_and_close_button(self, 'Cancel', '', :id => "cancel_delete", :class => 'remove-button popup-close')
+     lightbox.header "Delete #{'card'.plural(cards_pluralize)}"
+     lightbox.body do %>
+        <% form_tag(@destroy_params, {:id => 'delete-form'}) do -%><% end -%>
+        <%= render :partial => 'shared/irrecoverable_warning' %>
+        <% info_box do %>
+          <p>We recommend that you review the following things that will be affected by deleting <%= @card ? "card #{@card.number_and_name.bold}" : "these cards" %>:</p>
+          <ul>
+            <%= tree_belongings_warning(@warnings[:belongs_to_trees]) %>
+            <%= tree_relationship_usage_warning(@warnings[:tree_relationship][:usage_count], @warnings[:tree_relationship][:properties]) %>
+            <%= card_relationship_usage_warning(@warnings[:card_relationship][:usage_count], @warnings[:card_relationship][:properties]) %>
+            <%= the_following_will_be_deleted 'transition'      , @warnings[:items_that_will_be_deleted][:transitions]  %>
+            <%= the_following_will_be_not_set 'project variable', @warnings[:values_that_will_be_not_set][:project_variables] %>
+            <li>Any MQL (Advanced filters, some Macros or aggregates using MQL conditions) that uses <%= this_card = %w{this card}.plural(cards_pluralize) %> will no longer return any results.</li>
+            <li>Pages and tables/charts that reference <%= this_card %> will no longer work.</li>
+            <% if CurrentLicense.status.enterprise? -%>
+              <li>Any dependencies raised or resolved by this card will be deleted or unlinked.</li>
+            <% end -%>
+            <li>Any personal favorites that use <%= this_card %> may not work as expected.</li>
+            <li>Previously subscribed atom feeds that use <%= this_card %> will no longer provide new data.</li>
+          </ul>
+        <% end %>
+    <% end
+    lightbox.complete_action do -%>
+      <%= link_to_function 'Continue to delete', "disableLink('confirm_delete'); $j('#delete-form').submit()", {:id => "confirm_delete", :class => 'ok'} %>
+    <% end -%>
+</div>
+
+<%= javascript_with_rescue lightbox_fix_height_js('confirm-delete-div', 10, "'55em'") -%>

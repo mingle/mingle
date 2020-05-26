@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_help.dtd">
+<chapter title="Capture your objectives" collapsed="false">
+	<p>To begin capturing your program objectives, click on the backlog link on the Mingle Programs landing page:</p> 
+	   <screenshot src="resources/images/backlog_link.png"/>
+	<p>This will take you to your backlog where you can start capturing high-level objectives and content about their value and purpose. (Don’t worry about getting your objective names right the first time. You can easily edit their names inline by clicking on them. <exref url="http://www.thoughtworks.com/insights/blog/keeping-eye-why-naming-program-objectives">Read more about tips on naming</exref>.)</p> 
+	<p>Once created, objectives can be given a relative <strong>value</strong> and <strong>size</strong> by setting their respective sliders. Doing this will automatically generate a calculated <strong>ratio</strong> slider, which visualizes the relationship between the value and size of your objective to help you prioritize your objectives later on.</p>
+	<p>You can also begin to articulate your objective’s <strong>value statement</strong>, capturing high-level notes about its purpose in the text box during the research and discovery phase (or equivalent) of your program management process. (N.B. The value statement text box has a 750 character limit.)</p> 
+    <p>You’ll see guiding questions to help define your objective’s value and the impact it will have on your organization and your customers. Simply click save or outside the objective to return to a collapsed list view of your backlog.</p> 
+	   <screenshot src="resources/images/value_statement.png"/>
+</chapter>

@@ -1,0 +1,388 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+.add-user-disabled, .disable-enroll, .enable-enroll {
+  background: transparent no-repeat scroll center left;
+  padding: 0.25em 0em 0.25em 26px;
+  margin-right: 0.5em;
+}
+
+a.enable-enroll {
+  text-decoration: underline;
+}
+
+span.dropdown {
+  padding: 0 20px 0 10px;
+  background-image: url("../images/shared/icons/icon_triangle_down.png");
+  background-repeat: no-repeat;
+  background-position: right 50%;
+}
+
+.disabled span.dropdown {
+  background-image: url("../images/shared/icons/icon_triangle_down_grey.png");
+}
+
+.team-confirm-box {
+  h3 {
+    margin: 0 0 10px 0;
+    padding: 0 0 10px 0;
+    border-bottom: 1px dotted #CCC;
+  }
+  p {
+    margin: 0;
+  }
+  ul {
+    margin: 10px 0 20px 0;
+  }
+}
+
+.tristate-checkbox-unchecked {
+  padding-left: 16px;
+  background: url(../images/tristate-checkbox-unchecked.png) no-repeat;
+}
+
+.tristate-checkbox-checked {
+  padding-left: 16px;
+  background: url(../images/tristate-checkbox-checked.png) no-repeat;
+}
+
+.tristate-checkbox-partial {
+  padding-left: 16px;
+  background: url(../images/tristate-checkbox-partial.png) no-repeat;
+}
+
+ul.group-dropdown {
+  max-height: 12em;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.bulk-operations-panel .slider-down {
+  min-width: auto;
+}
+
+#tabbed-content.team-tabbed-content {
+  margin-top: 0px;
+  margin-bottom: 30px;
+}
+
+td {
+  &.permissions_column {
+    width: 210px;
+    padding: 0;
+  }
+  div.member_permission {
+    padding: 3px;
+  }
+}
+
+div.member_permission .drop-list-panel {
+  float: left;
+  display: inline-block;
+  width: 160px;
+  a.menu_link {
+    display: inline-block;
+    width: 100%;
+    background: #eeeeee url('../images/shared/backgrounds/bg_dropdownmenu.png') right 50%;
+    border-collapse: collapse;
+    border: 1px solid #DDD;
+  }
+}
+
+tr.deactivated div.member_permission .drop-list-panel a.menu_link {
+  color: #888;
+}
+
+div.member_permission {
+  a.menu_link:hover {
+    border-color: #CCC;
+  }
+  .drop-list-panel .role_name {
+    padding: 3px 13px 3px 5px;
+    display: inline-block;
+    width: 100%;
+  }
+  a.popup-launcher {
+    color: red;
+    font-size: 13px;
+    font-weight: bold;
+    display: inline-block;
+    float: right;
+    margin: 3px 7px;
+    padding: 0;
+    &.override-explanation {
+      font-size: 25px;
+      line-height: 14px;
+      margin-top: 10px;
+    }
+  }
+}
+
+.connector {
+  border-bottom: 15px solid #111;
+  border-bottom: 15px solid rgba(20, 20, 20, 0.9);
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  height: 0;
+  width: 0;
+  margin: 15px 0 0 176px;
+  &.override-explanation {
+    margin-left: 285px;
+  }
+}
+
+
+.invite-to-team-requires-upgrade {
+
+  &.failed {
+    .upgrade {
+      margin: 0;
+    }
+
+    .user-count {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    .with-progress-bar {
+      margin: 15px 0;
+    }
+  }
+
+  &.thanks {
+
+    p {
+      margin: 15px 0;
+    }
+
+    .postscript {
+      border-top: dotted #eee;
+      padding-top: 15px;
+      font-size: 12px;
+    }
+  }
+
+  text-align: center;
+  font-size: 16px;
+
+  img {
+    margin: 15px 0;
+    height: 98px;
+  }
+
+  h1 {
+    font-size: 28px;
+    margin-bottom: 30px;
+    border: 0;
+  }
+
+}
+
+.avatar {
+  transition-property: width,height;
+  transition-duration: 0.5s;
+  vertical-align: middle;
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 12px;
+  background-color: #fff;
+
+  &.ui-draggable-dragging {
+    width: 48px;
+    height: 48px;
+    border-radius: 24px;
+    z-index: 10001;
+  }
+}
+
+
+
+#ft {
+  .team-list {
+    float: left;
+
+    ul.top-5 {
+      display: inline-block;
+      margin: 0 0 0 10px;
+      li {
+        display: inline;
+        .avatar {
+          width: 28px;
+          height: 28px;
+          border-radius: 18px;
+          border: none;
+          z-index: 10001;
+          cursor: move;
+        }
+        .placeholder {
+          @extend .avatar;
+          cursor: pointer;
+          background-color: #d3d3d3;
+          box-shadow: inset 1px 1px 1px #909090;
+        }
+      }
+    }
+
+    .card-icon-placeholder-toggle {
+      display: none;
+    }
+
+    .full-team-list {
+      @include popover($direction: down,
+                       $width: 210px,
+                       $height: 240px,
+                       $popOffset: 122px,
+                       $triangleOffset: 111px);
+      font-size: 22px;
+      color: #eee;
+      vertical-align: middle;
+      padding: 5px 10px 5px 5px;
+
+      .content {
+        .users.short-list {
+          margin-top: 5px;
+          height: 190px;
+        }
+        .users {
+          margin: auto;
+          width: 188px;
+          overflow-y: scroll;
+          overflow-x: hidden;
+
+          ul {
+            height: 100%;
+            width: 195px;
+            margin: 0px auto;
+            li {
+              display: inline-block;
+              padding: 2.65px;
+              margin: 0px;
+              .avatar {
+                cursor: move;
+                margin: 3px;
+                width: 48px;
+                height: 48px;
+                border-radius: 24px;
+              }
+            }
+          }
+        }
+      }
+      input[type=text] {
+        width: 100%;
+        background: url("../images/shared/icons/icon_search.png") no-repeat right 2px center;
+      }
+    }
+  }
+
+
+  .invite-to-team {
+    float: left;
+    font-size: 13px;
+    line-height: 13px;
+    margin-top: 2px;
+    margin-left: 5px;
+
+    form {
+      display: none;
+    }
+
+    .spinner {
+      display: none;
+    }
+
+    .invite-team-member {
+      margin-left: 5px;
+    }
+
+    .ui-widget-content {
+      padding: 5px;
+      background: #333;
+    }
+
+    input[type=text] {
+      width: 200px;
+      border-size: 0;
+      border-radius: 20px;
+      border: 0;
+      box-shadow: none;
+      margin-top:4px;
+      padding: 3px 10px;
+    }
+
+    .show-form {
+      border-radius: 20px;
+      min-width: 20px;
+      height: 25px;
+      margin-top: 2px;
+
+      @include transition(min-width 0.5s ease-in);
+
+      &:hover {
+        min-width: 60px;
+      }
+    }
+    .show-form, .cancel {
+      input {
+        font-size: 13px;
+        height: 21px;
+      }
+
+      input[type=submit] {
+        box-shadow: none;
+        border: none;
+        min-width: 0;
+        margin: 0;
+        padding: 3px 10px;
+        text-transform: none;
+
+        &:disabled {
+          opacity: 0.4;
+        }
+      }
+    }
+
+    input[type=submit], .cancel {
+      border-radius: 20px;
+      margin-right: 2px;
+
+      &:disabled {
+        opacity: 0.4;
+      }
+    }
+
+    .show-form, input[type="submit"] {
+      background-color: $HIGHLIGHT_COLOR;
+      color: $MINGLE_PRIMARY_CONTRAST_COLOR;
+      border: none;
+      outline: none;
+    }
+
+    .cancel {
+      background-color: $MINGLE_SECONDARY_COLOR;
+      color: $MINGLE_PRIMARY_CONTRAST_COLOR;
+      border: none;
+      outline: none;
+
+      &:hover {
+        color: $MINGLE_PRIMARY_COLOR;
+        background-color: $MINGLE_PRIMARY_CONTRAST_COLOR;
+      }
+    }
+
+  }
+}

@@ -1,0 +1,421 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Text Box Test</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js"
+          type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/jquery.tipsy-flash.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery.tipsy.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+  <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+
+  <script src="test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../../app/assets/javascripts/ui_utils.js" type="text/javascript"></script>
+
+  <script src="../../app/assets/javascripts/text_box.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="test_assets/qunit-1.21.0.css" type="text/css"/>
+  <script src="test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+  <script src="test_assets/sinon-2.3.6.js" type="text/javascript"></script>
+  <script src="test_assets/qunit-phantom.js" type="text/javascript"></script>
+
+</head>
+<body>
+<div id="qunit">
+</div>
+<div>
+  <input id="text_box" name="macro_editor[pie-chart][title]" type="text">
+  <div id="text_box_container"></div>
+</div>
+
+<script type="text/javascript">
+  QUnit.module("Text Box", {
+    afterEach: function () {
+      $j("#text_box").removeData();
+      $j("#text_box").off();
+      $j("#text_box").val('');
+      $j("#text_box_container").html('')
+    }
+  });
+
+  QUnit.test('testShouldInitializeInputIfInputNotPresent', function (assert) {
+    var container = $j('#text_box_container');
+    new MingleUI.TextBox(container, {name: 'title'});
+
+    assert.ok(container.find('input[name="title"]')[0]);
+  });
+
+  QUnit.test('testShouldNotInitializeInputIfInputPresent', function (assert) {
+    var container = $j('#text_box_container');
+    container.append($j('<input>', {id: 'text_input', type: 'text'}));
+    new MingleUI.TextBox(container, {name: 'title'});
+
+    assert.notOk(container.find('input[name="title"]')[0]);
+    assert.ok(container.find('input#text_input')[0]);
+  });
+
+  QUnit.test('testShouldAddNameAsDefaultPlaceholder', function (assert) {
+    new MingleUI.TextBox('#text_box', {name: 'title'});
+
+    assert.equal($j('#text_box').prop('placeholder'), 'Title');
+  });
+
+
+  QUnit.test('testShouldAddPlaceholderWhenSpecified', function (assert) {
+    var placeholder = 'text value';
+    new MingleUI.TextBox('#text_box', {name: 'title', placeholder: placeholder});
+
+    assert.equal($j('#text_box').prop('placeholder'), placeholder);
+  });
+
+  QUnit.test("testShouldSetDefaultValueOnTextBox", function (assert) {
+    var textBox = new MingleUI.TextBox('input[name="macro_editor[pie-chart][title]"]', {
+      name: 'title',
+      initialValue: 'My chart'
+    });
+    assert.equal(textBox.value(), 'My chart');
+  });
+
+  QUnit.test("testShouldSetDefaultValueEmptyIfNotSpecified", function (assert) {
+    var textBox = new MingleUI.TextBox('input[name="macro_editor[pie-chart][title]"]', {name: 'title'});
+    assert.equal(textBox.value(), '');
+  });
+
+  QUnit.test("testOnValueChangeIsCalledWhenTextBoxGoesOutOfFocus", function (assert) {
+    var onValueChangeSpy = sinon.spy();
+    var textBox = new MingleUI.TextBox('input[name="macro_editor[pie-chart][title]"]', {
+      name: 'title',
+      onValueChange: onValueChangeSpy
+    });
+    $j("#text_box").val('new title');
+    $j("#text_box").trigger('blur');
+
+    assert.equal(onValueChangeSpy.callCount, 1);
+    assert.deepEqual(onValueChangeSpy.args[0], [textBox, 'new title']);
+    assert.equal(textBox.value(), 'new title');
+  });
+
+  QUnit.test("testOnValueChangeIsCalledWhenTextBoxGoesOutOfFocusAndTextIsChanged", function (assert) {
+    var onValueChangeSpy = sinon.spy();
+    var textBox = new MingleUI.TextBox('input[name="macro_editor[pie-chart][title]"]', {
+      onValueChange: onValueChangeSpy
+    });
+    $j("#text_box").trigger('blur');
+    var commaPressEvent = $j.Event('keyup');
+    commaPressEvent.key = ',';
+    $j("#text_box").trigger(commaPressEvent);
+    assert.equal(onValueChangeSpy.callCount, 0);
+
+    $j("#text_box").val('new_title');
+    $j("#text_box").trigger('blur');
+    assert.equal(onValueChangeSpy.callCount, 1);
+    assert.deepEqual(onValueChangeSpy.args[0], [textBox, 'new_title']);
+    assert.equal(textBox.value(), 'new_title');
+
+  });
+
+  QUnit.test("testOnValueChangeIsCalledWhenTextBoxIsMultiValuedAndSeparatorKeyIsPressed", function (assert) {
+    var onValueChangeSpy = sinon.spy();
+    var textBox = new MingleUI.TextBox('input[name="macro_editor[pie-chart][title]"]', {
+      onValueChange: onValueChangeSpy,
+      multiValued: true
+    });
+    assert.equal(onValueChangeSpy.callCount, 0);
+
+    $j("#text_box").val('new_title');
+    var commaPressEvent = $j.Event('keyup');
+    commaPressEvent.key = ',';
+    $j("#text_box").trigger(commaPressEvent);
+
+    assert.equal(onValueChangeSpy.callCount, 1);
+    assert.deepEqual(onValueChangeSpy.args[0], [textBox, ['new_title']]);
+    assert.deepEqual(textBox.value(), ['new_title']);
+  });
+
+  QUnit.test('testShouldReturnArrayForMultiValuedTextBoxWithValueSeparatedByCommaWhenSeparatorIsNotDefined', function (assert) {
+    var textBox = new MingleUI.TextBox('#text_box', {multiValued: true});
+
+    $j("#text_box").val('value1, value2');
+
+    assert.deepEqual(textBox.value(), ['value1', 'value2']);
+  });
+
+  QUnit.test('testShouldReturnArrayForMultiValuedTextBoxWithValueSeparatedBySpecifiedSeparator', function (assert) {
+    var textBox = new MingleUI.TextBox('#text_box', {multiValued: true, separator: ';'});
+
+    $j("#text_box").val('value1, value2');
+
+    assert.equal(textBox.value(), 'value1, value2');
+
+    $j("#text_box").val('value1; value2');
+
+    assert.deepEqual(textBox.value(), ['value1', 'value2']);
+  });
+
+  QUnit.test('testShouldNotAllowTextValuesWhenTextBoxIsNumeric', function (assert) {
+    var keyAllowed = false, input = $j('#text_box');
+    new MingleUI.TextBox('#text_box', {numeric: true});
+    input.on('keypress', function () {
+      keyAllowed = true;
+    });
+    'ab_+`~c//)?=d,'.split('').each(function (key) {
+      var keypress = $j.Event('keypress');
+      keypress.key = key;
+      input.trigger(keypress);
+      assert.notOk(keyAllowed);
+    });
+
+    var keypress = $j.Event('keypress');
+    keypress.key = '2';
+    input.trigger(keypress);
+    assert.ok(keyAllowed);
+  });
+
+  QUnit.test('testShouldAllowSeparatorTextValueWhenTextBoxIsNumericAndMultiValued', function (assert) {
+    new MingleUI.TextBox('#text_box', {numeric: true, multiValued: true, separator: ';'});
+    var keyAllowed = false, input = $j('#text_box');
+    input.on('keypress', function () {
+      keyAllowed = true;
+    });
+
+    var keypress = $j.Event('keypress');
+    keypress.key = ';';
+    input.trigger(keypress);
+    assert.ok(keyAllowed);
+  });
+
+  QUnit.test('testShouldAllowNegativeNumericValues', function (assert) {
+    new MingleUI.TextBox('#text_box', {numeric: true, multiValued: false});
+    var keyAllowed = false, input = $j('#text_box');
+    input.on('keypress', function () {
+      keyAllowed = true;
+    });
+
+    var keypress = $j.Event('keypress');
+    keypress.key = '-';
+    input.trigger(keypress);
+    assert.ok(keyAllowed);
+  });
+
+  QUnit.test('testShouldRemoveNonNumericValuesOnPastingForNumericTextBox', function (assert) {
+    new MingleUI.TextBox('#text_box', {numeric: true});
+
+    var input = $j('#text_box');
+    var event = $j.Event('paste');
+    event.originalEvent = {
+      clipboardData: {
+        getData: function () {
+          return 'ab1c3d57.fed5;68';
+        }
+      },
+      preventDefault: function () {
+      },
+      stopPropagation: function () {
+      }
+    };
+    input.trigger(event);
+
+    assert.equal(input.val(), '1357.568');
+  });
+
+  QUnit.test('testOnValueChangeIsCalledWhenEnterKeyIsPressed', function (assert) {
+    var onValueChangeTriggered = false, input = $j('#text_box'), keyup = $j.Event('keyup');
+    new MingleUI.TextBox('#text_box', {
+      numeric: true, multiValued: true, separator: ';', onValueChange: function () {
+        onValueChangeTriggered = true;
+      }
+    });
+
+    input.val('hello');
+    keyup.keyCode = 13;
+    input.trigger(keyup);
+
+    assert.ok(onValueChangeTriggered);
+  });
+
+  QUnit.test('testOnValueChangeIsCalledOnlyWhenValueChanges', function (assert) {
+    var onValueChangeTriggeredCount = 0, input = $j('#text_box'), keyUpEvent = $j.Event('keyup');
+    new MingleUI.TextBox('#text_box', {
+      numeric: true, multiValued: true, separator: ';', onValueChange: function () {
+        onValueChangeTriggeredCount++;
+      }
+    });
+
+    input.val('hello');
+    keyUpEvent.keyCode = 13;
+    input.trigger(keyUpEvent);
+    input.blur();
+
+    assert.equal(onValueChangeTriggeredCount, 1);
+  });
+
+  QUnit.test('testCanEnableDisableTextBox', function (assert) {
+    var input = $j('#text_box');
+    var textBox = new MingleUI.TextBox('#text_box', {numeric: true, initialValue: 'val'});
+    assert.notOk(input.prop('disabled'));
+
+    textBox.disable();
+
+    assert.ok(input.prop('disabled'));
+    assert.ok(textBox.disabled());
+    assert.equal(textBox.value(), '');
+
+    textBox.enable();
+    assert.notOk(input.prop('disabled'));
+    assert.notOk(textBox.disabled());
+    assert.equal(textBox.value(), '');
+  });
+
+  QUnit.test('testOnCancelIsCalledWithOldValueWhenEscapeIsPressed', function (assert) {
+    var onCancelCalled = false, input = $j('#text_box'), keyUpEvent = $j.Event('keydown');
+    new MingleUI.TextBox('#text_box', {
+      numeric: true, multiValued: true, separator: ';', onCancel: function (value) {
+        onCancelCalled = true;
+        assert.equal(value, '');
+      }
+    });
+
+    input.val('hello');
+    keyUpEvent.keyCode = 27;
+    input.trigger(keyUpEvent);
+
+    assert.ok(onCancelCalled);
+  });
+
+  QUnit.test('testResetShouldResetLastValueAndInputValueWithoutTriggeringOnValueChangedEvent', function (assert) {
+    var onValueChangeCalled = false, input = $j('#text_box');
+    var textBox = new MingleUI.TextBox('#text_box', {
+      multiValued: true, separator: ';', onValueChange: function () {
+        onValueChangeCalled = true;
+      }
+    });
+
+    input.val('blah').blur();
+
+    assert.equal(textBox.value(), 'blah');
+    assert.ok(onValueChangeCalled);
+    onValueChangeCalled = false;
+
+    textBox.reset();
+
+    assert.equal(textBox.value(), '');
+    assert.notOk(onValueChangeCalled);
+  });
+
+  QUnit.test('testUpdateShouldUpdateTheValue', function (assert) {
+    var textBox = new MingleUI.TextBox('#text_box', {}), input = $j('#text_box'), updatedValue = 'updated value';
+    assert.equal(input.val(), '');
+
+    textBox.update(updatedValue);
+
+    assert.equal(input.val(), updatedValue);
+    assert.equal(textBox.value(), updatedValue);
+  });
+
+  QUnit.module('TextBox With Date', {
+    beforeEach: function () {
+      $j("#text_box").removeData();
+      $j("#text_box").off();
+      $j("#text_box").val('');
+      $j("#text_box_container").html('');
+      this.datePickerSpy = sinon.spy(jQuery.fn.init(), 'datepicker');
+    },
+    afterEach: function () {
+      this.datePickerSpy.restore();
+      $j("#text_box").datepicker("destroy");
+      $j("#text_box").val('');
+    }
+  });
+
+  QUnit.test('testShouldCreateDatePickerIfTextBoxInputTypeIsDateType', function (assert) {
+    var textBox = new MingleUI.TextBox('#text_box', {isDate: true, config: {date: {maxDate: "+5y"}}});
+    assert.equal(this.datePickerSpy.callCount, 1);
+    assert.equal(this.datePickerSpy.args[0][0].maxDate, "+5y");
+  });
+
+  QUnit.test('testShouldCallHandleValueChangeWhenDateIsChanged', function (assert) {
+    var onValueChangeSpy = sinon.spy();
+    var textBox = new MingleUI.TextBox('#text_box', {
+      isDate: true, config: {date: {maxDate: "+5y"}}, onValueChange: onValueChangeSpy
+    });
+    $j("#text_box").datepicker("show");
+    $j(".ui-datepicker-calendar td a:first").click();
+    assert.ok(onValueChangeSpy.callCount, 1);
+  });
+
+  QUnit.test('testShouldRestrictStartDate', function (assert) {
+    var onValueChangeCalled;
+    var textBox = new MingleUI.TextBox('#text_box', {
+      isDate: true,
+      config: {date: {maxDate: "+5y", defaultDate: new Date('01/15/2018')}},
+      onValueChange: function () {
+        onValueChangeCalled = true;
+      }
+    });
+
+    textBox.restrictDateRange(new Date('01/02/2018'));
+
+    $j("#text_box").datepicker("show");
+    assert.equal($j(".ui-datepicker-calendar tbody tr:first td.ui-datepicker-unselectable").text().trim(), '1');
+    assert.equal($j(".ui-datepicker-calendar tbody tr:first td a").text().trim(), '23456');
+    assert.equal($j(".ui-datepicker-calendar tbody tr:last td a").text().trim(), '28293031');
+  });
+
+  QUnit.test('testShouldRestrictEndDate', function (assert) {
+    var onValueChangeCalled;
+    var textBox = new MingleUI.TextBox('#text_box', {
+      isDate: true,
+      config: {date: {maxDate: "+5y", defaultDate: new Date('01/15/2018')}},
+      onValueChange: function () {
+        onValueChangeCalled = true;
+      }
+    });
+
+    textBox.restrictDateRange(undefined, new Date('01/30/2018'));
+
+    $j("#text_box").datepicker("show");
+    assert.equal($j(".ui-datepicker-calendar tbody tr:first td a").text().trim(), '123456');
+    assert.equal($j(".ui-datepicker-calendar tbody tr:last td.ui-datepicker-unselectable").text().trim(), '31');
+    assert.equal($j(".ui-datepicker-calendar tbody tr:last td a").text().trim(), '282930');
+  });
+
+  QUnit.test('testShouldRestrictBothStartDateAndEndDate', function (assert) {
+    var onValueChangeCalled;
+    var textBox = new MingleUI.TextBox('#text_box', {
+      isDate: true,
+      config: {date: {maxDate: "+5y", defaultDate: new Date('01/15/2018')}},
+      onValueChange: function () {
+        onValueChangeCalled = true;
+      }
+    });
+
+    textBox.restrictDateRange(new Date('01/02/2018'), new Date('01/30/2018'));
+
+    $j("#text_box").datepicker("show");
+    assert.equal($j(".ui-datepicker-calendar tbody tr:first td.ui-datepicker-unselectable").text().trim(), '1');
+    assert.equal($j(".ui-datepicker-calendar tbody tr:first td a").text().trim(), '23456');
+    assert.equal($j(".ui-datepicker-calendar tbody tr:last td.ui-datepicker-unselectable").text().trim(), '31');
+    assert.equal($j(".ui-datepicker-calendar tbody tr:last td a").text().trim(), '282930');
+  });
+</script>
+</body>

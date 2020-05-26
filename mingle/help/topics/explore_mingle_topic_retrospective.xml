@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Team Retrospective">
+
+    <p>A team retrospective is a great way for a team to reflect, inspect, adapt and improve. A common format for a team retrospective is for a facilitator to lead the team through a set of questions meant to help everyone think about the accomplishments to date as well as how to improve going forward. Everyone will individually answer the questions and then the team will walk through the replies as a group, reflect upon those, and come up with actions.</p>
+
+    <p>The notion of a retrospective is rooted in the belief that any team, even a well-performing one, should take time to examine itself and find ways to become as effective as possible. A retrospective is very much NOT about assigning blame or scapegoating.</p>
+
+    <p>Mingle can help you facilitate. In the following example, the team's set of questions are "what should we start doing?", "what should we stop doing?", "what should we continue doing?", "what should we do more of?", "what should we do less of?" and "what puzzles us?".</p>
+
+    <screenshot alttext="Retrospective with the Grid View" src="resources/images/explore_mingle_retrospective.png" />
+
+    <section title="Instructions">
+        <bullets>
+            <item>Work with your team and define a set of questions</item>
+            <item>Create a <cref topic="card_types">card type</cref> called "Retrospective Topics" </item>
+            <item>
+                <p>Create a <cref topic="card_properties">card property</cref> called "Retrospective Categories"</p>
+                <bullets>
+                    <item>The "managed text list" property type works well</item>
+                    <item>Create a value for every question, e.g. "what should we start doing?"</item>
+                </bullets>
+            </item>
+            <item>Add (or reuse) card properties that make sense for your team, e.g. "Priority" or "Status" or "Owner" </item>
+            <item>Create a <cref topic="grid_view">grid view</cref> that shows all the retrospective categories and topics</item>
+            <item>Ask your team to <cref topic="creating_a_card">create cards</cref> on their own before the team retrospective</item>
+            <item>Display the <cref topic="grid_view">grid view</cref> in the area you have the team retrospective</item>
+		        </bullets>
+    </section>
+
+    <section title="Tip">
+        <bullets>
+            <item>
+                Sometimes there is not enough time to cover every topic. Before the team retrospective, you can create a card property called "Votes" (number) and have your team vote by having each person increment the value. You can then sort the grid view by "Votes" to ensure the team addresses the most popular topics.
+            </item>
+				<item>
+					If your team decided to assign owners to certain action items at the end of the retrospective you can update the "Retrospective Topic" cards and set the owner. This way your team can easily see who is assigned an action and what actions they are responsible for.
+				</item>
+
+        </bullets>
+    </section>
+
+	<section title="Also see...">
+        <bullets>
+	<item><cref topic="explore_mingle_topic_daily_standup">Daily Standup</cref></item>
+	<item><cref topic="explore_mingle">Explore Mingle</cref></item>
+        </bullets>
+    </section>
+
+
+</topic>

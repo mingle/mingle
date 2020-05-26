@@ -1,0 +1,28 @@
+// ------------------------------------------------------------------
+// NOTICE file corresponding to the section 4d of The Apache License,
+// Version 2.0, in this case for XBean :: Spring
+// ------------------------------------------------------------------
+
+XBean :: Spring
+Copyright 2005-2008 Apache Software Foundation
+
+This product includes software developed at
+Apache Software Foundation (http://www.apache.org/).
+
+This product includes/uses software, Logging (http://jakarta.apache.org/commons/logging/)
+
+This product includes/uses software, QDox (http://qdox.codehaus.org)
+
+This product includes/uses software, Spring Framework: Core (http://www.springframework.org),
+developed by Spring Framework  (http://www.springframework.org/)
+
+This product includes/uses software, Unnamed - ant:ant:jar:1.6.2
+
+This product includes/uses software, Unnamed - jmock:jmock:jar:1.0.0
+
+This product includes/uses software, Spring Framework: Web (http://www.springframework.org),
+developed by Spring Framework  (http://www.springframework.org/)
+
+
+
+

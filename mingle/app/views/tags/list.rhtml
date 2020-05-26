@@ -1,0 +1,59 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= render :partial => 'shared/admin_actions'%>
+
+<%= render :partial => 'tag_list_actions' %>
+
+<h1>Tags</h1>
+
+<div id="content" class="last_wrapper">
+  <table id="tags" class="highlightable-table">
+    <thead>
+        <tr class="table-top">
+          <th class='tag_name_column'>Tag</th>
+          <th class='tagged_on_column'>Where used</th>
+          <th class='tag_action_column last'>&nbsp;</th>
+        </tr>
+    </thead>
+
+    <tbody>
+      <% if @tags.empty? -%>
+        <tr>
+          <td colspan="3" class="italic-light align-center last">There are currently no tags to list. You can create a new tag from the action bar.</td>
+        </tr>
+      <% end -%>
+      <% for tag in @tags -%>
+        <tr id="<%= tag.html_id %>" class="<%= cycle('odd', 'even') %>">
+          <td><%= h tag.name %></td>
+          <td id='<%= tag.html_id %>_tagged_on'>
+            <%= usages_of(tag) %>
+          </td>
+          <td class="align-right standard-link-spacing last">
+            <%= link_to "Edit", {:controller => 'tags', :action => 'edit', :id => tag}, :id => "edit-#{tag.html_id}"  %> 
+            <% if tag.active_taggings? -%>
+              <%= link_to 'Delete', {:controller => 'tags', :action => 'confirm_delete', :id => tag}, :id => "destroy-#{tag.html_id}" %>
+            <% else -%>
+              <%= link_to 'Delete', {:controller => 'tags', :action => 'destroy', :id => tag }, :method => :post, :id => "destroy-#{tag.html_id}" %>
+            <% end -%>
+          </td>
+        </tr>
+      <% end -%>
+    </tbody>
+  </table>
+</div>
+
+<%= render :partial => 'tag_list_actions' %>

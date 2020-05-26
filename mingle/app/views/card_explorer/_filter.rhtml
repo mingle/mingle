@@ -1,0 +1,41 @@
+<!-- _filter -->
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+
+<div class="sidebar-tabs-content">
+  <% collapsible "Filter by...", true do -%>
+    <% form_tag( {
+                    :action => 'filter_cards', 
+                    :controller => 'card_explorer'
+                  }, 
+                  { :id => 'card_explorer_filter',  :onsubmit => "return new FiltersForm(this, 'card_selector_spinner').submit()"}) do -%>
+      <%= attributes_hidden_field @card_selector %>
+      <%= hidden_field_tag :field_id, params[:field_id] %>
+      <div class="align-center" id="card_explorer_filter_widget" ></div>
+      <%= clear_float %>
+
+      <div id='add_new_filter_link'class="align-center">
+        <%= link_to_function('Add a filter', 'InputingContexts.top().card_explorer_filters.addNewFilter()', :id => 'add_a_new_filter_for_explorer') %>
+      </div>
+    <% end -%>
+  <% end -%>
+</div>
+
+<div id='card_selector_filter_results'>
+</div>
+
+<!-- _filter -->

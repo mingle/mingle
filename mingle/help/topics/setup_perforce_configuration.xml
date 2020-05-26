@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE section SYSTEM "mingle_help.dtd">
+<section title="Perforce source integration for Mingle Onsite">
+  <subsection title="Before you start">
+  <note>
+    <item>Native Perforce integration is available for Mingle onsite only.</item>
+    <item>Before you can configure Perforce as your source repository please ensure the Perforce command line client, <exref url="http://www.perforce.com/perforce/products/p4.html">"p4"</exref>, is installed on the machine running Mingle.</item>
+  </note>
+  
+  <note>If you are unable to use Perforce because Mingle cannot locate "p4" please update perforce_config.yml in the Mingle config directory. If you are unable to locate perforce_config.yml in your config directory, selecting Perforce as the version control system should create this file. </note>
+</subsection>
+	<subsection title="Configuration">
+  <p>After successfully choosing <strong>Perforce</strong> from the source repository list, Mingle will display the <strong>Perforce Repository settings</strong> page.</p>
+  <screenshot alttext="Perforce Repository settings page" src="resources/images/perforce_repository_settings_page.png" />
+
+  <bullets>
+    <item>Enter the depots that you wish to connect to. If you have multiple depot paths, separate each path with a space.</item>
+    <item>Enter the hostname or ip address of the Perforce server</item>
+    <item>Enter the port of the Perforce server</item>
+    <item>Enter the username/password to connect to the Perforce server. You must first click the <button>Change login user password</button> to enter a new password.</item>
+    
+    <screenshot alttext="Perforce repository settings page - user password" src="resources/images/perforce_repository_settings_password.png" />
+    
+    <item>Click the <link>Save settings</link> link to save the configuration and return to the <strong>Project admin</strong> page</item>  
+  </bullets>
+</subsection>
+</section>
+
+
+
+

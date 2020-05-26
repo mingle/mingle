@@ -1,0 +1,48 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="graphic-dialog-container">
+
+  <div id="graphic-dialog" class="profile-box">
+
+    <div class="login-branding">
+      <%= image_tag("logo.png", :class => "login-logo", :alt => "mingle") %>
+    </div>
+
+    <% form_tag({:action=> "login"}, {:id => 'login_form', :class => 'login-form'}) do %>
+      <label for="user_login">Sign-in name or email:</label>
+        <%= text_field 'user', 'login', :value => @login, :class => 'width-full', :tabindex => '1' %>
+      <label for="user_password">Password:</label>
+      <input type="password" name="user[password]" id="user_password" value="" class="width-full" tabindex="2" autocomplete="off"/>
+      <input type="checkbox" name="remember_me" id="remember_me" tabindex="3"/> <label for="remember_me" class="inline for-checkbox" id="remember_me_label">Remember me</label>
+
+      <div class="submit-login">
+        <%= submit_tag 'Sign in', :tabindex => '4', :class => 'primary' %>
+        <div class="forgot-password">
+          <%= link_to('Forgotten your password?', :controller => 'profile', :action => 'forgot_password') if supports_password_recovery? %>
+        </div>
+      </div>
+
+      <% if MingleConfiguration.terms_of_service_url %>
+        <span class="terms-of-service">
+          By signing in, you agree to the <%= link_to "Terms of Service", MingleConfiguration.terms_of_service_url, :target => "_blank" -%>.
+        </span>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<%= javascript_with_rescue "if ($F('user_login').length == 0) { $('user_login').focus(); }" -%>

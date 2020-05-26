@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE subsection SYSTEM "mingle_help.dtd">
+<subsection title="Project variable value macro" collapsed="true" id="project_variable">
+<markup_reference title="Displays the current value of the specified project variable">
+			<icon alttext="Average query toolbar icon" src="resources/images/toolbar_project_variable_macro_icon.png" />
+			<markup>
+			project-variable 
+			  name: (current release)
+			</markup>
+
+where 'current release' is the name of a project variable in the project.
+			</markup_reference>
+			<warning>This project-variable macro cannot be used as a value of other macro parameters. For example, although you may expect to use this macro to specify x-label-start on a data-series-chart this functionality is not supported. </warning>
+			<table caption="Parameters">
+     		<header-row>
+     			<col-header>Name</col-header>
+     			<col-header>Meaning</col-header>
+     			<col-header>Required</col-header>
+     			<col-header>Default value</col-header>
+     		</header-row>
+     		<row>
+     			<label>name</label>
+     			<col>Name of a project variable.</col>
+     			<col>Yes</col>
+     			<col />
+     		</row>
+     		<row>
+     			<label>project</label>
+     			<col>Any valid project identifier, specifying which project’s project variable is being referred to.</col>
+     			<col>No</col>
+          <col>Default is the project to which the page or card containing the macro belongs to.</col>
+     		</row>
+     		</table>
+	</subsection>
+
+ 

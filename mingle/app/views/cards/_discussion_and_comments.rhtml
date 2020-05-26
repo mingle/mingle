@@ -1,0 +1,60 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="comments-and-history">
+  <div class="sidebar-tabs">
+    <%= render_help_link('Card Comments/History')%>
+    <ul>
+      <li class="menu-item" id="discussion-tab" style="display:none">
+        <a href="#" id="discussion-link" onclick="['discussion-container', 'current-discussion', 'history-tab'].each(Element.show); ['history-container', 'current-history','discussion-tab'].each(Element.hide); return false;">
+          <%= comments_and_murmurs_tab_title %>
+        </a>
+      </li>
+      <li class="current-menu-item" id="current-discussion">
+        <span id="discussion-title"><%= comments_and_murmurs_tab_title %> <%= spinner id: 'discussion-spinner' %></span>
+      </li>
+      <li class="menu-item" id="history-tab">
+        <% if show_history -%>
+          <a id="history-link" onclick="historyClick()" style="cursor:pointer">History</a>
+        <% else -%>
+          <a id="history-link" class="disabled">History</a>
+        <% end -%>
+      </li>
+      <li class="current-menu-item" id ="current-history" style="display:none">
+        <span>History <%= spinner :id => 'history-spinner' %></span>
+      </li>
+    </ul>
+    <div class="clear-both"><!--Clear floats!--></div>
+  </div>
+  <div id='discussion-container'>
+    <%= render :partial => 'card_new_comment', :locals => { :card => card, :allow_direct_comments => allow_direct_comments } %>
+    <%= render :partial => 'discussion', :locals => { :card => card, :allow_direct_comments => allow_direct_comments } %>
+  </div>
+  <div id='history-container' style="display:none">
+  </div>
+
+  <%= javascript_with_rescue(attach_to_card_history_loader(card)) %>
+
+  <%= javascript_with_rescue <<-JAVASCRIPT
+    historyClick = function() {
+      ['history-container', 'current-history', 'discussion-tab'].each(Element.show);
+      ['discussion-container', 'current-discussion', 'history-tab'].each(Element.hide);
+      CardHistory.loadIfNotLoadedOnce();
+      return false;
+    }
+  JAVASCRIPT
+  -%>
+</div>

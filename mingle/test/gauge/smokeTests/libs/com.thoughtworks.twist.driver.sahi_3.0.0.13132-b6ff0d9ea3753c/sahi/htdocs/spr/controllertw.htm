@@ -1,0 +1,186 @@
+<!--
+/**
+ * Copyright  2006  V Narayan Raman
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<html>
+<head><title>Twist - Sahi Controller</title></head>
+<body>
+<script src="/_s_/spr/controllertw.js"></script>
+<script>
+_c.sahisid = "$sahisid";
+</script>
+<style>
+a, body, input, td, textarea, select {
+    font-size: 8pt;
+    font-family: verdana;
+}
+ul.tabs {
+	padding: 0px;
+	margin: 0px;
+}
+ul.tabs li.hiTab {
+	font-weight: bold;
+	background-color: white;
+	padding: 4px 8px;
+	border: 0px 0px 2px 2px;
+	border-color: black;
+}
+ul.tabs li.normalTab {
+	font-weight: normal;
+}
+ul.tabs li {
+	font-family: verdana;
+	#font-size: 9pt;
+	display: inline;
+	background-color: silver;
+	border: 1px solid gray;
+	padding: 2px 8px;
+	margin-right: 2px;
+	cursor: pointer;
+}
+div.hiTab {
+	font-weight: bold;
+}
+div.normalTab {
+	font-weight: normal;
+	cursor: pointer;
+}
+.field {
+	width: 250px;
+}
+.b {
+	xtext-transform: uppercase;
+	xfont-size: 7pt;
+	cursor: pointer;
+	width: 60px;
+	xfont-family: verdana;
+	padding: 0px;
+}
+.ta {
+	width: 392px;
+	height: 100px;
+	margin: 3px;
+}
+.topB {
+	xtext-transform: uppercase;
+	xfont-size: 7pt;
+	cursor: pointer;
+	font-family: verdana;
+	padding: 0px;
+}
+.step {
+	cursor: pointer;
+}
+.stepsPart {
+	background-color: #ccc;
+}
+.cImg {
+	cursor: pointer;
+	border: 1px solid white;
+	padding: 1px;
+}
+.cImg_toggle {
+	cursor: pointer;
+	border: 1px solid white;
+	padding: 1px;
+}
+.fileInput{
+	cursor: pointer;
+}
+.editorbox{
+	width:100%;
+	height:199px;
+	border:0px;
+}
+</style>
+<div style="float:right;margin-right:7px;">
+<input type="button" id="rec_on" style="display:block;width:60px;" value="Record" onclick="_c.startRecording()">
+<input type="button" id="rec_off" style="display:none;width:60px;" value="Stop" onclick="_c.stopRecording()"></div>
+<input type="button" id="rec_clear" style="display:block;width:60px;float:right;margin-right:8px;" value="Clear" onclick="_c.clearRecording()">
+<!-- Spy start -->
+<div style="margin:10px 0px 10px 0px;"><ul class="tabs">
+<li id="tspy">Accessor Spy</li>
+<li id="tsteps" onclick="_c.showAllRecordedSteps()">Recorded Steps</li>
+</ul></div>
+<div  style="">
+<div id="tspybox" style="display:none">
+<table width="99%"><tr><td>
+<table>
+<tr>
+<td>Accessor</td><td>
+<input onkeypress="_c.reIdentifyQ(event)" class="field" id="accessor" type="text" name="accessor">
+</td>
+</tr>
+<tr>
+<td>Alternatives</td><td>
+<select onchange="$('accessor').value=this.value" class="field" id="alternatives" name="alternatives"></select>
+</td>
+</tr>
+<tr>
+<td>Value/Text</td><td><input class="field" id="aValue" type="text" name="aValue"></td>
+</tr>
+<tr>
+<td>Prefix</td><td><input id="windowName" type="text" name="windowName"></td>
+</tr>
+<tr>
+<td>Assert</td><td>
+<select onchange="_c.recordStep(_c.getSelectedAssertion());this.selectedIndex=0;" class="field" id="assertions" name="assertions"></select>
+</td>
+</tr>
+</table>
+</td><td valign="top" style="padding-top:4px;">
+<input class="b" type="button" value="Hilight" onclick="_c.highlight()"><br/>
+<!--<input class="b" type="button" value="Props" onclick="_c.showProps()"><br/>-->
+<hr/>
+<input class="b" type="button" value="Hover" onclick="_c.hover()"><br/>
+<input class="b" type="button" value="Click" onclick="_c.click()"><br/>
+<input class="b" type="button" value="Set" onclick="_c.setValue()"><br/>
+</td></tr>
+<tr><td colspan="2">
+Recorded steps:
+<br/>
+<textarea id="lastSteps" style="width:390px;height:55px;" readonly="readonly"></textarea>
+</td></tr>
+</table>
+</div>
+
+<div id="tstepsbox" style="display:none">
+<div id="allsteps" style="border: 1px groove gray; overflow:auto; padding:4px; margin:0px;height:200px;"></div>
+</div>
+</div>
+<!-- Spy end -->
+
+<!--About tab start-->
+<div class="content" id="taboutbox" style="display:none">
+Sahi Software
+</div>
+<!--About tab end-->
+
+<!-- Common start -->
+<input type="hidden" id="currentLogFileName"/>
+<!-- Common end -->
+
+<script>
+//var tabGroup1 = new TabGroup("tabGroup1", ["tscripts", "tlogs", "tabout"], "tscripts");
+//var tabGroup2 = new TabGroup("tabGroup2", ["tplay", "trecorder"], "trecorder");
+var spyTabs = new TabGroup("spyTabs", ["tspy", "tsteps"], "tspy");
+//var openTabs = new TabGroup("openTabs", ["tfile", "turl"], "tfile");
+_c.makeImgButtons();
+</script>
+
+
+</body>
+</html>

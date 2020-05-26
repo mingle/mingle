@@ -1,0 +1,42 @@
+<!--TIME_WAIT-->
+<pre>
+4. Windows Communication Foundation (WCF) Known Issues
+
+4.1 WCF Can Run Out of Sockets If Creating Many Non-one-way Channels in a Short Timespan
+By design, TCP has a limited number of available client TCP ports. The cleanup of those ports is slow when connections are closed because there is a default four-minute delay. If you open and close more than 1000 connections a minute, you might run out of available ports and Microsoft Windows Communication Foundation (WCF) will throw a socket exception.
+
+You are most likely to experience this issue in the following scenarios:
+
+    * When using the WCF TCP standard Binding
+    * With any custom WCF binding that uses TCP and does not use the WCF Composite Duplex binding
+    * When using any TCP binding with sessions
+    * Msdtc.exe can experience this issue when using WS-AtomicTransaction
+
+You are less likely to experience this issue in the following scenarios:
+
+    * When using WCF HTTP-based bindings
+    * When using WCF Named Pipes bindings
+    * For any sessionless TCP bindings on which you do only one-way messaging
+    * When using TCP with the WCF Composite Duplex binding
+
+If your application needs to use more connections than the system can handle, there are two possible workarounds. You can use either one of the workarounds, or both workarounds in combination:
+
+1. Increase the number of client ports by increasing the value of the following registry key:
+
+    System Key: [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters]
+    Value Name: MaxUserPort
+    Value Type: DWORD
+    Value data: 65534
+    Valid Range: 5000-65534 (decimal)
+    Default: 0x1388 (5000 decimal)
+    Description: This parameter controls the maximum number of ports used when a program requests any available user port from the system. Typically, ephemeral (short-lived) ports are allocated values between 1024 and 5000 (decimal), inclusive.
+
+2. Decrease the TIME_WAIT period to 30 seconds by adding the following registry key (or decrease the value of the registry key if it is already present):
+
+    System Key: [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters]
+    Value Name: TcpTimedWaitDelay
+    Value Type: REG_DWORD - Time in seconds
+    Valid Range: 30-300 (decimal)
+    Default: 0xF0 (240 decimal)
+    Description: This parameter determines the time that a connection stays in the TIME_WAIT state when it is closing. While a connection is in the TIME_WAIT state, the socket pair cannot be re-used. This is also known as the "2MSL" state. According to RFC793, the value should be two times the maximum segment lifetime on the network. See the RFC for more details.
+</pre>

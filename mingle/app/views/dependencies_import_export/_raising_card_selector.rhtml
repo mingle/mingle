@@ -1,0 +1,31 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<label class="raising-card">
+  <span>
+    <% if dependency_hash["raising_card"].blank? || allow_raising_card_edit %>
+      <span class="card-select" data-card-selector-url="<%= card_selector_url(dependency_hash['raising_project']) -%>" >
+      <span class="summary">
+        <%= dependency_hash["raising_card"].blank? ? 'Select Card' : dependency_raising_card(dependency_hash) %>
+      </span>
+      <i class="fa fa-plus"></i></span>
+      <%= hidden_field_tag "dependencies[#{dependency_hash["number"]}][raising_card_name]", dependency_hash["raising_card"].blank? ? nil : dependency_hash["raising_card"]["name"], :class => 'raising-card-name'-%>
+      <%= hidden_field_tag "dependencies[#{dependency_hash["number"]}][raising_card_number]", dependency_hash["raising_card"].blank? ? nil : dependency_hash["raising_card"]["number"], :class => 'raising-card-number'-%>
+    <% else %>
+      <%= dependency_raising_card(dependency_hash) -%>
+    <% end -%>
+  </span>
+</label>

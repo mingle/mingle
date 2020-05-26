@@ -1,0 +1,242 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+.buy-popup {
+    a {
+        color: $MINGLE_PRIMARY_COLOR;
+    }
+
+    .mingle-edition {
+        input[type=radio] {
+          display: none;
+        }
+        label {
+          display: inline;
+        }
+        .edition-desc {
+          display: none;
+          padding: 15px 0 5px 0;
+        }
+        .button-group label input:checked+.button-group-item {
+          background: #69abed;
+          -webkit-box-shadow: inset 3px 3px 6px rgba(0,0,0,0.125);
+          box-shadow: inset 3px 3px 6px rgba(0,0,0,0.125);
+          color: #fff;
+        }
+        .button-group label .button-group-item {
+          width: 7em;
+          background: #efefef;
+          cursor: pointer;
+          display: inline-block;
+          font-size: 1.4em;
+          font-weight: normal;
+          line-height: 1;
+          text-align: center;
+          padding: 0.75em 0;
+        }
+    }
+
+    text-align: center;
+    h2 {
+        color: black;
+        padding: 20px;
+        font-style: italic;
+        font-weight: 400;
+        font-size: 28px;
+        margin-top: 0;
+    }
+    .lightbox_header {
+        background-color: white;
+        padding: 20px 20px 10px 20px;
+        #close_buy {
+            color: black;
+            font-size: 24px;
+            position: absolute;
+            right: 25px;
+            top: 20px;
+        }
+    }
+    .lightbox_content {
+        padding: 0;
+    }
+
+    .prices {
+      padding: 0px 70px;
+      font-size: 16px;
+      .label {
+        text-align: left;
+        line-height: 1.5;
+      }
+      .slider {
+        .slider-wrapper {
+          position: relative;
+
+          .free-label {
+            position: absolute;
+            left: 10px;
+            top: 6px;
+            color: #fff;
+          }
+
+          .pricing-slider {
+            height: 30px;
+            border: none;
+            border-left: 83px solid rgb(105,171,237);
+            background-color: #AFAFAF;
+            -webkit-box-shadow: none;
+            -moz-box-shadow: none;
+            box-shadow: none;
+
+            .noUi-background {
+              background-color: #EFEFEF;
+            }
+
+            .noUi-handle {
+              &:before, &:after {
+                content: none;
+              }
+              cursor: pointer;
+              background-color: rgb(105,171,237);
+              color: #fff;
+              padding-top: 11px;
+              width: 40px;
+              height: 40px;
+              border-radius: 20px;
+              border: none;
+              -webkit-box-shadow: 0px 3px 5px 0px rgba(136,136,136,1);
+              -moz-box-shadow: 0px 3px 5px 0px rgba(136,136,136,1);
+              box-shadow: 0px 3px 5px 0px rgba(136,136,136,1);
+            }
+          }
+        }
+      }
+    }
+    .final-cost {
+      padding: 20px;
+      padding: 20px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .cost-info {
+        margin-top: -12px;
+        color: #888;
+        font-style: italic;
+    }
+    .contact-us-message {
+      font-size: 16px;
+      margin-top: 20px;
+    }
+    .contact {
+        margin-top: 30px;
+        background-color: #eee;
+        padding: 10px;
+        input[type=text] {
+            width: 350px;
+            height: 42px;
+            font-size: 24px;
+            text-align: center;
+        }
+    }
+
+    .action-bar {
+        input {
+            background-color: $HIGHLIGHT_COLOR;
+            color: white;
+            text-transform: none;
+            height: 47px;
+            width: 134px;
+            font-size: 24px;
+            border: none;
+            &:hover {
+                opacity: 0.85;
+            }
+        }
+    }
+    .buy-message {
+        padding-bottom: 30px;
+        font-size: 18px;
+        .action-bar {
+            padding-top: 45px;
+        }
+    }
+}
+
+#trial_count_down {
+    float: left;
+    color: black;
+    line-height: 39px;
+    font-size: 18px;
+    margin-left: 10px;
+    padding-left: 20px;
+    padding-top: 2px;
+    font-weight: 100;
+
+    .cc {
+        float: left;
+    }
+
+    .days-left {
+        float: left;
+        background-color: black;
+        padding: 0 2px;
+        margin-left: 3px;
+        height: 36px;
+        span {
+            font-size: 22px;
+            background-color: white;
+            font-family: 'Solari';
+        }
+    }
+
+    .buy-button {
+        float: left;
+        margin-left: 15px;
+        #buy {
+            background-color: $HIGHLIGHT_COLOR;
+            color: white;
+            text-transform: uppercase;
+            &:hover {
+                opacity: 0.85;
+            }
+            padding: 6px 20px 4px 20px;
+        }
+    }
+}
+
+#free-buy {
+    background-color: $HIGHLIGHT_COLOR;
+    color: white;
+    text-transform: uppercase;
+    &:hover {
+        opacity: 0.85;
+    }
+    a {
+        padding: 0px 10px;
+    }
+}
+
+#downgrade_lightbox {
+    #downgrade_link {
+        font-size: 14px;
+        color: #333;
+        text-decoration: underline;
+    }
+    .bottom-progress-bar {
+        position: relative;
+        height: 4px;
+        width: 100%;
+    }
+}

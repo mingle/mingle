@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_help.dtd">
+<chapter title="Card relationship properties">
+    <section title="Introduction">
+    	<p>Card relationship properties allow users to create a relationship between cards. For example, users can make a defect to connect to a story. This can be changed to another story or bug as needed.</p>
+		<screenshot src="resources/images/card_relationship_prop.png"/>
+		<p>where 'Depend on' is a card relationship property which points to story card '#1 Navigate to and read Email' as its value.</p>
+    </section>
+
+    <section title="How to...">
+        <bullets>
+            <item><cref topic="creating_card_properties">Create a card property</cref></item>
+            <item><cref topic="modifying_or_deleting_card_properties">Modify or delete a card property</cref></item>
+        </bullets>
+    </section>
+</chapter>
+
+

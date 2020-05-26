@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Project settings page">
+	<section title="What you can do on this page">		
+		<p>
+			The Project settings page lets you change global settings for the current project, including
+		</p>
+			<bullets>
+				<item>Project name</item>
+				<item>Project identifier</item>
+				<item>Description</item>
+				<item>Project time zone settings</item>
+				<item>Project numeric precision</item>
+				<item>Notification email address</item>
+				<item>Project icon/logo</item>
+				<item>Enable anonymous access</item>
+				<item>Enable request membership to the project</item>
+			</bullets>
+	</section>
+	<section title="Basic settings">
+		<screenshot alttext="Basic project settings page" src="resources/images/project_settings_basic.png" />
+		<subsection title="Project name" collapsed="true">
+			<p>The project name will be displayed on the <cref topic="all_projects_page">Projects page</cref> and in the header or tabs in your browser. 
+				Since these titles are often truncated in browser tabs, it makes sense to choose one that will clearly differentiate your project even if truncated.</p>
+		</subsection>
+		<subsection title="Project identifier" collapsed="true">
+			<p>Mingle automatically creates a default project identifier based on the name you type, however you can change the project identifier as required. 
+			The project identifier forms the URL from where you access the project, so if changing the identifier, you may need to update any bookmarks and communicate this information to your team. 
+			The Identifier must be all lower case, less than 30 characters, and you must represent any spaces with underscores.</p>
+			<note>The project identifier is used in the <cref topic="mingle_api">Mingle API</cref>, so if you are using the API and want to change the identifier you will have to amend all API references accordingly.</note>
+		</subsection>
+		<subsection title="Description" collapsed="true">
+			<p>The project description is displayed in the <cref topic="all_projects_page">Current projects</cref> page. You can provide any additional context that a user might want to know about the project.</p>
+		</subsection>
+	</section>
+	<section title="Advanced project settings">	
+		<screenshot alttext="Basic project settings page" src="resources/images/project_settings_advanced.png" />	
+		<subsection title="Project time settings" collapsed="true">
+			<screenshot alttext="Advanced project settings page - time zone settings" src="resources/images/project_settings_time.png" />
+			<p>Choose the time zone that applies to your project from the list. This will determine what time zone is set on any dates that are stored in Mingle. 
+				The special value (today) in <cref topic="mql_reference">MQL</cref>, <cref topic="card_defaults">card defaults</cref> and <cref topic="formula_properties">formula properties</cref> will also be derived from the specified time zone.</p>
+		</subsection>
+		<subsection title="Project numeric precision" collapsed="true">
+			<screenshot alttext="Advanced project settings page - numeric precision" src="resources/images/project_settings_numeric_precision.png" />
+			<p>See <cref topic="project_numeric_precision">project numeric precision</cref> for more information about this setting.</p>
+			<warning>This value determines the precision with which your numeric properties are stored and formula properties are calculated. 
+				Decreasing this value could change existing data, permanently losing precision from any numeric values which are stored with greater than the new number of decimal places.</warning>
+		</subsection>
+		<subsection title="Project email address" collapsed="true">
+			<screenshot alttext="Advanced project settings page - email address" src="resources/images/project_settings_email.png" />
+			<p>This is the email address from which any system generated emails will be sent. e.g. <cref topic="subscribing_via_email">email notifications</cref>.</p>
+		</subsection>
+		<subsection title="Project icon/logo" collapsed="true">
+			<screenshot alttext="Advanced project settings page - project icon/logo" src="resources/images/project_settings_icon.png" />
+			<p>You can specify an image that will appear in the <cref topic="all_projects_page">Current projects</cref> page next to the project name.</p>
+		</subsection>
+		<subsection title="Team member checkbox" collapsed="true">
+			<screenshot alttext="Advanced project settings page - team member checkbox" src="resources/images/project_settings_admin_team_member.png"></screenshot>
+				<p>When the Mingle Admin is creating a project they can check this box if (as <cref topic="user_roles">Mingle Admin</cref>) they want to be included as a team member on the project. 
+					Once the project has been created, unchecking or checking this box has no effect.</p>
+		
+		</subsection>
+		<subsection title="Anonymous user access checkbox" collapsed="true">
+			<screenshot alttext="Advanced project settings page - anon user access checkbox" src="resources/images/project_settings_anon_user_checkbox.png"></screenshot>
+				<p>When the Mingle Admin is creating a project they can check this box (<cref topic="mingle_licenses">if available</cref>) to enable the project for anonymous user access. 
+					Once the project has been created checking and unchecking this option will enable or disable anonymous access as appropriate.</p>
+		
+		</subsection>
+		<subsection id= "request_membership" title="Request membership checkbox" collapsed="true">
+		
+	    <p>Mingle and project admins can set a project as visible in the project list to non-project members. When this option is set non-project members will see this project listed on the <cref topic="all_projects_page">all projects page</cref> and can request access to the project. Project admins for that project will be notified of the request for access via email. Checking and unchecking this option will enable or disable this feature as appropriate. If the project does not have any project admins or the project admins do not have an email address associated with their accounts then non-project members will be unable to request membership even when this option is set. </p>
+
+	  </subsection>
+  </section>
+	<section title="Also see...">
+		<bullets>
+			<item><cref topic="setup_source_repository_integration">Setting up the source repository</cref></item>
+			<item><cref topic="creating_mingle_projects">Creating a new project</cref></item>
+			<item><cref topic="customizing_projects">Customizing projects</cref></item>
+		</bullets>
+	</section>
+</topic>
+

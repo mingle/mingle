@@ -1,0 +1,19 @@
+_include("set_included2.sah");
+//<browser>
+function getLinks(){
+	return getLinks2();
+}
+//</browser>
+
+_log("abcd");
+
+//<browser>
+function getLinks2(){
+	var retVal = [];
+	var links = getRawLinks();
+	for (var i=0; i<2; i++){
+		retVal[i] = _getText(links[i]);
+	}
+	return retVal;
+}
+//</browser>

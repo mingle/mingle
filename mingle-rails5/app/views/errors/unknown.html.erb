@@ -1,0 +1,27 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<h1>We're sorry but Mingle found a problem it couldn't fix</h1>
+
+<% info_box do %>
+    <p><b>We apologize for the inconvenience.</b></p>
+    <p>You should be able to continue work by
+      <a href="<%= CONTEXT_PATH %>/">returning to the projects page</a> or you may prefer to
+      <a href="<%= CONTEXT_PATH %>/profile/logout">sign out</a> and sign in again.
+    </p>
+<% end %>
+
+<%= render :partial => 'errors/action_bar' %>

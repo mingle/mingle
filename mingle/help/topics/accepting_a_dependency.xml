@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_plus.dtd">
+<chapter title="Accepting a Dependency" id="mingle_plus">
+	    <p>When a new dependency has been raised on a project, Mingle will display a counter next to the <cref topic="dependency_tab">Dependency Tab</cref>. The tab is the central location for a project's dependencies. By linking one or more card(s) to a dependency, you are associating those cards to that dependency.</p>
+	    
+		<screenshot alttext="dependency tab" src="resources/images/dependency_tab.png" />
+		
+	    <p>To accept a dependency, navigate to the Dependency Tab and open the dependency. Clicking on the Accept button or the + icon next to "Resolving Cards" will prompt you to link resolving cards within your project to the dependency. These resolving card(s) will represent the work needed to resolve the dependency.</p>
+
+	    <screenshot alttext="accepting a dependency" src="resources/images/accepting_a_dependency.png" />
+
+	    <bullets>
+	    	<item><strong>Desired completion date:</strong> This date is given by the raising project and represents when they expect the dependency to be resolved.</item>
+	    	<item><strong>Resolving card(s):</strong> By clicking on the + icon, you can search for cards within the project to link to the dependency. There is no limit to the number of cards you can link to a dependency. You can also unlink the cards by clicking on the x icon.</item>
+	    </bullets>
+</chapter>

@@ -1,0 +1,57 @@
+var $ar = new Array();
+$ar[$ar.length] = ["hi", "there", "one", "a\"b"];
+//$ar[$ar.length] = [];
+//$ar[$ar.length] = [];
+$ar[$ar.length] = ["hey", "he,re", 2, " aa "];
+	
+function testWithComma(){	
+	checkWithXXX(",");
+}
+function testWithPipe(){	
+	checkWithXXX("|");
+}
+function checkWithXXX($separator){
+	_writeCSVFile($ar, "sahicsv.txt", true, $separator);
+
+	var $ar2 = _readCSVFile("sahicsv.txt", $separator);
+
+	for (var $i=0; $i<$ar.length; $i++){
+		for (var $j=0; $j<$ar[$i].length; $j++){
+			_assertEqual($ar[$i][$j], $ar2[$i][$j]);
+		}
+	}
+}
+function checkWithDefault(){
+	_writeCSVFile($ar, "sahicsv.txt", true);
+
+	var $ar2 = _readCSVFile("sahicsv.txt");
+
+	for (var $i=0; $i<$ar.length; $i++){
+		for (var $j=0; $j<$ar[$i].length; $j++){
+			_assertEqual($ar[$i][$j], $ar2[$i][$j]);
+		}
+	}
+}
+function checkDefaultUsesComma(){
+	_writeCSVFile($ar, "sahicsv.txt", true);
+
+	var $ar2 = _readCSVFile("sahicsv.txt", ",");
+
+	for (var $i=0; $i<$ar.length; $i++){
+		for (var $j=0; $j<$ar[$i].length; $j++){
+			_assertEqual($ar[$i][$j], $ar2[$i][$j]);
+		}
+	}
+}
+function testCSVArrayEquals(){
+	_writeFile("hi, there, one, a\"b\nhey, \"he,re\", 2, \" aa \"", "sahicsv.txt", true);
+	var $ar2 = _readCSVFile("sahicsv.txt");
+	
+	for (var $i=0; $i<$ar.length; $i++){
+		for (var $j=0; $j<$ar[$i].length; $j++){
+			_assertEqual($ar[$i][$j], $ar2[$i][$j]);
+		}
+	}
+}
+
+_runUnitTests();

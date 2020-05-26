@@ -1,0 +1,356 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+/*reset.css*/
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,input,textarea,p,blockquote,th,td
+{
+  margin:0;padding:0;
+}
+
+table
+{
+  border-collapse:collapse;border-spacing:0;
+}
+
+img
+{
+  border:0;
+}
+
+ol,ul
+{
+  list-style:none;
+}
+
+caption,th
+{
+  text-align:left;
+}
+
+h1,h2,h3,h4,h5,h6
+{
+  font-size:100%;font-weight:normal;
+}
+
+q:before,q:after
+{
+  content:'';
+}
+
+abbr,acronym
+{
+  border:0;
+}
+
+
+/*grids.css*/
+
+#ft {
+  clear:both;
+}
+
+#yui-main .yui-b
+{
+  position:static;
+}
+
+#yui-main {
+width:100%;
+}
+
+#main {
+  height: 100%;
+}
+
+
+
+/* new structure */
+
+
+#bd {
+  background-color: #f3f3f3;
+}
+
+.page-content {
+  width:100%;
+  float: left;
+  display: block;
+  margin-right: 0;
+
+  transition-property: all;
+  transition-duration: .6s;
+  transition-timing-function: cubic-bezier(0, 1, 0.4, 1);
+
+  a{
+    word-wrap: break-word;
+  }
+  * {
+    transition-property: none;
+  }
+
+  &.with-sidebar {
+    width: 76%;
+    margin-right: 0;
+  }
+}
+
+.sidebar {
+  width: 0px;
+  display:inline-block;
+  float: right;
+  position: relative;
+  overflow: hidden;
+  transition-property: all;
+  transition-duration: .6s;
+  transition-timing-function: cubic-bezier(0, 1, 0.4, 1);
+
+  * {
+    transition-property: none;
+  }
+
+  .sidebar-panel {
+    width: 500px;
+    -webkit-transform: translateX(10%);
+    -moz-transform: translateX(10%);
+    -ms-transform: translateX(10%);
+    -o-transform: translateX(10%);
+    transform: translateX(10%);
+
+    transition: transform 2s;
+    -webkit-transition: -webkit-transform 2s;
+    -moz-transition: -moz-transform 2s;
+    -o-transition: -o-transform 2s;
+
+    * {
+      transition-property: none;
+    }
+  }
+
+  &.expanded {
+    width: 24%;
+    overflow: visible;
+
+    .sidebar-panel {
+      width: 100%;
+      -webkit-transform: translateX(0);
+      -moz-transform: translateX(0);
+      -ms-transform: translateX(0);
+      -o-transform: translateX(0);
+      transform: translateX(0);
+
+      transition: transform 0.1s;
+      -webkit-transition: -webkit-transform 0.1s;
+      -moz-transition: -moz-transform 0.1s;
+      -o-transition: -o-transform 0.1s;
+
+      * {
+        transition-property: none;
+      }
+    }
+  }
+}
+
+
+
+/* cruft. */
+
+
+#doc,#doc2,#doc3,.yui-t1,.yui-t2,.yui-t3,.yui-t4,.yui-t5,.yui-t6,.yui-t7
+{
+  margin:auto;
+  text-align:left;
+  width:57.69em;
+  min-width:70em;
+}
+
+#doc2
+{
+  width:73.074em;
+  min-width:950px;
+}
+
+#doc3
+{
+  margin:auto 10px;width:auto;
+}
+
+.yui-b
+{
+  position:relative;
+}
+
+.yui-b
+{
+  _position:static;
+}
+
+
+.yui-t1 #yui-main,.yui-t2 #yui-main,.yui-t3 #yui-main
+{
+  float:right;margin-left:-25em;
+}
+
+/* The margin-right must match the sidebar's size */
+
+.yui-t4 #yui-main,.yui-t5 #yui-main,.yui-t6 #yui-main
+{
+  float:left;margin-right:-27em;
+  float:left;margin-right:-325px;
+}
+
+.yui-t1 .yui-b
+{
+  float:left;
+  width:12.3207em;
+}
+
+.yui-t1 #yui-main .yui-b
+{
+  margin-left:13.3207em;
+}
+
+.yui-t2 .yui-b
+{
+  float:left;
+  width:13.8456em;
+}
+
+.yui-t2 #yui-main .yui-b
+{
+  margin-left:14.8456em;
+}
+
+.yui-t3 .yui-b
+{
+  float:left;
+  width:23.0759em;
+}
+
+.yui-t3 #yui-main .yui-b
+{
+  margin-left:24.0759em;
+}
+
+.yui-t4 .yui-b
+{
+  float:right;
+  width:13.8456em;
+}
+
+.yui-t4 #yui-main .yui-b
+{
+  margin-right:14.8456em;
+}
+
+.yui-t5 .yui-b
+{
+  float:right;
+  width:18.4608em;
+}
+
+.yui-t5 #yui-main .yui-b
+{
+  margin-right:18.4608em;
+  padding-top:0.5em;
+}
+
+/* Yahoo's standard grid gives you a 2em gutter between the two columns and no 0.5em padding - this version reduces the gutter to 1em and adds a 1em padding - this is the size of the sidebar*/
+
+
+
+.yui-t7 #yui-main .yui-b
+{
+  display:block;
+  margin:0em;
+}
+
+/* Yahoo's standard grid has a 1em bottom border*/
+
+#yui-main .yui-b
+{
+  float:none;
+  width: 76%;
+}
+
+.yui-g .yui-u,.yui-g .yui-g,.yui-gc .yui-u,.yui-gc .yui-g .yui-u,.yui-ge .yui-u,.yui-gf .yui-u
+{
+  float:right;display:inline;
+}
+
+.yui-g div.first,.yui-gc div.first,.yui-gc div.first div.first,.yui-gd div.first,.yui-ge div.first,.yui-gf div.first
+{
+  float:left;
+}
+
+.yui-g .yui-u,.yui-g .yui-g
+{
+  width:49.1%;
+}
+
+.yui-g .yui-g .yui-u,.yui-gc .yui-g .yui-u
+{
+  width:48.1%;
+}
+
+.yui-gb .yui-u,.yui-gc .yui-u,.yui-gd .yui-u
+{
+  float:left;
+  margin-left:2%;
+  width:32%;
+}
+
+.yui-gb div.first,.yui-gc div.first,.yui-gd div.first
+{
+  margin-left:0;
+}
+
+.yui-gc div.first,.yui-gd .yui-u
+{
+  width:66%;
+}
+
+.yui-gd div.first{
+  width:32%;
+}
+
+.yui-ge .yui-u{
+  width:24%;
+}
+
+.yui-ge div.first,.yui-gf .yui-u
+{
+  width:74.2%;
+}
+
+.yui-gf div.first
+{
+  width:24%;
+}
+
+.yui-ge div.first
+{
+  width:74.2%;
+}
+
+#bd:after,.yui-g:after,.yui-gb:after,.yui-gc:after,.yui-gd:after,.yui-ge:after,.yui-gf:after
+{
+  content:".";display:block;height:0;clear:both;visibility:hidden;
+}
+
+#bd,.yui-g,.yui-gb,.yui-gc,.yui-gd,.yui-ge,.yui-gf
+{
+  zoom:1;
+}

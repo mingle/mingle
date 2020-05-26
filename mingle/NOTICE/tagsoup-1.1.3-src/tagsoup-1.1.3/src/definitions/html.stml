@@ -1,0 +1,277 @@
+<!--
+// This file is part of TagSoup.
+// 
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.  You may also distribute
+// and/or modify it under version 3.0 of the Academic Free License.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+-->
+
+<statetable xmlns='http://www.ccil.org/~cowan/XML/tagsoup/stml'
+		version='1.0'>
+	<symbol id='EOF'/>
+	<symbol id='S'/>
+	<symbol id='default'/>
+	<symbol id='CR'/>
+	<symbol id='LF'/>
+	<action id='A_ADUP'/>
+	<action id='A_ADUP_SAVE'/>
+	<action id='A_ADUP_STAGC'/>
+	<action id='A_ANAME'/>
+	<action id='A_ANAME_ADUP_STAGC'/>
+	<action id='A_AVAL'/>
+	<action id='A_AVAL_STAGC'/>
+	<action id='A_CDATA'/>
+	<action id='A_CMNT'/>
+	<action id='A_DECL'/>
+	<action id='A_ENTITY'/>
+	<action id='A_ETAG'/>
+	<action id='A_EMPTYTAG'/>
+	<action id='A_ANAME_ADUP'/>
+	<action id='A_GI'/>
+	<action id='A_GI_STAGC'/>
+	<action id='A_LF'/>
+	<action id='A_LT'/>
+	<action id='A_LT_PCDATA'/>
+	<action id='A_MINUS'/>
+	<action id='A_MINUS2'/>
+	<action id='A_MINUS3'/>
+	<action id='A_PCDATA'/>
+	<action id='A_PCDATA_SAVE_PUSH'/>
+	<action id='A_PI'/>
+	<action id='A_PITARGET'/>
+	<action id='A_PITARGET_PI'/>
+	<action id='A_SAVE'/>
+	<action id='A_SAVE_PUSH'/>
+	<action id='A_SKIP'/>
+	<action id='A_SP'/>
+	<action id='A_STAGC'/>
+	<action id='A_UNGET'/>
+	<action id='A_UNSAVE_PCDATA'/>
+	<state id='S_ANAME'>
+		<tr symbol='default' action='A_SAVE' newstate='S_ANAME'/>
+		<tr char='=' action='A_ANAME' newstate='S_AVAL'/>
+		<tr char='>' action='A_ANAME_ADUP_STAGC' newstate='S_PCDATA'/>
+		<tr char='/' action='A_ANAME_ADUP' newstate='S_EMPTYTAG'/>
+		<tr symbol='EOF' action='A_ANAME_ADUP_STAGC' newstate='S_DONE'/>
+		<tr symbol='S' action='A_ANAME' newstate='S_EQ'/>
+	</state>
+	<state id='S_APOS'>
+		<tr symbol='default' action='A_SAVE' newstate='S_APOS'/>
+		<tr char='&amp;' action='A_SAVE_PUSH' newstate='S_ENT'/>
+		<tr char='&apos;' action='A_AVAL' newstate='S_TAGWS'/>
+		<tr symbol='EOF' action='A_AVAL_STAGC' newstate='S_DONE'/>
+		<tr symbol='S' action='A_SP' newstate='S_APOS'/>
+	</state>
+	<state id='S_AVAL'>
+		<tr symbol='default' action='A_SAVE' newstate='S_STAGC'/>
+		<tr char='"' action='A_SKIP' newstate='S_QUOT'/>
+		<tr char='&apos;' action='A_SKIP' newstate='S_APOS'/>
+		<tr char='>' action='A_AVAL_STAGC' newstate='S_PCDATA'/>
+		<tr symbol='EOF' action='A_AVAL_STAGC' newstate='S_DONE'/>
+		<tr symbol='S' action='A_SKIP' newstate='S_AVAL'/>
+	</state>
+	<state id='S_CDATA'>
+		<tr symbol='default' action='A_SAVE' newstate='S_CDATA'/>
+		<tr char='&lt;' action='A_SAVE' newstate='S_CDATA2'/>
+		<tr symbol='CR' action='A_LF' newstate='S_CCRLF'/>
+		<tr symbol='EOF' action='A_PCDATA' newstate='S_DONE'/>
+	</state>
+	<state id='S_CDATA2'>
+		<tr symbol='default' action='A_SAVE' newstate='S_CDATA'/>
+		<tr char='/' action='A_UNSAVE_PCDATA' newstate='S_ETAG'/>
+		<tr symbol='EOF' action='A_UNSAVE_PCDATA' newstate='S_DONE'/>
+	</state>
+	<state id='S_COM'>
+		<tr symbol='default' action='A_SAVE' newstate='S_COM2'/>
+		<tr char='-' action='A_SKIP' newstate='S_COM2'/>
+		<tr symbol='EOF' action='A_CMNT' newstate='S_DONE'/>
+		<tr symbol='CR' action='A_LF' newstate='S_COMCRLF'/>
+	</state>
+	<state id='S_COM2'>
+		<tr symbol='default' action='A_SAVE' newstate='S_COM2'/>
+		<tr char='-' action='A_SKIP' newstate='S_COM3'/>
+		<tr symbol='EOF' action='A_CMNT' newstate='S_DONE'/>
+		<tr symbol='CR' action='A_LF' newstate='S_COMCRLF'/>
+	</state>
+	<state id='S_COM3'>
+		<tr symbol='default' action='A_MINUS' newstate='S_COM2'/>
+		<tr char='-' action='A_SKIP' newstate='S_COM4'/>
+		<tr symbol='EOF' action='A_CMNT' newstate='S_DONE'/>
+		<tr symbol='CR' action='A_LF' newstate='S_COMCRLF'/>
+	</state>
+	<state id='S_COM4'>
+		<tr symbol='default' action='A_MINUS2' newstate='S_COM2'/>
+		<tr char='-' action='A_MINUS3' newstate='S_COM4'/>
+		<tr char='>' action='A_CMNT' newstate='S_PCDATA'/>
+		<tr symbol='EOF' action='A_CMNT' newstate='S_DONE'/>
+		<tr symbol='CR' action='A_LF' newstate='S_COMCRLF'/>
+	</state>
+	<state id='S_COMCRLF'>
+                <tr symbol='default' action='A_UNGET' newstate='S_COM'/>
+                <tr symbol='LF' action='A_SKIP' newstate='S_COM'/>
+                <tr symbol='EOF' action='A_CMNT' newstate='S_DONE'/>
+	</state>
+	<state id='S_CRLF'>
+		<tr symbol='default' action='A_UNGET' newstate='S_PCDATA'/>
+		<tr symbol='LF' action='A_SKIP' newstate='S_PCDATA'/>
+		<tr symbol='EOF' action='A_SKIP' newstate='S_DONE'/>
+	</state>
+	<state id='S_CCRLF'>
+		<tr symbol='default' action='A_UNGET' newstate='S_CDATA'/>
+		<tr symbol='LF' action='A_SKIP' newstate='S_CDATA'/>
+		<tr symbol='EOF' action='A_SKIP' newstate='S_DONE'/>
+	</state>
+	<state id='S_DECL'>
+		<tr symbol='default' action='A_SAVE' newstate='S_DECL2'/>
+		<tr char='-' action='A_SKIP' newstate='S_COM'/>
+		<tr char='[' action='A_SKIP' newstate='S_BB'/>
+		<tr char='>' action='A_SKIP' newstate='S_PCDATA'/>
+		<tr symbol='EOF' action='A_SKIP' newstate='S_DONE'/>
+	</state>
+	<state id='S_DECL2'>
+		<tr symbol='default' action='A_SAVE' newstate='S_DECL2'/>
+		<tr char='>' action='A_DECL' newstate='S_PCDATA'/>
+		<tr symbol='EOF' action='A_SKIP' newstate='S_DONE'/>
+	</state>
+	<state id='S_ENT'>
+		<tr symbol='default' action='A_ENTITY' newstate='S_ENT'/>
+		<tr symbol='EOF' action='A_ENTITY' newstate='S_DONE'/>
+	</state>
+	<state id='S_EQ'>
+		<tr symbol='default' action='A_ADUP_SAVE' newstate='S_ANAME'/>
+		<tr char='=' action='A_SKIP' newstate='S_AVAL'/>
+		<tr char='>' action='A_ADUP_STAGC' newstate='S_PCDATA'/>
+		<tr symbol='EOF' action='A_ADUP_STAGC' newstate='S_DONE'/>
+		<tr symbol='S' action='A_SKIP' newstate='S_EQ'/>
+	</state>
+	<state id='S_ETAG'>
+		<tr symbol='default' action='A_SAVE' newstate='S_ETAG'/>
+		<tr char='>' action='A_ETAG' newstate='S_PCDATA'/>
+		<tr symbol='EOF' action='A_ETAG' newstate='S_DONE'/>
+		<tr symbol='S' action='A_SKIP' newstate='S_ETAG'/>
+	</state>
+	<state id='S_GI'>
+		<tr symbol='default' action='A_SAVE' newstate='S_GI'/>
+		<tr char='/' action='A_SKIP' newstate='S_EMPTYTAG'/>
+		<tr char='>' action='A_GI_STAGC' newstate='S_PCDATA'/>
+		<tr symbol='EOF' action='A_SKIP' newstate='S_DONE'/>
+		<tr symbol='S' action='A_GI' newstate='S_TAGWS'/>
+	</state>
+	<state id='S_NCR'>
+		<tr symbol='default' action='A_ENTITY' newstate='S_NCR'/>
+		<tr symbol='EOF' action='A_ENTITY' newstate='S_DONE'/>
+	</state>
+	<state id='S_XNCR'>
+		<tr symbol='default' action='A_ENTITY' newstate='S_XNCR'/>
+		<tr symbol='EOF' action='A_ENTITY' newstate='S_DONE'/>
+	</state>
+	<state id='S_PCDATA'>
+		<tr symbol='default' action='A_SAVE' newstate='S_PCDATA'/>
+		<tr char='&amp;' action='A_PCDATA_SAVE_PUSH' newstate='S_ENT'/>
+		<tr char='&lt;' action='A_PCDATA' newstate='S_TAG'/>
+		<tr symbol='CR' action='A_LF' newstate='S_CRLF'/>
+		<tr symbol='EOF' action='A_PCDATA' newstate='S_DONE'/>
+	</state>
+	<state id='S_PI'>
+		<tr symbol='default' action='A_SAVE' newstate='S_PI'/>
+		<tr char='>' action='A_PI' newstate='S_PCDATA'/>
+		<tr symbol='EOF' action='A_PI' newstate='S_DONE'/>
+		<tr symbol='CR' action='A_LF' newstate='S_PICRLF'/>
+	</state>
+	<state id='S_PICRLF'>
+		<tr symbol='default' action='A_UNGET' newstate='S_PI'/>
+		<tr symbol='LF' action='A_SKIP' newstate='S_PI'/>
+		<tr symbol='EOF' action='A_PI' newstate='S_DONE'/>
+	</state>
+	<state id='S_PITARGET'>
+		<tr symbol='default' action='A_SAVE' newstate='S_PITARGET'/>
+		<tr char='>' action='A_PITARGET_PI' newstate='S_PCDATA'/>
+		<tr symbol='EOF' action='A_PITARGET_PI' newstate='S_DONE'/>
+		<tr symbol='S' action='A_PITARGET' newstate='S_PI'/>
+	</state>
+	<state id='S_QUOT'>
+		<tr symbol='default' action='A_SAVE' newstate='S_QUOT'/>
+		<tr char='"' action='A_AVAL' newstate='S_TAGWS'/>
+		<tr char='&amp;' action='A_SAVE_PUSH' newstate='S_ENT'/>
+		<tr symbol='EOF' action='A_AVAL_STAGC' newstate='S_DONE'/>
+		<tr symbol='S' action='A_SP' newstate='S_QUOT'/>
+	</state>
+	<state id='S_STAGC'>
+		<tr symbol='default' action='A_SAVE' newstate='S_STAGC'/>
+		<tr char='>' action='A_AVAL_STAGC' newstate='S_PCDATA'/>
+		<tr symbol='EOF' action='A_AVAL_STAGC' newstate='S_DONE'/>
+		<tr symbol='S' action='A_AVAL' newstate='S_TAGWS'/>
+	</state>
+	<state id='S_TAG'>
+		<tr symbol='default' action='A_SAVE' newstate='S_GI'/>
+		<tr char='!' action='A_SKIP' newstate='S_DECL'/>
+		<tr char='/' action='A_SKIP' newstate='S_ETAG'/>
+		<tr char='?' action='A_SKIP' newstate='S_PITARGET'/>
+		<tr symbol='EOF' action='A_LT_PCDATA' newstate='S_DONE'/>
+		<tr symbol='S' action='A_LT' newstate='S_PCDATA'/>
+	</state>
+	<state id='S_TAGWS'>
+		<tr symbol='default' action='A_SAVE' newstate='S_ANAME'/>
+		<tr char='/' action='A_SKIP' newstate='S_EMPTYTAG'/>
+		<tr char='>' action='A_STAGC' newstate='S_PCDATA'/>
+		<tr symbol='EOF' action='A_STAGC' newstate='S_DONE'/>
+		<tr symbol='S' action='A_SKIP' newstate='S_TAGWS'/>
+	</state>
+	<state id='S_EMPTYTAG'>
+		<tr symbol='S' action='A_SKIP' newstate='S_TAGWS'/>
+		<tr symbol='default' action='A_SAVE' newstate='S_ANAME'/>
+		<tr char='>' action='A_EMPTYTAG' newstate='S_PCDATA'/>
+	</state>
+	<state id='S_BB'>
+		<tr char='C' action='A_SKIP' newstate='S_BBC'/>
+		<tr symbol='default' action='A_SKIP' newstate='S_DECL'/>
+		<tr symbol='EOF' action='A_SKIP' newstate='S_DONE'/>
+	</state>
+	<state id='S_BBC'>
+		<tr char='D' action='A_SKIP' newstate='S_BBCD'/>
+		<tr symbol='default' action='A_SKIP' newstate='S_DECL'/>
+		<tr symbol='EOF' action='A_SKIP' newstate='S_DONE'/>
+	</state>
+	<state id='S_BBCD'>
+		<tr char='A' action='A_SKIP' newstate='S_BBCDA'/>
+		<tr symbol='default' action='A_SKIP' newstate='S_DECL'/>
+		<tr symbol='EOF' action='A_SKIP' newstate='S_DONE'/>
+	</state>
+	<state id='S_BBCDA'>
+		<tr char='T' action='A_SKIP' newstate='S_BBCDAT'/>
+		<tr symbol='default' action='A_SKIP' newstate='S_DECL'/>
+		<tr symbol='EOF' action='A_SKIP' newstate='S_DONE'/>
+	</state>
+	<state id='S_BBCDAT'>
+		<tr char='A' action='A_SKIP' newstate='S_BBCDATA'/>
+		<tr symbol='default' action='A_SKIP' newstate='S_DECL'/>
+		<tr symbol='EOF' action='A_SKIP' newstate='S_DONE'/>
+	</state>
+	<state id='S_BBCDATA'>
+		<tr char='[' action='A_SKIP' newstate='S_CDSECT'/>
+		<tr symbol='default' action='A_SKIP' newstate='S_DECL'/>
+		<tr symbol='EOF' action='A_SKIP' newstate='S_DONE'/>
+	</state>
+	<state id='S_CDSECT'>
+		<tr char=']' action='A_SAVE' newstate='S_CDSECT1'/>
+		<tr symbol='default' action='A_SAVE' newstate='S_CDSECT'/>
+		<tr symbol='EOF' action='A_SKIP' newstate='S_DONE'/>
+	</state>
+	<state id='S_CDSECT1'>
+		<tr char=']' action='A_SAVE' newstate='S_CDSECT2'/>
+		<tr symbol='default' action='A_SAVE' newstate='S_CDSECT'/>
+		<tr symbol='EOF' action='A_SKIP' newstate='S_DONE'/>
+	</state>
+	<state id='S_CDSECT2'>
+		<tr char='>' action='A_CDATA' newstate='S_PCDATA'/>
+		<tr symbol='default' action='A_SAVE' newstate='S_CDSECT'/>
+		<tr symbol='EOF' action='A_SKIP' newstate='S_DONE'/>
+	</state>
+	<state id='S_DONE'/>
+</statetable>

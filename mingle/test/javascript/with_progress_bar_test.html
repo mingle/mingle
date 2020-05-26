@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>
+      JavaScript unit test file
+    </title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/jquery/jquery.tipsy.js" type="text/javascript"></script>
+    <script src="test_assets/unittest.js" type="text/javascript"></script>
+    <script src="test_assets/unittest_ext.js" type="text/javascript"></script>
+
+    <script src="../../app/assets/javascripts/with_progress_bar.js" type="text/javascript"></script>
+
+
+    <link rel="stylesheet" href="test_assets/unittest.css" type="text/css" />
+    </style>
+  </head>
+  <body>
+    <div id="content">
+      <div id="header">
+        <h1>
+          JavaScript unit test file
+        </h1>
+        <p>
+          This file tests <strong>with_progress_bar.js</strong>.
+        </p>
+      </div>
+      <!-- Log output -->
+      <div id="testlog"></div>
+      <div style='border:solid 1px' id='sandbox'>
+        <button class="alone">Show</button>
+
+        <div class="form">
+          <button>Show inside custom form</button>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+// <![CDATA[
+
+  SANDBOX_CONTENT = $j('#sandbox').html();
+
+  new Test.Unit.Runner({
+
+    setup: function() {
+
+      $j('#sandbox').html(SANDBOX_CONTENT);
+
+      this.button = $j('button.alone');
+
+      this.button.withProgressBar({ event: "click" });
+    },
+
+    testCreatesNecessarySurroundingElements: function() { with(this) {
+      assertEqual(1, $j('.progress').length);
+    }},
+
+    testProgressBarHiddenAtStart: function() { with(this) {
+      assert(!$j('.progress').is(':visible'));
+    }},
+
+    testOnClickShowProgressBarAndHideOnAjaxComplete: function() { with(this) {
+      this.button.trigger('click');
+      assert($j('.progress').is(':visible'));
+      $j(document).trigger('ajaxComplete');
+      assert(!$j('.progress').is(':visible'));
+    }},
+
+    testOptionallyAttachesEventListenerToAnotherElement: function() { with(this) {
+      var form = $j('.form');
+      var buttonInsideForm = form.find('button');
+      buttonInsideForm.withProgressBar({event: "click"});
+
+      buttonInsideForm.trigger('click');
+      assert($j('.progress').is(':visible'));
+      $j(document).trigger('ajaxComplete');
+      assert(!$j('.progress').is(':visible'));
+    }}
+
+
+  }, { testLog: "testlog", test : '' }).run;
+
+// ]]>
+</script>
+  </body>
+</html>

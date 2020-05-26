@@ -1,0 +1,44 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<p>
+  <span class="drop-list-panel">
+    <h4>Card type:</h4>
+    <% types_for_card_data_type.each do |type| %>
+      <p class="checkbox_row">
+        <%= card_type_radio_button_for(type) %><%= h type.name %>
+      </p>
+    <% end %>    
+    <% if @project_variable.card_type && !types_for_card_data_type.include?(@project_variable.card_type) %>
+    <p class="checkbox_row">
+      <%= radio_button 'project_variable', 'card_type_id', @project_variable.card_type.id, :class => "card_type_radio_button", :disabled => true %>
+      <%= @project_variable.card_type.name %>
+      <span class="notes">(This card type is disabled because there are no trees that use it.)</span>
+    </p>
+    <% end %>    
+    <p class="checkbox_row">
+      <%= card_type_radio_button_for(nil) %><%= ProjectVariablesController::ANY_CARD_TYPE %>
+    </p>
+  </span>
+</p>
+
+<% lightbox_loading_message = capture do %>
+  <%= render :partial => "shared/lightbox_loading_message" %>
+<% end %>
+
+<div id="card_selector_drop_link_container">
+  <%= render :partial => 'card_selector' %>
+</div>

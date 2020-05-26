@@ -1,0 +1,64 @@
+function exists(dir){
+	var f = new java.io.File(dir);
+	return f.exists();
+}
+function createDeleteDir($dir){
+	_execute('cmd /C mkdir "' + $dir + '"') //default async execution
+	var i = 0;
+	var $exists = false;
+	while (i < 10) {
+		 $exists = exists($dir);
+		 if ($exists) break;
+		 _wait(1000);
+    }
+	_assertTrue($exists, $dir + " does not exist");
+	var $f = new java.io.File($dir);
+	_assertTrue($f.isDirectory(), $dir + " is not a directory");
+	_execute('cmd /C rmdir "' + $dir + '"', true); //sync execution
+	var i = 0;
+	var $exists = true;
+	while (i < 10) {
+		 $exists = exists($dir);
+		 if (!$exists) break;
+		 _wait(1000);
+    }
+	$exists = exists($dir)
+	_assertFalse($exists, $dir + " exists");
+}
+//createDeleteDir("test_execute");
+//createDeleteDir("test execute");
+
+function testExecutionReturnsOutput(){
+	var $res = _execute("java -version", true);
+	_assert($res.indexOf("java version") != -1);
+}
+
+function testCreateDeleteDir(){
+	var $dir = "test_execute";
+	_execute('cmd /C mkdir "' + $dir + '"', true);
+	var $exists = exists($dir);
+	_assertTrue($exists);
+	_execute('cmd /C rmdir "' + $dir + '"', true);
+	$exists = exists($dir);
+	_assertFalse($exists);
+}
+
+function testDoesNotStopForLongExecutes(){
+	_click(_link("Link Test"));
+	_click(_link("Back"));
+	_execute('"C:\\Program Files\\Internet Explorer\\iexplore.exe"', true);
+	_click(_link("Form Test"));
+	_click(_link("Back"));
+}
+
+function testExecuteProceedsAfterTimeout(){
+	_click(_link("Link Test"));
+	_click(_link("Back"));
+	_execute('"C:\\Program Files\\Internet Explorer\\iexplore.exe"', true, 5000);
+	_click(_link("Form Test"));
+	_click(_link("Back"));
+}
+
+_runUnitTests(["testCreateDeleteDir", "testExecutionReturnsOutput"]);
+
+

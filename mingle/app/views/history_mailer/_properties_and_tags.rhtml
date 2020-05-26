@@ -1,0 +1,33 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<ul>
+<% if properties -%>
+  <% properties.each do |key, value| -%>
+    <% if Project.card_type_definition.name?(key) -%>
+      <% properties.delete(key) -%>
+      <li><%= key -%>: <%= value -%>
+    <% end -%>
+  <% end -%>
+  <% properties.collect{|key, value| [key, value]}.smart_sort_by{|key, value| key}.each do |key, value| -%>
+    <% value = project.property_value(key,value).display_value if project.find_property_definition_or_nil(key) %>
+    <li><%= key -%>: <%= value -%>
+  <% end -%>
+<% end -%>
+<% if tags && !tags.empty? -%>
+    <li>tagged with: <%= tags.join(', ') -%></li>
+<% end -%>
+</ul>

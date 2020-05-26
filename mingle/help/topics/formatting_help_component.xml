@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Creating and formatting content">
+  <section title="Introduction">
+	    <p>With the introduction of a rich text <cref topic="using_the_editing_toolbar">"WYSIWYG" editor</cref> in <cref topic="whats_new_in_release_13_2">Mingle 13.2</cref>, it is now much easier to create and format content in cards and pages. None of our previous wiki mark-up is required to create or format content. What you see is now what you get. However, we have maintained the ability to create links to other resources, including cards, attachments and pages in your and other Mingle projects. Learn more about <cref topic="markup_linking">linking</cref>.</p>
+	      <screenshot src="resources/images/new_editing_toolbar.png"/>
+	    <p>After you create a <cref topic="creating_a_page">card</cref> or <cref topic="creating_a_page">page</cref>, you can open it to add and format content (including <cref topic="creating_charts_and_tables">graphs, charts and tables</cref>, which you can create using Mingle <cref topic="macro_reference">macros</cref>) by clicking on the "Edit" button.</p>
+  		<p>To save or cancel your changes, respectively click the <link>Save</link> or Cancel button. (There is no preview button since Mingle has a WYSIWYG editor.)</p>
+  		<note>
+  			<bullets>
+  				<item>All project team members (with full user permissions) can edit or format any card or page in their project.</item>
+  				<item>Mingle will always return the latest version of the card or page content when you open to edit. Whenever you edit a card or page, Mingle keeps a full history of changes, which you can see on the main <cref topic="history_tab">History tab</cref> and also from within each card's and page's individual history component. Learn more about <cref topic="card_murmurs_and_history_components">card versions and history</cref> as well as <cref topic="page_history_component">page versions and history</cref>.</item>
+  				<item>Your browser's native right click function is turned on by default. To use the WYSIWYG Editor right click function, press "cmd/ctrl + right click."</item>
+  			</bullets>
+  		</note>
+  </section>
+<section title="Text, Images, Tables, Links, Attachments, Macros">
+	<subsection title="Bold text" file="markup_bold_text" collapsed="true"/>
+	<subsection title="Italicize text" file="markup_italicize_text" collapsed="true"/>
+	<subsection title="Underline text" file="markup_underline_text" collapsed="true"/>
+	<subsection title="Strikethrough text" file="markup_strike_through_text" collapsed="true"/>
+	<subsection title="Color text" file="markup_color_text" collapsed="true"/>
+	<subsection title="Images" file="markup_inline_image" collapsed="true"/>
+	<subsection title="Tables" file="markup_create_table" collapsed="true"/>
+	<subsection title="Paragraph format" file="markup_paragraph_format" id="paragraph_format" collapsed="true"/>
+	<subsection title="Layouts" file="page_card_layout" collapsed="true"/>
+	<subsection title="Create bulleted list" file="markup_bulleted_list" collapsed="true"/>
+	<subsection title="Create numbered list" file="markup_create_numbered_list" collapsed="true"/>
+	<subsection title="Right indent text" file="markup_right_indent_text" collapsed="true"/>
+	<subsection title="Left indent text (outdent)" file="markup_left_indent_text" collapsed="true"/>
+  <subsection title="Links" file="markup_linking" collapsed="true"/>
+	<subsection title="Attachments" file="markup_attach_file" collapsed="true"/>
+	<subsection title="Macros" file="markup_macros" collapsed="true"/>
+</section>
+<section title="Also see...">
+		<bullets>
+			<item><cref topic="macro_reference">Full reference of chart, table, and dashboard macros</cref></item>
+			<item><cref topic="mql_reference">MQL Syntax</cref></item>
+			<item><cref topic="deleting_a_card">Deleting cards</cref></item>
+			<item><cref topic="deleting_a_page">Deleting pages</cref></item>
+			<item><cref topic="mingle_tips_and_tricks">Mingle tips and tricks</cref></item>
+		</bullets>
+</section>
+</topic>

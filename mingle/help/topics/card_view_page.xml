@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Card view page">
+	<section title="What you can do on this page">
+		<p>
+			The Card view page lets you view details for a card including all properties attached to this card. 
+			From here you can add tags, edit card descriptions and change card properties. 
+			If you have card transition(s) setup that match the card properties, you can also 'transition' this card to the next stage of its life cycle (i.e. update multiple properties at once).
+		</p>
+		<bullets>
+			<item><cref topic="updating_cards">Updating cards</cref></item>
+			<item><cref topic="editing_and_deleting_wiki_pages">Formatting cards</cref></item>
+			<item><cref topic="card_printing">Printing cards</cref></item>
+			<item><cref topic="attaching_objects_and_links_to_wiki_pages">Attaching objects and links to cards</cref></item>
+			<item><cref topic="viewing_card_history_and_murmurs">Viewing card history and murmurs</cref></item>
+			<item><cref topic="murmurs">Viewing and posting Murmurs</cref></item>
+			<item><cref topic="working_with_tags">Working with tags</cref></item>
+			<item><cref topic="card_transitions">Using transitions</cref></item>
+			<item><cref topic="creating_a_card#create_children_from_parent">Adding children cards</cref></item>
+		</bullets>
+	</section>
+	<section title="Also see...">
+		<bullets>
+			<item><cref topic="working_with_cards">Working with cards</cref></item>
+			<item><cref topic="viewing_cards">Viewing cards</cref></item>
+			<item><cref topic="creating_card_properties">Creating card properties</cref></item>
+			<item><cref topic="creating_card_transitions">Creating card transitions</cref></item>
+			<item><cref topic="creating_tags_for_cards_or_wiki_pages">Creating tags for cards or wiki pages</cref></item>
+			<item><cref topic="creating_card_keywords">Creating card keywords</cref></item>
+			<item><cref topic="creating_a_favorite_card_view">Creating a favorite card view</cref></item>
+  			<item><cref topic="creating_a_card">Creating cards</cref></item>	
+				<item>
+					<cref topic="explore_mingle_topic_whats_a_card">What's a card?</cref>
+				</item>
+		</bullets>
+	</section>
+</topic>

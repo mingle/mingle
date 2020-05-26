@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE subsection SYSTEM "mingle_help.dtd">
+<subsection title="Recently viewed pages section">
+    <p>Mingle displays the pages you've viewed most recently in the <sidebar-button>Recently viewed pages</sidebar-button> side bar section, which is visible in the right hand sidebar when viewing any page.</p>
+	<screenshot alttext="Recently viewed pages" src="resources/images/wiki_page_recently_viewed_list.png" />
+	<p>Click on the <link>page name</link> link to view the corresponding page, or click on the <link>Index of pages</link> link to view a list of all pages in your Mingle project.</p>
+</subsection>
+
+

@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Project overview tab">
+  <section title="Setting up the project overview (dashboard reports)">
+    <p>The Overview tab is a project home page or dashboard. Your team can use this space for links, progress reporting, and other portal-type features. It is the first page users see when they log into a project.</p>
+    <bullets title="Depending on how you setup the Overview tab, it can:">
+      <item>give you and your team a snapshot of project progress (with graphs, charts and tables in MQL)</item>
+      <item>provide links to important Mingle pages, such as pages describing team training, project scope, Mingle team usage, design guidelines</item>
+      <item>show pictures, screenshots and other graphics</item>
+      <item>link to important cards</item>
+    </bullets>
+    <subsection title="Example project overview page" id="test" collapsed="true">
+      <p>The following screenshot shows an example <cref topic="project_overview_page_example">project overview page</cref>.</p>
+      <screenshot alttext="Example project overview page" src="resources/images/project_overview_page_example.png"/>
+    </subsection>
+  </section>
+  <bullets title="Also see...">
+    <item>
+      <cref topic="working_with_pages">Working with pages</cref>
+    </item>
+  </bullets>
+  <note>The <tab>Overview</tab> tab is a specialized page. Everything you can include on the Overview tab, you can also include on other pages. See <cref topic="working_with_pages">Working with pages</cref> for details.</note>
+</topic>

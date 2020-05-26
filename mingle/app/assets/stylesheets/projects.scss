@@ -1,0 +1,209 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+/* build the header with floated help link */
+a#contextual_help_link {
+  float: none;
+}
+
+#admins-list {
+  .lightbox_header {
+    background-color: #3fbeea;
+  }
+  .info-box {
+    background: white;
+    border: none;
+    margin: 0;
+    padding: 0;
+    .admin-name {
+      font-size: 12px;
+      padding: 3px;
+    }
+  }
+  .lightbox_content_wrapper {
+    overflow-y: scroll;
+    max-height: 300px;
+  }
+}
+
+.admin_tasks {
+  overflow: hidden;
+}
+
+.admin_tasks a {
+  padding: 0 10px;
+  margin-right: 0;
+  border-right: 1px solid #CCC;
+  display: block;
+  float: left;
+}
+
+.admin_tasks a.register {
+  padding-left: 0;
+}
+
+.admin_tasks a:last-child {
+  border: 0;
+}
+
+.project-description a.request-membership-light {
+	padding: 2px;
+}
+
+.project_links {
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #DDDDDD;
+}
+
+.project_actions .action-bar a,
+.project_actions .action-bar a#contextual_help_link {
+  display: block;
+  padding:7px 0 7px 20px;
+  float: none;
+  margin: 0;
+  background-position: left 50%;
+  background-repeat: no-repeat;
+}
+
+.project-admin-header {
+    border: 0;
+    padding: 13px 15px;
+    height: 41px;
+
+    a:before {
+    @include fa_icon($fa-var-gear);
+  }
+}
+
+.projects-drop-down {
+  @extend .drop-down;
+
+  .projects-caret {
+    @extend .caret;
+  }
+
+  fieldset {
+    padding: 0 10px;
+  }
+
+  input[type=text] {
+    width: 100%;
+    padding-right: 16px;
+    background: url("../images/shared/icons/icon_search.png") no-repeat right 2px center;
+  }
+
+  ul  {
+    &.projects {
+      max-height: 500px;
+      overflow: auto;
+
+      a {
+        &:hover,&.ui-state-focus {
+          background-color: lighten($TRACE_COLOR, 20%);
+          font-weight: 300;
+          color: #666;
+        }
+      }
+    }
+
+    &.no-results {
+      display: none;
+
+      li {
+        width: 150px;
+        color: #bbb;
+        text-align: center;
+      }
+    }
+
+    &.new-project {
+      margin: 0;
+    }
+
+    a.project-new {
+      &:before {
+        @include fa_icon($fa-var-plus);
+      }
+    }
+  }
+}
+
+#project_precision {
+  width: 100px;
+}
+
+/* Collapsible section */
+
+h2#advanced_options_header {
+  padding-top: 15px;
+  border-top: 1px solid #CCC;
+}
+
+
+a#options-toggle-link {
+  color: inherit;
+}
+
+#options-content,
+#options-toggle-off
+{
+  background-color: #F9F9F9;
+  border-top: 1px dotted #CCCCCC;
+  border-bottom: 1px dotted #CCCCCC;
+  padding: 1em 0em;
+  margin: 0em 1em 1em 1em;
+}
+
+#options-content
+{
+  border-top: none;
+}
+
+#options-toggle-on
+{
+  background-color: #F9F9F9;
+  margin-bottom: 0;
+  padding: 1em 0 0 0;
+}
+
+#advanced-options-content .checkbox_row {
+  padding: 0 0 10px 0;
+}
+
+
+#all_users_become_members_options {
+  padding: 5px 0 10px 15px;
+}
+
+#all_users_become_members_options .form_item {
+  padding: 0 0 0 40px;
+}
+
+.advanced_project_item {
+  border-bottom: 1px dotted #CCC;
+  padding-bottom: 15px !important;
+}
+
+.advanced_project_item div input {
+  margin: 10px 0;
+}
+
+#page-identifier-projects-delete {
+  .info-box a {
+    color: $MINGLE_PRIMARY_COLOR;
+  }
+}

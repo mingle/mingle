@@ -1,0 +1,108 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<h3>History Subscriptions <%= spinner :id => 'global_unsubscribe_spinner' %></h3>
+<div class='content'>
+  <table id='global_subscriptions' class='highlightable-table'>
+    <thead>
+      <tr>
+        <th>Project</th>
+        <th>Show updates to</th>
+        <th>Where they have been</th>
+        <th>And were changed to</th>
+        <th>By</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render :partial => 'shared/no_records', :locals => { :colspan => 6, :css_hidden => true, :model => 'subscriptions' } %>
+      <%- for subscription in user_subscriptions_sorted_by_project(:global) -%>
+      <tr id='<%= dom_id(subscription) %>' class="<%= cycle('odd', 'even', :name => 'global') %> <%= 'processing-error' if subscription.processing_error? %> text-light">
+        <% subscription.project.with_active_project  do |project| %>
+          <td><%= project.name %> <%= '*' if subscription.processing_error? %></td>
+          <td><%= filter_types_or_anything(subscription.filter_types_display_names) %></td>
+          <td><%= involved_filter_as_sentence(subscription) %></td>
+          <td><%= acquired_filter_as_sentence(subscription) %></td>
+          <td><%= subscription.filter_user.try(:name) || '(anyone)' %></td>
+          <td><%= link_to_unsubscribe(subscription, 'global_unsubscribe_spinner') %></td>
+        <% end  %>
+      </tr>
+      <%- @global_subscription_had_error ||= true if subscription.processing_error? -%>
+      <%- end -%>
+    </tbody>
+  </table>
+  <%= render :partial => 'history_subscriptions/processing_error_message' if @global_subscription_had_error %>
+</div>
+
+<h3>Card Subscriptions <%= spinner :id => 'card_unsubscribe_spinner' %></h3>
+<div class='content'>
+  <table id='card_subscriptions' class='highlightable-table'>
+    <thead>
+      <tr>
+        <th>Project</th>
+        <th>Card number</th>
+        <th>Card name</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render :partial => 'shared/no_records', :locals => { :colspan => 4, :css_hidden => true, :model => 'subscriptions' } %>
+
+      <%- for subscription in user_subscriptions_sorted_by_project(:card) -%>
+      <tr id='<%= dom_id(subscription) %>' class="<%= cycle('odd', 'even', :name => 'card') %> <%= 'processing-error' if subscription.processing_error? %> text-light">
+        <% subscription.project.with_active_project do |project| %>
+          <td><%=h project.name %> <%= '*' if subscription.processing_error? %></td>
+          <td>#<%=h subscription.filter_card.number %></td>
+          <td><%=h subscription.filter_card.name %></td>
+          <td><%= link_to_unsubscribe(subscription, 'card_unsubscribe_spinner') %></td>
+        <% end %>
+      </tr>
+      <%- @card_subscription_had_error ||= true if subscription.processing_error? -%>
+      <%- end -%>
+    </tbody>
+  </table>
+  <%= render :partial => 'history_subscriptions/processing_error_message' if @card_subscription_had_error %>
+</div>
+
+<h3>Page Subscriptions<%= spinner :id => 'page_unsubscribe_spinner' %></h3>
+<div class='content'>
+  <table id='page_subscriptions' class='highlightable-table'>
+    <thead>
+      <tr>
+        <th>Project</th>
+        <th>Page name</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render :partial => 'shared/no_records', :locals => { :colspan => 3, :css_hidden => true, :model => 'subscriptions' } %>
+
+      <%- for subscription in user_subscriptions_sorted_by_project(:page) -%>
+      <tr id='<%= dom_id(subscription) %>' class="<%= cycle('odd', 'even', :name => 'page') %> <%= 'processing-error' if subscription.processing_error? %> text-light">
+        <% subscription.project.with_active_project do |project|  %>
+          <td><%=h project.name %> <%= '*' if subscription.processing_error? %></td>
+          <td><%=h subscription.filter_page.name %></td>
+          <td><%= link_to_unsubscribe(subscription, 'page_unsubscribe_spinner') %></td>
+        <% end %>
+      </tr>
+      <%- @page_subscription_had_error ||= true if subscription.processing_error? -%>
+      <%- end -%>
+    </tbody>
+  </table>
+  <%= render :partial => 'history_subscriptions/processing_error_message' if @page_subscription_had_error %>
+</div>
+
+<%= javascript_with_rescue "SubscriptionsCounter.add(['global_subscriptions', 'card_subscriptions', 'page_subscriptions']);" %>

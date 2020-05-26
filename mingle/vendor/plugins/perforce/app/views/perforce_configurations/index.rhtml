@@ -1,0 +1,77 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= render :partial => 'shared/repository_actions', :locals => {:new_repository => @repository_config.nil? || @repository_config.new_record?} %>
+<%= @edit_actions %>
+
+<h1>Perforce repository settings</h1>
+
+<% form_tag({:controller => "repository", :action => 'save'}, {:id => 'project-properties'}) do -%>
+
+<div class="form_item">
+  <label for="repository_config_repository_path">Depot paths:
+  <span class="notes">
+  (the depot paths in your <%= link_to('Perforce', 'http://www.perforce.com/', {:target => '_blank'}) %> repository, e.g. //depot/sandbox1/... //depot/sandbox2/...)
+  </span>
+  </label>
+  <%= text_field 'repository_config', 'repository_path', { :class => 'large' } %>
+</div>
+
+<div class="form_item">
+  <label for="repository_config_repository_host">Host
+  <span class="notes">
+  (the hostname or ip address of the Perforce server, e.g. our.perforceserver.com)
+  </span>
+  </label>
+  <%= text_field 'repository_config', 'host', { :class => 'large' } %>
+</div>
+
+
+<div class="form_item">
+  <label for="repository_config_repository_port">Port
+  <span class="notes">
+  (the port of the Perforce server, e.g. 1666)
+  </span>
+  </label>
+  <%= text_field 'repository_config', 'port', { :class => 'large' } %>
+</div>
+
+<div class="form_item">
+  <label for="repository_config_repository_user_name">Login user name: </label>
+  <%= text_field 'repository_config', 'username', { :class => 'large' } %>
+</div>
+
+
+<div class="form_item" id="login_user_password_panel">
+<a href="javascript:void(0)" onclick="window.openChangeRepositoryUserPasswordPanel()">Change password</a>
+</div>
+
+  <%= hidden_field_tag 'id', @repository_config.id if @repository_config %>
+  <%= hidden_field_tag 'repository_type', "PerforceConfiguration" %>
+
+<% end -%>
+
+<%= @edit_actions %>
+
+<%= javascript_with_rescue <<-SCRIPT
+    window.changeRepositoryUserPasswordPanel = $('login_user_password_panel')
+    window.openChangeRepositoryUserPasswordPanel = function() {
+     var panel = window.changeRepositoryUserPasswordPanel;
+     panel._innerHTML = panel.innerHTML;
+     panel.innerHTML = "<label for='repository_config_repository_password'>Login user password:<a href='javascript:void(0)' onclick='window.changeRepositoryUserPasswordPanel.innerHTML = window.changeRepositoryUserPasswordPanel._innerHTML'>Cancel</a></label><input class='large' id='project_repository_password' name='repository_config[password]' type='password'>"
+    }
+    SCRIPT
+%>

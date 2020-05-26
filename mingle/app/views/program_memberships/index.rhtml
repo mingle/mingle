@@ -1,0 +1,67 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div class="program_members">
+  <%- select_tab :team -%>
+  <%= render :partial => 'shared/pagination_info', :locals => {:models => @users, :model_name => 'member'} %>
+
+  <%= link_to('Add team member', list_users_for_add_program_program_memberships_path(@program), :class => 'action_icon add_link') if authorized?({controller: :program_memberships, action: :create})%>
+  <div class="clear_float">
+    <%= render :partial => 'users/search', :locals => { :search_controller_name => 'program_memberships', :search_action_name => 'index' } %>
+  </div>
+  
+  <% form_tag(bulk_destroy_program_program_memberships_path(@program), :method => :delete) do %>
+  <div class="table_actions clear_float">
+    <%- if !@users.empty? && authorized?({controller: :program_memberships, action: :bulk_destroy}) -%>
+      <div class='selection_actions table_action_group'>
+        Select:
+        <%= link_to_function 'All', :id => "select_all", :class => @users.empty? ? 'disabled' : nil -%>
+        <%= link_to_function 'None', :id => "select_none", :class => @users.empty? ? 'disabled' : nil -%>
+      </div>
+      <div class="table_action_group">
+        <%= hidden_field_tags_from_params_hash(:search => params[:search], :page => params[:page]) %>
+        <%= submit_tag('Remove', :id => "remove_members", :disabled => true) %>
+      </div>
+      <%= javascript_with_rescue "new CheckboxController([$('remove_members')], $$('.select_user'));" %>
+    <%- end -%>
+  </div>
+  <table class="list_table highlightable_table">
+    <thead>
+      <tr>
+	      <% if authorized?({controller: :program_memberships, action: :bulk_destroy}) %>
+		      <th></th>
+	      <% end %>
+        <th>Display name</th>
+        <th>Sign-in name</th>
+        <th>Email</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if @users.empty? -%>
+        <tr>
+          <td class="results_notice" colspan="4">
+            There are currently no members to list.
+          </td>
+        </tr>
+      <% else -%>      
+          <%= render :partial => 'member', :collection => @users, locals:{authorized_to_remove_member: authorized?({controller: :program_memberships, action: :bulk_destroy}) } %>
+      <% end -%>
+    </tbody>
+  </table>
+  <%- end -%>
+
+  <%= render :partial => 'shared/pagination_info', :locals => {:models => @users, :model_name => 'member'} %>
+</div>

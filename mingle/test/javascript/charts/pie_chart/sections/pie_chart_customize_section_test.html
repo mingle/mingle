@@ -1,0 +1,410 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Pie Chart Customize Chart Section Test</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <script src="../../../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+  <script src="../../../../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../../../../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+
+  <script src="../../../../../public/javascripts/application.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/drop_down.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/text_box.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/parameter.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/group_parameter.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/section_helpers.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/sections/customize_chart_section.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/pie_chart/sections/customize_chart_section.js" type="text/javascript"></script>
+
+  <script src="../../../test_assets/sinon-2.3.6.js" type="text/javascript"></script>
+  <script src="../../../test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+  <script src="../../../test_assets/qunit-phantom.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="../../../test_assets/qunit-1.21.0.css" type="text/css"/>
+
+</head>
+  <body>
+    <div id="qunit"></div>
+    <div id="pie_chart_wizard"></div>
+    <script type="application/javascript">
+      var defaults = {
+        chartSize: 'medium',
+        labelType: 'percentage',
+        legendPosition: 'right'
+      }, paramDefs = [
+        {
+          name: 'chart-title',
+          input_type: 'textbox',
+          label: 'Chart title',
+          placeholder: 'Chart title'
+        },
+        {
+          name: 'chart-customization-group',
+          input_type: 'group-parameter',
+          param_defs: [
+            {
+              name: 'chart-size',
+              initial_value: defaults.chartSize,
+              allowed_values: [['Small', 'small'], ['Medium', 'medium'], ['Large', 'large']],
+              multiple_values_allowed: false,
+              input_type: 'dropdown',
+              label: 'Chart size'
+            },
+            {
+              name: 'label-type',
+              initial_value: defaults.labelType,
+              allowed_values: [['Percentage', 'percentage'], ['Whole number', 'whole-number']],
+              multiple_values_allowed: false,
+              input_type: 'dropdown',
+              label: 'Label type'
+            },
+            {
+              name: 'legend-position',
+              initial_value: defaults.legendPosition,
+              allowed_values: [['Right', 'right'], ['Bottom', 'bottom']],
+              multiple_values_allowed: false,
+              input_type: 'dropdown',
+              label: 'Legend position'
+            }
+          ]
+        }
+      ];
+
+      QUnit.module('Pie Chart Customize Chart Section', {
+        beforeEach: function () {
+          this.onUpdate = sinon.spy();
+          this.callbacks = {onUpdate: this.onUpdate};
+          sinon.spy(MingleUI.EasyCharts, 'Parameter');
+          sinon.spy(MingleUI.EasyCharts.Sections, 'CustomizeChartSection');
+        },
+        afterEach: function () {
+          MingleUI.EasyCharts.Parameter.restore();
+          MingleUI.EasyCharts.Sections.CustomizeChartSection.restore();
+        }
+      }, function () {
+        QUnit.module('Common Test', {
+          beforeEach: function () {
+            this.section = new MingleUI.EasyCharts.PieChart.Sections.CustomizeChartSection({}, this.callbacks);
+          }
+        });
+
+        QUnit.test('testShouldAddTitle', function(assert) {
+          var titleContainer = this.section.htmlContainer.find('div.section-title-container');
+
+          assert.ok(this.section.htmlContainer.hasClass('disabled'));
+          assert.notOk(this.section.isEnabled());
+          assert.equal(titleContainer.text(), '3Customize the chart');
+          assert.equal(titleContainer.find('span.section-number').text(), '3');
+          assert.equal(titleContainer.find('span.section-title').text(), 'Customize the chart');
+        });
+
+        QUnit.test('testShouldCreateACustomizeChartSection', function (assert) {
+          var sectionArgs = MingleUI.EasyCharts.Sections.CustomizeChartSection.args[0];
+
+          assert.equal(MingleUI.EasyCharts.Sections.CustomizeChartSection.callCount, 1);
+          var expectedSectionData = {
+            name: 'pieChartCustomizeChartSection',
+            initialData: {},
+            paramNames: ['chartTitle', 'chartSize', 'labelType', 'legendPosition'],
+            parameterDefinitions: paramDefs,
+            defaults: defaults
+          };
+          assert.deepEqual(sectionArgs[0], expectedSectionData);
+          assert.equal(sectionArgs[1], this.callbacks);
+        });
+
+        QUnit.test('tetIsValidShouldReturnTrueAlways', function (assert) {
+          assert.ok(this.section.isValid());
+        });
+
+        QUnit.module('Disabled Customize Chart Section',{
+          beforeEach: function () {
+            this.section = new MingleUI.EasyCharts.PieChart.Sections.CustomizeChartSection({}, this.callbacks);
+          }
+        });
+
+        QUnit.test('testShouldEnableCustomizeChartSection', function(assert) {
+          this.section.enableWith();
+          assert.notOk(this.section.htmlContainer.hasClass('disabled'));
+          assert.ok(this.section.isEnabled());
+        });
+
+        QUnit.test('testValuesShouldReturnDefaultValues', function (assert) {
+          var defaultValues = {
+            "labelType": "percentage",
+            "legendPosition": "right",
+            "chartSize": "medium"
+          };
+          assert.deepEqual(this.section.values(), defaultValues);
+        });
+
+        QUnit.module('Enabled Customize Chart Section', {
+          beforeEach: function() {
+            this.section = new MingleUI.EasyCharts.PieChart.Sections.CustomizeChartSection({}, this.callbacks);
+            this.section.enableWith();
+          }
+        });
+
+        QUnit.test('testShouldDisableCustomizeChartSection', function(assert) {
+          assert.notOk(this.section.htmlContainer.hasClass('disabled'));
+          assert.ok(this.section.isEnabled());
+
+          this.section.disable();
+
+          assert.ok(this.section.htmlContainer.hasClass('disabled'));
+          assert.notOk(this.section.isEnabled());
+        });
+
+        QUnit.test('tetShouldAddChartTitleTextBox', function (assert) {
+          var chartTitleParams = MingleUI.EasyCharts.Parameter.args[0], chartTitleParamDef = paramDefs[0];
+
+          assert.equal(MingleUI.EasyCharts.Parameter.callCount, 5);
+          assert.equal(chartTitleParams[0], 'pie_chart_customize_chart_section');
+          assert.deepEqual(chartTitleParams[1], chartTitleParamDef);
+          assert.equal(typeof chartTitleParams[2].onUpdate, 'function');
+
+          assert.ok(this.section.htmlContainer.find('div#pie_chart_customize_chart_section_chart_title_parameter')[0]);
+          assert.equal(this.section.htmlContainer.find('div#pie_chart_customize_chart_section_chart_title_parameter .parameter-label').text(), chartTitleParamDef.label);
+          assert.ok(this.section.htmlContainer.find('div#pie_chart_customize_chart_section_chart_title_parameter .parameter')[0]);
+          assert.ok(this.section.htmlContainer.find('#pie_chart_customize_chart_section_chart_title_parameter .parameter input')[0]);
+        });
+
+        QUnit.test('tetShouldAddChartSizeDropDown', function (assert) {
+          var chartSizeParams = MingleUI.EasyCharts.Parameter.args[2], chartSizeParamDef = paramDefs[1].param_defs[0];
+
+          assert.equal(MingleUI.EasyCharts.Parameter.callCount, 5);
+          assert.equal(MingleUI.EasyCharts.Parameter.args[1][1].input_type, 'group-parameter');
+          assert.equal(chartSizeParams[0], 'chart_customization_group');
+          assert.deepEqual(chartSizeParams[1], chartSizeParamDef);
+          assert.equal(typeof chartSizeParams[2].onUpdate, 'function');
+
+          var customizeChartGroupContainer = this.section.htmlContainer.find('div#pie_chart_customize_chart_section_chart_customization_group_parameter'),
+              groupParameterContainer = customizeChartGroupContainer.find('.parameter');
+
+          assert.ok(customizeChartGroupContainer[0]);
+          assert.notOk(customizeChartGroupContainer.find('> .parameter-label')[0]);
+          assert.ok(groupParameterContainer[0]);
+          assert.equal(groupParameterContainer.find('#chart_customization_group_chart_size_parameter .parameter-label').text(), chartSizeParamDef.label);
+          assert.equal(groupParameterContainer.find('#chart_customization_group_chart_size_parameter .options-container').text(), 'SmallMediumLarge');
+          assert.equal(groupParameterContainer.find('#chart_customization_group_chart_size_parameter .selected-value').text(), 'Medium');
+        });
+
+        QUnit.test('testShouldAddLabelTypeDropDown', function (assert) {
+          var labelTypeParams = MingleUI.EasyCharts.Parameter.args[3], labelTypeParamDef =  paramDefs[1].param_defs[1];
+
+          assert.equal(MingleUI.EasyCharts.Parameter.callCount, 5);
+          assert.equal(MingleUI.EasyCharts.Parameter.args[1][1].input_type, 'group-parameter');
+          assert.equal(labelTypeParams[0], 'chart_customization_group');
+          assert.deepEqual(labelTypeParams[1], labelTypeParamDef);
+          assert.equal(typeof labelTypeParams[2].onUpdate, 'function');
+
+          var customizeChartGroupContainer = this.section.htmlContainer.find('div#pie_chart_customize_chart_section_chart_customization_group_parameter'),
+              groupParameterContainer = customizeChartGroupContainer.find('.parameter');
+
+          assert.ok(customizeChartGroupContainer[0]);
+          assert.notOk(customizeChartGroupContainer.find('> .parameter-label')[0]);
+          assert.ok(groupParameterContainer[0]);
+          assert.equal(groupParameterContainer.find('#chart_customization_group_label_type_parameter .parameter-label').text(), labelTypeParamDef.label);
+          assert.equal(groupParameterContainer.find('#chart_customization_group_label_type_parameter .options-container').text(), 'PercentageWhole number');
+          assert.equal(groupParameterContainer.find('#chart_customization_group_label_type_parameter .selected-value').text(), 'Percentage');
+        });
+
+        QUnit.test('tetShouldAddLegendPositionDropDown', function (assert) {
+          var legendPositionParams = MingleUI.EasyCharts.Parameter.args[4], legendPositionParamDef =  paramDefs[1].param_defs[2];
+
+          assert.equal(MingleUI.EasyCharts.Parameter.callCount, 5);
+          assert.equal(MingleUI.EasyCharts.Parameter.args[1][1].input_type, 'group-parameter');
+          assert.equal(legendPositionParams[0], 'chart_customization_group');
+          assert.deepEqual(legendPositionParams[1], legendPositionParamDef);
+          assert.equal(typeof legendPositionParams[2].onUpdate, 'function');
+
+          var customizeChartGroupContainer = this.section.htmlContainer.find('div#pie_chart_customize_chart_section_chart_customization_group_parameter'),
+              groupParameterContainer = customizeChartGroupContainer.find('.parameter');
+
+          assert.ok(customizeChartGroupContainer[0]);
+          assert.notOk(customizeChartGroupContainer.find('> .parameter-label')[0]);
+          assert.ok(groupParameterContainer[0]);
+          assert.equal(groupParameterContainer.find('#chart_customization_group_legend_position_parameter .parameter-label').text(), legendPositionParamDef.label);
+          assert.equal(groupParameterContainer.find('#chart_customization_group_legend_position_parameter .options-container').text(), 'RightBottom');
+          assert.equal(groupParameterContainer.find('#chart_customization_group_legend_position_parameter .selected-value').text(), 'Right');
+        });
+
+        QUnit.test('tetShouldTriggerOnUpdateWhenAnythingChanges', function (assert) {
+          var groupParameterContainer = this.section.htmlContainer.find('div#pie_chart_customize_chart_section_chart_customization_group_parameter .parameter');
+
+          this.section.htmlContainer.find('#pie_chart_customize_chart_section_chart_title_parameter input').val('chart title').blur();
+
+          assert.equal(this.onUpdate.callCount, 1);
+          assert.equal(this.onUpdate.args[0][0], this.section);
+
+          groupParameterContainer.find('#chart_customization_group_chart_size_parameter li:contains("Small")').click();
+
+          assert.equal(this.onUpdate.callCount, 2);
+          assert.equal(this.onUpdate.args[1][0], this.section);
+
+          groupParameterContainer.find('#chart_customization_group_label_type_parameter li:contains("Whole number")').click();
+
+          assert.equal(this.onUpdate.callCount, 3);
+          assert.equal(this.onUpdate.args[2][0], this.section);
+
+          groupParameterContainer.find('#chart_customization_group_legend_position_parameter li:contains("Bottom")').click();
+
+          assert.equal(this.onUpdate.callCount, 4);
+          assert.equal(this.onUpdate.args[3][0], this.section);
+        });
+
+        QUnit.test('testValuesShouldReturnAllSelectedValues', function (assert) {
+          var groupParameterContainer = this.section.htmlContainer.find('div#pie_chart_customize_chart_section_chart_customization_group_parameter .parameter');
+
+          this.section.htmlContainer.find('#pie_chart_customize_chart_section_chart_title_parameter input').val('chart title').blur();
+          groupParameterContainer.find('#chart_customization_group_label_type_parameter li:contains("Whole number")').click();
+
+          assert.deepEqual(this.section.values(), {
+            chartTitle: 'chart title',
+            chartSize: 'medium',
+            labelType: 'whole-number',
+            legendPosition: 'right'
+          })
+        });
+
+        QUnit.test('testValuesShouldReturnUpdatedTitleEvenWhenOnUpdateWasNotCalled', function (assert) {
+          assert.deepEqual(this.section.values(), {
+            chartTitle: '',
+            chartSize: 'medium',
+            labelType: 'percentage',
+            legendPosition: 'right'
+          });
+
+          this.section.htmlContainer.find('#pie_chart_customize_chart_section_chart_title_parameter input').val('chart title');
+
+          assert.equal(this.onUpdate.callCount, 0);
+
+          assert.deepEqual(this.section.values(), {
+            chartTitle: 'chart title',
+            chartSize: 'medium',
+            labelType: 'percentage',
+            legendPosition: 'right'
+          });
+        });
+
+        QUnit.module('Enabled Customize Chart Section With Initial Data', {
+          beforeEach: function() {
+            this.initialData = {
+              chartTitle: 'my chart',
+              chartSize: 'large',
+              labelType: 'whole-number',
+              legendPosition: 'bottom',
+              foo: 'bar',
+              blah: 'bloo'
+            };
+            this.section = new MingleUI.EasyCharts.PieChart.Sections.CustomizeChartSection(this.initialData, this.callbacks);
+            this.section.enableWith();
+          }
+        });
+
+        QUnit.test('testShouldAddChartTitleTextBoxWithInitialData', function (assert) {
+          var chartTitleParams = MingleUI.EasyCharts.Parameter.args[0], chartTitleParamDef = paramDefs[0],
+              expectedInitialData = {
+                chartTitle: 'my chart',
+                chartSize: 'large',
+                labelType: 'whole-number',
+                legendPosition: 'bottom'
+              };
+
+          assert.equal(MingleUI.EasyCharts.Parameter.callCount, 5);
+          assert.equal(chartTitleParams[0], 'pie_chart_customize_chart_section');
+          assert.deepEqual(chartTitleParams[1], chartTitleParamDef);
+          assert.equal(typeof chartTitleParams[2].onUpdate, 'function');
+          assert.deepEqual(chartTitleParams[2].initialData, expectedInitialData);
+
+          assert.ok(this.section.htmlContainer.find('div#pie_chart_customize_chart_section_chart_title_parameter')[0]);
+          assert.equal(this.section.htmlContainer.find('div#pie_chart_customize_chart_section_chart_title_parameter .parameter-label').text(), chartTitleParamDef.label);
+          assert.ok(this.section.htmlContainer.find('div#pie_chart_customize_chart_section_chart_title_parameter .parameter')[0]);
+          assert.ok(this.section.htmlContainer.find('#pie_chart_customize_chart_section_chart_title_parameter .parameter input')[0]);
+          assert.equal(this.section.htmlContainer.find('#pie_chart_customize_chart_section_chart_title_parameter input').val(), 'my chart');
+        });
+
+        QUnit.test('tetShouldAddChartSizeDropDown', function (assert) {
+          var chartSizeParams = MingleUI.EasyCharts.Parameter.args[2], chartSizeParamDef = paramDefs[1].param_defs[0];
+
+          assert.equal(MingleUI.EasyCharts.Parameter.callCount, 5);
+          assert.equal(MingleUI.EasyCharts.Parameter.args[1][1].input_type, 'group-parameter');
+          assert.equal(chartSizeParams[0], 'chart_customization_group');
+          assert.deepEqual(chartSizeParams[1], chartSizeParamDef);
+          assert.equal(typeof chartSizeParams[2].onUpdate, 'function');
+          var customizeChartGroupContainer = this.section.htmlContainer.find('div#pie_chart_customize_chart_section_chart_customization_group_parameter'),
+              groupParameterContainer = customizeChartGroupContainer.find('.parameter');
+
+          assert.ok(customizeChartGroupContainer[0]);
+          assert.notOk(customizeChartGroupContainer.find('> .parameter-label')[0]);
+          assert.ok(groupParameterContainer[0]);
+          assert.equal(groupParameterContainer.find('#chart_customization_group_chart_size_parameter .parameter-label').text(), chartSizeParamDef.label);
+          assert.equal(groupParameterContainer.find('#chart_customization_group_chart_size_parameter .options-container').text(), 'SmallMediumLarge');
+          assert.equal(groupParameterContainer.find('#chart_customization_group_chart_size_parameter .selected-value').text(), 'Large');
+        });
+
+        QUnit.test('testShouldAddLabelTypeDropDown', function (assert) {
+          var labelTypeParams = MingleUI.EasyCharts.Parameter.args[3], labelTypeParamDef = paramDefs[1].param_defs[1];
+
+          assert.equal(MingleUI.EasyCharts.Parameter.callCount, 5);
+          assert.equal(MingleUI.EasyCharts.Parameter.args[1][1].input_type, 'group-parameter');
+          assert.equal(labelTypeParams[0], 'chart_customization_group');
+          assert.deepEqual(labelTypeParams[1], labelTypeParamDef);
+          assert.equal(typeof labelTypeParams[2].onUpdate, 'function');
+
+          var customizeChartGroupContainer = this.section.htmlContainer.find('div#pie_chart_customize_chart_section_chart_customization_group_parameter'),
+              groupParameterContainer = customizeChartGroupContainer.find('.parameter');
+
+          assert.ok(customizeChartGroupContainer[0]);
+          assert.notOk(customizeChartGroupContainer.find('> .parameter-label')[0]);
+          assert.ok(groupParameterContainer[0]);
+          assert.equal(groupParameterContainer.find('#chart_customization_group_label_type_parameter .parameter-label').text(), labelTypeParamDef.label);
+          assert.equal(groupParameterContainer.find('#chart_customization_group_label_type_parameter .options-container').text(), 'PercentageWhole number');
+          assert.equal(groupParameterContainer.find('#chart_customization_group_label_type_parameter .selected-value').text(), 'Whole number');
+        });
+
+        QUnit.test('testShouldAddLegendPositionDropDown', function (assert) {
+          var legendPositionParams = MingleUI.EasyCharts.Parameter.args[4],
+              legendPositionParamDef = paramDefs[1].param_defs[2];
+
+          assert.equal(MingleUI.EasyCharts.Parameter.callCount, 5);
+          assert.equal(MingleUI.EasyCharts.Parameter.args[1][1].input_type, 'group-parameter');
+          assert.equal(legendPositionParams[0], 'chart_customization_group');
+          assert.deepEqual(legendPositionParams[1], legendPositionParamDef);
+          assert.equal(typeof legendPositionParams[2].onUpdate, 'function');
+
+          var customizeChartGroupContainer = this.section.htmlContainer.find('div#pie_chart_customize_chart_section_chart_customization_group_parameter'),
+              groupParameterContainer = customizeChartGroupContainer.find('.parameter');
+
+          assert.ok(customizeChartGroupContainer[0]);
+          assert.notOk(customizeChartGroupContainer.find('> .parameter-label')[0]);
+          assert.ok(groupParameterContainer[0]);
+          assert.equal(groupParameterContainer.find('#chart_customization_group_legend_position_parameter .parameter-label').text(), legendPositionParamDef.label);
+          assert.equal(groupParameterContainer.find('#chart_customization_group_legend_position_parameter .options-container').text(), 'RightBottom');
+          assert.equal(groupParameterContainer.find('#chart_customization_group_legend_position_parameter .selected-value').text(), 'Bottom');
+        });
+
+
+      });
+
+    </script>
+  </body>
+</html>

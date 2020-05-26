@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="What's new in Release 14.1">
+	<p>For <cref topic="mingle_onsite">Mingle onsite</cref> customers, please review the <cref topic="upgrading_from_previous_versions">upgrade instructions</cref> before moving to Mingle 14.1.</p>
+	<note>
+	  <item>All of the features below are already available for our Mingle in the cloud customers.</item>
+  </note>
+	<section title="New look">
+	  <p>	Mingle got a facelift in 14.1. We lightened the colors up and flattened the UI. This is not just an aesthetic improvement; it’s an important step in making Mingle easier to use. Check out our <exref url="/mingle/blog">new blog</exref> to read more about what’s coming in Mingle in 2014.</p>
+	</section>
+
+
+	<section title="Avatars">
+	  <p>Your smiling faces are on your card wall now! This new feature allows you and your team to easily see who’s working on what. Read more about how to <cref topic="show_avatars_on_grid_view">show avatars on your card wall</cref>.</p>
+	  <p>By default, we will use your Gravatar image, but you have all the freedom to change it to a cooler one via your Mingle profile page. Gravatar integration is not supported for customers hosting <cref topic="mingle_onsite">Mingle onsite</cref>.</p>
+	<screenshot alttext="avatars_on_the_wall" src="resources/images/avatars_on_the_wall.png"/>
+
+	</section>
+
+
+	<section title="Full card preview &#38; edit without leaving the card wall">
+	  <p>	Mingle now allows you to click any card on your wall to immediately see its entire contents. And, even better, you can double-click anywhere in the card title or body to start editing. Read more about <cref topic="quick_view_edit_cards">full card preview and edit.</cref></p>
+	<screenshot alttext="drag_properties_to_the_top" src="resources/images/in_place_edit.png"/>
+
+	</section>
+
+	<section title="Tab to indent in WYSIWYG">
+		<p>We've upgraded CKEditor to 4.2.2. Mingle now allows you to indent number and bullet lists, and anywhere in the description with the tab button</p>
+	</section>
+
+	<section title="HMAC">
+	  <p>Mingle now supports <exref url="http://en.wikipedia.org/wiki/HMAC">HMAC (Hash-based message authentication code) authentication</exref>. You can generate an HMAC secret key from your Mingle profile page. Just look under the HMAC Auth Key tab. We also provide you <exref url="https://github.com/mingle/mingle_api_hmac_ruby_example">an example Ruby app that uses the Secret Key for authentication</exref>. Read more about how to <cref topic="configuring_hmac_authentication"> configure HMAC authentication</cref>.</p>
+	</section>
+
+	<section title="Bug fixes">
+	  <p>The following bugs have been fixed with 14.1:</p>
+	    <bullets>
+          <bullets>
+	                <item>Multi-card print broken</item>
+			<item>Property definition leaves orphaned database column in cards table(unable to edit or update cards)</item>
+			<item>Mingle shows JavaScript alert error after renaming project identifier</item>
+			<item>Last card modified on timestamp is different with last card version modified on timestamp</item>
+			<item>Error when MQL: select Project Level Variable whose value is not set</item>
+			<item>Magic card defaults to first type and has wrong properties in quick add</item>
+			<item>Cards style is incorrect when printing cards</item>
+			<item>Search throws 500 error if wiki page name is a date</item>
+			<item>User from project import may have corrupt history subscription causing 500 error on user profile page</item>
+			<item>Source tab does not show changesets for Git integration</item>
+			<item>[Security Audit] Cross-site request forgery</item>
+			<item>[Security Audit] Customer Enumeration</item>
+			<item>[Security Audit] Reflected XSS</item>
+			<item>[Security Audit] Stored XSS</item>
+			<item>[Security Audit] Cross-site Request Forgery: API requests should not allow auth user by session or cookie</item>
+			<item>[Security Audit] Login improvements</item>
+			<item>[Security Audit] Customer Enumeration</item>
+	      </bullets>
+  	    </bullets>
+	</section>
+
+	<section title="Performance fixes">
+	  <p>The following performance bugs have been fixed with 14.1:</p>
+	    <bullets>
+	      <bullets>
+			<item>Out of memory when clicking page history tab when page name has special characters</item>
+			<item>Memory leak in the SyncObjectiveWorkProcessor background job</item>
+			<item>Upgraded to OpenJDK 7</item>
+	      </bullets>
+	    </bullets>
+	</section>
+
+</topic>

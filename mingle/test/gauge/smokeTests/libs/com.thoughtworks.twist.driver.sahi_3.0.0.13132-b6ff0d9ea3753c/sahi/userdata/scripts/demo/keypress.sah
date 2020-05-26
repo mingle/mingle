@@ -1,0 +1,69 @@
+if (_condition(navigator.appName == "Microsoft Internet Explorer")){
+	_click(_link("Key Press"));
+
+	_keyPress(_textbox("t2"), 'a')
+	_assertEqual("key pressed charCode=[undefined] keyCode=[97] NONE", _textbox("t1").value);
+	_assertEqual("a", _textbox("t2").value);
+
+	_keyPress(_textbox("t2"), 97)
+	_assertEqual("key pressed charCode=[undefined] keyCode=[97] NONE", _textbox("t1").value);
+	_assertEqual("aa", _textbox("t2").value);
+
+	_keyPress(_textbox("t2"), 'A', "SHIFT")
+	_assertEqual("key pressed charCode=[undefined] keyCode=[65] SHIFT", _textbox("t1").value);
+	_assertEqual("aaA", _textbox("t2").value);
+
+	_keyPress(_textbox("t2"), 'a', "ALT")
+	_assertEqual("key pressed charCode=[undefined] keyCode=[97] ALT", _textbox("t1").value);
+	_assertEqual("aaAa", _textbox("t2").value);
+
+	_keyPress(_textbox("t2"), 'a', "CTRL")
+	_assertEqual("key pressed charCode=[undefined] keyCode=[97] CTRL", _textbox("t1").value);
+	_assertEqual("aaAaa", _textbox("t2").value);
+}else {
+	if (_condition(navigator.userAgent.match(/Firefox/) != null)) {
+		_click(_link("Key Press"));
+
+		_keyPress(_textbox("t2"), 'a')
+		_assertEqual("key pressed charCode=[97] keyCode=[0] NONE", _textbox("t1").value);
+		_assertEqual("a", _textbox("t2").value);
+
+		_keyPress(_textbox("t2"), 97)
+		_assertEqual("key pressed charCode=[97] keyCode=[0] NONE", _textbox("t1").value);
+		_assertEqual("aa", _textbox("t2").value);
+
+		_keyPress(_textbox("t2"), 'A', "SHIFT")
+		_assertEqual("key pressed charCode=[65] keyCode=[0] SHIFT", _textbox("t1").value);
+		_assertEqual("aaA", _textbox("t2").value);
+
+		_keyPress(_textbox("t2"), 'a', "ALT")
+		_assertEqual("key pressed charCode=[97] keyCode=[0] ALT", _textbox("t1").value);
+		_assertEqual("aaA", _textbox("t2").value);
+
+		_keyPress(_textbox("t2"), 'a', "CTRL")
+		_assertEqual("key pressed charCode=[97] keyCode=[0] CTRL", _textbox("t1").value);
+		_assertEqual("aaA", _textbox("t2").value);
+	} else {
+	    _click(_link("Key Press"));
+
+	    _keyPress(_textbox("t2"), 'a')
+	    _assertEqual("key pressed charCode=[97] keyCode=[97] NONE", _textbox("t1").value);
+	    _assertEqual("a", _textbox("t2").value);
+
+	    _keyPress(_textbox("t2"), 97)
+	    _assertEqual("key pressed charCode=[97] keyCode=[97] NONE", _textbox("t1").value);
+	    _assertEqual("aa", _textbox("t2").value);
+
+	    _keyPress(_textbox("t2"), 'A', "SHIFT")
+	    _assertEqual("key pressed charCode=[65] keyCode=[65] SHIFT", _textbox("t1").value);
+	    _assertEqual("aaA", _textbox("t2").value);
+
+	    _keyPress(_textbox("t2"), 'a', "ALT")
+	    _assertEqual("key pressed charCode=[97] keyCode=[97] ALT", _textbox("t1").value);
+	    _assertEqual("aaAa", _textbox("t2").value);
+
+	    _keyPress(_textbox("t2"), 'a', "CTRL")
+	    _assertEqual("key pressed charCode=[97] keyCode=[97] CTRL", _textbox("t1").value);
+	    _assertEqual("aaAaa", _textbox("t2").value);
+	}
+}

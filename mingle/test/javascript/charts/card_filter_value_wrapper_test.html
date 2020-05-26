@@ -1,0 +1,788 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Chart Condition Value Wrapper Test</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js"
+          type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery.scrollintoview.js"
+          type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+  <script src="../../../app/assets/javascripts/thirdparty/calendar.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/calendar-setup.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/calendar-en.js" type="text/javascript"></script>
+
+  <script src="../../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/application.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/lightbox.js" type="text/javascript"></script>
+
+  <script src="../test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../../../app/assets/javascripts/ui_utils.js" type="text/javascript"></script>
+
+  <script src="../../../app/assets/javascripts/alignment.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/url_helper.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/drop_down.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/text_box.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/card_filter_value_wrapper.js"
+          type="text/javascript"></script>
+
+  <script src="../test_assets/sinon-2.3.6.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="../test_assets/qunit-1.21.0.css" type="text/css"/>
+
+</head>
+<body>
+<div id="qunit">
+</div>
+<input id="card_type_name_field" value="Sprint" type="hidden">
+<div id="pie_chart_condition_container"></div>
+
+<script src="../test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+<script src="../test_assets/qunit-phantom.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+  var propertyDefinitions = {
+    ManagedNumeric: {
+      name: 'ManagedNumeric',
+      isNumeric: true,
+      isManaged: true,
+      nullable: true,
+      propertyValueDetails: [{value: '1'}, {value: '2'}, {value: '3'}],
+      projectLevelVariableOptions: [['(current velocity)', '(current velocity)']],
+      operatorOptions: [['is greater than', 'is greater than'], ['is less than', 'is less than']]
+    },
+    UnmanagedNumeric: {
+      name: 'UnmanagedNumeric',
+      isNumeric: true,
+      isManaged: false,
+      dataType: 'numeric',
+      nullable: true,
+      operatorOptions: [['is', 'is'], ['is greater than', 'is greater than'], ['is less than', 'is less than']]
+    },
+    ReleaseDate: {
+      name: 'ReleaseDate',
+      dataType: 'date',
+      isNumeric: false,
+      isManaged: false,
+      nullable: true,
+      projectLevelVariableOptions: ['(today)'],
+      operatorOptions: ['is', 'is after', 'is before', 'is not']
+    },
+    Owner: {
+      name: 'Owner',
+      dataType: 'user',
+      nullable: true,
+      projectLevelVariableOptions: ['(current user)'],
+      operatorOptions: ['is', 'is not']
+    },
+    Sprint: {
+      name: 'Sprint',
+      dataType: 'card',
+      nullable: true,
+      operatorOptions: ['is', 'is not'],
+      validCardTypeName: 'Sprint',
+      cardSelectorFilterValuesMql: "FROM TREE 'Sprint Tree' WHERE type = 'Sprint'",
+      cardSelectorFilterValuesSearchContext: 'tree_configuration_ids:1 AND card_type_id:4'
+    },
+    'Some Card': {
+      name: 'Some Card',
+      dataType: 'card',
+      nullable: true,
+      operatorOptions: ['is', 'is not']
+    }
+  };
+
+  function dd(date, dateFormat) {
+    return date.print(dateFormat);
+  }
+
+  function dv(date) {
+    return date.print('%d-%m-%Y');
+  }
+
+  function valuesFor(chartConditionValueWrapper) {
+    return chartConditionValueWrapper.htmlContainer.find('.options-container').text();
+  }
+
+  function selectedValue(chartConditionValueWrapper) {
+    return chartConditionValueWrapper.htmlContainer.find('.selected-value').text();
+  }
+
+  function clickAccessibilityOption(type) {
+    $j('div.accessibility-option.{type}'.supplant({type: type})).click();
+  }
+
+  QUnit.module('Chart Condition Value Wrapper', {
+    beforeEach: function () {
+      this.server = sinon.fakeServer.create();
+      this.container = $j('#pie_chart_condition_container');
+      this.container.append($j('<div>', {id: 'chart_condition_value'}));
+    },
+    afterEach: function () {
+      this.container.html('');
+      this.server.restore();
+      InputingContexts.clear();
+    }
+  });
+
+  QUnit.test('testShouldInitializeDropDownWithAnyWhenPropertyIsNotDefined', function (assert) {
+    var chartConditionValueWrapper = new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: undefined,
+      showRelativeValues: true
+    });
+
+    assert.equal(selectedValue(chartConditionValueWrapper), '(any)');
+  });
+
+  QUnit.test('testShouldInitializeDropDownWhenPropertyIsDefinedAndManagedAndAddPLVsInValues', function (assert) {
+    var chartConditionValueWrapper = new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: propertyDefinitions.ManagedNumeric,
+      showRelativeValues: true
+    });
+
+    assert.equal(valuesFor(chartConditionValueWrapper), '(not set)(current velocity)123');
+    assert.equal(selectedValue(chartConditionValueWrapper), '(any)');
+  });
+
+  QUnit.test('testShouldInitializeDropDownWithNotSetValueWhenPropertyIsNullable', function (assert) {
+    var propDef = {nullable: true, isManaged: true};
+    var chartConditionValueWrapper = new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: propDef,
+      showRelativeValues: true
+    });
+
+    assert.equal(valuesFor(chartConditionValueWrapper), '(not set)');
+    assert.equal(selectedValue(chartConditionValueWrapper), '(any)');
+
+    this.container.find('#chart_condition_value').html('');
+    var propDef = {nullable: true, isManaged: false};
+    var chartConditionValueWrapper = new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: propDef,
+      showRelativeValues: true
+    });
+
+    assert.equal(valuesFor(chartConditionValueWrapper), '(not set)');
+    assert.equal(selectedValue(chartConditionValueWrapper), '(any)');
+  });
+
+  QUnit.test('testShouldInitializeAddValueToggleForUnmanagedProperties', function (assert) {
+    var chartConditionValueWrapper = new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: propertyDefinitions.UnmanagedNumeric,
+      showRelativeValues: true
+    });
+
+    var addValueToggle = this.container.find('div.accessibility-option.numeric');
+
+    assert.ok(addValueToggle[0]);
+
+    addValueToggle.click();
+
+    assert.ok($j('input[type=text]').is(':visible'));
+    assert.equal(valuesFor(chartConditionValueWrapper), 'Enter value(not set)')
+  });
+
+  QUnit.test('testShouldBeAbleToAddValueForUnmanagedProperties', function (assert) {
+    var chartConditionValueWrapper = new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: propertyDefinitions.UnmanagedNumeric,
+      showRelativeValues: true
+    });
+    var addValueToggle = this.container.find('div.accessibility-option.numeric');
+
+    assert.ok(addValueToggle[0]);
+    addValueToggle.click();
+    var inputBox = this.container.find('input[type=text]');
+    inputBox.val('1').blur();
+
+    assert.equal(valuesFor(chartConditionValueWrapper), 'Enter value(not set)1');
+    assert.deepEqual(chartConditionValueWrapper.value(), ['1']);
+    assert.notOk(inputBox.is(':visible'));
+  });
+
+
+  QUnit.test('testIsValidShouldReturnTrueWhenValueIsPresentForUnmanagedProperties', function (assert) {
+    var chartConditionValueWrapper = new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: propertyDefinitions.UnmanagedNumeric,
+      showRelativeValues: true
+    });
+
+    assert.notOk(chartConditionValueWrapper.isValid());
+    clickAccessibilityOption('numeric');
+
+    this.container.find('input[type=text]').val('blah blah').blur();
+
+    assert.ok(chartConditionValueWrapper.isValid());
+  });
+
+  QUnit.test('testIsValidShouldReturnTrueWhenValueIsSelectedForManagedProperties', function (assert) {
+    var chartConditionValueWrapper = new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: propertyDefinitions.ManagedNumeric,
+      showRelativeValues: true
+    });
+
+    assert.notOk(chartConditionValueWrapper.isValid());
+
+    chartConditionValueWrapper.htmlContainer.find('#chartConditionValue_2').click();
+
+    assert.ok(chartConditionValueWrapper.isValid());
+  });
+
+  QUnit.test('testShouldBeAbleToUpdateValuesForManagedProperties', function (assert) {
+    var chartConditionValueWrapper = new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: propertyDefinitions.ManagedNumeric,
+      showRelativeValues: true
+    });
+    var status = {
+      name: 'Status',
+      isNumeric: true,
+      isManaged: true,
+      propertyValueDetails: [{value: 'To Do'}, {value: 'Doing'}, {value: 'Done'}],
+      operatorOptions: [['is', 'is'], ['is not', 'is not']]
+    };
+    assert.equal(valuesFor(chartConditionValueWrapper), '(not set)(current velocity)123');
+
+    chartConditionValueWrapper.update(status);
+
+    assert.equal(valuesFor(chartConditionValueWrapper), 'To DoDoingDone');
+  });
+
+  QUnit.test('testShouldBeAbleToUpdateValuesForUnmanagedProperties', function (assert) {
+    var chartConditionValueWrapper = new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: propertyDefinitions.ManagedNumeric,
+      showRelativeValues: true
+    });
+    assert.equal(valuesFor(chartConditionValueWrapper), '(not set)(current velocity)123');
+
+    chartConditionValueWrapper.update(propertyDefinitions.UnmanagedNumeric);
+
+    assert.equal(valuesFor(chartConditionValueWrapper), 'Enter value(not set)');
+    assert.equal(selectedValue(chartConditionValueWrapper), '(any)');
+
+    chartConditionValueWrapper.update(propertyDefinitions.ManagedNumeric);
+
+    assert.equal(valuesFor(chartConditionValueWrapper), '(not set)(current velocity)123');
+    assert.notOk(chartConditionValueWrapper.htmlContainer.find('input[name="chartConditionValue"]')[0]);
+  });
+
+  QUnit.test('testValueShouldReturnListOfSelectedValuesForManagedProperties', function (assert) {
+    var chartConditionValueWrapper = new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: propertyDefinitions.ManagedNumeric,
+      showRelativeValues: true
+    });
+    assert.equal(valuesFor(chartConditionValueWrapper), '(not set)(current velocity)123');
+
+    chartConditionValueWrapper.htmlContainer.find('#chartConditionValue_2').click();
+    chartConditionValueWrapper.htmlContainer.find('#chartConditionValue_3').click();
+
+    assert.deepEqual(chartConditionValueWrapper.value(), ['2', '3']);
+  });
+
+  QUnit.test('testShouldBeAbleToSelectNotSetForUnmanagedNumericValues', function (assert) {
+    var chartConditionValueWrapper = new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: propertyDefinitions.UnmanagedNumeric,
+      showRelativeValues: true
+    });
+    $j('#chartConditionValue_null').click();
+
+    assert.deepEqual(chartConditionValueWrapper.value(), ['null']);
+  });
+
+  QUnit.test('testShouldCallOnValueChangeCallbackWhenValueChangesForManagedProperties', function (assert) {
+    var eventTriggered = false;
+    var chartConditionValueWrapper = new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: propertyDefinitions.ManagedNumeric,
+      showRelativeValues: true,
+      onValueChange: function () {
+        eventTriggered = true;
+      }
+    });
+
+    chartConditionValueWrapper.htmlContainer.find('#chartConditionValue_2').click();
+    assert.ok(eventTriggered);
+    eventTriggered = false;
+
+    chartConditionValueWrapper.htmlContainer.find('#chartConditionValue_3').click();
+    assert.ok(eventTriggered);
+    eventTriggered = false;
+
+    chartConditionValueWrapper.htmlContainer.find('#chartConditionValue_2').click();
+    assert.ok(eventTriggered);
+  });
+
+  QUnit.test('testShouldTriggerValueUpdatedEventWithEnteredValuesWhenValueChangesForUnmanagedProperties', function (assert) {
+    var callbackTriggered = false;
+    new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: propertyDefinitions.UnmanagedNumeric,
+      showRelativeValues: true,
+      onValueChange: function () {
+        callbackTriggered = true;
+      }
+    });
+    clickAccessibilityOption('numeric');
+    this.container.find('input[name="chartConditionValue"]').val('15678').blur();
+
+    assert.ok(callbackTriggered);
+  });
+
+  QUnit.test('testShouldInitializeDropDownWithPLVsAndDefaultsForDateProperties', function (assert) {
+    var chartConditionValueWrapper = new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: propertyDefinitions.ReleaseDate,
+      showRelativeValues: true,
+      project: {identifier: 'projectIdentifier', dateFormat: '%d/%m/%Y'}
+    });
+
+    assert.equal(valuesFor(chartConditionValueWrapper), '(not set)(today)Select a date');
+  });
+
+  QUnit.test('testShouldInitializeCalendarToggleForDateProperties', function (assert) {
+    new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: propertyDefinitions.ReleaseDate,
+      showRelativeValues: true,
+      project: {identifier: 'projectIdentifier', dateFormat: '%d/%m/%Y'}
+    });
+
+    var calendarToggle = this.container.find('div.accessibility-option.date');
+
+    assert.ok(calendarToggle[0]);
+
+    calendarToggle.click();
+
+    assert.ok($j('div.calendar').is(':visible'));
+  });
+
+  QUnit.test('testShouldAddAndSelectTheSelectedDateToDropDownForDateProperties', function (assert) {
+    var chartConditionValueWrapper = new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: propertyDefinitions.ReleaseDate,
+      showRelativeValues: true,
+      project: {identifier: 'projectIdentifier', dateFormat: '%d/%m/%Y'}
+    });
+
+    clickAccessibilityOption('date');
+    var today = $j('div.calendar td.day:contains("12")')[0];
+    today.dispatchEvent(new Event('mousedown'));
+    today.dispatchEvent(new Event('mouseup'));
+
+    var someDate = new Date();
+    someDate.setDate(12);
+    var anotherDate = new Date();
+    anotherDate.setDate(15);
+    var someDateDisplayValue = dd(someDate, '%d/%m/%Y');
+    var someDateMqlValue = dv(someDate);
+
+    assert.equal(valuesFor(chartConditionValueWrapper), '(not set)(today){date}Select a date'.supplant({date: someDateDisplayValue}));
+    assert.deepEqual(chartConditionValueWrapper.value(), [someDateMqlValue]);
+
+    clickAccessibilityOption('date');
+    var otherDate = $j('div.calendar td.day:contains("15")')[0];
+
+    otherDate.dispatchEvent(new Event('mousedown'));
+    otherDate.dispatchEvent(new Event('mouseup'));
+
+    assert.equal(valuesFor(chartConditionValueWrapper), '(not set)(today){dates}Select a date'.supplant({dates: someDateDisplayValue + dd(anotherDate, '%d/%m/%Y')}));
+    assert.deepEqual(chartConditionValueWrapper.value(), [someDateMqlValue, dv(anotherDate)]);
+  });
+
+  QUnit.test('testShouldInitializeDropDownWithPLVsAndDefaultsForUserProperties', function (assert) {
+    var chartConditionValueWrapper = new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: propertyDefinitions.Owner,
+      showRelativeValues: true
+    });
+
+    assert.equal(valuesFor(chartConditionValueWrapper), '(not set)(current user)Select a user');
+    assert.ok(this.container.find("div.accessibility-option.user")[0]);
+  });
+
+  QUnit.test('testShouldShowUserSelectorWhenSelectUserIconIsClicked', function (assert) {
+    new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: propertyDefinitions.Owner,
+      showRelativeValues: true,
+      project: {identifier: 'my_project', dateFormat: '%d/%m/%Y'}
+    });
+    this.server.respondWith("GET", /\/projects\/my_project\/team\/show_user_selector/,
+        [200, {"Content-Type": "text/javascript"}, "InputingContexts.update('response')"]);
+
+    this.container.find("div.accessibility-option.user").click();
+    this.server.respond();
+    var userSelectorLightBoxContext = InputingContexts.top();
+    assert.ok(userSelectorLightBoxContext);
+    assert.equal($j(userSelectorLightBoxContext.lightbox.content).text(), 'response');
+
+    assert.equal(this.server.requests.length, 1);
+    assert.ok(this.server.requests[0].url.match(/^\/projects\/my_project\/team\/show_user_selector\?property_definition_name=Owner&action_type=filter/));
+  });
+
+  QUnit.test('testShouldAddUserToValuesDropDownAndSelectItWhenUserIsSelectedInUserSelector', function (assert) {
+    var chartConditionValueWrapper = new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: propertyDefinitions.Owner,
+      showRelativeValues: true,
+      project: {identifier: 'my_project', dateFormat: '%d/%m/%Y'}
+    });
+    this.server.respondWith("GET", /\/projects\/my_project\/team\/show_user_selector/,
+        [200, {"Content-Type": "text/javascript"}, "InputingContexts.update('response')"]);
+
+    this.container.find("div.accessibility-option.user").click();
+    this.server.respond();
+    var userSelectorLightBoxContext = InputingContexts.top();
+
+    assert.ok(userSelectorLightBoxContext);
+
+    userSelectorLightBoxContext.feed({name: 'User Name', value: 'userLogin'});
+
+    assert.equal(valuesFor(chartConditionValueWrapper), '(not set)(current user)User NameSelect a user');
+    assert.deepEqual(chartConditionValueWrapper.value(), ['userLogin']);
+  });
+
+  QUnit.test('testShouldNotShowAccessibilityActionTriggerWhenPropertyIsManagedOrUnmanagedPropertyWithoutAccessibilityOption', function (assert) {
+    var chartConditionValueWrapper = new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: propertyDefinitions.Owner,
+      showRelativeValues: true,
+      project: {identifier: 'my_project', dateFormat: '%d/%m/%Y'}
+    });
+    assert.ok(this.container.find('.accessibility-option').is('.user'));
+    assert.equal(valuesFor(chartConditionValueWrapper), '(not set)(current user)Select a user');
+
+    chartConditionValueWrapper.update(propertyDefinitions.ManagedNumeric);
+    assert.notOk(this.container.find('.accessibility-option')[0]);
+    assert.equal(valuesFor(chartConditionValueWrapper), '(not set)(current velocity)123');
+
+    chartConditionValueWrapper.update(propertyDefinitions.UnmanagedNumeric);
+    assert.ok(this.container.find('.accessibility-option').is('.numeric'));
+    assert.equal(valuesFor(chartConditionValueWrapper), 'Enter value(not set)');
+
+    chartConditionValueWrapper.update({isManaged: false});
+    assert.notOk(this.container.find('.accessibility-option')[0]);
+
+    chartConditionValueWrapper.update(propertyDefinitions.Sprint);
+    assert.ok(this.container.find('.accessibility-option').is('.card'));
+  });
+
+  QUnit.test('testShouldInitializeDropDownWithThisCardAndPLVsAndDefaultsForCardProperties', function (assert) {
+    var chartConditionValueWrapper = new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: propertyDefinitions.Sprint,
+      showRelativeValues: true,
+      enableThisCardOption: true
+    });
+
+    assert.equal(valuesFor(chartConditionValueWrapper), '(not set)THIS CARDSelect a card');
+    assert.ok(this.container.find("div.accessibility-option.card")[0]);
+  });
+
+  QUnit.test('testShouldShowCardSelectorWhenSelectCardIconIsClicked', function (assert) {
+    new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: propertyDefinitions.Sprint,
+      showRelativeValues: true,
+      project: {identifier: 'my_project', dateFormat: '%d/%m/%Y'}
+    });
+    this.server.respondWith("GET", /\/projects\/my_project\/card_explorer\/show_card_selector/,
+        [200, {"Content-Type": "text/javascript"}, "InputingContexts.update('response')"]);
+
+    var expectedParams = {
+      card_selector: {
+        title: 'Select card for Sprint',
+        context_mql: "FROM TREE 'Sprint Tree' WHERE type = 'Sprint'",
+        search_context: 'tree_configuration_ids:1 AND card_type_id:4',
+        card_result_attribute: 'number'
+      }
+    }, expectedUrl = RegExp.escape(UrlHelper.showCardSelectorUrl('my_project') + '?' + $j.param(expectedParams));
+
+    this.container.find("div.accessibility-option.card").click();
+    this.server.respond();
+    var userSelectorLightBoxContext = InputingContexts.top();
+    assert.ok(userSelectorLightBoxContext);
+    assert.equal($j(userSelectorLightBoxContext.lightbox.content).text(), 'response');
+
+    assert.equal(this.server.requests.length, 1);
+    assert.ok(this.server.requests[0].url.match(new RegExp(expectedUrl)));
+  });
+
+  QUnit.test('testShouldAddCardToValuesDropDownAndSelectItWhenCardIsSelectedInCardSelector', function (assert) {
+    var chartConditionValueWrapper = new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: propertyDefinitions.Sprint,
+      showRelativeValues: true,
+      project: {identifier: 'my_project', dateFormat: '%d/%m/%Y'}
+    });
+    this.server.respondWith("GET", /\/projects\/my_project\/card_explorer\/show_card_selector/,
+        [200, {"Content-Type": "text/javascript"}, "InputingContexts.update('response')"]);
+
+    this.container.find("div.accessibility-option.card").click();
+    this.server.respond();
+    var userSelectorLightBoxContext = InputingContexts.top();
+
+    assert.ok(userSelectorLightBoxContext);
+
+    userSelectorLightBoxContext.feed({name: '#2 Sprint 2', value: '2'});
+
+    assert.equal(valuesFor(chartConditionValueWrapper), '(not set)#2 Sprint 2Select a card');
+    assert.deepEqual(chartConditionValueWrapper.value(), ['2']);
+  });
+
+  QUnit.test('testShouldHideLightBoxWhenItFailsToOpenSelector', function (assert) {
+    var chartConditionValueWrapper = new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: propertyDefinitions.Sprint,
+      showRelativeValues: true,
+      project: {identifier: 'my_project', dateFormat: '%d/%m/%Y'}
+    });
+    this.server.respondWith('GET', /projects\/my_project/, [422, {}, '']);
+
+    assert.ok(this.container.find("div.accessibility-option.card")[0]);
+    this.container.find("div.accessibility-option.card").click();
+    this.server.respond();
+    var userSelectorLightBoxContext = InputingContexts.top();
+
+    assert.notOk(userSelectorLightBoxContext);
+
+    chartConditionValueWrapper.update(propertyDefinitions.Owner);
+
+    assert.ok(this.container.find("div.accessibility-option.user")[0]);
+    this.container.find("div.accessibility-option.user").click();
+    this.server.respond();
+    userSelectorLightBoxContext = InputingContexts.top();
+
+    assert.notOk(userSelectorLightBoxContext);
+  });
+
+  QUnit.test('testShouldNotTryToOpenSelectorWhenItsAlreadyOpen', function (assert) {
+    new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: propertyDefinitions.Sprint,
+      showRelativeValues: true,
+      project: {identifier: 'my_project', dateFormat: '%d/%m/%Y'}
+    });
+    this.server.respondWith("GET", /\/projects\/my_project\/card_explorer\/show_card_selector/,
+        [200, {"Content-Type": "text/javascript"}, "InputingContexts.update('response');"]);
+
+    this.container.find("div.accessibility-option.card").click();
+    this.server.respond();
+    var userSelectorLightBoxContext = InputingContexts.top();
+
+    assert.ok(userSelectorLightBoxContext.lightbox instanceof NewLightbox);
+
+    this.container.find("div.accessibility-option.card").click();
+
+    assert.equal(InputingContexts.contexts.length, 1);
+    assert.equal(this.server.requests.length, 1);
+  });
+
+  QUnit.test('testHideRelativeValueShouldHideNullValueAndShouldGiveOnlyOneValueAndSelectFirstSelectedValue', function (assert) {
+    var chartConditionValueWrapper = new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: propertyDefinitions.ManagedNumeric,
+      showRelativeValues: true,
+      project: {identifier: 'my_project', dateFormat: '%d/%m/%Y'}
+    });
+
+    chartConditionValueWrapper.htmlContainer.find('#chartConditionValue_2').click();
+    chartConditionValueWrapper.htmlContainer.find('#chartConditionValue_3').click();
+
+    assert.equal(valuesFor(chartConditionValueWrapper), '(not set)(current velocity)123');
+    assert.equal(selectedValue(chartConditionValueWrapper), '2, 3');
+
+    chartConditionValueWrapper.hideRelativeValues();
+
+    assert.equal(valuesFor(chartConditionValueWrapper), '(current velocity)123');
+    assert.equal(selectedValue(chartConditionValueWrapper), '2');
+    assert.notOk(chartConditionValueWrapper.htmlContainer.find('input[type=checkbox]')[0]);
+
+    chartConditionValueWrapper.hideRelativeValues();
+    assert.equal(selectedValue(chartConditionValueWrapper), '2');
+  });
+
+  QUnit.test('testShowRelativeValueShouldShowNullableValueAndShouldGiveMultipleValuesAndSelectSelectedValue', function (assert) {
+    var chartConditionValueWrapper = new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: propertyDefinitions.ManagedNumeric,
+      showRelativeValues: true,
+      project: {identifier: 'my_project', dateFormat: '%d/%m/%Y'}
+    });
+
+    chartConditionValueWrapper.hideRelativeValues();
+
+    assert.equal(valuesFor(chartConditionValueWrapper), '(current velocity)123');
+    assert.equal(selectedValue(chartConditionValueWrapper), '(any)');
+    assert.notOk(chartConditionValueWrapper.htmlContainer.find('input[type=checkbox]')[0]);
+
+    chartConditionValueWrapper.htmlContainer.find('#chartConditionValue_3').click();
+
+    chartConditionValueWrapper.showRelativeValues();
+
+    assert.equal(valuesFor(chartConditionValueWrapper), '(not set)(current velocity)123');
+    assert.equal(selectedValue(chartConditionValueWrapper), '3');
+    assert.ok(chartConditionValueWrapper.htmlContainer.find('input[type=checkbox]')[0]);
+  });
+
+  QUnit.test('testHideRelativeValuesShouldHideThisCardForCardProperties', function (assert) {
+    var chartConditionValueWrapper = new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: propertyDefinitions.Sprint,
+      showRelativeValues: true,
+      project: {identifier: 'my_project', dateFormat: '%d/%m/%Y'},
+      enableThisCardOption: true
+    });
+
+    assert.equal(valuesFor(chartConditionValueWrapper), '(not set)THIS CARDSelect a card');
+
+    chartConditionValueWrapper.hideRelativeValues();
+
+    assert.equal(valuesFor(chartConditionValueWrapper), 'Select a card');
+  });
+
+  QUnit.test('testShouldAddThisCardOptionForCardPropertiesWithoutCardTypeRestriction', function (assert) {
+    var chartConditionValueWrapper = new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: propertyDefinitions['Some Card'],
+      showRelativeValues: true,
+      project: {identifier: 'my_project', dateFormat: '%d/%m/%Y'},
+      enableThisCardOption: true
+    });
+
+    assert.equal(valuesFor(chartConditionValueWrapper), '(not set)THIS CARDSelect a card');
+  });
+
+  QUnit.test('testShouldNotAddThisCardOptionWhenCurrentCardTypeCouldNotBeFound', function (assert) {
+    $j('#card_type_name_field').val('');
+    var chartConditionValueWrapper = new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: propertyDefinitions['Some Card'],
+      showRelativeValues: true,
+      project: {identifier: 'my_project', dateFormat: '%d/%m/%Y'},
+      enableThisCardOption: true
+    });
+    assert.equal(valuesFor(chartConditionValueWrapper), '(not set)Select a card');
+
+    $j('#card_type_name_field').remove();
+    chartConditionValueWrapper = new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: propertyDefinitions['Some Card'],
+      showRelativeValues: true,
+      project: {identifier: 'my_project', dateFormat: '%d/%m/%Y'},
+      enableThisCardOption: true
+    });
+    assert.equal(valuesFor(chartConditionValueWrapper), '(not set)Select a card');
+
+    $j('body').prepend($j('<input>', {type: 'hidden', id: 'card_type_name_field', value: 'Sprint'}));
+  });
+
+  QUnit.test('testShouldNotShowThisCardOptionWhenEnableThisCardOptionIsFalse', function (assert) {
+    var chartConditionValueWrapper = new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: propertyDefinitions['Some Card'],
+      showRelativeValues: true,
+      project: {identifier: 'my_project', dateFormat: '%d/%m/%Y'},
+      enableThisCardOption: false
+    });
+
+    assert.equal(valuesFor(chartConditionValueWrapper), '(not set)Select a card');
+  });
+
+  QUnit.test('testShouldSelectInitialValuesWhenInitialValuesAreGivenForManagedProperties', function (assert) {
+    var chartConditionValueWrapper = new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: propertyDefinitions.ManagedNumeric,
+      initialValues: [['3', '3']],
+      showRelativeValues: false
+    });
+
+    assert.equal(valuesFor(chartConditionValueWrapper), '(current velocity)123');
+    assert.equal(selectedValue(chartConditionValueWrapper), '3');
+    assert.deepEqual(chartConditionValueWrapper.value(), ['3']);
+  });
+
+  QUnit.test('testShouldAddInitialValuesWhenInitialValuesAreGivenForUnmanagedPropertiesWithoutTriggeringOnUpdate', function (assert) {
+    var onValueChange = sinon.spy();
+    var chartConditionValueWrapper = new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: propertyDefinitions.UnmanagedNumeric,
+      initialValues: [['3', '3'], ['6', '6']],
+      showRelativeValues: true,
+      onValueChange: onValueChange
+    });
+
+    assert.equal(valuesFor(chartConditionValueWrapper), 'Enter value(not set)36');
+    assert.equal(selectedValue(chartConditionValueWrapper), '3, 6');
+    assert.deepEqual(chartConditionValueWrapper.value(), ['3', '6']);
+    assert.equal(onValueChange.callCount, 0);
+  });
+
+  QUnit.test('testShouldAddInitialValuesWhenInitialValuesAreGivenForDateProperties', function (assert) {
+    var onValueChange = sinon.spy();
+    var chartConditionValueWrapper = new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: propertyDefinitions.ReleaseDate,
+      initialValues: [['08/30/2017', '30-08-2017']],
+      showRelativeValues: true,
+      onValueChange: onValueChange,
+      project: {identifier: 'projectIdentifier', dateFormat: '%d/%m/%Y'}
+    });
+
+    assert.equal(valuesFor(chartConditionValueWrapper), '(not set)(today)08/30/2017Select a date');
+    assert.equal(selectedValue(chartConditionValueWrapper), '08/30/2017');
+    assert.deepEqual(chartConditionValueWrapper.value(), ['30-08-2017']);
+    assert.equal(onValueChange.callCount, 0);
+  });
+
+  QUnit.test('testShouldAddInitialValuesWhenInitialValuesAreGivenForUserProperties', function (assert) {
+    var onValueChange = sinon.spy();
+    var chartConditionValueWrapper = new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: propertyDefinitions.Owner,
+      initialValues: [['User One', 'user_one']],
+      showRelativeValues: true,
+      onValueChange: onValueChange
+    });
+
+    assert.equal(valuesFor(chartConditionValueWrapper), '(not set)(current user)User OneSelect a user');
+    assert.equal(selectedValue(chartConditionValueWrapper), 'User One');
+    assert.deepEqual(chartConditionValueWrapper.value(), ['user_one']);
+    assert.equal(onValueChange.callCount, 0);
+  });
+
+  QUnit.test('testShouldAddInitialValuesWhenInitialValuesAreGivenForCardProperties', function (assert) {
+    var onValueChange = sinon.spy();
+    var chartConditionValueWrapper = new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: propertyDefinitions.Sprint,
+      initialValues: [['#2 Sprint one', '2'], ['#4 Sprint X', '4']],
+      showRelativeValues: true,
+      onValueChange: onValueChange
+    });
+
+    assert.equal(valuesFor(chartConditionValueWrapper), '(not set)#2 Sprint one#4 Sprint XSelect a card');
+    assert.equal(selectedValue(chartConditionValueWrapper), '#2 Sprint one, #4 Sprint X');
+    assert.deepEqual(chartConditionValueWrapper.value(), ['2','4']);
+    assert.equal(onValueChange.callCount, 0);
+  });
+
+  QUnit.test('testShouldShowOptionsContainerWhenDropdownEnabled', function (assert) {
+    var dropDown = sinon.spy(MingleUI, 'DropDown');
+    var chartConditionValueWrapper = new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: {},
+      initialValues: ['(any)'],
+      showRelativeValues: true,
+      disabled: true
+    });
+
+    assert.ok(dropDown.args[0][3].disabled);
+
+    chartConditionValueWrapper.enable();
+    assert.notOk(chartConditionValueWrapper.htmlContainer.hasClass('disabled'));
+
+  });
+
+  QUnit.test('testShouldDisableProjectVariables', function (assert) {
+    var chartConditionValueWrapper = new MingleUI.EasyCharts.CardFilterValueWrapper(this.container, 'chart_condition', {
+      propertyDefinition: propertyDefinitions.Owner,
+      disableProjectVariables: true,
+      showRelativeValues: true
+    });
+
+    assert.equal(valuesFor(chartConditionValueWrapper), '(not set)Select a user');
+
+  });
+</script>
+</body>
+</html>

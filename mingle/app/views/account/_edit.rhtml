@@ -1,0 +1,78 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div class="buy-popup">
+  <% lightbox = Lightbox.with_close_link(self,
+     "", "", :id => "close_buy", :class => "fa fa-close")
+     lightbox.header "Confirm Your Plan"
+     lightbox.body do %>
+
+  <% if @message %>
+  <% warning_box do %>
+    <%= @message %>
+  <% end %>
+  <% end %>
+  <% info_box do %>
+    You currently have <b><%= User.activated_users %></b> active users.
+  <% end %>
+
+
+  <% form_tag({:controller => "account", :action => "update"},
+  'data-remote' => true, :id => "buy-form") do %>
+      <input type="hidden" name="max_active_full_users" value="<%= CurrentLicense.status.max_active_full_users %>"/>
+      <div class="mingle-edition">
+        <div class="button-group"><label><input type="radio" name="mingle-edition" value="basic" data-per-user-price="20" role="button" <%= 'checked' unless @include_planner %>><span class="button-group-item">Mingle</span></label><label><input type="radio" name="mingle-edition" value="plus" data-per-user-price="35" role="button" <%= 'checked' if @include_planner %>><span class="button-group-item">Mingle Plus</span></label></div>
+        <p class="mingle-edition-basic-only edition-desc">Helping you visually plan, track, and collaborate at the team level</p>
+        <p class="mingle-edition-plus-only edition-desc">Bringing agile to the enterprise without sacrificing visibility, flexibility or team productivity</p>
+      </div>
+
+      <div class="prices">
+      <div class="slider">
+        <div class="label">Users</div>
+        <div class="slider-wrapper">
+          <div class="pricing-slider" role="slider"></div>
+          <div class="free-label">0-5 FREE</div>
+        </div>
+      </div>
+    </div>
+    <div class="final-cost per-month-price">
+    </div>
+    <div class="cost-info">
+      billed annually (includes 5 free users)
+    </div>
+    <div class="contact-us-message">
+      Questions? Need help getting started? <a href="mailto:studios@thoughtworks.com">Contact us</a>
+    </div>
+    <div class="contact">
+      <h2>Contact Information</h2>
+      <div class="form_item">
+        <%= text_field_tag "contact_email", nil, :placeholder => "email" %>
+      </div>
+      <div class="form_item">
+        <%= text_field_tag "contact_phone", nil, :placeholder => "phone" %>
+      </div>
+
+      <div class="action-bar">
+        <%= button_to_function "Submit", {:id => "buy_button", :class => 'ok'} %>
+      </div>
+    </div>
+  <% end #form -%>
+  <% end #body -%>
+<%= javascript_with_rescue <<-JAVASCRIPT
+$j("#buy-form").initBuyForm();
+JAVASCRIPT
+-%>
+</div>

@@ -1,0 +1,24 @@
+<html>
+<head><title>Key and Char codes</title></head>
+<body>
+
+<script>
+function $(id){return document.getElementById(id);}
+function showCodes(e, eType){
+	if (!e) e = window.event;
+	$("output").value += eType + ": c="+e.charCode+";k="+e.keyCode+"\n";
+}
+</script>
+
+<input type="text" id="input" 
+	onkeydown="showCodes(event, 'keydown')"
+	onkeypress="showCodes(event, 'keypress')"
+	onkeyup="showCodes(event, 'keyup')"		
+	/>
+<input type="button" value="Clear" onclick="$('input').value='';$('output').value=''">
+<br/>
+<textarea id="output" style="width:400px;height:100px">
+</textarea>
+
+</body>
+</html>

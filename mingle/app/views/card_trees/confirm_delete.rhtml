@@ -1,0 +1,48 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= render :partial => "shared/delete_actions", :locals => {:location  => "top", :thing_to_delete => @project, :cancel_url => link_for_cancel} %>
+
+<h1>Delete card tree</h1>
+
+<% form_tag({:action => 'delete', :id => @tree_config.id}, {:id => 'delete-form'}) do -%><% end -%>
+
+<%= render :partial => 'shared/irrecoverable_warning' %>
+
+<% info_box do %>
+  <p>We recommend that you review the following changes that will result from deleting the <%= @tree_config.name.bold %> tree:</p>
+
+  <ul>
+	<% cards_count = @tree_config.cards_count -%>
+    <li><%= enumerate(cards_count, 'card').bold %> <%= cards_count == 1 ? 'belongs' : 'belong' %> to this tree.</li>
+    
+    <%= the_following_will_be_deleted('property', @tree_config.relationships.collect(&:name)) %>
+
+    <%= the_following_will_be_deleted('aggregate property', @tree_config.aggregate_property_definitions.collect(&:name)) %>
+    <%= the_following_will_be_deleted('transition', @tree_config.related_transitions) %>
+
+    <li>Properties deleted cannot be recovered and will no longer be displayed in history.</li>
+    
+    <li>Any favorites and tabs that use this tree or its properties will be deleted.</li>
+
+    <li>Tables or charts that use this tree or its properties may no longer work.</li>
+
+	<li>Any MQL (Advanced filters, some Macros or aggregates using MQL conditions) that uses this tree and its properties will no longer return any results.</li>
+
+  </ul>
+<% end %>
+
+<%= render :partial => "shared/delete_actions", :locals => {:location  => "top", :thing_to_delete => @project, :cancel_url => link_for_cancel} %>

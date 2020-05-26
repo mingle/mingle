@@ -1,0 +1,10 @@
+Add automatic classloading of extensions
+Add wait in sahiInstant
+Rectify documentation for _prompt _confirm
+Make a release
+Revamp website:
+    Add examples for every accessor and action
+Add documentation for RemoteRequestProcessor
+Add dirty flag for auto rebuildHeader/resetData
+Add template for creating plugins
+

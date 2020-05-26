@@ -1,0 +1,207 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+.objectives #objective_name {
+  width: auto;
+}
+
+.objective .objective_name {
+  border: 0;
+  border-right: 1px solid #CCCCCC;
+  display: inline-block;
+  margin: 0 10px 5px 0;
+  padding: 0 10px 5px 0;
+}
+
+.objective .duration {
+  margin-bottom: 5px;
+}
+
+.objective .symbols {
+  padding: 0px;
+  position: absolute;
+  right: 12px;
+  top: 0px;
+}
+
+.objective .symbols * {
+  float: left;
+  zoom: 1;
+  height: 20px;
+  margin: 4px 5px 0 0;
+}
+
+.timeline .main_view .objective .card_count {
+  background: #333;
+  border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+  color: #FFF;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 0 8px;
+  margin-top: 4px;
+  line-height: 20px;
+}
+
+.timeline .main_view .objective .card_count a {
+  color: #FFF;
+}
+
+.timeline .main_view .objective .late {
+  background: url(../../../images/planner/icons/icon_warning_16.png) -1px 2px no-repeat;
+  width: 16px;
+  cursor: pointer;
+}
+
+#objective_popup_details {
+  height: 190px;
+}
+
+.add_objective_panel,
+.objective_popup_panel {
+  display: none;
+  position: absolute;
+  width: 330px;
+  z-index: 1000;
+}
+.objective_popup_panel .bottom_arrow,
+.add_objective_panel .bottom_arrow {
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 15px solid #111;
+  border-top: 15px solid rgba(20,20,20,0.95);
+  height: 0;
+  width: 0;
+  margin-top: -15px;
+}
+.objective_popup_panel .top_arrow,
+.add_objective_panel .top_arrow {
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 15px solid #111;
+  border-bottom: 15px solid rgba(20,20,20,0.95);
+  height: 0;
+  width: 0;
+  margin: 0 0 0 0;
+  margin-bottom: -15px;
+}
+.objective_popup_panel .top_right,
+.add_objective_panel .top_right,
+.objective_popup_panel .bottom_right,
+.add_objective_panel .bottom_right {
+  float: right;
+  margin-right: 20px;
+}
+.objective_popup_panel .bottom_left,
+.add_objective_panel .bottom_left,
+.objective_popup_panel .top_left,
+.add_objective_panel .top_left {
+  margin-left: 20px;
+}
+.add_objective_panel .submit_wrapper {
+  margin: 0;
+  margin-top: 10px;
+  clear: left;
+  float: right;
+}
+.add_objective_panel .submit_wrapper input {
+  margin: 0;
+  margin-right: 1px;
+}
+.objective_popup_details a.action_icon {
+  color: #FFF;
+}
+.add_objective_panel .objective_fields {
+  height: 70px;
+}
+
+.popup_contents .objective_name {
+  width: 305px;
+}
+
+.popup_contents .symbols {
+  padding: 0px;
+  right: 12px;
+  top: 0px;
+  height: 25px;
+}
+
+.composite-progress {
+  height: 72px;
+  overflow-y: auto;
+}
+
+.composite-progress .project-name {
+  font-weight: bold;
+}
+
+.composite-progress .meter {
+  height: 12px;
+  border: 1px solid #aaa;
+  width: 180px;
+  overflow: hidden;
+  margin: 0 4px 0 0;
+  display: inline;
+  float: left;
+}
+
+.composite-progress .count {
+  font-size: 12px;
+  word-wrap: no-wrap;
+}
+
+.composite-progress .progress-info {
+  float: left;
+  vertical-align: baseline;
+  width: 250px;
+}
+
+.composite-progress .level {
+  background: #0973B6;
+  width: 0;
+  height: 12px;
+  margin: 0;
+}
+
+
+.composite-progress .chart_icon {
+  height: 22px;
+  width: 24px;
+  margin: -4px 8px 0px 2px;
+  padding-right: 0px;
+  float: right;
+  cursor: pointer;
+}
+
+.composite-progress .forecast_chart_link {
+  background: url("../../../images/planner/icons/icon_objective_project_chart_enabled.png") no-repeat center left;
+}
+
+.composite-progress .forecast_chart_alert {
+  background: url("../../../images/planner/icons/icon_objective_project_chart_alert.png") no-repeat center left;
+}
+
+.composite-progress .no_forecast_chart {
+  background: url("../../../images/planner/icons/icon_objective_project_chart_disabled.png") no-repeat center left;
+  cursor: default;
+}
+
+.objective .symbols .spinner {
+  margin-top: 2px;
+  margin-right: 0;
+  height: 16px;
+}

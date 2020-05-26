@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Creating tags for cards or pages">
+    <section title="Introduction">
+    	<p>Tags are a great way to dynamically group related cards or pages in Mingle. </p>
+<p>You can create and manage tags from the <tab>Project admin</tab> tab, <link>Tags</link> link or create tags on the fly from <cref topic="working_with_tags">within cards and pages</cref>.</p>
+    	
+    	<hint>It's not essential to create tags as a project administrator since team members will most likely create tags as they work on projects. 
+    		Your main task as a project administrator then becomes <cref topic="managing_tags">maintaining tags</cref>.</hint>
+    	
+    	<p>Applying tags to pages gives you extra search terms. Whenever you <cref topic="mingle_search">search in Mingle</cref>, the search results for pages are prioritized 
+    		according to tags. For example, if a page has a tag of 'training' and you perform a Mingle search for 'training', 
+    		this page will be prioritized in the search results.</p>
+    	
+    	<p>Applying tags to cards gives you another layer of card filtering when displaying cards or creating saved views. 
+    		You can <cref topic="filter_list_by_component">specify which cards you want to view according to their tags</cref> from the <sidebar-button>Filter list by...</sidebar-button> sidebar control.</p>
+    	
+    	<p>For details about creating tags in cards or pages on the fly, see <cref topic="working_with_tags">Working with tags</cref>.</p>
+    	
+    </section>
+
+	<section title="How to add new tags from the Project admin section">
+		<steps>
+			<item>
+				<p><cref topic="signing_in_and_out_of_mingle">Sign in</cref> to Mingle as a project administrator and open the project with the tags you want to add or change (if you're not already working in the project).</p>
+			</item>
+			<item>
+				<p>Click the Project admin tab.</p>
+				<screenshot alttext="Project admin tab" src="resources/images/project_admin_tab.png" />		
+				<p>Mingle displays the Project settings page.	(Note: if you are signed in as a project team member, Mingle displays the Team page.)</p>
+				<screenshot alttext="Project admin menu - tags link" src="resources/images/admin_tags_link.png"></screenshot>
+			</item>			
+		  	<item>
+		  		<p>Click the <link>Tags</link> link.</p>
+				<p>Mingle displays the <strong>Tags page</strong> with all tags currently in the project.	In the example below, no tags have been added yet.</p>
+		  		<screenshot alttext="Tags page - no tags created" src="resources/images/tags_page_empty.png"></screenshot>
+			</item>
+			<item><p>Click the <link>Create new tag</link> link.</p>
+				<p>Mingle displays the <strong>Create new tag</strong> page.</p>
+				<screenshot alttext="Create new tag page" src="resources/images/create_new_tag_page.png"></screenshot>
+			</item>
+			<item>
+				<p>Type the <strong>tag name</strong>. Do not include commas. You can add spaces for tags with more than one word.</p>
+			</item>
+			<item>
+				<p>Click the <link>Create tag</link> link.</p>
+				<p>Mingle saves the tag and displays it in the Tags page.</p>
+				<screenshot alttext="Tags page - tag created successfully" src="resources/images/tags_page_tag_created.png"></screenshot>
+			</item>
+			<item>
+				<p>Repeat to create more tags.</p>
+				<note>You can edit or delete tags using the <link>Edit</link> and <link>Delete</link> links in the Tags page.</note>
+			</item>
+		</steps>
+	</section>
+	<section title="Also see...">
+		<bullets>
+			<item><cref topic="working_with_tags">Working with tags</cref></item>
+			<item><cref topic="managing_tags">Managing tags</cref></item>
+		</bullets>
+	</section>
+</topic>
+
+

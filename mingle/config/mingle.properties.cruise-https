@@ -1,0 +1,6 @@
+#Refer to the mingle.properties.example file in your Mingle installation folder to see other properties that can be set to configure Mingle
+-Dmingle.port=8080
+-Dmingle.ssl.port=8443
+-Dmingle.ssl.keystore=config/keys/keystore
+-Dmingle.ssl.keystorePassword=123456
+-Dmingle.ssl.keyPassword=123456

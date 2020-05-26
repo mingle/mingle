@@ -1,0 +1,73 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+#retirement_banner{
+  .retirement-banner{
+    margin: 80px auto;
+    width: 410px;
+    min-height: 311px;
+    border: 1px solid #c3c3c3;
+    background-color: #fff;
+    text-align: center;
+
+    #banner-heading{
+      font-size: 24px;
+      color: white;
+      background-color: #3fbeea;
+      padding: 10px;
+    }
+    #mail {
+      a {
+        color: #3fbeea;
+        text-decoration: underline;
+      }
+    }
+    #info-box{
+      line-height: 24px;
+      font-size: 14px;
+      padding: 10px;
+      text-align: left;
+    }
+
+    #continue-button{
+      float: left;
+      margin-left: 10px;
+      margin-top: 20px;
+    }
+  }
+  #graphic-dialog-container{
+    box-shadow: 2px 2px 5px #0d0d0d21;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index:100;
+  }
+}
+
+.banner-overlay{
+  position: fixed; /* Sit on top of the page content */
+  display: block; /* Hidden by default */
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+  z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+  cursor: pointer;
+}
+

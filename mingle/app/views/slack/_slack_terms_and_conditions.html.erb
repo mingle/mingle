@@ -1,0 +1,24 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div class="slack-terms-and-conditions-container">
+  <%= check_box_tag('eula_acceptance', 'slack_eula_accepted', false, class: 'eula-acceptance', onClick: "Slack.toggleSubmit('##{form_id}', '#{eula_context}')") %>
+  I accept the <%= content_tag('span', 'Mingle + Slack terms of service', class: 'tnc-switch', onClick: "Slack.toggleSectionDisplay('##{form_id} .tnc')") %>
+  <div class="tnc hide">
+    <%= terms %>
+  </div>
+</div>
+<%= submit_tag(submit_text, class: "slack-tnc-submit #{submit_class}", disabled: (defined?(disable_submit) && disable_submit)) %>

@@ -1,0 +1,269 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>Cumulative Flow Graph Macro Builder Test</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <script src="../../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+    <script src="../../../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js"
+            type="text/javascript"></script>
+    <script src="../../../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+    <script src="../../../../app/assets/javascripts/thirdparty/prototype.js" type="application/javascript"></script>
+    <script src="../../../../public/javascripts/prototype_ext.js" type="application/javascript"></script>
+
+    <script src="../../../../app/assets/javascripts/easy_charts/dummy_series.js" type="text/javascript"></script>
+    <script src="../../../../app/assets/javascripts/easy_charts/mql_builder.js" type="application/javascript"></script>
+    <script src="../../../../app/assets/javascripts/easy_charts/stacked_bar_chart/macro_builder.js"
+            type="application/javascript"></script>
+    <script src="../../../../app/assets/javascripts/easy_charts/cumulative_flow_graph/macro_builder.js"
+            type="application/javascript"></script>
+
+    <script src="../../test_assets/sinon-2.3.6.js" type="application/javascript"></script>
+    <script src="../../test_assets/qunit-1.21.0.js" type="application/javascript"></script>
+    <script src="../../test_assets/qunit-phantom.js" type="application/javascript"></script>
+    <link rel="stylesheet" href="../../test_assets/qunit-1.21.0.css" type="text/css"/>
+</head>
+<body>
+<div id="qunit"></div>
+<script type="application/javascript">
+  var sandbox = sinon.sandbox.create(sinon.defaultConfig);
+
+  function FakeCardFilter(property, operator, value, isCardProperty) {
+    return {
+      property: {
+        value: function () {
+          return property;
+        }
+      },
+      operator: {
+        value: function () {
+          return operator;
+        }
+      },
+      value: {
+        value: function () {
+          return value;
+        }
+      },
+      isValid: function () {
+        return property && operator && value;
+      },
+      isForCardProperty: function () {
+        return isCardProperty;
+      },
+      getMql: function () {
+        return '"{prop}" {op} "{val}"'.supplant({prop: property, op: operator, val: value})
+      }
+    };
+  }
+
+  QUnit.module('Cumulative Flow Graph Macro Builder', {
+    beforeEach: function () {
+      this.originalMQLBuilder = MQLBuilder;
+      MQLBuilder = sinon.spy(MQLBuilder);
+    },
+    afterEach: function () {
+      MQLBuilder = this.originalMQLBuilder;
+      sandbox.restore();
+    }
+  });
+
+  QUnit.test('testShouldInvokeStackedBarChartMacroBuilder', function (assert) {
+    var stackedBarChartMacroBuilderSpy = sandbox.spy(MingleUI.EasyCharts.StackedBarChart, 'MacroBuilder');
+    new MingleUI.EasyCharts.CumulativeFlowGraph.MacroBuilder({project: 'project'});
+
+    assert.equal(stackedBarChartMacroBuilderSpy.callCount, 1);
+    assert.deepEqual(stackedBarChartMacroBuilderSpy.args[0][0], {project: 'project'});
+  });
+
+  QUnit.test('testBuildShouldGenerateCumulativeFlowGraphMacro', function (assert) {
+    var chartData = {
+      project: 'project',
+      tags: ['tag1'],
+      cardFilters: [new FakeCardFilter('Type', 'eq', ['Story', 'Card']), new FakeCardFilter('prop2', 'ne', ['valX', 'valY'])],
+      xLabelProperty: 'prop2',
+      firstXLabel: 'p2v1',
+      lastXLabel: 'p2v2',
+      xLabelInterval: 1,
+      showGuideLines: true
+    };
+    var builder = new MingleUI.EasyCharts.CumulativeFlowGraph.MacroBuilder(chartData);
+    var macro = builder.build();
+
+    assert.deepEqual(macro, {
+
+      "cumulative-flow-graph": {
+        "conditions": '"Type" IN ("Story","Card") AND NOT ("prop2" IN ("valX","valY")) AND TAGGED WITH "tag1"',
+        "labels": 'SELECT DISTINCT "prop2"',
+        "project": "project",
+        "show-guide-lines": true,
+        "x-label-end": "p2v2",
+        "x-label-start": "p2v1",
+        "x-label-step": 1
+      }
+    });
+
+  });
+
+  QUnit.test('testBuildShouldAddSeriesTypeCustomizationParameterWhenTypeIsLine', function (assert) {
+    var chartData = {
+      seriesParameter: {
+        Series1: {
+          label: 'Series label',
+          hidden: false,
+          color: '#ffffff',
+          property: 'prop1',
+          project: 'project',
+          series1Aggregate: 'count',
+          seriesType: 'Line',
+          dataPointSymbol: 'Circle',
+          lineStyle: 'Dash',
+          dataLabels: true,
+          combine:'overlay-top',
+          filters: [new FakeCardFilter('Type', 'eq', ['Story', 'Card'])],
+        }
+      }
+    };
+    var builder = new MingleUI.EasyCharts.CumulativeFlowGraph.MacroBuilder(chartData);
+    var macro = builder.build();
+
+    assert.deepEqual(macro, {
+      'cumulative-flow-graph': {
+        conditions: '"Type" = "card_type"',
+        'x-label-step': '1',
+        'show-guide-lines': undefined,
+        labels: 'SELECT DISTINCT "property"',
+        series: [
+          {
+            data: 'SELECT "prop1", COUNT(*) WHERE "Type" IN ("Story","Card")',
+            label: 'Series label',
+            project: 'project',
+            color: '#ffffff',
+            type: 'Line',
+            combine:'overlay-top',
+            'data-point-symbol': 'Circle',
+            'data-labels': true,
+            'line-style': 'Dash',
+            hidden: false
+          }
+        ]
+      }
+    });
+  });
+
+  QUnit.test('testBuildShouldAddSeriesTypeCustomizationParameterWhenTypeIsArea', function (assert) {
+    var chartData = {
+      showGuideLines:true,
+      seriesParameter: {
+        Series1: {
+          label: 'Series label',
+          combine: 'overlay-bottom',
+          hidden: false,
+          color: '#ffffff',
+          property: 'prop1',
+          project: 'project',
+          series1Aggregate: 'count',
+          seriesType: 'Area',
+          dataPointSymbol: 'Circle',
+          dataLabels: true,
+          filters: [new FakeCardFilter('Type', 'eq', ['Story', 'Card'])],
+        }
+      }
+    };
+    var builder = new MingleUI.EasyCharts.CumulativeFlowGraph.MacroBuilder(chartData);
+    var macro = builder.build();
+
+    assert.deepEqual(macro, {
+      'cumulative-flow-graph': {
+        conditions: '"Type" = "card_type"',
+        'x-label-step': '1',
+        'show-guide-lines': true,
+        labels: 'SELECT DISTINCT "property"',
+        series: [
+          {
+            data: 'SELECT "prop1", COUNT(*) WHERE "Type" IN ("Story","Card")',
+            label: 'Series label',
+            project: 'project',
+            color: '#ffffff',
+            type: 'Area',
+            'data-point-symbol': 'Circle',
+            'data-labels': true,
+            combine: 'overlay-bottom',
+            hidden:false
+          }
+        ]
+      }
+    });
+  });
+
+  QUnit.test('testBuildShouldNotAddSeriesTypeCustomizationParameterWhenTypeIsBar', function (assert) {
+    var chartData = {
+      showGuideLines:false,
+      seriesParameter: {
+        Series1: {
+          label: 'Series label',
+          combine: 'overlay-bottom',
+          hidden: false,
+          color: '#ffffff',
+          property: 'prop1',
+          project: 'project',
+          series1Aggregate: 'count',
+          seriesType: 'Bar',
+          dataPointSymbol: 'Circle',
+          lineStyle: 'Dash',
+          dataLabels: true,
+          filters: [new FakeCardFilter('Type', 'eq', ['Story', 'Card'])],
+          trendLine:{
+            addTrendLine:false,
+            scope:'All',
+            ignore:'None',
+            style:'dash',
+            color:'#4444'
+          }
+        }
+      }
+    };
+    var builder = new MingleUI.EasyCharts.CumulativeFlowGraph.MacroBuilder(chartData);
+    var macro = builder.build();
+
+    assert.deepEqual(macro, {
+      'cumulative-flow-graph': {
+        conditions: '"Type" = "card_type"',
+        'x-label-step': '1',
+        'show-guide-lines': false,
+        labels: 'SELECT DISTINCT "property"',
+        series: [
+          {
+            data: 'SELECT "prop1", COUNT(*) WHERE "Type" IN ("Story","Card")',
+            label: 'Series label',
+            project: 'project',
+            color: '#ffffff',
+            type: 'Bar',
+            hidden:false,
+            combine: 'overlay-bottom'
+          }
+        ]
+      }
+    });
+  });
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="user_icon_paragraph" class="paragraph">
+
+  <h2>User Icon</h2>
+
+  <% if MingleConfiguration.saas? %>
+    <h4>We love Gravatars.  Link your email to your <a target="_blank" class="traditional" href="http://gravatar.com">Gravatar account</a>.</h4>
+    <p><%= link_to_function "Yeah yeah, that's great but I just want to upload a pic...", "$j('#non_gravatar_section').show(); $j(this).parents('p').hide();", :class => 'traditional' %>.</p>
+    <%= javascript_with_rescue "$j(function() { if ($j('#user_icon_container .fieldWithErrors').size() == 0) { $j('#non_gravatar_section').hide(); } });" %>
+  <% end %>
+
+  <div id="non_gravatar_section">
+    <label for="user_icon">User icon: <span class="notes">(Used as your display icon. Supported formats are BMP, GIF, JPEG and PNG. Maximum file size is 100 KB)</span></label>
+    <span class="user-icon-preview"><%= image_tag_for_user_icon(@user, :id => 'user_icon_image', :size => '48x48') %></span>
+    <span class="upload-user-icon">
+
+      <span id="user_icon_container">
+        <%= error_message_on 'user', 'icon', :prepend_text => 'Icon ', :css_class => 'field_error' %>
+        <%= file_column_field 'user', 'icon', :alt => 'user icon' %>
+      </span>
+
+      <%= hidden_field 'user', 'reset_user_icon' %>
+
+      <% if @user.icon -%>
+      <%= button_to_function("Reset icon", {:id => 'reset_icon'}) do |page|
+      page['user_reset_user_icon']['value'] = true
+      # we need clear user_icon field by replace it because setting file input value by js is not cross browser
+      page['user_icon_container'].replace_html(empty_file_column_field('user', 'icon', :alt => 'user icon'))
+      page['user_icon_image'].set_attribute('src', image_path(@user_icons.default_icon(@user)))
+      page['user_icon_image'].set_attribute('style', "background-color: #{Color.for(@user.name)}")
+      end %>
+      <% end -%>
+
+    </span>
+  </div>
+  <div class="clear"></div>
+</div>

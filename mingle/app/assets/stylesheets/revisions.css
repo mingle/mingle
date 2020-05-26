@@ -1,0 +1,150 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+table.diff
+{
+  border-top: 1px solid #999999 !important;
+  border-bottom: 1px solid #999999 !important;
+}
+
+table.diff caption
+{
+  color: #660000;
+  margin-top: 0em;
+  margin-bottom: 0em;
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+
+table.diff td
+{
+  border-right: 1px solid #999999 !important;
+  padding: 0;
+  padding-left: 20px;
+}
+
+table.diff td.new
+{
+  background: #D1E37F url(../images/icon-diff-add.png) no-repeat scroll center left;
+  border-right: 1px solid #7D884C !important;
+  padding-left: 28px;
+}
+
+table.diff td.old
+{
+  background: #EC9C9F url(../images/icon-diff-remove.png) no-repeat scroll center left;
+  border-right: 1px solid #8E5E5F !important;
+  padding-left: 28px;
+}
+
+table.diff .separator
+{
+  background-color: #ffffff;
+  border: 0px solid #ffffff !important;
+  border-top: 1px solid #999999 !important;
+  border-bottom: 1px solid #999999 !important;
+  line-height: 2px;
+}
+
+table.diff th
+{
+  background-color: #EEEEEE;
+  border-left: 1px solid #999999 !important;
+  border-right: 1px solid #999999 !important;
+  color: #444444;
+  font-family: "Consolas", "Courier New", Courier, mono;
+  text-align: center;
+  width: 3em;
+  padding: 0;
+}
+
+table.diff th.new
+{
+  background-color: #BCC960;
+  border-left: 1px solid #7D884C !important;
+  border-right: 1px solid #7D884C !important;
+}
+
+table.diff th.old
+{
+  background-color: #DB9194;
+  border-left: 1px solid #8E5E5F !important;
+  border-right: 1px solid #8E5E5F !important;
+}
+
+table.diff pre
+{
+  font-family: "Consolas", "Courier New", Courier, mono;
+/*  font-size: 92%; it looks ugly on Safari2, so I comment it*/
+  margin: 0em;
+}
+
+table.diff tr:hover {
+  background-color: #fca !important;
+}
+
+table .col1
+{
+  width: 8em;
+}
+
+table .col3
+{
+  width: 12em;
+}
+
+table .col4
+{
+  width: 16em;
+}
+
+li
+{
+  list-style-type: none !important;
+  margin-left: 0em !important;
+  padding: 2px 0px 2px 20px;
+}
+
+li.added
+{
+  background: transparent url(../images/icon-source-add.png) no-repeat scroll center left;
+}
+
+li.replaced
+{
+  background: transparent url(../images/icon-source-replace.png) no-repeat scroll center left;  
+}
+
+li.renamed
+{
+  background: transparent url(../images/icon-source-rename.png) no-repeat scroll center left;  
+}
+
+li.renamed-modified
+{
+  background: transparent url(../images/icon-source-rename-modify.png) no-repeat scroll center left;  
+  padding-left: 35px;
+}
+
+li.deleted
+{
+  background: transparent url(../images/icon-source-delete.png) no-repeat scroll center left;
+}
+
+li.modified
+{
+  background: transparent url(../images/icon-source-modify.png) no-repeat scroll center left;  
+}

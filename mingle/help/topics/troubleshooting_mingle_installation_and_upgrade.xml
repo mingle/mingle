@@ -1,0 +1,130 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Troubleshooting Mingle Installation and Upgrade">	
+  <section title="Introduction">
+<p> The following sections will guide you through some common installation and upgrade issues, suggesting possible problems and ways to resolve these issues. </p>
+
+<p>If you are unable to resolve your issue <exref url="@tw_studios_mingle_support_url@">please contact ThoughtWorks Studios Support</exref> who will provide further troubleshooting assistance. </p>
+  	</section>
+
+<section title="Unable to Start Mingle">
+	
+<p>	If you see the following message before Mingle has started this may be caused by an incorrect system set-up. Please refer to Mingle's <cref topic="system_requirements">system requirements</cref> to ensure your system is set-up correctly.</p>
+		
+	<screenshot src="resources/images/troubleshooting_installation_mingle_is_starting_we_re_sorry_issue.png"/>
+
+<subsection title="Possible cause: Incorrect Java version" collapsed="true">
+	
+<p>This issue may be caused by running Mingle on a machine with an incorrect Java version. Currently Mingle only supports Java 1.6 (JDK 1.6). 	</p>
+
+<note>	All existing customers running the Mingle server on Mac OSX and General Linux/Unix using Java 5  (JDK version 1.5) will need to upgrade to Java 6 (JDK version 1.6) before upgrading to Mingle 3.3. </note>
+
+<subsection title="How to check your Java version">
+
+<note>Mingle's Windows installer is packaged with it's own version of Java so this issue is more likely to occur on system's running Mingle from the Unix installer. </note>
+		
+	<p>To confirm what version of Java you're run on your Unix based computer, execute java --version in the terminal.  </p>
+	
+		</subsection> 
+		
+		<subsection title="How to resolve this issue">
+		  
+	<subsection title="To upgrade to Java 6 on a Linux machine" collapsed="true">
+	
+	<p>Unfortunately there are too many variants of Linux for us to present accurate instructions for installing Java 6 on your particular distribution. However, Sun/Oracle Java 6 is definitely available for most all distributions of Linux. If you Google for "Install Sun/Oracle Java 6 [your linux distribution]" you should easily find clear instructions. Be sure to install Sun/Oracle Java and not an alternative. (We realize that Sun Java is now Oracle Java, but many Linux instructions and package repositories still refer to it as Sun Java.)</p>
+	<p>After installation of Java 6, be sure that PATH, symbolic links, start scripts and such are properly configured such that Mingle will be using Java 6 and not Java 5.</p>
+</subsection>
+	
+	<subsection title="To change to a different version of Java on a Mac OS X machine" collapsed="true">
+	
+	<steps>
+	
+	<item>Use to SpotLight search for "Java Preferences"</item> 
+	<item>Drag Java 6 to the top of your list of Java versions</item> 
+	<item>Restart your terminal</item> 
+	<item>Try to start Mingle again</item></steps>
+	
+	
+	<screenshot src="resources/images/troubleshooting_installation_mingle_is_starting_we_re_sorry_issue_mac_switch_java.png"/>
+	
+</subsection>
+		</subsection> 
+		
+	</subsection> 
+	
+	<subsection title="Possible cause: Incorrect database" collapsed="true">
+		
+		<p>This issue may be caused by running Mingle on a machine with an unsupported database such as MySQL. </p>
+		<p>Please refer to Mingle's <cref topic="system_requirements">system requirements</cref> to find out which databases are supported. Mingle no longer supports MySQL. Please refer to Mingle's <cref topic="database_migration">database migration help</cref> to research options on upgrading from MySQL.</p>    
+			
+				<subsection title="How to resolve this issue">
+
+<p>Please refer to Mingle's <cref topic="system_requirements">system requirements</cref> and <cref topic="configuring_a_database_for_use_with_mingle"> how to configure a database to run with Mingle</cref> to ensure your system is set-up correctly. </p>
+				</subsection> 
+
+
+			
+  </subsection> 
+  
+  <subsection title="Possible cause: GEM_HOME and/or GEM_PATH environment variables are set" collapsed="true">
+    <p>This issue may be caused if you are using the general unix/linux build of Mingle on Linux or OS X and start Mingle in a shell with either GEM_HOME or GEM_PATH set as environment variables. This issue will particularly impact machines which have the RVM tool installed for purposes of managing multiple versions of Ruby.</p>
+    <p>If you are having this particular issue, you will see a stack trace along these lines in the mingle.log file:</p>
+    <code>
+      java.lang.RuntimeException: java.lang.RuntimeException: java.lang.NullPointerException
+      	at com.thoughtworks.mingle.G.A(Unknown Source)
+      	at com.thoughtworks.mingle.RuntimeStatusServlet.init(Unknown Source)
+      	at org.mortbay.jetty.servlet.ServletHolder.initServlet(ServletHolder.java:431)
+      	at org.mortbay.jetty.servlet.ServletHolder.doStart(ServletHolder.java:263)
+      	at org.mortbay.component.AbstractLifeCycle.start(AbstractLifeCycle.java:50)
+      	at org.mortbay.jetty.servlet.ServletHandler.initialize(ServletHandler.java:676)
+      	at org.mortbay.jetty.servlet.Context.startContext(Context.java:140)
+      	at org.mortbay.jetty.webapp.WebAppContext.startContext(WebAppContext.java:1239)
+      	at org.mortbay.jetty.handler.ContextHandler.doStart(ContextHandler.java:517)
+      	at org.mortbay.jetty.webapp.WebAppContext.doStart(WebAppContext.java:466)
+      	at org.mortbay.component.AbstractLifeCycle.start(AbstractLifeCycle.java:50)
+      	at org.mortbay.jetty.handler.HandlerCollection.doStart(HandlerCollection.java:152)
+      	at org.mortbay.component.AbstractLifeCycle.start(AbstractLifeCycle.java:50)
+      	at org.mortbay.jetty.handler.HandlerWrapper.doStart(HandlerWrapper.java:130)
+      	at org.mortbay.jetty.Server.doStart(Server.java:224)
+      	at org.mortbay.component.AbstractLifeCycle.start(AbstractLifeCycle.java:50)
+      	at com.thoughtworks.mingle.Server$1.run(Unknown Source)
+      Caused by: java.lang.RuntimeException: java.lang.NullPointerException
+      	at com.thoughtworks.mingle.rack.D.getApplication(Unknown Source)
+      	at com.thoughtworks.mingle.rack.C.getApplication(Unknown Source)
+      	at com.thoughtworks.mingle.rack.C.borrowApplication(Unknown Source)
+      	at com.thoughtworks.mingle.G.B(Unknown Source)
+      	... 17 more
+      Caused by: java.lang.NullPointerException
+      	... 21 more      
+    </code>
+    <subsection title="How to resolve this issue">
+      <p>Before starting Mingle in the terminal, type:</p>
+      <code>unset GEM_HOME GEM_PATH</code>
+    </subsection>
+    
+  </subsection>
+
+	
+</section>
+
+<section file="need_more_help"/>
+	
+</topic>
+
+

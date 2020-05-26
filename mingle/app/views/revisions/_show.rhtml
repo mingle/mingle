@@ -1,0 +1,73 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<p>
+  <label>Time:</label>
+  <%= time_ago_in_words(mingle_revision.commit_time) %> ago (<%= mingle_revision.commit_time %>)
+</p>
+
+<p>
+  <label>Author:</label>
+  <%= h mingle_revision.user %>
+</p>
+
+<p>
+  <label>Message:</label>
+  <%= replace_card_links(h(mingle_revision.commit_message)) %>
+</p>
+
+
+  <% if (defined?(background) && background) || view_cache.fragment_exist?(mingle_revision.number) -%>
+    <% view_cache.cache(self, mingle_revision.number) do -%>
+      <% if revision -%>
+      
+      	<p style="margin-bottom: 0em;">
+      	  <label>Changes:</label>
+      	</p>
+	
+      	<ul style="margin-top: 0em;">
+      		<% revision.changed_paths.each do |changed_path| -%>
+      			<li class="<%= changed_path.action_class %>">
+      			  <%= changed_path.path %>
+      			  <% if changed_path.file? && !changed_path.binary? && !changed_path.deleted? -%>
+      			    (<% if(changed_path.modification?) -%><%= link_to('View diff', "##{changed_path.path.gsub(/\W/, '_')}") %> | <% end -%><%= link_to('View source', url_for(:project_id => project.identifier, :path => changed_path.path_components, :rev => mingle_revision.identifier, :controller => 'source', :action => 'index')) %>)
+      			  <% end -%>
+      			</li>
+      	  <% end -%>
+      	</ul>
+	
+      	<div id='content-simple' style="border-top: 1px dotted #CCCCCC;">
+      	  <% revision.changed_paths.each do |changed_path| -%>
+      	    <% if changed_path.modification? && !changed_path.binary? -%>
+      		    <a name="<%= changed_path.path.gsub(/\W/, '_') %>"></a>
+      	      <%= raw changed_path.html_diff %>
+      	    <% end -%>
+      	  <% end -%>
+      	</div>
+      	
+      <% end -%>
+    <% end -%>
+  <% else -%>  
+    <% warning_box do %>
+      <p id="revision-content-not-cached-error-msg">The content of this <%= @project.repository_vocabulary['revision'] %> has not yet been cached by Mingle.</p>
+      <ul class="disc">
+        <li>If this is a new <%= @project.repository_vocabulary['revision'] %>, caching should complete shortly. Please check back in a few minutes.</li>
+        <li>If this is an older <%= @project.repository_vocabulary['revision'] %> and Mingle is still completing its first caching of your source repository, this could take some time.</li>
+        <li>If you suspect some other problem, please ask your Mingle administrator to inspect the Mingle log file for any related errors and to contact <a href="<%= raw THOUGHTWORKS_STUDIOS_SUPPORT_URL %>">ThoughtWorks Studios</a> support team.</li>
+      </ul>
+      <%= clear_float %>
+    <% end -%>
+  <% end -%>

@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Quick Project Setup">
+	<section title="Here are the basics to get you up and running with Mingle!">
+    <p>Mingle projects are where you store information about the projects you are working on. Mingle projects are very flexible and powerful. Mingle projects are composed of structured information, known as <cref topic="explore_mingle_topic_whats_a_card">cards</cref>, and a powerful <cref topic="working_with_pages">Mingle page</cref>. Both cards and pages can contain attached information. <cref topic="source_tab">Source code</cref> can be <cref topic="setup_source_repository_integration">associated</cref> with a Mingle project. Additionally, daily conversations can be stored in Mingle as <cref topic="murmurs">Murmurs</cref>. All of this information can then be linked together, providing an truly integrated collaboration environment for your team.</p>
+    <p>To gain these benefits, you must first create a Mingle project and set it up so that it matches the way you work.</p>
+		<note>
+			<p>This section assumes you've already <cref topic="configuring_a_database_for_use_with_mingle">configured a database</cref> for your <cref topic="mingle_onsite">Mingle onsite</cref>, 
+                and <cref topic="completing_the_mingle_configuration_wizard">completed the configuration wizard and setup the first user</cref>.</p>
+			<p>The first user is the Mingle administrator and he/she has the necessary permissions to complete all of these steps.</p>
+		</note>
+	</section>
+	<section title="Step one - Create a new project">
+		
+		You can either create a new project or create a project from a template. For the quickest project set-up we suggestion creating a card from a template. 
+		
+		<subsection title="Creating a new project from template" file="creating_a_project_from_template" />
+	</section>
+	<section title="Step two - Customize your project">
+		<p>The Mingle project templates include relevant project settings, project reporting and sample cards. You can use these as a basis for <cref topic="customizing_projects">customizing your project</cref>. 
+        From within your new project, customize project settings by clicking the <tab>Project admin</tab> tab.</p>
+		<screenshot alttext="Project admin tab" src="resources/images/project_admin_tab.png"/>
+		<p>There are several project settings you can configure. These are conveniently grouped under the various heading you see on the sidebar.</p>
+		<subsection title="Card types" id='quick_project_setup_card_types' collapsed="true">
+			<p><cref topic="card_types">Card types</cref> are the different kinds of things you would like to track in a project. Various kinds of projects would setup their own card types. A project which is purely in maintenance mode might have very different types of cards (bugs, issues, enhancements etc...) than a project which is under active development (story, bug, risk, UI issue etc...). Each card type can have its own set of properties. Customize card types by selecting <tab>Project admin</tab> tab, <link>Card types</link> link.</p>
+		</subsection>
+		<subsection title="Card properties" collapsed="true">
+			<p>Cards are the basic units you use to manage projects in Mingle. <cref topic="creating_card_properties">Card properties</cref> are how you define, sort, group and manage cards based on your project's workflow. 
+                Each card property has one or more values that represent a card's current status. Customize card properties by selecting <tab>Project admin</tab> tab, <link>Card properties</link> link.</p>
+		</subsection>
+		<subsection title="Card transitions" id='quick_project_setup_card_transitions' collapsed="true">
+			<p><cref topic="card_transitions">Card transitions</cref> let you define your team's workflow, and you use transitions to forward work to various team members at different stages of the project lifecycle. 
+                Card transitions place links on cards that match certain card properties. Clicking these links updates cards according to the card properties you specify. 
+                They are used for completing common actions such as closing a bug or marking a user story as complete. Customize card transitions by selecting <tab>Project admin</tab> tab, <link>Card transitions</link> link.</p>
+		</subsection>
+		<subsection title="Card trees" collapsed="true">
+			<p><cref topic="creating_a_new_card_tree">Card trees</cref> allow you to define a hierarchy of parent-child relationships between any card types. 
+                These relationships can be viewed graphically, as a <cref topic="tree_view">tree view</cref> or <cref topic="hierarchy_view">hierarchy view</cref>, and cards can easily be added and moved around in the tree view. 
+                Customize card trees by selecting <tab>Project admin</tab> tab, <link>Card trees</link> link.</p>
+		</subsection>
+		<subsection title="Card keywords" collapsed="true">
+			<p><cref topic="creating_card_keywords">Card keywords</cref> are words, numbers or symbols that Mingle uses to create automatic links in cards and pages. When you're editing a card or page and you add any of these keywords, Mingle will automatically convert them to links. E.g. a card keyword of <strong>#</strong> lets you type <strong>#123</strong> to create a quick link to card 123. Customize card keywords by selecting <tab>Project admin</tab> tab, <link>Card keywords</link> link.</p>
+		</subsection>
+		<subsection title="Favorites and tabs" collapsed="true">
+			<p>You can setup <cref topic="creating_a_favorite_card_view">favorites</cref> for quick access to commonly used card views, and <cref topic="creating_tabs_from_favorites">turn the more common views into navigation tabs</cref>.</p>
+			<p>Use the sample cards that came with the template to help setup your favorites. From within your project, setup favorites by clicking the <tab>All</tab> tab, then filter the card properties you want to view in the favorite. 
+                Select <sidebar-button>Favorites</sidebar-button> on the right, and click on the <link>Add current view to team favorites...</link> link.</p>
+			<screenshot alttext="Favorites sidebar button" src="resources/images/favorites_sidebar_button.png"/>
+			<p>You can then <cref topic="creating_tabs_from_favorites">turn the favorite into a tab</cref> from the <link>Manage team favorites and tabs</link> in the Favorites sidebar panel.</p>
+		</subsection>
+		<subsection title="Project variables" collapsed="true">
+			<p><cref topic="project_variables">Project variables</cref> allow you to specify a value which can be referenced in many places within your Mingle project. 
+        		Customize project variables by selecting <tab>Project admin</tab> tab, <link>Project variables</link> link.</p>
+		</subsection>
+	</section>
+	<section title="Step three - Setup project reporting">
+		<p>In Mingle, project reporting can be done via the <tab>Overview</tab> tab, <cref topic="working_with_pages">Mingle pages</cref> or cards. Here you can chart reports to see the status of your project and team workloads. 
+        Since your project is based on a template, it will already include a few relevant <cref topic="creating_charts_and_tables_in_pages">graphs, tables and charts</cref> that you can customize. 
+        	Mingle uses its own markup language called <cref topic="mql_reference">MQL</cref>, which you can use to create new reports.</p>
+	</section>
+	<section title="Step four - Add Mingle users and project team members" id='add_mingle_users_and_project_team_members'>
+		<p>Once you're comfortable with your project settings, you can add users to Mingle and register them on your project.</p>
+		<subsection title="To add new users">
+			<p>To <cref topic="creating_user_profiles">add new users</cref>, click the <link>Manage users</link> link from the <strong>Current projects</strong> page (the first page you see after logging on - click the <strong>Mingle</strong> logo to display this page).</p>
+			
+			<info> Learn more about <cref topic="manage_users_page">managing users</cref>. </info>
+			
+		</subsection>
+		<subsection title="To add team members to your project">
+			<p>To add team members to a project, open your project from the All and click <tab>Project admin</tab> tab &gt; <link>Team</link>. </p>
+		
+		<info> Learn more about <cref topic="managing_project_team_members">managing project team members</cref>. </info>
+		</subsection>
+	</section>
+	<section title="Step five - Clean up template items">
+		<p>Since you created your project based on a template, there will be some items from the template that you won't use in your project. You should remove these before starting your project.</p>
+		<bullets>
+			<item>Each template contains a set of sample cards that you should remove. To remove these cards, click the <tab>All</tab> tab, select all cards and click the <button>Delete</button> button.</item>
+			<item>Other items you may wish to remove include extra <cref topic="modifying_or_deleting_card_transitions">transitions</cref>, <cref topic="deleting_a_card_tree">card trees</cref>, 
+                <cref topic="modifying_or_deleting_card_properties">card properties</cref>, <cref topic="managing_tags">tags</cref>, <cref topic="managing_favorites_and_tabs">favorites and tabs</cref>, 
+                <cref topic="updating_card_keywords">card keywords</cref> and <cref topic="modifying_or_deleting_project_variables">project variables</cref>. 
+                Click the <tab>Project admin</tab> tab to access each of these areas.</item>
+		</bullets>
+	</section>
+	<section title="Step six - Start using Mingle">
+		<p>See <cref topic="using_mingle">Using Mingle</cref> for details.</p>
+	</section>
+</topic>

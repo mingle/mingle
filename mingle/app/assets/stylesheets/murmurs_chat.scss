@@ -1,0 +1,292 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+#murmurs-drop-down {
+  @include popover($direction: up,
+                   $width: auto,
+                   $height: auto,
+                   $popOffset: 450px,
+                   $triangleOffset: 30px);
+
+  margin: 0;
+
+  &.open {
+      .murmurs-chat {
+          background-color: $MINGLE_PRIMARY_COLOR;
+          a {
+              color: white;
+          }
+      }
+  }
+
+  .badge {
+    display: inline-block;
+    min-width: 10px;
+    padding: 3px 7px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    background-color: $MINGLE_PRIMARY_COLOR;
+    border-radius: 10px;
+
+  }
+
+  .badge.hidden {
+      display: none;
+      width: 0px;
+      height: 0px;
+      border:none;
+  }
+
+  .murmurs-chat {
+      border: 0;
+      padding: 13px 15px;
+      height: 41px;
+      a:before {
+          @include fa_icon($fa-var-comments);
+      }
+  }
+
+  .content {
+    margin-top: 0px;
+    &:before, &:after {
+      display: none;
+    }
+  }
+
+  .murmurs-list {
+      padding: 0px;
+      width: 600px;
+
+      .murmurs-panel {
+          margin: 0px;
+          height: 400px;
+          overflow-y: auto;
+          overflow-x: hidden;
+          .murmurs-panel-footer {
+              text-align: center;
+              padding: 10px;
+          }
+      }
+
+      .specific-murmur-panel {
+          margin: 0px;
+      }
+  }
+}
+
+.murmurs-list {
+    @include autocomplete;
+
+    .conversation-header {
+      height: 32px;
+      background-color: $MINGLE_PRIMARY_COLOR;
+      display: none;
+
+      .conversation-label {
+        position: absolute;
+        margin: 9px 0 0 7px;
+        color: #fff;
+        size: 12px;
+      }
+
+      .close-conversation {
+        margin-top:6px;
+        float:right;
+        color:white;
+        height:20px;
+        width: 30px;
+        font-size: 20px;
+        cursor: pointer;
+      }
+
+    }
+
+    a {
+        text-decoration: underline;
+    }
+
+    .murmurs-input {
+        padding: 0px;
+        border-bottom: 1px solid #ddd;
+        height: 65px;
+        position: relative;
+        img.sender {
+            width: 64px;
+            height: 64px;
+            vertical-align: top;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+        }
+        textarea {
+            height: 64px;
+            padding: 7px;
+            border: 0px;
+            margin-left: 64px;
+            width: 70%;
+        }
+        textarea:focus {
+            border-color: white;
+            background-color: white;
+            box-shadow: none;
+            -moz-box-shadow: none;
+            -webkit-box-shadow: none;
+            -o-box-shadow: none;
+        }
+        .send-button {
+            position: absolute;
+            top: 0px;
+            right: 10px;
+            vertical-align: top;
+            padding: 18px 0px 0px 5px;
+        }
+    }
+    .murmurs-loading {
+        padding: 10px;
+        background-color: #f8f8f8;
+        border-bottom: 1px solid #ddd;
+        text-align: center;
+    }
+    .info {
+        color: #333;
+    }
+    li {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+}
+.murmur-panel {
+    color: black;
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #ddd;
+    position: relative;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    &.mentioned {
+        .murmur-content {
+            background-color: $MINGLE_PRIMARY_DEEMPHASIZED;
+        }
+    }
+
+    &.in-conversation {
+      .murmur-conversation {
+        display:none;
+      }
+    }
+
+    .murmur-author {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 64px;
+        height: 64px;
+        padding: 13px;
+        background-color: #f8f8f8;
+        img {
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            margin-right: 10px;
+            border-radius: 18px;
+            border: 1px solid #D6D6D6;
+        }
+    }
+    .murmur-content {
+        background-color: white;
+        min-height: 64px;
+        padding: 10px 15px;
+        margin-left: 64px;
+        font-size: 14px;
+        a {
+            color: $MINGLE_PRIMARY_COLOR;
+        }
+        .at-highlight {
+            color: $MINGLE_PRIMARY_COLOR;
+            text-decoration: none;
+        }
+        .murmur-body {
+            line-height: 16px;
+        }
+        .murmur-title {
+            font-size: 12px;
+            margin-bottom: 5px;
+            small {
+                font-weight: normal;
+                color: #888;
+                padding-left: 2px;
+            }
+            .name {
+                font-weight: bold;
+                float: left;
+            }
+            .murmur-context {
+                float: left;
+                margin-left: 5px;
+            }
+            .time {
+                color: #888;
+                margin-left: 10px;
+                float: right;
+                abbr {
+                    padding-left: 5px;
+                }
+            }
+            .murmur-source {
+                color: #888;
+                margin-left: 5px;
+                font-weight: 500;
+                float: left;
+            }
+        }
+        .murmur-footer {
+            margin: 5px 0 0 0;
+            text-align: right;
+            font-size: 14px;
+            .murmur-conversation {
+              color: $MINGLE_PRIMARY_COLOR;
+              min-width: 0;
+              .fa {
+                  padding-right: 4px;
+              }
+            }
+            .murmur-reply {
+                color: #888;
+                min-width: 0;
+                .fa {
+                    padding-right: 4px;
+                }
+            }
+            a:hover {
+                color: $MINGLE_PRIMARY_COLOR;
+            }
+        }
+        &:hover {
+            a { color: $MINGLE_PRIMARY_COLOR}
+        }
+    }
+}
+
+.murmur-input-autocomplete {
+    img {
+        border-radius: 12px;
+    }
+}

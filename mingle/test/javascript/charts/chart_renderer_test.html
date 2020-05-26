@@ -1,0 +1,1240 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>Chart Renderer Test</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+
+    <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js"
+            type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/ruby_to_js_date_format.js" type="text/javascript"></script>
+    <script src="../../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+
+    <script src="../../../app/assets/javascripts/thirdparty/c3-0.4.11/c3.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/thirdparty/c3-0.4.11/d3.v3.min.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/chart_renderer.js" type="text/javascript"></script>
+    <script src="../test_assets/sinon-2.3.6.js" type="text/javascript"></script>
+
+    <link rel="stylesheet" href="../../../app/assets/stylesheets/thirdparty/c3.css" type="text/css"/>
+    <link rel="stylesheet" href="../test_assets/qunit-1.21.0.css" type="text/css"/>
+
+</head>
+<body>
+<div id="qunit">
+</div>
+
+<div id="piechart-1">
+</div>
+
+<div id="daily_history_chart">
+</div>
+
+<div class="lightbox"></div>
+
+<script src="../test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+<script src="../test_assets/qunit-phantom.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+  var MingleUI = $j.extend(MingleUI, {
+    EasyCharts: {
+      ActionTracker: {
+        postClickedEvent: function (macroType) {
+
+        }
+      }
+    }
+  });
+
+  var bindTo = "#piechart-1";
+  var doing_sector = [
+    {
+      name: "Doing",
+      ratio: 0.5,
+      value: 2
+    }
+  ];
+
+  var todo_sector = [
+    {
+      name: "To do",
+      ratio: 0.5,
+      value: 1
+    }
+  ];
+
+  function legendItem(seriesLabel) {
+    return $j('.c3-legend-item-' + seriesLabel.gsub(/ /, '-'));
+  }
+
+  function legendTile(seriesLabel) {
+    return legendItem(seriesLabel).find('.c3-legend-item-tile');
+  }
+
+  QUnit.module('Pie Chart Renderer', {
+    beforeEach: function () {
+      this.data = {
+        data: {
+          type: 'pie',
+          columns: [
+            ['To do', 1],
+            ['Doing', 1]
+          ]
+        },
+        bindto: bindTo,
+        size: {
+          width: 0.0,
+          height: 0.0
+        },
+        region_data: {
+          "To do": {
+            count: 1,
+            cards: [
+              {
+                name: "Test card",
+                number: 1
+              }
+            ]
+          },
+          Doing: {
+            count: 1,
+            cards: [
+              {
+                name: "Another card with a long name. This name should be truncated appropriately in the c3 chart rendered toolkit. hello, world!!!!!!",
+                number: 2
+              }
+            ]
+          }
+        }
+      };
+    }
+  }, function () {
+    QUnit.test('testShouldCallC3RendererToRenderChart', function (assert) {
+      sinon.spy(C3Renderer, 'render');
+      new PieChartRenderer(this.data, bindTo).render();
+
+      assert.ok(C3Renderer.render.calledOnce);
+      assert.deepEqual(C3Renderer.render.args[0][0].data.columns, this.data.data.columns);
+      assert.deepEqual(C3Renderer.render.args[0][1], bindTo);
+      C3Renderer.render.restore();
+    });
+
+    QUnit.test("testShouldGenerateCorrectTooltipWhenLabelTypeIsPercentage", function (assert) {
+      this.data.label_type = 'percentage';
+      var renderer = new PieChartRenderer(this.data, bindTo),
+          todo_sector_tooltip_expected = "<table><thead><tr><th colspan=\"2\">To do : 50.0%</th></tr></thead><tfoot><tr><td colspan=\"2\" class=\"notes\">Showing 1 of 1 cards</td></tr></tfoot><tbody><tr><td>#1</td><td>Test card</td></tr></tbody></table>",
+          todo_sector_tooltip_actual = renderer.toolTipContent(todo_sector);
+
+      assert.equal(todo_sector_tooltip_actual, todo_sector_tooltip_expected);
+
+      this.data.label_type = 'whole-number';
+      renderer = new PieChartRenderer(this.data, bindTo);
+      var doing_sector_tooltip_expected = "<table><thead><tr><th colspan=\"2\">Doing : 2</th></tr></thead><tfoot><tr><td colspan=\"2\" class=\"notes\">Showing 1 of 1 cards</td></tr></tfoot><tbody><tr><td>#2</td><td>Another card with a long name. This name should...</td></tr></tbody></table>",
+          doing_sector_tooltip_actual = renderer.toolTipContent(doing_sector, 'whole-number');
+
+      assert.equal(doing_sector_tooltip_actual, doing_sector_tooltip_expected);
+
+      renderer.render();
+      assert.ok($j(bindTo).hasClass('c3'));
+    });
+
+    QUnit.test('testShouldNotRemoveAnimatedClassFromLightboxElementOnRenderWhenSectorDataIsEmpty', function (assert) {
+      $j('.lightbox').addClass('animated');
+      delete this.data.region_data;
+      new PieChartRenderer(this.data, bindTo).render();
+
+      assert.ok($j('.lightbox').hasClass('animated'));
+    });
+
+    QUnit.test('testRenderShouldAddTitleContainerWithTitle', function (assert) {
+      this.data.title = {text: 'Mychart'};
+      new PieChartRenderer(this.data, bindTo).render();
+
+      assert.equal($j('.title').text(), 'Mychart');
+    });
+
+    QUnit.test('testRenderShouldAddTitleContainerOnlyWhenDataExist', function (assert) {
+      this.data.title = {text: 'Mychart'};
+      this.data.data.columns = [];
+      new PieChartRenderer(this.data, bindTo).render();
+
+      assert.notOk($j('.title')[0]);
+    });
+
+    QUnit.test('testRenderShouldSetCustomLabelOnPieChartIfLabelTypeSetToWholeNumber', function (assert) {
+      sinon.spy(C3Renderer, 'render');
+      this.data.label_type = 'whole-number';
+      new PieChartRenderer(this.data, bindTo).render();
+
+      assert.ok(C3Renderer.render.calledOnce);
+      var pieOptions = C3Renderer.render.args[0][0].pie;
+
+      assert.ok(pieOptions);
+      assert.equal(typeof(pieOptions.label.format), "function");
+      C3Renderer.render.restore();
+    });
+  });
+
+  QUnit.module('Stack Bar Chart Renderer', {
+    beforeEach: function () {
+      this.data = {
+        data: {
+          columns: [['To do', 1, 2], ['Doing', 1, 2]],
+          type: 'bar',
+          types: {},
+          colors: {}
+        },
+        axis: {
+          x: {
+            categories: ['Release 1', 'Release 2'],
+            tick: {
+              format: ""
+            }
+          },
+          y: {
+            label: {text: 'Count'}
+          }
+        },
+        tooltip: {
+          contents: {}
+        },
+        region_data: {
+          "Release 1": {
+            "To do": {
+              count: 1,
+              cards: [
+                {
+                  name: "Test card",
+                  number: 1
+                }
+              ]
+            },
+            'Doing': {
+              count: 1,
+              cards: [
+                {
+                  name: "Another card with a long name. This name should be truncated appropriately in the c3 chart rendered toolkit. hello, world!!!!!!",
+                  number: 2
+                }
+              ]
+            }
+          }
+        },
+        region_mql: {
+          conditions: {
+            "Release 1": {
+              'To do': 'type = story AND status = "To do"',
+              Doing: 'type = story AND status = Doing'
+            }
+          },
+          project_identifier: {Doing: 'some_project', 'To do': 'my_project'}
+        }
+      };
+      sinon.spy(C3Renderer, 'render');
+      AbsoluteUrlHelper = {
+        sectorUrl: function (project) {
+          return window.location.origin + "/projects/" + project + "/cards/list?filters[mql]=type%20%3D%20story%20AND%20status%20%3D%20Doing";
+        }
+      };
+    },
+    afterEach: function () {
+      $j(bindTo).empty();
+      C3Renderer.render.restore();
+
+    }
+  }, function () {
+    QUnit.test('testShouldCallC3RendererToRenderStackBarChart', function (assert) {
+      new StackedBarChartRenderer(this.data, bindTo).render();
+
+      assert.ok(C3Renderer.render.calledOnce);
+      assert.deepEqual(C3Renderer.render.args[0], [this.data, bindTo]);
+    });
+
+    QUnit.test("testShouldGenerateCorrectTooltipForStackBarChart", function (assert) {
+      var renderer = new StackedBarChartRenderer(this.data, bindTo);
+      var tooltip_expected = "<table><thead><tr><th colspan=\"2\">Doing : 1 of 2</th></tr></thead><tfoot><tr><td colspan=\"2\" class=\"notes\">Showing 1 of 1 cards</td></tr></tfoot><tbody><tr><td>#2</td><td>Another card with a long name. This name should...</td></tr></tbody></table>";
+      var tooltip_actual = renderer.toolTipContent([{value: 1, index: 0, id: 'Doing'}]);
+
+      assert.equal(tooltip_actual, tooltip_expected);
+
+    });
+
+    QUnit.test('testShouldCallWindowOpenWithCorrectUrlForStackBarChart', function (assert) {
+      sinon.spy(window, 'open');
+
+      var renderer = new StackedBarChartRenderer(this.data, bindTo);
+      renderer.chartOptions.data.onclick({index: 0, id: 'Doing'});
+      assert.equal(window.open.callCount, 1);
+      assert.equal(window.open.args[0][0], window.location.origin + "/projects/some_project/cards/list?filters[mql]=type%20%3D%20story%20AND%20status%20%3D%20Doing");
+
+      renderer.chartOptions.data.onclick({index: 0, id: 'To do'});
+
+      assert.equal(window.open.callCount, 2);
+      assert.equal(window.open.args[1][0], window.location.origin + "/projects/my_project/cards/list?filters[mql]=type%20%3D%20story%20AND%20status%20%3D%20Doing");
+      window.open.restore();
+    });
+
+    QUnit.test('testShouldCallActionTrackerPostClickedEventMethod', function (assert) {
+      sinon.spy(MingleUI.EasyCharts.ActionTracker, 'postClickedEvent');
+
+      var renderer = new StackedBarChartRenderer(this.data, bindTo);
+      renderer.chartOptions.data.onclick({index: 0, id: 'Doing'});
+      assert.ok(MingleUI.EasyCharts.ActionTracker.postClickedEvent.calledOnce);
+      assert.equal(MingleUI.EasyCharts.ActionTracker.postClickedEvent.args[0][0], 'stack-bar-chart');
+      MingleUI.EasyCharts.ActionTracker.postClickedEvent.restore();
+    });
+  });
+
+  QUnit.module('Ratio Bar Chart Renderer', {
+    beforeEach: function () {
+      this.data = {
+        data: {
+          type: 'bar',
+          columns: [
+            ['To do', 1],
+            ['Doing', 1]
+          ]
+        },
+        axis: {
+          y: {
+            tick: {
+              format: ""
+            }
+          },
+          x: {
+            categories: ['To Do', 'Doing'],
+            tick: {
+              format: ""
+            }
+          }
+        },
+        region_data: {
+          "To do": {
+            count: 1,
+            cards: [
+              {
+                name: "Test card",
+                number: 1
+              }
+            ]
+          },
+          Doing: {
+            count: 1,
+            cards: [
+              {
+                name: "Another card with a long name. This name should be truncated appropriately in the c3 chart rendered toolkit. hello, world!!!!!!",
+                number: 2
+              }
+            ]
+          }
+        },
+        region_mql: {
+          conditions: {
+            'To do': 'type = story AND status = "To do"',
+            Doing: 'type = story AND status = Doing'
+          },
+          project_identifier: 'my_project'
+        }
+      };
+      sinon.spy(C3Renderer, 'render');
+      AbsoluteUrlHelper = {
+        sectorUrl: function () {
+          return window.location.origin + "/projects/my_project/cards/list?filters[mql]=type%20%3D%20story%20AND%20status%20%3D%20Doing";
+        }
+      };
+    },
+    afterEach: function () {
+      $j(bindTo).empty();
+      C3Renderer.render.restore();
+    }
+  }, function () {
+    QUnit.test('testShouldCallC3RendererToRenderRatioBarChart', function (assert) {
+      new RatioBarChartRenderer(this.data, bindTo).render();
+
+      assert.ok(C3Renderer.render.calledOnce);
+      assert.deepEqual(C3Renderer.render.args[0], [this.data, bindTo]);
+    });
+
+    QUnit.test('testShouldSetYAxisLabelFormatandValue', function (assert) {
+      new RatioBarChartRenderer(this.data, bindTo).render();
+      var axisOptions = C3Renderer.render.args[0][0].axis;
+      var y_label = axisOptions.y.tick;
+
+      assert.ok(C3Renderer.render.calledOnce);
+      assert.equal(typeof(y_label.format), "function");
+      assert.equal(y_label.format, this.data.axis.y.tick.format);
+      assert.equal(y_label.outer, false)
+
+    });
+
+    QUnit.test("testShouldGenerateCorrectTooltipForRatioBarChart", function (assert) {
+      var renderer = new RatioBarChartRenderer(this.data, bindTo);
+      var tooltip_expected = "<table><thead><tr><th colspan=\"2\">Doing : 100.0%</th></tr></thead><tfoot><tr><td colspan=\"2\" class=\"notes\">Showing 1 of 1 cards</td></tr></tfoot><tbody><tr><td>#2</td><td>Another card with a long name. This name should...</td></tr></tbody></table>";
+      var tooltip_actual = renderer.toolTipContent([{value: 100, index: 1}]);
+
+      assert.equal(tooltip_actual, tooltip_expected);
+
+    });
+
+    QUnit.test("testShouldNotGenerateFooterAndBodyWhenThereAreNoCards", function (assert) {
+
+      var data = {
+        data: {
+          type: 'bar',
+          columns: [
+            ['To do', 0],
+            ['Doing', 0]
+          ]
+        },
+        axis: {
+          y: {
+            tick: {
+              format: ""
+            }
+          },
+          x: {
+            categories: ['To Do', 'Doing'],
+            tick: {
+              format: ""
+            }
+          }
+        },
+        region_data: {}
+      };
+      var renderer = new RatioBarChartRenderer(data, bindTo);
+      var todo_sector_tooltip_expected = "<table><thead><tr><th colspan=\"2\">Doing : 0.0%</th></tr></thead><tfoot><tr></tr></tfoot><tbody></tbody></table>";
+      var todo_sector_tooltip_actual = renderer.toolTipContent([{value: 0, index: 1}]);
+
+      assert.equal(todo_sector_tooltip_actual, todo_sector_tooltip_expected);
+
+    });
+
+    QUnit.test('testShouldCallWindowOpenWithCorrectUrlForRatioBarChart', function (assert) {
+      sinon.spy(window, 'open');
+
+      var renderer = new RatioBarChartRenderer(this.data, bindTo);
+      renderer.chartOptions.data.onclick({index: 1});
+      assert.ok(window.open.calledOnce);
+      window.open.restore();
+    });
+
+    QUnit.test('testShouldCallRatioBarChartActionTrackerPostClickedEventMethod', function (assert) {
+      sinon.spy(MingleUI.EasyCharts.ActionTracker, 'postClickedEvent');
+
+      var renderer = new RatioBarChartRenderer(this.data, bindTo);
+      renderer.chartOptions.data.onclick({index: 1});
+      assert.ok(MingleUI.EasyCharts.ActionTracker.postClickedEvent.calledOnce);
+      assert.equal(MingleUI.EasyCharts.ActionTracker.postClickedEvent.args[0][0], 'ratio-bar-chart');
+      MingleUI.EasyCharts.ActionTracker.postClickedEvent.restore();
+    });
+
+    QUnit.test('testRenderShouldAddTitleContainerWithTitle', function (assert) {
+      this.data.title = {text: 'RatioBarChart'};
+      new RatioBarChartRenderer(this.data, bindTo).render();
+
+      assert.equal($j('.title').text(), 'RatioBarChart');
+    });
+
+  });
+
+  QUnit.module("C3 Renderer", {
+    beforeEach: function () {
+      sinon.spy(c3, "generate");
+      this.data = {
+        data: {
+          columns: [["To do", 1], ['Done', 2]],
+          type: 'chart'
+        }
+      };
+    },
+    afterEach: function () {
+      c3.generate.restore();
+      $j(bindTo).empty();
+    }
+  }, function () {
+    QUnit.test('testShouldRenderErrorMessageWhenNoDataFound', function (assert) {
+      this.data.data.columns = [];
+      assert.notOk(C3Renderer.render(this.data, bindTo));
+      assert.equal($j(bindTo).html(), 'We could not find any data for this chart.');
+      assert.notOk(c3.generate.called);
+
+      assert.notOk(C3Renderer.render({}, bindTo));
+      assert.equal($j(bindTo).html(), 'We could not find any data for this chart.');
+      assert.notOk(c3.generate.called);
+    });
+
+    QUnit.test('testShouldNotRenderErrorMessageWhenNoDataAndDisplayWithoutDataIsSet', function (assert) {
+      this.data.data.columns = [];
+      this.data.displayWithoutData = true;
+      assert.ok(C3Renderer.render(this.data, bindTo));
+      assert.notOk($j(bindTo).is(':empty'));
+      assert.ok(c3.generate.called);
+    });
+
+    QUnit.test('testShouldCallC3GenerateMethodToRenderChart', function (assert) {
+      assert.equal(C3Renderer.render(this.data, bindTo), c3.generate.returnValues[0]);
+      assert.ok(c3.generate.calledOnce);
+
+      var chartOptions = c3.generate.args[0][0];
+      assert.deepEqual(chartOptions.data, this.data.data);
+      assert.deepEqual(chartOptions.bindto, bindTo);
+    });
+
+    QUnit.test('testShouldAddCustomTooltipPositionFunction', function (assert) {
+      assert.ok(C3Renderer.render(this.data, bindTo));
+      assert.ok(c3.generate.calledOnce);
+
+      var chartOptions = c3.generate.args[0][0];
+      assert.deepEqual(typeof chartOptions.tooltip.position, 'function');
+    });
+
+    QUnit.test('testShouldOverrideTooltipContentsCallbackWhenDataHasHiddenSeries', function (assert) {
+      this.data.data.colors = {'To do': 'transparent'};
+      var tooltipCallback = function () {
+      };
+      assert.ok(C3Renderer.render($j.extend(this.data, {tooltip: {contents: tooltipCallback}}), bindTo));
+      assert.ok(c3.generate.calledOnce);
+
+      var chartOptions = c3.generate.args[0][0];
+
+      assert.equal(typeof chartOptions.tooltip.contents, 'function');
+      assert.notEqual(chartOptions.tooltip.contents.toString(), tooltipCallback.toString());
+    });
+
+    QUnit.test('testShouldNotTriggerOriginalTooltipContentsCallbackWhenCalledForHiddenSeries', function (assert) {
+      this.data.data.colors = {'To do': 'transparent'};
+      var tooltipCallback = sinon.spy();
+      assert.ok(C3Renderer.render($j.extend(this.data, {tooltip: {contents: tooltipCallback}}), bindTo));
+      assert.ok(c3.generate.calledOnce);
+
+      var chartOptions = c3.generate.args[0][0];
+
+      assert.notOk(chartOptions.tooltip.contents([{name: 'To do'}]));
+      assert.equal(tooltipCallback.callCount, 0);
+    });
+
+    QUnit.test('testShouldTriggerOriginalTooltipContentsCallbackWhenCalledForVisibleSeries', function (assert) {
+      this.data.data.colors = {'To do': 'transparent'};
+      var tooltipCallback = sinon.stub().returns('tooltip contents');
+      assert.ok(C3Renderer.render($j.extend(this.data, {tooltip: {contents: tooltipCallback}}), bindTo));
+      assert.ok(c3.generate.calledOnce);
+
+      var chartOptions = c3.generate.args[0][0];
+
+      assert.ok(chartOptions.tooltip.contents([{name: 'Done'}]));
+      assert.equal(tooltipCallback.callCount, 1);
+    });
+
+    QUnit.test('testShouldNotOverrideTooltipContentsCallbackWhenDataHasNoHiddenSeries', function (assert) {
+      [undefined, {}, {'Done': 'red'}].forEach(function (colors, index) {
+        var tooltipCallback = sinon.spy();
+        this.data.data.colors = colors;
+        this.data.tooltip = {contents: tooltipCallback};
+        assert.ok(C3Renderer.render(this.data, bindTo));
+        assert.equal(c3.generate.callCount, index + 1);
+
+        var chartOptions = c3.generate.args[0][0];
+
+        assert.equal(typeof chartOptions.tooltip.contents, 'function');
+        assert.equal(chartOptions.tooltip.contents.toString(), tooltipCallback.toString());
+      }.bind(this));
+    });
+
+    QUnit.test('testShouldOverrideOnClickCallbackWhenDataHasHiddenSeries', function (assert) {
+      var onClickCallback = function () {
+      };
+      this.data.data.colors = {'To do': 'transparent'};
+      this.data.data.onclick = onClickCallback;
+      assert.ok(C3Renderer.render(this.data, bindTo));
+      assert.ok(c3.generate.calledOnce);
+
+      var chartOptions = c3.generate.args[0][0];
+
+      assert.equal(typeof chartOptions.data.onclick, 'function');
+      assert.notEqual(chartOptions.data.onclick.toString(), onClickCallback.toString());
+    });
+
+    QUnit.test('testShouldNotTriggerOriginalOnClickCallbackWhenCalledForHiddenSeries', function (assert) {
+      var onClickCallback = sinon.spy();
+      this.data.data.colors = {'To do': 'transparent'};
+      this.data.data.onclick = onClickCallback;
+      assert.ok(C3Renderer.render(this.data, bindTo));
+      assert.ok(c3.generate.calledOnce);
+
+      var chartOptions = c3.generate.args[0][0];
+
+      assert.notOk(chartOptions.data.onclick({id: 'To do'}));
+      assert.equal(onClickCallback.callCount, 0);
+    });
+
+    QUnit.test('testShouldTriggerOriginalOnClickCallbackWhenCalledForVisibleSeries', function (assert) {
+      var onClickCallback = sinon.stub().returns('interactive filters');
+      this.data.data.colors = {'To do': 'transparent'};
+      this.data.data.onclick = onClickCallback;
+      assert.ok(C3Renderer.render(this.data, bindTo));
+      assert.ok(c3.generate.calledOnce);
+
+      var chartOptions = c3.generate.args[0][0];
+
+      assert.ok(chartOptions.data.onclick({id: 'Done'}));
+      assert.equal(onClickCallback.callCount, 1);
+    });
+
+    QUnit.test('testShouldNotOverrideDataOnClickCallbackWhenDataHasNoHiddenSeries', function (assert) {
+      [undefined, {}, {'Done': 'red'}].forEach(function (colors, index) {
+        var onClickCallback = sinon.spy();
+        this.data.data.colors = colors;
+        this.data.data.onclick = onClickCallback;
+        assert.ok(C3Renderer.render(this.data, bindTo));
+        assert.equal(c3.generate.callCount, index + 1);
+
+        var chartOptions = c3.generate.args[0][0];
+
+        assert.equal(typeof chartOptions.data.onclick, 'function');
+        assert.equal(chartOptions.data.onclick.toString(), onClickCallback.toString());
+      }.bind(this));
+    });
+  });
+
+
+  QUnit.module("Mocking window navigator", {
+    beforeEach: function () {
+      this.originalC3 = c3;
+      c3 = {
+        generate: function () {
+          return {};
+        },
+        version: "0.4.11"
+      };
+      this.data = {
+        data: {
+          columns: [["To do", 1]],
+          type: 'chart'
+        },
+        bindto: bindTo
+      };
+      sinon.spy(c3, "generate");
+      this.originalNavigator = window.navigator;
+    },
+    afterEach: function () {
+      window.navigator = this.originalNavigator;
+      c3 = this.originalC3;
+      $j(bindTo).empty();
+    }
+  }, function () {
+    QUnit.test('testRenderShouldRemoveAnimatedClassFromLightboxElementOnRenderWhenSectorDataIsNotEmptyAndBrowserIsFirefox', function (assert) {
+      // customized user agent to firefox, only second one works for phantomJS
+      navigator.__defineGetter__('userAgent', function () {
+        return 'mozilla/5.0 (macintosh; intel mac os x 10.12; rv:53.0) gecko/20100101 firefox/53.0';
+      });
+      window.navigator = {
+        get userAgent() {
+          return 'mozilla/5.0 (macintosh; intel mac os x 10.12; rv:53.0) gecko/20100101 firefox/53.0';
+        }
+      };
+      $j('.lightbox').addClass('animated');
+      assert.ok(C3Renderer.render(this.data, bindTo));
+      assert.ok(c3.generate.calledOnce);
+      assert.notOk($j('.lightbox').hasClass('animated'));
+
+    });
+
+    QUnit.test('testRenderShouldNotRemoveAnimatedClassFromLightboxElementOnRenderWhenSectorDataIsNotEmptyAndBrowserIsChrome', function (assert) {
+      // customized user agent to chrome
+      window.navigator = {
+        get userAgent() {
+          return 'mozilla/5.0 (macintosh; intel mac os x 10_12_4) applewebkit/537.36 (khtml, like gecko) chrome/58.0.3029.110 safari/537.36';
+        }
+      };
+      window.navigator.__defineGetter__('userAgent', function () {
+        return 'mozilla/5.0 (macintosh; intel mac os x 10_12_4) applewebkit/537.36 (khtml, like gecko) chrome/58.0.3029.110 safari/537.36'
+      });
+      $j('.lightbox').addClass('animated');
+      assert.ok(C3Renderer.render(this.data, bindTo));
+      assert.ok(c3.generate.calledOnce);
+
+      assert.ok($j('.lightbox').hasClass('animated'));
+    });
+  });
+
+  QUnit.module('Data Series Chart Renderer', {
+    beforeEach: function () {
+      this.data = {
+        data: {
+          title: 'Story Points',
+          type: 'line',
+          trends: [],
+          columns: [["Start", 1, 3, 5, 7], ["To do", 1, 3, 5, 7], ['Done', 2, 4, 6, 8]],
+          regions: {
+            'Trend': [{'style': 'dashed'}]
+          },
+          types: {Done: 'bar'}
+        },
+        point: {show: false, symbols: {}},
+        axis: {
+          x: {
+            categories: ['Release 1', 'Release 2'],
+            tick: {
+              format: ""
+            }
+          },
+          y: {
+            label: {text: 'Count'}
+          }
+        },
+        tooltip: {},
+        legend: {position: 'top-right'},
+        region_data: {
+          'Release 1': {
+            'Start': {cards: [{number: 1, name: 'card 1'}], count: 1},
+            'Doing': {cards: [{number: 1, name: 'card 1'}], count: 1},
+            'To do': {cards: [{number: 2, name: 'card 2'}], count: 1},
+            'Done': {cards: [], count: 0}
+          },
+          'Release 2': {
+            'Doing': {cards: [{number: 3, name: 'card 3'}], count: 1},
+            'To do': {cards: [{number: 4, name: 'card 4'}], count: 1},
+            'Done': {cards: [], count: 0}
+          }
+        },
+        region_mql: {
+          conditions: {
+            "Release 1": {
+              'Start': 'type = story',
+              'To do': 'type = story AND status = "To do"',
+              'Doing': 'type = story AND status = Doing'
+            }
+          },
+          project_identifier: {'Start': 'some_project', 'Doing': 'some_project', 'To do': 'my_project'}
+        }
+      };
+      AbsoluteUrlHelper = {
+        sectorUrl: function (project) {
+          return window.location.origin + "/projects/" + project + "/cards/list?filters[mql]=type%20%3D%20story%20AND%20status%20%3D%20Doing";
+        }
+      };
+
+      sinon.spy(C3Renderer, 'render');
+    },
+    afterEach: function () {
+      $j(bindTo).empty();
+      C3Renderer.render.restore();
+    }
+  }, function () {
+    QUnit.test('testShouldCallC3RendererToRenderChart', function (assert) {
+      new DataSeriesChartRenderer(this.data, bindTo).render();
+
+      assert.equal(C3Renderer.render.callCount, 1);
+      assert.deepEqual(C3Renderer.render.args[0][0].data.columns, this.data.data.columns);
+      assert.deepEqual(C3Renderer.render.args[0][1], bindTo);
+      assert.equal(typeof C3Renderer.render.args[0][0].onrendered, 'function');
+    });
+
+    QUnit.test('testShouldUpdateLegendTileStrokeWidthOnRenderedForLineSeries', function (assert) {
+      new DataSeriesChartRenderer(this.data, bindTo).render();
+
+      assert.equal($j('.c3-legend-item-To-do .c3-legend-item-tile').attr('stroke-width'), 2);
+      assert.equal($j('.c3-legend-item-Done .c3-legend-item-tile').attr('stroke-width'), 10);
+    });
+
+    QUnit.test('testShouldUpdateLegendTileStrokeStyleToDashedArrayForDashedLineStyle', function (assert) {
+      this.data.data.types = {};
+      this.data.data.regions = {'Done': [{style: 'dashed'}]};
+      new DataSeriesChartRenderer(this.data, bindTo).render();
+
+      assert.notOk(legendTile('To do').attr('stroke-dasharray'));
+      assert.equal(legendTile('Done').attr('stroke-dasharray'), '1,2');
+    });
+
+    QUnit.test('testShouldUpdateLegendTileStrokeStyleToSpecifiedLegendStyle', function (assert) {
+      this.data.data.types = {};
+      this.data.legends_style = {'Done': {style: 'dashed'}};
+      new DataSeriesChartRenderer(this.data, bindTo).render();
+
+      assert.notOk(legendTile('To do').attr('stroke-dasharray'));
+      assert.equal(legendTile('Done').attr('stroke-dasharray'), '1,2');
+    });
+
+    QUnit.test('testShouldAddDataPointSymbolToLegendItemIfSymbolMentioned', function (assert) {
+      this.data.data.types = {};
+      this.data.point.symbols = {'To do': 'diamond', 'Done': 'square'};
+      new DataSeriesChartRenderer(this.data, bindTo).render();
+      var calculateX = function (tile) {
+        var tileX1 = parseFloat(tile.attr('x1')), tileX2 = parseFloat(tile.attr('x2'));
+        return tileX1 + Math.abs(tileX2 - tileX1) / 2;
+
+      };
+      var toDoTile = legendTile('To do'), doneTile = legendTile('Done'),
+          toDoSymbolY = toDoTile.attr('y1'),
+          doneSymbolY = doneTile.attr('y1'),
+          toDoSymbolX = calculateX(toDoTile),
+          doneSymbolX = calculateX(doneTile),
+          toDoSymbol = legendItem('To do').find('path.c3-diamond'),
+          doneSymbol = legendItem('Done').find('path.c3-square');
+
+      assert.ok(toDoSymbol[0]);
+      assert.ok(doneSymbol[0]);
+      assert.equal(toDoSymbol.attr('transform'), 'translate(' + toDoSymbolX + ',' + toDoSymbolY + ')');
+      assert.equal(doneSymbol.attr('transform'), 'translate(' + doneSymbolX + ',' + doneSymbolY + ')');
+    });
+
+    QUnit.test('testShouldAddDataPointSymbolToLegendItemIfSymbolMentionedForAreaType', function (assert) {
+      this.data.data.types = {'Done': 'area', 'To do': 'area'};
+      this.data.point.symbols = {'To do': 'diamond', 'Done': 'diamond'};
+      new DataSeriesChartRenderer(this.data, bindTo).render();
+      var calculateX = function (tile) {
+        var tileX1 = parseFloat(tile.attr('x1')), tileX2 = parseFloat(tile.attr('x2'));
+        return tileX1 + Math.abs(tileX2 - tileX1) / 2;
+
+      };
+      var toDoTile = legendTile('To do'), doneTile = legendTile('Done'),
+          toDoSymbolY = toDoTile.attr('y1'),
+          doneSymbolY = doneTile.attr('y1'),
+          toDoSymbolX = calculateX(toDoTile),
+          doneSymbolX = calculateX(doneTile),
+          toDoSymbol = legendItem('To do').find('path.c3-diamond'),
+          doneSymbol = legendItem('Done').find('path.c3-diamond');
+
+      assert.equal(toDoTile.attr('stroke-width'), 2);
+      assert.equal(doneTile.attr('stroke-width'), 2);
+      assert.equal(toDoSymbol.attr('transform'), 'translate(' + toDoSymbolX + ',' + toDoSymbolY + ')');
+      assert.equal(doneSymbol.attr('transform'), 'translate(' + doneSymbolX + ',' + doneSymbolY + ')');
+    });
+
+    QUnit.test('testShouldAddDataPointSymbolsToLineSeriesIfSymbolMentioned', function (assert) {
+      this.data.data.types = {};
+      this.data.data.columns.push(['Doing', 2, 3, 5, 7]);
+      this.data.point.symbols = {'To do': 'diamond', 'Done': 'square'};
+      new DataSeriesChartRenderer(this.data, bindTo).render();
+
+      assert.equal($j('.c3-diamonds-To-do').find('path.c3-diamond').length, 4);
+      assert.equal($j('.c3-squares-Done').find('path.c3-square').length, 4);
+      assert.equal($j('.c3-diamonds-Doing').length, 0);
+      assert.equal($j('.c3-squares-Doing').length, 0);
+    });
+
+    QUnit.test('testAddTooltipContentsFunctionWhenRegionDataIsNotEmptyForLineType', function (assert) {
+      this.data.data.types = {};
+      this.data.data.columns.push(['Doing', 2]);
+      new DataSeriesChartRenderer(this.data, bindTo).render();
+      var expectedTooltipContent = '<table><thead><tr><th colspan="2">Doing : Release 1, 1</th></tr></thead><tfoot><tr><td colspan="2" class="notes">Showing 1 of 1 cards</td></tr></tfoot><tbody><tr><td>#1</td><td>card 1</td></tr></tbody></table>';
+
+      assert.equal(typeof C3Renderer.render.args[0][0].tooltip.contents, 'function');
+      assert.equal(C3Renderer.render.args[0][0].tooltip.contents.call({d3: {event: {}}}, [{
+        value: 1,
+        index: 0,
+        id: 'Doing'
+      }]), expectedTooltipContent);
+    });
+
+    QUnit.test('testAddTooltipContentsFunctionWhenRegionDataIsNotEmptyForBarType', function (assert) {
+      this.data.data.columns.push(['Doing', 1, 2, 3, 5]);
+      this.data.data.types.Doing = 'bar';
+      new DataSeriesChartRenderer(this.data, bindTo).render();
+      var expectedTooltipContent = '<table><thead><tr><th colspan="2">Done : Release 1, 1</th></tr></thead><tfoot><tr></tr></tfoot><tbody></tbody></table>';
+
+      assert.equal(typeof C3Renderer.render.args[0][0].tooltip.contents, 'function');
+      assert.equal(C3Renderer.render.args[0][0].tooltip.contents.call({d3: {event: {}}}, [{
+        value: 1,
+        index: 0,
+        id: 'Done'
+      }]), expectedTooltipContent);
+    });
+
+    QUnit.test('testAddInteractiveFilterFunctionWhenRegionDataIsNotEmpty', function (assert) {
+      this.data.data.types = {};
+      this.data.data.columns.push(['Doing', 2]);
+      this.data.region_data =
+          new DataSeriesChartRenderer(this.data, bindTo).render();
+
+      assert.equal(typeof C3Renderer.render.args[0][0].data.onclick, 'function');
+      sinon.spy(window, 'open');
+
+      C3Renderer.render.args[0][0].data.onclick({index: 0, id: 'Doing'});
+      assert.equal(window.open.callCount, 1);
+      assert.equal(window.open.args[0][0], window.location.origin + "/projects/some_project/cards/list?filters[mql]=type%20%3D%20story%20AND%20status%20%3D%20Doing");
+
+      C3Renderer.render.args[0][0].data.onclick({index: 0, id: 'To do'});
+
+      assert.equal(window.open.callCount, 2);
+      assert.equal(window.open.args[1][0], window.location.origin + "/projects/my_project/cards/list?filters[mql]=type%20%3D%20story%20AND%20status%20%3D%20Doing");
+      window.open.restore();
+    });
+
+    QUnit.test('testShouldAddInteractiveFilterFunctionForAllLabelsStartLabel', function (assert) {
+      this.data.data.types = {};
+      this.data.data.columns.push(['Doing', 2]);
+      new DataSeriesChartRenderer(this.data, bindTo).render();
+
+      assert.equal(typeof C3Renderer.render.args[0][0].data.onclick, 'function');
+      sinon.spy(window, 'open');
+
+      C3Renderer.render.args[0][0].data.onclick({index: 0, id: 'Start'});
+      assert.equal(window.open.callCount, 1);
+      assert.equal(window.open.args[0][0], window.location.origin + "/projects/some_project/cards/list?filters[mql]=type%20%3D%20story%20AND%20status%20%3D%20Doing");
+
+      C3Renderer.render.args[0][0].data.onclick({index: 0, id: 'Doing'});
+      assert.equal(window.open.callCount, 2);
+      assert.equal(window.open.args[0][0], window.location.origin + "/projects/some_project/cards/list?filters[mql]=type%20%3D%20story%20AND%20status%20%3D%20Doing");
+
+      C3Renderer.render.args[0][0].data.onclick({index: 0, id: 'To do'});
+
+      assert.equal(window.open.callCount, 3);
+      assert.equal(window.open.args[2][0], window.location.origin + "/projects/my_project/cards/list?filters[mql]=type%20%3D%20story%20AND%20status%20%3D%20Doing");
+      window.open.restore();
+    });
+
+    QUnit.test('testAddTooltipContentsFunctionWhenRegionDataIsNotEmptyForLineType', function (assert) {
+      this.data.data.types = {};
+      this.data.data.columns.push(['Trend', 2, 4, 5]);
+      new DataSeriesChartRenderer(this.data, bindTo).render();
+      var expectedTooltipContent = '';
+
+      assert.equal(typeof C3Renderer.render.args[0][0].tooltip.contents, 'function');
+      assert.equal(C3Renderer.render.args[0][0].tooltip.contents.call({d3: {}}, [{
+        value: 2,
+        index: 0,
+        id: 'Trend'
+      }]), expectedTooltipContent);
+    });
+
+    QUnit.test('testAddLegendItemOnClickFunction', function (assert) {
+      this.data.data.types = {};
+      this.data.data.columns.push(['Trend', 2, 4, 5]);
+      new DataSeriesChartRenderer(this.data, bindTo).render();
+
+      assert.equal(typeof C3Renderer.render.args[0][0].legend.item.onclick, 'function');
+    });
+
+    QUnit.test('testHideCustomDataPointSymbolsWhenLegendItemOnClickFunctionTrigger', function (assert) {
+      this.data.data.types = {};
+      this.data.point.symbols = {Done: 'square'};
+      this.data.data.columns.push(['Trend', 2, 4, 5]);
+      new DataSeriesChartRenderer(this.data, bindTo).render();
+      var chartInternal = C3Renderer.render.returnValues[0].internal;
+      chartInternal.d3.event = {};
+
+      assert.equal(d3.select('.c3-squares-Done').style('opacity'), 1);
+
+      C3Renderer.render.args[0][0].legend.item.onclick.call(chartInternal, 'Done');
+
+      assert.equal(d3.select('.c3-squares-Done').style('opacity'), 0);
+    });
+
+    QUnit.test('testShouldRemoveCirclesForTrendLines', function (assert) {
+      this.data.data.types = {};
+      this.data.data.columns.push(['Trend', 2, 4, 5]);
+      this.data.data.trends.push('Trend');
+      new DataSeriesChartRenderer(this.data, bindTo).render();
+      var chartInternal = C3Renderer.render.returnValues[0].internal;
+      chartInternal.d3.event = {};
+
+      assert.notOk($j('.c3-circles-Trend')[0]);
+      assert.ok($j('.c3-circles-Done')[0]);
+      assert.ok($j('.c3-circles-To-do')[0]);
+    });
+
+    QUnit.test('testShouldShowTooltipForAllTheSeriesAtThePosition', function (assert) {
+      this.data.data.types = {};
+      this.data.data.columns[1] = ['Doing', 2, 3, 6, 8];
+      new DataSeriesChartRenderer(this.data, bindTo).render();
+      var expectedTooltipContent = '<table><thead><tr><th colspan="2">Doing : Release 2, 3</th></tr></thead><tfoot><tr><td colspan="2" class="notes">Showing 1 of 1 cards</td></tr></tfoot><tbody><tr><td>#3</td><td>card 3</td></tr></tbody></table>';
+      var chartInternal = {d3: {event: {}}};
+
+      assert.equal(C3Renderer.render.args[0][0].tooltip.contents.call(chartInternal, [{
+        value: 3,
+        index: 1,
+        id: 'Doing'
+      }]), expectedTooltipContent);
+
+      expectedTooltipContent += '<table><thead><tr><th colspan="2">To do : Release 2, 3</th></tr></thead><tfoot><tr><td colspan="2" class="notes">Showing 1 of 1 cards</td></tr></tfoot><tbody><tr><td>#4</td><td>card 4</td></tr></tbody></table>';
+      assert.equal(C3Renderer.render.args[0][0].tooltip.contents.call(chartInternal, [{
+        value: 3,
+        index: 1,
+        id: 'To do'
+      }]), expectedTooltipContent);
+    });
+  });
+
+  QUnit.module('Cumulative Flow Graph', {
+    beforeEach: function () {
+      var self = this;
+      this.sandbox = sinon.sandbox.create(sinon.defaultConfig);
+      this.onRenderedSpy = this.sandbox.spy();
+      this.onLegendClick = this.sandbox.spy();
+      this.stackedBarChartRendererStub = this.sandbox.stub();
+      this.originalStackedBarChartRenderer = StackedBarChartRenderer;
+      this.originalCustomC3DataSymbols = CustomC3DataSymbols;
+      StackedBarChartRenderer = this.stackedBarChartRendererStub;
+      this.customC3DataSymbolsStub = this.sandbox.stub().returns({
+        chartOptions: function () {
+          return {
+            onRendered: self.onRenderedSpy,
+            onLegendClick: self.onLegendClick
+          }
+        }
+      });
+
+      CustomC3DataSymbols = this.customC3DataSymbolsStub;
+
+
+      this.server = this.sandbox.useFakeServer();
+    },
+    afterEach: function () {
+      StackedBarChartRenderer = this.originalStackedBarChartRenderer;
+      CustomC3DataSymbols = this.originalCustomC3DataSymbols;
+      this.sandbox.restore();
+    }
+  }, function () {
+    QUnit.test('testChartRendererShouldInitializeCumulativeFlowGraphRenderer', function (assert) {
+      var cumulativeFlowGraphRendererStub = this.sandbox.stub().returns({render: this.sandbox.spy()});
+      var originalCumulativeFlowGraphRenderer = CumulativeFlowGraphRenderer;
+      CumulativeFlowGraphRenderer = cumulativeFlowGraphRendererStub;
+      var bindTo = '#cumulative_flow_grpah';
+      var data = {legend: {}};
+      var dataUrl = '/projects/online_shopping_cardt/wiki/Overview_Page/chart_data/1/cumulative-flow-graph?preview=true&amp;time=1513964956';
+      this.server.respondWith("GET", dataUrl,
+
+          [200, {"Content-Type": "application/json"}, JSON.stringify(data)]);
+
+      ChartRenderer.renderChart('cumulativeFlowGraph', dataUrl, bindTo);
+      this.server.respond();
+      var parameters = cumulativeFlowGraphRendererStub.args[0];
+
+      assert.equal(cumulativeFlowGraphRendererStub.callCount, 1);
+      assert.equal(parameters.length, 2);
+      assert.equal(parameters[1], bindTo);
+      assert.deepEqual(parameters[0], data);
+      CumulativeFlowGraphRenderer = originalCumulativeFlowGraphRenderer;
+    });
+
+    QUnit.test('testShouldSetupCustomDataSymbolOptionsAndInvokeStackedBarChart', function (assert) {
+      var bindTo = '#cumulative_flow_grpah';
+      var data = {legend: {}};
+      new CumulativeFlowGraphRenderer(data, bindTo);
+
+      assert.equal(this.customC3DataSymbolsStub.callCount, 1);
+      assert.equal(this.customC3DataSymbolsStub.args[0].length, 1);
+      assert.deepEqual(this.customC3DataSymbolsStub.args[0][0], data);
+
+      assert.equal(this.stackedBarChartRendererStub.callCount, 1);
+      assert.equal(this.stackedBarChartRendererStub.args[0].length, 2);
+
+      var chartOptions = this.stackedBarChartRendererStub.args[0][0];
+
+      assert.deepEqual(this.onRenderedSpy, chartOptions.onrendered);
+      assert.deepEqual(this.onLegendClick, chartOptions.legend.item.onclick);
+    });
+  });
+
+  QUnit.module('Daily History Chart', {
+    beforeEach: function () {
+      this.data = {data: {}, axis: {x: {tick: {format: '%d %b %Y'}}}};
+      this.sandbox = sinon.sandbox.create(sinon.defaultConfig);
+      this.dataSeriesChartRendererStub = this.sandbox.stub();
+      this.originalDataSeriesChartRenderer = DataSeriesChartRenderer;
+      DataSeriesChartRenderer = this.dataSeriesChartRendererStub;
+
+      this.server = this.sandbox.useFakeServer();
+    },
+    afterEach: function () {
+      DataSeriesChartRenderer = this.originalDataSeriesChartRenderer;
+      this.sandbox.restore();
+      $j('#daily_history_chart').empty();
+    }
+  }, function () {
+    QUnit.test('testChartRendererShouldInitializeDailyHistoryChartRenderer', function (assert) {
+      var dailyHistoryChartRendererStub = this.sandbox.stub().returns({render: this.sandbox.spy()});
+      var originalDailyHistoryChartRenderer = DailyHistoryChartRenderer;
+      DailyHistoryChartRenderer = dailyHistoryChartRendererStub;
+      var bindTo = '#daily_history_chart';
+      this.data.legend = {};
+      var dataUrl = '/projects/online_shopping_cardt/wiki/Overview_Page/chart_data/1/daily-history-chart?preview=true&amp;time=1513964956';
+      this.server.respondWith("GET", dataUrl,
+
+          [200, {"Content-Type": "application/json"}, JSON.stringify(this.data)]);
+
+      ChartRenderer.renderChart('dailyHistoryChart', dataUrl, bindTo);
+      this.server.respond();
+      var parameters = dailyHistoryChartRendererStub.args[0];
+
+      assert.equal(dailyHistoryChartRendererStub.callCount, 1);
+      assert.equal(parameters.length, 2);
+      assert.equal(parameters[1], bindTo);
+      assert.deepEqual(parameters[0], this.data);
+      DailyHistoryChartRenderer = originalDailyHistoryChartRenderer;
+    });
+
+    QUnit.test('testShouldInvokeDataSeriesChartRenderer', function (assert) {
+      var bindTo = '#daily_history_chart';
+      this.data.legend = {};
+      new DailyHistoryChartRenderer(this.data, bindTo);
+
+      assert.equal(this.dataSeriesChartRendererStub.callCount, 1);
+      assert.equal(this.dataSeriesChartRendererStub.args[0].length, 2);
+
+    });
+
+    QUnit.test('testShouldSetXTickCullingToFalseWhenNotSpecified', function (assert) {
+      var bindTo = '#daily_history_chart';
+
+      new DailyHistoryChartRenderer(this.data, bindTo);
+
+      var dataSeriesChartOptions = this.dataSeriesChartRendererStub.args[0][0];
+      assert.strictEqual(dataSeriesChartOptions.axis.x.tick.culling, false);
+    });
+
+    QUnit.test('testShouldLeaveXTickCullingUnchangedWhenSpecified', function (assert) {
+      var bindTo = '#daily_history_chart';
+      this.data.axis.x.tick.culling = {max: 100};
+
+      new DailyHistoryChartRenderer(this.data, bindTo);
+
+      var dataSeriesChartOptions = this.dataSeriesChartRendererStub.args[0][0];
+      assert.deepEqual(dataSeriesChartOptions.axis.x.tick.culling, {max: 100});
+    });
+
+    QUnit.test('testShouldSetColorOfForecastGuideLinesOnRender', function (assert) {
+      var bindTo = '#daily_history_chart';
+      DataSeriesChartRenderer = this.originalDataSeriesChartRenderer;
+      var data = {
+        data: {
+          title: 'Story Points',
+          type: 'line',
+          columns: [["Start", 1, 3, 5, 7], ["To do", 1, 3, 5, 7], ['Done', 2, 4, 6, 8], ['_x', 1, 2, 3, 4]],
+          regions: {},
+          trends: [],
+          types: {},
+          xs: {'Start': '_x', 'To do': '_x', 'Done': '_x'}
+        },
+        point: {show: false, symbols: {}},
+        axis: {
+          x: {
+            type: 'timeseries',
+            tick: {
+              format: "%d %b %Y"
+            }
+          },
+          y: {
+            label: {text: 'Count'}
+          }
+        },
+        tooltip: {},
+        legend: {position: 'top-right'},
+        grid: {y: {show: true, lines: [{value: 3.5, color: '#123456', class: 'dashed-guideline'}]}}
+      };
+      var dailyHistoryChartRenderer = new DailyHistoryChartRenderer(data, bindTo);
+      dailyHistoryChartRenderer.render();
+      var d3YgridLine = d3.select('.c3-ygrid-line.dashed-guideline').select('line');
+
+      assert.ok(['#123456', 'rgb(18, 52, 86)'].include(d3YgridLine.style('stroke')));
+    });
+
+    QUnit.test('testShouldShowMessagePassedInData', function (assert) {
+      var bindTo = '#daily_history_chart';
+      var message = 'This chart is not complete';
+      this.data.message = message;
+      new DailyHistoryChartRenderer(this.data, bindTo);
+
+      var actualChartProgressMessage = $j(bindTo).find('.chart-progress-message').text();
+
+      assert.equal(actualChartProgressMessage, message);
+
+    });
+
+    QUnit.test('testShouldNotShowProgressMessageWhenEmpty', function (assert) {
+
+      var bindTo = '#daily_history_chart';
+      new DailyHistoryChartRenderer(this.data, bindTo);
+
+      assert.equal('', $j(bindTo).find('.chart-progress-message').text())
+    });
+
+    QUnit.test('testDailyHistoryChartRendererShouldInvokeDailySeriesChartRenderer', function (assert) {
+      var bindTo = '#daily_history_chart';
+      new DailyHistoryChartRenderer(this.data, bindTo);
+
+      assert.equal(this.dataSeriesChartRendererStub.callCount, 1);
+      assert.ok(this.dataSeriesChartRendererStub.args[0][0].displayWithoutData);
+      assert.equal(typeof this.dataSeriesChartRendererStub.args[0][0].tooltip.contents, "function");
+      assert.equal(this.dataSeriesChartRendererStub.args[0][1], "#daily_history_chart .chart-content");
+    });
+
+    QUnit.test('testShouldSetupDataPointLabelFormattersForForecastSeries', function (assert) {
+      var data = {
+        legend: {},
+        custom_series_labels: {
+          "No Scope Change": "03 Nov 2016",
+          "50% Increase In Remaining Scope": "27 Nov 2016",
+          "150% Increase In Remaining Scope": "14 Jan 2017"
+        }
+      };
+
+      data = $j.extend(this.data, data);
+      var bindTo = '#daily_history_chart';
+      new DailyHistoryChartRenderer(data, bindTo);
+      var labelFormatters = this.dataSeriesChartRendererStub.args[0][0].data.labels.format;
+      assert.equal(labelFormatters['No Scope Change'](null, 'No Scope Change'), '03 Nov 2016');
+      assert.equal(labelFormatters['50% Increase In Remaining Scope'](null, '50% Increase In Remaining Scope'), '27 Nov 2016');
+      assert.equal(labelFormatters['150% Increase In Remaining Scope'](null, '150% Increase In Remaining Scope'), '14 Jan 2017');
+    });
+
+    QUnit.test('testShouldOnlyShowDataLabelsOnSelectedPositionsForASeries', function (assert) {
+      var data = {
+        legend: {},
+        custom_series_labels: {
+          "Total Scope": {positions: [10]},
+          "Current Scope": {positions: [12]}
+        }
+      };
+      data = $j.extend(this.data, data);
+      var bindTo = '#daily_history_chart';
+      new DailyHistoryChartRenderer(data, bindTo);
+      var labelFormatters = this.dataSeriesChartRendererStub.args[0][0].data.labels.format;
+
+      assert.equal(labelFormatters['Total Scope'](34, 'Total Scope', 10), 34);
+      assert.equal(labelFormatters['Total Scope'](34, 'Total Scope', 12), '');
+    });
+
+    QUnit.test('testShouldHideToolTip', function (assert) {
+      var data = {
+        legend: {},
+        series_without_tooltip: ["Series Without Tooltip"]
+      };
+      data = $j.extend(this.data, data);
+      var bindTo = '#daily_history_chart';
+      new DailyHistoryChartRenderer(data, bindTo);
+      var tooltipGenerator = this.dataSeriesChartRendererStub.args[0][0].tooltip.contents;
+      var seriesWithoutTooltip = [{
+        x: "2016-12-05",
+        value: 98,
+        id: "Series Without Tooltip",
+        index: 0,
+        name: "Series Without Tooltip"
+      }];
+
+      assert.equal(tooltipGenerator(seriesWithoutTooltip), '');
+    });
+  });
+
+</script>
+</body>
+</html>

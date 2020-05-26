@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_help.dtd">
+<chapter title="Using Mingle">
+    <topic title="Getting Started" file="getting_started_in_mingle"/>
+    <section title="How to..">
+        <todo>finish content</todo>
+        <bullets>
+            <item><cref topic="viewing_cards">Viewing cards</cref></item>
+            <item><cref topic="working_with_cards">Working with cards</cref></item>
+            <item><cref topic="working_with_pages">Working with pages</cref></item>
+            <item><cref topic="viewing_project_changes">Viewing project changes (History tab)</cref></item>
+            <item><cref topic="working_with_tags">Working with tags</cref></item>
+            <item><cref topic="linking_source_files_to_cards">Linking source files to cards</cref></item>
+            <item><cref topic="creating_mingle_projects">Creating Mingle projects</cref></item>
+            <item><cref topic="mingle_api">Integrating Mingle with other applications</cref></item>
+        </bullets>
+    </section>
+</chapter>

@@ -1,0 +1,13 @@
+if (_isOpera()){
+	// Opera does not support Modal Dialogs
+} else if (_isIE()) {
+	_click(_button("Set 1"));
+	_click(_checkbox(0));
+	_click(_button("Close"));
+	_assertEqual("123", _lastAlert());
+} else {
+	_click(_button("Set 1"));
+	_popup("me modal")._click(_checkbox(0));
+	_popup("me modal")._click(_button("Close"));
+	_assertEqual("123", _lastAlert());
+}

@@ -1,0 +1,11 @@
+Tags:
+Preconditions:
+*Setting Proxy*
+Sahi requires proxy to be set for certain browsers. For info please have a look at *Help* -> *Twist help* -> *How do I* -> *Configure proxy for sahi*
+
+*For https(SSL certificates) urls*
+Sahi generates certificates for https urls that needs confirmation. For more information, please visit http://sahi.co.in/w/https-ssl
+
+*Note:* Make sure the browser launch location, provided along with browser type, is correct .i.e In case of Windows 64-bit OS this needs to be changed from ...\Program Files\... to ...\Program Files (x86)\...
+
+For more information on sahi visit_ http://www.sahi.co.in _

@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>
+      JavaScript unit test file
+    </title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/jquery/jquery.tipsy.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/jquery.tipsy-flash.js" type="text/javascript"></script>
+
+    <script src="test_assets/jquery.mockjax.js" type="text/javascript"></script>
+    <script src="test_assets/jquery.simulate.js" type="text/javascript"></script>
+    <script src="test_assets/unittest.js" type="text/javascript"></script>
+    <script src="test_assets/unittest_ext.js" type="text/javascript"></script>
+
+    <script src="../../app/assets/javascripts/dom.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/popover.js" type="text/javascript"></script>
+
+
+    <link rel="stylesheet" href="test_assets/unittest.css" type="text/css" />
+    <style type="text/css" media="screen">
+      img{
+        width: 32px;
+        height: 32px;
+      }
+
+      .popover .content {
+        display:none;
+      }
+
+      .popover.open .content {
+        display:block;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div id="content">
+      <div id="header">
+        <h1>
+          JavaScript unit test file
+        </h1>
+        <p>
+          This file tests <strong>popover.js</strong>.
+        </p>
+      </div>
+
+      <div style='border:solid 1px' id='sandbox'>
+          <div class="popover">
+            <a>handle</a>
+            <div class="content">
+              content
+            </div>
+          </div>
+      </div>
+      <!-- Log output -->
+      <div id="testlog"></div>
+    </div>
+    <script type="text/javascript">
+// <![CDATA[
+
+(function($) {
+  SANDBOX_CONTENT = $('#sandbox').html();
+
+  new Test.Unit.Runner({
+
+    setup: function() {
+      $('#sandbox').html(SANDBOX_CONTENT);
+    },
+
+    teardown: function() {
+    },
+
+
+    testClickPopoverShouldShowContent: function() { with(this) {
+      $(".popover").popover();
+      assert(!$('.popover').hasClass('open'));
+      $(".popover").click();
+      assert($('.popover').hasClass('open'));
+    }},
+
+
+    testDoubleInitializationShouldNotBreakBasicFunction: function() { with(this) {
+      $(".popover").popover();
+      $(".popover").popover();
+      assert(!$('.popover').hasClass('open'));
+      $(".popover").click();
+      assert($('.popover').hasClass('open'));
+    }},
+
+    testPopoverContentDoesNotShowWhenShouldShowReturnsFalse: function() { with(this) {
+      $(".popover").popover({
+        shouldShow: function() {
+          return false;
+        }
+      });
+      assert(!$('.popover').hasClass('open'));
+      $(".popover").click();
+      assert(!$('.popover').hasClass('open'));
+    }},
+
+    testPopoverContentShowsWhenShouldShowReturnsIsTrue: function() { with(this) {
+      $(".popover").popover({
+        shouldShow: function() {
+          return true;
+        }
+      });
+      assert(!$('.popover').hasClass('open'));
+      $(".popover").click();
+      assert($('.popover').hasClass('open'));
+    }},
+
+    testDoubleInitializationShouldHonorTheLastBeforeShow: function() { with(this) {
+      var whichCallback = null;
+      $(".popover").popover({beforeShow: function() { whichCallback="old"}});
+      $(".popover").popover({beforeShow: function() { whichCallback="new"}});
+
+      $(".popover").click();
+      assertEqual("new", whichCallback)
+    }}
+
+  }, { testLog: "testlog", test : '' }).run;
+})(jQuery);
+// ]]>
+</script>
+  </body>
+</html>

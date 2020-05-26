@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE subsection SYSTEM "mingle_help.dtd">
+<subsection title="Value query" collapsed="true" id="value_query">
+  <markup_reference title="Calculate the total size of all stories">
+    <note>
+        <item>Macro markup is space sensitive and we advise you to stick to the indentation scheme specified in the example. If you add project as a parameter this needs to be added to a new line as shown in the markup below.</item>
+        <item>Starting from 13.2.2, the value query macro is not supported as part of URL. See <exref url="http://support.thoughtworks.com/entries/23699073-Macros-in-URL-Not-Supported-from-13-2">related Knowledge Base article</exref>.</item>
+        
+    </note>
+    <p>
+      <icon alttext="Value query toolbar icon" src="resources/images/toolbar_value_query_icon.png" />
+      <markup>
+  value 
+    query: SELECT SUM('size') WHERE Type = Story
+    project: project_one
+      </markup>
+    </p>
+    <preview>
+      <screenshot alttext="Example value query" src="resources/images/tables_value_query_example.png" />
+    </preview>
+  </markup_reference>
+  <table caption="Parameters">
+    <header-row>
+      <col-header>Name</col-header>
+      <col-header>Meaning</col-header>
+      <col-header>Required</col-header>
+      <col-header>Default value</col-header>
+    </header-row>
+    <row>
+      <label>query</label>
+      <col>A custom <cref topic="mql_reference">MQL query</cref>, the results of executing this query will be shown as an value.</col>
+      <col>Yes</col>
+      <col />
+    </row>
+    <row>
+      <label>project</label>
+      <col>Any valid project identifier, specifying which project’s cards will be used to calculate the value query. Authorization will be enforced upon view. That is, if a user does not have access to a project, that data series will not be included in the chart for that user. Default is the project to which the page or card containing the macro belongs.</col>
+      <col>No</col>
+      <col>Default is the project to which the page or card containing the macro belongs to.</col>
+    </row>
+  </table>
+</subsection>

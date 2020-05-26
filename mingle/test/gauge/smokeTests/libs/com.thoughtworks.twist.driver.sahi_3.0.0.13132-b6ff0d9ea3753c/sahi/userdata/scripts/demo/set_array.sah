@@ -1,0 +1,46 @@
+
+function testSetWorksWithArrays(){
+	_navigateTo("/demo/index.htm");
+	var $linkArray = new Array();
+	for(var $i = 0; $i < 5; $i++){
+		_set($linkArray[$i], top.document.links[$i].href);
+	} 
+	               
+	// browse the saved links
+	var $url =  $linkArray[2];
+	_navigateTo($url);
+	_assertEqual("Table Test", _title());
+}
+
+
+function testSetWorksWithVariableInValue(){
+	_navigateTo("/demo/formTest.htm");
+	var $values = [];
+	for (var $i=0; $i<2; $i++){
+	   _set($values[$i], _checkbox("c1["+$i+"]").value);
+	}
+	_assertEqual(["cv1", "cv3"], $values);
+}
+
+function testSetWorksOnPopups(){
+	_navigateTo("/demo/index.htm");
+	_click(_link("Window Open Test"));
+	_popup("popWin")._click(_link("Link Test"));
+	_click(_link("Form Test"));
+	var $a = "";
+	_popup("popWin")._set($a, _link("Form Test").href);
+	_assertNotEqual(-1, $a.indexOf("formTest.htm"));
+}
+
+function testSetWorksOnPopupsWithVariableNames(){
+	_navigateTo("/demo/index.htm");
+	_click(_link("Window Open Test"));
+	_popup("popWin")._click(_link("Link Test"));
+	_click(_link("Form Test"));
+	var $name = "popWin";
+	var $a = "";
+	_popup($name)._set($a, _link("Form Test").href);
+	_assertNotEqual(-1, $a.indexOf("formTest.htm"));
+}
+
+_runUnitTests();

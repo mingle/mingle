@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE subsection SYSTEM "mingle_help.dtd">
+<subsection title="Create a new project from template" id='create_a_new_project_from_template' collapsed="false">
+
+<p>If you create a project from a template you need to decide which template is best for you. </p>
+
+<p>	You can use one of Mingle's <cref topic="standard_mingle_templates">pre-defined project templates</cref> as a basis for <cref topic="creating_mingle_projects">creating your project</cref>. These templates are based on a variety of common agile methods and practices.
+
+	Additionally, your organization may also have created a template or templates specific to your needs. If this is the case check the <cref topic="manage_templates_page">manage templates page</cref> for details of these templates.</p>
+		<steps>
+			<item><p>To create a new project, click the <link>New project</link> link on the <strong>Current projects</strong> page (the first page you see after installation or logging on - click the <strong>Mingle logo</strong> to display this page).</p>
+			<screenshot alttext="Empty all projects page" src="resources/images/installation/create_new_project_link.png"/>
+			</item>
+
+			<item><p>When entering project details, choose the template you want to use as a basis for your project. You can of course choose to make a project without using a template, however that will involve additional project configuration.</p>
+			<screenshot alttext="New project from template" src="resources/images/installation/new_project_from_template.png"/>
+			</item>
+
+			<item><p>Click the '<strong>Create project</strong>' link to complete the project creation.</p>
+				<screenshot alttext="New project from template" src="resources/images/installation/complete_create_project_link.png"/>
+			</item>
+		</steps>
+
+</subsection>

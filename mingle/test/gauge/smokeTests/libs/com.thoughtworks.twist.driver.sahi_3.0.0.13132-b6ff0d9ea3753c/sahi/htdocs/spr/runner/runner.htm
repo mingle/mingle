@@ -1,0 +1,143 @@
+<html>
+<head>
+<title>Sahi Test Runner</title>
+</head>
+<body>
+<style>
+body * {font-family:verdana;font-size:9pt;}
+</style>
+<form name="runForm" action="/_s_/dyn/Suite_start" method="post">
+<table>
+<tr><td>Sahi test or suite path</td><td>
+<input type="text" name="suite" value="scripts/demo/sahi_demo.sah" style="width:300px;"/>
+</td></tr>
+<tr><td>Base URL</td><td>
+<input type="text" name="base" value="http://sahi.co.in/demo/" style="width:300px;"/>
+</td></tr>
+<tr><td>Init JS</td><td>
+<input type="text" name="initJS" value="x=1234" style="width:300px;"/>
+</td></tr>
+</table>
+<br/>
+
+<div id="checkboxes"></div>
+<input type="button" onclick="generateURL()" value="Generate URL"/>
+<input type="button" onclick="run()" value="Run"/>
+<br/>
+<textarea name="runUrl" style="width:400px;height:100px;"></textarea>
+</form>
+<iframe id="iframe1" style="display:none"></iframe>
+<a href="http://localhost:9999/_s_/dyn/Log_viewLogs/example/index.htm" target="_blank">Show logs</a>
+<div id="browser_template" style="display:none">
+<form name="$form_name">
+<fieldset>
+<legend>$name</legend>
+<table>
+<tr><td>Browser executable path</td><td>
+<input type="text" name="browser" value="$exe_path" style="width:500px;"/>
+</td></tr>
+<tr><td>No of threads to run in (for suites)</td><td>
+<input type="text" name="threads" value="3" style="width:30px;"/>
+</td></tr>
+<tr><td>Browser process name</td><td>
+<input type="text" name="browserProcessName" value="$exe"/>
+</td></tr>
+<tr><td>Browser option</td><td>
+<input type="text" name="browserOption" value="$browser_option" style="width:500px;"/>
+</td></tr>
+<tr><td></td><td>
+</td></tr>
+</table>
+</fieldset>
+</form><br/>
+</div>
+
+<div id="settings" style="display:none">
+<a href="javascript:hide('settings');show('showSettings')">Hide browser settings</a>
+<div id="settingsInner" style="width:700px;"></div>
+</div>
+<div id="showSettings" style="display:block">
+<a href="javascript:show('settings');hide('showSettings')">Show browser settings</a>
+</div>
+
+<script>
+var browsers = new Array();
+browsers[0] = {name:"Firefox", exe_path:"C:\\Program Files\\Mozilla Firefox\\firefox.exe", 
+		exe:"firefox.exe", browser_option:"-profile $userDir/browser/ff/profiles/sahi$threadNo -no-remote"};
+browsers[1] = {name:"Internet Explorer", exe_path:"C:\\Program Files\\Internet Explorer\\iexplore.exe", 
+		exe:"iexplore.exe", browser_option:"-nomerge"};
+browsers[2] = {name:"Chrome", exe_path:"C:\\Documents and Settings\\Narayan Raman\\Local Settings\\Application Data\\Google\\Chrome\\Application\\chrome.exe", 
+		exe:"chrome.exe", browser_option:"--user-data-dir=$userDir/browser/chrome/profiles/sahi/$threadNo"};
+
+
+
+function $(id){return document.getElementById(id);}
+function hide(id){$(id).style.display="none";}
+function show(id){$(id).style.display="block";}
+function renderBrowserSettings(){
+	var template = $("browser_template").innerHTML;	
+	
+	var s = "";
+	var c = "";    
+	for (var i=0; i<browsers.length; i++){
+		var br = browsers[i];
+		var t = "" + template;
+		t =	t.replace(/[$]form_name/, br.name.replace(/ /g, '_'));
+		t =	t.replace(/[$]name/, br.name);
+		t = t.replace(/[$]exe_path/, br.exe_path);
+		t = t.replace(/[$]exe/, br.exe);
+		t = t.replace(/[$]browser_option/, br.browser_option);
+		s += t;
+
+		c += '<label><input type="radio" name="browserType" value="'+i+'">'+ br.name +'</label>';
+	}
+	$("settingsInner").innerHTML = s;
+	$("checkboxes").innerHTML = c;
+	document.runForm.browserType[0].checked = true;
+}
+renderBrowserSettings();
+function generateURL(){
+	var f = document.runForm;
+	var j = 0;	
+	for (var i=0; i < f.browserType.length; i++) {
+		if (f.browserType[i].checked) {
+			j = i;
+			break;
+		}
+	}
+	var br = browsers[j];
+	var url = "http://localhost:9999/_s_/dyn/Suite_start?" +
+	"suite="+encodeURIComponent(f.suite.value) +
+	"&base=" + encodeURIComponent(f.base.value) + 
+	"&browser=" + encodeURIComponent(br.exe_path) + 
+	"&threads=3" +
+	"&html=" + encodeURIComponent("logs/playback/example") +
+	"&junit=" + encodeURIComponent("logs/playback/example_junit") +
+	"&browserProcessName=" + br.exe + 
+	"&browserOption=" + encodeURIComponent(br.browser_option)+
+	"&initJS="+ encodeURIComponent(f.initJS.value)+
+	"";
+	
+	f.runUrl.value = url;
+}
+function run(){
+	generateURL();
+	$('iframe1').src = document.runForm.runUrl.value;
+}
+</script>
+
+
+<!--
+http://localhost:9999/_s_/dyn/Suite_start?suite=..%2Fuserdata%2Fscripts%2Fdemo%2Fdemo.suite
+&base=
+&browser=
+&threads=3
+&browserProcessName=
+&sahisid=
+&html=
+&junit=D%3A%5Csahi%5Csf%5Csahi_993%2Fuserdata%2Ftemp%2Fjunit
+&browserOption=
+-->
+</body>
+</html>
+

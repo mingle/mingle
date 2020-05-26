@@ -1,0 +1,51 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% lightbox = Lightbox.with_close_link_and_close_button(self, 'Cancel', '', :id => 'cancel', :class => 'remove-button popup-close')
+  lightbox.header "Select features for #{program.name}", spinner(:id => 'select_objectives_spinner')
+  lightbox.body do %>
+    <% form_remote_tag :url => assign_to_objectives_path(project.identifier, program.identifier), :html => {:id => "selected_objectives_form"} do |f| %>
+      <%= hidden_field_tag :number, card.number if card %>
+      <%= hidden_field_tag :editing, editing %>
+      <%-
+        objectives = program.objectives.planned.group_by {|objective| objective.auto_sync?(project) ? 'auto-sync' : 'manual' }
+        selected_auto_sync_objectives = Array(objectives['auto-sync']).select{|o| selected_objectives.include?(o)}
+      -%>
+      <ul>
+      <% Array(objectives['manual']).smart_sort_by(&:name).each do |objective| %>
+        <li>
+          <%= check_box_tag 'selected_objectives[]', objective.id, selected_objectives.include?(objective), :id => "objective_#{objective.identifier}" %>
+          <%= label_tag "objective_#{objective.identifier}", objective.name %>
+        </li>
+      <% end %>
+      </ul>
+      <% if selected_auto_sync_objectives.any? -%>
+        <h3>Added by auto-sync</h3>
+        <ul>
+          <% selected_auto_sync_objectives.smart_sort_by(&:name).each do |objective| %>
+            <li>
+              <%= hidden_field_tag 'selected_objectives[]', objective.id %>
+              <%= check_box_tag "auto_sync_objective_#{objective.identifier}", '', true, :disabled => true %>
+              <%= objective.name %>
+            </li>
+          <% end %>
+        </ul>
+      <%- end -%>
+    <%- end -%>
+<% end
+lightbox.complete_action do -%>
+  <%= button_to_function "Save", "$('select_objectives_spinner').show();$('selected_objectives_form').onsubmit()", :id => "save_selected_objectives", :class => 'primary'  %>
+<% end -%>

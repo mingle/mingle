@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Generate Transition Workflow">
+	<section title="Introduction">	
+		<p>Beginning with Mingle 2.3, you can easily generate transitions that use your project workflow. Instead of manually creating multiple transitions that differ by one property value, you can generate these transitions at once.</p>
+	</section>
+	
+	<section title="How to generate transition workflow">
+	 <steps>	
+		<item>
+			<p>The 'Create new transition workflow' link is provided on the card transitions management page. Clicking on this link takes users to the 'Generate transition workflow' page.</p>
+			<screenshot src="resources/images/transition_workflow_navigator.png" />
+		</item>
+		
+		<item>
+			<p>There are two drop down lists available on this page: one for a card type and another for a property. The card type drop down list contains all existing card types in the current project. Once you select a card type, the property drop down will be enabled and properties that are appropriate for the selected card type will be available as options. </p>
+			<screenshot src="resources/images/transition_workflow_filters.png" />	
+			<hint>Only managed text and managed numeric properties are valid property types for the property drop down.</hint>
+		</item>
+		
+		<item>
+			<p>As soon as both a card type and a property are selected, you can preview the transition workflow.</p>
+			<hint>For each generated transition a hidden date property will be created. These are used to record the date on which the transition is applied. </hint>
+			<screenshot src="resources/images/transition_workflow_preview.png" />
+			<warning>Listed transitions are for preview and have not yet been created.</warning>
+		</item>
+	
+		<item>
+			<p>To complete the transition workflow generation you need to click on the 'Generate transition workflow' link. Then all listed transitions will be created and you are taken back to the card transitions page. You can also cancel the generation after previewing the transitions by clicking on the 'Cancel' link.</p>	
+			<screenshot src="resources/images/transition_workflow_complete_link.png" />
+		</item>
+     </steps> 
+	</section>
+	<note>Transitions which are generated on this page can be edited or deleted once they are created just like any other existing transitions. </note>
+	<hint>Only Mingle or project administrators have access to this page and have the ability to generate transition workflows.</hint>
+	
+	<section title="Also see..."> 
+	<bullets>
+	<item><cref topic="card_transitions">Card transitions</cref></item>
+	<item><cref topic="automated_transitions">Automated transitions on the grid view</cref></item>
+	</bullets> 
+	</section>	
+</topic>

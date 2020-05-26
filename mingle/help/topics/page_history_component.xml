@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Page history component">
+	<section title="What you can do on this page">
+		<p>The page history component displays a summary of all changes made to the selected page. It shows who made the change and how long ago the change was made. Click the <link>View</link> link next to a version number to see this page version.</p>
+		<bullets>
+			<item><cref topic="viewing_previous_versions_of_pages">Viewing previous versions of pages</cref></item>
+		</bullets>
+	</section>
+	<section title="Also see...">
+		<bullets>
+			<item><cref topic="working_with_pages">Working with pages</cref></item>
+			<item><cref topic="viewing_project_changes">Viewing project changes (History tab)</cref></item>
+		</bullets>
+	</section>
+</topic>

@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<section title="What can you do on the List view?">
+	<subsection title="Filter cards" id="filter" collapsed="true">
+	<cref topic="filter_list_by_component">Filter the card list</cref> to isolate the cards you want to work with.
+	</subsection>
+	<subsection file="creating_cards_with_quick_add" id="create_cards_using_quick_add" collapsed="true"/>
+	<subsection title="Update cards" id="update" collapsed="true">
+		<bullets title="There are two ways you can update cards within the List view" collapsed="true">
+			<item><strong>individually</strong>, by clicking on a card. This lets you edit all details for a card including <cref topic="card_properties">properties</cref>, description and <cref topic="working_with_tags">tags</cref>.</item>
+			<item><strong><cref topic="updating_cards_in_bulk">in bulk</cref></strong>, by selecting the cards you want to update and then selecting the actions you want to perform. You can update card property values, delete cards, add or update tags, or <cref topic="card_transitions">apply a transition</cref>.</item>
+		</bullets>
+	</subsection>
+	<subsection title="Add or remove columns" id ="add_columns" collapsed="true">
+		<p>Within the List view, you can hide existing columns, or add columns for property values. Click the <link>Add / remove columns</link> link to update the columns that display.</p>
+	</subsection>
+	<subsection title="Sort cards" id="sorting_cards" collapsed="true">
+		<p>The card list view can also be sorted to view the cards in a specific order. Simply add the column you wish to sort by and select the column header. Select the header again to toggle between ascending and descending sort order. To change the sort criteria select a new column header.</p>
+	</subsection>
+	<subsection title="Update URL" collapsed="true">
+		<p>Each card view has a link called <link>Update URL</link>. This is identical to the browser address (URL), but gives you a quick way to create links to the current card view. 
+			You can use these links to send to people via email or instant messaging (IM), or to place on a website, blog or Mingle wiki page.
+			In Windows, right-click on this link to bring up options for copying or sending.</p>
+		</subsection>
+	<subsection file="card_printing_from_list_view" id="printing" collapsed="true"/>
+	<subsection title="Maximize the view" collapsed="true">
+
+	<p>The card list view can be viewed in the <cref topic="maximizing_card_views">maximized mode</cref>. This will allow for cleaner, more useful views when working with your Mingle cards.
+</p>
+			</subsection>
+
+			<subsection title="Create favorites" id="create_favorite" collapsed="true">
+				<p>If you've found a card List view that your team will use regularly, you can <cref topic="creating_a_favorite_card_view">save this view</cref>. You can then <cref topic="creating_tabs_from_favorites">turn this into a tab</cref>.</p>
+				<p> You can also create <cref topic="managing_my_favorites">personal favorites</cref> from card list views. </p>
+			</subsection>
+			<subsection title="Import / Export cards" id="import_export" collapsed="true">
+			<cref topic="import_export_component">The Import / Export component</cref> lets you export the cards in the current list, or import a list of cards from Excel.
+		</subsection>
+
+</section>

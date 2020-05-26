@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Card property values page">
+	<warning>Card property values determine how Mingle manages project workflow. 
+		Adding or changing property values may have a major impact on the project team. 
+		Ensure you understand the details in <cref topic="card_properties">card properties</cref> before changing values on this page.</warning>
+	<section title="What you can do on this page">
+		<p>The Card property values page lets you <cref topic="maintain_card_property_values">add, edit or delete the values</cref> 
+			available for <cref topic="card_property_types">managed list card properties</cref>, and shows how many cards share the value. 
+			From here you can change the colors assigned to values and re-order the list of values by dragging and dropping. 
+			The order of the property values determines how cards display when Sorting in the <cref topic="grid_view">Grid view</cref>.</p>
+		
+		<p>You can also use the <link>Edit property</link> link to <cref topic="modifying_or_deleting_card_properties">modify the card property</cref> itself</p>.
+		<bullets>
+			<item><cref topic="maintain_card_property_values">Maintaining card property values</cref></item>
+			<item><cref topic="card_properties">Card properties overview</cref></item>
+			<item><cref topic="card_property_types">Card property types</cref></item>
+			<item><cref topic="creating_card_properties">Creating card properties</cref></item>
+			<item><cref topic="modifying_or_deleting_card_properties">Modifying or deleting card properties</cref></item>
+		</bullets>
+	</section>
+		<section title="Also see...">
+			<bullets>
+				<item><cref topic="card_transitions">Card transitions</cref></item>
+				<item><cref topic="card_defaults">Card defaults</cref></item>
+				<item><cref topic="project_variables">Project variables</cref></item>
+			</bullets>
+		</section>		
+</topic>
+
+

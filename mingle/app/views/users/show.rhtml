@@ -1,0 +1,110 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= render :partial => 'shared/top_level_header_pills', :locals => { :selected_tab => 'admin' } %>
+
+<%= render :partial => 'shared/contextual_help', :locals => { :params_for_link => { :controller => 'profile', :action => 'show' } } %>
+<div>
+  <h1>
+    <%= image_tag_for_user_icon(@user, :id => 'user_icon_image', :size => '48x48') %>
+    <span class="profile-title"><%= h @user.name %></span><span class="deactivation-notice"><%= @user.activated? ? '' : '(Deactivated)' %></span>
+
+    <% unless Authenticator.managing_user_profile_externally? %>
+      <span class="profile-header-actions">
+        <%= link_to 'Edit', {:action => 'edit_profile', :id => @user}, :class => 'edit-user primary', :id => "edit-profile" %>
+        <%= link_to 'Change password', {:action => 'change_password', :id => @user}, :class => 'edit-password', :id => "change-password" if supports_password_change? %>
+      </span>
+    <% end %>
+  </h1>
+
+  <%= render_help_link 'Manage Profile Page', :class => 'page-help-at-action-bar' %>
+</div>
+
+<div class="basic-profile-information">
+  <% if @user.admin? -%>
+    <p><%= @user.name %> is an <b>administrator</b>.</p>
+  <% end -%>
+
+  <p><label>Sign-in name:</label><span id='user_login'><%= @user.login %></span></p>
+
+  <% if Authenticator.managing_user_profile_externally? && @user.activated? %>
+    <br />
+    <h2>
+      Profile Values Managed in <%= Authenticator.label.humanize %> for the Studios Suite
+      <%= link_to 'Edit', {:action => "edit_#{Authenticator.label}_profile", :id => @user}, :class => 'edit-user primary', :id => "edit-#{Authenticator.label}-profile" %>
+      <% if supports_password_change? %>
+        <%= link_to 'Change password', {:action => "change_#{Authenticator.label}_password_form", :id => @user}, :class => 'edit-user change-password', :id => "change-#{Authenticator.label}-password" %>
+      <% end -%>
+    </h2>
+  <% end %>
+
+  <p><label>Display name:</label><span><%= @user.name %></span></p>
+
+  <p><label>Email:</label><span id="user_email"><%= @user.email.blank? ? 'Not set' :  auto_link(h(@user.email)).html_safe %></span></p>
+
+  <% if Authenticator.managing_user_profile_externally? %>
+    <br />
+    <h2>
+      Profile Values Managed in Mingle
+      <%= link_to 'Edit', {:action => 'edit_profile', :id => @user}, :class => 'edit-user primary', :id => "edit-profile" %>
+    </h2>
+  <% end %>
+
+<%- if FEATURES.active?('scm') -%>
+  <p><label>Version control user name:</label><span id='user_version_control_user_name'><%= @user.version_control_user_name.blank? ? 'Not set' : @user.version_control_user_name %></span></p>
+<%- end -%>
+
+</div>
+
+<%= javascript_with_rescue "SubscriptionsCounter.attach();" %>
+
+<% content_for :tab_projects_content do %>
+  <%= render :partial => 'users/projects_membership' %>
+<% end %>
+<% content_for :tab_my_favorites_content do %>
+  <%= render :partial => 'users/personal_views' %>
+<% end %>
+<% content_for :tab_subscriptions_content do %>
+  <%= render :partial => 'history_subscriptions/history_subscriptions' %>
+<% end %>
+<% content_for :tab_oauth_access_tokens_content do %>
+  <%= render :partial => 'users/oauth_access_tokens', :locals => {:oauth_tokens => valid_oauth_tokens(@user)} %>
+<% end %>
+<% content_for :tab_hmac_auth_key_content do %>
+  <%= render :partial => 'users/hmac_auth_key' %>
+<% end %>
+<%- if @slack_team_info
+      content_for :tab_slack_content do -%>
+        <%= render partial: 'users/authenticate_in_slack' %>
+<%-   end
+    end -%>
+
+<%-
+tabs = if (User.current == @user || User.current.admin?)
+         tabs_to_be_shown = ['Projects', 'My Favorites', 'Subscriptions', 'OAuth Access Tokens', 'HMAC Auth Key']
+         tabs_to_be_shown << 'Slack' if @slack_team_info
+         tabs_to_be_shown
+       else
+         ['Projects']
+       end
+-%>
+<%= render :partial => 'shared/tabs_pane', :locals => {
+                                              :tabs => tabs,
+                                              :selected_tab => params[:tab] || 'Projects'
+                                            } %>
+
+
+<%= javascript_with_rescue "SubscriptionsCounter.instance.noSubscriptionsCheck();" %>

@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Deleting a favorite or tab">
+
+	<section title="Deleting a team favorite or tab">
+	
+	Mingle and project admins can delete Team favorites by going to the <cref topic="favorites_and_tabs_page">Team favorites and tabs page</cref> and selecting the favorite or tab they wish to delete. 
+      </section>  
+        <section title="Deleting a personal favorite">
+	
+	Users and Mingle admins can delete personal favorites from <cref topic="managing_your_user_profile#manage_personal_favorites">users' profiles</cref>.
+           
+        </section>
+		<section title="Also see...">
+			<bullets>
+				<bullets>
+				<item><cref topic="creating_a_favorite_card_view">Creating a team favorite card view</cref></item>
+				<item><cref topic="creating_a_favorite_wiki_page">Creating a team favorite wiki page</cref></item>
+				<item><cref topic="creating_tabs_from_favorites">Creating tabs from team favorites</cref></item>
+				<item><cref topic="updating_a_favorite_and_a_tab">Updating a favorite and a tab</cref></item>
+				<item><cref topic="managing_favorites_and_tabs">Managing team favorites and tabs</cref></item>
+				<item><cref topic="managing_my_favorites">Managing my favorites</cref></item>
+				<item><cref topic="customizing_projects">Customizing projects</cref></item>		
+				</bullets>
+			</bullets>
+		</section>
+</topic>

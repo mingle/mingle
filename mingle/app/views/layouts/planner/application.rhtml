@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<html data-rev="<%= MINGLE_REVISION -%>">
+  <head>
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <%= csrf_meta_tag %>
+    <meta charset="utf-8">
+    <title>
+      <%= page_title %>
+    </title>
+    <%= stylesheet_link_tag("sprockets_planner") %>
+
+    <%= render :partial => 'layouts/metrics' %>
+
+    <% if Rails.env.test? || Rails.env.development? -%>
+      <style type="text/css">
+        #javascript-errors {
+          margin: 0;
+          padding: 0;
+          border: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          background: black;
+          color: red;
+          font-weight: bold;
+          text-align: left;
+          display: none;
+        }
+
+        #javascript-errors a {
+          color: yellow;
+        }
+      </style>
+      <%= raw javascript_include_tag("/javascripts/debug/errors.js") %>
+    <% end -%>
+    <%= raw javascript_include_tag("sprockets_app") %>
+    <%= javascript_include_tag(MingleConfiguration.ckeditor_source) %>
+    <%= javascript_with_rescue %Q{
+      MingleJavascript.env = #{Rails.env.to_s.to_json};
+      window.docLinkHandler = new LinkHandler(['content']);
+      window.MingleColorPalette = #{Color.defaults.to_json};
+    } %>
+    <link rel="shortcut icon" href="<%= image_path('/favicon.ico') %>" />
+    <link rel="apple-touch-icon" href="<%= image_path('/apple-touch-icon.png') %>" />
+    <% if Rails.env.test? %>
+      <%= javascript_with_rescue "Date.clockNow = #{Clock.now.milliseconds};" %>
+      <%= javascript_with_rescue "LocaleDate.timezoneOffset = #{Clock.client_timezone_offset};" if Clock.client_timezone_offset %>
+      <%= javascript_include_tag("/javascripts/test-only/thirdparty/jquery.simulate.js") %>
+      <%= javascript_include_tag("/javascripts/test-only/thirdparty/jquery.simulate.ext.js") %>
+      <%= javascript_include_tag("/javascripts/test-only/thirdparty/jquery.simulate.drag-n-drop.js") %>
+    <% end -%>
+  </head>
+  <body id="<%= @controller.controller_name.dup << '_' << @controller.action_name %>" class="<%= params[:controller] %>" data-show-holiday-fun="<%=MingleConfiguration.show_holiday_fun?(user_preference(:i_hate_holidays)) -%>"
+  data-holiday-name="<%= MingleConfiguration.show_holiday_fun?(user_preference(:i_hate_holidays)) ? MingleConfiguration.latest_holiday : '' -%>"
+  data-hover-logo-link="<%= MingleConfiguration.holiday_logo_link.nil? ? '' : MingleConfiguration.holiday_logo_link -%>" >
+    <%= render :partial => 'layouts/application_hd' %>
+    <div id="content">
+
+      <%= yield :page_header %>
+      <div class="content">
+        <%= yield :content_header %>
+        <%= render :partial => 'layouts/flash' %>
+        <%= render :partial => 'layouts/readonly_warning' %>
+        <%= yield %>
+      </div>
+    </div>
+    <% if !rendering_login? %>
+		  <% if MingleConfiguration.display_export_banner? && display_export_notice? %>
+			  <%= render :partial => 'layouts/retirement_banner', :locals => {:time_left_for_mingle_eol => remaining_time_for_mingle_eol} %>
+		  <% end -%>
+	  <% end -%>
+    <%= render :partial => 'layouts/footbar' %>
+
+    <div id="content_overlay" style='background-color: white; opacity: 0.7; display:none; position:absolute'></div>
+    <div style="display:none"><%= render :partial => 'shared/lightbox_loading_message' %></div>
+    <%= render :partial => 'shared/user_notification' %>
+
+    <%= render_buffered_javascript %>
+  </body>
+</html>

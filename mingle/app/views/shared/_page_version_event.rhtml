@@ -1,0 +1,58 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="page-<%= Page.name2identifier(event.name) %>-<%= event.version %>" class="event page-event">
+  <div class="user-icon">
+    <span class="event-type"></span>
+    <%= image_tag_for_user_icon(event.modified_by, :size => '24x24') %>
+  </div>
+  <div class="event-content">
+    <h3>
+      <% if include_object_name -%>
+        <%= link_to(event.name, {:controller => 'pages', :action => 'show', :pagename => Page.name2identifier(event.name), :version => event.version} ) %>
+        <span class="notes"><%= h event_originator(event) %></span>
+      <% else -%>
+        <% if event.latest_version? %>
+          Version <%= event.version %>
+        <% else %>
+          <%= "Version #{event.version}" %> (<%= link_to("View", {:controller => 'pages', :action => 'show', :pagename => Page.name2identifier(event.name), :version => event.version}, { :id => "link-to-page-#{Page.name2identifier(event.name)}-#{event.version}" }) %>)
+        <% end %>
+        <p class="notes"><%= h event_originator(event) %></p>
+      <% end -%>
+    </h3>
+
+    <ul class="change">
+      <% if event.details_still_loading? -%>
+        <li>Details still loading... (<a onclick='historyLoader.reload()' class='history-refresh'>refresh</a>)</li>
+      <% else -%>
+        <% for change in event.changes.select(&:descriptive?) -%>
+          <li class="word_break"><%= h(change.describe) %></li>
+        <% end -%>
+      <% end -%>
+    </ul>
+
+    <% if include_version_links -%>
+    <div class="version-links">
+      <% if event.latest_version? -%>
+        <%= link_to("View latest version (v#{event.version})", {:controller => 'pages', :action => 'show', :pagename => Page.name2identifier(event.name)}, { :id => "link-to-page-#{Page.name2identifier(event.name)}" }) %>
+      <% else -%>
+        <%= link_to("View this version (v#{event.version})", {:controller => 'pages', :action => 'show', :pagename => Page.name2identifier(event.name), :version => event.version}, { :id => "link-to-page-#{Page.name2identifier(event.name)}-#{event.version}" }) %> |
+        <%= link_to("View latest version (v#{event.page.version})", {:controller => 'pages', :action => 'show', :pagename => Page.name2identifier(event.name)}, { :id => "link-to-page-#{Page.name2identifier(event.name)}" }) %>
+      <% end -%>
+    </div>
+    <% end -%>
+  </div>
+</div>

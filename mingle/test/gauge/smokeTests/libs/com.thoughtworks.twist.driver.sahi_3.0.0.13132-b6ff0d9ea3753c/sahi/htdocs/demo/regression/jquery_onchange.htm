@@ -1,0 +1,29 @@
+<html>
+<body>
+<script language="javascript" src="jquery-1.4.2.min.js"></script>
+    
+    <select name="guarantorId" class="field" onchansge="doIt()">
+        <option value=""></option>
+        <option value="964">AAAAAAAAAAAAAAAAAAAA</option>
+    </select>    
+    <select name="bondingLineId" class="field200">
+    <option value=""></option>
+    
+    </select>
+    <script>
+    function doIt(e){
+        if (!e) e = window.event;
+    	alert(_sahi.list(e));
+    }
+    jQuery.noConflict();
+    /**/
+    jQuery(document).ready(function() {                              
+        jQuery("select[name='guarantorId']").change(function(e) {
+            alert(_sahi.list(e));
+        	jQuery("select[name='bondingLineId']").html("<option>abcd</option>");
+        });
+    });
+    /**/
+    </script>
+</body>
+</html>

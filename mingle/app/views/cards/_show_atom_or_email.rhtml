@@ -1,0 +1,55 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% unless changes.all?{|c| c.describe.blank?} -%>
+  <p>
+    <b>Changes</b>
+    <% changes.each do |change| -%>  
+      <% unless change.describe.blank? -%>
+        <br><%=h change.describe %>
+      <% end -%>
+    <% end -%>
+  </p>
+<% end -%>
+
+<% if card.comment_details %>
+  <p>
+    <b>Comment</b>
+    <br>
+    <%= card.comment_details.content %>
+  </p>
+<% end %>
+
+<% if card.property_definitions_in_smart_order.any? -%>
+  <p>
+  <b>Properties</b>
+  <% card.property_values.each do |property_value| -%>
+    <span><br><%= property_value.name %>:&nbsp;<%= property_value.display_value %></span>
+  <% end -%>
+  </p>
+<% end -%>
+
+<% if card.tags.any? -%>
+  <p><b>Tags</b><br><%= card.tags.collect { |t| t.name }.join(',') %></p>
+<% end -%>
+
+<% content = card.formatted_email_content(self) %>
+<% if content.trim.present? -%>
+  <p>
+    <b>Description</b>
+    <div style="background-color: #F1F0EC; padding: 10px"><%= raw content %></div>
+  </p>
+<% end -%>

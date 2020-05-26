@@ -1,0 +1,68 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% authorized_to_delete_work = authorized?({controller: :works, action: :bulk_delete})  %>
+<div id='work_list'>
+  <%= render :partial => 'shared/pagination_info', :locals => { :models => @works, :model_name => 'work item' } %>
+  <div class="works_table">
+    <% form_tag(bulk_delete_program_plan_objective_works_url(@plan.program, @objective)) do %>
+      <%= fields_from_array(params[:filters] || [], "filters").join("\n").html_safe %>
+		  <% if authorized_to_delete_work %>
+			  <div class="table_actions clear_float">
+				  <div class='selection_actions table_action_group'>
+					  Select:
+					  <%= link_to_function 'All', :id => "select_all" -%>
+					  <%= link_to_function 'None', :id => "select_none" -%>
+				  </div>
+				  <div class="table_action_group">
+					  <%= hidden_field_tag('page', params[:page]) %>
+					  <%= submit_tag('Remove', :id => 'remove_works') %>
+				  </div>
+			  </div>
+		  <% end %>
+
+      <table class='list_table selectable_table' id='view_work_list'>
+        <thead>
+          <tr>
+	          <%	content_tag(:th, class: :checkbox) if authorized_to_delete_work %>
+            <th>Project</th>
+            <th class="number">Number</th>
+            <th>Name</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%- if @works.any? -%>
+            <%= render :partial => 'work', :collection => @works , locals:{authorized_to_delete_work: authorized_to_delete_work}%>
+          <%- else -%>
+            <tr>
+              <td class="results_notice" colspan="6">
+                <%- if @plan.works.empty? -%>
+                  This plan has no work.
+                <%- else -%>
+                  There are no work items that match the current filter – <%= link_to 'Reset filter', program_plan_objective_works_path(@plan.program) %>.
+                <%- end -%>
+              </td>
+            </tr>
+          <%- end -%>      
+        </tbody>
+      </table>
+    <%- end -%>
+  </div>
+  <%= render :partial => 'shared/pagination_info', :locals => { :models => @works, :model_name => 'work item' } %>
+
+  <%= javascript_with_rescue "new CheckboxController([$('remove_works')], $$('.select_work'));" %>  
+</div>

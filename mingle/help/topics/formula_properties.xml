@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_help.dtd">
+<chapter title="Formula properties">
+    <section title="Introduction">
+    	<p>Formula properties are <strong>derived from numeric or date card properties</strong>. They allow you to create automatically computed values, reducing opportunities for inconsistency.</p>
+    	<p>You can create an <cref topic="aggregate_properties">aggregate property</cref> based on a formula property. Beginning with Mingle 3.0, you can also use aggregates in formula properties.</p>
+    	<example title="simple example - Calculating the end date of an iteration">
+    		<p>A simple example is calculating the end date of an iteration based on the start date and the length of the iteration in days. Here "Start Date" and "Iteration Length" are properties assigned to the "Iteration" card type.</p>
+    		<p>The formula definition might look like: <formula>"Start Date" + ("Iteration Length" - 1)</formula></p>
+    	</example>
+    	<note>
+    	  <bullets>
+    	    <item>Formula properties can return either a date or decimal number with the <cref topic="project_numeric_precision">chosen numeric precision</cref>.</item>
+    	    <item>Formula properties cannot be marked as <cref topic="transition_only_properties">transition only</cref>.</item>
+    	  </bullets>
+    	</note>    
+    </section>
+    <section title="How to...">
+        <bullets>
+            <item><cref topic="creating_a_formula_property">Create a formula property</cref></item>
+            <item><cref topic="modifying_or_deleting_card_properties">Modify or delete a formula property</cref></item>
+        </bullets>
+    </section>
+    <section title="Also see...">
+        <bullets>            
+                <item><cref topic="formula_property_examples">Formula property examples</cref></item>  
+        </bullets>
+    </section>
+</chapter>
+
+

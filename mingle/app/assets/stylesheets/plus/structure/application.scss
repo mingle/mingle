@@ -1,0 +1,332 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+/**
+ * Application.css
+ *
+ * application-wide style standards, mostly related to html elements but also layouts
+ */
+
+/**
+ * TABLE OF CONTENTS
+ *
+ * =BODY
+ * =TITLES
+ * =FORMS
+ * =PRE/CODE
+ * =LINKS
+ * =PARAGRAPHS
+ * =LAYOUTS
+ * ==APPLICATION
+ * ==IN_PLAN
+ * ==PARTIALS
+ * ===PLAN_NAV
+ * =FLOAT CLEARING
+ * ==COMPLIANT FLOAT CLEARING
+ * ==IE7 FLOAT CLEARING HACK STANDARDS
+ */
+
+
+/**
+ * =BODY
+ */
+body {
+ background-color: #FFF;
+ color: #333;
+ font-family: Helvetica, Arial;
+ font-size: 12px;
+ padding-bottom: 35px;
+}
+
+b, strong {
+  font-weight: bold;
+}
+
+/**
+ * =TITLES
+ */
+h1, h2, h3, h4 {
+  color: #000;
+  font-family: Helvetica, Arial;
+  font-weight: 300;
+}
+h1 {
+  font-size: 22px;
+  padding: 5px 0 10px 0;
+}
+h2 {
+  font-size: 18px;
+  padding: 5px 0 10px 0;
+}
+h2 span {
+  font-weight:700;
+}
+h3 {
+  font-size: 16px;
+  padding: 5px 0 10px 0;
+}
+h4 {
+  color: #000;
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0;
+  padding: 5px 0;
+}
+
+
+/**
+ * =TABLES
+ */
+th, td {
+  padding: 7px 10px;
+  color: #333;
+  vertical-align: top;
+}
+
+
+/**
+ * =FORMS
+ */
+input,select,textarea {
+  box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+  font-size: 12px;
+  font-family: Arial, Helvetica;
+  margin: 0;
+}
+select {
+  padding: 2px;
+  width: 250px;
+}
+textarea {
+  border: 1px solid #CCC;
+  border: 1px solid rgba(0,0,0,0.2);
+  box-shadow: inset 0 0 3px rgba(0,0,0,0.2);
+    -moz-box-shadow: inset 0 0 3px rgba(0,0,0,0.2);
+    -webkit-box-shadow: inset 0 0 3px rgba(0,0,0,0.2);
+  padding: 5px;
+}
+input[disabled],
+input[disabled]:hover,
+input.disabled,
+input.disabled:hover {
+  background: #EEE;
+  box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    -o-box-shadow: none;
+  color: #AAA !important;
+  cursor: default;
+}
+input[type=text],
+input[type=date],
+input[type=password] {
+  background-color: #FFF;
+  border: 1px solid #CCC;
+  border: 1px solid rgba(0,0,0,0.2);
+  box-shadow: inset 0 0 3px rgba(0,0,0,0.2);
+    -moz-box-shadow: inset 0 0 3px rgba(0,0,0,0.2);
+    -webkit-box-shadow: inset 0 0 3px rgba(0,0,0,0.2);
+  box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+  padding: 4px 5px;
+  width: 250px;
+}
+input[type=text]:focus,
+input[type=date]:focus,
+input[type=password]:focus,
+textarea:focus {
+  background-color: #E6F5F9;
+}
+
+label {
+    display: block;
+    margin: 0 0 5px 0;
+}
+.fieldWithErrors {
+  display: inline;
+}
+.fieldWithErrors input[type=text],
+.fieldWithErrors input[type=date],
+.fieldWithErrors input[type=password] {
+  @include fieldWithErrors();
+}
+.required {
+  color:#CC0000;
+}
+
+select.x-small,
+input.x-small {
+  width: 50px;
+}
+
+select.small,
+input.small {
+  width: 100px;
+}
+
+select.large,
+input.large {
+  width: 500px;
+}
+
+select.x-large,
+input.x-large {
+  width: 750px;
+}
+
+select.half,
+input.half {
+  width:50%;
+}
+
+select.full,
+input.full {
+  width:100%;
+}
+
+
+/**
+ * =PRE/CODE
+ */
+pre,
+code {
+  font-family: Consolas, Monaco, "Courier New", Courier;
+  font-size: 12px;
+}
+
+
+/**
+ * =LINKS
+ */
+a {
+  color: #0973b6;
+  text-decoration: none;
+}
+
+/**
+ * =LISTS
+ */
+ ul li {
+   list-style: disc;
+   list-style-position: inside;
+   margin: 5px 0;
+ }
+
+
+/**
+ * =PARAGRAPHS
+ */
+p {
+  line-height: 130%;
+  margin-bottom: 10px;
+}
+
+/**
+ * =LAYOUTS
+ */
+
+
+
+/**
+ * ==APPLICATION
+ */
+
+.content {
+  padding: 15px;
+  background:none repeat scroll 0 0 #FFFFFF;
+}
+
+/**
+ * ==IN_PLAN
+ */
+.page_header {
+  height: 34px;
+  background: #333;
+  color: #FFF;
+  overflow: hidden;
+  padding: 10px 10px 0 10px;
+  box-sizing: content-box;
+}
+.page_header h1 {
+  border: 0;
+  color: #FFF;
+  display: inline-block;
+  float: left;
+  margin: 0;
+  padding: 0 0 10px 0;
+}
+.page_header a {
+  color: #ffc;
+}
+.page_header a.add_link {
+  color: #FFF;
+  float: right;
+  margin: 0;
+}
+
+.page_header .actions {
+  float: left;
+  margin-left: 10px;
+  padding: 0 10px;
+  border-left: 1px solid white;
+}
+
+.page_header .actions li {
+  display: inline;
+}
+
+.page_header .actions a.action_icon {
+  color: #FFF;
+  margin-top: 3px;
+}
+
+
+/**
+ * ==PARTIALS
+ */
+.loading_message {
+  padding-left: 20px;
+  line-height: 16px;
+  background: url(../../../images/spinner.gif) left center no-repeat;
+}
+
+/**
+ * =FLOAT CLEARING
+ * NOTE: DO NOT ADD NEW STYLES BELOW THIS SECTION
+ */
+
+
+/**
+ * ==STANDARDS COMPLIANT FLOAT CLEARING
+ */
+.clear_float:after {
+  clear: both;
+  content: ".";
+  display: block;
+  height: 0;
+  visibility: hidden;
+}
+
+/**
+ * ==IE7 FLOAT CLEARING HACK
+ */
+*+html .clear_float {
+  display: inline-block;
+  zoom: 1;
+}

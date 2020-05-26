@@ -1,0 +1,68 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div class="manage-users-list">
+<%= render :partial => 'user_totals' %>
+<%= render :partial => 'shared/pagination_info', :locals => {:models => @users, :model_name => 'user', :paginate_options => {:params => { :search => params[:search] }}} %>
+
+<div class="table-action-panel">
+  <%= render :partial => 'users/search', :locals => { :search_controller_name => 'users', :search_action_name => 'list', :deactivated_users_filter => true } %>
+  <%= clear_float %>
+</div>
+<%= clear_float %>
+
+<%- form_for(:search, @search, :url => {:controller => 'users', :action => 'list'}, :html => { :method => 'get', :id => 'user-sort', :onsubmit => 'this.submit()' }) do |form| -%>
+<%= form.hidden_field :query %>
+<%= form.hidden_field :order_by, :id => 'order_by' %>
+<%= form.hidden_field :direction, :id => 'direction' %>
+
+<table id='users' class="highlightable-table sortable_table">
+  <%- if @users.any? -%>
+    <thead>
+      <tr class="table-top">
+        <%= sortable_user_attribute_th('name', 'Display name') %>
+        <%= sortable_user_attribute_th('login', 'Sign-in name') %>
+        <%= sortable_user_attribute_th('email', 'Email') %>
+        <%- if FEATURES.active?('scm') -%>
+          <%= sortable_user_attribute_th('version_control_user_name', 'Version control user name') %>
+        <%- end -%>
+        <th class="align-center">Light user</th>
+        <th class="align-center">Administrator</th>
+        <%- if authorized?(:controller => 'users', :action => 'toggle_activate') -%>
+          <%= sortable_user_attribute_th('last_login_at', 'Last login') %>
+        <%- end -%>
+        <%= sortable_user_attribute_th('activated', 'Activate/Deactivate') %>
+        <%- if can_update_password? -%>
+          <th id="change-password-column">&nbsp;</th>
+        <%- end -%>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render :partial => 'user', :collection => @users %>
+    </tbody>
+  <%- else -%>
+    <tbody>
+      <tr class="table-top">
+        <td class="italic-light"><%= flash[:info] %></td>
+      </tr>
+    </tbody>
+  <%- end -%>
+</table>
+<%- end -%>
+<%= render :partial => 'shared/pagination_info', :locals => {:models => @users, :model_name => 'user', :paginate_options => {:params => { :search => params[:search] }}} %>
+</div>
+
+<%= javascript_with_rescue %Q[ new ManageUsers(); ] %>

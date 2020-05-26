@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<meta name="generator" content="HTML Tidy, see www.w3.org">
+<title>Link Test</title>
+</head>
+<body>
+<h2>Link Test</h2>
+
+<a href="linkByContent.htm" id="linkById">linkByContent</a> ( &lt;a
+href="linkByContent.htm" id="linkById"&gt;linkByContent&lt;/a&gt; )
+<br>
+ <br>
+<br>
+ <a href="linkByHtml.htm" id="linkByHtml"><b>linkByHtml</b></a> (
+&lt;a href="linkByHtml.htm"
+id="linkByHtml"&gt;&lt;b&gt;linkByHtml&lt;/b&gt;&lt;/a&gt; ) <br>
+<br>
+
+<br>
+ <a onclick="document.getElementById('t1').value='Clicked'">link without href</a> (
+&lt;a&gt;link without href&lt;/a&gt; ) <br>
+<br>
+
+<br>
+<a onclick="document.getElementById('t1').value='formTest link with return true';return true;" href="formTest.htm">link with return true</a><br/>
+
+<a onclick="document.getElementById('t1').value='formTest link with return false';return false;" href="formTest.htm">link with return false</a><br/>
+<a onclick="xx(event)" href="formTest.htm">link with returnValue=false</a><br/>
+<a id="myLink" href="formTest.htm">added handler using js</a><br/>
+
+<br/>
+<a href="/demo/index.htm"><img alt="imgWithLink" src="add.gif" style="border:0px;"></a>
+<br/>
+<a id="imageLink2" href="/demo/index.htm"><img alt="imgWithLinkNoClick" src="add.gif" style="border:0px;"></a> with no click
+<br/><br/>
+
+<br>
+Image with no click and link uses window.open ( href="#" onclick="window.open('/demo/linkTest.htm', 'win1')" )<br/>
+<a href="#" onclick="window.open('/demo/linkTest.htm', 'win1')"><img alt="imgWithLink" src="add.gif" style="border:0px;"></a>
+
+<br><br>
+<A class="" onclick="JSubmit('2');return false;" href="/demo/index.htm"><SPAN>Search</SPAN></A>
+
+<script>
+function JSubmit(){
+	alert(123);
+	//document.getElementById('t1').value = "JSubmit";
+}
+function xx(e){
+	if (!e) e = window.event;
+	document.getElementById('t1').value='formTest link with returnValue=false';
+	e.returnValue=false; // works for IE & Chrome & Safari
+	_sahi._debug(_sahi.list(e));
+	if (e.preventDefault) e.preventDefault(); // works for FF & Chrome & Safari
+	//_sahi._debug(_sahi.list(e));
+}
+function myAddEvent(el, ev, fn) {
+    if (!el) return;
+    if (el.attachEvent) {
+        el.attachEvent("on" + ev, fn);
+    } else if (el.addEventListener) {
+        el.addEventListener(ev, fn, false);
+    }
+}
+function myFn(e){
+	if (!e) e = window.event;
+	document.getElementById('t1').value='myFn called';
+	e.returnValue=false;
+	if (e.preventDefault) e.preventDefault();
+}
+myAddEvent(document.getElementById("myLink"), "click", myFn);
+myAddEvent(document.getElementById("imageLink2"), "click", myFn);
+
+</script>
+
+<form>
+<input id="t1" type="text" value="" size="100">
+</form>
+<a href="index.htm">1234</a>
+<br>
+
+ <a href="index.htm"><EM hasAttached="true">Sahi</EM></a><br/>
+<hr>
+<script>
+function submitMyForm2()
+{
+    document.myForm2.submit();
+}
+</script>
+<form name="myForm2" action="http://sahi.co.in/demo/formTest.htm"></form>
+<a href="#" onClick="javascript:submitMyForm2();">Form submit on click</a> without return false
+<hr>
+
+<br/>
+<a href="index.htm" title="with title">Don't use my text to identify. Use my title.</a>
+<br/><br/>
+
+Image with return false<br/>
+<a href="index.htm"><img src="add.gif" id="imageWithReturnFalse" onclick="return false"></a> 
+<br/><br/>
+
+Image with onclick="this.parentNode.href='tableTest.htm'":<br/> 
+<a href="index.htm"><img src="add.gif" id="imageWithOnclickChangingHref" onclick="this.parentNode.href='tableTest.htm'"></a> 
+<br/><br/>
+
+<script type="text/javascript"> 
+
+function loadintoIframe(iframeid, url) {
+	if (document.getElementById)
+		document.getElementById(iframeid).src = url
+}
+
+</script>
+<br/><br/>
+<iframe id="myframe" src="clickCombo.htm" style="overflow:visible; width:350px; display:block"></iframe><br/><br/>
+<a href="javascript:loadintoIframe('myframe','index.htm')">click here</a></b> 
+<br/><br/>
+<a href="index.htm">Back</a>
+</body>
+</html>
+

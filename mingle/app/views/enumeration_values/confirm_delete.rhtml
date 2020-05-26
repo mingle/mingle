@@ -1,0 +1,43 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= render :partial => "shared/delete_actions", :locals => {:location  => "top", :thing_to_delete => @project, :cancel_url => url_for(:action => 'list', :definition_id => @enumeration_value.property_definition.id)} %>
+
+<h1>Delete enumeration value</h1>
+
+<% form_tag({:action => 'destroy', :id => @enumeration_value}, {:id => 'delete-form'}) do -%><% end -%>
+
+<%= render :partial => 'shared/irrecoverable_warning' %>
+
+<% info_box do %>
+  <p>We recommend that you review the following things that will be affected by deleting the value <%= @enumeration_value.value.bold %>:</p>
+
+  <ul>
+    <% if @used_by_project_variables.any? %>
+      <li>The following <%= pluralize(@used_by_project_variables.size, 'project variable') %> will be disassociated from property <%= @enumeration_value.property_definition.name.bold %>: <%= @used_by_project_variables.collect(&:display_name).bold.to_sentence %></li>
+    <% end %>
+    <% if @used_by_team_views.any? %>
+      <li>The following <%= pluralize(@used_by_team_views.size, 'card list view') %> will be deleted: <%= @used_by_team_views.collect(&:name).bold.to_sentence %>
+      </li>
+    <% end %>
+    <% if @used_by_personal_views.any? %>
+      <li>Any personal favorites that use this value will be deleted</li>
+    <% end %>
+  </ul>
+<% end %>
+
+<%= render :partial => "shared/delete_actions", 
+           :locals => {:location  => "bottom", :thing_to_delete => @project, :cancel_url => url_for(:action => 'list', :definition_id => @enumeration_value.property_definition.id)} %>

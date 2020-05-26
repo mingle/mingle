@@ -1,0 +1,56 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% render :partial => 'shared/admin_actions'%>
+
+<div id='slack_integration'>
+  <h1>Slack Integration</h1>
+  <% if @slack_integrated -%>
+    <% read_only_mode = read_only_mode?(@team_mapped, @selected_slack_channel) %>
+  <% end -%>
+  <div id='slack_content_intro'>
+    <br>
+    <p>
+      For your reference, there is a list of all available features in our Help docs: <a href="<%= link_to_help('/features_slack.html') %>" class='slack-help-link'>Mingle + Slack features</a>.
+    </p>
+    <br>
+    <% if !@slack_integrated -%>
+      <p>
+        This instance of Mingle has not been linked with a Slack Team. Please contact a Mingle administrator to do this. They will be able to configure a Slack team in the <em> Admin > Integrations </em> section on the home page.
+      </p>
+    <% else -%>
+      <p>
+        This instance of Mingle has been linked with the Slack team <a href="<%= @team_info[:url] %>" class="slack-team"><%= @team_info[:name] %></a>. If your channel is on a different Slack team, please contact a Mingle administrator to change this.
+      </p>
+    <% end%>
+  </div>
+  <% if @slack_integrated %>
+    <%= render :partial => 'team_mapped_message', :locals => {selected_slack_channel: @selected_slack_channel, :team_mapped => @team_mapped} %>
+    <% if has_access_to_select_channel? %>
+      <div id='select_slack_channel'>
+        <%= render :partial => 'new_link_slack_channel_form', :locals => {team_mapped: @team_mapped, read_only_mode: read_only_mode, selected_slack_channel: @selected_slack_channel} %>
+      </div>
+      <% if @team_mapped %>
+        <div class="remove-slack-integration">
+          <h2>Remove Integration</h2>
+          <p class="help-text">To delink this Project from Slack, click on the button below. This will remove the integration for all channels linked with this project.</p>
+          <%= check_box_tag 'remove_project_integration', nil, false, :onclick => "Slack.removeIntegrationChecked('project')" %> <label for="remove_project_integration" class="inline">This action is not recoverable.</label>
+          <%= button_to('Remove Integration', {:action => 'remove_slack_integration'}, {:id => 'remove_project_integration_submit', :disabled => true, :method => 'delete', :class=> 'remove_integration_form'}) %>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>

@@ -1,0 +1,37 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= link_to_function('<i class="fa fa-columns"></i> Add / remove columns'.html_safe, {:id => 'column-selector-link', :class => 'columns'}) %>
+<div id="column-selector" class="slider-down" style="position: absolute; display: none;">
+  <%= spinner :id => "spinner_column", :style => 'position: absolute; top: 5px; right: 5px; width: 16px; height: 16px; display: none;' %>
+  <p class="column-selector-operations-top">
+    <%= check_box_tag 'selectAll', nil, false, :id => "select_all_lanes" %>
+    <%= label_tag "select_all_lanes", "Select All" %>
+  </p>
+  <ul id="options-container">
+    <% @view.workspace.column_properties.each do |property_def| -%>
+      <li>
+          <input type="checkbox" autocomplete="off" value="<%=property_def.name%>" name="columns" id="toggle_column_<%=property_def.html_id%>">
+          <label for="toggle_column_<%= property_def.html_id %>"><%= h(property_def.name) %></label>
+      </li>
+    <% end -%>
+  </ul>
+  <p class="column-selector-operations-bottom">
+    <%= button_to_function 'Apply', {:id => "apply_selected_column"} %>
+  </p>
+</div>
+
+<%= register_xhr_refreshable_params_aware_widget "new MultipleColumnsSelector('column-selector', 'column-selector-link', '#{url_for(:controller => 'cards', :action => 'list')}')" %>

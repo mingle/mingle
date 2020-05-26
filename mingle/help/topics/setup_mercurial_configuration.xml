@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE section SYSTEM "mingle_help.dtd">
+<section title="Mercurial source integration for Mingle Onsite">
+<subsection title="Before you start">
+	
+<note><bullets title="Please be aware:">
+	 <item>Native Mercurial integration is available for Mingle onsite only.</item>
+	 <item>Mingle supports up to Mercurial 2.1 for source integration.</item>
+	 <item>Mercurial (hg) will need to be installed on the machine running Mingle. Please ensure that the directory containing your Mercurial binaries is on your path.</item>
+      <item>Using the Mercurial source integration can take up extra disk space on the machine running Mingle. The amount of disk space used will be proportional to the size of the repository as well as the number of changesets. If you see any issues relating to limited disk space on the machine running Mingle please ensure you have adequate space for the Mercurial source.   </item>
+	 <item>Currently the Mercurial source browser does not support UTF-8 characters in commit messages. We are hoping to resolve this in future releases. </item>
+	</bullets></note>
+</subsection>
+	<subsection title="Configuration">
+
+<p>After choosing <strong>Mercurial</strong> from the source repository list, Mingle will display the <strong>Mercurial Repository settings</strong> page</p>
+
+<screenshot alttext="Mercurial Repository settings page" src="resources/images/mercurial_repository_settings_page.png" />
+<bullets>
+    <item>Enter the URL for your Mercurial repository</item>
+    <item>If your repository requires username and password authentication, be sure to enter that information as well. You must first click the <button>Change login user password</button> to enter a new password.</item>
+        <screenshot alttext="Mercurial repository settings page - user password" src="resources/images/mercurial_repository_settings_password.png" />
+    <item>Click the <link>Save settings</link> link to save the configuration and return to the <strong>Project admin</strong> page</item>  
+        
+</bullets>
+  </subsection>
+</section>
+
+
+
+

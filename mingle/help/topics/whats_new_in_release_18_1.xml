@@ -1,0 +1,54 @@
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+  <?xml version="1.0"?>
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="What's new in Release 18.1">
+	<p>For <cref topic="mingle_onsite">Mingle onsite</cref> customers, please review the <cref topic="upgrading_from_previous_versions">upgrade instructions</cref> before moving to Mingle 18.1.</p>
+	<note>
+	  <item>All of the features below are already available for our Mingle in the cloud customers.</item>
+  </note>
+
+<section title="Easy Charts">
+ 		<p>Setting up charts to track and report progress has never been easier!</p>
+      <p>Reporting is one of Mingle’s most powerful features - you can create hundreds of customized charts and reports. Easy Charts introduces a wizard to make customization easier than ever. Just a few clicks, and you’ll be all set up.</p>
+      <p>We’ve released the Easy Chart wizard for Pie chart, Ratio bar chart, Stacked bar chart and Data series chart in our previous release (v17). More charts are now available with the wizard:</p>
+      <bullets>
+      <item>Use Easy Charts to <cref topic="ec_cfg">create customized interactive Cumulative flow charts</cref>.</item>
+      <item>Use Easy Charts to <cref topic="ec_daily_history_charts">create daily history charts</cref>.</item>
+      <item>Use Easy Charts to <cref topic="ec_forecasting_chart">create forecasting charts</cref>.</item>
+      <item>Use Easy Charts to <cref topic="ec_fixed_date_chart">create fixed date charts</cref>.</item>
+      </bullets>
+ </section>
+
+ <section title="Program Wall">
+   	  <p>This version will provide a sneak peak of the changes we’re making to Program Management in our Mingle Plus offering. The goal is to make program planning simple and transparent. The old Backlog is now the Program Wall, with program objectives tracked as cards and managed in a grid. Program members will be able to:</p>
+      <bullets>
+      <item>Manage a backlog of program objectives, and plan them on the timeline.</item>
+      <item>Prioritize objectives by reordering them in the swimlanes.</item>
+      <item>Program objectives are expanded as pop-ups and come with a rich-text editor.</item>
+      </bullets>
+ </section>
+
+ <section title="Performance improvement on the Grid view">
+ 	<p>We have improved the experience on the grid view when users add new cards on the grid view and update cards in the pop-up mode.</p>
+</section>
+
+ <section title="Bug Fixes">
+ 	<p>Fixed an issue when “enable enroll all users as team members” is turned on in a project, the user(s) are unable to access project from the Project list page nor from user summary page.</p>
+</section>
+
+</topic>

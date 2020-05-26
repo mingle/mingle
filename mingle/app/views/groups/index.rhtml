@@ -1,0 +1,47 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= render_help_link("Groups Page", :class => 'page-help') %>
+
+<%= render :partial => 'shared/admin_actions'%>
+
+<div>
+  <h1><%= @project.name %> user groups</h1>
+</div>
+
+
+<%= render :partial => 'add_group' %>
+
+<div id="content" class="content-margin-adjust">
+  <table id='project_groups' class="highlightable-table">
+    <thead>
+      <tr class="table-top">
+        <th>Group name</th>
+        <th>Number of users</th>
+        <% if allow_edit? -%>
+          <th class="align-right"> &nbsp; </th>
+        <% end -%>
+      </tr>
+    </thead>
+    <tbody>
+      <% if @project.user_defined_groups.empty? -%>
+        <td colspan="3" class="italic-light align-center last">There are currently no groups to list.</td>
+      <% else -%>
+        <%= render :partial => 'group', :collection => @project.user_defined_groups.smart_sort_by(&:name) %>
+      <% end -%>
+    </tbody>
+  </table>
+</div>

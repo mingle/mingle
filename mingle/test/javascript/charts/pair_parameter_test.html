@@ -1,0 +1,176 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Pair Parameter Test</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+  <script src="../../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/application.js" type="text/javascript"></script>
+
+  <script src="../../../app/assets/javascripts/drop_down.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/parameter.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/pair_parameter.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/section_helpers.js" type="text/javascript"></script>
+
+  <script src="../test_assets/sinon-2.3.6.js" type="text/javascript"></script>
+  <script src="../test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+  <script src="../test_assets/qunit-phantom.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="../test_assets/qunit-1.21.0.css" type="text/css"/>
+
+</head>
+  <body>
+    <div id="qunit">
+    </div>
+    <div id="pair_param_container"></div>
+    <script type="application/javascript">
+      QUnit.module('Pair Parameter', {
+        beforeEach: function () {
+          this.pairParamDef = {
+            name: 'pair-parameter',
+            connecting_text: 'connecting_text',
+            param_defs: [{
+              name: 'param1',
+              initial_value: 'foo',
+              allowed_values: ['foo', 'bar', 'blah'],
+              multiple_values_allowed: false,
+              input_type: 'dropdown'
+            }, {
+              name: 'param2',
+              initial_value: null,
+              allowed_values: ['1', '2', '3', '4'],
+              multiple_values_allowed: false,
+              input_type: 'dropdown'
+            }]
+          };
+
+          sinon.spy(MingleUI.EasyCharts, 'Parameter');
+          this.container = $j('#pair_param_container');
+        },
+        afterEach: function () {
+          this.container.empty();
+          MingleUI.EasyCharts.Parameter.restore();
+        }
+      });
+
+      QUnit.test('testShouldAddBothParameters', function (assert) {
+        new MingleUI.EasyCharts.PairParameter(this.container, this.pairParamDef, {});
+        var param1Args = MingleUI.EasyCharts.Parameter.args[0];
+        var param2Args = MingleUI.EasyCharts.Parameter.args[1];
+
+        assert.equal(MingleUI.EasyCharts.Parameter.callCount, 2);
+        assert.equal(param1Args[0], 'pair_parameter');
+        assert.equal(param1Args[1], this.pairParamDef.param_defs[0]);
+        assert.deepEqual(param1Args[2], {});
+        assert.equal(param2Args[0], 'pair_parameter');
+        assert.equal(param2Args[1], this.pairParamDef.param_defs[1]);
+        assert.deepEqual(param2Args[2], {});
+
+        assert.ok(this.container.find('#pair_parameter_param1_parameter')[0]);
+        assert.equal(this.container.find('#pair_parameter_param1_parameter .options-container').text(), 'foobarblah');
+        assert.equal(this.container.find('#pair_parameter_param1_parameter .selected-value').text(), 'foo');
+        assert.ok(this.container.find('#pair_parameter_param2_parameter')[0]);
+        assert.equal(this.container.find('#pair_parameter_param2_parameter .options-container').text(), '1234');
+        assert.equal(this.container.find('#pair_parameter_param2_parameter .selected-value').text(), '(not set)');
+      });
+
+      QUnit.test('testShouldAddConnectingTextBetweenParameters', function (assert) {
+        new MingleUI.EasyCharts.PairParameter(this.container, this.pairParamDef, {});
+
+        assert.equal(this.container.find('#pair_parameter_param1_parameter').next().text(), this.pairParamDef.connecting_text);
+      });
+
+      QUnit.test('testHidePairShouldHideConnectingTextAndSecondParam', function (assert) {
+        var pairParam = new MingleUI.EasyCharts.PairParameter(this.container, this.pairParamDef, {});
+
+        assert.ok(this.container.find('.pair-connector').is(':visible'));
+        assert.ok(this.container.find('#pair_parameter_param2_parameter').is(':visible'));
+
+        pairParam.hidePairParameter();
+
+        assert.notOk(this.container.find('.pair-connector').is(':visible'));
+        assert.notOk(this.container.find('#pair_parameter_param2_parameter').is(':visible'));
+      });
+
+      QUnit.test('testShowPairShouldShowConnectingTextAndSecondParam', function (assert) {
+        var pairParam = new MingleUI.EasyCharts.PairParameter(this.container, this.pairParamDef, {});
+
+        assert.ok(this.container.find('.pair-connector').is(':visible'));
+        assert.ok(this.container.find('#pair_parameter_param2_parameter').is(':visible'));
+
+        pairParam.hidePairParameter();
+
+        assert.notOk(this.container.find('.pair-connector').is(':visible'));
+        assert.notOk(this.container.find('#pair_parameter_param2_parameter').is(':visible'));
+
+        pairParam.showPairParameter();
+
+        assert.ok(this.container.find('.pair-connector').is(':visible'));
+        assert.ok(this.container.find('#pair_parameter_param2_parameter').is(':visible'));
+      });
+
+      QUnit.test('testSetPairValuesShouldUpdateSecondParamValues', function (assert) {
+        var pairParam = new MingleUI.EasyCharts.PairParameter(this.container, this.pairParamDef, {});
+
+        assert.equal(this.container.find('#pair_parameter_param2_parameter .options-container').text(), '1234');
+
+        pairParam.setPairValues(['a','b','c','d'], 'b');
+
+        assert.equal(this.container.find('#pair_parameter_param2_parameter .options-container').text(), 'abcd');
+        assert.equal(this.container.find('#pair_parameter_param2_parameter .selected-value').text(), 'b');
+      });
+
+      QUnit.test('testIsValidShouldReturnFalseWhenNoValuesAreSet', function (assert) {
+        this.pairParamDef.param_defs[0].initial_value = null;
+        var pairParam = new MingleUI.EasyCharts.PairParameter(this.container, this.pairParamDef, {});
+
+        assert.notOk(pairParam.isValid());
+      });
+
+      QUnit.test('testIsValidShouldReturnTrueWhenFirstParameterIsSelectedAndSecondIsHidden', function (assert) {
+        var pairParam = new MingleUI.EasyCharts.PairParameter(this.container, this.pairParamDef, {});
+
+        assert.notOk(pairParam.isValid());
+
+        pairParam.hidePairParameter();
+
+        assert.ok(pairParam.isValid());
+      });
+
+      QUnit.test('testIsValidShouldReturnFalseWhenFirstParameterIsSelectedAndSecondIsNot', function (assert) {
+        var pairParam = new MingleUI.EasyCharts.PairParameter(this.container, this.pairParamDef, {});
+
+        assert.notOk(pairParam.isValid());
+      });
+
+      QUnit.test('testIsValidShouldReturnTrueWhenBothParametersAreSelected', function (assert) {
+        var pairParam = new MingleUI.EasyCharts.PairParameter(this.container, this.pairParamDef, {});
+
+        assert.notOk(pairParam.isValid());
+
+        this.container.find('#pair_parameter_param2_parameter li:contains("1")').click();
+
+        assert.ok(pairParam.isValid());
+      });
+    </script>
+  </body>
+</html>

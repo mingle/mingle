@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Configuring Mingle's authentication">
+	
+	<p>The authentication settings for Mingle are controlled through the <path>[mingle_data_directory]/config/auth_config.yml</path> file. This file is created by default on all brand new installations.</p>
+	
+	<section title="Using other authentication systems">
+    <p>You can <cref topic="mingle_ldap_authentication">configure Mingle to use LDAP for authentication</cref>.</p>
+    <p>You can <cref topic="mingle_cas_sso_authentication">configure Mingle to CAS for authentication</cref>.</p>  
+  </section>
+
+<section title="Configuring basic authentication" file="configuring_basic_authentication"/>
+
+<section title="Setting password format restrictions" file="setting_password_format_restrictions" collapsed="false"/>   
+
+
+<section title="Also see...">
+	<bullets>
+		<item><cref topic="advanced_mingle_configuration">More information on configuring Mingle</cref></item>
+	</bullets>
+</section>
+</topic>
+

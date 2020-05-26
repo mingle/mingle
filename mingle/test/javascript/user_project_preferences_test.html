@@ -1,0 +1,194 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>
+        JavaScript unit test file
+    </title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js"
+            type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/user_project_preferences.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="test_assets/qunit-1.21.0.css" type="text/css"/>
+    <script src="../../app/assets/javascripts/ajax_error_handler.js" type="text/javascript"></script>
+    <script src="test_assets/sinon-2.3.6.js" type="text/javascript"></script>
+    <script src="test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+    <script src="test_assets/qunit-phantom.js" type="text/javascript"></script>
+
+</head>
+<body>
+<div id="header">
+    <h1>JavaScript unit test file</h1>
+    <p>
+        This file tests the ProjectAssignment class in <strong>membership.js</strong>.
+    </p>
+</div>
+<div id="qunit"></div>
+<div id="qunit-fixture"></div>
+<div id="main">
+    <div class="main_inner">
+        <div id="flash">
+            <div class="success-box"><div class="flash-content" id="notice"></div></div>
+        </div>
+        <table class="highlightable-table">
+            <tbody>
+            <tr>
+                <td class="col1">
+                    <h>Project</h>
+                </td>
+                <td name="usage" class="col2">
+                    <h>Subscribe</h>
+                </td>
+            </tr>
+            <tr>
+                <td class="col1" id="project_1">
+                    Project_1
+                </td>
+                <td name="usage" class="col2">
+                    <input checked="checked" class="slack-murmur-subscription"
+                           data-update-subscription-url="/user_display_preference/update_user_project_preference"
+                           id="slack_murmur_subscription_1" name="slack_murmur_subscription_1"
+                           onclick="UserProjectPreferences.subscribeUnsubscribe(1)" type="checkbox"
+                           value="slack_murmur_subscription">
+                </td>
+            </tr>
+            <tr>
+                <td class="col1" id="project_2">
+                    Project_2
+                </td>
+                <td name="usage" class="col2">
+                    <input class="slack-murmur-subscription"
+                           data-update-subscription-url="/user_display_preference/update_user_project_preference"
+                           id="slack_murmur_subscription_2" name="slack_murmur_subscription_2"
+                           onclick="UserProjectPreferences.subscribeUnsubscribe(2)" type="checkbox"
+                           value="slack_murmur_subscription">
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+
+<script type="text/javascript">
+
+    var respondToFirstRequestInQueue = function (value) {
+        var parsedValue = JSON.parse(value);
+        var request = server.requests.shift();
+        if (!request)
+            throw "No request found";
+        if (parsedValue.hasOwnProperty('project_id')) {
+            request.respond(
+                200,
+                {"Content-Type": "application/json"}
+                , value
+            );
+        }
+        else {
+            request.respond(
+                401,
+                {"Content-Type": "application/json"}
+                , value
+            );
+        }
+    };
+
+    var assertNoAjaxRequest = function (assert) {
+        assert.equal(0, server.requests.length)
+    };
+
+    QUnit.module("UserProjectPreferences", {
+        beforeEach: function (assert) {
+            server = sinon.fakeServer.create();
+        },
+        afterEach: function (assert) {
+            $j('#slack_murmur_subscription_1').prop('checked', true);
+            $j('#slack_murmur_subscription_2').prop('checked', false);
+            $j("#flash #notice").text("");
+            server.restore();
+        }
+    });
+
+    QUnit.test("testShouldUnsubscribeForSlackMurmurNotification", function (assert) {
+        assertNoAjaxRequest(assert);
+        $j('#slack_murmur_subscription_1').click();
+        done = assert.async(2);
+
+        setTimeout(function () {
+            respondToFirstRequestInQueue(JSON.stringify({
+                project_id: 1,
+                user_project_preferences: {preference: 'slack_murmur_subscription', value: false}
+            }));
+            done();
+        });
+
+        setTimeout(function () {
+            assert.equal(false, $j('#slack_murmur_subscription_1').prop('checked'));
+            assert.equal('You have successfully unsubscribe for Project_1',$j("#flash #notice").text());
+            done();
+        });
+    });
+
+    QUnit.test("testShouldSubscribeForSlackMurmurNotification", function (assert) {
+        assertNoAjaxRequest(assert);
+        $j('#slack_murmur_subscription_2').click();
+        done = assert.async(2);
+
+        setTimeout(function () {
+            respondToFirstRequestInQueue(JSON.stringify({
+                project_id: 2,
+                user_project_preferences: {preference: 'slack_murmur_subscription', value: true}
+            }));
+            done();
+        });
+
+        setTimeout(function () {
+            assert.equal(true, $j('#slack_murmur_subscription_2').prop('checked'));
+            assert.equal('You have successfully subscribe for Project_2',$j("#flash #notice").text());
+            done();
+        });
+    });
+
+    QUnit.test("testShouldDisplayErrorMessageOnFailure", function (assert) {
+        assertNoAjaxRequest(assert);
+        $j('#slack_murmur_subscription_2').click();
+
+        done = assert.async(2);
+
+        setTimeout(function () {
+            respondToFirstRequestInQueue(JSON.stringify({
+                user_project_preferences: {
+                    preference: 'slack_murmur_subscription',
+                    value: false
+                }
+            }));
+            done();
+        });
+
+        setTimeout(function () {
+            assert.equal(false, $j('#slack_murmur_subscription_2').prop('checked'));
+            done();
+        });
+    });
+
+</script>
+</body>
+</html>

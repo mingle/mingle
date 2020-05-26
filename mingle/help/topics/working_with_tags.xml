@@ -1,0 +1,131 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Working with tags">
+	<section title="Introduction">
+		<p>Tags are a flexible and ad hoc way to label, flag, categorize and group cards. 
+    		You can use tags for any purpose at any time, e.g. to flag specific bugs that tell a developer to speak to a certain person. 
+    		Or highlight user stories that need to be reviewed by a usability expert.</p>
+		<hint>You can also tag pages with search terms so they are more prominent when searching in Mingle.</hint>
+		<p>You can tag any card or page with an unlimited number of tags. 
+    		You can view cards according to their tags by adding tags to the filter on the main card view page, or search according to tag names.</p>
+	</section>
+	<section title="How to add or remove tags from multiple cards">
+		<steps>
+			<item><cref topic="signing_in_and_out_of_mingle">Sign in</cref> to Mingle and locate your project (if you're not already working in the project).</item>
+			<item>
+				<cref topic="finding_cards_to_work_with">Locate the card(s)</cref> you want to tag. 
+				You can do this by <cref topic="filter_list_by_component">filtering a card view</cref> or <cref topic="mingle_search">searching for cards</cref>.
+			</item>
+			<item>Display the cards you want to tag in a <cref topic="list_view">list view.</cref></item>
+			<item>Click the <button>Tag</button> button.
+				<p>Mingle displays the tag field.</p>
+				<screenshot alttext="List view - add tags" src="resources/images/list_view_add_tags.png"/>
+			</item>
+			<item>Type the tag name(s), separating distinct tag names with commas. 	If tags already exist for the project, Mingle displays suggestions as you type.</item>
+			<item>
+				Click the <button>Add tags</button> button.
+				<p>Mingle adds these tags to the top of the tag field. You can remove these tags by clicking the X next to the tag name(s).</p>
+				<screenshot alttext="List view - all tagged" src="resources/images/list_view_all_tagged.png"/>
+			</item>
+		</steps>
+		<p>Whenever you select cards in the list view with these tags, the tag names will display here where you can remove them for selected cards.</p>
+	</section>
+	<section title="How to add tags to single cards">
+		<steps>
+			<item><cref topic="signing_in_and_out_of_mingle">Sign in</cref> to Mingle and locate your project (if you're not already working in the project).</item>
+			<item>
+				<cref topic="finding_cards_to_work_with">Locate and open the card</cref> you want to tag. 
+				You can do this by <cref topic="filter_list_by_component">filtering a card view</cref> or <cref topic="mingle_search">searching for cards</cref>.
+				<p>Mingle displays any tags currently attached to this card.</p>
+				<screenshot alttext="Card view - edit tags" src="resources/images/card_view_edit_tags.png"/>
+			</item>
+			<item>
+				Click the + icon on the right.
+				<screenshot alttext="Card view - add tags" src="resources/images/card_view_add_tags.png"/>
+			</item>
+			<item>
+				<bullets title="If you want to">
+					<item><strong>add a new tag</strong>, type it in the field here.</item>
+					<item>Click the <button>Add tags</button> button.</item>
+						<item>Mingle adds the tag above the tag field.</item>
+					<item><strong>remove a tag</strong>, click the X to the right of the tag name.</item>
+				</bullets>
+			</item>
+			<item>Click the <button>Close</button> button to stop editing tags.</item>
+		</steps>
+	</section>
+	<section title="How to add tags to pages">
+		<steps>
+			<item><cref topic="signing_in_and_out_of_mingle">Sign in</cref> to Mingle and locate your project (if you're not already working in the project).</item>
+			<item>
+				Locate and open the page you want to tag. Mingle displays any tags currently attached to this page.
+			</item>
+			<item>
+				Click the <link>Add tags</link> link. Mingle opens up these tags for editing.
+			</item>
+			<item>
+				<bullets title="If you want to">
+					<item><strong>add a new tag</strong>, type it in the field here.</item>
+						<item>Click the <button>Add tags</button> button.</item>
+						<item>Mingle adds the tag above the tag field.</item>
+					<item><strong>remove a tag</strong>, click the X to the right of the tag name.</item>
+				</bullets>
+			</item>
+			<item>Click the <button>Close</button> button to stop editing tags.</item>
+		</steps>
+	</section>
+
+	<section title="How to color your tags">
+<steps>
+	<item>Just add a tag to your card</item>
+	<item>Click on the tag</item>
+	<item>Pick a color</item>
+	<item>Close your card</item>
+	<item>The mini card now shows the tag on your wall</item>
+</steps>
+ <p><screenshot alttext="rename fav" src="resources/images/color_tag.gif"/></p>
+ <hint>
+<bullets>
+	<item>The color tag functionality is available on both the card preview and full view</item>
+	<item>Only one tag — the first tag you color, chronologically speaking — will appear on the mini card at a time (your other tags will still be visible in alphabetical order and can be colored on the card itself, but only the first one you colored chronologically will show up on your wall)</item>
+	<item>If you don’t want the tag to appear on the mini card but want to keep the tag, simply don’t choose a color for the tag</item>
+</bullets>
+ </hint>
+</section>
+
+	<section title="Import tags">
+    <p>To import new or existing tags, include a "tags" column in your tab-separated-value document. When you import the document, the tags will be added to any new and existing cards referenced in your tab-separated-value document. Once imported, new tag values will be available to add to cards and pages throughout your project. Learn more about <cref topic="import_export_component">importing and exporting cards</cref>.</p>
+  </section>  
+
+	<section title = "Use tags in MQL">
+		<p>Tags can be used to create charts. Learn more on <cref topic="mql_reference">MQL reference</cref>.</p>
+		<markup> WHERE type = defect and TAGGED WITH 'merged into Iteration 1'</markup>
+		<markup> WHERE type = defect and AND NOT TAGGED WITH 'Image'</markup>
+	</section>
+	<section title="Also see...">
+		<bullets>
+			<item>
+				<cref topic="managing_tags">Managing tags</cref>
+			</item>
+			<item>
+				<cref topic="creating_tags_for_cards_or_wiki_pages">Creating tags for cards or wiki pages</cref>
+			</item>
+		</bullets>
+	</section>
+</topic>

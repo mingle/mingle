@@ -1,0 +1,680 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Cross Project Chart Series Test</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery.tag-it.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/tinycolor.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+  <script src="../../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+
+  <script src="../../../public/javascripts/application.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery.scrollintoview.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/color_picker.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/color_selector.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/drop_down.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/text_box.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/mingle_tageditor.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/tags_filter.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/mingle_tag_storage.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/url_helper.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/project_data_store.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/single_checkbox.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/group_parameter.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/parameter.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/trend_line_parameter.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/pair_parameter.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/section_helpers.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/card_filter_value_wrapper.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/card_filter.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/property_definition_filter.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/card_type_filter.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/card_filters.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/mql_builder.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/series.js" type="text/javascript"></script>
+
+  <script src="../test_assets/sinon-2.3.6.js" type="text/javascript"></script>
+  <script src="../test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+  <script src="../test_assets/qunit-phantom.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="../test_assets/qunit-1.21.0.css" type="text/css"/>
+
+</head>
+<body>
+<div id="qunit">
+</div>
+<div id="chart_series_cross_project"></div>
+<script type="application/javascript">
+  var _allPropDefs = {
+    1: {
+      name: 'prop1',
+      isNumeric: true,
+      isManaged: true,
+      dataType: 'numeric',
+      operatorOptions: [['is not', 'is not']],
+      propertyValueDetails: [{value: 'p1v2', position: 2}, {value: 'p1v1', position: 1}, {value: 'p1v3', position: 3}]
+    },
+    2: {
+      name: 'Release',
+      dataType: 'card',
+      operatorOptions: [['is', 'is']]
+    },
+    3: {
+      name: 'prop3',
+      isManaged: false,
+      dataType: 'string',
+      operatorOptions: [['is', 'is']],
+      propertyValueDetails: [{value: 'p3v1', position: 2}, {value: 'p3v2', position: 1}]
+    },
+    4: {
+      name: 'prop4',
+      dataType: 'date',
+      operatorOptions: [['is', 'is']]
+    },
+    5: {
+      name: 'Iteration',
+      dataType: 'card',
+      operatorOptions: [['is', 'is']]
+    },
+    6: {
+      name: 'Sprint',
+      dataType: 'card',
+      operatorOptions: [['is', 'is']]
+    },
+    7: {
+      name: 'prop2',
+      dataType: 'numeric',
+      isManaged: false,
+      isNumeric: true,
+      operatorOptions: [['is', 'is']]
+    }
+  };
+  var getPropDefs = function (propDefNums) {
+    return propDefNums.map(function (profDefNum) {
+      return $j.extend(true, {}, _allPropDefs[profDefNum]);
+    });
+  };
+  var sandbox = sinon.sandbox.create(sinon.defaultConfig),
+      projectData = {
+        identifier: 'sample_project',
+        dateFormat: '%Y/%m/%d',
+        cardTypes: [
+          {
+            id: 1,
+            name: "Story",
+            propertyDefinitions: getPropDefs([1, 2, 3, 5, 6])
+          },
+          {
+            id: 2,
+            name: "Work",
+            propertyDefinitions: getPropDefs([1, 3, 4, 5, 6])
+          },
+          {
+            id: 3,
+            name: "Release",
+            propertyDefinitions: getPropDefs([3, 4, 5, 6])
+          }
+        ],
+        cardTypeNames: [
+          "Story",
+          "Work",
+          "Release"
+        ],
+        team: [
+          {name: 'User1', login: 'user1'},
+          {name: 'User2', login: 'user2'}
+        ],
+        tags: [{name: 'tag1', color: 'red'}, {name: 'tag2', color: 'green'}],
+      },
+      accessibleProjects = [{name: 'Sample Project', identifier: 'sample_project'},
+        {name: 'Sample Project 2', identifier: 'sample_project2'}],
+      secondProjectData = {
+        identifier: 'sample_project2',
+        dateFormat: '%Y/%m/%d',
+        cardTypes: [
+          {
+            id: 1,
+            name: "Story",
+            propertyDefinitions: getPropDefs([1, 2, 3, 5, 6])
+          },
+          {
+            id: 2,
+            name: "Work",
+            propertyDefinitions: getPropDefs([1, 3, 4, 5, 6])
+          }
+        ],
+        cardTypeNames: [
+          "Story",
+          "Work"
+        ],
+        team: [],
+        tags: []
+      },
+      seriesParameterInitializationData = null;
+
+  function changeProject(series, projectName) {
+    var projectDropDown = series.htmlContainer.find('div.series-params-container div#' +  series.name.toSnakeCase() + '_project_parameter');
+    projectDropDown.find('.drop-down .drop-down-toggle').click();
+    projectDropDown.find('.drop-down .options-container li:contains("'+ projectName +'")').click();
+
+  }
+
+  QUnit.module('Cross Project Chart Series', {
+    beforeEach: function () {
+      this.container = $j('#chart_series_cross_project');
+      seriesParameterInitializationData = {
+        config:{'trend-line':{isRequired:false}},
+        number: 1,
+        currentProject: 'sample_project',
+        cardFilters: [
+          {property: 'Type', values: ['Story', 'Release'], operator: 'is'}
+        ],
+        property: _allPropDefs[5].name,
+        colors: ["#3D8F84", "#19A657", "#55EB7D"]
+      };
+      this.callBacks = {onUpdate: sandbox.spy(), onError: sandbox.spy()};
+    },
+    afterEach: function () {
+      this.container.empty();
+      sandbox.restore();
+    }
+
+  });
+
+  QUnit.test('testShouldBeAbleToSelectDifferentProject', function (assert) {
+    var projectDataStore = new ProjectDataStore(projectData, secondProjectData);
+    sinon.stub(projectDataStore, 'accessibleProjects').returns(accessibleProjects);
+    var localData = $j.extend({}, seriesParameterInitializationData, {projectDataStore: projectDataStore});
+    this.series = new MingleUI.EasyCharts.Series(localData, this.callBacks);
+    this.container.append(this.series.htmlContainer);
+    assert.equal(this.series.htmlContainer.find('#series_1_project_parameter .drop-down .selected-value').text(), 'Sample Project');
+
+    changeProject(this.series, 'Sample Project 2');
+
+    assert.equal(this.series.htmlContainer.find('#series_1_project_parameter .drop-down .selected-value').text(), 'Sample Project 2');
+    assert.equal(this.series.value().project, 'sample_project2');
+    assert.equal(this.callBacks.onUpdate.callCount, 1);
+    assert.equal(this.callBacks.onError.callCount, 0);
+  });
+
+  QUnit.test('testShouldTriggerOnUpdateWhenNewProjectDataIsFetched', function (assert) {
+    var projectDataStore = new ProjectDataStore(projectData), server = sinon.fakeServer.create();
+    sinon.stub(projectDataStore, 'accessibleProjects').returns(accessibleProjects);
+    server.respondWith("GET", "/api/v2/projects/sample_project2/chart_data.json",
+        [200, {"Content-Type": "application/json"}, JSON.stringify(secondProjectData)]);
+    var localData = $j.extend({}, seriesParameterInitializationData, {projectDataStore: projectDataStore});
+    this.series = new MingleUI.EasyCharts.Series(localData, this.callBacks);
+    this.container.append(this.series.htmlContainer);
+    assert.equal(this.series.htmlContainer.find('#series_1_project_parameter .drop-down .selected-value').text(), 'Sample Project');
+
+    changeProject(this.series, 'Sample Project 2');
+
+    assert.equal(this.callBacks.onUpdate.callCount, 0);
+    assert.equal(this.series.htmlContainer.find('#series_1_project_parameter .drop-down .selected-value').text(), 'Sample Project 2');
+    assert.equal(this.series.value().project, 'sample_project2');
+
+    server.respond();
+
+    assert.equal(this.callBacks.onUpdate.callCount, 1);
+    assert.equal(this.callBacks.onError.callCount, 0);
+    server.restore();
+  });
+
+  QUnit.test('testCrossProjectSelectionAllowsCommonCardTypesInDropDown', function (assert) {
+    sinon.spy(MingleUI.EasyCharts, 'CardFilters');
+    var projectDataStore = new ProjectDataStore(projectData, secondProjectData);
+    sinon.stub(projectDataStore, 'accessibleProjects').returns(accessibleProjects);
+    var localData = $j.extend({}, seriesParameterInitializationData, {projectDataStore: projectDataStore});
+    this.series = new MingleUI.EasyCharts.Series(localData, this.callBacks);
+    this.container.append(this.series.htmlContainer);
+    var filtersContainer = this.series.htmlContainer.find('div#series_1_filters_parameter');
+    assert.equal(filtersContainer.find('#card_filter_1 .property-value .selected-value').text(), 'Story, Release');
+
+    changeProject(this.series, 'Sample Project 2');
+
+    filtersContainer = this.series.htmlContainer.find('div#series_1_filters_parameter');
+    assert.equal(this.callBacks.onUpdate.callCount, 1);
+    assert.equal(this.callBacks.onError.callCount, 0);
+    assert.equal(filtersContainer.find('#card_filter_1 .property-value .selected-value').text(), 'Story');
+    MingleUI.EasyCharts.CardFilters.restore();
+  });
+
+  QUnit.test('testCrossProjectSelectionThrowsErrorWhenNoCommonCardTypes', function (assert) {
+    var secondProjectData = {
+      identifier: 'sample_project2',
+      name: 'Sample Project 2',
+      dateFormat: '%Y/%m/%d',
+      cardTypes: [
+        {id: 1, name: "Stor", propertyDefinitions: getPropDefs([1, 2, 3, 5, 6])},
+        {id: 2, name: "Wor", propertyDefinitions: getPropDefs([1, 3, 4, 5, 6])}
+      ],
+      cardTypeNames: [
+        "Stor",
+        "Wor"
+      ],
+      team: [],
+      tags: []
+    };
+    var projectDataStore = new ProjectDataStore(projectData, secondProjectData);
+    sinon.stub(projectDataStore, 'accessibleProjects').returns(accessibleProjects);
+    var localSeriesParameterInitializationData = $j.extend({}, seriesParameterInitializationData, {projectDataStore: projectDataStore});
+    this.series = new MingleUI.EasyCharts.Series(localSeriesParameterInitializationData, this.callBacks);
+    this.container.append(this.series.htmlContainer);
+    var propertyContainer = this.series.htmlContainer.find('div#series_1_property_parameter');
+    propertyContainer.find('.drop-down li:contains("Sprint")').click();
+
+    assert.equal(this.callBacks.onUpdate.callCount, 1);
+    assert.equal(this.series.value().property, 'Sprint');
+    assert.equal(this.callBacks.onError.callCount, 0);
+
+    changeProject(this.series, 'Sample Project 2');
+
+    propertyContainer = this.series.htmlContainer.find('div#series_1_property_parameter');
+    var filtersContainer = this.series.htmlContainer.find('div#series_1_filters_parameter');
+
+    assert.equal(propertyContainer.find('.drop-down .selected-value').text(), '(not set)');
+    assert.equal(filtersContainer.find('#card_filter_1 .property-value .selected-value').text(), '(any)');
+    assert.equal(this.callBacks.onUpdate.callCount, 1);
+    assert.equal(this.callBacks.onError.callCount, 1);
+    assert.equal(this.callBacks.onError.args[0][0], "Error in macro using Sample Project 2 project: Filtered card type(s) 'Story,Release' don't exist.");
+  });
+
+  QUnit.test('testCrossProjectSelectionShouldNotUpdateCardTypesAndPropertiesWhenNoCommonCardTypes', function (assert) {
+    var secondProjectData = {
+      identifier: 'sample_project2',
+      name: 'Sample Project 2',
+      dateFormat: '%Y/%m/%d',
+      cardTypes: [
+        {id: 1, name: "Stor", propertyDefinitions: getPropDefs([1, 2, 3, 5, 6])},
+        {id: 2, name: "Wor", propertyDefinitions: getPropDefs([1, 3, 4, 5, 6])}
+      ],
+      cardTypeNames: [
+        "Stor",
+        "Wor"
+      ],
+      team: [],
+      tags: []
+    };
+    var projectDataStore = new ProjectDataStore(projectData, secondProjectData);
+    sinon.stub(projectDataStore, 'accessibleProjects').returns(accessibleProjects);
+    var localSeriesParameterInitializationData = $j.extend({}, seriesParameterInitializationData, {projectDataStore: projectDataStore});
+    this.series = new MingleUI.EasyCharts.Series(localSeriesParameterInitializationData, this.callBacks);
+    this.container.append(this.series.htmlContainer);
+    var propertyContainer = this.series.htmlContainer.find('div#series_1_property_parameter');
+    propertyContainer.find('.drop-down li:contains("Sprint")').click();
+
+    assert.equal(this.callBacks.onUpdate.callCount, 1);
+    assert.equal(this.series.value().property, 'Sprint');
+    assert.equal(this.callBacks.onError.callCount, 0);
+
+    changeProject(this.series, 'Sample Project 2');
+
+    propertyContainer = this.series.htmlContainer.find('div#series_1_property_parameter');
+    var filtersContainer = this.series.htmlContainer.find('div#series_1_filters_parameter');
+
+    this.series.updateProperty('some random property');
+
+    assert.equal(propertyContainer.find('.drop-down .selected-value').text(), '(not set)');
+    assert.equal(filtersContainer.find('#card_filter_1 .property-value .selected-value').text(), '(any)');
+  });
+
+  QUnit.test('testCrossProjectSelectionDefaultsToPropertyNotSetOnProjectChange', function (assert) {
+    var secondProjectData = {
+      identifier: 'sample_project2',
+      dateFormat: '%Y/%m/%d',
+      cardTypes: [
+        {id: 1, name: "Story", propertyDefinitions: getPropDefs([1, 2, 3, 5, 6])},
+        {id: 2, name: "Wor", propertyDefinitions: getPropDefs([1, 3, 4, 5, 6])}
+      ],
+      cardTypeNames: [
+        "Story",
+        "Wor"
+      ],
+      team: [],
+      tags: []
+    };
+    var projectDataStore = new ProjectDataStore(projectData, secondProjectData);
+    sinon.stub(projectDataStore, 'accessibleProjects').returns(accessibleProjects);
+    var propertyName = getPropDefs([1])[0]["name"];
+    var localSeriesParameterInitializationData = $j.extend({}, seriesParameterInitializationData, {
+      projectDataStore: projectDataStore,
+      property: propertyName
+    });
+    this.series = new MingleUI.EasyCharts.Series(localSeriesParameterInitializationData, this.callBacks);
+    this.container.append(this.series.htmlContainer);
+
+    changeProject(this.series, 'Sample Project 2');
+    var propertyDropDown = this.series.htmlContainer.find('div#series_1_property_parameter .drop-down');
+
+    assert.notOk(this.series.value().property);
+    assert.equal(propertyDropDown.find('.selected-value').text(), '(not set)');
+    assert.equal(propertyDropDown.find('.options-container li').length, 1);
+    assert.equal(propertyDropDown.find('.options-container li').get(0).innerText, 'prop1');
+  });
+
+  QUnit.test('testCrossProjectSelectionShouldUpdateAggregatePropertiesDropDown', function (assert) {
+    var secondProjectData = {
+      identifier: 'sample_project2',
+      name: 'Sample Project 2',
+      dateFormat: '%Y/%m/%d',
+      cardTypes: [
+        {id: 1, name: "Story", propertyDefinitions: getPropDefs([1, 2, 3, 5, 6, 7])},
+        {id: 2, name: "Wor", propertyDefinitions: getPropDefs([1, 3, 4, 5, 7])}
+      ],
+      cardTypeNames: [
+        "Story",
+        "Wor"
+      ],
+      team: [],
+      tags: []
+    };
+    var projectDataStore = new ProjectDataStore(projectData, secondProjectData);
+    sinon.stub(projectDataStore, 'accessibleProjects').returns(accessibleProjects);
+    var localSeriesParameterInitializationData = $j.extend({}, seriesParameterInitializationData, {
+      projectDataStore: projectDataStore,
+      property: getPropDefs([1])[0]["name"],
+      cardFilters: [
+        {property: 'Type', values: ['Story', 'Work'], operator: 'is'}
+      ]
+    });
+    this.series = new MingleUI.EasyCharts.Series(localSeriesParameterInitializationData, this.callBacks);
+    this.container.append(this.series.htmlContainer);
+    this.series.htmlContainer.find('#aggregate_pair_series_1_aggregate_parameter .options-container li:contains("Sum")').click();
+    var aggregatePropertyContainer = this.series.htmlContainer.find('#aggregate_pair_series_1_aggregate_property_parameter');
+    assert.equal(aggregatePropertyContainer.find('.drop-down .selected-value').text(), '(not set)');
+    assert.equal(aggregatePropertyContainer.find('.options-container li').length, 1);
+    assert.equal(aggregatePropertyContainer.find('.options-container li').get(0).innerText, 'prop1');
+
+    changeProject(this.series, 'Sample Project 2');
+    this.series.htmlContainer.find('#aggregate_pair_series_1_aggregate_parameter .options-container li:contains("Sum")').click();
+    aggregatePropertyContainer = this.series.htmlContainer.find('#aggregate_pair_series_1_aggregate_property_parameter');
+
+    assert.equal(aggregatePropertyContainer.find('.drop-down .selected-value').text(), '(not set)');
+    assert.equal(aggregatePropertyContainer.find('.options-container li').length, 2);
+    assert.equal(aggregatePropertyContainer.find('.options-container li').get(0).innerText, 'prop1');
+    assert.equal(aggregatePropertyContainer.find('.options-container li').get(1).innerText, 'prop2');
+  });
+
+  QUnit.test('testCrossProjectSelectionShouldShowAllAccessibleProjectsInProjectDropDown', function (assert) {
+    var projectDataStore = new ProjectDataStore(projectData);
+    accessibleProjects.push({name: 'Project 3', identifier: 'some_weird_identifier'});
+    sinon.stub(projectDataStore, 'accessibleProjects').returns(accessibleProjects);
+    var localSeriesParameterInitializationData = $j.extend({}, seriesParameterInitializationData, {
+      projectDataStore: projectDataStore,
+      property: getPropDefs([1])[0]["name"]
+    });
+    this.series = new MingleUI.EasyCharts.Series(localSeriesParameterInitializationData, this.callBacks);
+    this.container.append(this.series.htmlContainer);
+    var projectDropDown = this.series.htmlContainer.find('div.series-params-container div#series_1_project_parameter .drop-down');
+    var projectOptions = projectDropDown.find('.options-container li span');
+
+    assert.equal(projectDropDown.find('.selected-value').text(), 'Sample Project');
+    assert.equal(projectOptions.length, 3);
+    assert.equal(projectOptions.get(0).innerText, 'Sample Project');
+    assert.equal(projectOptions.get(0).title, 'sample_project');
+    assert.equal(projectOptions.get(1).innerText, 'Sample Project 2');
+    assert.equal(projectOptions.get(1).title, 'sample_project2');
+    assert.equal(projectOptions.get(2).innerText, 'Project 3');
+    assert.equal(projectOptions.get(2).title, 'some_weird_identifier');
+  });
+
+  QUnit.test('testCrossProjectSelectionShouldResetAggregateDropDown', function (assert) {
+    var secondProjectData = {
+      identifier: 'sample_project2',
+      name: 'Sample Project 2',
+      dateFormat: '%Y/%m/%d',
+      cardTypes: [
+        {id: 1, name: "Story", propertyDefinitions: getPropDefs([1, 2, 3, 5, 6, 7])},
+        {id: 2, name: "Wor", propertyDefinitions: getPropDefs([1, 3, 4, 5, 7])}
+      ],
+      cardTypeNames: [
+        "Story",
+        "Wor"
+      ],
+      team: [],
+      tags: []
+    };
+    var projectDataStore = new ProjectDataStore(projectData, secondProjectData);
+    sinon.stub(projectDataStore, 'accessibleProjects').returns(accessibleProjects);
+    var localSeriesParameterInitializationData = $j.extend({}, seriesParameterInitializationData, {
+      projectDataStore: projectDataStore,
+      property: getPropDefs([1])[0]["name"],
+      cardFilters: [
+        {property: 'Type', values: ['Story', 'Work'], operator: 'is'}
+      ]
+    });
+    this.series = new MingleUI.EasyCharts.Series(localSeriesParameterInitializationData, this.callBacks);
+    this.container.append(this.series.htmlContainer);
+    var aggregateDropDown = this.series.htmlContainer.find('#aggregate_pair_series_1_aggregate_parameter .drop-down');
+    aggregateDropDown.find('.options-container li:contains("Sum")').click();
+
+    assert.equal(aggregateDropDown.find('.selected-value').text(), 'Sum');
+    assert.equal(this.series.value().series1Aggregate, 'sum');
+
+    changeProject(this.series, 'Sample Project 2');
+    aggregateDropDown = this.series.htmlContainer.find('#aggregate_pair_series_1_aggregate_parameter .drop-down');
+
+    assert.equal(aggregateDropDown.find('.selected-value').text(), 'Number of cards');
+    assert.equal(this.series.value().series1Aggregate, 'count');
+  });
+
+  QUnit.test('testCrossProjectSelectionShouldNotChangeSeriesColor', function (assert) {
+    var secondProjectData = {
+      identifier: 'sample_project2',
+      name: 'Sample Project 2',
+      dateFormat: '%Y/%m/%d',
+      cardTypes: [
+        {id: 1, name: "Story", propertyDefinitions: getPropDefs([1, 2, 3, 5, 6, 7])},
+        {id: 2, name: "Wor", propertyDefinitions: getPropDefs([1, 3, 4, 5, 7])}
+      ],
+      cardTypeNames: [
+        "Story",
+        "Wor"
+      ],
+      team: [],
+      tags: []
+    };
+    var projectDataStore = new ProjectDataStore(projectData, secondProjectData);
+    sinon.stub(projectDataStore, 'accessibleProjects').returns(accessibleProjects);
+    var localSeriesParameterInitializationData = $j.extend({}, seriesParameterInitializationData, {
+      projectDataStore: projectDataStore,
+      property: getPropDefs([1])[0]["name"],
+      cardFilters: [
+        {property: 'Type', values: ['Story', 'Work'], operator: 'is'}
+      ]
+    });
+    this.series = new MingleUI.EasyCharts.Series(localSeriesParameterInitializationData, this.callBacks);
+    this.container.append(this.series.htmlContainer);
+    var seriesColor = this.series.value().color;
+
+    changeProject(this.series, 'Sample Project 2');
+
+    assert.equal(this.series.value().color, seriesColor);
+  });
+
+  QUnit.test('testCrossProjectSelectionShouldNotChangeSeriesColor', function (assert) {
+    var secondProjectData = {
+      identifier: 'sample_project2',
+      name: 'Sample Project 2',
+      dateFormat: '%Y/%m/%d',
+      cardTypes: [
+        {id: 1, name: "Story", propertyDefinitions: getPropDefs([1, 2, 3, 5, 6, 7])},
+        {id: 2, name: "Wor", propertyDefinitions: getPropDefs([1, 3, 4, 5, 7])}
+      ],
+      cardTypeNames: [
+        "Story",
+        "Wor"
+      ],
+      team: [],
+      tags: []
+    };
+    var projectDataStore = new ProjectDataStore(projectData, secondProjectData);
+    sinon.stub(projectDataStore, 'accessibleProjects').returns(accessibleProjects);
+    var localSeriesParameterInitializationData = $j.extend({}, seriesParameterInitializationData, {
+      projectDataStore: projectDataStore,
+      property: getPropDefs([1])[0]["name"],
+      cardFilters: [
+        {property: 'Type', values: ['Story', 'Work'], operator: 'is'}
+      ]
+    });
+    this.series = new MingleUI.EasyCharts.Series(localSeriesParameterInitializationData, this.callBacks);
+    this.container.append(this.series.htmlContainer);
+    var seriesName = 'new name';
+    var seriesLabelTextBox = this.series.htmlContainer.find('div#series_1_label_parameter').find('input');
+    seriesLabelTextBox.val(seriesName);
+
+    var keyUpEvent = $j.Event('keyup');
+    keyUpEvent.keyCode = 13;
+    seriesLabelTextBox.trigger(keyUpEvent);
+
+    assert.equal(this.series.value().label, seriesName);
+
+    changeProject(this.series, 'Sample Project 2');
+
+    assert.equal(seriesLabelTextBox.val(),seriesName);
+    assert.equal(this.series.value().label, seriesName);
+  });
+
+  QUnit.test('testCrossProjectSelectionShouldNotRemoveSeriesTypeCustomizationParameterWhenEnabled', function (assert) {
+    var secondProjectData = {
+      identifier: 'sample_project2',
+      name: 'Sample Project 2',
+      dateFormat: '%Y/%m/%d',
+      cardTypes: [
+        {id: 1, name: "Story", propertyDefinitions: getPropDefs([1, 2, 3, 5, 6, 7])},
+        {id: 2, name: "Wor", propertyDefinitions: getPropDefs([1, 3, 4, 5, 7])}
+      ],
+      cardTypeNames: [
+        "Story",
+        "Wor"
+      ],
+      team: [],
+      tags: []
+    };
+    var projectDataStore = new ProjectDataStore(projectData, secondProjectData);
+    sinon.stub(projectDataStore, 'accessibleProjects').returns(accessibleProjects);
+    var localSeriesParameterInitializationData = $j.extend({}, seriesParameterInitializationData, {
+      config:{
+        enableSeriesTypeCustomization:true,
+        group: {
+          isRequired: true,
+          values: {
+            'series-type': {
+              isRequired: true,
+              initialValue: 'Line'
+            }
+          }
+        }
+      },
+      projectDataStore: projectDataStore,
+      property: getPropDefs([1])[0]["name"],
+      cardFilters: [
+        {property: 'Type', values: ['Story', 'Work'], operator: 'is'}
+      ]
+    });
+    this.series = new MingleUI.EasyCharts.Series(localSeriesParameterInitializationData, this.callBacks);
+    this.container.append(this.series.htmlContainer);
+    var typeParameterContainer = this.container.find('div#group1_series_type_parameter');
+
+    typeParameterContainer.find('.drop-down .drop-down-toggle').click();
+    typeParameterContainer.find('.drop-down .options-container li span[title="Line"]').click();
+    var seriesTypeCustomizationParameter = this.container.find('.series-type-customization-params-container');
+
+    assert.equal(seriesTypeCustomizationParameter.length, 1);
+    assert.ok(seriesTypeCustomizationParameter.find('#series_1_line_style_parameter').is(':visible'));
+    assert.ok(seriesTypeCustomizationParameter.find('#series_1_data_point_symbol_parameter').is(':visible'));
+    assert.ok(seriesTypeCustomizationParameter.find('#series_1_data_labels_parameter').is(':visible'));
+
+    changeProject(this.series, 'Sample Project 2');
+    seriesTypeCustomizationParameter = this.container.find('.series-type-customization-params-container');
+
+    assert.equal(seriesTypeCustomizationParameter.length, 1);
+    assert.ok(seriesTypeCustomizationParameter.find('#series_1_line_style_parameter').is(':visible'));
+    assert.ok(seriesTypeCustomizationParameter.find('#series_1_data_point_symbol_parameter').is(':visible'));
+    assert.ok(seriesTypeCustomizationParameter.find('#series_1_data_labels_parameter').is(':visible'));
+
+  });
+
+  QUnit.test('testCrossProjectSelectionShouldNotRemoveSeriesTypeCustomizationLineStyleParameter', function (assert) {
+    var secondProjectData = {
+      identifier: 'sample_project2',
+      name: 'Sample Project 2',
+      dateFormat: '%Y/%m/%d',
+      cardTypes: [
+        {id: 1, name: "Story", propertyDefinitions: getPropDefs([1, 2, 3, 5, 6, 7])},
+        {id: 2, name: "Wor", propertyDefinitions: getPropDefs([1, 3, 4, 5, 7])}
+      ],
+      cardTypeNames: [
+        "Story",
+        "Wor"
+      ],
+      team: [],
+      tags: []
+    };
+    var projectDataStore = new ProjectDataStore(projectData, secondProjectData);
+    sinon.stub(projectDataStore, 'accessibleProjects').returns(accessibleProjects);
+    var localSeriesParameterInitializationData = $j.extend({}, seriesParameterInitializationData, {
+      config:{
+        enableSeriesTypeCustomization:true,
+        group: {
+          isRequired: true,
+          values: {
+            'series-type': {
+              isRequired: true,
+              initialValue: 'Line'
+            }
+          }
+        }
+      },
+      projectDataStore: projectDataStore,
+      property: getPropDefs([1])[0]["name"],
+      cardFilters: [
+        {property: 'Type', values: ['Story', 'Work'], operator: 'is'}
+      ]
+    });
+    this.series = new MingleUI.EasyCharts.Series(localSeriesParameterInitializationData, this.callBacks);
+    this.container.append(this.series.htmlContainer);
+    var typeParameterContainer = this.container.find('div#group1_series_type_parameter');
+
+    typeParameterContainer.find('.drop-down .drop-down-toggle').click();
+    typeParameterContainer.find('.drop-down .options-container li span[title="Area"]').click();
+    var seriesTypeCustomizationParameter = this.container.find('.series-type-customization-params-container');
+
+    assert.equal(seriesTypeCustomizationParameter.length, 1);
+    assert.notOk(seriesTypeCustomizationParameter.find('#series_1_line_style_parameter').length);
+    assert.ok(seriesTypeCustomizationParameter.find('#series_1_data_point_symbol_parameter').is(':visible'));
+    assert.ok(seriesTypeCustomizationParameter.find('#series_1_data_labels_parameter').is(':visible'));
+
+    changeProject(this.series, 'Sample Project 2');
+    seriesTypeCustomizationParameter = this.container.find('.series-type-customization-params-container');
+
+    assert.equal(seriesTypeCustomizationParameter.length, 1);
+    assert.ok(seriesTypeCustomizationParameter.find('#series_1_line_style_parameter').is(':visible'));
+    assert.ok(seriesTypeCustomizationParameter.find('#series_1_data_point_symbol_parameter').is(':visible'));
+    assert.ok(seriesTypeCustomizationParameter.find('#series_1_data_labels_parameter').is(':visible'));
+
+  });
+</script>
+</body>
+</html>

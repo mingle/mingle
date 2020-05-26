@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Filter AST test</title>
+
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/live/filter_ast.js" type="text/javascript"></script>
+
+  <link rel="stylesheet" href="../test_assets/qunit-1.21.0.css" type="text/css" />
+</head>
+<body>
+  <div id="qunit"></div>
+  <div id="qunit-fixture"></div>
+
+  <script src="../test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+  <script src="../test_assets/qunit-phantom.js" type="text/javascript"></script>
+  <script type="text/javascript">
+
+    QUnit.test("can parse \"in\" operator", function(assert) {
+      var filters = ["in", "Status", ["New", "Open", "Done"]];
+      var matchesView = MingleUI.ast.compiler(filters);
+
+      assert.ok(matchesView({"Status": "Open"}));
+      assert.ok(!matchesView({"Status": "In Progress"}));
+    });
+
+    QUnit.test("accepts cards that match", function(assert) {
+      var filters = ["and",["!=","Status","Done"],["=","Type","Story"]];
+      var matchesView = MingleUI.ast.compiler(filters);
+
+      assert.ok(matchesView({"Status": "New", "Type": "Story"}));
+    });
+
+    QUnit.test("rejects cards that do not match", function(assert) {
+      var filters = ["and",["!=","Status","Done"],["=","Type","Story"]];
+      var matchesView = MingleUI.ast.compiler(filters);
+
+      assert.ok(!matchesView({"Status": "Done", "Type": "Story"}));
+      assert.ok(!matchesView({"Status": "New", "Type": "Bug"}));
+      assert.ok(!matchesView({"Status": "Done", "Type": "Bug"}));
+    });
+
+    QUnit.test("matches cards that with NOT filter", function(assert) {
+      var filters = ["and",["=", "Type", "Story"], { "ast" : ["=", "Status", "Archive"], "name" : "not"}]
+      var matchesView = MingleUI.ast.compiler(filters);
+
+      assert.ok(matchesView({"Type": "Story", "Status" : "New"}));
+      assert.ok(!matchesView({"Type": "Story", "Status" : "Archive"}));
+    })
+
+    QUnit.test("accepts any card when there are no filters, i.e. Type is (any)", function(assert) {
+      var matchesView = MingleUI.ast.compiler(null);
+
+      assert.ok(matchesView({"Status": "Done", "Type": "Story"}));
+      assert.ok(matchesView({"Status": "New", "Type": "Bug"}));
+      assert.ok(matchesView({"Status": null, "Type": "Card"}));
+      assert.ok(matchesView({"Status": null, "Type": "Card", "&tags": ["tag1", "tag2"]}));
+      assert.ok(matchesView({"Status": "Done", "Type": "Bug"}));
+    });
+
+    QUnit.test("card number is always interpreted as numeric", function(assert) {
+      var filters = ["<=","Number","9"];
+      var matchesView = MingleUI.ast.compiler(filters);
+
+      assert.ok(matchesView({"Number": 5}));
+      assert.ok(!matchesView({"Number": 15}));
+
+      assert.ok(matchesView({"Number": "5"}));
+      assert.ok(!matchesView({"Number": "15"}));
+    });
+
+    QUnit.test("can compare numeric properties", function(assert) {
+      var filters = ["<=","Size","9"];
+      var matchesView = MingleUI.ast.compiler(filters);
+
+      assert.ok(matchesView({"Size": ["-2", "numeric"]}));
+      assert.ok(matchesView({"Size": ["0", "numeric"]}));
+      assert.ok(matchesView({"Size": ["2", "numeric"]}));
+      assert.ok(matchesView({"Size": ["9", "numeric"]}));
+      assert.ok(matchesView({"Size": 9}));
+      assert.ok(matchesView({"Size": 8}));
+      assert.ok(matchesView({"Size": 7}));
+      assert.ok(matchesView({"Size": -1}));
+
+      assert.ok(!matchesView({"Size": ["10", "numeric"]}));
+      assert.ok(!matchesView({"Size": ["31", "numeric"]}));
+      assert.ok(!matchesView({"Size": ["19", "numeric"]}));
+      assert.ok(!matchesView({"Size": 11}));
+      assert.ok(!matchesView({"Size": 31}));
+    });
+
+    QUnit.test("can compare null", function(assert) {
+      var filters = ["=","Status", null];
+      var matchesView = MingleUI.ast.compiler(filters);
+
+      assert.ok(matchesView({"Status": null, "Type": "Story"}));
+      assert.ok(!matchesView({"Status": "New", "Type": "Story"}));
+
+      filters = ["!=","Status", null];
+      matchesView = MingleUI.ast.compiler(filters);
+
+      assert.ok(!matchesView({"Status": null, "Type": "Story"}));
+      assert.ok(matchesView({"Status": "New", "Type": "Story"}));
+    });
+
+    QUnit.test("can compare user properties", function(assert) {
+      var filters = ["=","Owner","1"];
+      var matchesView = MingleUI.ast.compiler(filters);
+
+      var admin = JSON.stringify([1, "/images/admin.png", "red", "admin", "Mingle Admin"])
+      var member = JSON.stringify([2, "/images/member.png", "blue", "member", "Team member"])
+
+      assert.ok(matchesView({"Owner": [admin, "user"]}));
+      assert.ok(!matchesView({"Owner": [member, "user"]}));
+    });
+
+    QUnit.test("can compare date properties", function(assert) {
+      var filters = ["<=","Completed","2016-02-28"];
+      var matchesView = MingleUI.ast.compiler(filters);
+
+      assert.ok(matchesView({"Status": "Done", "Completed": "2016-02-27"}));
+      assert.ok(matchesView({"Status": "Done", "Completed": "2016-02-28"}));
+
+      assert.ok(!matchesView({"Status": "Done", "Completed": "2016-03-01"}));
+      assert.ok(!matchesView({"Status": "Done"}));
+
+      // why not test with a leap year
+      assert.ok(matchesView({"Status": "Done", "Completed": "2012-02-29"}));
+      assert.ok(!matchesView({"Status": "Done", "Completed": "2016-02-29"}));
+    });
+
+    QUnit.test("can compare tags", function(assert) {
+      var filters = ["and",["and",{"name":"tagged","ast":{"with":["tag1"]}},["!=","Status","Archive"]],["=","Type","Story"]];
+      var matchesView = MingleUI.ast.compiler(filters);
+
+      assert.ok(matchesView({"Status": "New", "Type": "Story", "&tags": ["tag1", "tag2"]}));
+
+      assert.ok(!matchesView({"Status": "New", "Type": "Story", "&tags": ["tag2", "tag3"]}));
+
+      assert.ok(!matchesView({"Status": "New", "Type": "Story"}));
+    });
+
+    QUnit.done(function(result){console.log(result)});
+  </script>
+</body>
+</html>

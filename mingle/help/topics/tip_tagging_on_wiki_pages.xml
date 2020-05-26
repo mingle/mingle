@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE section SYSTEM "mingle_help.dtd">
+<chapter title="Apply tags to pages">
+	<p>You can enhance management of your pages by tagging them. Tagging pages allows you to access any page you're looking for quickly and easily. </p>
+	<section title="Tagging pages">
+		<p>Tagging is available on the top of every page, just like <cref topic="creating_tags_for_cards_or_pages">tagging on cards</cref>. </p>
+  		<steps>
+  		  <item>To tag a page select "edit tags"</item>
+  		  <item>Type in your tag or choose from the options available</item>
+  		  <item>The page is now tagged</item>
+  		  <p><screenshot alttext="tagging on wiki" src="resources/images/tag.png"/></p>
+  		  </steps>
+	</section>
+<section title="Using tags to find pages">
+	<steps>
+	  <item>In the Mingle search field, type in the tag to find the page you're looking for. </item>
+	  <p><screenshot alttext="using tag for search" src="resources/images/use_tag_for_search.png" /></p>
+	  <item>Only pages and cards that have this tag will be returned as a result.</item>
+		<p><screenshot alttext="search result" src="resources/images/find_page_tagged_with.png" /></p>
+		</steps>
+		</section>
+</chapter>

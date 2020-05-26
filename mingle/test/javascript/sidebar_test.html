@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Sidebar test</title>
+
+    <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/sidebar.js" type="text/javascript"></script>
+
+    <link rel="stylesheet" href="test_assets/qunit-1.21.0.css" type="text/css" />
+
+    <style type="text/css">
+      /* required to test visible() */
+      #sidebar {
+        display: none;
+      }
+
+      #sidebar.expanded {
+        display: block;
+      }
+    </style>
+
+  </head>
+
+  <body>
+    <div id="qunit"></div>
+    <div id="qunit-fixture">
+      <div id="header">
+        <div id="sidebar-control">Click me</div>
+      </div>
+      <div>
+        <div id="main">main content</div>
+        <div id="sidebar">stuff in sidebar</div>
+      </div>
+    </div>
+
+    <script src="test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+    <script src="test_assets/qunit-phantom.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+      var preference = "unset";
+      var MingleUI = {
+        updateUserPreference: function(key, value) {
+          preference = value;
+        }
+      };
+
+      function setup() {
+        preference = "unset";
+        Sidebar.attach("#sidebar", "#sidebar-control", "#header", "#main");
+      }
+
+      QUnit.module("Sidebar tests", { beforeEach: setup });
+
+      QUnit.test("doNotPersistState() should prevent updates to user prefs", function(assert) {
+        Sidebar.doNotPersistState();
+        Sidebar.toggle();
+        assert.strictEqual(preference, "unset");
+        Sidebar.toggle();
+        assert.strictEqual(preference, "unset");
+      });
+
+      QUnit.test("persistState() should update user prefs", function(assert) {
+        Sidebar.doNotPersistState();
+
+        Sidebar.toggle();
+        assert.strictEqual(preference, "unset");
+
+        Sidebar.persistState();
+
+        Sidebar.toggle();
+        assert.strictEqual(preference, false);
+
+        Sidebar.toggle();
+        assert.strictEqual(preference, true);
+      });
+
+      QUnit.test("visible() works", function(assert) {
+        Sidebar.show();
+        assert.ok(Sidebar.visible());
+
+        Sidebar.hide();
+        assert.ok(!Sidebar.visible());
+      });
+
+      QUnit.test("show() and hide() work", function(assert) {
+        Sidebar.show();
+        assert.ok(Sidebar.sidebarPanel.is(".expanded"));
+        assert.ok(Sidebar.header.is(".with-sidebar"));
+        assert.ok(Sidebar.mainContent.is(".with-sidebar"));
+        assert.ok(Sidebar.control.is(".open"));
+
+        Sidebar.hide();
+        assert.ok(!Sidebar.sidebarPanel.is(".expanded"));
+        assert.ok(!Sidebar.header.is(".with-sidebar"));
+        assert.ok(!Sidebar.mainContent.is(".with-sidebar"));
+        assert.ok(!Sidebar.control.is(".open"));
+      });
+
+      QUnit.test("toggle() works", function(assert) {
+        Sidebar.show();
+        assert.ok(Sidebar.sidebarPanel.is(".expanded"));
+        assert.ok(Sidebar.control.is(".open"));
+
+        Sidebar.toggle();
+        assert.ok(!Sidebar.sidebarPanel.is(".expanded"));
+        assert.ok(!Sidebar.control.is(".open"));
+
+        Sidebar.toggle();
+        assert.ok(Sidebar.sidebarPanel.is(".expanded"));
+        assert.ok(Sidebar.control.is(".open"));
+      });
+
+      QUnit.done(function(result){console.log(result);});
+
+    </script>
+  </body>
+</html>

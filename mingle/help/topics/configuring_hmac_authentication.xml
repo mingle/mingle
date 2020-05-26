@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<section title="HMAC Authentication"> 	
+	<p>Unlike Basic authentication, <exref url="http://en.wikipedia.org/wiki/Hash-based_message_authentication_code">HMAC authentication</exref> is user specific. Every user can generate one HMAC secret key from his or her profile page under the HMAC Auth Key tab. Mingle admins may also generate HMAC secret keys for any user.</p>
+	 <screenshot src="resources/images/hmac_auth_key.png"/>
+	 <note>Please note that regenerating your HMAC key will invalidate your existing key.</note>
+
+<subsection title="Creating a Mingle API request using HMAC authentication">
+  <subsection title="With library support">
+  <p>The following is example ruby code to fetch a projects list using HMAC authentication. It uses the <exref url="https://github.com/mgomes/api_auth">api_auth gem</exref> (install gem api-auth):</p>
+      
+      <code>
+        require "uri"
+        require "net/https"
+        require "time"
+        require "rubygems"
+        require "api_auth" # gem install api-auth
+
+        MINGLE_URL = "https://your-org.mingle-api.thoughtworks.com/api/v2/projects.xml"
+
+        access_key_id = "your_username"
+        secret_access_key = "???????????????"
+
+        uri = URI.parse(MINGLE_URL)
+        http = Net::HTTP.new(uri.host, uri.port)
+        http.use_ssl = true
+
+        request = Net::HTTP::Get.new(uri.request_uri)
+        ApiAuth.sign!(request, access_key_id, secret_access_key)
+
+        response = http.request(request)
+        puts response.body
+      </code>  
+  </subsection>
+  
+  <subsection title="Without library support">
+  <p>You can also create Mingle API requests using HMAC without library support by following these directions:</p>
+      
+      <steps>
+        <item>Request content type - in our GET request to get a card we'll use the "application/xml" content type and in our POST request to create a card we'll use "application/xml"</item>
+        <item>Mingle resource URI - for the GET request we'll use "/api/v2/projects/[YOUR_PROJECT]/cards/[CARD_NUMBER].xml" (replace [YOUR_PROJECT] and [CARD_NUMBER] with real values from Mingle).  For the POST, we'll use "/api/v2/projects/[YOUR_PROJECT]/cards.xml"</item>
+        <item>Request date - this exact date needs to be included in the HTTP request "Date" header.  It must be current (if it is too old, it will be rejected) and in the form "Fri, 16 May 2014 03:29:56 GMT"</item>
+        <item>Content MD5 - this is calculated by feeding the request body content into an MD5 hashing algorithm and then base64 encoding it.  This needs to be included in the HTTP request "Content-MD5" header</item>
+            <bullets>
+                <item>In the GET request, there is no request body.  The MD5 base64 encoded string for an empty string is "1B2M2Y8AsgTpgAmY7PhCfg=="</item>
+                <item>In the POST request, you'll be sending content in the request body to create a new Mingle card. How you do this in your code is platform dependent.</item>
+              </bullets>        
+        </steps>      
+
+  <p>Concatenate these four fields into a single string in this format: "[ContentType],[ContentMD5],[ResourceURI],[RequestDate]". For example: "application/xml,1B2M2Y8AsgTpgAmY7PhCfg==,/api/v2/projects/my_project/card/123.xml,Fri, 16 May 2014 03:29:56 GMT"</p>
+</subsection>
+</subsection>
+</section>
+
+

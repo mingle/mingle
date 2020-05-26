@@ -1,0 +1,42 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%- select_tab :program_project -%>
+<%- content_for :page_header do -%>
+  <div class="page_header" id='page_navigator'>
+    <h1><%= link_to 'Projects', program_program_projects_path(@plan.program) %> &raquo; Remove</h1>
+  </div>
+<%- end -%>
+
+<%= render :layout => 'shared/irrecoverable_warning' %>
+<% info_box do %>
+  <%- works = @plan.works(:include => :objective).created_from(@project) -%>
+  <%- objectives = works.collect(&:objective).uniq -%>
+  <%- if works.any? -%>
+    <p>Removing this project will also remove <b><%= pluralize(works.count, 'work item') %></b> from the following <%= 'objective'.plural(objectives.size) %>:</p>
+    <ul>
+      <%- objectives.collect(&:name).sort.each do |name| -%>
+        <li><%= name %></li>
+      <%- end -%>
+    </ul>
+  <%- else -%>
+    <p>There is no work from this project.</p>
+  <%- end -%>
+<%- end -%>
+
+<% form_tag(program_program_project_path(@plan.program, @project.identifier), {:id => 'delete-form', :method => :delete}) do -%>
+  <%= render :partial => "shared/planner/action_bar", :locals => {:action_name  => "Remove", :cancel_url => program_program_projects_path(@plan.program) } %>
+<% end -%>

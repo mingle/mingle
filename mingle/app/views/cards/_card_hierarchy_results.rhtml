@@ -1,0 +1,38 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="content">
+<% if @cards and @cards.size > 0 -%>
+  <table class="edit-table sortable_table" id="cards"> 
+    <thead>     
+      <%= render(:partial => 'cards/cards_header_in_hierarchy') %>
+  
+      <tr class="table-column-header" id ="table-column-header">  
+        <%= render :partial => "cards/hierarchy_card_table_head" %>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render :partial => "cards/hierarchy_card_table" %>
+    </tbody>
+  </table>
+<% end -%>
+</div>
+
+<%= render :partial => 'cards/open_card_with_context_numbers_form' %>
+
+<% if @cards.any? -%>
+  <%= javascript_with_rescue "checkBoxes = new CheckBoxes(this.document, 'checkbox_');" -%>
+<% end -%>

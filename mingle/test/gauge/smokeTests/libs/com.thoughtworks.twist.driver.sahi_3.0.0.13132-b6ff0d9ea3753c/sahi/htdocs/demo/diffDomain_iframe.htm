@@ -1,0 +1,19 @@
+<html>
+<head><title>Diff Domain Iframe</title></head>
+<body>
+<script>
+function oc(){
+    alert(document.f1.t1.value + "  " +eval(document.f1.t1.value));
+}
+</script>
+Diff Domain Iframe
+<form name="f1">
+<input type="text" name="t1"><br/>
+<input type="button" value="Click me">
+<input type="button" value="Eval me" onclick="oc()">
+</form>
+
+<iframe src="http://dummy1:10000/demo/diffDomain_dummy1.htm"></iframe>
+
+</body>
+</html>

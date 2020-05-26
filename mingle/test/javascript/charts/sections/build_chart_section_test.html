@@ -1,0 +1,432 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Build Chart Section Test</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <script src="../../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js" type="text/javascript"></script>
+  <script src="../../../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+  <script src="../../../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../../../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+
+  <script src="../../../../public/javascripts/application.js" type="text/javascript"></script>
+  <script src="../../../../app/assets/javascripts/drop_down.js" type="text/javascript"></script>
+  <script src="../../../../app/assets/javascripts/text_box.js" type="text/javascript"></script>
+  <script src="../../../../app/assets/javascripts/project_data_store.js" type="text/javascript"></script>
+  <script src="../../../../app/assets/javascripts/easy_charts/parameter.js" type="text/javascript"></script>
+  <script src="../../../../app/assets/javascripts/easy_charts/pair_parameter.js" type="text/javascript"></script>
+  <script src="../../../../app/assets/javascripts/easy_charts/section_helpers.js" type="text/javascript"></script>
+  <script src="../../../../app/assets/javascripts/easy_charts/sections/build_chart_section.js" type="text/javascript"></script>
+
+  <script src="../../test_assets/sinon-2.3.6.js" type="text/javascript"></script>
+  <script src="../../test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+  <script src="../../test_assets/qunit-phantom.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="../../test_assets/qunit-1.21.0.css" type="text/css"/>
+
+</head>
+  <body>
+    <div id="qunit">
+    </div>
+    <div id="chart_wizard"></div>
+    <script type="application/javascript">
+      var paramDefs = [
+        {
+          name: 'property',
+          initial_value: null,
+          allowed_values: [],
+          multiple_values_allowed: false,
+          input_type: 'dropdown',
+          label: 'Based on which property should the sectors of the pie chart be split?'
+        }, {
+          input_type: 'pair-parameter',
+          label: 'What determines the size of each sector?',
+          connecting_text: 'of',
+          name: 'aggregate-pair',
+          param_defs: [
+            {
+              name: 'aggregate',
+              initial_value: 'count',
+              allowed_values: [['Number of cards', 'count'], ['Sum', 'sum'], ['Average', 'avg']],
+              multiple_values_allowed: false,
+              input_type: 'dropdown'
+            }, {
+              name: 'aggregate-property',
+              initial_value: null,
+              allowed_values: [],
+              multiple_values_allowed: false,
+              input_type: 'dropdown'
+            }
+          ]
+        }
+      ], currentProjectData = {
+        identifier: 'currentProject',
+        cardTypes: [
+          {name: 'Card', id: 1, propertyDefinitions: [{name: 'prop1', isNumeric: true}, {name: 'prop2'}, {name: 'prop3'}]},
+          {name: 'Story', id: 2, propertyDefinitions: [{name: 'prop1', isNumeric: true}, {name: 'prop3'}, {name: 'prop4'}]},
+          {name: 'Release', id: 3, propertyDefinitions: [{name: 'prop5', isNumeric: true}, {name: 'prop6'}, {name: 'prop7'}]}
+        ],
+        team: [],
+        tags: [{name: 'tag1', color: 'red'}, {name: 'tag2', color: 'green'}]
+      }, projectDataStore = new ProjectDataStore(currentProjectData);
+
+      QUnit.module('Build Chart Section', {
+        beforeEach: function () {
+          sinon.spy(MingleUI.EasyCharts, 'Parameter');
+          this.onUpdate = sinon.spy();
+          this.onComplete = sinon.spy();
+          this.container = $j('#chart_wizard');
+          this.updateProperties = sinon.stub().callsFake(function (params, properties, aggregateProperties, initialData) {
+            params.property.updateOptions(properties);
+            params.aggregatePair.setPairValues(aggregateProperties);
+          });
+
+          this.projectData = projectDataStore.dataFor(currentProjectData.identifier);
+          this.selectedCardTypes = ['Story', 'Card'];
+        },
+        afterEach: function () {
+          this.container.empty();
+          MingleUI.EasyCharts.Parameter.restore();
+        }
+
+      }, function () {
+
+        QUnit.module('Common Test', {
+          beforeEach: function () {
+            this.section = new MingleUI.EasyCharts.Sections.BuildChartSection({
+              name: 'buildChartSection',
+              parameterDefinitions: paramDefs,
+              aggregatePairName: 'aggregate-pair',
+              extensionMethods: {
+                updateProperties: this.updateProperties
+              }
+            }, {
+              onUpdate: this.onUpdate,
+              onComplete: this.onComplete
+            });
+          }
+        });
+
+        QUnit.test('testShouldAddTitle', function (assert) {
+          var titleContainer = this.section.htmlContainer.find('div.section-title-container');
+          assert.equal(titleContainer.text(), '2Build the chart');
+          assert.equal(titleContainer.find('span.section-number').text(), '2');
+          assert.equal(titleContainer.find('span.section-title').text(), 'Build the chart');
+        });
+
+        QUnit.module('Disabled Section', {
+          beforeEach: function () {
+            this.section = new MingleUI.EasyCharts.Sections.BuildChartSection({
+              name: 'buildChartSection',
+              parameterDefinitions: paramDefs,
+              aggregatePairName: 'aggregate-pair',
+              extensionMethods: {
+                updateProperties: this.updateProperties
+              }
+            }, {
+              onUpdate: this.onUpdate,
+              onComplete: this.onComplete
+            });
+            this.container.append(this.section.htmlContainer);
+          }
+        });
+
+        QUnit.test('testShouldInitializeDisabledSection', function (assert) {
+          assert.ok(this.section.htmlContainer.hasClass('disabled'));
+        });
+
+        QUnit.test('testIsEnabledShouldReturnFalse', function (assert) {
+          assert.notOk(this.section.isEnabled());
+        });
+
+        QUnit.test('testDisableShouldRemoveParamsContainer', function (assert) {
+          this.section.enableWith(this.projectData,this.selectedCardTypes);
+
+          assert.notOk(this.section.htmlContainer.hasClass('disabled'));
+          assert.ok(this.section.htmlContainer.find('.section-params-container')[0]);
+
+          this.section.disable();
+
+          assert.ok(this.section.htmlContainer.hasClass('disabled'));
+          assert.notOk(this.section.htmlContainer.find('.section-params-container')[0]);
+          assert.notOk(this.section.isEnabled());
+        });
+
+        QUnit.test('testValuesShouldReturnEmptyObject', function (assert) {
+          assert.deepEqual(this.section.values(), {});
+        });
+
+        QUnit.module('Enabled Section', {
+          beforeEach: function () {
+            this.section = new MingleUI.EasyCharts.Sections.BuildChartSection({
+              name: 'buildChartSection',
+              parameterDefinitions: paramDefs,
+              aggregatePairName: 'aggregate-pair',
+              extensionMethods: {
+                updateProperties: this.updateProperties
+              }
+            }, {
+              onUpdate: this.onUpdate,
+              onComplete: this.onComplete
+            });
+            this.section.enableWith(this.projectData, this.selectedCardTypes);
+            this.container.append(this.section.htmlContainer);
+          }
+        });
+
+        QUnit.test('testEnabledWithShouldRemoveDisabledClass', function (assert) {
+          assert.notOk(this.section.htmlContainer.hasClass('disabled'));
+        });
+
+        QUnit.test('testIsEnabledShouldReturnTrue', function (assert) {
+          assert.ok(this.section.isEnabled());
+        });
+
+        QUnit.test('testShouldTriggerUpdatePropertiesExtension', function (assert) {
+          assert.equal(this.updateProperties.callCount, 1);
+          assert.deepEqual(this.updateProperties.args[0][1], ['prop1', 'prop3']);
+          assert.deepEqual(this.updateProperties.args[0][2], ['prop1']);
+        });
+
+        QUnit.test('testShouldAddPropertyDropDown', function (assert) {
+          var propertyDropDownParams = MingleUI.EasyCharts.Parameter.args[0];
+
+          assert.equal(MingleUI.EasyCharts.Parameter.callCount, 4);
+          assert.equal(propertyDropDownParams[0], 'build_chart_section');
+          assert.deepEqual(propertyDropDownParams[1], paramDefs[0]);
+          assert.equal(typeof propertyDropDownParams[2].onUpdate, 'function');
+
+          assert.ok(this.section.htmlContainer.find('div#build_chart_section_property_parameter')[0]);
+          assert.equal(this.section.htmlContainer.find('div#build_chart_section_property_parameter .parameter-label').text(), paramDefs[0].label);
+          assert.ok(this.section.htmlContainer.find('div#build_chart_section_property_parameter .parameter')[0]);
+          assert.equal(this.section.htmlContainer.find('div#build_chart_section_property_parameter .parameter .options-container').text(), 'prop1prop3');
+        });
+
+        QUnit.test('testShouldAddAggregateDropDown', function (assert) {
+          var propertyDropDownParams = MingleUI.EasyCharts.Parameter.args[1];
+
+          assert.equal(MingleUI.EasyCharts.Parameter.callCount, 4);
+          assert.equal(propertyDropDownParams[0], 'build_chart_section');
+          assert.deepEqual(propertyDropDownParams[1], paramDefs[1]);
+          assert.equal(typeof propertyDropDownParams[2].onUpdate, 'function');
+
+          assert.ok(this.section.htmlContainer.find('div#build_chart_section_aggregate_pair_parameter')[0]);
+          assert.equal(this.section.htmlContainer.find('div#build_chart_section_aggregate_pair_parameter .parameter-label').text(), paramDefs[1].label);
+          assert.ok(this.section.htmlContainer.find('div#build_chart_section_aggregate_pair_parameter .parameter')[0]);
+          assert.equal(this.section.htmlContainer.find('#build_chart_section_aggregate_pair_parameter .parameter #aggregate_pair_aggregate_parameter .options-container').text(), 'Number of cardsSumAverage');
+          assert.equal(this.section.htmlContainer.find('#build_chart_section_aggregate_pair_parameter .parameter #aggregate_pair_aggregate_parameter .selected-value').text(), 'Number of cards');
+        });
+
+        QUnit.test('testShouldAddHiddenAggregatePropertyDropDown', function (assert) {
+          var propertyDropDownParams = MingleUI.EasyCharts.Parameter.args[1];
+
+          assert.equal(MingleUI.EasyCharts.Parameter.callCount, 4);
+          assert.equal(propertyDropDownParams[0], 'build_chart_section');
+          assert.deepEqual(propertyDropDownParams[1], paramDefs[1]);
+          assert.equal(typeof propertyDropDownParams[2].onUpdate, 'function');
+
+          assert.ok(this.section.htmlContainer.find('div#build_chart_section_aggregate_pair_parameter')[0]);
+          assert.equal(this.section.htmlContainer.find('div#build_chart_section_aggregate_pair_parameter .parameter-label').text(), paramDefs[1].label);
+          assert.ok(this.section.htmlContainer.find('div#build_chart_section_aggregate_pair_parameter .parameter')[0]);
+          assert.notOk(this.section.htmlContainer.find('#build_chart_section_aggregate_pair_parameter .parameter #aggregate_pair_aggregate_property_parameter').is(':visible'));
+          assert.equal(this.section.htmlContainer.find('#build_chart_section_aggregate_pair_parameter .parameter #aggregate_pair_aggregate_property_parameter .options-container').text(), 'prop1');
+          assert.equal(this.section.htmlContainer.find('#build_chart_section_aggregate_pair_parameter .parameter #aggregate_pair_aggregate_property_parameter .selected-value').text(), '(not set)');
+        });
+
+        QUnit.test('testShouldAddCustomizeChartButton', function (assert) {
+          assert.ok(this.section.htmlContainer.find('button').text(), 'Customize the chart');
+        });
+
+        QUnit.test('testShouldShowAggregatePropertyWhenAggregateIsSum', function (assert) {
+          this.section.htmlContainer.find('#build_chart_section_aggregate_pair_parameter .parameter #aggregate_pair_aggregate_parameter li:contains("Sum")').click();
+
+          assert.ok(this.section.htmlContainer.find('#build_chart_section_aggregate_pair_parameter .parameter #aggregate_pair_aggregate_property_parameter').is(':visible'));
+        });
+
+        QUnit.test('testShouldShowAggregatePropertyWhenAggregateIsAverage', function (assert) {
+          this.section.htmlContainer.find('#build_chart_section_aggregate_pair_parameter .parameter #aggregate_pair_aggregate_parameter li:contains("Average")').click();
+
+          assert.ok(this.section.htmlContainer.find('#build_chart_section_aggregate_pair_parameter .parameter #aggregate_pair_aggregate_property_parameter').is(':visible'));
+        });
+
+        QUnit.test('testShouldHideAggregatePropertyWhenAggregateIsCount', function (assert) {
+          this.section.htmlContainer.find('#build_chart_section_aggregate_pair_parameter .parameter #aggregate_pair_aggregate_parameter li:contains("Sum")').click();
+
+          assert.ok(this.section.htmlContainer.find('#build_chart_section_aggregate_pair_parameter .parameter #aggregate_pair_aggregate_property_parameter').is(':visible'));
+
+          this.section.htmlContainer.find('#build_chart_section_aggregate_pair_parameter .parameter #aggregate_pair_aggregate_parameter li:contains("Number of cards")').click();
+
+          assert.notOk(this.section.htmlContainer.find('#build_chart_section_aggregate_pair_parameter .parameter #aggregate_pair_aggregate_property_parameter').is(':visible'));
+        });
+
+        QUnit.test('testShouldTriggerOnUpdateCallbackWhenAnythingChanges', function (assert) {
+          this.section.htmlContainer.find('#build_chart_section_property_parameter .parameter li:contains("prop1")').click();
+
+          assert.equal(this.onUpdate.callCount, 1);
+          assert.equal(this.onUpdate.args[0][0], this.section);
+
+          this.section.htmlContainer.find('#build_chart_section_aggregate_pair_parameter .parameter #aggregate_pair_aggregate_parameter li:contains("Sum")').click();
+
+          assert.equal(this.onUpdate.callCount, 2);
+          assert.equal(this.onUpdate.args[1][0], this.section);
+
+          this.section.htmlContainer.find('#build_chart_section_aggregate_pair_parameter .parameter #aggregate_pair_aggregate_property_parameter li:contains("prop1")').click();
+
+          assert.equal(this.onUpdate.callCount, 3);
+          assert.equal(this.onUpdate.args[2][0], this.section);
+        });
+
+        QUnit.test('testShouldTriggerOnCompleteCallbackWhenCustomizeTheChartButtonIsClickedAndRemoveTheButton', function (assert) {
+          this.section.htmlContainer.find('button').click();
+
+          assert.equal(this.onComplete.callCount, 1);
+          assert.notOk(this.section.htmlContainer.find('button')[0]);
+        });
+
+        QUnit.test('testIsValidShouldReturnTrueWhenPropertyIsSelectedAndAggregateIsNumberOfCards', function (assert) {
+          assert.notOk(this.section.isValid());
+
+          this.section.htmlContainer.find('#build_chart_section_property_parameter .parameter li:contains("prop1")').click();
+
+          assert.ok(this.section.isValid());
+        });
+
+        QUnit.test('testIsValidShouldReturnTrueWhenPropertyAndAggregatePropertyAreSelectedAndAggregateIsSum', function (assert) {
+          var aggregatePair = this.section.htmlContainer.find('#build_chart_section_aggregate_pair_parameter .parameter');
+          assert.notOk(this.section.isValid());
+
+          this.section.htmlContainer.find('#build_chart_section_property_parameter .parameter li:contains("prop1")').click();
+          assert.ok(this.section.isValid());
+
+          aggregatePair.find('#aggregate_pair_aggregate_parameter li:contains("Sum")').click();
+          assert.notOk(this.section.isValid());
+
+          aggregatePair.find('#aggregate_pair_aggregate_property_parameter li:contains("prop1")').click();
+
+          assert.ok(this.section.isValid());
+        });
+
+        QUnit.test('testEnableInsertShouldReturnTrueIfParametersSelectedForAChartAreValid', function (assert) {
+          this.section.htmlContainer.find('#build_chart_section_property_parameter .parameter li:contains("prop1")').click();
+
+          assert.equal(this.section.enableInsert(), true);
+        });
+
+        QUnit.test('testIsValidShouldReturnTrueWhenPropertyAndAggregatePropertyAreSelectedAndAggregateIsAverage', function (assert) {
+          assert.notOk(this.section.isValid());
+
+          this.section.htmlContainer.find('#build_chart_section_property_parameter .parameter li:contains("prop1")').click();
+          assert.ok(this.section.isValid());
+
+          this.section.htmlContainer.find('#build_chart_section_aggregate_pair_parameter .parameter #aggregate_pair_aggregate_parameter li:contains("Average")').click();
+          assert.notOk(this.section.isValid());
+
+          this.section.htmlContainer.find('#build_chart_section_aggregate_pair_parameter .parameter #aggregate_pair_aggregate_property_parameter li:contains("prop1")').click();
+
+          assert.ok(this.section.isValid());
+        });
+
+        QUnit.test('testValuesShouldReturnSelectedValues', function (assert) {
+          assert.deepEqual(this.section.values(), {aggregate: 'count'});
+
+          this.section.htmlContainer.find('#build_chart_section_property_parameter .parameter li:contains("prop1")').click();
+          this.section.htmlContainer.find('#build_chart_section_aggregate_pair_parameter .parameter #aggregate_pair_aggregate_parameter li:contains("Average")').click();
+          this.section.htmlContainer.find('#build_chart_section_aggregate_pair_parameter .parameter #aggregate_pair_aggregate_property_parameter li:contains("prop1")').click();
+
+          assert.deepEqual(this.section.values(), {
+            property: 'prop1',
+            aggregate: 'avg',
+            aggregateProperty: 'prop1'
+          });
+        });
+
+        QUnit.test('testShouldInvokeTheAddButtonCallBack', function(assert) {
+          var callBack = sinon.spy();
+          this.container.empty();
+          this.section = new MingleUI.EasyCharts.Sections.BuildChartSection({
+            name: 'buildChartSection',
+            parameterDefinitions: paramDefs,
+            aggregatePairName: 'aggregate-pair',
+            extensionMethods: {
+              updateProperties: this.updateProperties
+            }
+          }, {
+            onUpdate: this.onUpdate,
+            onComplete: this.onComplete,
+            onEnabled: callBack
+          });
+          this.section.enableWith(this.projectData, this.selectedCardTypes);
+          this.container.append(this.section.htmlContainer);
+          assert.equal(callBack.callCount,1);
+          assert.notOk(this.section.htmlContainer.find('button').length);
+        });
+
+        QUnit.module('Enabled section with initial data', {
+          beforeEach: function () {
+            this.initialData = {
+              property: 'prop1',
+              aggregate: 'sum',
+              aggregateProperty: 'prop1'
+            };
+            this.section = new MingleUI.EasyCharts.Sections.BuildChartSection({
+              name: 'buildChartSection',
+              initialData: this.initialData,
+              hasValidInitialData: true,
+              paramNames: Object.keys(this.initialData),
+              parameterDefinitions: paramDefs,
+              aggregatePairName: 'aggregate-pair',
+              extensionMethods: {
+                updateProperties: this.updateProperties
+              }
+            }, {
+              onUpdate: this.onUpdate,
+              onComplete: this.onComplete
+            });
+            this.section.enableWith(this.projectData, this.selectedCardTypes);
+            this.container.append(this.section.htmlContainer);
+          }
+        });
+
+        QUnit.test('testShouldCallExtensionMethodUpdatePropertiesWithInitialData', function (assert) {
+          assert.equal(this.updateProperties.args[0][3], this.initialData);
+        });
+
+        QUnit.test('testShouldInitializeAggregateDropDownWithInitialValue', function (assert) {
+          assert.equal(this.section.htmlContainer.find('#build_chart_section_aggregate_pair_parameter .parameter #aggregate_pair_aggregate_parameter .selected-value').text(), 'Sum');
+        });
+
+        QUnit.test('testValuesShouldReturnAllInitialValues', function (assert) {
+          assert.deepEqual(this.section.values(), this.initialData);
+        });
+
+        QUnit.test('testShouldNotShowCustomizeChartButton', function (assert) {
+          assert.notOk(this.section.htmlContainer.find('button')[0]);
+        });
+
+        QUnit.test('testShouldTriggerOnComplete', function (assert) {
+          assert.equal(this.onComplete.callCount, 1);
+        });
+
+        QUnit.test('testShouldTriggerOnUpdate', function (assert) {
+          assert.equal(this.onUpdate.callCount, 1);
+        });
+      });
+    </script>
+  </body>
+</html>

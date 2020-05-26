@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta name="generator" content="HTML Tidy, see www.w3.org">
+<title></title>
+<script type="text/javascript">
+function abc(){
+    //sahiSimulateClick(document.links[0]);
+    sahiSimulateClick(document.getElementById("tb"));
+}
+
+function sahiCanSimulateClick(el){
+    return (el.click || el.dispatchEvent);
+}
+
+function sahiSimulateClick(el){
+    if (el.click) el.click(); //IE has a click
+    else if (el.dispatchEvent) // For FF
+    {
+        var evt = el.ownerDocument.createEvent('MouseEvents');
+        evt.initMouseEvent('click', true, true,
+            el.ownerDocument.defaultView, 1,
+            0, 0, 0, 0,
+            false, false, false, false,
+            1, null);
+        el.dispatchEvent(evt);
+    }
+}
+function testButton(e){
+    if (!e) e = window.event;
+    if (e.srcElement) alert("1 "+e.srcElement);
+    if (e.target) alert("2 "+e.target);
+}
+</script>
+</head>
+<body onload="abc()">
+<a href="ext/yahoo_menu.htm" onclick="alert(2)">yahoo_menu</a> <br>
+<input id="tb" type="button" onclick="testButton(event)" value=
+"Test"><br>
+<input type="button" value="Control">
+</body>
+</html>
+

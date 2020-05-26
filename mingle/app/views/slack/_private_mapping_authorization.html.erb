@@ -1,0 +1,29 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id='slack_authorization'>
+  <p><%= link_to_function('Were you looking for a private channel?', :onClick => 'Slack.toggleSectionDisplay("#private-channel-authorization")', :class => 'slack-link')%></p>
+  <div id="private-channel-authorization" class="hide">
+    <div id="authorization-steps">
+      <% if !basic_identity_mapped?(@user_integration) %>
+        <p>We don't know who you are on Slack yet. First, <%= link_to('link your Slack account', authenticate_in_slack_link, :class => 'slack-link', :target => "_blank" )%></p>
+      <% end %>
+      <p>We'll need to ask Slack for the private channels you're in. <%= link_to('Get private channels', slack_user_groups_authorization_link("projects/#{Project.current.identifier}/slack"), :class => 'slack-link')%>
+      </p>
+      <p>Once this is done, the list of channels above will contain your private channels</p>
+    </div>
+  </div>
+</div>

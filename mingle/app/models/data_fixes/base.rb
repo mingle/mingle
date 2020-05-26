@@ -1,0 +1,43 @@
+#  Copyright 2020 ThoughtWorks, Inc.
+#  
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Affero General Public License as
+#  published by the Free Software Foundation, either version 3 of the
+#  License, or (at your option) any later version.
+#  
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Affero General Public License for more details.
+#  
+#  You should have received a copy of the GNU Affero General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+
+module DataFixes
+  class Base
+    extend MigrationHelper
+
+    class << self
+      alias_method :c, :quote_column_name
+      alias_method :t, :safe_table_name
+
+      # setting to true will make the datafix asynchronous to prevent request timeouts
+      def queued?
+        false
+      end
+
+      def required?
+        :na
+      end
+
+      def description
+        raise "Description must be set by subclasses"
+      end
+
+      def apply(project_ids=[])
+        raise "To be implemented by subclasses"
+      end
+
+    end
+  end
+end

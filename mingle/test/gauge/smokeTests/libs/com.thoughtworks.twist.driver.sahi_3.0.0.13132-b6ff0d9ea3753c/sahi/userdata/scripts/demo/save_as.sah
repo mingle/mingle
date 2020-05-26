@@ -1,0 +1,38 @@
+function trySaveAs($link){
+	var $filePath = "testsaveas_x.zip";
+	var $fullFilePath = _userDataDir() +  "/testsaveas_x.zip";
+	var $resolvedPath = _userDataPath($filePath);
+	_assertEqual($fullFilePath.replace(/\\/g, '/'), $resolvedPath.replace(/\\/g, '/'));
+	//var $fullFilePath = "C:/testsaveas_x.zip";
+	
+	var f = new java.io.File($fullFilePath);
+	if (f.exists()){
+		f["delete"]();
+	}
+	var file = new java.io.File($fullFilePath);
+	var $exists = file.exists();
+	_assertFalse($exists);
+	
+	_click(_link($link));
+	_assertExists(_link("testsaveas.zip"));
+	_assertExists(_link("Back"));
+	_click(_link("testsaveas.zip"));
+	_assertEqual("testsaveas.zip", _lastDownloadedFileName());
+//	_wait(2000);
+	_saveDownloadedAs($filePath);
+	_clearLastDownloadedFileName();
+	_assertNotEqual("testsaveas.zip", _lastDownloadedFileName());
+	_click(_link("Back"));
+	_assertExists(_link("Link Test"));
+	var file = new java.io.File($fullFilePath);
+	var $exists = file.exists();
+	_assertTrue($exists);
+	if ($exists){
+		file["delete"]();
+	}
+}
+trySaveAs("Save As Test");
+_navigateTo("/demo/");
+_click(_link("Frames Test"));
+_click(_link("Blank Page"));
+trySaveAs("Save As Test")

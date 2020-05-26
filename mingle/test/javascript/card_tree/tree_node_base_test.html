@@ -1,0 +1,265 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>
+      JavaScript unit test file
+    </title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+    <script src="../test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+
+    <script src="../test_assets/unittest.js" type="text/javascript"></script>
+    <script src="../test_assets/unittest_ext.js" type="text/javascript"></script>
+
+
+    <script src="../../../public/javascripts/module.js" type="text/javascript"></script>
+
+    <script src="../../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/thirdparty/controls.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/thirdparty/builder.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+    <script src="../../../public/javascripts/smart_sort.js" type="text/javascript"></script>
+    <script src="../../../public/javascripts/application.js" type="text/javascript"></script>
+    <script src="../../../public/javascripts/card_tree/tree_node_base.js" type="text/javascript"></script>
+    <script src="../../../public/javascripts/card_tree/node_parser.js" type="text/javascript"></script>
+
+    <link rel="stylesheet" href="assets/unittest.css" type="text/css" />
+    <link rel="stylesheet" href="../test_assets/unittest.css" type="text/css" />
+  </head>
+  <body>
+    <div id="content">
+      <div id="header">
+        <h1>
+          JavaScript unit test file
+        </h1>
+        <p>
+          This file tests <strong>TreeNodeBase</strong> module in <strong>cardtree/tree_node_base.js</strong>.
+        </p>
+      </div><!-- Log output -->
+      <div id="testlog"></div>
+      <div style='border:solid 1px' id='sandbox'>
+        <h3> sandbox: </h3>
+      </div>
+    </div>
+    <script type="text/javascript">
+// <![CDATA[
+
+  CustomMixin = {
+    someFun: function(){ this.someFunCalled = true; },
+  }
+
+  new Test.Unit.Runner({
+
+
+    //####################################################################################
+    //                                              root
+    //                             --------------------|----------------
+    //                            |                                    |
+    //                    ----- child1----                 ----- child2------
+    //                   |                 |              |           |      |
+    //               child11            child12        child21    child23  child22
+    //                  |
+    //               child111
+    //####################################################################################
+    setup: function() {
+      var structure = { html_id: 'root', number: 0, expanded: true, allCardCount: 14, children: [
+        // child 1 has 2 children
+        { html_id: 'child1', number: 1, allCardCount: 3, children: [
+           {html_id: 'child11', number: 11, allCardCount: 1, children: [
+              {html_id: 'child111', number: 111, allCardCount:0, children: []} ]},
+           {html_id: 'child12', number: 12, allCardCount: 0, children: []},
+        ]},
+        // child 2 has 3 children
+        { html_id: 'child2', number: 2, allCardCount: 10, children: [
+           {html_id: 'child21', number: 21, allCardCount: 0, children: []},
+           {html_id: 'child22', number: 22, allCardCount: 0, children: []},
+           {html_id: 'child23', number: 23, allCardCount: 7, children: []},
+        ]},
+      ]};
+
+      this.parser = new TreeNodesParser(CustomMixin);
+      this.root = this.parser.parse(structure);
+      this.child1 = this.root.findNodeByNumber(1);
+      this.child2 = this.root.findNodeByNumber(2);
+      this.child11 = this.root.findNodeByNumber(11);
+      this.child111 = this.root.findNodeByNumber(111);
+      this.child12 = this.root.findNodeByNumber(12);
+      this.child21 = this.root.findNodeByNumber(21);
+      this.child22 = this.root.findNodeByNumber(22);
+      this.child23 = this.root.findNodeByNumber(23);
+
+      var newStructure = { html_id: 'child3', number: 3, allCardCount: 5, children: [
+        { html_id: 'child31', number: 31, allCardCount: 0, children: []},
+      ]};
+
+      this.newSubTree = this.parser.parse(newStructure);
+    },
+
+    // TODO:need to work after smart sort feature was added
+    testChildrenShouldBeSmartsorted: function() { with(this) {
+      var structure = { html_id: 'root', number: 0, children: [
+        { html_id: 'child10', number: 10, children: []},
+        { html_id: 'child1', number: 1, children: []},
+        { html_id: 'child9', number: 9, children: []},
+        { html_id: 'child2', number: 2, children: []}
+      ]};
+      var subtree = new TreeNodesParser().parse(structure)
+
+      child12.addChild(subtree.findNodeByNumber(9));
+      child12.addChild(subtree.findNodeByNumber(2));
+      child12.addChild(subtree.findNodeByNumber(10));
+      child12.addChild(subtree.findNodeByNumber(1));
+      assertArrayEqual([1, 2, 9, 10], child12.children.pluck('number'));
+    }},
+
+    testCanAddChildNode: function() { with(this){
+      assertEqual(2, root.children.length);
+      assertArrayEqual([1, 2], root.children.pluck('number'));
+      assertArrayEqual([root, root], root.children.pluck('parent'));
+    }},
+
+    testShouldMoveNodeWhenAddChildNodeInTheTree: function() { with(this){
+      child1.addChild(child21);
+      assertArrayEqual([22, 23], child2.children.pluck('number'));
+      assertArrayEqual([11, 12, 21], child1.children.pluck('number'));
+    }},
+
+    testShouldNotAddSameChildNodeTwice: function() { with(this){
+      root.addChild(child1);
+      assertEqual(2, root.children.length);
+      assertArrayEqual([1, 2], root.children.pluck('number'));
+      child1.parent = null
+      root.addChild(child1);
+      assertEqual(2, root.children.length);
+      assertArrayEqual([1, 2], root.children.pluck('number'));
+    }},
+
+    testCanOnlyRemoveChildNode: function() { with(this) {
+      child1.removeFromParent(false);
+      assertArrayEqual([2, 11, 12], root.children.pluck('number'));
+    }},
+
+    testCanRemoveAllChildrenWithNode: function() { with(this) {
+      child1.removeFromParent(true);
+      assertArrayEqual([2], root.children.pluck('number'));
+    }},
+
+    testShouldBeAbleToFindDescendantNodeWithConditionAtAnyNode: function() { with(this) {
+      assertEqual(child11, root.findNode(function(node){ return node.number == 11; }));
+      assertEqual(child22, child2.findNode(function(node){ return node.number == 22;}));
+      assertNull(child2.findNode(function(node){ return node.number == 11;}));
+    }},
+
+    testShouldBeAbleToIterateOverEachDescendantForANode: function() { with(this) {
+      var numbers = $A();
+      root.eachDescendant(function(node) {
+        numbers.push(node.number)
+      });
+      assertArrayEqual([1, 11, 111, 12, 2, 21, 22, 23], numbers);
+      root.invokeDescendants('someFun')
+      assertArrayEqual([true, true], root.children.pluck('someFunCalled'));
+    }},
+
+    testCanTellAncestors: function() { with(this) {
+      assertArrayEqual([root], root.findNodeByNumber(2).ancestors());
+    }},
+
+    testFindNodeByNumber: function() { with(this) {
+      assertEqual(root, root.findNodeByNumber(0));
+      assertEqual(child23, root.findNodeByNumber(23));
+    }},
+
+    testShouldUpdateChildrenCountAfterRemoveChildNode: function(){ with(this){
+      child11.removeFromParent(false);
+      assertEqual(2, child1.allCardCount);
+      assertEqual(13, root.allCardCount);
+
+      assertEqual(10, child2.allCardCount);
+      child23.removeFromParent(true);
+      assertEqual(2, child2.allCardCount);
+    }},
+
+    testShouldUpdateChildrenCountAfterAddNewChildNode: function(){ with(this){
+      child2.addChild(child11);
+      assertEqual(12, child2.allCardCount);
+      assertEqual(1, child1.allCardCount);
+
+      child1.addChild(child23);
+      assertEqual(9, child1.allCardCount)
+      assertEqual(4, child2.allCardCount);
+    }},
+
+    testShouldAddSubTreeToTreeWhenReplaceNodeWithSubtree: function(){ with(this) {
+      child11.replace(newSubTree);
+      assertEqual(child11, root.findNodeByNumber(11));
+      newSubTree.children.each(function(child) {
+        this.assertEqual(child11, child.parent)
+      }.bind(this));
+    }},
+
+    testShouldRemoveAllOldSubTreeWhenReplaceNodeWithSubTree: function(){with(this) {
+      child1.replace(newSubTree);
+      assertEqual(child1, root.findNodeByNumber(1));
+      assertNull(root.findNodeByNumber(11));
+      assertNull(root.findNodeByNumber(12));
+      assertNull(child11.parent);
+      assertNull(child12.parent);
+      assertNull(child111.parent);
+    }},
+
+    testShouldUpdateAllCardCountWhenReplace: function(){ with(this) {
+      child111.replace(newSubTree);
+      assertEqual(5, child111.allCardCount);
+      assertEqual(6, child11.allCardCount);
+      assertEqual(8, child1.allCardCount);
+      assertEqual(19, root.allCardCount);
+    }},
+
+    testBottomUpTraveling: function() { with(this) {
+      var path = []
+      child1.bottomUpTraveling(function(node) {
+        path.push(node);
+      })
+      assertArrayEqual([child111, child11, child12, child1], path);
+    }},
+
+    //####################################################################################
+    //                                            Planning
+    //                             --------------------|-----------------
+    //                            |                    |                |
+    //                    ----- release1----       iteration2        story5
+    //                   |                 |           |
+    //            ---iteration1----    story3       story4
+    //           |                |
+    //       story1            story2
+    //
+    //####################################################################################
+    testDeepFirstTravelling: function() { with(this) {
+
+      this.root = this.parser.parse({"html_id": "node_0", "children": [{"html_id": "card_159", "children": [{"html_id": "card_163", "children": [{"html_id": "card_165", "children": [], "name": "story1", "number": 7,  "descendantCount": 0, }, {"html_id": "card_166", "children": [], "name": "story2", "number": 8,  "descendantCount": 0, }], "name": "iteration1", "number": 5,  "descendantCount": 0, }, {"html_id": "card_164", "children": [], "name": "story3", "number": 6,  "descendantCount": 0, }], "name": "release1", "number": 1,  "descendantCount": 0, }, {"html_id": "card_160", "children": [{"html_id": "card_161", "children": [], "name": "story4", "number": 3,  "descendantCount": 0, }], "name": "iteration2", "number": 2,  "descendantCount": 0, }, {"html_id": "card_162", "children": [], "name": "story5", "number": 4,  "descendantCount": 0, }], "name": "Planning", "descendantCount": 0,  "number": 0, });
+
+      assertArrayEqual(["Planning", "release1", "iteration1", "story1", "story2", "story3", "iteration2", "story4", "story5"], this.root.deepFirstTravelCollect().pluck('name'));
+
+    }}
+  }, { testLog: "testlog", test: ''}).run;
+// ]]>
+</script>
+  </body>
+</html>

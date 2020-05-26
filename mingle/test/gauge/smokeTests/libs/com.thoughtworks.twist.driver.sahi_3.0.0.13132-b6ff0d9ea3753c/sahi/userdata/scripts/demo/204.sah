@@ -1,0 +1,3 @@
+_click(_link("204 Response"));
+_assertExists(_link("Link Test"));
+_click(_link("Link Test"));

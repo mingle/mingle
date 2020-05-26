@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE section SYSTEM "mingle_help.dtd">
+<section title="Create cards with the blue plus icon" id="create_cards_using_quick_add_card">
+	<p>
+		Very similar to the <cref topic="creating_cards_with_quick_add_card">quick add card</cref>, the blue "+" icon at the top of all columns on any <cref topic="grid_view">grid view</cref> allows you to quickly create a new card that will appear within the column you're adding it to.</p> 
+  <p>To create a new card using the feature, simply click on the blue "+" icon and enter the card title in the pop-up that appears.</p>
+	<p><screenshot src="resources/images/new_add_card.gif"/></p>	
+</section>

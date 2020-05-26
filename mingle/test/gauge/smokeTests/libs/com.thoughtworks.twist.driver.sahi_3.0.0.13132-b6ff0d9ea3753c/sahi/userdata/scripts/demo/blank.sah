@@ -1,0 +1,4 @@
+_click(_link("Link Test"));
+_click(_link("Back"));
+_click(_link("Blank Page"));
+_navigateTo("/demo/index.htm");

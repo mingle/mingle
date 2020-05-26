@@ -1,0 +1,37 @@
+function click($combo, $expected){
+	_click(_div("Experiment Zone"), $combo);
+	_assertEqual($expected, _textbox("tb").value);
+}
+function tearDown(){
+	_setValue(_textbox("tb"), "");
+}
+function testNormalClick(){
+	click(null, "click");
+}
+
+function testCtrlClick(){
+	click("CTRL", "<ctrl>click");
+}
+
+function testAltClick(){
+	click("ALT", "<alt>click");
+}
+
+function testShiftClick(){
+	click("SHIFT", "<shift>click");
+}
+
+function testMetaClick(){
+	click("META", "<meta>click");
+}
+
+function testCombinationClicks(){
+	click("CTRL|ALT", "<ctrl><alt>click");
+	click("CTRL|SHIFT", "<ctrl><shift>click");
+	click("ALT|SHIFT", "<alt><shift>click");
+	click("SHIFT|ALT", "<alt><shift>click");
+	click("CTRL|ALT|SHIFT", "<ctrl><alt><shift>click");
+}
+
+_navigateTo("clickCombo.htm");
+_runUnitTests();

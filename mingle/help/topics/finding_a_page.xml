@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE section SYSTEM "mingle_help.dtd">
+<section title="Finding a page">
+    <bullets
+        title="There are several ways within Mingle to find pages to view, edit or delete, including: ">
+        <item>
+            <p>from the <tab>Project admin</tab> tab <link>Pages</link> link (full list of all pages)</p>
+            <screenshot src="resources/images/wiki_pages_list.png"></screenshot>
+        	<note>This page is also available by clicking on the <link>Index of pages</link> link in the <strong>Recently viewed pages</strong> control which is displayed when viewing any page.</note>
+        </item>
+    	<item>
+    		<p>from the <cref topic="recently_viewed_pages_control">recently viewed pages</cref> control which is displayed when viewing any page.</p>
+    		<screenshot src="resources/images/wiki_page_recently_viewed_list.png" />
+    	</item>
+        <item>from links from other <cref topic="linking_between_wiki_pages_and_cards"> pages</cref></item>
+        <item>from links from within card descriptions</item>
+        <item>from directly from a URL, e.g. http://mingle.yourcompany.com/<subst>your project</subst>/wiki/<subst>wiki_name</subst>, where <subst>your project</subst> is your project identifier and <subst>wiki_name</subst> is the name of the wiki page</item>
+        <item>from a <cref topic="mingle_search">Mingle search</cref>.</item>
+    </bullets>
+</section>
+
+
+

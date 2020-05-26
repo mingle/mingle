@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE section SYSTEM "mingle_help.dtd">
+<topic title="Card ranking" id ="card_ranking">
+<section title="Introduction">
+	<p>Card ranking allows users to use the grid view to simulate a physical card wall by positioning cards the way you want to organize them.</p>
+	<p>We believe that card ranks are meaningful in the context of many cards. With this concept Mingle allows users to express the subjective importance between cards. For example, if a project manager feels that Card A is more important than Card B or needs to be developed first, she can position Card A above Card B in grid view.</p>
+	<note>Every card in a project has a rank. Upon card creation the new card is ranked below existing cards.</note>
+</section>
+
+<section title ="How to rank cards">
+	<p>Rank is the default selection for the sort by menu in the grid view and is turned on by default. Therefore, all cards displayed in the grid view are sorted by their current card rank when you first come to the grid view.</p>
+
+	<subsection title = "Ranking mode on/off button" collapsed="true">
+		<p>The ability to rank cards is turned off by default so you have to manually turn on ranking mode to be able to change card rankings. Providing an explicit way to indicate to users that the ability to rank cards is on, helps to prevent accidentally changing card rankings.</p>
+		<p>When the ranking mode is turned off:</p>
+		<screenshot alttext="Grid view menus" src="resources/images/card_ranking_mode_off.png" />
+
+		<p>When the ranking mode is turned on:</p>
+		<screenshot alttext="Grid view menus" src="resources/images/card_ranking_mode_on.png" />
+		<p>Notice that when the ranking mode is on, the background color on grid view is also changed to light green.</p>
+	</subsection>
+
+	<p>You can rank a card by dragging and dropping just like how you manage cards in the grid view. Once the ranking mode is on, you can drag and drop cards as you want. You will notice that the blue card rank indicator will be provided as you move cards. This card rank indicator shows where this moving card will be dropped so that it is easier for you to know how this card will be ranked. </p>
+	<p>In the example below, the business analyst Britney opens her story wall grid view, and notices that card number #11 was critical (red color) but was ranked at the bottom of the 'In Analysis' lane, so she turns on the ranking mode in grid view.</p>
+	<screenshot alttext="Grid view menus" src="resources/images/ranking_cards_before.png" />
+	<p>She now drags card number #11 and drops it at the top of the lane.</p>
+	<screenshot alttext="Grid view menus" src="resources/images/ranking_cards.png" />
+	<screenshot alttext="Grid view menus" src="resources/images/ranking_cards_after.png" />
+
+	<hint>Only full project members and project or Mingle administrators can rank cards. Read only, light and anonymous users cannot rank cards.</hint>
+
+	<hint>Please note that card ranks are not displayed and changes to the card rank are not recorded in project history. This means you cannot trace who changed a card's ranking or when a card's ranking was changed anywhere in the project.</hint>
+
+</section>
+<section title ="Using card rank in table query" id="using_card_rank_in_table_query" collapsed="false">
+  <p>After you rank the cards in grid view, you can order cards by rank in a <cref topic="markup_table_query" collapsed="false">table query</cref>. Please note that the actual number rank of the card is not displayed in the table query. The cards will simply be listed in the order they have been ranked. Also, MQL's <cref topic="mql_reference#order">ORDER BY</cref> works in the same way as SQL's ORDER BY. Please refer to SQL for more information.</p>
+  <markup> table query: select name, number where type is story ORDER BY PROJECT_CARD_RANK </markup>
+  <screenshot allttex="use_project_card_rank_in_table_query" src="resources/images/use_project_card_rank_in_table_query.png"/>
+</section>
+<section title="Understanding the Ranking Rule" collapsed="true">
+	<p>There is one ranking rule.</p>
+	<note>When a card moves for ranking, move it as little as possible.</note>
+	<p>In the following examples we have cards ranked in this order.</p>
+	<screenshot alttext="Grid view menus" src="resources/images/ranking_rule1.png" />
+	<p>Now suppose we have a grid lane with the following cards.</p>
+	<screenshot alttext="Grid view menus" src="resources/images/ranking_rule2.png" />
+	<subsection title="Moving Up" collapsed="true">
+		<p>Action: Drag card E between card A and card C.</p>
+		<p>This will rank the moved card immediately before the card it is dragged above. Below are the card ranks for all 5 cards.</p>
+		<screenshot alttext="Grid view menus" src="resources/images/ranking_rule3_up.png" />
+	</subsection>
+
+	<subsection title="Moving Down" collapsed="true">
+		<p>Action: Drag card A between card C and card E.</p>
+		<p>This will rank the moved card immediately before the card it is dragged above. Below are the card ranks for all 5 cards.</p>
+		<screenshot alttext="Grid view menus" src="resources/images/ranking_rule4_down.png" />
+	</subsection>
+</section>
+
+<section title="Also see...">
+	<bullets>
+		<item><cref topic="grid_view">Grid view</cref></item>
+		<item><cref topic="explore_mingle">Explore Mingle</cref></item>
+	</bullets>
+</section>
+
+</topic>

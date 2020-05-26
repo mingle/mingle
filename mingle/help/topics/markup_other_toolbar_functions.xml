@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE subsection SYSTEM "mingle_help.dtd">
+<subsection title="Macros">
+    <markup_reference>
+		<subsection title="The project macro">
+			<p>The project macro icon (part of <cref topic="mingle_macro_builder">Mingle's macro builder</cref>) will automatically insert the current project's project identifier inline a card or page description.</p>
+<screenshot src="resources/images/toolbar_project_macro_icon.png" />
+	    <p>If you want to insert this by hand, you can type the following into the free text box that opens when you click the orange Mingle icon on the editing toolbar.</p>   
+	    	        <markup>project</markup>
+    	</subsection>
+
+		<subsection title="The project variable macro">
+			<p>The project variable icon allow users to view the value of any project variable on current project.</p>
+			<screenshot src="resources/images/toolbar_project_variable_macro_icon.png" />
+			<p>If you want to insert this by hand, you can type the following into the free text box that opens when you click the orange Mingle icon on the editing toolbar.</p>   
+	        <markup>project-variable name: (Current_Iteration)</markup>
+		</subsection>
+		
+		<subsection title="The average query macro">
+			<p>The average query macro allow users to get the average value of the specified numeric property. The outcome of average query is returned in numeric format.</p>
+			<screenshot src="resources/images/toolbar_average_query_icon.png" />
+			<p>If you want to insert this by hand, you can type the following into the free text box that opens when you click the orange Mingle icon on the editing toolbar.</p>
+			<markup>average query: SELECT 'Planning Estimate' WHERE Type = Story and Iteration = 'Iteration 1'</markup>
+		</subsection>
+		
+		<subsection title ="The value query macro">
+			<p>Using the value query macro user can simply display the value of the specified property or aggregate the value and then display. The outcome of the value query can be numeric, text or date. </p>
+			<screenshot src="resources/images/toolbar_value_query_icon.png" />
+			<p>If you want to insert this by hand, you can type the following into the free text box that opens when you click the orange Mingle icon on the editing toolbar.</p>
+			<markup>value query: SELECT value_or_aggregate WHERE condition1 AND condition2</markup>
+			<p>&lt;strong&gt;Example&lt;/strong&gt;</p>
+			<p>The value query is often used to refer any specific value in a sentence or table for reporting purposes.</p>
+			<list>
+			  <bullets>
+			    <bullets>
+			    <item>The planned size for 'Iteration 1' is &lt;strong&gt;value query: SELECT 'Planned Size' WHERE Type = Iteration and name = 'Iteration 1'&lt;/strong&gt;.</item>
+			    <item>The total number of stories for 'Iteration 1' is &lt;strong&gt;value query: SELECT Count(*) WHERE Type = Story and Iteration = 'Iteration 1'&lt;/strong&gt;.</item>
+			    <item>The priority of story #117 is &lt;strong&gt;value query: SELECT Priority WHERE number = 117&lt;/strong&gt;.</item>
+			    <item>The Start date of 'Iteration 1'= &lt;strong&gt;value query: SELECT 'start date' WHERE Type = Iteration and name = 'Iteration 1'&lt;/strong&gt;.</item>
+			</bullets>
+		</bullets>
+		</list>
+		</subsection>
+		
+	</markup_reference>
+</subsection>
+

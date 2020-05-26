@@ -1,0 +1,86 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<li class="objective-box clear_float" id='backlog_objective_<%= backlog_objective.id %>'>
+  <%form_for(backlog_objective, :url  => program_backlog_objective_path(@program.identifier, backlog_objective.id), :html => { :id => "backlog_objective_#{backlog_objective.id}_form", :onsubmit => "BacklogObjectiveEditor.save($j(this).find('.editor')); return false;"}) do |f| %>
+
+    <div id="objective_summary_<%= backlog_objective.id %>" class="objective_summary">
+
+      <span id="backlog_objective_<%= backlog_objective.name%>_handle" class="handle fa fa-bars"></span>
+
+      <div class="name-container">
+        <span id="backlog_objective_<%= backlog_objective.id %>_name" class="name"><%=h backlog_objective.name %></span>
+        <%= f.text_field :name, :class => "name_input hide"%>
+      </div>
+
+      <div class="slider_container">
+        <div id="backlog_objective_<%= backlog_objective.id %>_value_slider" name="backlog_objective_<%= backlog_objective.name %>_value_slider" class="slider"></div>
+        <div id="backlog_objective_<%= backlog_objective.id %>_size_slider"  name="backlog_objective_<%= backlog_objective.name %>_size_slider" class="slider"></div>
+        <div id="progressbar_<%= backlog_objective.id %>" name="progressbar_<%= backlog_objective.name %>"></div>
+      </div>
+
+      <%= f.hidden_field :size %>
+      <%= f.hidden_field :value %>
+      <%= f.hidden_field :id %>
+
+    </div>
+
+    <div class="editor" style="display: none;">
+
+      <div class="objective_error"></div>
+
+      <div class="value_statement">
+        <h4>Value Statement</h4>
+
+        <div class='value_statement_text'>
+          <%= f.text_area :value_statement, :class => "value_statement_text_area", :maxlength => 750 %>
+          <span class='charcounter'>750 Character Limit</span>
+        </div>
+      </div>
+
+      <div class="guiding_questions" >
+        <h4>Guiding Questions</h4>
+        <ul>
+          <li>Whose life are we changing?</li>
+          <li>What problem are we solving?</li>
+          <li>Why do we care about solving this?</li>
+          <li>What is the successful outcome?</li>
+        </ul>
+      </div>
+
+      <% action_bar do -%>
+        <%= link_to_function 'Save', "$j(this).closest('form').submit();", :class => 'link_as_button primary' %>
+        <%= link_to_function 'Cancel', "BacklogObjectiveEditor.cancelEditing($j('#objective_summary_#{backlog_objective.id}').siblings('.editor'))", :class => 'link_as_button' %>
+        <%= link_to_function 'Plan on timeline', "BacklogObjectiveEditor.plan($j('#plan_backlog_objective_form_#{backlog_objective.id}'))", :id => "plan-#{backlog_objective.id}", :class => 'objective_action link_as_button' %>
+        <%= link_to_remote 'Delete', { :url => { :action => 'confirm_delete', :id => "#{backlog_objective.id}" }}, :id => "delete-value-#{backlog_objective.id}", :class => 'inline-link inline-delete-link link_as_button' %>
+    </div>
+    <% end %>
+
+  <% end %>
+  <%= render :partial => 'plan_objective_form', :locals => { :backlog_objective => backlog_objective } %>
+</li>
+
+<% init_ratio = MingleConfiguration.hide_objective_ratio? ? '' : "BacklogObjectiveRatio.initialize_ratio($j('#progressbar_#{backlog_objective.id}'), $j('#backlog_objective_#{backlog_objective.id}_form'));" %>
+<%= javascript_with_rescue <<-JAVASCRIPT
+
+BacklogObjectiveSlider.initialize_slider($j('#backlog_objective_#{backlog_objective.id}_size_slider'), '#{program_backlog_objective_path(@program.identifier, backlog_objective.id)}', #{backlog_objective.size}, 'size');
+
+BacklogObjectiveSlider.initialize_slider($j('#backlog_objective_#{backlog_objective.id}_value_slider'), '#{program_backlog_objective_path(@program.identifier, backlog_objective.id)}', #{backlog_objective.value}, 'value');
+
+#{init_ratio}
+
+JAVASCRIPT
+-%>

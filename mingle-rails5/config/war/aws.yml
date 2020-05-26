@@ -1,0 +1,21 @@
+#  Copyright 2020 ThoughtWorks, Inc.
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Affero General Public License as
+#  published by the Free Software Foundation, either version 3 of the
+#  License, or (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Affero General Public License for more details.
+#
+#  You should have received a copy of the GNU Affero General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+production:
+  sqs_endpoint: sqs.<%= java.lang.System.getProperty('AWS_REGION') %>.amazonaws.com
+  sqs_region: <%= java.lang.System.getProperty('AWS_REGION') %>
+  dynamo_db_endpoint: dynamodb.<%= java.lang.System.getProperty('AWS_REGION') %>.amazonaws.com
+  dynamo_db_region: <%= java.lang.System.getProperty('AWS_REGION') %>
+  sns_endpoint: sns.<%= java.lang.System.getProperty('AWS_REGION') %>.amazonaws.com
+  s3_endpoint: s3-<%= java.lang.System.getProperty('AWS_REGION') %>.amazonaws.com

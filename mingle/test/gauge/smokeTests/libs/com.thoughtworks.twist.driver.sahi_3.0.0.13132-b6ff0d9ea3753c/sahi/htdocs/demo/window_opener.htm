@@ -1,0 +1,42 @@
+<html>
+<head><title>Window Opener Tests</title></head>
+<body>
+<input id="tx" type="text" value="">
+<script type="text/javascript">
+var gotit = "GOT IT";
+document.getElementById("tx").value = "" + (window.opener ? window.opener.gotit : null);
+
+function noHref(){
+	location.href="window_opener_iframe.htm";
+}
+</script>
+<br/><a onclick="noHref()">No href</a>
+<br/><a href="window_opener.htm">No target</a>
+<br/><a href="window_opener.htm" target="_self">_self</a>
+<br/><a href="window_opener.htm" target="_parent">_parent</a>
+<br/><a href="window_opener.htm" target="_top">_top</a>
+<br/><a href="window_opener.htm" target="_blank">_blank</a>
+<br/><a href="window_opener.htm" target="another">another</a>
+<br/><a href="window_opener.htm" target="win_one">Self Win One</a>
+<br/><a href="window_opener_iframe.htm" target="ifr1">Iframe</a>
+<br/>
+<br/>
+<br/>
+<br/><input type="button" value="Window Open Self" onclick="window.open('window_opener.htm', '_self')"> 
+<br/><input type="button" value="Window Open Parent" onclick="window.open('window_opener.htm', '_parent')"> 
+<br/><input type="button" value="Window Open Top" onclick="window.open('window_opener.htm', '_top')"> 
+<br/><input type="button" value="Window Open" onclick="window.open('window_opener.htm')"> 
+<br/><input type="button" value="Window Open Another" onclick="window.open('window_opener.htm', 'another')"> 
+<br/><input type="button" value="Window Open Self (Win One)" onclick="window.open('window_opener.htm', 'win_one')"> 
+<br/>
+<br/><input type="button" value="Window Location Href" onclick="window.location='window_opener.htm'"> 
+<br/><input type="button" value="Window Location Href Top" onclick="window.top.location='window_opener.htm'"> 
+<br/>
+<br/><input type="button" value="Clear Opener" onclick="top.opener = null"> 
+<br/><input type="button" value="Set Name" onclick="window.name = 'win_one'"> 
+<br/>
+
+<iframe src="" name="ifr1" width="500px" height="300px"></iframe>
+
+</body>
+</html>

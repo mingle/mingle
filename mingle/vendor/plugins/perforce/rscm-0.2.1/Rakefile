@@ -1,0 +1,152 @@
+#  Copyright 2020 ThoughtWorks, Inc.
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Affero General Public License as
+#  published by the Free Software Foundation, either version 3 of the
+#  License, or (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Affero General Public License for more details.
+#
+#  You should have received a copy of the GNU Affero General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+
+require 'rubygems'
+require 'rake'
+require 'rake/testtask'
+require 'rake/rdoctask'
+require 'rake/packagetask'
+require 'rake/gempackagetask'
+require 'rake/contrib/compositepublisher'
+require 'rake/contrib/sshpublisher'
+require 'rake/contrib/rubyforgepublisher'
+require 'lib/rubyforge_file_publisher'
+
+PKG_BUILD     = ENV['PKG_BUILD'] ? '.' + ENV['PKG_BUILD'] : ''
+PKG_NAME      = 'rscm'
+PKG_VERSION   = '0.2.1' + PKG_BUILD
+PKG_FILE_NAME = "#{PKG_NAME}-#{PKG_VERSION}"
+
+desc "Default Task"
+task :default => [ :all ]
+task :all => [:ant, :gem]
+
+# Run the unit tests
+# To run a specific test: rake test TEST=path/to/test
+fl = FileList.new('test/**/*_test.rb')
+fl.exclude('test/**/mooky*.rb')
+fl.exclude('test/**/monotone*.rb') # Incomplete/unsupported for now - reactivate when more complete!
+fl.exclude('test/**/darcs*.rb')    # Incomplete/unsupported for now - reactivate when more complete!
+fl.exclude('test/**/perforce*.rb') # Incomplete/unsupported for now - reactivate when more complete!
+fl.exclude('test/**/starteam*.rb') # Too bloody hard to test without a StarTeam server license! Tested ad-hoc.
+Rake::TestTask.new { |t|
+  t.libs << "test"
+  t.test_files = fl
+  t.verbose = true
+}
+
+rd = Rake::RDocTask.new { |rdoc|
+  rdoc.title    = 'RSCM - Ruby Source Control Management API'
+  rdoc.options << '--line-numbers' << '--inline-source'
+  rdoc.rdoc_files.include('README')
+  rdoc.rdoc_files.include('CHANGELOG')
+  rdoc.rdoc_files.include('lib/**/*.rb')
+  rdoc.rdoc_files.include('docs/**/*.rd')
+}
+
+task :ant do |t|
+  if(!ENV['RSCM_STARTEAM'])
+    puts "WARNING - NOT BUILDING STARTEAM SUPPORT SINCE 'RSCM_STARTEAM' IS NOT DEFINED."
+  else
+    ant = RUBY_PLATFORM == "i386-mswin32" ? "ant.bat" : system("which ant.sh") ? "ant.sh" : "ant" 
+    IO.popen("#{ant} -f ext/java/build.xml clean jar") do |io|
+      io.each_line do |line|
+        puts line
+      end
+    end
+  end
+end
+
+PKG_FILES = FileList[
+  '[A-Z]*',
+  'lib/**/*', 
+  'bin/**/*', 
+  'test/**/*',
+  'testproject/**/*',
+  'doc/**/*',
+  'ext/rscm.jar'
+]
+
+if ! defined?(Gem)
+  puts "Package Target requires RubyGEMs"
+else
+  spec = Gem::Specification.new do |s|
+    
+    #### Basic information.
+
+    s.name    = PKG_NAME
+    s.version = PKG_VERSION
+    s.summary = "RSCM - Ruby Source Control Management"
+    s.description = <<-EOF
+      RSCM is a Ruby library for various Source Control Management (SCM) systems.
+    EOF
+
+    #### Which files are to be included in this gem?  Everything!  (Except CVS directories.)
+
+    s.files = PKG_FILES.to_a
+
+    #### Load-time details: library and application (you will need one or both).
+
+    s.require_path = 'lib'
+    s.autorequire = 'rscm'
+
+    #### Documentation and testing.
+
+    s.has_rdoc = true
+    s.extra_rdoc_files = rd.rdoc_files.reject { |fn| fn =~ /\.rb$/ }.to_a
+    rd.options.each do |op|
+      s.rdoc_options << op
+    end
+
+    #### Author and project details.
+
+    s.author = "Aslak Hellesoy"
+    s.email = "dev@damagecontrol.codehaus.org"
+    s.homepage = "http://rscm.rubyforge.org"
+    s.rubyforge_project = "rscm"
+  end
+
+  Rake::GemPackageTask.new(spec) do |pkg|
+    pkg.need_zip = true
+    pkg.need_tar = true
+  end
+end
+
+task :publish => [:rdoc] do
+  publisher = Rake::CompositePublisher.new
+  publisher.add Rake::RubyForgePublisher.new('rscm', 'aslak_hellesoy')
+  publisher.upload
+
+#  RUBYFORGE_GROUP_ID = 490
+#  RUBYFORGE_PACKAGE_ID = 552
+#  RUBYFORGE_RELEASE_NAME = "rakedrelease"
+#
+#  Rake::RubyForgeFilePublisher.new(
+#    RUBYFORGE_GROUP_ID, 
+#    "aslak_hellesoy", 
+#    "README",
+#    #"pkg/#{PKG_FILE_NAME}.gem", 
+#    RUBYFORGE_PACKAGE_ID,
+#    RUBYFORGE_RELEASE_NAME
+#  ) do |p|
+#    p.type_id = 8100
+#    p.processor_id = 2000
+#    p.preformatted = 1
+#    p.release_name = "come on"
+#    p.release_changes = "now"
+#    p.release_date = Time.utc(2005, 2, 19, 23, 42, 0)
+#  end
+
+end

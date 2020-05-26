@@ -1,0 +1,59 @@
+function testGetText(){
+	_navigateTo("/demo/index.htm");
+	var $text = _getText(_link(0));
+	_assertEqual("Link Test", $text);
+}
+function testGetValue(){
+	_navigateTo("/demo/formTest.htm");
+	_assertEqual("", _textbox("t1").value);
+	_setValue(_textbox("t1"), "abcd");
+	var $text = _getValue(_textbox("t1"));
+	_assertEqual("abcd", $text);
+}
+function testGetAttribute(){
+	_navigateTo("/demo/index.htm");
+	var $text = _getAttribute(_link(0), "href");
+	_assertTrue($text.indexOf("linkTest.htm") != -1);
+}
+function testContainsText(){
+	_navigateTo("/demo/index.htm");
+	var $c = _containsText(_link(1), "orm Te"); // Form Test
+	_assertTrue($c);
+}
+function testContainsHTML(){
+	_navigateTo("/demo/index.htm");
+	var $c = _containsHTML(_link(1), "orm Te"); // Form Test
+	_assertTrue($c);
+}
+function testStyle(){
+	_navigateTo("/demo/index.htm");
+	var $c = _style(_link(0), "text-decoration")
+	_assertEqual("underline", $c);
+}
+function testAPIs(){
+	var apis = ["_getValue", "_getAttribute", "_containsText",
+	            "_containsHTML", "_getText", "_getCellText", "_getSelectedText", 
+	            "_lastAlert", "_lastPrompt", "_lastConfirm", "_style", "_cookie", 
+	            "_position", "_rteHTML", "_rteText", "_isVisible", 
+	            "_contains", "_title", "_exists"];
+	for (var i=0; i<apis.length; i++){
+		var $api = apis[i];
+		var $b = _sahi[$api] != null;
+		_assert($b, $api + " does not exist");
+	}
+}
+function testFetch(){
+	_navigateTo("/demo/formTest.htm");
+	_assertEqual("", _textbox("t1").value);
+	_setValue(_textbox("t1"), "abcd");
+	var $text = _fetch(_textbox("t1").value);
+	_assertEqual("abcd", $text);
+}
+
+function testIsVisible(){
+	_navigateTo("/demo/tableTest.htm");
+	var $visible = _isVisible(_cell("CellWithId"));
+	_assertTrue($visible);
+}
+
+_runUnitTests();

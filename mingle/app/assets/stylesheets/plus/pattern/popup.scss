@@ -1,0 +1,273 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+/**
+ * popup.css
+ *
+ * popup styles such as the objective details popup on timeline
+ */
+
+/**
+ * TABLE OF CONTENTS
+ *
+ * =BASE
+ */
+
+
+/**
+ * =BASE
+ */
+.popup_contents {
+  background: #111;
+  background: rgba(20,20,20,0.95);
+  color: #FFF;
+  height: 140px;
+  margin-bottom: 15px;
+  margin-top: 15px;
+  padding: 5px 10px;
+  position: relative;
+  -moz-user-select: text;
+  -webkit-user-select: text;
+}
+
+.popup_contents .popup-title {
+  border-bottom: 1px solid #333;
+  color: #FFF;
+  margin: 0 0 8px 0;
+  padding: 0 0 6px 0;
+}
+
+.popup_contents .popup-title span,
+.popup_contents .popup-title a {
+  overflow: hidden;
+  display: block;
+  max-height: 34px;
+  line-height: 17px;
+  word-wrap: break-word;
+  padding-right: 17px;
+}
+
+.popup_contents .popup-title a {
+  color: #FFFFCC;
+}
+
+.popup_contents .popup-title .objective_date_range {
+  font-size: 12px;
+  font-weight: normal;
+  margin-top: 8px;
+}
+
+.popup_contents .close {
+  background: url("../../../images/planner/icons/icon_close_transparent.png") no-repeat center center;
+  cursor: pointer;
+  height: 16px;
+  position: absolute;
+  right: 10px;
+  top:10px;
+  width: 16px;
+}
+.popup_contents a {
+  color: #FFF;
+}
+
+.popup_contents p a {
+  color: #FFFF99;
+  text-decoration: underline;
+}
+
+#objective_work_summary {
+  margin-bottom: 7px;
+}
+
+.popup_contents .actions {
+  bottom: 0;
+  left: 0;
+  padding: 0px 10px 4px 10px;
+  position: absolute;
+}
+
+.popup_contents .actions #submit_button {
+  margin-bottom: 5px;
+}
+
+.lightbox_header {
+  background: #333;
+  position: relative;
+  background-size: contain;
+}
+
+.lightbox_header a.popup-close {
+  margin: 0;
+  float: none;
+  position: absolute;
+  right: 14px;
+  top: 11px;
+}
+
+.lightbox_header h2 {
+  padding: 10px 35px 10px 15px;
+  margin: 0;
+  color: #FFF;
+}
+
+.lightbox_header h2,
+.lightbox_header h2 * {
+  font-weight: 300;
+}
+
+.lightbox_content_wrapper {
+  height: auto;
+  overflow: auto;
+  background: url(../../../images/shared/backgrounds/overlay_top_innershadow_light.png) repeat-x top;
+  border-top: 1px solid #CCC;
+}
+
+#asynch-request-progress-div .lightbox_content_wrapper {
+  height: 200px;
+}
+
+.lightbox_content {
+  padding: 15px;
+}
+
+.lightbox_actions .action_bar, /* Duplicated for now to fix action bar on change objective lightbox on card show*/
+.lightbox_actions .action-bar {
+  margin: 0 !important;
+  border: 0;
+  border-top: 1px solid #CCC;
+  border-radius: 0;
+  position: relative;
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
+  box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+}
+
+/* - - - - - - - - - - - - - - - - - - - - -
+
+Title : Lightbox CSS
+Author : Kevin Hale
+URL : http://particletree.com/features/lightbox-gone-wild/
+
+Created : January 13, 2006
+Modified : February 1, 2006
+
+- - - - - - - - - - - - - - - - - - - - - */
+.lightbox {
+  display: none;
+  top: 180px;
+  left: 50%;
+  width: 660px;
+  height: 22em;
+  margin: -120px 0 0 -330px;
+  padding: 0;
+  background: #fff;
+  text-align: left;
+  position:fixed;
+}
+
+.lightbox form {
+/*  height: 100%;*/
+  margin: 0em;
+  padding: 0em;
+}
+
+.lightbox form fieldset {
+  height: 85%;
+}
+
+.overlay{
+  display:none;
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background-color:rgba(51, 51, 51, 0.3);
+}
+
+.overlay[id]{
+  position:fixed;
+}
+
+.lightbox.done #lbLoadMessage{
+  display:none;
+}
+
+.lightbox.done #lbContent{
+  display:block;
+}
+
+.lightbox.loading #lbContent{
+  display:none;
+}
+
+.lightbox.loading #lbLoadMessage{
+  display:block;
+}
+
+.lightbox.done img{
+  width:100%;
+  height:100%;
+}
+
+.lightbox {
+  width: 660px;
+  height: auto;
+  margin: 0 0 0 -330px;
+  left: 50%;
+}
+
+#lbLoadMessage {
+  display: block;
+  text-align: center;
+  padding-top: 2em;
+}
+
+#lbLoadMessage .ajax-spinner {
+  display: block;
+  margin: 3em auto;
+}
+
+.lightbox .preview-panel-container {
+  width: auto;
+}
+
+.lightbox .preview-panel-container .error {
+  display: inline-block;
+  max-width: 45em;
+}
+
+.lightbox .preview-panel {
+  min-height: 10em;
+}
+
+
+#progress-bar {
+  font-size: 200%;
+  background: #EEE;
+  border: 1px solid #CCC;
+  box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    -moz-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+  margin: 15px 0;
+}
+
+#progress-indicator {
+  background-color: #6cc1e5;
+	width: 0;
+}

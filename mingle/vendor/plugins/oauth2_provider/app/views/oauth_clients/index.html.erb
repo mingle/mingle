@@ -1,0 +1,71 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= render :partial => 'shared/top_level_header_pills', :locals => { :selected_tab => 'admin' } %>
+
+<div id="oauth_page">
+  <%= render_help_link('OAuth 2.0 Clients', :class => 'page-help-at-action-bar') if defined?(render_help_link)  %>
+
+  <h1>OAuth clients configuration</h1>
+
+  <% if request.ssl? || ENV['DISABLE_OAUTH_SSL'] %>
+    <h2>OAuth 2.0 (v9) provider endpoints for this server</h2>
+
+    <% if Oauth2::Provider::Configuration.ssl_base_url_as_url_options[:protocol] == 'https' %>
+      <div class='summary info-box oauth_config_info'>
+        <p><span>Authorization URL:</span> <%= url_for Oauth2::Provider::Configuration.ssl_base_url_as_url_options.merge(:controller => :oauth_authorize, :action => :index) %></p>
+        <p><span>Token URL:</span> <%= url_for Oauth2::Provider::Configuration.ssl_base_url_as_url_options.merge(:controller => :oauth_token, :action => :get_token) %></p>
+      </div>
+    <% else %>
+      <div class="error-box">Please set mingle.secureSiteURL property in mingle.properties in order to see both the Authorization URL and Token URL in this box.</div>
+    <% end %>
+  <% end %>
+
+  <% if @oauth_clients.empty? %>
+    <div class="info-box">You have not configured any OAuth clients. Click the 'Add client' button to add one.</div>
+  <% else %>
+
+    <h2>OAuth clients configured for this server</h2>
+
+    <table id="oauth_clients_table" class="list_table">
+      <tr>
+        <th>Name</th>
+        <th>OAuth Redirect URI</th>
+        <th>OAuth Client Credentials</th>
+        <th>Action</th>
+      </tr>
+
+      <% @oauth_clients.each do |oauth_client| %>
+        <tr>
+          <td><%= link_to h(oauth_client.name), {:controller => 'oauth_clients', :action => :edit, :id => oauth_client.id}, {:class => 'edit_link'} %></td>
+          <td><%=h oauth_client.redirect_uri %></td>
+          <td>
+            <p><b>Client ID</b>: <%=h oauth_client.client_id %></p>
+            <p><b>Client Secret</b>: <%=h oauth_client.client_secret %></p>
+          </td>
+          <td>
+            <%= link_to content_tag(:span, "Delete"), {:controller => 'oauth_clients', :action => :destroy, :id => oauth_client.id}, {:confirm => 'Are you sure?', :method => :delete, :class => 'delete_link', :title => 'Click to delete this client'} %>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+
+  <% end %>
+
+  <div class="table_actions">
+    <%= link_to 'Add client', {:controller => 'oauth_clients', :action => :new}, {:class => 'link_as_button primary', :id => 'new_oauth_client_button'} %>
+  </div>
+</div>

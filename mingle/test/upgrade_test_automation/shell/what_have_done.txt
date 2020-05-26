@@ -1,0 +1,20 @@
+Create:
+ quick add card
+ single tag / bulk tag
+ import the project from the test data dir -- rabbit
+
+
+Update:
+ update card via excel
+
+Delete:
+ delete all card
+
+Verify:
+ all templates loaded
+
+
+
+NEED_TO:
+ verify the history
+ verify the icon/attachment

@@ -1,0 +1,38 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= render :partial => "confirm_update_actions", :locals => {:location  => "top"} %>
+
+<h1>Update property definition</h1>
+
+<% form_tag({:action => 'update', :id => @property_definition.id}, {:id => 'update-form'}) do -%>
+  <% params[:property_definition].each do |name, value| -%>
+    <%= hidden_field_tag("property_definition[#{name}]", value) %>
+  <% end -%>
+  <% @card_types.each_with_index do |card_type, index| -%>
+    <%= hidden_field_tag("card_types[#{index}]", card_type.id) %>
+  <% end -%>
+<% end -%>
+
+<% warning_box do %>
+  <h2>CAUTION! This action has consequences that are final and irrecoverable.</h2>	
+<% end %>
+
+<% info_box do %>
+  <%= render :partial => "update_property_definition_warning" %>
+<% end -%>
+
+<%= render :partial => "confirm_update_actions", :locals => {:location  => "bottom"} %>

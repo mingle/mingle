@@ -1,0 +1,8 @@
+Notice: It's quite possible that none of these features will ever
+be implemented.  If you'd like to implement one yourself, feel free
+to send me a patch.
+
+Flag added parent elements with a special attribute
+Fix DOCTYPE output routine
+Handle URI attributes specially (don't expand entity references)
+Allow case sensitivity as a standard feature

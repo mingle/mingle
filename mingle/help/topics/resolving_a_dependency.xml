@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_plus.dtd">
+<chapter title="Resolving a Dependency" id="mingle_plus">
+		<p>To mark a dependency as resolved, simply open the dependency and click on the Resolve button. This will change the dependency status to resolved and the raising project will be notified by the dependency icon on the card in their project.</p>
+
+		<screenshot alttext="resolving dependency" src="resources/images/resolving_dependency.png" />
+
+		<p>There may be times where a resolved dependency has not been completely finished. In these situations, dependencies can be pulled back into the Accepted status by opening the resolved dependency and clicking Unresolve. This will move the dependency back into Accepted.</p>
+
+		<screenshot alttext="unresolving dependency" src="resources/images/unresolving_dependency.png" />
+</chapter>

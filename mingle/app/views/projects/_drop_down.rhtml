@@ -1,0 +1,40 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div class="projects-drop-down">
+  <div class="projects-caret"></div>
+  <div class="content">
+    <form id="project-find-as-you-type">
+      <fieldset>
+        <input type="text" name="filter" placeholder="Find a project" />
+      </fieldset>
+    </form>
+    <ul class="no-results">
+      <li>No other projects</li>
+    </ul>
+    <% if authorized?({:controller => 'projects', :action => 'new'}) %>
+    <ul class="new-project">
+      <li class="with-separator"><%= link_to 'New project', admin_new_project_path, {:class => 'project-new'} %></li>
+    </ul>
+    <% end %>
+  </div>
+</div>
+
+<%= javascript_with_rescue <<-JAVASCRIPT
+  var url = "#{ projects_path(:project_id => nil) }";
+  $j(".projects-drop-down").projectsDropDown('#{@project.identifier}', url);
+JAVASCRIPT
+-%>

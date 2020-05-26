@@ -1,0 +1,35 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% action_bar do %>
+  <%= render_help_link('Team Page', :class => 'page-help-at-action-bar')%>
+
+  <% if @project.auto_enroll_enabled?  -%>
+    <%= link_to 'Add team member', {:action => 'list_users_for_add_member'}, {:class => 'add-user-disabled link_as_button disabled', :onclick => 'return false', :title => 'Enroll all users as team members currently enabled'}%>
+    <%= link_to 'Disable enroll all users as team members', {:action => 'enable_auto_enroll', :tab => params[:tab]}, {:class => 'disable-enroll', :method => :post} %>
+  <% else -%>
+    <%= link_to 'Add team member', {:action => 'list_users_for_add_member'}, {:class => "add-user link_as_button primary"}%>
+    <%= link_to_function('Enable enroll all users as team members', '$("team-confirm-box").show();', :accessing => ':enable_auto_enroll', :class => 'enable-enroll') -%>
+  <% end -%>
+<% end %>
+
+<% if authorized?(:action => 'enable_auto_enroll') && location == :top -%>
+  <% if(@project.auto_enroll_enabled?) -%>
+    <%= render :partial => 'enabled_enroll_all_users_as_team_members_options' %>
+  <% else -%>
+    <%= render :partial => 'enable_enroll_all_users_as_team_members_confirm_box' %>
+  <% end -%>
+<% end -%>

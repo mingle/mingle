@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE subsection SYSTEM "mingle_help.dtd">
+<subsection title="Create bulleted list">
+  <markup_reference title="To create a single bullet or a bulleted list, select the line(s) of text you want to bullet and click on the bullet icon on the editing toolbar. To remove the bullet format, simply highlight the desired text and click the bullet icon again.">
+		   <screenshot src="resources/images/bullet_list.png"/> 
+  <note>Starting with Mingle 13.3, you can also use the keyboard shortcut &lt;strong&gt;CTRL + SHIFT + 8&lt;/strong&gt; to add or remove bullet lists.</note>
+  </markup_reference>
+</subsection>

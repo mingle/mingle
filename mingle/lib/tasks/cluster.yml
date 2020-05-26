@@ -1,0 +1,31 @@
+#  Copyright 2020 ThoughtWorks, Inc.
+#  
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Affero General Public License as
+#  published by the Free Software Foundation, either version 3 of the
+#  License, or (at your option) any later version.
+#  
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Affero General Public License for more details.
+#  
+#  You should have received a copy of the GNU Affero General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+database:
+  host: chistdmngdb01
+  ssh_login: mingle_builder
+  ssh_password: 5MJC%3nvLC
+
+master: bjmngcluster01
+
+slaves:
+  - bjmngcluster02
+  - bjmngcluster03
+
+installer_download_url: https://mingle_builder:5MJC%253nvLC@beijing-mingle-installer.thoughtworks.com/unstable_3_0/mingle_windows_unstable_3_0_16443_9b89c2740ba7.exe
+
+installer_save_as: \\bjmngcluster01\mingle\mingle_installer.exe
+
+mingle_home_dir: c:\mingle
+  

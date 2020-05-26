@@ -1,0 +1,13 @@
+ThoughtWorks, Mingle Dependency Tracker
+Copyright 2009-2010 ThoughtWorks Studios
+
+This product includes the following third party software and use of
+such software is subject to the applicable licences.
+
+jQuery - JavaScript library for simplifying DOM interactions
+Copyright (c) 2009 John Resig, http://jquery.com/
+Licence: https://github.com/jquery/jquery/blob/master/MIT-LICENSE.txt
+
+json2.js - JSON encoder/decoder in JavaScript
+Public Domain.
+License: https://github.com/douglascrockford/JSON-js/blob/master/json2.js

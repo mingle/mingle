@@ -1,0 +1,75 @@
+#  Copyright 2020 ThoughtWorks, Inc.
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Affero General Public License as
+#  published by the Free Software Foundation, either version 3 of the
+#  License, or (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Affero General Public License for more details.
+#
+#  You should have received a copy of the GNU Affero General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+
+# Defaults to 0.0.0.0; if fronting Mingle with a webserver (e.g. Apache, NGINX, etc.), a common setting is 127.0.0.1
+# -Dmingle.bindInterface=MINGLE_BIND_INTERFACE
+
+# -Dmingle.swapDir=MINGLE_SWAP_DIR
+# -Dmingle.logDir=log
+
+# Defaults to /
+# -Dmingle.appContext=ALTERNATE_APP_CONTEXT_PATH
+
+# For https access, *where SSL termination is handled by Mingle* instead of a web server, configure the following parameters
+# NOTE: the SSL port will override the -Dmingle.port setting; Mingle will only listen for web requests on 1 port.
+# -Dmingle.ssl.port=8443
+# -Dmingle.ssl.keystore=/PATH/TO/KEYSTORE
+# -Dmingle.ssl.keystorePassword=PASSWORD_TO_ACCESS_KEYSTORE
+# -Dmingle.ssl.keyPassword=KEY_PASSPHRASE
+
+# For customizing background jobs:
+
+# Turn off all background jobs, default is false
+# -Dmingle.noBackgroundJob=true
+
+# Change the background job worker count, default is 1; Changing this to 0 will disable the job
+# -Dmingle.card_importing_preview.workerCount=1
+# -Dmingle.link_cards_and_murmurs.workerCount=1
+# -Dmingle.full_text_search_indexing_processors.workerCount=1
+# -Dmingle.history_generation.workerCount=1
+# -Dmingle.compute_aggregates.workerCount=1
+# -Dmingle.rebuild_objective_snapshots.workerCount=1
+
+# JRuby runtime pool size, default is 12. This should be no larger than your pool size in database.yml
+# -Dmingle.jrubyMaxAccessThreads=12
+
+# For Mingle cluster configuration, please contact Mingle support to change this property
+# Default:
+# -Dmingle.services=amq.broker,amq.connection.factory,memcached,elastic_search
+# Services will be started in the given order, so amq.broker will be started first and then amq.connection.factory, etc.
+# Service amq.connection.factory must be started after amq.broker and before all other services.
+# For Mingle cluster configuration
+#   master node: use default config.
+#   non-master node:
+#     -Dmingle.services=amq.connection.factory
+
+# Configure memcached service:
+# memcached host - defaults to "localhost" (i.e. assumes Mingle is the memcached host)
+# -Dmingle.memcachedHost=MEMCACHED_HOST
+# memcached port - defaults to the standard 11211
+# -Dmingle.memcachedPort=MEMCACHED_PORT
+# maximum number of items allowed in the cache, default value: 10000
+# -Dmingle.memcachedMaxSize=10000
+# maximum size in bytes of the cache. default value 40 * 1024000 (40 MB)
+# -Dmingle.memcachedMaxBytes=81920000
+# number of bytes to attempt to leave as ceiling room, default is 1024000
+# -Dmingle.memcachedCeilingSize=1024000
+# turn on verbose log if it is true, default is false
+# -Dmingle.memcachedVerbose=true
+
+# All services will use this namespace to identify their service requests
+# -Dmingle.appNamespace=acmeinc
+
+# Also, BE SURE to leave an empty line at the end of this file

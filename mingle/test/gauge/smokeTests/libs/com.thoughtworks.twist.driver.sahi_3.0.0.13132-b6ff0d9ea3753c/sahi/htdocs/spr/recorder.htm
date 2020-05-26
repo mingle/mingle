@@ -1,0 +1,236 @@
+<!--
+/**
+ * Copyright  2006  V Narayan Raman
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+
+<html>
+<head>
+    <meta name="generator" content="HTML Tidy, see www.w3.org">
+    <title>Sahi Controller</title>
+    <script type="text/javascript" src="/_s_/spr/domainfix.js">
+    </script>
+    <script type="text/javascript" src="/_s_/spr/exception.js">
+    </script>
+
+    <script type="text/javascript" src="/_s_/spr/controller2.js">
+    </script>
+
+    <script type="text/javascript" src="/_s_/dyn/ControllerUI_scriptDirsList/scriptDirslist.js">
+    </script>
+
+    <script type="text/javascript" src="/_s_/spr/util.js">
+    </script>
+
+    <script type="text/javascript" src="/_s_/spr/common.js">
+    </script>
+
+    <script type="text/javascript" src="/_s_/spr/cookie.js">
+    </script>
+
+    <script type="text/javascript" src="/_s_/spr/suggest.js">
+    </script>
+
+    <style type="text/css">
+        .recPane {
+            display: block;
+            background-color: white;
+            border-left: solid white 2px;
+            border-right: solid gray 2px;
+            border-top: solid white 2px;
+            border-bottom: solid gray 2px;
+            margin: 2px;
+        }
+
+        a, body, input, td, textarea, select {
+            font-size: 8pt;
+            font-family: verdana;
+        }
+
+        .button {
+            width: 50px;
+        }
+
+        form {
+            margin-bottom: 0;
+        }
+
+        body {
+            margin: 8px;
+            background-color: lightgrey;
+        }
+
+        .comment {
+            color: darkred;
+            font-weight: bolder;
+        }
+        .suggestDD{
+            border:0px;
+            background-color:lightgray;
+            position:absolute;
+            display:none;
+        }
+    </style>
+</head>
+<script>
+function resizeTAs(){
+	resizeTA2(document.getElementById('taDebug'), 40, 400, 50);
+	resizeTA2(document.getElementById('taResult'), 40, 400, 50);
+}
+</script>
+<body onload="doOnRecLoad();resizeTAs()" onbeforeunload="doOnRecUnLoad()"
+      onresize="resizeTAs()" onkeyup="hideAllSuggests(event)" onclick="Suggest.hideAll()">
+<div id="rec" class="recPane">
+<table bgcolor="">
+    <tr>
+        <td colspan="2" class="comment">Enter a script name and click
+            "Record" to start recording.<br>
+            Script will be generated in sahi/scripts directory.<br>
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2">
+            <table>
+                <tr>
+                    <td>
+                        <form name="recordstartform" action="/_s_/dyn/Recorder_start"
+                              target="channel" onsubmit="return onRecordStartFormSubmit(this)">
+                            <table>
+                                <tr>
+                                    <td>Script Directory:</td>
+                                    <td>
+                                        <select name="dir" style="width:200px">
+                                            <option value="../scripts">../scripts</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Script Name:</td>
+                                    <td>
+                                        <input type="text" name="file" value="">
+                                        <input type="submit" name="record" value="Record">
+                                        <input type="button" value="Stop" onclick="stopRec()">
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td>
+        </td>
+    </tr>
+</table>
+
+<hr>
+<table>
+    <tr>
+        <td></td>
+    </tr>
+
+    <tr>
+        <td bgcolor="">
+            <form name="currentForm">
+                <table>
+                    <tr>
+                        <td colspan="3" class="comment">Press CTRL key and hover mouse over
+                            any HTML element. <a class='comment' href='sahi_recorder_help.htm'
+                                                 target='_blank'>More ...</a><br>
+                        </td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <td>Accessor:</td>
+                        <td>
+                            <input id="suggestBox" name="accessor" value="" style="width:280px" onkeyup="Suggest.suggests['1'].textboxEvent(event)" autocomplete="off">
+                            <select id="suggestDD" class="suggestDD" onclick="Suggest.suggests['1'].choose(event)" onkeydown="Suggest.suggests['1'].handleUpArrow(event)" onkeyup="Suggest.suggests['1'].selectEvent(event)"></select>
+                        </td>
+                        <td><input type="button" class="button" value=" Click " onclick=
+                                "demoClick()"></td>
+                    </tr>
+
+                    <script autocomplete="false">
+                        function showProperties(){
+                            document.currentForm.debug.value = sahi().list(sahi()._eval(addSahi(document.getElementById('suggestBox').value)));
+                        }
+                        function listProperties(str){
+                            return sahi()._eval(addSahi(str))
+                        }
+                        var suggest = new Suggest(document.getElementById("suggestBox"), document.getElementById("suggestDD"), "1");
+                        suggest.getOptions = getAccessorProps;
+                        suggest.onchange = resetValue;
+                    </script>
+
+                    <tr>
+                        <td>Alternative:</td>
+                        <td><select name="alternative" onchange="$('suggestBox').value=this.value;" style="width:280px"></select></td>
+                        <td><input type="button" class="button" value=" Hilight " onclick=
+                                "demoHighlight()"></td>
+                    </tr>
+
+                    <tr>
+                        <td>Value:</td>
+                        <td><input id="elValue" name="elValue" value="" style="width:280px"></td>
+                        <td><input type="button" class="button" value=" Set " onclick=
+                                "demoSetValue()"></td>
+                    </tr>
+
+                    <tr>
+                        <td>Window name:</td>
+                        <td><input name="winName" value="" style="width:280px"></td>
+                        <td><input type="button" class="button" value=" Props " onclick="showProperties()"></td>
+                    </tr>
+
+                </table>
+
+                <br>
+                <input type="button" class="button" value="Assert" onclick="top.opener.top._sahi.doAssert($('suggestBox').value, $('elValue').value)"/> 
+                <input type="button" class="button" value="Wait" onclick="addWait()"/> 
+                <input type="input" name="waitTime" value="3000" size="6"> ms 
+                <input type="button" value="Comment" onclick="mark()"/> 
+                <input type="input" name="comment" value="" size="20"/>
+                <br>
+                <hr>
+                APIs List: <input type="text" id="apiTextbox" onkeyup="Suggest.suggests['2'].textboxEvent(event)" autocomplete="off" size="55">
+                <select id="apiSelect" class="suggestDD" onclick="Suggest.suggests['2'].choose(event)" onkeydown="Suggest.suggests['2'].handleUpArrow(event)" onkeyup="Suggest.suggests['2'].selectEvent(event)"></select>
+
+                <script autocomplete="false">
+                    var suggest2 = new Suggest(document.getElementById("apiTextbox"), document.getElementById("apiSelect"), "2");
+                    suggest2.getOptions = getAPIs;
+                    suggest2.onchange = setAPI;
+                </script>
+                <br/>
+                <hr>
+                Evaluate expression: <a href="javascript:showHistory()">History</a>
+                <br/>
+                <input type="hidden" name="history">
+                <textarea name="debug" rows="8" cols="50" id="taDebug" style="white-space:normal"></textarea><br/>
+                <input type="button" onclick="evaluateExpr(true)" value="Test --&gt; ">
+                <input type="button" onclick="append()" value="Append to Script">
+                <input type="button" onmousedown="demoHighlight2()" value="Highlight">
+                <input type="button" onmousedown="demoClick2()" value="Click"><br/>
+                <textarea name="result" rows="3" cols="50" id="taResult" style="white-space:normal;background-color:silver" readonly="true"></textarea>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+            </form>
+        </td>
+    </tr>
+</table>
+</div>
+</body>
+</html>
+

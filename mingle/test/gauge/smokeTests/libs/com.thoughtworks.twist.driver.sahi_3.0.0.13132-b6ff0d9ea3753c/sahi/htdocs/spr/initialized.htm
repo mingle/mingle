@@ -1,0 +1,66 @@
+<!--
+/**
+ * Copyright  2006  V Narayan Raman
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<html>
+<head><title>Sahi Start</title></head>
+<body>
+<div style="margin-top:30px;">
+<script>
+_sahi._isRecording = false;
+function recordNavigateTo(){
+	var url = document.getElementById("_sahi_ignore_url").value;
+	recordNavigateTo2(url);
+
+}
+function recordNavigateTo2(url){
+	_sahi.recordStep(_sahi.getNavigateToScript(url));
+	_sahi._navigateTo(url);
+}
+if ("$startUrl" != "" && "$startUrl" != "null"){
+	recordNavigateTo2("$startUrl");
+}
+</script>
+<div id="_sahi_ignore_section" style="display:none">
+<center>
+<a id="_sahi_ignore_1" selectable="false" href="http://sahi.co.in/" target="_blank"><img id="_sahi_ignore_2" selectable="false" src="/_s_/spr/images/sahi_os_logo1.png" style="border:0px;"/></a>
+<br/><br/>
+<div  id="_sahi_ignore_3" style="border: 1px solid brown;padding:10px;width:500px;">
+Press the ALT key and Double Click on page to bring up the Sahi Controller<br/>
+Sahi Scripts can be recorded and played back from the Controller.
+</div>
+<br/><br/>
+<form id="_sahi_ignore_4" onsubmit="recordNavigateTo();return false;" style="margin:0px;border:0px;">
+Enter start URL: <input type="text" style="width:300px;" id="_sahi_ignore_url"/>
+<input type="submit" id="_sahi_ignore_button" value="Go" style="height:22px;width:100px;"/>
+</form>
+<br/><br/>
+<a href="https://sahi.example.com/_s_/dyn/SSLManager">SSL Manager</a> | <a href="http://localhost:9999/logs/">Logs</a><br/>
+<a href="http://sahi.co.in/w/sahi/">Online Documentation</a> |
+<a href="http://sahi.co.in/demo/" onclick="recordNavigateTo2('http://sahi.co.in/demo/');return false;" id="_sahi_ignore_u1">Test Pages</a> |
+<a href="http://sahi.co.in/demo/training/" onclick="recordNavigateTo2('http://sahi.co.in/demo/training/');return false;" id="_sahi_ignore_u2">Sample Application</a><br/>
+<br/><br/>
+<a id="_sahi_ignore_6" href="http://sahi.co.in/" selectable="false" target="_blank"><img id="_sahi_ignore_7" selectable="false" src="/_s_/spr/images/sahi_logo_web.png" style="border:0px;"/></a>
+</center>
+</div>
+</div>
+<script>
+if ("$startUrl" == "" || "$startUrl" == "null") {
+	document.getElementById("_sahi_ignore_section").style.display = "block";
+}
+</script>
+</body>
+</html>

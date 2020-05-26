@@ -1,0 +1,51 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id='lane_action_container'>
+<% if view.group_lanes.visibles(:lane).any?(&:can_reorder?) %>
+<%=
+   reorder_url = url_for(view.to_params.merge(:controller => "lanes",
+    :action => "reorder", :project_id => @project.identifier, :property_definition_id =>
+   view.group_lanes.lane_property_definition.id))
+
+   javascript_with_rescue <<-JAVASCRIPT
+      $j('#swimming-pool').
+        reorderableLanes(#{reorder_url.to_json}, #{spinner.to_json}).
+        find(".editable_lane").
+        editableLanes(#{spinner(:id => 'rename_lane_spinner').to_json});
+   JAVASCRIPT
+  %>
+<% end %>
+
+<% if can_hide_any?(view) %>
+  <%
+    props = [:lane, :row].inject({}) do |memo, axis|
+      if view.groups.supports_direct_manipulation?(axis)
+        pd = view.groups.send(:"#{axis}_property_definition")
+        memo[axis] = pd.is_predefined ? nil : pd.id
+      end
+      memo
+    end
+  %>
+  <%= javascript_with_rescue <<-JAVASCRIPT
+
+     $j('#swimming-pool').find('.hide-lane').hideLane(#{props.to_json});
+
+  JAVASCRIPT
+  %>
+<%- end -%>
+
+</div>

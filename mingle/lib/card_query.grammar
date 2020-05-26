@@ -1,0 +1,367 @@
+#  Copyright 2020 ThoughtWorks, Inc.
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Affero General Public License as
+#  published by the Free Software Foundation, either version 3 of the
+#  License, or (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Affero General Public License for more details.
+#
+#  You should have received a copy of the GNU Affero General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+#
+
+class CardQueryParser
+
+options no_result_var
+
+prechigh
+  right SELECT
+  right DISTINCT
+  right WHERE
+  right GROUP_BY
+  right ORDER_BY
+  right TAGGED_WITH
+  right NOT
+  right PROPERTY
+  right FROM
+  right AS_OF
+  right IN_PLAN
+  left  AND
+  left  OR
+  left  LESS_THAN
+  left  GREATER_THAN
+  left  LESS_THAN_OR_EQUALS
+  left  GREATER_THAN_OR_EQUALS
+preclow
+
+token SELECT FROM WHERE GROUP_BY ORDER_BY AND OR NOT OPEN_BRACE CLOSE_BRACE 
+      COMMA IDENTIFIER EQUAL TAGGED_WITH DISTINCT STAR NULL
+      IN CURRENT_USER NOT_EQUAL TODAY
+      LESS_THAN GREATER_THAN LESS_THAN_OR_EQUALS GREATER_THAN_OR_EQUALS PROPERTY
+      TREE ORDER NUMBER NUMBERS THIS_CARD DOT IN_PLAN
+	  AS_OF
+
+rule
+  # this is the starting rule
+  target
+  : opt_select opt_as_of opt_from opt_where opt_group_by opt_order_by
+    { 
+      CardQuery.new(@options.merge(
+        :columns => val[0][:columns],
+        :distinct => val[0][:distinct],
+        :from => val[2],
+        :conditions => val[3],
+        :group_by => val[4],
+        :order_by => val[5],
+        :as_of => val[1]))
+    }
+  | conditions                              { CardQuery.new(:conditions => val[0]) }
+  ;
+  
+  opt_select
+  : /* optional */                          { { :columns => nil, :distinct => false } }
+  | select
+  ;
+  
+  opt_from
+  : /* optional */
+  | from
+  ;
+
+  opt_where
+  : /* optional */
+  | where
+  ;
+
+  opt_group_by
+  : /* optional */
+  | group_by
+  ;
+
+  opt_order_by
+  : /* optional */
+  | order_by
+  ;
+  
+  opt_as_of
+  : /* optional */
+  | as_of
+  ;
+  
+  select
+  : SELECT select_columns                   { { :columns => val[1], :distinct => false } }
+  | SELECT DISTINCT select_columns          { { :columns => val[2], :distinct => true } }
+  ;
+  
+  select_columns
+  : column                                  { [val[0]] }
+  | aggregate_function                      { [val[0]] }
+  | aggregate_function COMMA select_columns { [val[0]] + val[2] }
+  | column COMMA select_columns             { [val[0]] + val[2] }
+  ;
+  
+  from
+  : FROM container                          { val[1] }
+  ;
+  
+  container
+  : TREE value_string                       { CardQuery::Tree.new(val[1]) }
+  ;
+
+  column
+  : IDENTIFIER                              { CardQuery::Column.new(val[0]) }
+  | IDENTIFIER ORDER                        { CardQuery::Column.new(val[0], val[1]) }
+  | NUMBER                                  { CardQuery::Column.new(val[0]) }
+  | NUMBER ORDER                            { CardQuery::Column.new(val[0], val[1]) }
+  | NUMBERS                                 { CardQuery::Column.new(val[0]) }
+  | NUMBERS ORDER                           { CardQuery::Column.new(val[0], val[1]) }
+  | property
+  ;
+
+  property
+  : PROPERTY IDENTIFIER                     { CardQuery::Column.new(val[1]) }
+  | PROPERTY PROPERTY                       { CardQuery::Column.new(val[1]) }
+  ;
+  
+  this_card_property
+  : THIS_CARD DOT IDENTIFIER                { CardQuery::ThisCardProperty.new(val[2], @options) }
+  | THIS_CARD DOT NUMBER                    { CardQuery::ThisCardProperty.new(val[2], @options) }
+  ;
+  
+  aggregate_function
+  : IDENTIFIER OPEN_BRACE column CLOSE_BRACE { CardQuery::AggregateFunction.new(val[0], val[2]) }
+  | IDENTIFIER OPEN_BRACE STAR CLOSE_BRACE   { CardQuery::AggregateFunction.new(val[0], CardQuery::Star.new) }
+  ;
+  
+  where
+  : WHERE conditions                         { val[1] }
+  ;
+  
+  group_by
+  : GROUP_BY group_by_columns                { val[1] }
+  ;
+
+  group_by_columns
+  : column                                   { [CardQuery::GroupByColumn.new(val[0])]}
+  | column COMMA group_by_columns            { [CardQuery::GroupByColumn.new(val[0])] + val[2] }
+  ;
+  
+  order_by
+  : ORDER_BY order_by_columns                { val[1] }
+  ;
+
+  order_by_columns
+  : column                                  { [CardQuery::OrderByColumn.new(val[0])]}
+  | column COMMA order_by_columns           { [CardQuery::OrderByColumn.new(val[0])] + val[2] }
+  ;
+
+  conditions
+  : conditions AND conditions                { CardQuery::And.new(val[0], val[2]) }
+  | conditions OR conditions                 { CardQuery::Or.new(val[0], val[2]) }
+  | NOT conditions                           { CardQuery::Not.new(val[1]) }
+  | OPEN_BRACE conditions CLOSE_BRACE        { val[1] }
+  | condition
+  ;
+  
+  as_of
+  : AS_OF identifier                         { val[1] }
+  ;
+
+  simple_mql_expression
+  : OPEN_BRACE mql CLOSE_BRACE              { val[1] }
+  ;
+  
+  mql
+  : select opt_as_of opt_from opt_where opt_group_by opt_order_by
+  {
+    CardQuery.new(
+      :columns => val[0][:columns],
+      :distinct => val[0][:distinct],
+      :from => val[2],
+      :conditions => val[3],
+      :group_by => val[4],
+      :order_by => val[5],
+      :as_of => val[1],
+      :sub_query => true)
+  }
+  ;
+  
+  operator
+  : EQUAL                                   { Operator.equals }
+  | NOT_EQUAL                               { Operator.not_equals }
+  | LESS_THAN                               { Operator.less_than }
+  | GREATER_THAN                            { Operator.greater_than }
+  | LESS_THAN_OR_EQUALS                     { Operator.less_than_or_equals }
+  | GREATER_THAN_OR_EQUALS                  { Operator.greater_than_or_equals }
+  ;
+
+  identifier
+  : IDENTIFIER                              { val[0] }
+  | TODAY                                   { val[0] }
+  | CURRENT_USER                            { val[0] }
+  | NUMBER                                  { val[0] }
+  | NUMBERS                                 { val[0] }
+  | NULL                                    { val[0] }
+  | THIS_CARD                               { 'this card' }
+  ;
+
+  plv
+  : OPEN_BRACE plv_name CLOSE_BRACE         { CardQuery::PLV.new(val[1]) }
+  ;
+  
+  plv_name
+  : identifier                              { val[0] }
+  | identifier plv_name                     { val[0] + ' ' + val[1] }
+  ;
+
+  value
+  : this_card_property                      { val[0] }
+  | IDENTIFIER                              { val[0] }
+  | plv                                     { val[0] }
+  ;
+  
+  value_string
+  : value                                   { [val[0]] }
+  | value COMMA value_string                { [val[0]] + val[2] }
+  ;
+  
+  values
+  : OPEN_BRACE value_string CLOSE_BRACE      { val[1] }
+  ;
+
+  condition
+  : column operator plv                     { CardQuery::Condition.comparison_between_column_and_plv(val[0], val[1], val[2]) }
+  | column operator NUMBER IDENTIFIER       { CardQuery::Condition.comparison_between_column_and_number(val[0], val[1], val[3]) } 
+  | column operator NUMBER                  { CardQuery::Condition.comparison_between_columns(val[0], val[1], CardQuery::Column.new('Number')) } 
+  | column operator TODAY                   { CardQuery::TodayComparison.new(val[0], val[1]) }
+  | column operator this_card_property      { CardQuery::Condition.comparison_between_column_and_this_card_property(val[0], val[1], val[2]) }
+  | column operator property                { CardQuery::Condition.comparison_between_columns(val[0], val[1], val[2]) }
+  | column operator IDENTIFIER              { CardQuery::Condition.comparison_between_column_and_value(val[0], val[1], val[2]) }
+  | column operator THIS_CARD               { CardQuery::Condition.comparison_between_column_and_this_card(val[0], val[1], @options) }
+  | column EQUAL NULL                       { CardQuery::IsNull.new(val[0]) }
+  | column NOT_EQUAL NULL                   { CardQuery::Not.new(CardQuery::IsNull.new(val[0])) }
+  | column EQUAL CURRENT_USER               { CardQuery::IsCurrentUser.create(val[0]) }
+  | column NOT_EQUAL CURRENT_USER           { CardQuery::Not.new(CardQuery::IsCurrentUser.create(val[0])) }
+  | column IN values                        { CardQuery::Condition.explicit_in(val[0], val[2]) }
+  | column NUMBER IN values                 { CardQuery::Condition.numbers_explicit_in(val[0], val[3]) }
+  | column NUMBERS IN values                { CardQuery::Condition.numbers_explicit_in(val[0], val[3]) }
+  | column IN simple_mql_expression         { CardQuery::Condition.implicit_in(val[0], val[2]) }
+  | IN_PLAN IDENTIFIER                      { CardQuery::Condition.in_plan(val[1]) }
+  | TAGGED_WITH IDENTIFIER                  { CardQuery::TaggedWith.new(val[1]) }
+  ;
+end
+
+----- header ----
+require 'strscan'
+
+---- inner ----
+
+def unquote(value)
+  case value
+  when /^'(.*)'$/ then $1
+  when /^"(.*)"$/ then $1
+  else value
+  end
+end
+
+def unescape_quote(value)
+  value.gsub(/\\(['|"])/, '\1')
+end
+
+
+def parse(str, options={})
+  @input = str
+  @options = options
+  tokens = []
+  str = "" if str.nil?
+  scanner = StringScanner.new(str + ' ')
+
+  until scanner.eos?
+    case
+    when scanner.scan(/\s+/)
+      # ignore space
+    when m = scanner.scan(/select\b/i)
+      tokens.push [:SELECT, m]
+    when m = scanner.scan(/distinct\b/i)
+      tokens.push [:DISTINCT, m]
+    when m = scanner.scan(/[\.]/)
+      tokens.push [:DOT, m]
+    when m = scanner.scan(/\*/i)
+      tokens.push [:STAR, m]
+    when m = scanner.scan(/from\b/i)
+      tokens.push [:FROM, m]
+    when m = scanner.scan(/tree\b/i)
+      tokens.push [:TREE, m]
+    when m = scanner.scan(/where\b/i)
+      tokens.push [:WHERE, m]
+    when m = scanner.scan(/group\s+by\b/i)
+      tokens.push [:GROUP_BY, m]
+    when m = scanner.scan(/order\s+by\b/i)
+      tokens.push [:ORDER_BY, m]
+    when m = scanner.scan(/tagged\s+with\b/i)
+      tokens.push [:TAGGED_WITH, m]
+    when m = scanner.scan(/in plan\b/i)
+      tokens.push   [:IN_PLAN, m]
+    when m = scanner.scan(/null\b/i)
+      tokens.push [:NULL, m]
+    when m = scanner.scan(/current\s+user\b/i)
+      tokens.push [:CURRENT_USER, m]
+    when m = scanner.scan(/this card/i)
+      tokens.push [:THIS_CARD, m]
+    when m = scanner.scan(/in\b/i)
+      tokens.push [:IN, m]
+    when m = scanner.scan(/,/)
+      tokens.push [:COMMA, m]
+    when m = scanner.scan(/<=/)
+      tokens.push [:LESS_THAN_OR_EQUALS, m]
+    when m = scanner.scan(/>=/)
+      tokens.push [:GREATER_THAN_OR_EQUALS, m]
+    when m = scanner.scan(/</)
+      tokens.push [:LESS_THAN, m]
+    when m = scanner.scan(/>/)
+      tokens.push [:GREATER_THAN, m]
+    when m = scanner.scan(/!=|is\snot|not\s=/i)
+      tokens.push [:NOT_EQUAL, m]
+    when m = scanner.scan(/=|is\b/i)
+      tokens.push [:EQUAL, m]
+    when m = scanner.scan(/and\b/i)
+      tokens.push   [:AND, m]
+    when m = scanner.scan(/or\b/i)
+      tokens.push   [:OR, m]
+    when m = scanner.scan(/not\b/i)
+      tokens.push   [:NOT, m]
+    when m = scanner.scan(/today\b/i)
+      tokens.push   [:TODAY, m]
+    when m = scanner.scan(/property\b/i)
+      tokens.push   [:PROPERTY, m]
+    when m = scanner.scan(/number\b/i)
+      tokens.push   [:NUMBER, m]
+    when m = scanner.scan(/numbers\b/i)
+      tokens.push   [:NUMBERS, m]
+    when m = scanner.scan(/(asc|desc)\b/i)
+      tokens.push   [:ORDER, m]
+    when m = scanner.scan(/as\s+of\b/i)
+      tokens.push   [:AS_OF, m]
+    when m = scanner.scan(/'(((\\')|[^'])*)'/)
+      tokens.push   [:IDENTIFIER, unescape_quote(unquote(m))]
+    when m = scanner.scan(/"(((\\")|[^"])*)"/)
+      tokens.push   [:IDENTIFIER, unescape_quote(unquote(m))]
+    when m = scanner.scan(/((\d+\.?\d*)|(\d*\.?\d+))\b/)  
+      tokens.push   [:IDENTIFIER, m]      
+    when m = scanner.scan(/(\\"|\\'|[^\b\s\(\)\*\.,\=\!><\$\%\#])+/)
+      tokens.push   [:IDENTIFIER, unescape_quote(m)]
+    when m = scanner.scan(/\(/)
+      tokens.push   [:OPEN_BRACE, m]
+    when m = scanner.scan(/\)/)
+      tokens.push   [:CLOSE_BRACE, m]
+    else
+      raise "unexpected characters #{scanner.peek(5)}"
+    end
+  end
+  tokens.push [false, false]
+  yyparse(tokens, :each)
+end

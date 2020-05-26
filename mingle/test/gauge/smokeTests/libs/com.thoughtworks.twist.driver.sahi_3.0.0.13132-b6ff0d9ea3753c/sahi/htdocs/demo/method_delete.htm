@@ -1,0 +1,15 @@
+<html>
+<head>
+<title>Test DELETE</title>
+</head>
+<body>
+This page deletes data.
+<script>
+var xhr = new XMLHttpRequest();
+xhr.onreadystatechange = function(){alert(this.responseText);}
+xhr.open("DELETE", "/demo/deletemeanytime.html", true);
+xhr.send(null);
+</script>
+
+</body>
+</html>

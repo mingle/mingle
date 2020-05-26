@@ -1,0 +1,28 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<p id='<%= param_id %>' class='parameter-input'>
+  <%= label_tag "macro_editor[#{macro_def.name}][#{param_def.parameter_name}]", label_text_of_macro_parameter(param_def) %>
+
+  <span class="input_editor_type_wrapper">
+  <%= render :partial => param_def.input_editor_type.partial, :locals => { :param_def => param_def, :macro_def => macro_def, :param_name => param_name, :input_id => input_id } %>
+  </span>
+
+  <% unless param_def.required? || macro_def.parameter_definitions.size == 1 -%>
+    <%= link_to( "-", "#", :onclick => "$(this).fire('optional-parameter:remove')", :class => "remove-optional-parameter") %>
+  <% end %>
+  <%= raw(parameter_help_message(param_def)) %>
+</p>

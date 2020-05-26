@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MODE SYSTEM "xmode.dtd">
+
+<!-- jEdit, Sahi mode, written by Anders Lund Håheim -->
+
+<!--
+Installation:
+
+1. Copy this file to the /modes directory in the jEdit root folder
+2. Add the following XML node to the file "catalog" in the same directory
+
+<MODE NAME="sahi" FILE="sahi.xml" FILE_NAME_GLOB="*.sah" />
+-->
+
+<MODE>
+	<PROPS>
+		<PROPERTY NAME="commentStart" VALUE="/*" />
+		<PROPERTY NAME="commentEnd" VALUE="*/" />
+		<PROPERTY NAME="lineComment" VALUE="//" />
+	</PROPS>
+	
+	<RULES IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">
+		
+		<SPAN TYPE="COMMENT1">
+			<BEGIN>/*</BEGIN>
+			<END>*/</END>
+		</SPAN>
+		
+		<EOL_SPAN TYPE="COMMENT2">//</EOL_SPAN>
+		
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+			<BEGIN>"</BEGIN>
+			<END>"</END>
+		</SPAN>
+		
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+			<BEGIN>'</BEGIN>
+			<END>'</END>
+		</SPAN>
+		
+		<!-- JavaScript, Operators -->
+		<SEQ TYPE="OPERATOR">)</SEQ>
+		<SEQ TYPE="OPERATOR">(</SEQ>
+		<SEQ TYPE="OPERATOR">]</SEQ>
+		<SEQ TYPE="OPERATOR">[</SEQ>
+		<SEQ TYPE="OPERATOR">.</SEQ>
+		<SEQ TYPE="OPERATOR">,</SEQ>
+		<SEQ TYPE="OPERATOR">;</SEQ>
+		<SEQ TYPE="OPERATOR">=</SEQ>
+		<SEQ TYPE="OPERATOR">&gt;</SEQ>
+		<SEQ TYPE="OPERATOR">&lt;</SEQ>
+		<SEQ TYPE="OPERATOR">&gt;=</SEQ>
+		<SEQ TYPE="OPERATOR">&lt;=</SEQ>
+		<SEQ TYPE="OPERATOR">+</SEQ>
+		<SEQ TYPE="OPERATOR">-</SEQ>
+		<SEQ TYPE="OPERATOR">/</SEQ>
+		<SEQ TYPE="OPERATOR">*</SEQ>
+		<SEQ TYPE="OPERATOR">!</SEQ>
+		
+		<KEYWORDS>
+			
+			<!-- JavaScript, Statements -->
+			<KEYWORD1>if</KEYWORD1>
+			<KEYWORD1>else</KEYWORD1>
+			<KEYWORD1>do</KEYWORD1>
+			<KEYWORD1>while</KEYWORD1>
+			<KEYWORD1>for</KEYWORD1>
+			<KEYWORD1>in</KEYWORD1>
+			<KEYWORD1>switch</KEYWORD1>
+			<KEYWORD1>break</KEYWORD1>
+			<KEYWORD1>continue</KEYWORD1>
+			<KEYWORD1>function</KEYWORD1>
+			<KEYWORD1>return</KEYWORD1>
+			<KEYWORD1>new</KEYWORD1>
+			<KEYWORD1>var</KEYWORD1>
+			<KEYWORD1>typeof</KEYWORD1>
+			<KEYWORD1>delete</KEYWORD1>
+			<KEYWORD1>try</KEYWORD1>
+			<KEYWORD1>catch</KEYWORD1>
+			<KEYWORD1>throw</KEYWORD1>
+			<KEYWORD1>with</KEYWORD1>
+			<KEYWORD1>import</KEYWORD1>
+			
+			<!-- Sahi, Accessor and utility functions -->
+			<KEYWORD2>_accessor</KEYWORD2>
+			<KEYWORD2>_button</KEYWORD2>
+			<KEYWORD2>_submit</KEYWORD2>
+			<KEYWORD2>_textbox</KEYWORD2>
+			<KEYWORD2>_password</KEYWORD2>
+			<KEYWORD2>_checkbox</KEYWORD2>
+			<KEYWORD2>_textarea</KEYWORD2>
+			<KEYWORD2>_select</KEYWORD2>
+			<KEYWORD2>_radio</KEYWORD2>
+			<KEYWORD2>_image</KEYWORD2>
+			<KEYWORD2>_link</KEYWORD2>
+			<KEYWORD2>_getSelectedText</KEYWORD2>
+			<KEYWORD2>_getCellText</KEYWORD2>
+			<KEYWORD2>_savedRandom</KEYWORD2>
+			<KEYWORD2>_cell</KEYWORD2>
+			<KEYWORD2>_table</KEYWORD2>
+			<KEYWORD2>_popup</KEYWORD2>
+			<KEYWORD2>_include</KEYWORD2>
+			<KEYWORD2>_imageSubmitButton</KEYWORD2>
+			<KEYWORD2>_setGlobal</KEYWORD2>
+			<KEYWORD2>_getGlobal</KEYWORD2>
+			
+			<!-- Sahi, Action and assertation scheduler functions -->
+			<KEYWORD3>_click</KEYWORD3>
+			<KEYWORD3>_highlight</KEYWORD3>
+			<KEYWORD3>_setValue</KEYWORD3>
+			<KEYWORD3>_setSelected</KEYWORD3>
+			<KEYWORD3>_check</KEYWORD3>
+			<KEYWORD3>_wait</KEYWORD3>
+			<KEYWORD3>_simulateEvent</KEYWORD3>
+			<KEYWORD3>_assertNotNull</KEYWORD3>
+			<KEYWORD3>_assertNull</KEYWORD3>
+			<KEYWORD3>_assertTrue</KEYWORD3>
+			<KEYWORD3>_assertNotTrue</KEYWORD3>
+			<KEYWORD3>_assertEqual</KEYWORD3>
+			<KEYWORD3>_assertNotEqual</KEYWORD3>
+			<KEYWORD3>_alert</KEYWORD3>
+			<KEYWORD3>_eval</KEYWORD3>
+			<KEYWORD3>_call</KEYWORD3>
+			<KEYWORD3>_confirm</KEYWORD3>
+			<KEYWORD3>_prompt</KEYWORD3>
+			<KEYWORD3>_log</KEYWORD3>
+			<KEYWORD3>_navigateTo</KEYWORD3>
+			<KEYWORD3>_containsHTML</KEYWORD3>
+			<KEYWORD3>_containsText</KEYWORD3>
+			
+			<!-- Sahi, Action and assertation normal functions -->
+			<KEYWORD4>__click</KEYWORD4>
+			<KEYWORD4>__highlight</KEYWORD4>
+			<KEYWORD4>__setValue</KEYWORD4>
+			<KEYWORD4>__setSelected</KEYWORD4>
+			<KEYWORD4>__check</KEYWORD4>
+			<KEYWORD4>__wait</KEYWORD4>
+			<KEYWORD4>__simulateEvent</KEYWORD4>
+			<KEYWORD4>__assertNotNull</KEYWORD4>
+			<KEYWORD4>__assertNull</KEYWORD4>
+			<KEYWORD4>__assertTrue</KEYWORD4>
+			<KEYWORD4>__assertNotTrue</KEYWORD4>
+			<KEYWORD4>__assertEqual</KEYWORD4>
+			<KEYWORD4>__assertNotEqual</KEYWORD4>
+			<KEYWORD4>__alert</KEYWORD4>
+			<KEYWORD4>__eval</KEYWORD4>
+			<KEYWORD4>__call</KEYWORD4>
+			<KEYWORD4>__confirm</KEYWORD4>
+			<KEYWORD4>__prompt</KEYWORD4>
+			<KEYWORD4>__log</KEYWORD4>
+			<KEYWORD4>__navigateTo</KEYWORD4>
+			<KEYWORD4>__containsHTML</KEYWORD4>
+			<KEYWORD4>__containsText</KEYWORD4>
+			
+			<!-- JavaScript -->
+			<LITERAL1>true</LITERAL1>
+			<LITERAL1>false</LITERAL1>
+			<LITERAL1>null</LITERAL1>
+			<LITERAL1>this</LITERAL1>
+		</KEYWORDS>
+	</RULES>
+</MODE>
+
+
+
+
+

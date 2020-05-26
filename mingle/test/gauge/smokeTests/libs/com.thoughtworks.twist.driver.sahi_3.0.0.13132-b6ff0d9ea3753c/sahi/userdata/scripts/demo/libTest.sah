@@ -1,0 +1,52 @@
+var x = new Object();
+x.a = "a";
+$json = _sahi.toJSON(x);
+_assertEqual('{"a":"a"}', $json);
+
+
+var x = new Object();
+x.a = "a";
+x.x = x;
+$json = _sahi.toJSON(x);
+_assertEqual('{"a":"a","x":"recursive_access"}', $json);
+
+
+var x = new Object();
+x.a = new Object();
+//x.b = x.a;
+$json = _sahi.toJSON(x);
+_assertEqual('{"a":{}}', $json);
+
+
+var x = new Object();
+x.a = "a";
+x.b = x.a;
+$json = _sahi.toJSON(x);
+_assertEqual('{"a":"a","b":"a"}', $json);
+
+
+var x = new Object();
+x.a = "\u00a3";
+x.b = x.a;
+$json = _sahi.toJSON(x);
+_assertEqual('{"a":"\u00a3","b":"\u00a3"}', $json);
+
+
+var $x = /\u00a3/;
+$json = _sahi.toJSON($x);
+_assertEqual(""+/\u00a3/, ""+$x);
+$s = "\u00a3".match(/\u00a3/) != null; 
+_assertTrue($s); // test boolean
+_assertTrue("\u00a3".match($x) != null); // test regex
+_assertEqual('/\\u00a3/', $json); // test regex
+
+var x = new Array(1, "2", 3);
+$json = _sahi.toJSON(x);
+_assertEqual('[1,"2",3]', $json); // test array
+
+
+_logException(10);
+_logException("aaa");
+_logException({a:"a",b:"b"});
+
+

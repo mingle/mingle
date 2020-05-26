@@ -1,0 +1,53 @@
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<?xml version="1.0"?>
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Managing favorites and tabs">
+    <section title="Team favorites and tabs">
+		
+		<hint>Mingle allows users to create favorites and tabs that have the same definition as existing favorite and tabs, e.g. same filter criteria, columns/lanes or view style. This will help users who want to rename their existing favorites or tabs to something else using the exact same definition.</hint>
+		
+    	<subsection title="Card view favorites">
+    		<p>Favorites let you and your team quickly access a specific set of cards based on card properties and/or tags. 
+    		Favorites also remember the type of card view at the time they are saved, i.e. <cref topic="grid_view">grid</cref>, <cref topic="list_view">list</cref> or other view. 
+    		Favorites can be <cref topic="creating_tabs_from_favorites">made into tabs</cref>, allowing quick access from anywhere in Mingle.</p>
+
+    	</subsection>
+    	<subsection title="Page favorites">
+    		Favorites and tabs can be created from <cref topic="working_with_pages">pages</cref>, so that specific pages can be directly accessed from anywhere in Mingle.
+    	</subsection>
+
+<subsection title="My favorites">
+  Learn more about <cref topic="managing_my_favorites">My favorites</cref>.
+</subsection>
+    </section>
+	<section title="How to...">
+		<bullets>
+			<item><cref topic="creating_a_favorite_card_view">Create a team favorite card view</cref></item>
+			<item><cref topic="creating_a_favorite_page">Create a team favorite page</cref></item>
+			<item><cref topic="updating_a_favorite_and_a_tab">Update a favorite and a tab</cref></item>
+			<item><cref topic="updating_a_favorite_and_a_tab#reorder_tabs">Reorder tabs</cref></item>
+			<item><cref topic="deleting_a_favorite">Delete a favorite</cref></item>
+			<item><cref topic="creating_tabs_from_favorites">Create tabs from team favorites</cref></item>
+			<item><cref topic="managing_my_favorites">Manage my favorites</cref></item>
+		</bullets>
+	</section>
+	<section title="Also see...">
+		<bullets><item><cref topic="favorites_component">Favorites component</cref></item></bullets>
+	</section>
+</topic>

@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_help.dtd">
+<topic title="Customizing projects">
+  <section title="Introduction">
+    <p>Before your team can start using Mingle, you must create a new project and configure its parameters.</p>
+
+    <p>We've designed Mingle to be extremely flexible so you can adapt the application to your project's structure, methodologies and team preferences. On one hand, this means that Mingle is extremely powerful. On the other hand, it means you need to spend some time thinking about your project's structure and then configure Mingle accordingly.</p>
+
+    <hint>We've included some <cref topic="standard_mingle_templates">project templates</cref> to help your team get started quickly. Choose the closest match to your team's environment and edit the parameters to fit your team.</hint>
+  </section>
+  <section title="Create user profiles" >
+    <p>To <cref topic="creating_user_profiles">add new users</cref>, click the <link>Users</link> link from the instance Admin menu on mingle home page (the first page you see after logging on - click the <strong>Mingle</strong> logo to display this page).</p>
+  </section>
+  <section title="Create Mingle projects" >
+    <p>To <cref topic="creating_mingle_projects">create a new project</cref>, click the <link>New project</link> link from the <cref topic="all_projects_page">Projects page</cref>.</p>
+  </section>
+  <section title="Create or update project properties" >
+    <p>There are a number of ways in which you can customize Mingle to suit your particular project needs</p>
+    <bullets>
+      <item><cref topic="card_types">Card types</cref></item>
+      <item><cref topic="project_variables">Project variables</cref></item>
+      <item><cref topic="card_properties">Card properties</cref></item>
+      <item><cref topic="card_transitions">Card transitions</cref></item>
+      <item><cref topic="card_trees">Card trees</cref></item>
+      <item><cref topic="card_keywords">Card keywords</cref></item>
+    </bullets>
+  </section>
+  <section title="Setup the project environment and navigation" >
+    <p>You can <cref topic="creating_tabs_from_favorites">create custom tabs</cref> based on <cref topic="creating_a_favorite_card_view">favorites</cref> to display specific project information, and to facilitate your project workflow.</p>
+  </section>
+  <section title="Setup the project overview (dashboard reports)" >
+    <p>The <cref topic="project_overview_tab">Overview tab</cref> is a special wiki page that is used to present project information in a dashboard format, as well as linking into other wiki pages.</p>
+  </section>
+  <section title="Setup the source repository (if using Mingle with a source repository)" >
+    <p>To <cref topic="setup_source_repository_integration">connect your project to your source repository</cref>, select the <tab>Project admin</tab> tab, <link>Project repository settings</link> link. Mingle will display the <strong>Configure project repository</strong> page</p>
+  </section>
+</topic>

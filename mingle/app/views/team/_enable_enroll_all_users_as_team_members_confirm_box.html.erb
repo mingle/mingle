@@ -1,0 +1,42 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% new_user_count = User.count - @project.users.size -%>
+<% info_box :class => "team-confirm-box", :style => "display: none;", :id => "team-confirm-box" do -%>
+<div>
+  <h3>
+  <% if new_user_count > 0 -%>
+    You are about to perform the initial enroll which will add <%= pluralize(new_user_count, 'Mingle user') %> to this project
+  <% else -%>
+    All users of this Mingle instance are already team members of this project
+  <% end -%>
+  </h3>
+  <p>
+    Please choose how to enroll new team members:
+  </p>
+  
+  <% form_tag({:action => :enable_auto_enroll, :tab => params[:tab]}, :id => 'enable_auto_enroll_form') do -%>
+  <ul class="inline-list">
+    <li><%= radio_button_tag('auto_enroll_user_type', AutoEnrollUserType::ALL_USERS_ARE_FULL_MEMBERS, true) %> Enroll all users as <b>full</b> team members</li>
+    <li><%= radio_button_tag('auto_enroll_user_type', AutoEnrollUserType::ALL_USERS_ARE_READ_ONLY_MEMBERS, false) %> Enroll all users as <b>read only</b> team members</li>
+  </ul>
+  <div>
+    <input type="submit" class="primary" value="Continue"/>
+    <input type="button" value="Cancel" onclick="$('team-confirm-box').hide()"/>
+  </div>
+  <% end -%>
+</div>
+<% end -%>

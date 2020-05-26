@@ -1,0 +1,117 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+@mixin flat-triangle ($size, $color, $direction) {
+  height: 0;
+  width: 0;
+
+  @if ($direction == up) {
+    border-left: $size solid transparent;
+    border-right: $size solid transparent;
+    border-bottom: $size solid $color;
+  }
+
+  @if ($direction == right) {
+    border-top: $size solid transparent;
+    border-bottom: $size solid transparent;
+    border-left: $size solid $color;
+  }
+
+  @if ($direction == down) {
+    border-left: $size solid transparent;
+    border-right: $size solid transparent;
+    border-top: $size solid $color;
+  }
+
+  @if ($direction == left) {
+    border-top: $size solid transparent;
+    border-bottom: $size solid transparent;
+    border-right: $size solid $color;
+  }
+}
+
+
+@mixin bubble ($direction, $triangleSize, $triangleOffset) {
+  position: absolute;
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid $TRACE_COLOR;
+  box-shadow: 1px 2px 2px rgba(0,0,0,0.3);
+  z-index: 2;
+
+  &:before, &:after {
+    position: absolute;
+    content: "";
+  }
+
+  &:before {
+    @include flat-triangle($triangleSize,$TRACE_COLOR,$direction);
+  }
+
+  &:after {
+    @include flat-triangle($triangleSize,#fff,$direction);
+  }
+
+  @if ($direction == left) {
+    &:before {
+      left: -$triangleSize;
+      top: $triangleOffset;
+    }
+
+    &:after {
+      left: -$triangleSize + 1;
+      top: $triangleOffset;
+    }
+  }
+
+  @else if($direction == down) {
+    &:before {
+      bottom: -$triangleSize;
+      left: $triangleOffset;
+    }
+
+    &:after {
+      bottom: -$triangleSize + 1;
+      left: $triangleOffset;
+    }
+  }
+
+  @else if($direction == right) {
+    &:before {
+      right: -$triangleSize;
+      top: $triangleOffset;
+    }
+
+    &:after {
+      right: -$triangleSize + 1;
+      top: $triangleOffset;
+    }
+  }
+
+  @else if($direction == up) {
+    &:before {
+      top: -$triangleSize;
+      left: $triangleOffset;
+    }
+
+    &:after {
+      top: -$triangleSize + 1;
+      left: $triangleOffset;
+    }
+  }
+
+
+}

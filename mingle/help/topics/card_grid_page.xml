@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Card grid page">
+	<section title="What you can do on this page">
+		<p>The <cref topic="grid_view">card grid</cref> lets you view cards as they might appear as real cards on a wall or whiteboard.</p>
+		<subsection title="What can you do on the Grid view?" file="what_you_can_do_on_the_grid_view"/>
+			
+	</section>
+	<section title="Also see...">
+		<bullets>
+			<item><cref topic="viewing_cards">Viewing cards</cref></item>
+			<item><cref topic="working_with_cards">Working with cards</cref></item>
+			<item><cref topic="finding_cards_to_work_with">Finding cards to work with</cref></item>
+			<item><cref topic="list_view">Viewing cards in a list</cref></item>
+			<item><cref topic="using_mingle">Using Mingle</cref></item>
+				<item>
+					<cref topic="explore_mingle_topic_whats_a_card">What's a card?</cref>
+				</item>
+				<item>
+					<cref topic="explore_mingle_topic_story_wall">Story Wall</cref>
+				</item>
+		</bullets>
+	</section>
+</topic>
+

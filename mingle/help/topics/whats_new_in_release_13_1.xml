@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="What's new in Release 13.1">
+	<p>Please review the <cref topic="upgrading_from_previous_versions">upgrade instructions</cref> before moving to Mingle 13.1.</p>
+	<section title="Updates to the Mingle API">
+		<p>In our 13.1 release, the <cref topic="mingle_api">Mingle API</cref> has been extended to include the ability to:</p>
+			<bullets>
+				<bullets>
+					<item>Get, update, create and delete objectives in your program <cref topic="plan">plan</cref>. Read more about the <cref topic="mingle_api_objective">Objective API</cref>.</item>
+					<item>Access objective-related events in your program plan. Read more about the <cref topic="mingle_api_events#plan_objective_events">Plan objective events API</cref>.</item>
+					<item>Track when a card was copied from a source project to a destination project. Read more about <cref topic="mingle_api_events#card_events">card events</cref> in our events API and <cref topic="copying_a_card">copying a card</cref>.</item>						
+				</bullets>	
+			</bullets>
+	</section>
+	
+	<section title="Update to supported browsers">
+		<p>We have added official support for <strong>Chrome</strong> in Mingle 13.1. Read more about other supported browsers in <cref topic="system_requirements">system requirements</cref>.</p>
+	</section>
+	<section title="Update to MQL">
+	  <p>We have added the official support for <cref topic="card_rankings#using_card_rank_in_table_query">ORDER BY card rank in table query</cref>. Read more about <cref topic="card_rankings">card ranking</cref> and <cref topic="markup_table_query" collapsed="false">table query</cref>.
+	  </p>
+  </section>
+				
+	<section title="Bug Fixes">
+	    <p>The following bugs have been fixed with 13.1:</p>
+		     <bullets>
+		       		<item>Rails security fixes: Mingle uses Rails as its web application framework. This release of Mingle includes fixes for two urgent security vulnerabilities found in the Rails framework. For more information on these vulnerabilities see: <exref url="http://www.kb.cert.org/vuls/id/628463">VU#628463</exref> and <exref url="https://groups.google.com/forum/?hl=en&amp;fromgroups=#!topic/rubyonrails-security/61bkgvnSGTQ">CVE-2013-0156</exref>.</item>
+	           		<item>Macro parameter parsing can execute Ruby code</item>
+					<item>Formula parsing fails for special characters</item>
+			   		<item>Cannot remove card type from tree</item>
+			   		<item>Card edit shows 500 error on change in card type associated with tree</item>
+			   		<item>Git source integration stops working after one error</item>
+			   		<item>Unable to print cards from list view</item>
+					<item>Printing a card includes unwanted links</item>
+		     </bullets>   
+	</section>
+</topic>
+
+
+

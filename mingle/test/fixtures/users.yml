@@ -1,0 +1,132 @@
+#  Copyright 2020 ThoughtWorks, Inc.
+#  
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Affero General Public License as
+#  published by the Free Software Foundation, either version 3 of the
+#  License, or (at your option) any later version.
+#  
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Affero General Public License for more details.
+#  
+#  You should have received a copy of the GNU Affero General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+# belongs to all projects
+first:
+  id: 1
+  login: first
+  email: first@email.com
+  name: first@email.com
+  salt: d0be904f9e8d70a18494ec6e76816cae
+  password: 361df7b763380e62bbf4df7febd1c33ea7dea2673dc78780e78720b8250943d0 # test123.
+
+admin:
+  id: 2
+  login: admin
+  email: admin@email.com
+  name: admin@email.com
+  salt: d0be904f9e8d70a18494ec6e76816cae
+  password: 361df7b763380e62bbf4df7febd1c33ea7dea2673dc78780e78720b8250943d0 # test123.
+  admin: true
+
+# belongs to all projects
+project_member:
+  id: 3
+  login: member
+  email: member@email.com
+  name: member@email.com
+  salt: d0be904f9e8d70a18494ec6e76816cae
+  password: 361df7b763380e62bbf4df7febd1c33ea7dea2673dc78780e78720b8250943d0 # test123.
+
+proj_admin:
+  id: 4
+  login: proj_admin
+  email: proj_admin@email.com
+  name: proj_admin@email.com
+  salt: d0be904f9e8d70a18494ec6e76816cae
+  password: 361df7b763380e62bbf4df7febd1c33ea7dea2673dc78780e78720b8250943d0 # test123.  
+
+user_with_html:
+  id: 5
+  login: user_with_html
+  email: user_with_html@email.com
+  name: foo <b>bar</b>
+  salt: d0be904f9e8d70a18494ec6e76816cae
+  password: 361df7b763380e62bbf4df7febd1c33ea7dea2673dc78780e78720b8250943d0 # test123.
+    
+user_with_quotes:
+  id: 6
+  login: user_with_quotes
+  email: user_with_quotes@email.com
+  name: foo "bar"
+  salt: d0be904f9e8d70a18494ec6e76816cae
+  password: 361df7b763380e62bbf4df7febd1c33ea7dea2673dc78780e78720b8250943d0 # test123.
+
+read_only_user:
+  id: 7
+  login: read_only_user
+  email: read_only_user@email.com
+  name: read_only_user@email.com
+  salt: d0be904f9e8d70a18494ec6e76816cae
+  password: 361df7b763380e62bbf4df7febd1c33ea7dea2673dc78780e78720b8250943d0 # test123.
+  
+# belongs to projects(:first) (id = 1)
+bob:
+  id: 1000001
+  login: bob
+  email: bob@email.com
+  name: bob@email.com
+  salt: d0be904f9e8d70a18494ec6e76816cae
+  password: 361df7b763380e62bbf4df7febd1c33ea7dea2673dc78780e78720b8250943d0 # test123.
+
+# belongs to no projects
+existingbob:
+  id: 1000002
+  login: existingbob
+  email: existingbob@email.com
+  name: existingbob@email.com
+  salt: d0be904f9e8d70a18494ec6e76816cae
+  password: 361df7b763380e62bbf4df7febd1c33ea7dea2673dc78780e78720b8250943d0 # test123.
+  
+# belongs to no projects  
+longbob:
+  id: 1000003
+  login: longbob
+  email: longbob@email.com
+  name: longbob@email.com
+  salt: 1ecc814cb151e15069cdf200de0d52f8
+  password: 9f0b0add844bad57c953d1322d4e251d3ebe6e098e8520cdc559aac89e45f399 # longtest
+  
+# belongs to no project
+capitalized:
+  id: 1000004
+  login: Capitalized
+  email: Capitalized@email.com
+  name: Capitalized@email.com
+  salt: d0be904f9e8d70a18494ec6e76816cae
+  password: 361df7b763380e62bbf4df7febd1c33ea7dea2673dc78780e78720b8250943d0 # test123.
+  
+# belongs to no projects
+admin_not_on_project:
+  id: 1000005
+  login: admin_not_on_project
+  email: admin_not_on_project@email.com
+  name: admin_not_on_project@email.com
+  salt: d0be904f9e8d70a18494ec6e76816cae
+  password: 361df7b763380e62bbf4df7febd1c33ea7dea2673dc78780e78720b8250943d0 # test123.
+  admin: true
+
+# belongs to no projects
+admin_with_name_different_than_email_address:
+  id: 1000006
+  login: admin_with_name_different_than_email_address
+  email: admin_w_n_d_t_e_a@email.com
+  name: admin with name different than email address
+  salt: d0be904f9e8d70a18494ec6e76816cae
+  password: 361df7b763380e62bbf4df7febd1c33ea7dea2673dc78780e78720b8250943d0 # test123.
+  admin: true
+  version_control_user_name: i_am_a_special_user
+ 

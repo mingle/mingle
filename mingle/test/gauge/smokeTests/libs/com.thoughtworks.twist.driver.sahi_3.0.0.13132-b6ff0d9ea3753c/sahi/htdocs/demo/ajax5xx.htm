@@ -1,0 +1,56 @@
+<html>
+<body>
+<script type="text/javascript">
+function getXHR(){
+	if (window.XMLHttpRequest){
+		// If IE7, Mozilla, Safari, etc: Use native object
+		obj = new XMLHttpRequest()
+	}else {
+		if (window.ActiveXObject){
+			// ...otherwise, use the ActiveX control for IE5.x and IE6
+			obj = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+	}
+	return obj;
+}
+function ajaxGet(url){
+	clearMe();
+	var obj = getXHR();
+	obj.onreadystatechange=function(){
+	    if(obj.readyState==4){
+    		document.myForm.resp.value = GETME = obj.status + "\n" + obj.responseText;
+		}
+	}
+	obj.open("GET", url, true);
+	obj.send(null);
+}
+function ajaxPost(url){
+	clearMe();
+	var obj = getXHR();
+	obj.onreadystatechange=function(){
+	    if(obj.readyState==4){
+    		document.myForm.resp.value = GETME = obj.status + "\n" + obj.responseText;
+		}
+	}
+	obj.open("POST", url + "?" + (new Date())  , true);
+	obj.send(null);
+}
+function clearMe(){
+	document.myForm.resp.value = "";
+}
+</script>
+<form name="myForm">
+<textarea name="resp" rows="6" cols="30"></textarea><br/>
+<br/>
+<input type="text" value="/demo/php/500.php" name="url" id="url"/><br/>
+
+<input type="button" value="Ajax Get" onclick="ajaxGet(this.form.url.value);"/>
+<input type="button" value="Ajax Post" onclick="ajaxPost(this.form.url.value);"/>
+<input type="button" value="Clear" onclick="clearMe();"/><br/><br/>
+<!--
+<iframe src="http://me.example.com/demo/index.htm" height="0" width="0"></iframe>
+-->
+</form>
+
+</body>
+</html>

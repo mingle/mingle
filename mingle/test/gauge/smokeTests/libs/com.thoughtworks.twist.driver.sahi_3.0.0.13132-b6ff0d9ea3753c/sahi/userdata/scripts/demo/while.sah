@@ -1,0 +1,43 @@
+_debug("-----------------------------------------");
+_click(_link("Link Test"));
+_click(_link("Back"));
+_click(_link("Form Test"));
+_assertNotNull(_textbox("t1"));
+
+//_setGlobal("ix", 0);
+//while (true) {
+//    _condition(parseInt(_getGlobal("ix")) < 2);
+//    if ("true" != _getGlobal("condn" + (_sahiCmds.length))) break;
+//    _debug("----");
+//    _setValue(_textbox("t1"), _textbox("t1") + "a");
+//    _setValue(_textbox(1), "There");
+//    _setValue(_textbox("name"), "EveryWhere");
+//    _click(_link("Back"));
+//    _click(_link("Table Test"));
+//    _assertEqual("4", _getCellText(_cell(_table("t2"), "Soap", "Number")));
+//    _click(_link("Back"));
+//    _click(_link("Form Test"));
+//    _setGlobal("ix", parseInt(_getGlobal("ix")) + 1);
+//}
+
+
+insideWhile();
+_assertNotNull(_textbox("t1"));
+_click(_link("Back"));
+
+function insideWhile() {
+    _setGlobal("ix", 0);
+
+    while (_condition(parseInt(_getGlobal("ix")) < 2)) {
+        _debug("----");
+        _setValue(_textbox("t1"), _textbox("t1") + "a");
+        _setValue(_textbox(1), "There");
+        _setValue(_textbox("name"), "EveryWhere");
+        _click(_link("Back"));
+        _click(_link("Table Test"));
+        _assertEqual("4", _getCellText(_cell(_table("t2"), "Soap", "Number")));
+        _click(_link("Back"));
+        _click(_link("Form Test"));
+        _setGlobal("ix", parseInt(_getGlobal("ix")) + 1);
+    }
+}

@@ -1,0 +1,64 @@
+Feature	Group	Name	Priority	Release Estimate	Description
+Create Profile	Profile Module	Create Website Profile	High	200	A user is allowed to create a profile with specific account criteria. The user will “walk” through specific steps and criteria to complete the profile submission.  The profile can be saved and executed indefinitely.
+Create Project	Profile Module	Edit/Modify Project	High	200	A user can modify selected Project by changing selections criteria, descriptions and Grid data.  This data is saved to the existing project.
+User Administration	Security	User Session Timeout	High	200	The user will have session timeout.   The application will terminate the users session if there has not been any activity in the session for x amount of time.
+Create Customer	Profile Module	Create Simple Grid Request	High	200	The user can create a simple Grid request.  This a one time user Grid request.  This Grid can contain several profiles.
+Subscribe	Profile Module	Subscribe to a Preview Subscription Services	High	200	The user can create a Preview Subscription.  This includes the option to select from 4 different Grids.
+Subscribe	Profile Module	Subscribe to a Preview Review Subscription Services	High	200	The user can create a Preview Review Subscription.  This includes the option to select from  a Grid of 8 different Grids.  The user selects the desired Grid.
+Create Profile	Profile Module	Delete Selection for a Segement	High	200	The user can delete selection criteria for specific profile segement.
+Create Profile	Profile Module	Edit Selection for a Segments	High	200	The user can modify the a selection criteria in a previously saved profile segment.
+Create Customer	Profile Module	Customer Search	High	200	When the user starts a customer request, they can perform an existing customer search. 
+Create Customer	Profile Module	Create Ongoing Services	High	200	The user can create an Ongoing subscription for a customer.
+Create Profile	Grid Management	Generate Grid for a Segment	High	200	When the user adds information to a profile, the user can generate a test Grid to verify the Grid information for a segment.
+Create Profile	Profile Module	Output the Profile Selection Criteria	High	200	The user can output the Profile Selection Criteria to PDF.
+Search	Profile Module	Output the Profile Selection Filters	High	200	The user can output the profile selection filters to PDF.
+Create Profile	Profile Module	Profile Search	High	200	The user can search for a specific profile based on entered criteria.
+Create Project	Grid Management	Enable De-Dup	High	100	The De-dup option is available to a user in the application.
+Create Project	Profile Module	View Project Requirements Document	High	100	When a user has entered the required specifications for a Website or other projects, the data from this product is compiled and presented to the user.
+Create Profile	Profile Module	Print Project Requirements Documents	High	100	When a user has viewed the Project Requirements document, the option to print is presented.
+Subscribe	Profile Module	Create Preview Custom	High	100	The user can create a subscription for the Preview custom.
+Create Profile	Profile Module	Create A Profile From a Template	High	100	A user can create a new profile from an existing template.
+Create Customer	Profile Module	Add Preferences at Global Level	High	100	The user can specify filter and output options at a Global Level.
+Create Project	Profile Module	Add Preferences at Project Level	High	100	The user can specify filter and output options at a Project Level.
+Reporting	Output Module	Preview Output	High	100	The user can preview output.
+Reporting	Output Module	Send Grid to Website Cart	High	100	When the user specifies to transfer a Grid to Website, the Website application extracts converts the Grid to a Standard format.  The Standard formatted Grid is inserting to Website via a sales cart.
+Reporting	Output Module	Output to Website	High	100	When the user specifies to output a file to Website, the Website application save the record in a TXT or acceptable format.  The record is then exported to Website via a sales cart.
+Create Project	Output Module	Export to PDF	High	100	When a user generates a Grid or views a profile, the user can specify to export to Adobe Acrobat.  The Grid is generated, exported and saved in a PDF format.
+Reporting	Profile Module	Project Requirement Document	High	100	When a customer requests a large project development and customer account information, the user creates a project detail document to manage and receive confirmation of the customer requests.  A sign-off sheet should also be included when it’s created.
+Reporting	Output Module	Export to Access	High	100	When a user generates a Grid, the user can export to Microsoft Access.
+Create Profile	Grid Management	Change Grid Columns on the Fly	High	100	When the user selects criteria for a specific profile, the user generates a Grid with only the columns from the specified Grid selections.
+Reporting	Review Module	Review/Generate a Pending Grid	Medium	100	The user can generate a Grid from a pending Grid.
+Reporting	Output Module	Create Distribution Profile	Medium	100	When a user creates a profile (ongoing, projects, and simple Grids), they are presented with the option to create a distribution profile.
+Reporting	Output Module	Create a Zip File	Medium	100	For a particular user, template or customer, show different filters at the bottom of the profile edit screen.  Give the option to change the filters displayed.
+Create Profile	Profile Module	Create Website Project	Medium	100	A user is allowed to create a specific project for a customer.
+Reporting	Profile Module	View Profile	Medium	100	A user can view a specific profile.  The user can select a profile from a Grid of existing profiles.   
+Create Profile	Management Module	Grid Run Summary	Medium	100	The user can view a Grid Run Summary Report which details profile Grid run counts for a specific date range.
+Reporting	Management Module	Buying Reports	Medium	100	The user can generate a report which Grids the total number by title of items presented in customer Grid by a specific date range.
+Reporting	Profile Module	Advance Mode for Profile Edit 	Medium	100	The user can enter the query criteria in a SQL-Builder type mode. Similar to what the users have in Website right now.
+Create Profile	Profile Module	Display Profile Grid by Type-Sort	Medium	100	Show a Grid of profiles, both by the user login, profile type, status, and Market.
+Create Profile	Output Module	Confirmation Email Receipt	Medium	50	The user receives a  confirmation when an output file is sent to the customer.
+Create Profile	Profile Module	Display Custom Filters	Medium	50	For a particular user, template or customer, show different filters at the bottom of the profile edit screen.  Give the option to change the filters displayed.
+Reporting	Grid Management	Run a Project and Aggregate the Grid	Medium	50	The user can aggregate the total of the Grid costs and totals for a project.
+Reporting	Grid Management	Compare  Grids	Medium	50	The user can select an existing Grid and compare it to a new Grid.  The old Grid should flag titles that do not appear in the second Grid.
+Create Profile	Profile Module	Create a Help Framework	Medium	50	The user will be able to access Help within the application.
+Create Project	Grid Management	Display Detailed Product Information	Medium	50	The User can view detailed product information by linking from the Grid.
+Create Profile	Output Module	Sort Output During Review	Medium	50	When a user generates an output Grid, the user can specify to add a selection to the Grid.  
+	Profile Module	Grid Projects	Medium	50	A user is presented with a Grid of of all available projects.
+	Profile Module	Create Preferences at Profile Level	Medium	50	The user can create and add filters that are persisted to the profile segment level. 
+Create Profile	Profile Module	Save Profile Segment	Medium	50	When a user complete the data enter for a profile segment and submit, the data is written to the database table.
+Reporting	Grid Management	Upload or Replace  Customer Holding Records	Medium	50	A user can upload or replace a file of customer holdings to the database table.  This will allow the application to identify products the customer currently owns.
+Reporting	Grid Management	Identify Duplicates from Other Grids	Medium	50	When a user requests a new Grid, the Website database compares the subsequent results to previous Grids files generated for the same customer.   This is the saved final Grid.  The user can select the specific Grids to compare.
+Reporting	Output Module	Display Output Source Selection	Medium	50	When a user generates a Grid from profile, they are given the option to export that Grid or print directly to a specific printer.
+Reporting	Output Module	Data Transfer Grid Output	Medium	50	When the user specifies to transfer a file via Data Transfer, the Website application extracts the Grid in a TXT, Standard or ASCII format.   The file is then saved to an Data Transfer site for the customer download.
+Create Project	Schedule Module	Create Master Schedule	Medium	50	A user can set up a schedule that can generate multiple Grids for multiple profiles.  The schedule generates Grids for all of the specified profile.  This is applied to a project.
+Search	Schedule Module	Edit/Modify Schedule	Low	50	The user can specify to edit an existing schedule.  The user is presented with a Grid of existing schedules or can search for a specific schedule. The user can modify all of the schedule parameters.
+Create Profile	Schedule Module	Search Schedule	Low	50	The user can search for a specific schedule by different parameters (i.e. customer name, customer account, schedule name, date, profile name, etc.).  Website displays the requested schedules.
+Create Profile	Schedule Module	Schedule Projects	Low	50	The user can set schedule project parameters for a project.  The user can either create the schedule while creating the project initially or select a specific project from Grid and add the schedule criteria.
+User Administration	Profile Module	Archive Profile	Low	50	A user can archive specific profiles selected.  Archived profiles are not deleted, but does not appear in the profile Grid.   
+User Administration	Profile Module	Delete Profile	Low	50	A user can specify to delete a profile from a Grid.
+Reporting	Security	Create User ID's	Low	50	The administrator can create individual user accounts.  The administrator should assign a user name, password (which can be changed by the user), and specific user permissions (i.e. which modules can be accessed).  The administrator can also create an anonymous user for guest users.
+Reporting	Schedule Module	Suspend/Reactivate Scheduler-Automatically	Low	50	When a user determines a specific Grid criteria is not available (i.e. Repository Citations not received), the user can specific to suspend the scheduled event.  The event can be held until the specific data is received or can be set to generate again at another time.
+User Administration	Output Module	Search within a Grid	Low	50	When the user reviews a Grid generated for a specific customer, the user can search for specific products or information in the output Grid.  
+User Administration	Grid Management	Add Grid Selection	Low	50	When a user generates an output Grid, the user can specify to add a selection to the Grid.  
+User Administration	Security	User Login	Low	50	The user logs in to the application.  The user is authenticated against the user table.
+User Administration	Security	User Logout	Low	50	The users wishes to log out of the application.  The user session is terminated and presented with a logout confirmation.

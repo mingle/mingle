@@ -1,0 +1,61 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+.github-integrations {
+  margin-top: 30px;
+  ul {
+  	list-style: none;
+  }
+  li {
+  	padding: 5px;
+  	font-size: 14px;
+  }
+
+  .webhook {
+	&:before {
+		@include fa_icon($fa-var-external-link-square);
+		text-decoration: none;
+	}
+  }
+}
+
+.button-prefix {
+	&:before {
+		display: inline-block;
+		background-color: rgb(82, 82, 82);
+		color: white;
+		height: 25px;
+		width: 23px;
+		top: 2px;
+		position: relative;
+		text-align: center;
+		padding-top: 3px;
+		padding-left: 4px;
+	}
+}
+.github {
+	&:before {
+		@include fa_icon($fa-var-github);
+		font-size: large;
+	}
+
+	margin-bottom: 10px;
+}
+
+.text-link {
+  text-decoration: underline;
+  color: $CONTENT_LINK_COLOR;
+}

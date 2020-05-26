@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE section SYSTEM "mingle_help.dtd">
+<section title="Team Foundation Server (TFS) source integration for Mingle Onsite" id="tfs">
+  <subsection title="Before you start">
+    <note>
+      <bullets title="Please be aware:">
+        <item>Native TFS integration is available for Mingle onsite only.</item>
+        <item>Mingle currently supports Microsoft Visual Studio Team Foundation Server (TFS) 2010 and uses the TFS SDK jar published <exref url="http://www.google.com/url?q=http%3A%2F%2Fwww.microsoft.com%2Fdownload%2Fen%2Fdetails.aspx%3Fdisplaylang%3Den%26id%3D22616&amp;sa=D&amp;sntz=1&amp;usg=AFQjCNEw1q5XCiw8j5xPPgLwQuBl5KLkKA">here</exref>.</item>
+        <item>Mingle does not currently support TFS repository browsing.</item>
+		<item>The TFS integration has no source diffs.</item>
+		<item>The TFS integration does not have a configuration API.</item>
+      </bullets>
+    </note>
+  </subsection>
+
+  <subsection title="Configuration">
+  <p>After successfully choosing <strong>Team Foundation Server (TFS)</strong> from the source repository list, Mingle will display the <strong>TFS repository settings</strong> page.</p>
+  <screenshot alttext="TFS repository settings" src="resources/images/TFS_repository_settings.png" />
+
+  <bullets>
+    <item>Enter the <strong>URL</strong> for your TFS repository (e.g. https://mytfs:8080/tfs).</item>
+	<item>Enter the <strong>Collection</strong>.</item>
+	<item>Enter the <strong>Project</strong> name within the Collection.</item>
+	<item>Enter the <strong>Domain</strong> name of the Windows domain for your TFS. (If you are using the workgroup edition of TFS, then put your machine name in this field.)</item>
+	<item>Enter the <strong>User name</strong> for the account to be used by Mingle to connect to TFS. (N.B. The user must have read access to the TFS Project mentioned above.) Click <strong>Change password</strong>.</item>
+    <item>Enter your <strong>Password</strong>.</item> 
+	<item>Click the <strong>Save Settings</strong> link to save the configuration and return to the <strong>Project admin</strong> page. You will receive a confirmation message indicating that your repository settings were successfully saved.</item>
+
+  </bullets>
+</subsection>
+</section>

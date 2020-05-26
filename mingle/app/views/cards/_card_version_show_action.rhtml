@@ -1,0 +1,25 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= render :partial => 'navigation_bar' %>
+
+<% action_bar :id => "action-bar-#{location}" do %>
+  <%= render "shared/contextual_help_or_normal_help_link", :contextual_help_class => "page-help-at-action-bar", :position => location, :help_link => render_help_link('Card View Page', :class => 'page-help-at-card-show', :content => 'Help') %>
+
+  <a onclick="if(window.print){window.print();}else{alert('Sorry, your browser dosen\'t support print');};return false;" href="javascript:void(0)" class="print-single link_as_button">Print</a>
+  <%= link_to 'Show latest', { :action => 'show', :number => @card.number }, {:class => 'show-latest link_as_button'} unless @displaying_latest_version %>
+  <%= link_to_remote 'Copy to...', { :url => { :action => 'copy_to_project_selection', :number => @card.number }, :method => 'get', :before => 'InputingContexts.push(new LightboxInputingContext());' }, { :class => 'copy-to link_as_button' } if @displaying_latest_version %>
+<% end %>

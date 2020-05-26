@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE subsection SYSTEM "mingle_help.dtd">
+<subsection title="Adding user to multiple projects" id="add_user_to_multiple_projects">
+  <p>To be able to add user to projects, you have to be a <cref topic="user_roles#mingle_administrator">Mingle administrator</cref> or <cref topic="user_roles#project_administrator">project administrator</cref>.</p>
+  <steps title="To add user to multiple projects:">
+    <item>Go to the user's <cref topic="managing_your_user_profile">profile page</cref> who you want to add. You can open the profile page by clicking user's display name on the <cref topic="manage_users_page#open_a_user_profile">Manage user page</cref> or the <cref topic="project_team_page">Team page.</cref> </item>
+    <item>
+      <p>Click <link>Add to projects</link> button on <link>Projects</link> tab.</p>
+      <screenshot src="resources/images/add_user_to_projects.png"/> 
+    </item>
+    <item>
+      <p>On the light box, choose your project.</p>
+      <note><cref topic="user_roles#project_administrator">Project administrator</cref> can only add user to the projects he is administrator of. <cref topic="user_roles#mingle_administrator">Mingle administrator</cref> has full control over all the projects.</note>
+      <screenshot src="resources/images/add_user_to_projects_step1.png"/> 
+    </item>
+    <item>
+      <p>Choose <cref topic="user_roles">the permissions</cref> for user.</p>
+      <note><cref topic="user_roles#full_users_and_light_users">Light user</cref> can only be added as <cref topic="user_roles#read_only_project_team_member">read only project team member.</cref></note>
+      <screenshot src="resources/images/add_user_to_projects_step2.png"/> 
+    </item>
+    <item>
+      <p>Add or remove projects.</p>
+      <screenshot src="resources/images/add_user_to_projects_step3.png"/> 
+    </item>
+    <item>
+      <p>Click <link>Save</link> button on light box.</p>
+      <screenshot src="resources/images/add_user_to_projects_step4.png"/> 
+    </item>
+  </steps>
+</subsection>
+

@@ -1,0 +1,45 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="feed" class="collapsible-section-default">
+  <h2>Watch this?<%= spinner(:id => 'feed-spinner') %></h2>
+  <%= render_help_link 'Subscription', :style => 'margin-top: -2em'%>
+  <%= clear_float %>
+  <% cache(Keys::FeedUrl.new.path_for(@project, request_params.to_param)) do -%>
+    <p><%= link_to("via feed", history_atom_url(request_params), {:id => 'subscribe-link', :class => 'rss'}) %></p>
+  <% end -%>
+  <% if flash.now[:smtp_error] -%>
+    <div class="subscribe-error-message">
+      <p><%= flash.now[:smtp_error] %></p>
+    </div>
+  <% elsif User.current.has_subscribed_history?(@project, request_params)-%>
+    <div id="subscribed-message">
+      <p>You have subscribed to this via email.</p>
+    </div>
+  <% elsif User.current.email.blank? && authorized?('history:subscribe')-%>
+      <p class='email-disabled' title="Please add an email address to your user profile in order to subscribe via email."><span>via email</span></p>
+  <% else -%>
+    <div id="subscribe-via-email">
+      <p>
+      <%= link_to_remote('via email', 
+        {:url => {:controller => 'history', :action => 'subscribe', :filter_params => request_params}, 
+        :before => '$("feed-spinner").show()', 
+        :complete => '$("feed-spinner").hide()'},
+        {:class => 'email'})%>
+      </p>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,251 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+#search_results table, #search_results th, #search_results td {
+  border: none;
+  margin-bottom: 0;
+}
+
+.gsc-url-bottom {
+    display: none !important;
+}
+
+#no_result_message .search_term {
+  font-weight:bold;
+}
+
+#no_result_message .box {
+  padding: 10px 0;
+  overflow: hidden;
+  margin-top: 15px;
+}
+
+#search_form{
+  position: absolute;
+  right: 14px;
+  top: 18px;
+  _width: 200px;
+}
+
+table.gsc-search-box {
+  margin: 0 !important;
+  width: auto !important;
+}
+
+td.gsc-search-button {
+  width: 1px !important;
+  padding: 0 !important;
+}
+
+table.gsc-search-box td.gsc-input {
+  padding: 0 !important;
+}
+
+input.gsc-input {
+  width:200px !important;
+  height: 2.5rem;
+  background: #FFF url("images/icon_search.png") no-repeat right 50% !important;
+  color: #333 !important;
+  border: 0 !important;
+  box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    -o-box-shadow: none;
+  margin-left: 10px;
+  padding: 4px 26px 4px 7px !important;
+  border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+}
+
+input.gsc-search-button {
+  position: absolute;
+  margin: 0 !important;
+  top: 0;
+  right: 5px;
+  text-indent: -3000px;
+  min-width: 20px;
+  width: 20px;
+  height: 20px;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+  _padding-top: 500px;
+}
+
+
+#search_results_container {
+  display:none;
+  position: relative;
+}
+
+table.gsc-branding {
+  position: absolute;
+  width: auto !important;
+  right: 0;
+  top:15px;
+}
+
+#hide_search_results {
+  display: block;
+  background: url(images/icon_arrow_left_19.png) no-repeat left 50%;
+  padding: 5px;
+  padding-left: 25px;
+}
+
+
+
+#branding {
+  border-top: 1px solid #CCC;
+  margin-top: 10px;
+  width:100%;
+}
+#branding .gsc-branding{
+  float:right;
+}
+#search_form .gsc-branding{
+  display:none;
+}
+.gsc-resultsHeader{
+  display:none;
+}
+.gsc-clear-button{
+  display:none;
+}
+.gsc-tabsArea{
+  display:none;
+}
+td.gsc-input{
+  border:none;
+}
+td.gsc-search-button{
+  border:none;
+}
+.gs-result .gs-snippet {
+  color:#444 !important;
+}
+
+.gs-result .gs-snippet b {
+  color: #111 !important;
+}
+
+.gsc-results {
+  width: 100% !important;
+}
+
+#search_results .gsc-result {
+  border-bottom: 1px dotted #CCC;
+  padding: 1em 0;
+}
+
+.gsc-result .gs-title {
+  text-decoration: none !important;
+  color:#0076BA !important;
+  height: auto !important;
+  overflow: visible !important;
+}
+
+.gs-result .gs-title * {
+  color:#0076BA !important;
+  text-decoration: none !important;
+}
+.gs-result a.gs-visibleUrl, .gs-result .gs-visibleUrl {
+  color: #58a948 !important;
+}
+.gsc-cursor-box{
+  text-align: center;
+}
+
+/* Action bar */
+.action-bar
+{
+
+}
+
+.action-bar-inner-wrapper {
+
+}
+
+div.search-result {
+  clear: both;
+  border-bottom: 1px solid #ccc;
+  padding: 10px 0;
+  overflow: hidden;
+}
+
+div.search-result .img-container {
+  float: left;
+  width: 80px;
+  height: 80px;
+}
+
+div.search-result .img-container a img {
+  max-width: 80%;
+  max-height: 80%;
+  background: #3FBEEA;
+}
+
+div.search-result .search-snippet {
+  float: left;
+  margin-left: 10px;
+  padding-left: 10px;
+}
+
+div.search-result .search-result-highlight {
+  font-weight: bolder;
+}
+
+div.search-result .search-result-title {
+  font-weight: bolder;
+  font-size: 20px;
+}
+
+div#search_results_container ul.pagination {
+  list-style: none none;
+}
+
+div#search_results_container ul.pagination li.page-item {
+  display: inline-block;
+  float: left;
+  padding: 0 10px;
+  min-width: 17px;
+  text-align: center;
+}
+
+div#search_results_container ul.pagination li.page-item.active{
+  font-weight: bolder;
+  background: #eee;
+}
+
+div#search_form input {
+  width:200px !important;
+  height: 2.5rem;
+  background: #FFF url("images/icon_search.png") no-repeat right 50% !important;
+  color: #333 !important;
+  border: 0 !important;
+  box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    -o-box-shadow: none;
+  margin-left: 10px;
+  padding: 4px 26px 4px 7px !important;
+  border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+}

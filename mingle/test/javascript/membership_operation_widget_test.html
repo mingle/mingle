@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>
+      JavaScript unit test file
+    </title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+    <script src="../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+    <script src="test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+
+    <script src="test_assets/unittest.js" type="text/javascript"></script>
+    <script src="test_assets/unittest_ext.js" type="text/javascript"></script>
+
+    <script src="../../public/javascripts/membership.js" type="text/javascript"></script>
+    <script src="../../public/javascripts/checkbox.js" type="text/javascript"></script>
+
+
+    <link rel="stylesheet" href="assets/unittest.css" type="text/css" />
+    <link rel="stylesheet" href="test_assets/unittest.css" type="text/css" />
+  </head>
+  <body>
+    <div id="content">
+      <div id="header">
+        <h1>
+          JavaScript unit test file
+        </h1>
+        <p>
+          This file tests <strong>GroupSelector</strong> class in <strong>application.js</strong>.
+        </p>
+      </div><!-- Log output -->
+      <div id="testlog"></div>
+      <div style='border:solid 1px' id='sandbox'>
+      <h3> sandbox: </h3>
+      <form id="update_memberships" action="javascript:void(0)">
+        <div id="select-all-none-panel">
+          <a id="select_all">All</a>
+          <a id="select_none">None</a>
+        </div>
+        <div id="bulk-operations-panel">
+          <a id="remove_membership" class="disabled">Remove</a>
+          <a id="assign_groups" class="disabled">Group</a>
+        </div>
+
+        <div id="group-selector" style="display:none">
+          <ul id="options-container">
+            <li>
+              <div id="div1" class="tristate-checkbox">
+                <input type="hidden" name="no_change[]" id="group1" value="1"/>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <table id="users">
+          <tr>
+            <td><input type="checkbox" value="1" name="selected_memberships[]" id="selected_membership_1" class="select-membership"></td>
+            <td>user1</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" value="2" name="selected_memberships[]" id="selected_membership_2" class="select-membership"></td>
+            <td>user2</td>
+          </tr>
+        </table>
+      </form>
+    </div>
+    <script type="text/javascript">
+// <![CDATA[
+
+  SAND_BOX_CONTENT = $('sandbox').innerHTML;
+
+  new Test.Unit.Runner({
+
+    setup: function() {
+      $('sandbox').innerHTML = SAND_BOX_CONTENT;
+      this.widget = new MembershipOperationWidget('update_memberships');
+      this.formElement = $('update_memberships');
+      this.number = 0;
+    },
+
+    testShouldSubmitFormWhenClickOnRemoveLink: function(){ with(this){
+      this.formElement.submit = function() {
+        this.number++;
+        return false;
+      }.bind(this);
+
+      clickCheckbox('selected_membership_1');
+      Event.trigger($('remove_membership'), 'click');
+      assertEqual(1, number);
+    }},
+
+    testShouldBeAbleToDisableGroupLinkWhenRemoveMemberLinkDoesNotExist: function(){ with(this){
+      $('remove_membership').remove();
+      this.widget = new MembershipOperationWidget('update_memberships');
+      assert($('assign_groups').hasClassName('disabled'));
+    }},
+
+    testRemoveLinkShouldBeDisabledWhenThereIsNoMembership: function(){ with(this){
+      $('select-all-none-panel').remove();
+      $('users').innerHTML = '';
+      this.widget = new MembershipOperationWidget('bulk-operations-panel');
+      assert($('assign_groups').hasClassName('disabled'));
+    }}
+  }, { testLog: "testlog", test: '' }).run;
+// ]]>
+</script>
+  </body>
+</html>

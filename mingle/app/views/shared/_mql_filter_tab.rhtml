@@ -1,0 +1,38 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= render :partial => 'shared/resubmit_filter_button', :locals => {:container_id => 'filter-container'}%>
+<a id="filter_mql_wrapper" href="javascript:void(0)" title="Edit MQL">
+  <div id="filter_mql" class='filter-mql'>
+    <span id="filter_mql_edit_icon" class="none-content">Edit filter</span>
+  </div>
+</a>
+
+<div id='mql_edit_view' style="display:none;">
+    <div id="mql-how-to">
+      <h4>Using MQL conditions in filter</h4>
+      <p>For example: <span class="example">type = card AND size != 4.</span>
+      <%= render_help_link('Filter list by MQL', {:content => 'Learn more.', :class => ''}) %>
+      </p>
+    </div>
+    <div class="divider"></div>
+    <%= text_area_tag 'filters[mql]', nil, :id =>'mql_filter_edit_window', :rows => 12 %>
+    <fieldset>
+      <button class='clear-editing-content' onclick="$('mql_edit_view').down('textarea').value='';$('mql_edit_view').down('textarea').focus();return false;">Clear</button>
+      <button class='finish-editing'>Apply filter</button>
+      <button class='cancel-editing'>Cancel</button>
+    </fieldset>
+</div>

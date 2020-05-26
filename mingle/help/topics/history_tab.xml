@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="History tab">
+	<section title="What you can do on this page">
+		<p>The <tab>History</tab> tab is an audit feature that shows all activity on a project either today, yesterday, over the last seven days, the last 30 days, or since the project began.</p>
+			
+		<p>Clicking the History tab displays by default all cards that were updated today.</p>
+			
+		<p>Here you can either browse a straight list of project changes, or filter changes according to card properties. You can list changed cards according to their previous properties and/or their current properties. For example, you can view all cards that were open yesterday and closed today.</p>
+		<bullets>
+			 <item><cref topic="viewing_project_changes">Viewing project changes as they occur</cref></item>
+			 <item><cref topic="subscribing_via_email">Subscribing via email</cref></item>
+			 <item><cref topic="subscribing_via_feeds">Subscribing via Atom</cref></item>
+			 <item><cref topic="managing_email_subscriptions">Managing your email subscriptions</cref></item>
+		</bullets>
+	</section>
+</topic>
+

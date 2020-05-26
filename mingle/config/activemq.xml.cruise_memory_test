@@ -1,0 +1,48 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:amq="http://activemq.apache.org/schema/core"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+                           http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core-5.5.0.xsd">
+
+    <!-- Allows us to use system properties as variables in this configuration file -->
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"/>
+    <broker xmlns="http://activemq.apache.org/schema/core"
+            useJmx="false"
+            persistent="true"
+            populateJMSXUserID="true"
+            useShutdownHook="true"
+            brokerName="localhost"
+            deleteAllMessagesOnStartup="false"
+            enableStatistics="true"
+            tmpDataDirectory="${mingle.dataDir}/activemq-data/tmp_storage">
+
+        <persistenceAdapter>
+            <kahaPersistenceAdapter directory="${mingle.dataDir}/activemq-data"/>
+        </persistenceAdapter>
+
+        <plugins>
+            <simpleAuthenticationPlugin>
+                <users>
+                    <authenticationUser username="mingle" password="password" groups="admin"/>
+                </users>
+            </simpleAuthenticationPlugin>
+        </plugins>
+
+        <systemUsage>
+            <systemUsage>
+                <memoryUsage>
+                    <memoryUsage limit="128 mb"/>
+                </memoryUsage>
+                <storeUsage>
+                    <storeUsage limit="1 gb"/>
+                </storeUsage>
+                <tempUsage>
+                    <tempUsage limit="100 mb"/>
+                </tempUsage>
+            </systemUsage>
+        </systemUsage>
+
+    </broker>
+
+</beans>

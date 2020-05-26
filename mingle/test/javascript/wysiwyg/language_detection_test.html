@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+  <head>
+    <title>
+      JavaScript unit test file
+    </title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <script src="../../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/mingle_ui.js" type="text/javascript"></script>
+    <script src="../../../public/javascripts/ckeditor-4.4.8-cache07/ckeditor.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/ckeditor-config.js" type="text/javascript"></script>
+
+    <script src="../test_assets/unittest.js" type="text/javascript"></script>
+    <script src="../test_assets/unittest_ext.js" type="text/javascript"></script>
+
+    <link rel="stylesheet" href="../test_assets/unittest.css" type="text/css" />
+  </head>
+  <body>
+     <div id="content">
+      <div id="header">
+        <h1>
+          JavaScript unit test file
+        </h1>
+        <p>
+          This file tests <strong>that ckeditor always uses english</strong>.
+        </p>
+      </div><!-- Log output -->
+      <div style='border:solid 1px' id='sandbox'>
+        <h3> sandbox: </h3>
+        <div id="content-panel-container">
+          <textarea id="card_description" name="card[description]">
+          </textarea>
+        </div>
+      </div>
+      <div id="testlog"></div>
+
+    </div>
+    <script type="text/javascript">
+// <![CDATA[
+
+  SAND_BOX_CONTENT = $('sandbox').innerHTML;
+
+  function findElements(selector) {
+    return $j("iframe.cke_wysiwyg_frame").contents().find(selector);
+  }
+
+    new Test.Unit.Runner({
+      setup: function() {
+        var timeout = 100000;
+        while(!CKEDITOR.mingle.ready && (timeout--)>0);
+      },
+
+      testCkeditorLanguageIsEnglishEvenWhenBrowserUsesADifferentLang: function() { with(this) {
+        assertEqual('fr', CKEDITOR.lang.detect("fr", "fr"));
+        assertEqual('en', CKEDITOR.instances.card_description.langCode);
+      }}
+    }, { testLog: "testlog", test: '' }).run;
+
+  CKEDITOR.replace('card_description', {
+    on: {
+      instanceReady: function (event) {
+        event.editor.resize('100%', 500);
+        event.editor.setData('');
+        $j('iframe.cke_wysiwyg_frame').contents().find('#renderable-contents').css('-webkit-transform', 'translate3d(0,0,0)');
+        CKEDITOR.frameOffset = $j("iframe.cke_wysiwyg_frame").offset();
+      }
+    }
+  });
+// ]]>
+    </script>
+  </body>
+</html>

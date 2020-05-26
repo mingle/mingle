@@ -1,0 +1,52 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div class="current-user-actions">
+
+  <%- if project_selected? -%>
+    <ul class="project_actions">
+      <li class="project_action">
+        <% form_tag({ :controller => 'search', :project_id => @project.identifier }, { :method => 'get', :id => 'search', :class => "search", :"data-popup-url" => url_for(:controller => "search", :action => "request_popup") }) do -%>
+          <%= text_field_tag 'q', params[:q], :accesskey => 'q', :class => "text", :id => 'q', :placeholder => 'Cards, pages or murmurs...' %>
+          <%= submit_tag 'Search', :id => 'search_button', :name =>nil, :class => 'button search_button' %>
+        <% end -%>
+      </li>
+
+      <li class="project_action">
+        <%= render :partial => '/murmurs/drop_down' %>
+      </li>
+
+      <li class="project_action">
+        <div class='project-admin-header'>
+          <%= link_to 'Project admin', project_admin_link_params %>
+        </div>
+      </li>
+
+      <% if can_show_my_work?(@project) then %>
+        <li class="project_action">
+          <div id="my-work" class="my-work">
+          <span class="trigger"><i class="fa fa-coffee"></i> My Work</span>
+          <div class="content">
+            <dl class="my-cards" data-url="<%= raw cards_in_progress_path.to_s %>"></dl>
+            <div class="my-list" data-url="<%= raw rest_todos_list_path(:user_id => User.current.id, :project_id => nil).to_s %>"></div>
+          </div>
+        </div>
+        </li>
+      <% end %>
+
+    </ul>
+  <% end %>
+</div>

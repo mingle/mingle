@@ -1,0 +1,41 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%
+  project_identifier = renderable.project.identifier
+%>
+<div class="panel-content" data-panel-name="murmurs">
+  <h4 class="panel-header">Murmurs (<span data-murmur-count=""></span>)</h4>
+
+  <% content_tag(:div, :class => "murmurs-card-discussion", :"data-readonly" => readonly_privileges?.to_json, :"data-source-url" => rest_card_murmurs_conv_path(:number => renderable.number, :project_id => project_identifier)) do %>
+
+    <div class="content">
+      <% if authorized?(controller: :cards, action: :add_comment) %>
+        <% form_tag(murmur_from_card_path(:project_id => project_identifier, :number => renderable.number)) do %>
+          <textarea name="comment[content]" autofocus="true" data-users-url="<%= at_user_suggestion_path %>" data-at-login-autocomplete="true" placeholder="Hello @team, I'd like to say..."></textarea>
+          <input type="hidden" name="comment[replying_to_murmur_id]"></input>
+        <% end %>
+      <% end %>
+
+      <div class="murmurs-loading">
+        <i class="fa fa-refresh fa-spin fa-2x"></i>
+      </div>
+      <ul class="thread"></ul>
+    </div>
+
+  <% end %>
+
+</div>

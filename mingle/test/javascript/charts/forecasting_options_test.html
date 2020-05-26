@@ -1,0 +1,467 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Forecasting Options Test</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js"
+          type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+  <script src="../../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+
+  <script src="../../../public/javascripts/application.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery.scrollintoview.js"
+          type="text/javascript"></script>
+
+  <script src="../../../app/assets/javascripts/text_box.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/drop_down.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/parameter.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/section_helpers.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/forecasting_options.js" type="text/javascript"></script>
+
+  <script src="../test_assets/sinon-2.3.6.js" type="text/javascript"></script>
+  <script src="../test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+  <script src="../test_assets/qunit-phantom.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="../test_assets/qunit-1.21.0.css" type="text/css"/>
+
+</head>
+<body>
+<div id="qunit"></div>
+<div id="forecasting_options"></div>
+<script type="application/javascript">
+  var sandbox = sinon.sandbox.create(sinon.defaultConfig);
+  QUnit.module('Forecasting Options', {
+    beforeEach: function () {
+      this.seriesNames = [['Series Name 1', 'Series 1'], ['Series Name 2', 'Series 2'], ['Series Name 3', 'Series 3']];
+      this.startDate = new Date('01/24/2018');
+      this.container = $j('#forecasting_options');
+      this.onUpdateSpy = sandbox.spy();
+      sandbox.spy(MingleUI.EasyCharts, 'Parameter');
+    },
+    afterEach: function () {
+      sandbox.restore();
+      this.container.empty();
+    }
+  }, function () {
+    QUnit.module('Common Test', {
+      beforeEach: function () {
+        this.forecastingOptions = new MingleUI.EasyCharts.ForecastingOptions(this.container, {
+          seriesNames: this.seriesNames,
+          startDate: this.startDate
+        }, {
+          onUpdate: this.onUpdateSpy
+        })
+      }
+    });
+
+    QUnit.test('testShouldInitializeWithNameAndAppendToGivenContainer', function (assert) {
+      assert.equal(this.forecastingOptions.name, 'forecastingOptions');
+      assert.deepEqual(this.forecastingOptions.htmlContainer.get(0), this.container.find('.forecasting-options').get(0));
+    });
+
+    QUnit.test('testShouldInitializeScopeSeriesDropDown', function (assert) {
+      var scopeSeriesDropDownOptions = MingleUI.EasyCharts.Parameter.args[0],
+          scopeSeriesParameter = $j('#forecasting_options_scope_series_parameter');
+
+      assert.ok(scopeSeriesParameter.get(0));
+      assert.deepEqual(scopeSeriesDropDownOptions[1], {
+        input_type: 'dropdown',
+        label: 'Which series represents total scope in the chart?',
+        name: 'scope-series'
+      });
+      assert.equal(typeof scopeSeriesDropDownOptions[2].onUpdate, 'function');
+      assert.equal(scopeSeriesParameter.find('.selected-value').text(), '(not set)');
+      assert.equal(scopeSeriesParameter.find('li').size(), 3);
+      assert.equal(scopeSeriesParameter.find('.options-container li:first-child').text(), 'Series Name 1');
+      assert.equal(scopeSeriesParameter.find('.options-container li:nth-child(2)').text(), 'Series Name 2');
+      assert.equal(scopeSeriesParameter.find('.options-container li:last-child').text(), 'Series Name 3');
+    });
+
+    QUnit.test('testShouldInitializeCompletionSeriesDropDown', function (assert) {
+      var completionSeriesDropDownOptions = MingleUI.EasyCharts.Parameter.args[1],
+          completionSeriesParameter = $j('#forecasting_options_completion_series_parameter');
+
+      assert.ok(completionSeriesParameter.get(0));
+      assert.deepEqual(completionSeriesDropDownOptions[1], {
+        input_type: 'dropdown',
+        label: 'Which series represents completion in the chart?',
+        name: 'completion-series'
+      });
+      assert.equal(typeof completionSeriesDropDownOptions[2].onUpdate, 'function');
+      assert.equal(completionSeriesParameter.find('.selected-value').text(), '(not set)');
+      assert.equal(completionSeriesParameter.find('li').size(), 3);
+      assert.equal(completionSeriesParameter.find('.options-container li:first-child').text(), 'Series Name 1');
+      assert.equal(completionSeriesParameter.find('.options-container li:nth-child(2)').text(), 'Series Name 2');
+      assert.equal(completionSeriesParameter.find('.options-container li:last-child').text(), 'Series Name 3');
+    });
+
+    QUnit.test('testShouldRestrictCompletionSeriesOptionsWhenScopeSeriesIsSelected', function (assert) {
+      var scopeSeriesParameter = $j('#forecasting_options_scope_series_parameter'),
+          completionSeriesParameter = $j('#forecasting_options_completion_series_parameter');
+
+      scopeSeriesParameter.find('#scopeSeries_series_2').click();
+
+      assert.equal(scopeSeriesParameter.find('.selected-value').text(), 'Series Name 2');
+      assert.equal(scopeSeriesParameter.find('li').size(), 3);
+      assert.equal(scopeSeriesParameter.find('.options-container li:first-child').text(), 'Series Name 1');
+      assert.equal(scopeSeriesParameter.find('.options-container li:nth-child(2)').text(), 'Series Name 2');
+      assert.equal(scopeSeriesParameter.find('.options-container li:last-child').text(), 'Series Name 3');
+      assert.equal(completionSeriesParameter.find('.selected-value').text(), '(not set)');
+      assert.equal(completionSeriesParameter.find('.options-container li').size(), 2);
+      assert.equal(completionSeriesParameter.find('.options-container li:first-child').text(), 'Series Name 1');
+      assert.equal(completionSeriesParameter.find('.options-container li:last-child').text(), 'Series Name 3');
+    });
+
+    QUnit.test('testShouldTriggerOnUpdateWhenScopeSeriesIsSelected', function (assert) {
+      var scopeSeriesParameter = $j('#forecasting_options_scope_series_parameter');
+      assert.equal(this.onUpdateSpy.callCount, 0);
+
+      scopeSeriesParameter.find('#scopeSeries_series_2').click();
+
+      assert.equal(this.onUpdateSpy.callCount, 1);
+    });
+
+    QUnit.test('testShouldRestrictScopeSeriesOptionsWhenCompletionSeriesIsSelected', function (assert) {
+      var scopeSeriesParameter = $j('#forecasting_options_scope_series_parameter'),
+          completionSeriesParameter = $j('#forecasting_options_completion_series_parameter');
+
+      scopeSeriesParameter.find('#scopeSeries_series_2').click();
+
+      assert.equal(scopeSeriesParameter.find('.selected-value').text(), 'Series Name 2');
+      assert.equal(scopeSeriesParameter.find('li').size(), 3);
+      assert.equal(scopeSeriesParameter.find('.options-container li:first-child').text(), 'Series Name 1');
+      assert.equal(scopeSeriesParameter.find('.options-container li:nth-child(2)').text(), 'Series Name 2');
+      assert.equal(scopeSeriesParameter.find('.options-container li:last-child').text(), 'Series Name 3');
+      assert.equal(completionSeriesParameter.find('.selected-value').text(), '(not set)');
+      assert.equal(completionSeriesParameter.find('.options-container li').size(), 2);
+      assert.equal(completionSeriesParameter.find('.options-container li:first-child').text(), 'Series Name 1');
+      assert.equal(completionSeriesParameter.find('.options-container li:last-child').text(), 'Series Name 3');
+
+      completionSeriesParameter.find('#completionSeries_series_3').click();
+
+      assert.equal(scopeSeriesParameter.find('.selected-value').text(), 'Series Name 2');
+      assert.equal(scopeSeriesParameter.find('li').size(), 2);
+      assert.equal(scopeSeriesParameter.find('.options-container li:first-child').text(), 'Series Name 1');
+      assert.equal(scopeSeriesParameter.find('.options-container li:last-child').text(), 'Series Name 2');
+      assert.equal(completionSeriesParameter.find('.selected-value').text(), 'Series Name 3');
+      assert.equal(completionSeriesParameter.find('.options-container li').size(), 2);
+      assert.equal(completionSeriesParameter.find('.options-container li:first-child').text(), 'Series Name 1');
+      assert.equal(completionSeriesParameter.find('.options-container li:last-child').text(), 'Series Name 3');
+    });
+
+    QUnit.test('testShouldTriggerOnUpdateWhenCompletionSeriesIsSelected', function (assert) {
+      var completionSeriesParameter = $j('#forecasting_options_completion_series_parameter');
+      assert.equal(this.onUpdateSpy.callCount, 0);
+
+      completionSeriesParameter.find('#completionSeries_series_2').click();
+
+      assert.equal(this.onUpdateSpy.callCount, 1);
+    });
+
+    QUnit.test('testUpdateShouldUpdateScopeSeriesAndCompletionSeriesDropDownOptions', function (assert) {
+       var scopeSeriesParameter = $j('#forecasting_options_scope_series_parameter'),
+          completionSeriesParameter = $j('#forecasting_options_completion_series_parameter'),
+          seriesNames = [['Foo','f'], ['Bar','b'], ['Blah','bl']];
+
+      this.forecastingOptions.update({seriesNames: seriesNames});
+
+      assert.equal(scopeSeriesParameter.find('.selected-value').text(), '(not set)');
+      assert.equal(completionSeriesParameter.find('.selected-value').text(), '(not set)');
+      assert.equal(scopeSeriesParameter.find('.options-container li').size(), 3);
+      assert.equal(completionSeriesParameter.find('.options-container li').size(), 3);
+      seriesNames.forEach(function (name, index) {
+        assert.equal(scopeSeriesParameter.find('.options-container li span').get(index).innerHTML, seriesNames[index][0]);
+        assert.equal(completionSeriesParameter.find('.options-container li span').get(index).innerHTML, seriesNames[index][0]);
+      });
+    });
+
+    QUnit.test('testUpdateShouldKeepSelectedSeriesWhileUpdatingScopeSeriesAndCompletionSeriesDropDownOptions', function (assert) {
+      var scopeSeriesParameter = $j('#forecasting_options_scope_series_parameter'),
+          completionSeriesParameter = $j('#forecasting_options_completion_series_parameter'),
+          seriesNames = [['Series Name 1', 'Series 1'], ['New Series Name 2', 'Series 2'], ['New Series Name 3', 'Series 3']];
+
+      scopeSeriesParameter.find('#scopeSeries_series_2').click();
+
+      assert.equal(scopeSeriesParameter.find('.selected-value').text(), 'Series Name 2');
+
+      this.forecastingOptions.update({seriesNames: seriesNames});
+
+      assert.equal(scopeSeriesParameter.find('.selected-value').text(), 'New Series Name 2');
+      assert.equal(scopeSeriesParameter.find('.options-container li').size(), 3);
+      seriesNames.forEach(function (name, index) {
+        assert.equal(scopeSeriesParameter.find('.options-container li span').get(index).innerHTML, seriesNames[index][0]);
+      });
+      assert.equal(completionSeriesParameter.find('.selected-value').text(), '(not set)');
+      assert.equal(completionSeriesParameter.find('.options-container li').size(), 2);
+      assert.equal(completionSeriesParameter.find('.options-container li:first-child').text(), 'Series Name 1');
+      assert.equal(completionSeriesParameter.find('.options-container li:last-child').text(), 'New Series Name 3');
+    });
+
+    QUnit.module('Without Fixed Date Forecasting', {
+      beforeEach: function () {
+        this.forecastingOptions = new MingleUI.EasyCharts.ForecastingOptions(this.container, {
+          hasFixedDate: false,
+          seriesNames: this.seriesNames,
+          startDate: this.startDate
+        }, {
+          onUpdate: this.onUpdateSpy
+        })
+      }
+    });
+
+    QUnit.test('testShouldInitializeTargetReleaseDateTextBoxAndIsNotVisible', function (assert) {
+      var targetReleaseDateTextBoxOptions = MingleUI.EasyCharts.Parameter.args[2],
+          targetReleaseDateParameter = $j('#forecasting_options_target_release_date_parameter');
+
+      assert.notOk(targetReleaseDateParameter.is(':visible'));
+      assert.deepEqual(targetReleaseDateTextBoxOptions[1], {
+        input_type: 'textbox',
+        label: 'What is the target release date?',
+        name: 'target-release-date',
+        isDateType: true,
+        placeholder: 'Target Release Date',
+        config: {maxDate: '+5y'}
+      });
+      assert.equal(typeof targetReleaseDateTextBoxOptions[2].onUpdate, 'function');
+      assert.ok(targetReleaseDateParameter.find('input').get(0));
+      assert.equal(targetReleaseDateParameter.find('input').val(), '');
+    });
+
+    QUnit.test('testValueShouldIncludeScopeAndCompletionSeries', function (assert) {
+      var scopeSeriesParameter = $j('#forecasting_options_scope_series_parameter'),
+          completionSeriesParameter = $j('#forecasting_options_completion_series_parameter');
+
+      scopeSeriesParameter.find('#scopeSeries_series_2').click();
+      completionSeriesParameter.find('#completionSeries_series_3').click();
+
+      assert.deepEqual(this.forecastingOptions.value(), {
+        scopeSeries: 'Series Name 2',
+        completionSeries: 'Series Name 3'
+      });
+    });
+
+    QUnit.test('testIsValidShouldReturnTrueWhenBothScopeAndCompletionSeriesAreSelected', function (assert) {
+      var scopeSeriesParameter = $j('#forecasting_options_scope_series_parameter'),
+          completionSeriesParameter = $j('#forecasting_options_completion_series_parameter');
+
+      assert.notOk(this.forecastingOptions.isValid());
+
+      scopeSeriesParameter.find('#scopeSeries_series_2').click();
+
+      assert.notOk(this.forecastingOptions.isValid());
+
+      completionSeriesParameter.find('#completionSeries_series_3').click();
+
+      assert.ok(this.forecastingOptions.isValid());
+    });
+
+    QUnit.test('testUpdateShouldShowTheTargetReleaseDateCheckboxWhenHasFixedDateIsTrue', function (assert) {
+      var targetReleaseDateParameter = $j('#forecasting_options_target_release_date_parameter'),
+          seriesNames = [['Series Name 1', 'Series 1'], ['New Series Name 2', 'Series 2'], ['New Series Name 3', 'Series 3']];
+
+      assert.notOk(targetReleaseDateParameter.is(':visible'));
+
+      this.forecastingOptions.update({seriesNames: seriesNames, hasFixedDate: true, startDate: new Date('01/31/2018')});
+
+      assert.ok(targetReleaseDateParameter.is(':visible'));
+    });
+
+    QUnit.module('With Fixed Date Forecasting', {
+      beforeEach: function () {
+        this.datePickerSpy = sandbox.spy(jQuery.fn.init(), 'datepicker');
+        this.forecastingOptions = new MingleUI.EasyCharts.ForecastingOptions(this.container, {
+          hasFixedDate: true,
+          seriesNames: this.seriesNames,
+          startDate: this.startDate
+        }, {
+          onUpdate: this.onUpdateSpy
+        })
+      }
+    });
+
+    QUnit.test('testShouldInitializeTargetReleaseDateTextBoxAndItIsVisible', function (assert) {
+      var targetReleaseDateTextBoxOptions = MingleUI.EasyCharts.Parameter.args[2],
+          targetReleaseDateParameter = $j('#forecasting_options_target_release_date_parameter');
+
+      assert.ok(targetReleaseDateParameter.is(':visible'));
+      assert.deepEqual(targetReleaseDateTextBoxOptions[1], {
+        input_type: 'textbox',
+        label: 'What is the target release date?',
+        name: 'target-release-date',
+        isDateType: true,
+        placeholder: 'Target Release Date',
+        config: {maxDate: '+5y'}
+      });
+      assert.equal(typeof targetReleaseDateTextBoxOptions[2].onUpdate, 'function');
+      assert.ok(targetReleaseDateParameter.find('input').get(0));
+      assert.equal(targetReleaseDateParameter.find('input').val(), '');
+    });
+
+    QUnit.test('testShouldRestrictTargetReleaseDate', function (assert) {
+      assert.equal(this.datePickerSpy.callCount, 2);
+      assert.equal(this.datePickerSpy.args[1][0], "option");
+      assert.deepEqual(this.datePickerSpy.args[1][1], {
+        minDate: '25, Jan, 2018',
+        maxDate: undefined,
+        dateFormat: 'd, M, yy'
+      });
+    });
+
+    QUnit.test('testShouldTriggerOnUpdateOnTargetReleaseDateChange', function (assert) {
+      var targetReleaseDateParameter = $j('#forecasting_options_target_release_date_parameter');
+      assert.equal(this.onUpdateSpy.callCount, 0);
+      
+      targetReleaseDateParameter.find('input').val('01/31/2018');
+      targetReleaseDateParameter.find('input').trigger('blur');
+
+      assert.equal(this.onUpdateSpy.callCount, 1);
+    });
+
+    QUnit.test('testShouldTriggerOnUpdateOnTargetReleaseDateChange', function (assert) {
+      var targetReleaseDateParameter = $j('#forecasting_options_target_release_date_parameter');
+      assert.equal(this.onUpdateSpy.callCount, 0);
+
+      targetReleaseDateParameter.find('input').val('01/31/2018');
+      targetReleaseDateParameter.find('input').trigger('blur');
+
+      assert.equal(this.onUpdateSpy.callCount, 1);
+    });
+
+    QUnit.test('testUpdateShouldRestrictTargetReleaseDate', function (assert) {
+      var targetReleaseDateTextBox = MingleUI.EasyCharts.Parameter.returnValues[2].param;
+      sandbox.spy(targetReleaseDateTextBox, 'restrictDateRange');
+      assert.equal(targetReleaseDateTextBox.restrictDateRange.callCount, 0);
+
+      this.forecastingOptions.update({seriesNames: [], startDate: new Date('01/30/2018')});
+
+      assert.equal(targetReleaseDateTextBox.restrictDateRange.callCount, 1);
+    });
+
+    QUnit.test('testUpdateShouldUpdateTargetReleaseDateValueIfItIsLessThanNewStartDate', function (assert) {
+      var targetReleaseDateParameter = $j('#forecasting_options_target_release_date_parameter');
+
+      targetReleaseDateParameter.find('input').val('01/26/2018');
+      targetReleaseDateParameter.find('input').trigger('blur');
+
+      this.forecastingOptions.update({seriesNames: [], startDate: new Date('01/30/2018')});
+
+      assert.equal(targetReleaseDateParameter.find('input').val(), '31, Jan, 2018');
+    });
+
+    QUnit.test('testUpdateShouldOverrideOnlyGivenOption', function (assert) {
+      var scopeSeriesParameter = $j('#forecasting_options_scope_series_parameter'),
+          completionSeriesParameter = $j('#forecasting_options_completion_series_parameter'),
+          targetReleaseDateTextBox = MingleUI.EasyCharts.Parameter.returnValues[2].param,
+          updatedStartDate = new Date('01/31/2018');
+      sandbox.spy(targetReleaseDateTextBox, 'restrictDateRange');
+      assert.equal(targetReleaseDateTextBox.restrictDateRange.callCount, 0);
+      assert.equal(scopeSeriesParameter.find('.selected-value').text(), '(not set)');
+      assert.equal(completionSeriesParameter.find('.selected-value').text(), '(not set)');
+      assert.equal(scopeSeriesParameter.find('.options-container li').size(), 3);
+      assert.equal(completionSeriesParameter.find('.options-container li').size(), 3);
+      this.seriesNames.forEach(function (name, index) {
+        assert.equal(scopeSeriesParameter.find('.options-container li span').get(index).innerHTML, name[0]);
+        assert.equal(completionSeriesParameter.find('.options-container li span').get(index).innerHTML, name[0]);
+      });
+
+      this.forecastingOptions.update({startDate: updatedStartDate});
+
+      assert.equal(targetReleaseDateTextBox.restrictDateRange.callCount, 1);
+      assert.deepEqual(targetReleaseDateTextBox.restrictDateRange.args[0][0], new Date('02/01/2018'));
+
+      assert.equal(scopeSeriesParameter.find('.selected-value').text(), '(not set)');
+      assert.equal(completionSeriesParameter.find('.selected-value').text(), '(not set)');
+      assert.equal(scopeSeriesParameter.find('.options-container li').size(), 3);
+      assert.equal(completionSeriesParameter.find('.options-container li').size(), 3);
+      this.seriesNames.forEach(function (name, index) {
+        assert.equal(scopeSeriesParameter.find('.options-container li span').get(index).innerHTML, name[0]);
+        assert.equal(completionSeriesParameter.find('.options-container li span').get(index).innerHTML, name[0]);
+      });
+    });
+
+    QUnit.test('testUpdateShouldHideTargetReleaseDateTextBoxWhenHasFixedDateOptionIsFalse', function (assert) {
+      var targetReleaseDateParameter = $j('#forecasting_options_target_release_date_parameter');
+
+      assert.ok(targetReleaseDateParameter.is(':visible'));
+
+      this.forecastingOptions.update({hasFixedDate: false});
+
+      assert.notOk(targetReleaseDateParameter.is(':visible'));
+    });
+
+    QUnit.test('testValueShouldIncludeScopeAndCompletionSeriesAndTargetReleaseDate', function (assert) {
+      var scopeSeriesParameter = $j('#forecasting_options_scope_series_parameter'),
+          completionSeriesParameter = $j('#forecasting_options_completion_series_parameter'),
+          targetReleaseDateParameter = $j('#forecasting_options_target_release_date_parameter');
+
+      scopeSeriesParameter.find('#scopeSeries_series_2').click();
+      completionSeriesParameter.find('#completionSeries_series_3').click();
+
+      targetReleaseDateParameter.find('input').val('25, Jan, 2018');
+
+      assert.deepEqual(this.forecastingOptions.value(), {
+        scopeSeries: 'Series Name 2',
+        completionSeries: 'Series Name 3',
+        targetReleaseDate: '25, Jan, 2018'
+      });
+    });
+
+    QUnit.test('testValueShouldIncludeDefaultTargetRelaseDateIfNotSpecified', function (assert) {
+      var scopeSeriesParameter = $j('#forecasting_options_scope_series_parameter'),
+          completionSeriesParameter = $j('#forecasting_options_completion_series_parameter');
+
+      scopeSeriesParameter.find('#scopeSeries_series_2').click();
+      completionSeriesParameter.find('#completionSeries_series_3').click();
+
+      assert.deepEqual(this.forecastingOptions.value(), {
+        scopeSeries: 'Series Name 2',
+        completionSeries: 'Series Name 3',
+        targetReleaseDate: 'dd mmm yyyy'
+      });
+    });
+
+    QUnit.test('testIsValidShouldReturnTrueWhenBothSeriesAndTargetReleaseDateAreSet', function (assert) {
+      var scopeSeriesParameter = $j('#forecasting_options_scope_series_parameter'),
+          completionSeriesParameter = $j('#forecasting_options_completion_series_parameter'),
+          targetReleaseDateParameter = $j('#forecasting_options_target_release_date_parameter');
+
+      assert.notOk(this.forecastingOptions.isValid());
+
+      scopeSeriesParameter.find('#scopeSeries_series_2').click();
+
+      assert.notOk(this.forecastingOptions.isValid());
+
+      completionSeriesParameter.find('#completionSeries_series_3').click();
+
+      assert.notOk(this.forecastingOptions.isValid());
+
+      targetReleaseDateParameter.find('input').val('01/25/2018');
+      targetReleaseDateParameter.find('input').trigger('blur');
+
+      assert.ok(this.forecastingOptions.isValid());
+    });
+  });
+
+</script>
+</body>
+</html>

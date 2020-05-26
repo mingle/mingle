@@ -1,0 +1,9 @@
+try {
+	_assertEqual(1, 1);
+	$x = xparseInt("abcd"); // SHOULD FAIL ON THIS LINE ONLY
+	_log("Should not come here");
+} catch(e) {
+	_log("In catch");
+    _logExceptionAsFailure(e);
+}
+_log("Should come here 2");

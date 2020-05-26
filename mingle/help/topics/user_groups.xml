@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="User groups">
+  <section title="User groups">
+    <fragment file="user_groups_introduction" />
+  </section>
+  <section title="Also see...">
+    <bullets>
+      <item><cref topic="user_groups_page">Creating user groups</cref></item>
+      <item><cref topic="user_group_page">Managing team members in a user group</cref></item>
+      <item><cref topic="managing_project_team_members#manage_user_groups">Adding and removing user group members from the team page</cref></item>
+      <item><cref topic="card_transitions#who_can_execute">Restricting transitions to team members in a user group</cref></item>
+      <item><cref topic="mingle_api_user_group">User group API</cref></item>
+    </bullets>
+  </section>
+</topic>

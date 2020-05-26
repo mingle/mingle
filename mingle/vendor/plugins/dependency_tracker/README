@@ -1,0 +1,300 @@
+Mingle Dependency Tracker v1.1.1-14
+====================================
+
+About
+-----
+
+The Mingle Dependency Tracker allows dependencies between cards and
+projects to be recorded and tracked.
+
+The tool consists of three macros:
+
+Project macro (dependency-tracker-project)::
+    used to track all the dependencies within a project and to record
+    dependencies between cards in the project and on other projects
+
+Card macro (dependency-tracker-card)::
+    displays the dependencies relating to a single card and allows
+    that cards dependencies to be recorded
+
+Program macro (dependency-tracker-program)::
+    displays dependencies between projects
+
+Supported platforms
+~~~~~~~~~~~~~~~~~~~
+Mingle 3.1, 3.2, 3.3
+
+Use
+---
+
+The three macros differ somewhat in the way they work, but all have
+the same general structure and behaviour.
+
+To view the dependencies of a card, choose it in the central
+selector. The right-hand table shows the cards that the selected on
+depends on; the left-hand table shows the cards that depend on it.
+
+Cards are colored according to whether their dependencies have been
+met. Cards with unmet dependencies are colored red, those with met
+dependencies and no dependencies at all are colored green.
+
+Dependencies can be created using the form below the selector. This
+form can be used to create dependencies on other cards in the same
+project, or on cards in other projects. Duplicate and self-referential
+dependencies are disallowed.
+
+Configurability
+~~~~~~~~~~~~~~
+A number of aspects of the macros can be configured. These include:
+
+* the status that a card as to reach in order for a dependency to be
+  considered met
+* the card properties that are displayed
+* the projects on which dependencies may be recorded
+* the card types to be handled by the macro
+* the set of cards that the macro should report on
+
+See the section "Macro reference", below, for details.
+
+The different macros
+~~~~~~~~~~~~~~~~~~~~
+The card macro should be placed in the description of a card. It
+reports on the dependencies involving that card and allows new
+dependencies for that card to be recorded.
+
+The project macro should be placed on a wiki page. It reports on all
+dependencies within the project and on dependencies on other
+projects. It allows dependencies of any card in the project to be
+recorded.
+
+The program macro should be placed on a wiki page. It is designed to
+be used in the context of program-level reporting, possibly in a
+dedicated program reporting project. It reports only on dependencies
+between projects. It is not possible to record dependencies using the
+program macro.
+
+Macro reference
+---------------
+
+This section details the parameters that the macros take. Each should
+appear at most once. Examples of each one are given below.
+
+met::
+  MQL condition specifying when a dependency should be considered to
+  be met. Mandatory.
+
+  met: Status = Accepted
+  met: (Type = Story AND 'Story Status' >= Accepted) OR (Type = Bug AND 'Bug Status' >= Closed)
+
+properties::
+  A list of additional properties that will be displayed in the
+  dependency table. Optional.
+
+  properties: [Status, 'Card Owner', Type]
+  properties: Status
+
+card-type::
+  The card type, or types, to display in the tool. Optional. Defaults
+  to "Story" in the project and program macros and the type of the
+  current card in the card macro.
+
+  card-type: Story
+  card-type: [Story, Task, Defect]
+
+filter::
+  MQL condition which restricts the cards displayed in the
+  tool. Optional. No restriction is applied by default.
+
+  filter: Release = 'Release 3'
+  filter: Component = UI AND Status != Closed
+
+projects::
+  Program mode only (see section "Standalone and program mode",
+  below). The identifiers of the projects that make up the
+  program. Optional. Includes the current project by default.
+
+  projects: [mobile_client, security, core_services]
+
+dependency-project::
+  Program mode only (see section "Standalone and program mode",
+  below). The identifier of the project where dependencies are
+  stored. Optional. Defaults to the current project.
+
+  dependency-project: program_reporting
+
+This example macro invocation includes all the parameters:
+----------------------------------------------------
+{{
+  dependency-tracker-project
+    met: Status = Accepted
+    properties: [Type, Status]
+    card-type: [Story, Defect]
+    filter: Release = 'Release 3'
+    projects: [mobile_client, security, core_services]
+    dependency-project: program_reporting
+}}
+----------------------------------------------------
+
+For more examples, see the section "Setting up the macros", below.
+
+Installation and configuration
+------------------------------
+
+In order to start using the Dependency Tracker in your project you
+must:
+
+* install the tool, if necessary
+* configure the project
+* configure the project level macro
+* configure the card level macro
+
+Installation
+~~~~~~~~~~~~
+The tool lives in your Mingle installation's `vendor/plugins`
+directory, in a sub-directory called `dependency_tracker`.
+
+To install:
+
+* delete any existing `dependency_tracker` sub-directory
+* unpack the archive into `vendor/plugins`
+* restart your Mingle server
+
+Standalone and program mode
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The Dependency Tracker can operate in two different modes. For a
+single, standalone project (standalone mode) the dependencies are
+stored within the project. For a multi-project program with
+cross-project dependencies (program mode), all dependencies (between
+and within projects) are stored in a single project which we will
+refer to as the dependency project.
+
+You can chose any project on your Mingle instance to be the dependency
+project. Everyone who uses the Dependency Tracker macro needs to be a
+full team member of the dependency project.
+
+If you are using Mingle to manage a multi-project program of work, you
+may have a dedicated program-reporting project. If so, we recommend
+using this project as the dependency project; otherwise we recommend
+creating a dedicated dependency project.
+
+It is possible to have multiple projects on the same Mingle instance
+using the Dependency Tracker in standalone mode. It is only necessary
+to use it in program mode if you wish to record cross-project
+dependencies.
+
+It is possible to migrate projects from standalone mode to program
+mode (see the section "Migrating from standalone to program mode",
+below); but if you think that you will want to migrate in the future,
+then it is a good idea to use a single dependency project now, to ease
+the later migration.
+
+NOTE: In program mode, all users of the Dependency Tracker must be
+read only (or full) members all projects in the program. In order to
+create dependencies, users must be full members of the dependency
+project.
+
+Configuring the project
+~~~~~~~~~~~~~~~~~~~~~~~
+In standalone mode, the following configuration needs to be applied to
+each standalone project that uses the Dependency Tracker. In program
+mode, the configuration only needs to be applied to the dependency
+project.
+
+* create a property called `Depender` of type `any text`
+* create a property called `Dependee` of type `any text`
+* create a card type called `Dependency` with types `Depender` and
+  `Dependee`
+
+(Card type and property names are case sensitive.)
+
+Setting up the macros
+~~~~~~~~~~~~~~~~~~~~~
+See the section "Macro reference", above, for details of the macro
+parameters.
+
+You should create a wiki page to manage your dependencies. Put the
+project macro into the body of the page.
+
+---------------------------------
+{{
+  dependency-tracker-project
+    met: Status = Accepted
+    card-type: [Story, Defect]
+    properties: [Type, Status]
+    filter: Release = 'Release 3'
+}}
+---------------------------------
+
+You may wish to create different instances of the macro for managing
+the dependencies in different releases.
+
+You can optionally put the card macro into the description of every
+card. The easiest way to do this is to include it in the default
+description of appropriate card types.
+
+-------------------------------
+{{
+  dependency-tracker-card
+    met: Status = Accepted
+    properties: [Status, Owner]
+}}
+-------------------------------
+
+In program mode, the program macro can be placed in a wiki page in
+your program reporting project.
+
+----------------------------------------------------
+{{
+  dependency-tracker-program
+    met: Status = Accepted
+    projects: [mobile_client, security, core_services]
+    dependency-project: program_reporting
+}}
+----------------------------------------------------
+
+In program mode, the `projects` and `dependency-project` parameters
+are also required in the project and card macros.
+
+Migrating from standalone to program mode
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+CAUTION: You should back up your project before doing the migration.
+
+When operating in program mode, the Dependency Tracker stores all of
+the dependencies in a single project, which needs to be configured
+specially. Please read the section "Standalone and program mode",
+above, before doing the migration.
+
+Before migrating your dependency data you must prepare the dependency
+project, as specified in section "Configuring the project", above.
+
+Repeat the following steps for every project that you want to unite
+into a program.
+
+1. Export the dependency cards from the single project
+  * go to `All` tab
+  * filter cards by type `Dependency`
+  * click `Export to Excel` (do not include card descriptions)
+  * copy data into Excel, following instructions on the page
+  * delete all columns from the spreadsheet except `Type`, `Name`,
+    `Dependee` and `Depender`
+
+2. Import the dependency cards into the dependency project
+  * go to `All` tab
+  * select `Import from Excel`
+  * copy data from Excel, follow instructions on the page
+
+3. Modify the macro parameters
+  * add `dependency-project` parameter specifying the dependency
+    project's identifier
+  * add `projects` parameter specifying the identifiers of all
+    projects in the program
+
+4. Cleaning up old data in the single project
+  * carry out these steps if you are sure that you don't need to
+    access the history of your dependency data
+  * delete all cards of type `Dependency`
+  * delete the `Depender` and `Dependee` properties
+  * delete the `Dependency` card type
+
+You should also set up the program macro as specified in the section
+"Setting up the macros", above.

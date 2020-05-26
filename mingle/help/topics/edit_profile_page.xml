@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Edit profile page">
+	<section title="What you can do on this page">
+	<p>The Edit profile page lets you view and change details of your Mingle sign-in profile, and also the setting of your <cref topic="explore_mingle_page">Explore Mingle tab</cref>.</p>
+	<note><cref topic="user_roles#mingle_administrator">Mingle administrators</cref> can edit any user's profile</note>
+	</section>
+	<section title="Edit your profile details" collapsed = 'true'>
+		<p>You can update the following information:</p>
+		<bullets>
+			<item>Personal Icon</item>
+			<item>Sign-in name</item>
+			<item>Display name</item>
+			<item>Email address</item>
+			<item>Jabber user name</item>
+			<item>Version control name</item>
+		</bullets>
+		<p><screenshot src="resources/images/edit_profile.png" /></p>
+		<note>You can use <strong>&#43;</strong>, <strong>&#46;</strong>, <strong>&#45;</strong>, <strong>&#64;</strong> and <strong>&#95;</strong> in your display name.</note>
+	</section>
+	<section title="Non-essential profile details" file="non_essential_profile_details" collapsed="true"/>
+	<section title="Hide/Show Explore Mingle tab" collapsed = 'true'>
+		<p>You can choose to show or hide your <cref topic="explore_mingle_page">Explore Mingle tab</cref> by using the <strong>Display "Explore Mingle"</strong> checkbox.</p>
+		<screenshot alttext="Select Explore Mingle checkbox" src="resources/images/edit_profile_explore_mingle_checkbox.png" />
+	</section>
+	<section title="Also see...">
+		<bullets>
+			<item><cref topic="user_roles">About Mingle user roles</cref></item>
+			<item><cref topic="creating_user_profiles">Creating users (Mingle administrator)</cref></item>
+			<item><cref topic="managing_project_team_members">Managing project team members (project administrator)</cref></item>
+			<item><cref topic="managing_your_user_profile">Managing your user profile</cref></item>
+		</bullets>
+	</section>
+</topic>
+
+

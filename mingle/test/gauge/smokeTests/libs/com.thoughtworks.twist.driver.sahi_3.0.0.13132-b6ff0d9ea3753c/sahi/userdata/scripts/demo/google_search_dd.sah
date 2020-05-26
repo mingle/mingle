@@ -1,0 +1,44 @@
+function setUp(){
+	_navigateTo("http://www.google.co.in");
+	_wait(1000);
+}
+
+function testClickOnDDWorks(){
+	_setValue(_textbox("q"), "sahi dow");
+	_assert(_isVisible(_div("sahi download")));
+	_click(_div("sahi download"));
+	_assertExists(_link("/Sahi - Web Automation and Test Tool/"));
+}
+
+function testKeyDownArrowWorks(){
+	_setValue(_textbox("q"), "sahi dow");
+	_assert(_isVisible(_div("sahi download")));
+	_keyDown(_textbox("q"), [40,0]);
+	_keyUp(_textbox("q"), [40,0]);
+	_assertEqual("sahi download", _textbox("q").value);
+}
+
+function testKeyDownArrowWorksWithoutExplicitKeyCodes(){
+	_setValue(_textbox("q"), "sahi dow");
+	_assert(_isVisible(_div("sahi download")));
+	_keyDown(_textbox("q"), 40);
+	_keyUp(_textbox("q"), 40);
+	_assertEqual("sahi download", _textbox("q").value);
+}
+
+function xtestEnterWorks(){
+	_setValue(_textbox("q"), "sahi dow");
+	_assert(_isVisible(_div("sahi download")));
+	_keyDown(_textbox("q"), [40,0]);
+	_keyUp(_textbox("q"), [40,0]);
+	_keyDown(_textbox("q"), [13,0]);
+	_keyPress(_textbox("q"), [13,0]);
+	_keyUp(_textbox("q"), [13,0]);
+	_assertExists(_link("/Sahi - Web Automation and Test Tool/"));
+}
+
+//for(var i=0; i<10; i++){
+//	setUp();
+//	testKeyDownArrowWorks();
+//}
+_runUnitTests();

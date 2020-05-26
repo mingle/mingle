@@ -1,0 +1,60 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% tree_config = @view.workspace.tree_configuration || @tree %>
+
+<% cache_to(Keys::TreeFilter.new, tree_config, view.filter_tags) do %>
+
+  <% form_tag({:action => view.action, :controller => "cards"}, {
+      :id => 'tree_filter',
+      :onsubmit => "return new FiltersForm(this, 'tree-filter-spinner').submit()"}) do -%>
+
+    <p class="section-heading"><b>Do not</b> show these types of cards:<%= spinner(:id => 'tree-filter-spinner', :style => 'display: none; align: right;') %></p>
+    <% tree_config.all_card_types.each do |card_type| -%>
+      <p class="indent">
+        <%= check_box_tag 'excluded[]', card_type.name, nil, :onclick => "$('tree_filter').onsubmit()", :id => "exclude-type-#{card_type.name}", :class => 'excluded-card-type-checkbox' %><span id='excluded-card-type-name-<%= card_type.id %>' class='excluded-card-type-name'><%= h card_type.name.pluralize %></span>
+      </p>
+    <% end -%>
+
+    <% tree_config.all_card_types.each do |card_type| -%>
+      <%= render :partial => 'cards/tree_filter', :locals => {:tree_config => tree_config, :card_type => card_type} %>
+    <% end -%>
+
+    <%= render :partial => 'cards/card_list_filter_tags', :locals => {:tag_names => view.filter_tags, :tag_label => 'And all rows by these tags:' } %>
+  <% end -%>
+
+  <% script = tree_config.all_card_types.collect do |card_type|
+      %Q{
+        cardTypes = [];
+        cardTypes.push(#{to_js_card_type(card_type, :tree => tree_config)});
+        cardTypeDefinition = new CardTypeDefinition('Type', [['is', 'is'], ['is not', 'is not']], cardTypes, false, #{"tf_#{card_type.name.downcase}[]".to_json});
+        window.mingle_filters_#{card_type.id} = new Filters(cardTypeDefinition, 'tree_filter', '#{card_type.html_id}-filter-widget', '#{image_path("shared/icons/icon_close_14.png")}', '#{image_path("icon-calendar.png")}');
+        window.mingle_filters_#{card_type.id}.hideCardTypeFilter = true;
+      }
+    end.join
+  -%>
+  <%= javascript_with_rescue script -%>
+
+<% end -%>
+<%= register_xhr_refreshable_card_list_view_form('tree_filter', :exclude => tree_filter_parameters_to_exclude(tree_config) + [:excluded, :tagged_with, :all_cards_selected, :page]) %>
+
+<% script = tree_config.all_card_types.collect do |card_type|
+  %Q{
+      $("exclude-type-#{card_type.name}").checked = #{view.filters.excluded?(card_type)}
+      window.mingle_filters_#{card_type.id}.addFilters(#{to_js_filters((defined?(view) && view) ? view.filters.filters_for_type(card_type) : Filters.new(@project, ""))});
+    }
+  end.join -%>
+<%= javascript_with_rescue script -%>

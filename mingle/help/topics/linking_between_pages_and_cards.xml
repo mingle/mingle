@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE section SYSTEM "mingle_help.dtd">
+<section title="Linking between pages and cards">
+    <p>Mingle pages can be linked to from both card descriptions and other Mingle pages in your project by typing the page name enclosed in double square brackets: <markup>[[page_name]]</markup></p>
+    <p>You can also <strong>link to specific cards</strong> from within both cards and pages by typing in the card number prefixed by a <cref topic="card_keywords">card keyword</cref>: <markup>#123</markup></p>
+    <p>In this case, the card keyword is the <strong>#</strong> symbol, however the actual prefix you use in front of card numbers depends on the card keywords you setup.</p>
+    <note>
+		<bullets>
+			<item>When typing the above links inline in edit mode, they will appear as normal text. They will become links when you save your page or card.</item>
+			<item>You can also reference Mingle pages directly using URL's: <url>http://mingle.yourcompany.com/projects/your_project/wiki/new_page</url>, however you will still have to sign in to Mingle in order view the referenced page.</item>
+		</bullets>	
+	</note>
+	<p>Read more about <cref topic="markup_linking">inline links</cref> and <cref topic="cross_project_card_page_linking">cross project linking</cref> to learn how to link to additional resources in your and other Mingle projects.</p>
+</section>

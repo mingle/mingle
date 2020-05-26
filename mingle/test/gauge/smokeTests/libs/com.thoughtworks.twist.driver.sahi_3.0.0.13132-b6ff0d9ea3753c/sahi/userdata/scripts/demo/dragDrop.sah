@@ -1,0 +1,9 @@
+function testDragDrop($draggable, $droppable, $result) {
+	_dragDrop($draggable, $droppable);
+	_assertExists($result);
+	_assertNotExists($droppable);
+}
+
+_navigateTo("http://www.snook.ca/technical/mootoolsdragdrop/");
+testDragDrop(_div("Drag me"), _div("Item 1"), _div("dropped"));
+testDragDrop(_div("Drag me"), _div("Item 2"), _div("dropped[1]"));

@@ -1,0 +1,116 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+#header-pills {
+
+  padding: 0;
+  padding-top: 4px;
+  background: $HEADER_BACKGROUND_COLOR;
+  background-repeat: repeat-x;
+  height: 34px;
+
+  ul {
+
+    margin: 0;
+
+    li.header-menu-pill {
+
+      list-style: none;
+      float: left;
+      margin: 0 5px 0 0;
+      height: 30px;
+      padding: 2px;
+
+      a {
+        color: $MINGLE_SECONDARY_COLOR;
+        display: block;
+        font-size: 12px;
+        line-height: 28px;
+        height: 28px;
+        padding: 0 15px;
+      }
+
+      &:hover, &.selected {
+        background-color: $MINGLE_SECONDARY_COLOR;
+
+        a {
+          color: $MINGLE_SECONDARY_CONTRAST_COLOR;
+        }
+      }
+
+    }
+
+    .export-banner {
+      background: $MINGLE_PRIMARY_COLOR;
+      color: $MINGLE_SECONDARY_CONTRAST_COLOR;
+      display: block;
+      font-size: 12px;
+      line-height: 31px;
+      height: 28px;
+      padding: 0 15px !important;
+      &:hover, &.selected {
+        background: $MINGLE_PRIMARY_COLOR !important;
+        a {
+          color: $MINGLE_SECONDARY_CONTRAST_COLOR;
+        }
+      }
+    }
+
+    .coming-soon-banner {
+      padding: 3px;
+      background-color: white;
+      position: relative;
+      top: 7px;
+      left: -8px;
+      color: black
+    }
+
+    .coming-soon-banner:before {
+      content:"";
+      position: absolute;
+      top:0;
+      right:100%;
+      width:0;
+      height:0;
+      border-top-color:transparent;
+      border-right-color:white;
+      border-bottom-color:transparent;
+      border-left-color:transparent;
+      border-top-width:.6rem;
+      border-right-width:.6rem;
+      border-bottom-width:.6rem;
+      border-left-width:.6rem;
+      border-style:solid;
+    }
+
+    #admin-drop-down_menu_items {
+      .show-all-project-admins {
+        span {
+          padding: 5px 10px;
+          display: inline-block;
+          color: black;
+        }
+        input {
+          float: right;
+          position: relative;
+          bottom: 20px;
+          right: 10px;
+        }
+      }
+    }
+
+  }
+}

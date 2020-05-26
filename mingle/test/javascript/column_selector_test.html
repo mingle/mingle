@@ -1,0 +1,309 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>JavaScript unit test file</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/alignment.js" type="text/javascript"></script>
+
+  <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+  <script src="test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+
+  <script src="test_assets/unittest.js" type="text/javascript"></script>
+  <script src="test_assets/unittest_ext.js" type="text/javascript"></script>
+
+
+  <script src="../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/controls.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/builder.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+
+  <script src="../../public/javascripts/application.js" type="text/javascript"></script>
+
+  <script src="../../public/javascripts/card_list_view/rails_params.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/card_list_view/params_change_listener.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/column_selector.js" type="text/javascript"></script>
+
+  <link rel="stylesheet" href="assets/unittest.css" type="text/css" />
+  <link rel="stylesheet" href="test_assets/unittest.css" type="text/css" />
+</head>
+<body>
+
+<div id="content">
+
+  <div id="header">
+    <h1>JavaScript unit test file</h1>
+    <p>
+      This file tests the ColumnSelector class in <strong>column_selector.js</strong>.
+    </p>
+  </div>
+  <!-- Log output -->
+  <div id="testlog"> </div>
+
+  <div style ='border:solid 1px' id='sandbox'>
+    <h3> sandbox: </h3>
+    <a id='open_link'>open link</a>
+    <div id='column_selector' style="display:none">
+      <input id="selectAllCheckBox" name="selectAll" type="checkbox" value="selectAll"> Select All
+      <span id='spinner' class='spinner' style='display:none' > spinner </span>
+      <ul>
+        <li>
+          <input name="columns" type="checkbox" value="Status"><span>Status</span>
+          <input name="columns" type="checkbox" value="Priority"><span>Priority</span>
+          <input name="columns" type="checkbox" value="Co,Co"><span>Co,Co</span>
+          <input name="columns" type="checkbox" value="lu&gt;lu"><span>lu&gt;lu</span>
+          <input name="columns" type="checkbox" value="Created By"><span>Created By</span>
+        </li>
+      </ul>
+      <input type="button" value="Apply"/>
+    </div>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+// <![CDATA[
+  SAND_BOX_CONTENT = $('sandbox').innerHTML;
+
+  ServerStub = Class.create({
+    request: function(url, options) {
+      this.lastRequestUrl = url;
+      this.lastRequestOptions = options;
+    },
+  })
+
+  new Test.Unit.Runner({
+
+    setup: function() {
+      $('sandbox').innerHTML = SAND_BOX_CONTENT;
+      serverStub = new ServerStub();
+
+      columnSelector = new MultipleColumnsSelector('column_selector', 'open_link', 'http://example.com/list', serverStub);
+      container = $('column_selector');
+      selectAllCheckBox = $('selectAllCheckBox');
+      allColumns = container.select("input[type='checkbox'][name='columns']").map(function(column){
+        return column.value;
+      });
+
+      this.getCheckBox = function(value) {
+        return container.select("input[type='checkbox'][value='" + value + "']").first();
+      };
+
+      this.checkColumn = function(value){
+        this.getCheckBox(value).checked = true;
+        Event.trigger(this.getCheckBox(value), 'click');
+      };
+
+      this.uncheckColumn = function(value){
+        this.getCheckBox(value).checked = false;
+        Event.trigger(this.getCheckBox(value), 'click');
+      };
+
+      this.clickApplyButton = function(){
+        Event.trigger(container.select("input[type='button']").first(), 'click');
+      };
+    },
+
+    teardown: function() {
+      columnSelector.destroy();
+    },
+
+    testShouldCheckColumnsOnParamsUpdate: function() { with(this) {
+      columnSelector.onParamsUpdate(new RailsParams({'columns': 'Priority'}));
+      assert(this.getCheckBox('Priority').checked);
+      assert(!this.getCheckBox('Status').checked);
+    }},
+
+    testShouldIncludeColumnNameInRequestUrlWhenAddColumn: function(){with(this){
+      this.checkColumn('Status');
+      this.clickApplyButton();
+      assertEqual('http://example.com/list?columns=Status', serverStub.lastRequestUrl);
+    }},
+
+    testShouldNotShowAnyTickColumnsWhenNoColumnVisible: function() { with(this) {
+      columnSelector.onParamsUpdate(new RailsParams({}));
+      assert(!this.getCheckBox('Status').checked)
+      assert(!this.getCheckBox('Priority').checked)
+    }},
+
+    testShouldDoGetRequestOnAddColumn: function() { with(this) {
+      this.clickApplyButton();
+      assertEqual('GET', serverStub.lastRequestOptions['method']);
+    }},
+
+    testShouldClearColumnNameInRequestUrlWhenRemoveColumn: function() { with(this) {
+      columnSelector.onParamsUpdate(new RailsParams({'columns': 'Status'}));
+      this.getCheckBox('Status').checked = false;
+      this.clickApplyButton();
+      assertEqual('http://example.com/list', serverStub.lastRequestUrl);
+    }},
+
+    testShouldIncludeMultipleColumnNamesInRequestUrlWhenAddColumns: function(){ with(this){
+      columnSelector.onParamsUpdate(new RailsParams({'columns': 'Status'}));
+      this.checkColumn('Priority');
+      this.clickApplyButton();
+      assertEqual('http://example.com/list?columns=Status%2CPriority', serverStub.lastRequestUrl);
+    }},
+
+    testShouldKeepAnotherParamsWhenAddRemoveColumn: function(){ with(this){
+      columnSelector.onParamsUpdate(new RailsParams({'columns': 'Status', 'page': '2'}));
+      this.checkColumn('Priority');
+      this.clickApplyButton();
+      assertEqual('http://example.com/list?columns=Status%2CPriority&page=2', serverStub.lastRequestUrl);
+    }},
+
+    testShouldStopObservingAfterDestroyed: function(){ with(this){
+      columnSelector.destroy();
+      this.clickApplyButton();
+      assertNull(serverStub.lastRequestUrl);
+    }},
+
+    testShouldDestroySlidedownPanelAfterDestroyed: function() { with(this) {
+      var slideDownPanelDestroied = false;
+      columnSelector.slideDownPanel.destroy = function() { slideDownPanelDestroied = true };
+      columnSelector.destroy();
+      assert(slideDownPanelDestroied);
+    }},
+
+    testShouldShowSpinnerBeforeAddColumn: function() { with(this) {
+      columnSelector.container.show();
+      this.clickApplyButton();
+      assertVisible($('spinner'));
+    }},
+
+    testShouldBeAbleToRecognizeColumnNameWithComma: function() { with(this) {
+      columnSelector.onParamsUpdate(new RailsParams({'columns': 'Co\\,Co'}));
+      assert(this.getCheckBox("Co,Co").checked);
+    }},
+
+    testShouldBeAbleToRecognizeColumnNameWithHtmlTag: function() { with(this) {
+      columnSelector.onParamsUpdate(new RailsParams({'columns': 'lu>lu'}));
+      assert(this.getCheckBox("lu>lu").checked);
+    }},
+
+    testShouldCleanOutSortWhenSortIsNotInVisibleColumnList: function() { with(this) {
+      columnSelector.onParamsUpdate(new RailsParams({'columns': 'Priority', 'sort': 'Priority'}));
+      this.uncheckColumn('Priority');
+      this.clickApplyButton();
+      assert(!serverStub.lastRequestUrl.include('sort'));
+    }},
+
+    // bug #7351
+    testShouldNeverCleanOutNameSort: function() { with(this) {
+      columnSelector.onParamsUpdate(new RailsParams({'columns': 'Priority', 'sort': 'Name'}));
+      this.checkColumn('Status');
+      this.clickApplyButton();
+      assert(serverStub.lastRequestUrl.include('sort=Name'));
+    }},
+
+    // bug #7351
+    testShouldNeverCleanOutNumberSort: function() { with(this) {
+      columnSelector.onParamsUpdate(new RailsParams({'columns': 'Priority', 'sort': 'Number'}));
+      this.checkColumn('Status');
+      this.clickApplyButton();
+      assert(serverStub.lastRequestUrl.include('sort=Number'));
+    }},
+
+    testShouldCleanOutAllCardsSelectedOnAddColumn: function() { with(this) {
+      columnSelector.onParamsUpdate(new RailsParams({'all_cards_selected': 'true'}));
+      this.checkColumn('Priority');
+      this.clickApplyButton();
+      assert(!serverStub.lastRequestUrl.include('all_cards_selected'));
+    }},
+
+    testShouldCleanOutAllCardsSelectedOnRemoveColumn: function() { with(this) {
+      columnSelector.onParamsUpdate(new RailsParams({'all_cards_selected': 'true', 'columns': 'Priority' }));
+      this.uncheckColumn('Priority');
+      this.clickApplyButton();
+      assert(!serverStub.lastRequestUrl.include('all_cards_selected'));
+    }},
+
+    testShouldMatchColumnNameIgnoreCase: function() { with(this) {
+      columnSelector.onParamsUpdate(new RailsParams({'columns': 'priority' }));
+      assert(this.getCheckBox('Priority').checked);
+    }},
+
+    testShouldOrderByDisplayedColumnOrderIfAddingMultipleColumns: function() { with(this) {
+      this.checkColumn('Priority');
+      this.checkColumn('Created By');
+      this.clickApplyButton();
+      assertEqual('http://example.com/list?columns=Priority%2CCreated%20By', serverStub.lastRequestUrl);
+    }},
+
+    testShouldObeyColumnAddingOrderInRequestUrl: function() { with(this) {
+      columnSelector.onParamsUpdate(new RailsParams({'columns': 'Priority'}));
+      this.checkColumn('Status');
+      this.clickApplyButton();
+      assertEqual('http://example.com/list?columns=Priority%2CStatus', serverStub.lastRequestUrl);
+    }},
+
+    testShouldObeyColumnAddingOrderInRequestUrlWhenAddingMultipleColumns: function() { with(this) {
+      columnSelector.onParamsUpdate(new RailsParams({'columns': 'Priority'}));
+      this.checkColumn('Status');
+      this.checkColumn('Co,Co')
+      this.clickApplyButton();
+      assertEqual('http://example.com/list?columns=Priority%2CStatus%2CCo%5C%2CCo', serverStub.lastRequestUrl);
+    }},
+
+    testSelectAllShouldBeCheckedWhenAllColumnsWereSelected: function(){with(this){
+      allColumns = allColumns.map(function(column){
+        return column.replace(",", "\\,");
+      })
+
+      columnSelector.onParamsUpdate(new RailsParams({'columns': allColumns.join(',')}));
+      this.clickApplyButton();
+      assert(selectAllCheckBox.checked)
+    }},
+
+    testShouldRememberThePreviousOrderWhenAddColumnMoreThanTwice: function(){with(this){
+      columnSelector.onParamsUpdate(new RailsParams({'columns': 'lu>lu,Priority'}));
+      this.checkColumn('Status');
+      this.clickApplyButton();
+      assertEqual('http://example.com/list?columns=lu%3Elu%2CPriority%2CStatus', serverStub.lastRequestUrl)
+    }},
+
+    testShouldResetColumnsToInitialStateWhenUserClickOutsideTheSelector: function() { with(this) {
+      allColumns = allColumns.map(function(column){
+        return column.replace(",", "\\,");
+      })
+
+      columnSelector.onParamsUpdate(new RailsParams({'columns': allColumns.join(',')}));
+      this.clickApplyButton();
+      columnSelector.container.show();
+      this.uncheckColumn('Status');
+      Event.trigger(document.body, 'click');
+      assert(this.getCheckBox('Status').checked);
+    }},
+
+    testShouldShowSelectedColumnsAfterClickingApply: function() { with(this) {
+      columnSelector.onParamsUpdate(new RailsParams({'columns': 'Priority'}));
+      Event.trigger(document.body, 'click');
+      assert(this.getCheckBox('Priority').checked);
+    }}
+
+
+  }, {testLog: "testlog", test: ''}).run;
+// ]]>
+</script>
+</body>
+</html>

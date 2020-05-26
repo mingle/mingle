@@ -1,0 +1,5 @@
+This product includes the following software whose respective licenses as specified in the sahi/docs/licenses directory.
+1) Rhino (JS Engine)
+2) Apache Commons Codec Library
+
+This product also uses IzPack for building its installer.

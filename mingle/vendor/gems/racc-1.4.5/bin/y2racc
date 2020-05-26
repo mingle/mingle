@@ -1,0 +1,296 @@
+#!/usr/local/bin/ruby
+#
+# y2racc  --  yacc to racc converter
+#
+# Copyright (c) 1999-2005 Minero Aoki
+#
+# This program is free software.
+# You can distribute/modify this program under the terms of
+# the GNU LGPL, Lesser General Public Lisence version 2.1.
+# For details of the GNU LGPL, see the file "COPYING".
+#
+
+require 'getopts'
+require 'strscan'
+StringScanner.must_C_version
+
+Y2RACC_VERSION = '1.1.1'
+
+def usage(status = 1)
+  $stderr.puts "#{File.basename $0}: wrong option" unless status == 0
+  (status == 0 ? $stdout : $stderr).print(<<EOS)
+Usage: y2racc [-AC] [-c classname] [-o outfile] yaccfile
+    -o <file>    name of output file  [r.<inputfile>]
+    -c <name>    name of parser class [MyParser]
+    -u           output also user code (%%....)
+    -H           cut off header (%{....%})
+    -A           cut off actions
+    -U           cut off user code (%%....) (default)
+EOS
+  exit status
+end
+
+def main
+  getopts('uAHU', 'c:', 'o:', 'version', 'copyright', 'help') or usage 1
+  $OPT_u = false if $OPT_U
+  if $OPT_version
+    puts "y2racc version #{Y2RACC_VERSION}"
+    exit 0
+  end
+  if $OPT_copyright
+    puts 'Copyright (c) 1999-2005 Minero Aoki'
+    exit 0
+  end
+  usage 0 if $OPT_help
+  usage 1 unless ARGV.size == 1
+
+  cname = $OPT_c || 'MyParser'
+  fname = ARGV[0]
+  outf = $OPT_o || 'r.' + fname
+  conv = Converter.new(cname)
+  begin
+    File.open(fname) {|f|
+      conv.parse f, fname
+    }
+  rescue Errno::ENOENT
+    $stderr.puts "no such file: #{fname}"
+    exit 1
+  end
+  File.open(outf, 'w') {|f|
+    conv.output f
+  }
+end
+
+
+class Converter
+
+  def initialize(cname)
+    @cname = cname
+    @prectab = []
+    @start = nil
+    @tokens = []
+    @grammer = []
+
+    @header = nil
+    @footer = nil
+  end
+
+  COMMENT = %r</\*[^*]*\*+(?:[^/*][^*]*\*+)*/>
+
+  #
+  # parse
+  #
+
+  def parse(f, fname)
+    @fname = fname
+    str = f.read
+    s = StringScanner.new(str)
+    procdef s
+    procrule s
+  end
+
+
+  def procdef(s)
+    skip_until_percent s
+    until s.empty?
+      if t = s.scan(/(left|right|nonassoc|token|start)\b/)
+        __send__ 'proc_' + t, get_tokens(s)
+      elsif s.skip %r<(?:
+            type | union | expect | thong | binary |
+            semantic_parser | pure_parser | no_lines |
+            raw | token_table                          )\b>x
+        skip_until_percent s
+      elsif s.skip /\{/
+        @header = s.scan_until(/\%\}/)
+        @header.chop!; @header.chop!   # %}
+        skip_until_percent s
+      elsif s.skip /\%/   # %%
+        return
+      else
+        raise 'scan error'
+      end
+    end
+  end
+
+  def skip_until_percent(s)
+    until s.empty?
+      s.skip /[^\%\/]+/
+      if t = s.scan(COMMENT)
+        ;
+      elsif s.getch == '/'
+        ;
+      else
+        return
+      end
+    end
+  end
+
+  def get_tokens(s)
+    list = []
+    until s.empty?
+      s.skip /\s+/
+      next if s.skip(COMMENT)
+      if t = s.scan(/'((?:[^'\\]+|\\.)*)'/)
+        list.push t
+      elsif t = s.scan(/"((?:[^"\\]+|\\.)*)"/)
+        list.push t
+      elsif s.skip(/\%/)
+        break
+      elsif t = s.scan(/\S+/)
+        list.push t
+      else
+        raise 'scan error'
+      end
+    end
+    list
+  end
+
+  def proc_left(list)
+    @prectab.push ['left', list]
+  end
+
+  def proc_right(list)
+    @prectab.push ['right', list]
+  end
+
+  def proc_nonassoc(list)
+    @prectab.push ['nonassoc', list]
+  end
+
+  def proc_token(list)
+    list.shift if /\A<(.*)>\z/ === list[0]
+    @tokens.concat list
+  end
+
+  def proc_start(list)
+    @start = list[0]
+  end
+
+  ###
+
+  STRINGq = /'(?:[^'\\]+|\\.)*'/
+  STRINGQ = /"(?:[^"\\]+|\\.)*"/
+
+  def procrule(s)
+    @text = []
+    until s.empty?
+      if t = s.scan(/[^%'"{\/]+/)
+        @text.push t
+        break if s.empty?
+      end
+      if s.skip /\{/
+        if $OPT_A
+          skip_action s
+        else
+          scan_action s
+        end
+      elsif t = s.scan(STRINGq) then @text.push t
+      elsif t = s.scan(STRINGQ) then @text.push t
+      elsif t = s.scan(COMMENT) then @text.push t
+      elsif s.skip(/%prec\b/)   then @text.push '='
+      elsif s.skip(/%%/)
+        @footer = s.rest if $OPT_u
+        break
+      else
+        @text.push s.getch
+      end
+    end
+  end
+
+  def skip_action(s)
+    @text, save = [], @text
+    scan_action s
+    @text = save
+    #@text.push "{\n                # action\n            }"
+    @text.push "{  }"
+  end
+
+  def scan_action(s)
+    @text.push '{'
+    nest = 1
+    until s.empty?
+      if t = s.scan(/[^{'"}\/]+/)
+        @text.push t
+        break if s.empty?
+      end
+      if t = s.scan(COMMENT)
+        @text.push t
+        next
+      end
+      c = s.getch
+      @text.push c
+      case c
+      when '{'
+        nest += 1
+      when '}'
+        nest -= 1
+        if nest == 0
+          return
+        end
+      else
+        ;
+      end
+    end
+    $stderr.puts "warning: unterminated action in #{@fname}"
+  end
+
+  #
+  # output
+  #
+
+  def output(f)
+    f.print(<<SRC)
+#
+# converted from "#{@fname}" by y2racc version #{Y2RACC_VERSION}
+#
+
+class #{@cname}
+
+SRC
+    f.print 'token'
+    total = 0
+    @tokens.each do |t|
+      if total > 60
+        f.print "\n     "
+        total = 0
+      end
+      total += f.write(" #{t}")
+    end
+    f.puts
+    f.puts
+
+    unless @prectab.empty?
+      f.puts 'preclow'
+      @prectab.each do |type, toks|
+        f.printf "  %-8s %s\n", type, toks.join(' ') unless toks.empty?
+      end
+      f.puts 'prechigh'
+      f.puts
+    end
+
+    if @start
+      f.puts "start #{@start}"
+      f.puts
+    end
+
+    f.puts 'rule'
+    @text.each {|t| f.print t }
+    f.puts
+    f.puts 'end'
+
+    if not $OPT_H and @header
+      f.puts
+      f.puts '---- header'
+      f.puts @header
+    end
+    if $OPT_u and @footer
+      f.puts
+      f.puts '---- footer'
+      f.puts @footer
+    end
+  end
+
+end
+
+
+main

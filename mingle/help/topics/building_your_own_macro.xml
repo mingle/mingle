@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Building your own macro (Mingle Onsite only)">
+
+<section title="Getting started with the Macro Development Toolkit">
+  <p>These instructions are for building a custom macro in Mingle using the Macro Development Toolkit (available for <cref topic="mingle_onsite">Mingle Onsite</cref> only). The toolkit is available as a gem and is available either with your Mingle download (in the &#60;MINGLE_HOME&#62;/tools directory where &#60;MINGLE HOME&#62; is the directory where Mingle is installed) or via the web on <exref url="https://github.com/mingle/mingle_macro_development_toolkit/">GitHub</exref>. </p>
+
+<p>If installing from the local gem you can install from the folder containing the gem as follows:</p>
+  <code>% [sudo] gem install mingle-macro-development-toolkit-2.0.1.gem</code>
+  <p>If you are installing this gem from its home on <exref url="https://github.com/mingle/mingle_macro_development_toolkit/">GitHub</exref> then you can install it using:</p>
+  <code>% [sudo] gem install mingle-macro-development-toolkit</code>
+</section>
+
+<section title="Building a macro">    
+    <p>For information on building a macro please refer to <exref url="http://thoughtworksstudios.github.com/mingle_macro_development_toolkit/">the Mingle Macro Development Toolkit website on GitHub</exref> or the getting_started.txt in the installation folder of the gem.</p>
+</section>
+
+<section title="Uninstalling the Macro Development Toolkit">
+	<p>To uninstall the locally installed gem run:</p>
+	<code>% [sudo] gem uninstall mingle-macro-development-toolkit</code>
+</section>
+
+<section title="Legal notices and information">
+  <p>The Getting Started file and the mingle-macro-development-toolkit-2.0.1.gem are owned exclusively by ThoughtWorks, Inc., and ThoughtWorks reserves all rights therein.</p>
+
+  <p>We believe that it is a sound practice from legal, business and software development perspectives to always provide copyright information and license information with any software that you make available to others. We have provided this information for the Mingle Macro Development Toolkit in the LICENSE file distributed with the Toolkit. We encourage you to use that as an example to follow when marking your software with a copyright notice, as well as providing users with a license to your software. We have chosen to use the MIT License, an Open Source License, you may choose to use the same or a different license. If you are going to use an Open Source License we strongly encourage you to use <exref url="http://www.opensource.org/licenses">a license approved by the Open Source Initiative</exref>.</p>
+</section>  
+</topic>
+

@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE subsection SYSTEM "mingle_help.dtd">
+<subsection title="Inline links">
+  <markup_reference title="With Mingle's new WYSIWYG editor, you can insert external links as well as create internal Mingle links.">
+    <subsection title="Insert external links inline">
+		<p>To link text to an external site, highlight the desired text and click on the link icon on the editing toolbar. You can also use the keyboard shortcut &lt;strong&gt;CTRL + K&lt;/strong&gt;. Then insert the site's URL into the link widget window and press OK. The text will turn blue to indicate an external link and will be accessible in both "Save" and "Edit" modes.</p>
+			<screenshot src="resources/images/link_icon.png"/> 
+			<screenshot src="resources/images/link_window.png"/> 
+		<note>To edit the external link, either right click or double click the linked text.</note> 	
+	</subsection>
+	
+	<subsection title="Create internal Mingle links inline">
+		   <p>Use the following mark-up to create links to cards, attachments, and pages in your and other Mingle projects on your instance. You can also create unique Mingle links with <cref topic="card_keywords">card keywords</cref>.</p>
+		       <screenshot src="resources/images/formatting_help_component_new.png"/> 
+	</subsection>
+	<subsection title="Also see...">
+		<bullets>
+        	<item><cref topic="cross_project_card_page_linking">Cross project card and page linking</cref> to learn more about how to link to other resources in other projects on your Mingle instance.</item>
+    	</bullets>
+	</subsection>
+  </markup_reference>
+</subsection>

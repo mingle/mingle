@@ -1,0 +1,40 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="graphic-dialog-container">
+  <div id="graphic-dialog" class="profile-box">
+    <div id="graphic-dialog-input">
+      <h1 class="login_header">Terms of Service</h1>
+
+      <%= form_tag({action: :accept, controller: :saas_tos}, {id:'accept_form'}) do %>
+        <div class="terms-of-service">
+          Our lawyers would love for you to read and agree to the following <%= link_to "Terms of Service", MingleConfiguration.terms_of_service_url, :target => "_blank" -%>.
+        </div>
+        <div>
+          <%= check_box_tag "saas_tos_accepted", "accepted" %>
+          <label for="saas_tos_accepted" id="saas_tos_accepted_label" class="inline for-checkbox">I Agree</label>
+        </div>
+
+        <%= clear_float %>
+        <div class="submit-login">
+          <%= submit_tag "Continue", :disabled => true, :name =>"submit", :id => "continue", :class => "primary" %>
+        </div>
+
+      <% end %>
+    </div>
+  </div>
+</div>
+

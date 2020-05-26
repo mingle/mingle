@@ -1,0 +1,31 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% content_for :macro_warnings do %>
+  <% if too_many_macros?(renderable) %>
+    <% warning_spinner = spinner(:id => 'too_many_macros_warning_spinner') %>
+    <% hide_warning_link = link_to_remote_without_user_access('here',
+              :url => hide_too_many_macros_warning_path(:page => CGI.escape(request.request_uri)), :method => :post,
+              :before => show_spinner('too_many_macros_warning_spinner'),
+              :complete => "$('too_many_macros_warning').hide()") %>
+    <% hide_link_text = User.current.anonymous? ? '' : "To hide this message, please click #{hide_warning_link}. #{warning_spinner}" %>
+    <% help_link = render_help_link 'Too Many Macros', {:content => 'help', :class => ''} %>
+    
+    <% warning_message = "Loading more than 10 macros on a card or a page will slow down your system. To learn more, please visit #{help_link}. Please be aware that in the future Mingle may prevent users from having more than 10 macros on cards or pages. #{hide_link_text}" %>
+    
+    <%= render_flash_message(content_tag('p', warning_message.html_safe), 'info-box', :id => 'too_many_macros_warning') %>
+  <% end %>
+<% end %>

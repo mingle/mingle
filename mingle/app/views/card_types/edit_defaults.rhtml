@@ -1,0 +1,55 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%- mode = "defaults" -%>
+<% @sidebar = capture do %>
+  <%= render :partial => 'shared/help_panel_open' %>
+<% end %>
+
+<%= render :partial => 'shared/contextual_help' %>
+<%= hidden_field_tag 'card_type_name_field', @card_type.name %>
+<% form_tag({:action => 'update_defaults', :id => @card_defaults},
+            {:class => 'edit-card-defaults', 'data-editable-id' => "/projects/#{@project.identifier}/card_defaults/#{@card_defaults.id}"}) do -%>
+
+  <%= render :partial => 'shared/basic_save_action_bar', :locals => { :help_text => 'Edit card defaults', :action => 'Save defaults', :position => 'top' } %>
+
+  <h1>Edit '<%=h @card_type.name %>' defaults</h1>
+
+  <%= render :partial => 'card_defaults_check_list', :locals => { :card_defaults => @card_defaults } %>
+
+  <%= render :partial => "renderable/wysiwyg_editor", :locals => { :renderable => @card_defaults, :field_name => "description"} %>
+
+  <% if @card_type.property_type_mappings.count > 0 %>
+    <div id="card-bottom">
+      <p></p>
+      <div id="edit-properties-container">
+        <%= render :partial => 'defaults_property_widget', :locals => {:prop_def_holder => @card_type, :card_defaults => @card_defaults, :html_id_prefix => mode, :html_id => "edit-properties"} %>
+      </div>
+    </div>
+  <% end %>
+  <%= clear_float %>
+
+  <%= render :partial => 'shared/background_color_notice' %>
+  <%= render :partial => 'shared/basic_save_action_bar', :locals => { :help_text => 'Edit card defaults', :action => 'Save defaults' } %>
+<% end -%>
+
+<%= javascript_with_rescue <<-JAVASCRIPT
+  DropList.View.Layout.fix();
+
+  var relationshipsMap = $H(#{tree_relationships_map(:html_id_prefix => "#{mode}_", :restricted_by_card_type => @card_type).to_json});
+  RelationshipPropertiesController.attach(relationshipsMap, new CardDefaultsRelationshipProperties());
+JAVASCRIPT
+-%>

@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Mingle search">
+    <section title="Introduction">
+    	<p>Mingle lets you perform a comprehensive free-text search on project artifacts, including <cref topic="card_types">cards</cref>, <cref topic="dependencies">dependencies</cref>, <cref topic="working_with_pages">pages</cref> and <cref topic="murmurs">murmurs</cref>.
+    	</p>
+		<p>
+			The following fields are included when searching for...
+			<bullets>
+				<item><strong>Cards:</strong> type, name, number, description, tags, murmurs, created by (user) and modified by (user). (Starting with Mingle 12.2, you can also choose to index text, numeric and user card properties. Please contact our <exref url="@tw_studios_mingle_support_url@">support team</exref> for more information about how to do this.)</item>
+				<item><strong>Dependencies:</strong> dependency name, dependency number, dependency status, description, desired completion date, raising project, resolving project, raising card, and resolving card.</item>
+				<item><strong>Pages:</strong> name, content, created by (user) and modified by (user).</item>
+				<item><strong>Murmurs:</strong> content and author (user).</item>
+			</bullets>
+		</p>
+    </section>
+	<section title="How to search">
+		<steps>
+		<item>To search in Mingle, type your term in the Search field at the top-right of the screen.</item>
+    		<screenshot alttext="Mingle search field" src="resources/images/search_control.png"></screenshot>
+		<item>When your cursor has focus on the search text field hit the enter button or click on the magnifying glass to initiate your search. Mingle will return any cards, pages or murmurs that match your search keyword on the <strong>Search results</strong> page.</item>
+		<item>By default the search results show all cards, pages and murmurs that match the search terms. You can narrow your results to cards only, pages only or murmurs only by clicking on the respective facet.</item>
+		<screenshot alttext="Search results page" src="resources/images/search_results_page.png"></screenshot>
+		</steps>
+    <hint>Use fuzzy search from anywhere in your Mingle project to navigate to any card by using the hot keys "cmd/ctrl + shift + backspace."</hint>
+	</section>
+	<section title="Navigating directly to a card">
+		<p>If you know the number of the card you want to view, you can navigate directly to it by typing the card number prefixed with a # symbol into the Search field.</p>
+		<example>Typing <strong>#123</strong> will bring up the card view for card number 123.</example>
+	</section>
+	<section title="Advanced search options" id="advanced_search_options">
+		<p>Mingle search is built on top of <exref url="http://lucene.apache.org/">Apache Lucene</exref> so you can now use familiar query syntax to fine tune your search results.</p>
+		<hint>Apache Lucene offers a range of term modifiers and operators to affect your search results. Mingle search supports a subset of the modifiers and operators provided by Lucene. Notably Mingle has overridden the behavior of searching for fields so this search feature is not supported unless you are searching for card type.</hint>
+		<p>
+			Advanced search syntax examples:
+			<bullets>
+				<item><strong>Single character wildcard search (?):</strong> The query "te?t" returns "test" and "text". The query "boo?" returns "book" and "boot".</item>
+				<item><strong>Multiple characters wildcard search (*):</strong> The query "te*t" returns words that begin with "te" and end with "t". The query "boo*" returns "boom" and "boomerang".</item>
+				<item><strong>Search by card type:</strong> To search within a certain card type, precede the search term with "type:" followed by the name of the card type. (N.B. There should be no space after the colon and before the card type.)
+				<markup>type:story integration</markup>
+				Enclose multi-word card names and search terms in quotes.
+				<markup>type:"epic story" "integration parameter"</markup>
+				</item>
+				<item><strong>Boolean operators:</strong> The default conjunction operator is AND. Boolean operators must be ALL CAPS. Supported operators are AND, "+", OR, NOT and "-". The AND operator matches documents where both terms exist.
+				<markup>"3rd party" AND service</markup>
+				The "+" operator requires that the term after the "+" symbol must exist.
+				<markup>+authenticate user</markup>
+				The OR operator matches documents where either search term exists.
+				<markup>authenticate OR login</markup>
+				Search results will exclude documents where terms are preceded by the NOT or "-" operators
+				<markup>content NOT cms</markup>
+				<markup>content -cms</markup>
+				</item>
+				<item><strong>Grouping:</strong> You can use parentheses to group clauses and form sub queries.
+				<markup>(authenticate OR login) AND "cms"</markup>
+				</item>
+			</bullets>
+		</p>
+
+	</section>
+	<section title="Also see...">
+		<bullets>
+			<item><cref topic="finding_cards_to_work_with">Finding cards to work with</cref></item>
+			<item><cref topic="getting_around_in_mingle">Getting around in Mingle</cref></item>
+			<item><cref topic="viewing_cards">Viewing cards</cref></item>
+			<item><cref topic="finding_a_page">Finding a page</cref></item>
+			<item><cref topic="using_murmurs">Finding murmurs on the Murmurs tab</cref></item>
+		</bullets>
+	</section>
+</topic>

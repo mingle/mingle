@@ -1,0 +1,35 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="change_card_type_confirmation_actions_container" style="display: none;">
+  <div class="change-card_type_confirmation">
+    <% lightbox = Lightbox.with_close_link_and_close_button(self, "Cancel", "", :without_href => true, :id => "cancel", :onclick => on_cancel_javascript, :class => "remove-button popup-close")
+       lightbox.header "Confirm card type change"
+       lightbox.body do %>
+      <% info_box do %>
+        <p>With <%= multiple ? "card type changes these cards": "this card type change this card" -%> will lose:</p>
+        <ul>
+          <li>values of any properties that are not common between the types</li>
+          <li>tree memberships if the new card type is not available to the same trees</li>
+        </ul>
+        <p><i>Note: All previous property values will be recorded in the <%= multiple ? "cards'" : "card's"%> history.</i></p>
+      <% end %>
+    <% end %>
+    <% lightbox.complete_action do -%>
+      <%= content_tag :button, "Continue", :id => "continue", :class => "ok", :type => "button", :onclick => on_continue_javascript -%>
+    <% end -%>
+  </div>
+</div>

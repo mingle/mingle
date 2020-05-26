@@ -1,0 +1,33 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% cache_to Keys::ShowPropertyContainer.new, @project, card, session[:show_hidden_properties] do %>
+  <div id='show-properties-container' onclick="PropertyEditor.Init.ondemand(event);">
+    <% form_remote_tag :url => {:action => 'update_property', :project_id => @project.identifier, :card => card.id, :tab => @tab_name},
+                       :html => { :id => 'show-properties-form'},
+                       :before => "linkHandler.disableLinks(); $('spinner').show();",
+                       :complete => " DropList.View.Layout.fix(); $('spinner').hide(); linkHandler.enableLinks();" do -%>
+      <%= hidden_field_tag 'changed_property', '', :id => 'changed_property_name' %>
+      <%= render :partial => 'cards/property_widget',
+                 :locals => {:prop_def_holder => card, :card => card, :mode => CardsHelper::CARD_SHOW_MODE,
+                    :html_id => 'show-properties', :onchange => "$('show-properties-form').onsubmit()",
+                    :track_changed_property => 'changed_property_name'} %>
+    <% end -%>
+
+<%# so that layout is fixed on ajax replace %>
+    <%= javascript_with_rescue 'DropList.View.Layout.fix();' %>
+  </div>
+<% end %>

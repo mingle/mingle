@@ -1,0 +1,602 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+@media screen, print {
+  /* Overwrite the default min-width of YUI reset css so that the card numbers do not get cut off */
+  #doc,#doc2,#doc3,.yui-t1,.yui-t2,.yui-t3,.yui-t4,.yui-t5,.yui-t6,.yui-t7 {
+    min-width: 100% !important;
+    min-width: 100%;
+  }
+
+  /* Generic */
+  .print-only {
+    display: block;
+  }
+  .print-only-inline {
+    display: inline;
+  }
+  .hide-when-print {
+    display: none !important;
+    display: none;
+  }
+
+  #main {
+    background: none !important;
+    background-color: #FFFFFF !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  body {
+    background: none !important;
+    font-family: Helvetica, Arial, sans-serif !important; /* YUI fonts css provides graceful degradation */
+    font-size: 10pt !important; /* Detail handled by YIU fonts */
+    margin: 0;
+    padding: 0;
+  }
+
+  pre {
+    white-space: pre-wrap;
+  }
+
+  a
+  {
+    color: #000000;
+    text-decoration: none;
+  }
+
+  a:link,
+  a:visited {
+    background:transparent;
+    text-decoration:underline;
+  }
+
+  a:link:after,
+  a:visited:after {
+    content:" (" attr(href) ") ";
+    font-size:90%;
+  }
+
+  /* Generic areas to be hidden */
+
+  #header,
+  #sidebar,
+  .action-bar,
+  .card_navigation,
+  #action-bar-top,
+  #action-bar-bottom,
+  #ft,
+  #textmate_footnotes_debug,
+  #lightbox,
+  #notice,
+  #error,
+  #not_found,
+  #flash
+  {
+    display: none;
+  }
+
+  /* For the list page */
+
+  .basic-panel-one,
+  .actions,
+  .cards-header {
+    display: none;
+  }
+
+  table#cards {
+    width: 100%;
+  }
+
+  .checkbox input {
+    display: none;
+  }
+
+  .table-column-header th {
+    text-align: left;
+  }
+
+  /* For grid page */
+
+  table#swimming-pool {
+    width: 100%;
+  }
+
+  table .card-icon {
+    border: 1px solid #CCC;
+    float: left;
+    margin: 1em 0em 0em 1em;
+    overflow: hidden;
+    padding: 0.2em;
+  }
+
+  .lane {
+    text-align: center;
+  }
+
+  .group {
+    font-weight: bold;
+  }
+
+  /* Card detail */
+
+
+  #card {
+    border: none;
+  }
+
+  #programs-container {
+    border-top: 1px solid #CCC;
+    padding-top: 10px;
+    margin-top: 10px;
+  }
+
+  #programs-container strong {
+    font-size: 14pt;
+  }
+
+  #programs-container table.program-list {
+    margin-top: 10px;
+    margin-left: 1.5em;
+  }
+
+  #programs-container table.program-list th,
+  #programs-container table.program-list td {
+    font-size: 14px;
+    border-bottom: 1px dotted #CCC;
+    padding-right: 20px;
+  }
+
+
+  .card-index, #card-index {
+    color: #666;
+    font-size: 14pt;
+    font-weight: bold;
+    float: right;
+    margin-top: .5em;
+  }
+
+  .drop-list-panel
+  {
+    margin-right: 2em;
+  }
+
+  .tags-container {
+    padding: 0 10px;
+    border-top: none;
+    border-bottom: 2px solid #333;
+    padding-bottom: 1em;
+  }
+
+  #card-bottom {
+    padding-top: 1em;
+    padding-bottom: 1em;
+  }
+
+  /* Page */
+
+  #double-print-view .tags-container {
+    display: block !important;
+    font-size: 80%;
+    padding-top: 0;
+  }
+
+  .version-info {
+    font-size: 9pt !important;
+  }
+
+  /* Needed for dashboard */
+
+  .dashboard-panel,
+  .dashboard-half-panel
+  {
+    background: none !important;
+  }
+
+  .dashboard-panel h2,
+  .dashboard-half-panel h2
+  {
+    border-top: 1px solid #666666 !important;
+    border-left: 1px solid #666666 !important;
+    border-right: 1px solid #666666 !important;
+    color: #653C3D !important;
+  }
+
+  .dashboard-panel .dashboard-content h2,
+  .dashboard-half-panel .dashboard-content h2
+  {
+    border: none !important;
+  }
+
+  .dashboard-content
+  {
+    border: 1px solid #666666 !important;
+  }
+
+  .yui-u
+  {
+    display: inline;
+    float: right;
+    width: 49.1%;
+  }
+
+  .yui-g div.first
+  {
+    float: left;
+  }
+
+  .clear-both
+  {
+    clear: both;
+  }
+
+  /* For double print */
+
+  #double-print-view
+  {
+  /*  padding: 0cm 0.5cm;*/
+  }
+
+  #double-print-view .card
+  {
+    margin-bottom: 1cm;
+  }
+
+  #double-print-view .card {
+    box-shadow: none;
+      -moz-box-shadow: none;
+      -webkit-box-shadow: none;
+  }
+
+
+  #double-print-view .card
+  {
+    height: 12cm !important;
+    overflow: hidden !important;
+  }
+
+  #double-print-view .page-break-after
+  {
+    page-break-after: always;
+  }
+
+  #double-print-view .card-top
+  {
+  /*
+    height: 1.5cm !important;
+    overflow: hidden !important;
+  */
+  }
+
+  #double-print-view .card-top {
+    padding: 1em;
+    background: #f0f0f0;
+  }
+
+  #double-print-view .tags-container {
+    background: #f0f0f0;
+  }
+
+  #double-print-view .content
+  {
+    font-size: 10pt;
+    padding: 1em;
+    height: 6.0cm !important;
+    overflow: hidden !important;
+  }
+
+
+  #double-print-view h1 {
+    color: #000;
+    font-weight: 700;
+    border: 0;
+    padding: 0 0 0.5em 0;
+  }
+
+  #double-print-view .version-info {
+    padding: 0;
+    font-size: 8.5pt !important;
+  }
+
+  #double-print-view .card-bottom {
+    font-size: 100%;
+    line-height: 120%;
+    padding: 1em;
+    background: #FFFFDD;
+    height: 3cm !important;
+    overflow: hidden !important;
+  }
+
+  #double-print-view .card-bottom .emphasize {
+    color: #333;
+  }
+
+  /* Styles for card show page */
+  #page-identifier-cards-show .yui-u
+  {
+    width: auto;
+    display: block;
+    float: none;
+  }
+  #content a:link:after,
+  #content a:visited:after {
+    content: "";
+  }
+  #card-bottom-cover,
+  #comments-for-print,
+  #renderable-contents {
+    margin-bottom: 0;
+  }
+  #attachments {
+    margin: 0;
+    padding: 0 0 1em 0;
+  }
+  .card-short-description,
+  .card-index,
+  #card-short-description,
+  #card-index,
+  #page-identifier-cards-show #comments-for-print,
+  #page-identifier-cards-show #card-bottom-cover,
+  h1#card-short-description {
+    font-size: 16pt;
+    padding: 0;
+    font-weight: normal;
+    margin: .5em 0;
+  }
+
+  #card-bottom-cover h2,
+  #comments-for-print h2 {
+    font-size: 14pt;
+    border-top: 1px solid #999;
+    padding: .5em 0;
+    margin-bottom: .5em 0;
+  }
+  #card-bottom-cover a,
+  #comments-for-print a {
+    text-decoration: none;
+  }
+  #card-bottom h2 {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  #attachments h4 {
+    display: none;
+  }
+  /*#comments-for-print h2 {
+    font-size: 1.4em;
+    margin: 0;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    border-top: 5px solid #999;
+  }*/
+  #page-identifier-cards-show .divider
+  {
+    border-top: 1px dotted #DDD;
+    font-size: 0;
+    line-height: 0;
+    height: 0;
+  }
+
+  #page-identifier-cards-show .comment,
+  #page-identifier-cards-show .divider {
+    margin: 0.5em 0 0.5em 1em;
+  }
+
+  #page-identifier-cards-show .comment-author {
+    color: #666;
+    text-align: right;
+  }
+
+  #page-identifier-cards-show #card-top {
+    border-top: 2px solid #333;
+    padding-bottom: 0.25em;
+  }
+
+  #card-bottom-cover img {
+    display: none;
+  }
+  .open-edit-link {
+    display: none;
+  }
+  .open-edit-link:after {
+    content: "";
+  }
+  .tag-list {
+    display: inline !important;
+    display: inline;
+  }
+  #page-identifier-cards-show .should-be-hidden-when-print {
+    display: none;
+  }
+  #page-identifier-cards-show .should-be-hidden-when-print:after {
+    content: "";
+  }
+  .remove-attachment-link {
+    display: none;
+  }
+  .remove-attachment-link:after {
+    content: "";
+  }
+
+  #page-identifier-cards-show .properties_widget {
+    margin-left: 1.5em;
+  }
+
+  #card-bottom-cover a:link,
+  #card-bottom-cover a:visited
+  {
+    text-decoration: none;
+  }
+
+  #card-bottom-cover.show_card_version_page a:link:after,
+  #card-bottom-cover.show_card_version_page a:visited:after
+  {
+    margin-right: 0.5em;
+  }
+
+  #page-identifier-cards-show #card-bottom {
+    padding-top: 0;
+  }
+
+  #page-identifier-cards-show #card-bottom-cover,
+  #page-identifier-cards-show #card-bottom-cover span,
+  #page-identifier-cards-show #card-bottom-cover a {
+    color: black;
+  }
+
+  #page-identifier-cover-show #version-info {
+    font-size: 10px !important;
+    margin-top: .5em;
+  }
+
+  #page-identifier-cards-show .tree_group {
+    border-top: 1px dotted #DDDDDD;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    margin-left: -1.5em;
+    padding-left: 1em;
+    color: black;
+  }
+
+  #page-identifier-cards-show #edit-card-types {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin: 0.5em;
+    margin-bottom: 0.5em;
+  }
+
+  #page-identifier-cards-show .notes {
+    display: none !important;
+    display: none;
+  }
+
+  #page-identifier-cards-show #show_card_type_label {
+    overflow: visible;
+    width: auto;
+  }
+
+  #page-identifier-cards-show .drop-list-panel {
+    width: auto;
+    line-height: 1.5em;
+    margin: 0;
+  }
+
+  #page-identifier-cards-show .go-to-tree-link:after
+  {
+    content: "";
+  }
+
+  #page-identifier-cards-show .properties_widget span span,
+  #page-identifier-cards-show .properties_widget span.disabled_link,
+  #page-identifier-cards-show .properties_widget span a,
+  #page-identifier-cards-show .properties_widget span a:visited {
+    width: auto;
+  }
+  #page-identifier-cards-show .properties_widget a:after
+  {
+    content: "";
+  }
+  #page-identifier-cards-show .show-more a:after {
+    content: "";
+  }
+  /* layout inside card show content */
+  #content .yui-g .yui-u,
+  #content .yui-g .yui-g {
+    width: auto;
+  }
+  #content .yui-g .yui-u,
+  #content .yui-g .yui-g,
+  #content .yui-gc .yui-u,
+  #content .yui-gc .yui-g .yui-u,
+  #content .yui-ge .yui-u,
+  #content .yui-gf .yui-u,
+  #content .yui-g div.first {
+    display: block;
+    width: auto;
+    float: none;
+  }
+  #page-identifier-cards-show .dashboard-panel,
+  #page-identifier-cards-show .dashboard-half-panel,
+  #page-identifier-cards-show .dashboard-content
+  {
+    float: none;
+    overflow: visible;
+  }
+  #page-identifier-cards-show .dashboard-panel h2,
+  #page-identifier-cards-show .dashboard-half-panel h2
+  {
+    border-left: none !important;
+    border-right: none !important;
+    border-top: none !important;
+    border-bottom: 1px dotted #DDD !important;
+    text-align: left;
+  }
+  #page-identifier-cards-show .dashboard-content
+  {
+    border-bottom: 1px dotted #DDD !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-top: none !important;
+  }
+  #page-identifier-cards-show table
+  {
+    border-collapse: collapse;
+    font-size: 7pt;
+  }
+  #page-identifier-cards-show th,
+  #page-identifier-cards-show td
+  {
+    border: 1px solid 999;
+    padding: 0.25em;
+    vertical-align: top;
+  }
+
+  #tag_list-tag-list-panel img
+  {
+    display: none;
+  }
+  #tag-editor-actions {
+    display: none;
+  }
+  .removable-tag img {
+    display: none;
+  }
+
+  .properties_widget .property-name {
+    margin-left: 0.5em;
+  }
+
+  .properties_widget a {
+    font-weight: bold;
+    margin-right: 0.2em;
+  }
+
+  /* for double-print-view */
+  #double-print-view .yui-g,
+  #double-print-view .dashboard-panel
+  {
+    display: none;
+  }
+  #content a:link:after,
+  #content a:visited:after {
+    content: "";
+  }
+  /* end styles of double-print-view */
+  /* Fix bug #6608 */
+  .wiki .yui-g {float: none;}
+}

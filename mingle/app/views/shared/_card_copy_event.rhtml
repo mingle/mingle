@@ -1,0 +1,59 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%- other_project = Project.find_by_identifier(event.details[:associate_project_identifier]) -%>
+<div id="card-<%= event.origin.number %>" class="event card-copy-event">
+  <div class="user-icon">
+    <span class="event-type"></span>
+    <%= image_tag_for_user_icon(event.author, :size => '24x24') %>
+  </div>
+  <div class="event-content">
+    <h3>
+    <%- if include_object_name -%>
+      <%= link_to(h(event.origin.short_description), {:controller => "cards", :action => "show", :number => event.origin.number}) %>
+      <span class="notes"><%= event_originator(event)%></span>
+    <%- else -%>
+      <span class="event-title">
+        <%- if event.is_a?(CardCopyEvent::To) -%>
+          <%- if other_project.nil? -%>
+            Copy created to <strong>Deleted or Renamed Project</strong>
+          <%- else -%>
+            Copy created to <strong><%= other_project.name -%></strong> as card number <strong><%= event.details[:associate_card_number] -%></strong>
+          <%- end -%>
+        <%- else -%>
+          <%- if other_project.nil? -%>
+            Created from card in <strong>Deleted or Renamed Project</strong>
+          <%- else -%>
+            Created from original card number <strong><%= event.details[:associate_card_number] -%></strong> in <strong><%= other_project.name -%></strong>
+          <%- end -%>
+        <%- end -%>
+      </span>
+      <p class="notes"><%= event_originator(event) %></p>
+    <%- end -%>
+    </h3>
+
+    <%- if include_version_links -%>
+    <div class="version-links">
+      <%- if event.is_a?(CardCopyEvent::To) -%>
+        <%= other_project.nil? ? "Unable to view copied card because the project has been deleted or renamed" : link_to("View copied card", card_show_path(event.associate_url_options), { :class => "link-to-associated-card" }) %>
+      <%- else -%>
+        <%= other_project.nil? ? "Unable to view original card because the project has been deleted or renamed" : link_to("View original card", card_show_path(event.associate_url_options), { :class => "link-to-associated-card" }) %>
+      <%- end -%>
+    </div>
+    <%- end -%>
+
+  </div>
+</div>

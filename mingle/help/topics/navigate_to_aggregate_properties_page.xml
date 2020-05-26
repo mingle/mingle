@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE subsection SYSTEM "mingle_help.dtd">
+<section title="Navigate to aggregate properties page" id="manage_existing_team_members">
+	<steps>
+		<item><cref topic="signing_in_and_out_of_mingle">Sign in</cref> to Mingle as a project administrator and open the project in which you want to create a card tree (if you're not already working in the project).</item>
+		<item>
+			<bullets title="From anywhere in Mingle">
+				<item>From the Project admin menu, select the <link>Card trees</link> link. Mingle will take you to the <strong>Card trees</strong> page. 
+					Then select the <link>Configure</link> link next to the Card tree where you want to create the aggregate property.</item>
+			</bullets>
+			<steps title="Or, from Card Tree view">
+				<item>Select <strong>View tree configuration</strong> in the area above the tree.</item>
+				<item>
+				  <p>Select <strong>configure</strong> in the card configuration that is shown.</p>
+				  <screenshot alttext="Configure tree from Card Tree view" src="resources/images/configure_tree_from_card_tree_view.png"></screenshot>
+				</item>
+			</steps>
+			<p>Mingle will display the <strong>Configure card tree</strong> page.</p>
+		</item>
+		<p>
+			<screenshot alttext="Configure card tree page" src="resources/images/configure_card_tree_page.png"/>
+		</p>
+		<item>
+			<p>From the <cref topic="modifying_an_existing_card_tree">Configure card tree page</cref>, click on the <link>Edit aggregate properties</link> link. Mingle will display the Aggregate properties page.</p>
+		</item>
+	</steps>
+</section>

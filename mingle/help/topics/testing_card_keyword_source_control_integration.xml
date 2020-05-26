@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE section SYSTEM "mingle_help.dtd">
+<section title="Testing card keywords source repository integration">
+	<p>Before you begin, you must know the number of a card that has been referenced in a source commit message, e.g. <strong>Fixed bug 123</strong>.</p>
+	
+	<steps>
+		<item><cref topic="signing_in_and_out_of_mingle">Sign in</cref> to Mingle as a project administrator and open the project you want to change (if you're not already working in the project).</item>
+		<item>
+			<p>Click the <tab>Project admin</tab> tab.</p> 
+			<p><screenshot alttext="Project admin tab" src="resources/images/project_admin_tab.png" /></p>
+			<p>Mingle displays the <strong>Project settings</strong> page.</p>
+			<note>if you are logged in as a project team member, Mingle displays the <strong>Team</strong> page.</note>
+			<p><screenshot alttext="Project admin menu - keywords link" src="resources/images/card_keywords_link.png" /></p>
+		</item>
+		
+		<item><p>Click the <link>Card keywords</link> link.</p>    	
+			<p>Mingle displays the <strong>Card keywords</strong> page.</p>
+			<p><screenshot alttext="Card keyword page" src="resources/images/card_keywords_page.png" /></p>
+		</item>
+		<item>
+			<p>Type the number of a card that you know has been referenced in a source commit message.</p>
+			<p><screenshot alttext="Card keyword page - test source repository integration" src="resources/images/card_keywords_commit_test.png" /></p>
+		</item>
+		<item>    	
+			<p>Click the <button>Test</button> button.</p>
+			<p>Mingle displays the last 10 changesets/revisions that match the current keywords for this story.
+			If you get the results you expect, this means you've selected good card keywords and Mingle is picking them up in commit messages.</p>
+			<screenshot alttext="Card keyword page - test source repository integration results" src="resources/images/card_keywords_commit_test_results.png"></screenshot>
+			<p>If you don't see any matches, or not as many as you would expect, try adding different keywords and repeating.</p>
+		</item>
+		<item><note>Don't forget to click the <link>Update keywords</link> link to save your card keywords if you haven't done so already.</note></item>
+	</steps>    	
+</section>
+
+

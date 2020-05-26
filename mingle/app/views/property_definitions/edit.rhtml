@@ -1,0 +1,45 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% display_errors %>
+
+<%= render :partial => 'shared/admin_actions'%>
+
+<% form_tag :action => 'confirm_update', :id => @property_definition do %>
+  <%= render :partial => 'edit_action_bar', :locals => { :property_definition => @property_definition.id } %>
+
+  <h1>Edit property definition</h1>
+
+  <%= render :partial => 'name_description_form' %>
+
+  <p>
+    <label>Property type:&nbsp;<span class="notes">(once set, the type cannot be changed)</span></label>
+    <%= @property_definition.describe_type %>
+  </p>
+
+  <% if (@property_definition.is_a?(FormulaPropertyDefinition)) -%> 
+    <p>
+      <label for="property_definition_formula">Formula:</label>
+      <%= text_field 'property_definition', 'formula', {:class => 'width-full'} %>
+      <%= check_box_tag 'property_definition[null_is_zero]', 'true', @property_definition.null_is_zero?, {:class => 'trailing', :id => 'property_definition_null_is_zero'} %>
+      <label for="property_definition_null_is_zero" class="inline">Replace any (not set) numeric property values with zero</label>
+    </p>
+  <% end -%>
+  
+  <%= render :partial => 'available_cards_form' %>
+
+  <%= render :partial => 'edit_action_bar', :locals => { :property_definition => @property_definition.id } %>
+<% end %>

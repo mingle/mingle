@@ -1,0 +1,182 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Formula property examples">
+  <section title="Basic numeric formulas">
+    <example title="to calculate a weighted average of three values, can be used when applying Best/Expected/Worst case estimation">
+      <p>Where the card property names are "Best", "Expected", "Worst" respectively and they have numeric values:
+        <formula>((Best * 2) + (Expected * 4) + (Worst * 2)) / 6</formula>
+        giving twice as much weighting to the expected value than to the best or worst.
+      </p>
+    </example>
+  </section>
+  <section title="Formulas involving dates" id="dates">
+    <example title="to calculate an end date given a start date and a duration in days">
+      <p>Where the card property names are "Start Date" and "Duration" respectively:
+        <formula>"Start Date" + Duration</formula>
+        resulting in a <strong>date</strong> which is [duration] number of days after the Start Date.
+      </p>
+    </example>
+    <example title="to calculate the difference in days between two dates">
+      <p>Where the card property names are "Start Date" and "End Date" respectively:
+        <formula>"Start Date" - "End Date"</formula>
+        resulting in a <strong>number</strong> which is the number of days between Start Date and End Date.
+      </p>
+    </example>
+    <example title="to calculate the number of weeks between two dates">
+      <p>Where the card property names are "Start Date" and "End Date" respectively:
+        <formula>("Start Date" - "End Date") / 7</formula>
+        resulting in a <strong>number</strong> which is the number of weeks between Start Date and End Date.
+      </p>
+    </example>
+    <example title="to calculate a projected number of points deliverable for an iteration, given the number of expected developer days available in the iteration, and a numeric constant to indicate the current rate of development (points/dev days)">
+      <p>Where the card property name is "Planned Dev Days", and the rate of development <subst>yesterdays_weather</subst> would be replaced with the actual numeric value:
+        <formula><subst>yesterdays_weather</subst> * "Planned Dev Days"</formula>
+        resulting in a <strong>number</strong> which is the number of points that may be expected given the developer days in the iteration and the current rate of delivery.
+      </p>
+    </example>
+    <example title="to calculate an expected duration for a task, given an estimate in points and the current rate of delivery (points/days)">
+      <p>Where the card property name is "Estimate", and the rate of development <subst>yesterdays_weather</subst> would be replaced with the actual numeric value:
+        <formula>Estimate / <subst>yesterdays_weather</subst></formula>
+        resulting in a <strong>number</strong> which is the number of days that the task may be expected to take to complete given the current rate of delivery.
+      </p>
+    </example>
+  </section>
+  <section title="Aggregate property formulas">
+    <example title="to calculate the % completeness of a story using aggregate properties based on task card properties">
+      <p>Where the aggregate story card properties are, "Total Task Estimate" and "Completed Task Estimate":
+        <formula>"Completed Task Estimate"/"Total Task Estimate" * 100</formula>
+        resulting in a <strong>number</strong> which is the % completeness of a story.
+      </p>
+    </example>
+    <example title="to calculate the cost of a the highest priority stories in a feature using story aggregate properties">
+      <p>Where the aggregate feature card property "Total Estimate of Must Stories" is used with a numeric representing cost per point:
+        <formula>"Total Estimate of Must Stories" * 99</formula>
+        resulting in a <strong>number</strong> which estimates the cost of the Must stories in a feature.
+      </p>
+    </example>
+  </section>
+  <section title="Replace any (not set) numeric properties with zero" id="replace_not_set">
+    <example title="replace (not set) numeric properties with zero">
+      <p>The "Replace any (not set) numeric property values with zero" option allows you to specify how numeric property values that are (not set) will affect the calculated value of the formula. By default, if the value of any property within a formula is (not set) then the result of the formula calculation will be (not set). You can change this behavior to replace (not set) values with zero.</p>
+      <p>As an example, suppose you have a story card which has properties, "Development effort" and "Testing effort" and a formula property, "Story effort", with a formula of <formula>"Development effort" + "Testing effort"</formula> The following table shows the result of the formula calculation for several different cards, depending on whether or not "Replace any (not set) numeric property values with zero" is selected.</p>
+      <table>
+        <header-row>
+          <col-header>Card number</col-header>
+          <col-header>Development effort</col-header>
+          <col-header>Testing effort</col-header>
+          <col-header>Story effort - using (not set)</col-header>
+          <col-header>Story effort - replacing (not set) with zero</col-header>
+        </header-row>
+        <row>
+          <col>43</col>
+          <col>3</col>
+          <col>1</col>
+          <col>4</col>
+          <col>4</col>
+        </row>
+        <row>
+          <col>44</col>
+          <col>3</col>
+          <col>0</col>
+          <col>3</col>
+          <col>3</col>
+        </row>
+        <row>
+          <col>45</col>
+          <col>0</col>
+          <col>1</col>
+          <col>1</col>
+          <col>1</col>
+        </row>
+        <row>
+          <col>46</col>
+          <col>0</col>
+          <col>0</col>
+          <col>0</col>
+          <col>0</col>
+        </row>
+        <row>
+          <col>47</col>
+          <col>3</col>
+          <col>(not set)</col>
+          <col>(not set)</col>
+          <col>3</col>
+        </row>
+        <row>
+          <col>48</col>
+          <col>(not set)</col>
+          <col>1</col>
+          <col>(not set)</col>
+          <col>1</col>
+        </row>
+        <row>
+          <col>49</col>
+          <col>(not set)</col>
+          <col>(not set)</col>
+          <col>(not set)</col>
+          <col>0</col>
+        </row>
+      </table>
+    </example>
+    <p>Card numbers 47-49 show cases where replacing (not set) with zero affects the formula result.</p>
+    <example title='how numeric and date properties are affected by "Replace any (not set) numeric property values with zero"'>
+      <p>As shown <cref topic="formula_property_examples#dates">above</cref>, date properties can be used in formulas. Date properties are not affected by the "Replace any (not set) numeric property values with zero" option. If a date property that is used in a formula is (not set) then the result of the formula is (not set). If both date and numeric properties are used in the formula, then the numeric properties can replace (not set) with zero, but the date properties will not. For example, the following formula, "Estimated completion" which has a date property, "Start date", and a numeric property, "Duration":</p>
+      <formula>"Start date" + Duration</formula>
+      <p>The result of the formula, with and without replacing (not set) with zero, is shown in the table below for several cards.</p>
+      <table>
+        <header-row>
+          <col-header>Card number</col-header>
+          <col-header>Start date</col-header>
+          <col-header>Duration</col-header>
+          <col-header>Estimated completion - using (not set)</col-header>
+          <col-header>Estimated completion - replacing (not set) with zero</col-header>
+        </header-row>
+        <row>
+          <col>71</col>
+          <col>July 11, 2011</col>
+          <col>3</col>
+          <col>July 14, 2011</col>
+          <col>July 14, 2011</col>
+        </row>
+        <row>
+          <col>72</col>
+          <col>July 11, 2011</col>
+          <col>(not set)</col>
+          <col>(not set)</col>
+          <col>July 11, 2011</col>
+        </row>
+        <row>
+          <col>73</col>
+          <col>(not set)</col>
+          <col>3</col>
+          <col>(not set)</col>
+          <col>(not set)</col>
+        </row>
+        <row>
+          <col>74</col>
+          <col>(not set)</col>
+          <col>(not set)</col>
+          <col>(not set)</col>
+          <col>(not set)</col>
+        </row>
+      </table>
+      <p>Card number 72 shows the difference between when Duration does and does not replace (not set) with zero. Card number 73 shows that Start date is not affected by replacing (not set) with zero, because it is a date property.</p>
+    </example>
+  </section>
+</topic>

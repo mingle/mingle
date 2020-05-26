@@ -1,0 +1,5 @@
+# Delete objective <objective> of plan <planName>
+* Navigate to objective <objective> of plan <planName>
+* Choose to delete objective
+* Continue to delete objective
+* Assert that objective <objective> is not present

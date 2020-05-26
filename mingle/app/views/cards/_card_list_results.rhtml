@@ -1,0 +1,69 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="content">
+
+<% if @cards and @cards.size > 0 -%>
+  <table class="edit-table sortable_table" id="cards"> 
+    <thead>     
+      <tr class="cards-header">
+        <td colspan="100">
+          <span class="float-right view_controls">
+            <%= links_to_remove_screen_furniture(@view) %>
+            <%= render :partial => 'cards/tree_configuration_overview' if @view.tree_name %>
+            <%= link_to_print %>
+            <%= link_to_this_page %>
+            <%= render :partial => 'cards/column_selector' %>
+          </span>
+          
+          <span class="hide-on-maximized">
+            Select: <%= link_to_function 'All', 'checkBoxes.checkAll()', :id => "select_all", :href => 'javascript:void(0)' %>
+            <%= link_to_function 'None', 'checkBoxes.uncheckAll()', :id => "select_none", :href => 'javascript:void(0)' %>
+          </span>
+        
+          <span class="card_count"><%= @view.describe_current_page %></span>
+          <span style="display:none" id="really_select_all_message_box">
+            You have selected <span id="really_select_all_number_of_cards"></span> cards. 
+            <%= link_to_function "Select all #{@view.card_numbers.size} cards in current view", 
+                "AllCardsSelector.selectAllCards(#{@view.card_numbers.size})" %>
+          </span>
+          <span style="display: none;" id="really_select_all_selected_all_message">
+            All <%= @view.card_numbers.size %> cards in view are selected.
+          </span>
+        </td>
+      </tr>
+  
+      <tr class="table-column-header">  
+        <th class="row-action hide-on-maximized checkbox">&nbsp;</th>
+        <%= render :partial => "cards/list_card_table_head" %>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render :partial => "cards/list_card_table", :locals => { :template_url  => url_for(:controller => 'cards', :action => 'show', :number => 0)} %>
+    </tbody>
+  </table>
+  
+  <% if @view.paginated? -%>
+    <%= render :partial => 'shared/page_links', :locals => {:paged_object => @view, :addional_params => params.slice(:favorite_id).merge(:controller => 'cards') }%>
+  <% end -%>
+  
+  <%= javascript_with_rescue <<-JAVASCRIPT
+    #{@view.all_cards_selected? ? "AllCardsSelector.selectAllCardsWithNoPanelUpdate();" : "AllCardsSelector.onCheckAll(); AllCardsSelector.updateSelectedNumber();"}
+JAVASCRIPT
+-%>
+  
+<% end -%>
+</div>

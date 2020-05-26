@@ -1,0 +1,36 @@
+<NotepadPlus>
+    <UserLang name="sahi" ext="sah">
+        <Settings>
+            <Global caseIgnored="no" escapeChar="\" />
+            <TreatAsSymbol comment="no" commentLine="yes" />
+            <Prefix words1="no" words2="no" words3="no" words4="no" />
+        </Settings>
+        <KeywordLists>
+            <Keywords name="Delimiters">&quot;00&quot;00</Keywords>
+            <Keywords name="Folder+">{</Keywords>
+            <Keywords name="Folder-">}</Keywords>
+            <Keywords name="Operators">( )</Keywords>
+            <Keywords name="Comment">1/* 2*/ 0//</Keywords>
+            <Keywords name="Words1">abstract boolean break byte case catch char class const continue debugger default delete do double else enum export extends final finally float for function goto if implements import in instanceof int interface long native new package private protected public return short static super switch synchronized this throw throws transient try typeof var void volatile while with true false prototype</Keywords>
+            <Keywords name="Words2">_addMock _alert _assert _assertContainsText _assertEqual _assertEqualArrays _assertExists _assertFalse _assertNotContainsText _assertNotEqual _assertNotExists _assertNotNull _assertNotTrue _assertNull _assertTrue _blur _call _callServer _callServer _check _clearLastAlert _clearLastConfirm _clearLastDownloadedFileName _clearLastPrompt _clearPrintCalled _click _clickLinkByAccessor _closeWindow _createCookie _debug _debugToErr _debugToFile _deleteCookie _disableKeepAlive _domain _doubleClick _dragDrop _dragDropXY _enableKeepAlive _eval _expectConfirm _expectPrompt _focus _highlight _keyDown _keyPress _keyUp _log _mockImage _mouseDown _mouseOver _mouseUp _navigateTo _popup _removeFocus _removeMock _resetSavedRandom _rightClick _rteWrite _saveDownloadedAs _setFile _setGlobal _setSelected _setValue _simulateEvent _simulateMouseEvent _simulateMouseEventXY _type _uncheck _wait</Keywords>
+            <Keywords name="Words3">_accessor _button _checkbox _image _imageSubmitButton _link _password _radio _select _submit _textarea _textbox _hidden _event _cell _table _byId _row _div _span _spandiv _option _reset _file _get _byText _byClassName _label _listItem _list _parentNode _parentCell _parentRow _parentTable _in _near _rte _iframe _tableHeader _heading1 _heading2 _heading3 _heading4 _heading5 _heading6 _hidden _area _map _italic _bold _emphasis _strong _preformatted _code _blockquote _xy _under _byXPath _bySeleniumLocator _getValue _getAttribute _containsText _containsHTML _getText _getCellText _getSelectedText _lastAlert _lastPrompt _lastConfirm _style _cookie _position _rteHTML _rteText _isVisible _contains _title _exists _isIE _isFF _isFF3 _isChrome _isSafari _isOpera _isHTMLUnit _fetch _random _savedRandom _getGlobal _getDB _readFile _readURL _print _printCalled _lastDownloadedFileName _scriptName _logException _logExceptionAsFailure _stopOnError _continueOnError _scriptPath _re _readCSVFile _writeFile _writeToFile _deleteFile _suiteInfo _writeCSVFile _areEqualArrays _userDataDir _setRecovery _removeRecovery _sessionInfo _renameFile _runUnitTests _fail _dataDrive _condition _setSpeed _selectWindow _selectDomain _userDataPath _evalOnRhino _scriptStatus _flex _stackTrace _dynamicInclude _execute _prompt _confirm _resolvePath _datebox _datetimebox _datetime-localbox _emailbox _monthbox _numberbox _rangebox _telbox _timebox _urlbox _weekbox</Keywords>
+            <Keywords name="Words4"></Keywords>
+        </KeywordLists>
+        <Styles>
+            <WordsStyle name="DEFAULT" styleID="11" fgColor="000000" bgColor="FFFFFF" fontName="" fontStyle="0" />
+            <WordsStyle name="FOLDEROPEN" styleID="12" fgColor="000000" bgColor="FFFFFF" fontName="" fontStyle="0" />
+            <WordsStyle name="FOLDERCLOSE" styleID="13" fgColor="000000" bgColor="FFFFFF" fontName="" fontStyle="0" />
+            <WordsStyle name="KEYWORD1" styleID="5" fgColor="000080" bgColor="FFFFFF" fontName="" fontStyle="1" />
+            <WordsStyle name="KEYWORD2" styleID="6" fgColor="800080" bgColor="FFFFFF" fontName="" fontStyle="0" />
+            <WordsStyle name="KEYWORD3" styleID="7" fgColor="FF8040" bgColor="FFFFFF" fontName="" fontStyle="0" />
+            <WordsStyle name="KEYWORD4" styleID="8" fgColor="000000" bgColor="FFFFFF" fontName="" fontStyle="0" />
+            <WordsStyle name="COMMENT" styleID="1" fgColor="808080" bgColor="FFFFFF" fontName="" fontStyle="0" />
+            <WordsStyle name="COMMENT LINE" styleID="2" fgColor="808080" bgColor="FFFFFF" fontName="" fontStyle="0" />
+            <WordsStyle name="NUMBER" styleID="4" fgColor="000000" bgColor="FFFFFF" fontName="" fontStyle="0" />
+            <WordsStyle name="OPERATOR" styleID="10" fgColor="000000" bgColor="FFFFFF" fontName="" fontStyle="0" />
+            <WordsStyle name="DELIMINER1" styleID="14" fgColor="8080C0" bgColor="FFFFFF" fontName="" fontStyle="1" />
+            <WordsStyle name="DELIMINER2" styleID="15" fgColor="000000" bgColor="FFFFFF" fontName="" fontStyle="0" />
+            <WordsStyle name="DELIMINER3" styleID="16" fgColor="000000" bgColor="FFFFFF" fontName="" fontStyle="0" />
+        </Styles>
+    </UserLang>
+</NotepadPlus>

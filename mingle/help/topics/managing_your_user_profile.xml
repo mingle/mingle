@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Managing your user profile">
+  <section title="How to get to this page"> 
+    <p>Logged in Mingle users can always click the profile link located at the top of each Mingle page to go to their user profile page.</p>
+    <screenshot alttext="Profile link" src="resources/images/profile_link.png" />
+    <p><cref topic="user_roles#mingle_administrator">Mingle administrators</cref> or <cref topic="user_roles#project_administrator">project administrators</cref> can open any user's profile page by clicking a user's display name on the <cref topic="manage_users_page#open_a_user_profile">Manage user page</cref> or the <cref topic="project_team_page">Team page</cref>.</p>
+    <screenshot alttext="Click user display name" src="resources/images/open_user_profile.png"/>
+  </section>
+  <section title="What you can do on this page">
+    <p><strong>All Mingle users</strong> can manage their own user profile. The page lets you manage your profile information and personal settings.</p>
+    <bullets>
+      <item> <cref topic="managing_your_user_profile#view_profile_details">View and update profile details</cref></item>
+      <item> <cref topic="managing_your_user_profile#change_password">Change your password</cref></item>
+      <item> <cref topic="managing_your_user_profile#view_project_assignments">View project assignments</cref></item>
+      <item> <cref topic="managing_your_user_profile#manage_personal_favorites">Manage personal favorites</cref></item>
+      <item> <cref topic="managing_your_user_profile#manage_email_subscriptions">Manage email subscriptions</cref></item>
+      <item> <cref topic="managing_your_user_profile#manage_oauth_access_tokens">Manage OAuth access tokens</cref></item>
+    </bullets>
+    <p><strong>Mingle administrators</strong> can manage any user's profile (see above).  In addition, they can:</p>
+    <bullets>
+      <item> <cref topic="managing_your_user_profile#add_user_to_multiple_projects">Add a user to multiple projects</cref></item>
+    </bullets>
+    <p><strong>Project administrators</strong> have restricted permissions when they look at other another's profile. They can:</p>
+    <bullets>
+      <item> <cref topic="managing_your_user_profile#view_profile_details">View profile details</cref></item>
+      <item> <cref topic="managing_your_user_profile#view_project_assignments">View project assignments</cref></item>
+      <item> <cref topic="managing_your_user_profile#add_user_to_multiple_projects">Add a user to multiple projects</cref></item>
+    </bullets>
+  </section>
+  <section title="Viewing profile details" id="view_profile_details" collapsed = 'true'>
+    <p>You can see following information:</p>
+    <bullets>
+      <item>Personal Icon</item>
+      <item>Sign-in name</item>
+      <item>Display name</item>
+      <item>Email address</item>
+      <item>Jabber user name</item>
+      <item>Version control name</item>
+    </bullets>
+    <p>To update these fields, click the "Edit" button and update them on <cref topic="edit_profile_page">edit profile page</cref>.</p>
+    <note><cref topic="user_roles#project_administrator">Project administrators</cref> can view another's profile information but do not have permission to update.</note>
+  </section>
+  <section title="Changing password" id="change_password" collapsed = 'true'>
+    <p>If Mingle is used to manage passwords, users can change their password on their user profile page. <cref topic="user_roles#mingle_administrator">Mingle administrators</cref> can also change another user's password.</p>
+    <steps title="To change a Mingle user's password">
+      <item>Go to your profile page, or the profile page of another user.</item>
+      <item>
+        <p>Click the <button>Change Password</button> button.</p>
+        <screenshot alttext="Change password button on user profile" src="resources/images/user_profile_change_password_button.png" />
+      </item>
+      <item>
+        <p>Enter the new password.</p>
+        <note>Mingle requires a password format of at least 5 characters, including a number and a symbol character.</note>
+        <screenshot alttext="Change password page" src="resources/images/change_password.png" />
+      </item>
+      <item>Click <button>Change Password</button> to change the password.</item>
+    </steps>
+  </section>
+  <section title="Viewing project assignments" id="view_project_assignments" collapsed = 'true'>
+    <p>On the "Projects" tab, you will see the Mingle projects you are assigned to and your project permissions. <cref topic="user_roles#mingle_administrator">Mingle administrators</cref> and <cref topic="user_roles#project_administrator">project administrators</cref> can view this information.</p>
+    <screenshot alttext="Profile projects tab" src="resources/images/profile_project_tab.png" />
+    <note><cref topic="user_roles#mingle_administrator">Mingle administrators</cref> and <cref topic="user_roles#project_administrator">project administrators</cref> can also add a user to multiple projects.</note>
+  </section>
+  <section title="Adding a user to multiple projects" id="add_user_to_multiple_projects" file="adding_user_to_multiple_projects" collapsed="true"/> 
+  <section title="Managing personal favorites" id="manage_personal_favorites" collapsed = 'true'>
+    <p>Users can manage their own personal favorites from this tab. <cref topic="user_roles#mingle_administrator">Mingle administrators</cref> can manage another's personal favorites as well.</p>
+    
+    <steps title="To view and delete personal favorites:">
+      <item>Go to your profile page or the profile page of another user.</item>
+      <item>Click the "My Favorites" tab.</item>
+      <item>You will see the personal favorites that belong to the profile.</item>
+      <item>Click the "Delete" link to delete a favorite.</item>
+    </steps>
+    <screenshot alttext="Profile My-favorite tab" src="resources/images/profile_myfavorites_tab.png"/>
+  </section>
+  <section title="Managing Email subscriptions" id="manage_email_subscriptions" file="managing_email_subscriptions" collapsed= 'true' />
+  <section title="Managing OAuth access tokens" id="manage_oauth_access_tokens" collapsed = 'true'>
+    <hint>The OAuth Access Tokens tab is for a feature we will announce in the near future.  Stay tuned.</hint>
+  </section>
+  <section title="Also see...">
+    <bullets>
+      <item><cref topic="edit_profile_page">Editing user profile</cref></item>
+      <item><cref topic="user_roles">About Mingle user roles</cref></item>
+      <item><cref topic="creating_user_profiles">Creating users (Mingle administrator)</cref></item>
+      <item><cref topic="managing_project_team_members">Managing project team members (project administrator)</cref></item>
+    </bullets>
+  </section>
+</topic>
+
+

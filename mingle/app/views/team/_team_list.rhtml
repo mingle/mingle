@@ -1,0 +1,45 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<ul class="top-5">
+  <% User.current.recent_users(@project).first(5).each do |user| %>
+      <li><%= image_tag_for_user_icon(user, :class => 'avatar', :title => user.name, 'data-name' => user.name, 'data-value-identifier' => user.id) %></li>
+  <% end %>
+</ul>
+
+<% if @project.users.search_count(nil, team_list_search_option) > 5  %>
+<div class="full-team-list">
+  <i class="fa fa-ellipsis-v"></i>
+  <div class="content" >
+  </div>
+</div>
+<% end %>
+
+<div class="card-icon-placeholder-toggle" data-value="true">
+<div id="team-list-popover-content" class="card-assign" data-url="<%= url_for(:controller => 'team', :action => 'index', :search => team_list_search_option.merge(:per_page => 500), :format => 'json') %>">
+  <input type="text" class="search-for-team-members" placeholder="Find your Mingler"/>
+  <div class="assign-team-member">
+    <% form_tag(team_invite_user_path(@project.identifier), 'data-remote' => true) do %>
+      <i class="fa fa-times cancel"></i>
+      <%= text_field_tag 'email', '', :class =>"email", :placeholder => "person@your.org", 'data-invite-suggestions-url' => team_invite_suggestions_path(@project.identifier) %>
+      <%= submit_tag 'Invite', :class => "invite-team-member", :name => 'invite-to-team', 'data-disable-with' => 'Inviting...' %>
+      <i class="fa fa-spinner fa-spin spinner" style="display:none;"></i>
+    <% end -%>
+    <div class="users team-list"></div>
+  </div>
+  <div class="unassign"><a href="javascript:void(0)">unassign team member</a></div>
+</div>
+</div>

@@ -1,0 +1,156 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+ul.tagit {
+    padding: 1px 5px;
+    overflow: auto;
+    margin-left: inherit; /* usually we don't want the regular ul margins. */
+    margin-right: inherit;
+    border: none;
+}
+ul.tagit li {
+    display: inline-block;
+    margin: 2px 5px 2px 0;
+}
+ul.tagit li.tagit-choice {
+    position: relative;
+    line-height: inherit;
+}
+input.tagit-hidden-field {
+    display: none;
+}
+ul.tagit li.tagit-choice-read-only {
+    padding: .2em .5em .2em .5em;
+}
+
+ul.tagit li.tagit-choice-editable {
+    padding: .2em 18px .2em .5em;
+}
+
+ul.tagit li.tagit-new {
+    padding: .25em 4px .25em 0;
+}
+
+ul.tagit li.tagit-choice a.tagit-label {
+    cursor: pointer;
+    text-decoration: none;
+}
+
+ul.tagit li.tagit-choice span.tagit-label {
+    white-space: nowrap;
+}
+
+ul.tagit li.tagit-choice .tagit-close {
+    cursor: pointer;
+    position: absolute;
+    right: .1em;
+    top: 50%;
+    margin-top: -8px;
+    line-height: 17px;
+}
+
+/* used for some custom themes that don't need image icons */
+ul.tagit li.tagit-choice .tagit-close .text-icon {
+    display: none;
+}
+
+ul.tagit li.tagit-choice input {
+    display: inline-block;
+    margin: 2px 5px 2px 0;
+}
+
+/* following is customizing for mingle */
+
+ul.tagit {
+  margin: 0 0 1px 0;
+  &:before {
+    margin-top: 6px;
+    display: inline-block;
+    @include fa_icon($fa-var-tags); /* tag icon */
+  }
+
+  li.tagit-choice {
+    cursor: pointer;
+    background-color: #eee;
+    white-space: nowrap;
+    span {
+      color: #333;
+      vertical-align: center;
+    }
+  }
+
+  li.tag-placeholder {
+    line-height: 18px;
+    font-size: 0;
+    vertical-align: top;
+
+    &:after {
+      content: "\00a0";
+    }
+  }
+
+  li.tagit-new {
+    @extend .inline-add;
+
+    &:before {
+      margin-top: 2px;
+      display: inline-block;
+      font-weight: bold;
+      color: #666;
+      @include fa_icon($fa-var-plus);
+    }
+    input[type="text"] {
+      width: inherit;
+    }
+  }
+
+  a.tagit-close {
+      text-decoration: none;
+  }
+
+  .ui-icon.ui-icon-close {
+    line-height: normal;
+    text-indent: 0px;
+    text-align: center;
+    padding-left: 3px;
+    padding-top: 1px;
+    color: #ccc;
+    font-size: 12px;
+
+    &:hover {
+      color: #333;
+    }
+
+    &:after {
+      @include fa_icon($fa-var-times);
+    }
+
+  }
+}
+
+.tagit-pannel {
+  position: relative;
+  display: inline-block;
+  .spinner {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+  }
+}
+
+#sidebar .tagit-pannel input[type=text] {
+  width: auto;
+}

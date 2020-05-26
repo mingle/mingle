@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "identify_whom_to_talk_to.dtd">
+<chapter title="Identify whom to talk to as your plan changes" collapsed="false">
+	<p>Mingle Plus helps you identify whom to talk to as your program plan changes, supporting collaboration towards adapting your program to accommodate actual progress, achieve your objectives, and deliver customer value.</p> 
+    <p>If you see an alert or notice schedule drift when checking the status and progress of your plan, you might understand that a project is running late and want to know: 1) why and 2) who needs support to continue moving forward.</p>
+	<p>To understand why, you can view work to see the status of work items in an objective. (You can also use the filter to limit work items to a specific project and status.) You can review which items are “done” according to your done definition and which are not yet complete.</p>
+	<p>Because Mingle Programs and their plans are directly linked to your Mingle projects, you can understand who needs support by drilling into specific cards to view their history and current status. You can see who last worked on the card and start a conversation with her, or reach out to the project manager to understand what can be done to help move the project forward.</p>
+		<screenshot src="resources/images/view_work.png"/>
+	<p>If an alert indicates that a project in your objective has not yet started, you can access the Mingle project to see who’s working on it, review the work on deck, and speak with the project team about how best to initiate work towards achieving your objective.</p>
+		<screenshot src="resources/images/projects.png"/>
+</chapter>

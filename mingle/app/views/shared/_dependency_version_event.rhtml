@@ -1,0 +1,57 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="dependency-<%= event.id %>-<%= event.version %>" class="event dependency-event">
+  <div class="user-icon">
+    <span class="event-type"></span>
+    <%= image_tag_for_user_icon(event.event.created_by, :size => '24x24') %>
+  </div>
+  <div class="event-content">
+    <h3>
+      <% if include_object_name -%>
+        <%= link_to_function "Dependency #D#{event.number}", "$j(this).showDependencyPopup();", { :"data-dependency-number" => event.number, :"data-dependency-popup-url" => url_for(:controller =>"dependencies", :action => "popup_show"), :"data-dependency-version" => event.version } %>
+        <span class="notes"><%= h dependency_event_originator(event) %></span>
+      <% else -%>
+        <% if event.latest_version? %>
+          Version <%= event.version %>
+        <% else %>
+          <%= link_to_function "Version #{event.version}", "$j(this).showDependencyPopup();", { :"data-dependency-number" => event.number, :"data-dependency-popup-url" => url_for(:controller =>"dependencies", :action => "popup_show"), :"data-dependency-version" => event.version, accessing: {controller: ((defined?(program_dependency) && program_dependency) ? :program_dependencies : :dependencies), action: :popup_show } } %>
+        <% end %>
+        <p class="notes"><%= h dependency_event_originator(event) %></p>
+      <% end -%>
+    </h3>
+
+    <ul class="change">
+      <% if event.details_still_loading? -%>
+        <li>Details still loading... (<a onclick='historyLoader.reload()' class='history-refresh'>refresh</a>)</li>
+      <% else -%>
+        <% for change in event.changes.select(&:descriptive?) -%>
+          <li class="word_break"><%= raw(change.describe) %></li>
+        <% end -%>
+      <% end -%>
+    </ul>
+
+    <% if include_version_links -%>
+    <div class="version-links">
+      <% if event.latest_version? -%>
+         <%= link_to_function "View latest version (v#{event.version})", "$j(this).showDependencyPopup();", { :"data-dependency-number" => event.number, :"data-dependency-popup-url" => url_for(:controller =>"dependencies", :action => "popup_show"), :"data-dependency-version" => event.version, :id => "link-to-dependency-#{event.id}" } %>
+      <% else -%>
+         <%= link_to_function "View this version (v#{event.version})", "$j(this).showDependencyPopup();", { :"data-dependency-number" => event.number, :"data-dependency-popup-url" => url_for(:controller =>"dependencies", :action => "popup_show"), :"data-dependency-version" => event.version, :id => "link-to-page-#{event.id}-#{event.version}" } %> |  <%= link_to_function "View latest version (v#{event.dependency.version})", "$j(this).showDependencyPopup();", { :"data-dependency-number" => event.number, :"data-dependency-popup-url" => url_for(:controller =>"dependencies", :action => "popup_show"), :id => "link-to-dependency-#{event.id}" } %>
+      <% end -%>
+    </div>
+    <% end -%>
+  </div>
+</div>

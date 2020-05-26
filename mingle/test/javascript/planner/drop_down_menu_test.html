@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>JavaScript unit test file</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+  <script src="../../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../test_assets/unittest.js" type="text/javascript"></script>
+  <script src="../test_assets/unittest_ext.js" type="text/javascript"></script>
+
+  <script src="../../../public/javascripts/common/drop_down_menu.js" type="text/javascript"></script>
+
+  <link rel="stylesheet" href="../test_assets/unittest.css" type="text/css" />
+  <style type="text/css" media="screen">
+    .hide {
+      display:none;
+    }
+  </style>
+</head>
+  <body>
+
+  <div id="content">
+
+    <div id="header">
+      <h1>JavaScript unit test file</h1>
+      <p>
+        This file tests <strong>drop_down_menu.js</strong>.
+      </p>
+    </div>
+    <div id='test-content' style='padding: 0; margin: 0; left: 0px; top: 0px; position: absolute'>
+      <a href="javascript:void();" data-component="drop_down_menu" id='first_drop_down'>
+        Admin
+        <span class="menu-icon icon-caret-down"></span>
+      </a>
+      <div id='first_drop_down_menu_items' class="hide">
+        <ul>
+          <a href="#">item</a>
+        </ul>
+      </div>
+      <a href="javascript:void();" data-component="drop_down_menu" id='second_drop_down'>
+        Admin
+        <span class="menu-icon icon-caret-down"></span>
+      </a>
+      <div id='second_drop_down_menu_items' class="hide">
+        <ul>
+          <a href="#">item</a>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Log output -->
+    <div id="testlog" style="top: 200px"> </div>
+  </div>
+
+  <script type="text/javascript">
+  // <![CDATA[
+
+    new Test.Unit.Runner({
+      setup: function()  {
+      },
+
+      testClickingOnADropDownLinkDisplaysItsMenuItems: function() { with(this) {
+        assert(!$j('#first_drop_down_menu_items').is(':visible'));
+        $j('#first_drop_down').click();
+        assert($j('#first_drop_down_menu_items').is(':visible'));
+      }},
+
+      testClickingOutsideTheDropDownMenuClosesTheMenu: function() { with(this) {
+        $j('#first_drop_down').click();
+        $j(document).click();
+        assert(!$j('#first_drop_down_menu_items').is(':visible'));
+      }},
+
+      testClickingOnADropDownLinkHidesAnyOtherOpenMenuAndDisplaysItsMenuItemsOnly: function() { with(this) {
+        $j('#first_drop_down').click();
+        assert($j('#first_drop_down_menu_items').is(':visible'));
+        assert(!$j('#second_drop_down_menu_items').is(':visible'));
+
+        $j('#second_drop_down').click();
+        assert(!$j('#first_drop_down_menu_items').is(':visible'));
+        assert($j('#second_drop_down_menu_items').is(':visible'));
+      }}
+    }, { testLog: "testlog", test : '' });
+  // ]]>
+  </script>
+</body>
+</html>

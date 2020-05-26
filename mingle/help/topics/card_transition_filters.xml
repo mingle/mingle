@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_help.dtd">
+<chapter title="Card transition filters">
+
+	<p>With the 2.3 release, Mingle introduced filters to the Card transitions page. Two filters are provided; one for a card type and another for card property. With these filters Mingle allows you to view the list of transitions in the order each transition is used according to your project workflow. </p>
+
+	<section title="Filter your transitions">
+		<p>You can select a card type and a card property to filter transitions on the card transitions page. The card type filter contains all existing card types from current project. Once a card type is selected, the property filter becomes enabled. The property filter contains all properties that are available to the card type that has been selected in the card type filter. Below shows a Story card type and a Status property have been selected for each filter:</p>		
+		<screenshot alttext="" src="resources/images/transition_filters.png"/>
+		<hint>Only managed text, any text, managed numeric, any numeric, tree relationship, card relationship, user and date properties are available on the card property filter. Formula or aggregate properties are <strong>not</strong> supported from the card property filter. </hint>
+	</section>
+			
+	<section title="List transitions in your workflow order">	
+		<p>As soon as both a card type and a card property are selected, transitions that are for the selected card type and property will be listed. These transitions are sorted according to the customized order of the selected property's values. </p>
+		<bullets>
+    		<item>Transitions are sorted by property values used in prerequisite, or <strong>has</strong>, section and then by the property values used in the <strong>sets</strong> section. When both of these conditions are the same, transitions are alphabetically ordered by their names. </item>
+    	 	<item>Reserved values, such as (today) or (current user), project variables and (user input - required) or (user input - optional) are listed at the end of the workflow.</item>
+    	</bullets>
+		<screenshot alttext="" src="resources/images/transition_listed_by_filters.png"/>	
+		
+	</section>
+	<section title="Also see...">
+		<bullets>
+			<item><cref topic="card_transitions">Card Transitions</cref></item>
+		</bullets>
+	</section>
+</chapter>

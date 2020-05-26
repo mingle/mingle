@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_help.dtd">
+<chapter title="Card types">
+	<section title="Introduction">
+		<p>Card types are the various things you track in your project. These things would change from project to project depending on the methodology you follow and the kind of project. 
+			For example a newly started project under active development could have card types like story, task, defect, risk, etc. while a project in maintenance mode might have defect, issue, enhancement, feature request etc.</p>
+		
+		<p>Each card type can have its own <cref topic="card_properties">properties</cref> and <cref topic="card_transitions">transitions</cref>. This means that different types of cards could proceed through different properties and different lifecycles.</p>
+		
+		<p>Card types behave like property values, which allows them to have a sort order and color. 
+			You can group by and color by Type in <cref topic="grid_view">grid views</cref>, <cref topic="filter_list_by_component">filter</cref> by them, 
+			create <cref topic="creating_a_favorite_card_view">saved views and tabs</cref>, use them in <cref topic="mql_reference">MQL Queries</cref> and 
+			<cref topic="creating_charts_and_tables_in_wiki_pages">charts</cref>, just like you could with any other property.</p>
+		
+		<hint>Take a look at the <cref topic="standard_mingle_templates">standard project templates</cref> that are provided with Mingle to see some examples of what kind of card types may be useful to your project.</hint>
+	</section>
+	<section title="Maintaining card types" file="maintaining_card_types" />		
+	<section title="How do card types impact how Mingle works?">
+		<subsection title="Card Editing">			
+			<p>You can only set values for properties that belong to the current card type. Properties that are not applicable will not even show up.</p>
+			
+			<warning>If you change the type of a card, all properties not applicable to the new type will be deleted. You cannot automatically undo this change. 
+				You can still undo it manually, using the project history. The same thing happens when editing cards in bulk.</warning>
+		</subsection>
+		<subsection title="Transitions">			
+			<p>You can only use properties in a transition that are valid for the specified card type. You cannot change a card's type in a transition.</p>
+		</subsection>			
+		<subsection title="Filters">			
+			<p>Card types drive a lot of how <cref topic="filter_list_by_component">filtering</cref> works. The valid properties for the selected properties are automatically made available to you.</p>
+		</subsection>
+	</section>
+	<section title="Importing and Exporting from Excel">
+		<todo>add screen captures here</todo>
+			<bullets>
+				<item>While importing cards, there is an option to import a particular column's values as card types. If you have a column called Type, it will be automatically chosen to be the card type column. 
+					On import, a card type will be created for each unique value in this column. All other columns that are selected as properties are made available to that card type.</item>
+				<item>You can only choose at most one column to be card type.</item>
+				<item>If you import from Excel into a project without any cards and you do not select any column to be card type, all imported cards will be assigned the first card type in the project. This card type is shown to you when you import.</item>
+				<item>If you import from Excel over existing cards and update their card type, all values corresponding to their old type will be deleted.</item>
+			</bullets>
+			<warning>If when you are updating cards through Excel Import, you change the type of a card, all properties not applicable to the new type will be deleted. 
+				You cannot automatically undo this change. You can still undo it manually, using the project history.</warning>
+	</section>	
+	
+	<section title="Also see...">
+			<bullets>
+				<item>
+					<cref topic="explore_mingle_topic_whats_a_card">What's a card?</cref>
+				</item>
+				<item>
+					<cref topic="working_with_cards">Working with cards</cref>
+				</item>
+						</bullets>
+	</section>
+</chapter>
+
+

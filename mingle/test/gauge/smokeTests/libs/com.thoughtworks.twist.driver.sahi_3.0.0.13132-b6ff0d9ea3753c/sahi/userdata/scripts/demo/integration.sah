@@ -1,0 +1,30 @@
+// Test Manager can pass in data to this script via "initJS" parameter.
+// initJS will be "eval"ed before a script starts
+// Test Manager may also want to pass testCaseId, userId etc. to the script via "extraInfo" parameter
+// The script can post back the results of the test with the extraInfo (testCaseId, userId)
+
+// Pass "$user='test';$pwd='secret';" as parameter "initJS"
+
+_setValue(_textbox("user"), $user);
+_setValue(_password("password"), $pwd);
+_click(_submit("Login"));
+_setValue(_textbox("q"), "2");
+_setValue(_textbox("q[1]"), "1");
+_setValue(_textbox("q[2]"), "1");
+_click(_button("Add"));
+_click(_cell("Rs.200[1]"));
+_assertExists(_textbox("total"));
+_assert(_isVisible(_textbox("total")));
+_assertEqual("1150", _textbox("total").value);
+_click(_button("Logout"));
+
+// Implement a onScriptEnd callback function. This will be called at the end of the script.
+function onScriptEnd(){
+	// extraInfo is accessible via _sahi.getExtraInfo() 
+	_sahi.print(_sahi.getExtraInfo());
+	_sahi.print(_sahi._scriptStatus());
+	
+	// Can invoke a URL from here to talk back to the Test Manager. Uncomment the line below
+	// Packages.net.sf.util.Utils.readURL("http://TestManager/PostbackURL?myExtraInfo=" + escapeURIComponent(_sahi.getExtraInfo()) );
+	
+}

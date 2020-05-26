@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE section SYSTEM "mingle_help.dtd">
+<section title="Add child cards from parent card" id="create_children_from_parent">
+  <p>You can create child cards from a parent card.</p>
+  <bullets>
+    <item>
+      <p>Open a card that is in a tree and can have children cards associated with it. The tree properties for the parent card will be listed on the card.</p>
+      <screenshot src="resources/images/tree_properties_on_card.png"></screenshot>
+    </item>
+    <item>
+      <p>Click on the <link>+</link> link that appears.</p>
+      <screenshot src="resources/images/child_quick_add_on_parent.png"></screenshot>
+    </item>
+  </bullets>
+  <p>After you click the <link>+ Add new Card</link> link, you will be shown the tree quick add box.</p>
+  <screenshot src="resources/images/quick_add_cards_to_parent_tree.png"/>
+  <bullets>
+    <item>
+      <p>By default, the cards will be created as the next available card type in the tree. To change the card type of the cards which are added, select the card type link at the top of the quick add box.</p>
+      <screenshot src="resources/images/quick_add_cards_to_tree_select_card_type.png"/>
+      <note>You will only be able to select card types which can be added under the card you are adding cards to. You can select any card type in the tree when adding cards to the top of the tree.</note>
+    </item>
+    <item>
+      <p>By default, you can add five cards to the tree using the quick add box. To add more than five cards, select the <link>+</link> link.</p>
+      <screenshot src="resources/images/quick_add_cards_to_tree_add_more.png"/>
+    </item>
+  </bullets>
+  <p>After adding the names of the cards you want to add, select, <button>Save</button> from the quick add box to add the cards to the tree.</p>
+</section>

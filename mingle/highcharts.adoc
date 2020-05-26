@@ -1,0 +1,7 @@
+== How to build highcharts-2.2.3
+. Clone highcharts source code by `git clone  https://github.com/highcharts/highcharts`
+. Checkout version v2.2.3 tag `git checkout -b v2.2.3 v2.2.3`
+. Follow documentation at https://github.com/highcharts/highcharts/blob/v2.2.3/build.md to install pre-requisites for highcharts
+. Run this command to generate the distributable being at the root of the highcharts directory `ant dist`
+. After running the above command, the distribution is available at build/dist/Highcharts-2.2.3.zip
+. Unzip the distribution to location <cloned-mingle-directory>/mingle/public/javascripts/Highcharts-2.2.3

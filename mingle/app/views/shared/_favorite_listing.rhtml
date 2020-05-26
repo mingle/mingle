@@ -1,0 +1,62 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<ul>
+  <% favorites.of_card_list_views.include_favorited.smart_sort_by(&:name).each do |favorite| -%>
+      <li id="favorite-<%= favorite.id %>" class='<%= favorite_class(favorite) %>'>
+        <div class="favorite-item-container"
+             data-rename-url=<%= url_for(:controller => "favorites", :action => "rename") %>
+                 data-project-id=<%= @project.id %>
+             data-favorite-id=<%= favorite.id %>
+          <%= defined?(user_id) ? "data-user-id=#{user_id}" : '' %>>
+          <% if allow_view_creation %>
+            <span class="view-mode-only" style="float:right">
+            <%= link_to("",
+                       {:controller => 'cards', :action => 'create_view_async'},
+                       :id => favorite.favorited.html_id,
+                       :title => "Save current view as '#{favorite.name}'",
+                       :class => 'icon update-saved-view',
+                       :"data-name" => favorite.name) %>
+            </span>
+            <span class="view-mode-only" style="float:right">
+              <i class="fa fa-pencil favorites-pencil-icon" title="Rename"></i>
+            </span>
+
+            <span class="edit-mode-only" style="float:left"/>
+            <input type="text" value="<%= favorite.name %>" class="input-text"/>
+            <input type="submit" value="Save" class="primary favorite-save-button">
+            </span>
+          <% end %>
+            <span class="view-mode-only">
+             <%= link_to h(truncate(favorite.name, :length => 35)), {:controller => 'favorites', :action => 'show', :id => favorite.id}, :class => 'favorite-link', :title => favorite.name %>
+            </span>
+        </div>
+      </li>
+  <% end -%>
+
+  <% favorites.of_pages.include_favorited.smart_sort_by(&:name).each do |favorite| -%>
+      <li id="favorite-<%= favorite.id %>" class='<%= favorite_class(favorite) %>'>
+        <div>
+          <%= link_to h(truncate(favorite.name, :length => 35)), {:controller => 'favorites', :action => 'show', :id => favorite.id}, :class => 'favorite-link', :title => favorite.name %>
+        </div>
+      </li>
+  <% end -%>
+</ul>
+
+<%= javascript_with_rescue <<-JAVASCRIPT
+  $j("#favorites-container").makeFavoritesRenamable({truncationLength:35, saveTooltipPrefix: 'Save current view as'});
+  JAVASCRIPT
+-%>

@@ -1,0 +1,30 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<h1>Import program</h1>
+
+<div class="info-box">
+  <ul>
+    <p>Before importing your program, please make sure you have already migrated all projects in your program. If Mingle cannot detect all of the projects in the program being imported, your program import will fail. For more information about migrating your program, please see <%= render_help_link('Program Import', :class => '') %>.</p>
+    <p>Importing your program may take a long time.</p>
+    <p>We highly recommend that you export your program when there is minimal or no activity on your Mingle instance, or during scheduled down time.</p>
+  </ul>
+</div>
+
+<%= render :partial => 'form' %>
+
+<%= render :partial => 'form_action_bar', :locals => {:action => 'Import program', :onsubmit => ""}%>
+

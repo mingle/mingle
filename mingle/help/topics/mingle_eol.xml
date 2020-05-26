@@ -1,0 +1,232 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_help.dtd">
+<chapter title="Mingle End of Life and migration">
+<p>We have announced the <exref url="https://www.thoughtworks.com/mingle/news/2018/07/31/mingle-is-retiring.html">End of Life for Mingle</exref>. We will continue to support our customers until July 31st 2019. In the meantime, we recommend that our customers evaluate alternate tools, and migrate their data from Mingle to the tool of their choice. </p>
+    <section title="Exporting data from Mingle">
+        <p>As of October 1st 2018, we have made available a full Export feature. Mingle on the cloud customers can find this under the Export tab. Mingle Onsite customers will have to upgrade to 18.2 to access the Export feature.</p>
+        <screenshot alttext="Mingle eol export" src="resources/images/eol-export-utility.png" />
+        <p>Mingle administrators can start the export of the Mingle instance. You may choose a set of data from a checklist to export. Once the export is complete, you will be able to download a .zip. </p>
+        <screenshot alttext="Mingle eol export" src="resources/images/eol-export-utility-zipfile.png" />
+        <p>The options that you can choose from are as follows:</p>
+        <bullets>
+            <item><strong>Users and Admins</strong></item>
+                <p>The list of all users and project administrators is available as a .xlsx file. It has 2 sheets:</p>
+                <bullets>
+                    <item><strong>Users:</strong> Name, sign-in name, email address, role and activity status of all users in Mingle. This includes deactivated users.</item>
+                    <item><strong>Project admins:</strong> A list of all projects and admins' names and email addresses.</item>
+                </bullets>
+            <item><strong>User icons</strong></item>
+                 <p>This is a folder of all the profile images used by Mingle users. The filename of each image is in the format signinname_originalfilename.png</p> 
+            <item><strong>Integrations.xlsx</strong></item>   
+                 <p>If Mingle has been integrated with Slack, this file indicates the name of the Slack team that it is integrated with. This file will be available to Mingle on the cloud customers only. If the instance is not integrated with Slack, this file will not be in the downloaded .zip. </p>
+            <item><strong>Projects</strong></item>
+                 <p>Mingle administrators can choose which projects they would like to export and download. The projects on the checklist are sorted by activity, with the most recent first. </p>
+                 <p>Admins can, optionally, choose to export and download the history of each project. Exporting with the history will make the export much larger, and consequently slower, than without. </p>
+                <screenshot alttext="Mingle eol export" src="resources/images/eol-export-utility-history.png" />
+                 <p>The exported .zip will contain a folder titled Projects. This folder contains a sub-folder for every project that is exported. Each project folder has the name of the project, and contains the following:</p>
+                    <bullets>
+                        <item><strong>Data.xlsx</strong></item>
+                            <p>This file has multiple sheets and contains all data related to the project:</p>
+                            <bullets>
+                                <item><strong>Team:</strong> This is a list of all members in the project, with their name, display name, email address, permissions and groups in the project. </item>
+                                <item><strong>Cards:</strong> Every card in the project is listed as a row in this sheet. The card details - Number, Name, Description in plain text, Description in HTML, Type, Tags, Created by, Modified by, Incomplete checklist items, Complete checklist items and all properties of the card are columns. In addition, the Attachments column lists the names of all the attachments that were on the card, and these can be found in the Attachments folder. A column titled Has Charts indicates if the card contained any charts. The column titled Charts and Macros lists all the types of charts that were on the card. The Name column for each card links to the card in Mingle. Additionally, the column titled Data exceeding 32767 character limit indicates which columns have more data than the cell can hold. All such large data is exported to a .txt file in the Large descriptions folder. </item>
+                                <item><strong>Pages:</strong> Every page in the project is a row in this sheet. The details of the pages - Title, Description in plain text, Description in HTML and Tags are columns. In addition, the columns titled Tab and Team favorite indicate if the page was a tab or a team favorite respectively. The Attachments column lists the names of all the attachments that were on the page, and these can be found in the Attachments folder. A column titled Has Charts indicates if the page contained any charts. The column titled Charts and Macros lists all the types of charts that were on the page. The Title column for each page links to the page in Mingle. Additionally, the column titled Data exceeding 32767 character limit indicates which columns have more data than the cell can hold. All such large data is exported to a .txt file in the Large descriptions folder. </item>
+                                <item><strong>Murmurs:</strong> All the murmurs posted in this project are listed on this sheet, along with the timestamp, sign-in name of the member who posted it and the card number it was posted to. If it was posted to the project and not to a single card, it is indicated as Project. Additionally, any Murmur exceeding 32767 character limit is exported to a .txt file in the Large descriptions folder. </item>
+                                <item><strong>Card types:</strong> This is a list of all the card types configured in this project. If the card default for the type contained a description, it is listed in the columns titled Default description (Plain text) and Default description (HTML)</item>
+                                <item><strong>Properties:</strong> All the properties configured in the project are listed in this sheet. Their description, type and values are listed in columns. Additionally, the properties are indicated as Hidden, Locked and Transition-only in separate columns.  Additionally, any property values exceeding 32767 character limit is exported to a .txt file in the Large descriptions folder. </item>
+                                <item><strong>Types and properties:</strong> The mapping between card types and properties is listed in this sheet. Additionally, if a property takes a default value for a card type, it is listed in the Default value column. </item>
+                                <item><strong>Project variables:</strong> If any project variables are configured in the project, they are listed in this sheet, along with the type and properties they apply on. Additionally, the value of the project variable at the time of export is listed. </item>
+                                <item><strong>Trees:</strong> All trees in the project are in this sheet. There is a row for each connection between two nodes. The name and description of the tree, the parent node, child node and the property that links them are columns. Additionally, there are columns listing aggregate properties, their formula and scope, if any. </item>
+                                <item><strong>Transitions:</strong> This sheet represents all the workflow transitions configured in the project, if any. </item>
+                                <item><strong>Slack integration:</strong> If the project is integrated with Slack, this sheet contains the list of channels it is integrated with. Additionally, the Primary and Private columns indicate which channel is the default and which channels are private, respectively. This is available for Mingle on the cloud only. </item>
+                                <item><strong>Github integration:</strong> If the project is integrated with Github, this sheet indicates the username, repository and webhook ID. This is available for Mingle on the cloud only. </item>
+                                <item><strong>Code integration:</strong> This sheet lists other codebase integrations, if any. This is available for Mingle Onsite only. </item>
+                            </bullets>
+                            <item><strong>History.xlsx</strong></item>
+                                <p>If the admin has opted to export and download the project history, then the project folder will contain an additional History file. This file has a record of every action taken in the project. There are two sheets:</p>
+                                <bullets>
+                                    <item><strong>Card history</strong></item>
+                                    <item><strong>Page history</strong></item>
+                                </bullets>
+                                <p>In both, each event has several details - The date and time of the event, the sign-in name of the member who carried the action out, and the details of the change made. These changes include creation of a card or page, update of the description, properties, tags, attachments and murmurs. </p>
+                            <item><strong>Attachments</strong></item>
+                                <p>This folder contains sub-folders for each card and each page that contained attachments at the time of the export. The sub-folders are named by the card number and the page name. </p>
+                            <item><strong>Large descriptions</strong></item>
+                                <p>In the rare scenario that a card or page description exceeds the 32767-character limit in Microsoft Excel, the description is exported in a .txt file, and can be found in this folder. </p>    
+                    </bullets>
+            <item><strong>Programs</strong></item>
+                <note>This is available to Mingle Plus customers only.</note>
+                <bullets>
+                    <item><strong>Program name data.xlsx:</strong> An admin can choose which programs they want to export and download. These will be available in the exported .zip in a folder titled Programs. This folder contains a sub-folder for every program that is exported. Each program folder has the name of the program, and contains a .xlsx file. The file contains four sheets:</item>
+                            <bullets>
+                                <item><strong>Projects:</strong> This is a list of all the projects that are part of this program, along with the rule set for what qualifies as Done for the project (a property and value pair). Additionally, the Accepts dependencies column indicates if the other projects in the program will select the project when raising dependencies. </item>
+                                <item><strong>Team:</strong> This is a list of all the members in the program - their display names, sign-in names and email addresses.</item>
+                                <item><strong>Objectives:</strong> Each of the objectives created in the program is a row in this sheet. Details of the objectives are listed in columns - Number, title, value statement in plain text and HTML, value, size, created on timestamp, modified on timestamp, the sign-in name of the member who last modified it, the status, and the planned start and end date, if any. Additionally, the column titled Data exceeding 32767 character limit indicates which columns have more data than the cell can hold. All such large data is exported to a .txt file in the Large descriptions folder. </item>
+                                <item><strong>Objectives added work:</strong> This sheet lists the cards added to each objective at the time of export. The card name, number and the project is belongs to are listed in columns. Additionally, the Filter column indicates if the card was added to the objective as a result of a filter, and the Done status indicates if the card is complete based on the Done rule for the project. </item>
+                            </bullets>
+                    <item><strong>Large descriptions</strong> In the rare scenario that a card or page description exceeds the 32767-character limit in Microsoft Excel, the description is exported in a .txt file, and can be found in this folder. </item>
+                </bullets>    
+            <item><strong>Dependencies</strong></item>
+                <note>This is available to Mingle Plus customers only. </note>
+                <p>If the admin chooses to export and download dependencies, then the exported .zip will contain a folder called Dependencies. This folder contains two things:</p>
+                    <bullets>
+                        <item><strong>Dependencies.xlsx:</strong> This is a list of all dependencies that exist in Mingle at the time of export. It has two sheets:</item>
+                            <bullets>
+                                <item><strong>Dependencies:</strong> Each dependency is listed as a row in this sheet. The number, name, description in plain text and in HTML, the status, the date it was raised on, the project, the member and the card it was raised by, the project and cards that resolve it, and the desired completion date are details of the dependencies listed in columns. Additionally, the column titled Attachments lists the names of the files attached to the dependency, if any. Additionally, the column titled Data exceeding 32767 character limit indicates which columns have more data than the cell can hold. All such large data is exported to a .txt file in the Large descriptions folder. </item>
+                                <item><strong>History:</strong> This sheet has a record of every action taken with the dependencies. Each action is listed in a row. The columns contain details of the action - date and time that the action occurred, the sign-in name of the member who took the action, the dependency, and the details of the event that the action triggered. </item>
+                            </bullets>
+                        <item><strong>Attachments folder:</strong> This folder has a subfolder for each dependency that contains attachments. All files attached to the dependency at the time of export can be found in the subfolder, which is named by the dependency number. </item>
+                        <item><strong>Large descriptions</strong> In the rare scenario that a card or page description exceeds the 32767-character limit in Microsoft Excel, the description is exported in a .txt file, and can be found in this folder. </item> 
+                    </bullets>
+                <p>When the admin selects what you want to export, and clicks on Start Export, you will see a progress bar indicating how far along the export is. You may choose to leave the page and return to it later. This will not stop the export from completing. </p>
+                <screenshot alttext="Mingle eol export" src="resources/images/eol-export-utility-export-progress.png" />
+         </bullets>
+    </section>
+    <section title="Downloading the export">
+        <p>Once the export is complete, a download button becomes available. Clicking on this starts the download of the .zip file. The timestamp of the export is in the filename of the .zip.</p>
+         <screenshot alttext="Mingle eol export" src="resources/images/eol-export-utility-successful-export.png" />
+        <p>On unzipping the file, you will find the respective files and folders as described above. If any of the folders, sheets or files is empty, it will not be visible in the export.</p> 
+    </section>
+    <section title="Cancelling and restarting the export">
+        <p>When an export is in progress, you may choose to cancel it. The export is reset, and the checklist may once again be used to select the data to export. You may start a new export. It is not possible to pause and resume an export. </p>
+    </section>  
+    <section title="Reference guide to exported data">
+        <table>
+            <header-row>
+                <col-header>Mingle feature</col-header>
+                <col-header>Path in the export folder</col-header>
+            </header-row>    
+            <row>
+                <label>Cards</label>
+                <col>Projects > Project_folder > Data.xlsx (Cards sheet)</col>
+            </row>
+            <row>
+                <label>Pages</label>
+                <col>Projects > Project_folder > Data.xlsx (Pages sheet)</col>
+            </row>
+             <row>
+                <label>All Mingle users</label>
+                <col>Users and Admins.xlsx (Users sheet)</col>
+            </row>
+             <row>
+                <label>List of projects</label>
+                <col>Users and Admins.xlsx (Project administrators sheet)</col>
+            </row>
+             <row>
+                <label>Mingle administrators</label>
+                <col>Users and Admins.xlsx (Users sheet)</col>
+            </row>
+             <row>
+                <label>Project administrators</label>
+                <col>Users and Admins.xlsx (Project administrators sheet)</col>
+            </row>
+             <row>
+                <label>User images</label>
+                <col>User icons folder</col>
+            </row>
+             <row>
+                <label>Project team</label>
+                <col>Projects > Project_folder > Data.xlsx (Team sheet)</col>
+            </row>
+             <row>
+                <label>Murmurs</label>
+                <col>Projects > Project_folder > Data.xlsx (Murmurs sheet)</col>
+            </row>
+             <row>
+                <label>Dependencies(Mingle Plus only)</label>
+                <col>Dependencies > Dependencies.xlsx (Dependencies sheet)</col>
+            </row>
+             <row>
+                <label>Card types in a project</label>
+                <col>Projects > Project_folder > Data.xlsx (Card types sheet)</col>
+            </row>
+             <row>
+                <label>Properties in a project</label>
+                <col>Projects > Project_folder > Data.xlsx (Properties sheet)</col>
+            </row>
+             <row>
+                <label>Transition workflows in a project</label>
+                <col>Projects > Project_folder > Data.xlsx (Transitions sheet)</col>
+            </row>
+             <row>
+                <label>Trees in a project</label>
+                <col>Projects > Project_folder > Data.xlsx (Trees sheet)</col>
+            </row>
+             <row>
+                <label>Project variables</label>
+                <col>Projects > Project_folder > Data.xlsx (Project variables sheet)</col>
+            </row>
+             <row>
+                <label>Attachments on a card</label>
+                <col>Projects > Project_folder > Attachments > CardNumber_folder</col>
+            </row>
+             <row>
+                <label>Attachments on a page</label>
+                <col>Projects > Project_folder > Attachments > PageName_folder</col>
+            </row>
+             <row>
+                <label>Attachments on dependencies(Mingle Plus only)</label>
+                <col>Dependencies > Attachments folder</col>
+            </row>
+             <row>
+                <label>History of cards</label>
+                <col>Projects > Project_folder > History.xlsx (Card history sheet)</col>
+            </row>
+             <row>
+                <label>History of pages</label>
+                <col>Projects > Project_folder > History.xlsx (Page history sheet)</col>
+            </row>
+             <row>
+                <label>History of dependencies(Mingle Plus only)</label>
+                <col>Dependencies > Dependencies.xlsx (History sheet)</col>
+            </row>
+             <row>
+                <label>Slack integration(Mingle on the cloud only)</label>
+                <col>Integrations.xlsx (Slack sheet)AND Projects > Project_folder > Data.xlsx (Slack integration sheet)</col>
+            </row>
+             <row>
+                <label>Github integration(Mingle on the cloud only)</label>
+                <col>Projects > Project_folder > Data.xlsx (Github integration sheet)</col>
+            </row>
+             <row>
+                <label>Git / SVN / Mercurial integration(Mingle Onsite only)</label>
+                <col>Projects > Project_folder > Data.xlsx (Code integration sheet)</col>
+            </row>
+             <row>
+                <label>Program objectives(Mingle Plus only)</label>
+                <col>Programs > Program.xlsx (Objectives sheet)</col>
+            </row>
+             <row>
+                <label>List of projects in a program(Mingle Plus only)</label>
+                <col>Programs > Program.xlsx (Projects sheet)</col>
+            </row>
+        </table>
+        <p>Not available in the export:</p>
+        <bullets>
+            <item>Subscriptions to cards, pages or history</item>
+            <item>Personal favorites</item>
+            <item>List, grid and hierarchy views</item>
+            <item>Templates</item>
+            <item>CTA feed</item>
+            <item>Reports and charts</item>
+            <item>Program forecasting report</item>
+            <item>Planner view</item>
+        </bullets>    
+    </section>      
+</chapter>

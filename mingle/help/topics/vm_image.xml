@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Mingle Evaluation Virtual Machine (VM) Image">
+  <p>Mingle is available for evaluation as a virtual machine (VM) image. The main benefit of the VM image is that you will not need to setup a Mingle database in order to evaluate the functionality of Mingle.</p>
+  <warning> <p>The Mingle evaluation VM image is intended only for evaluations, not for production usage. Although Mingle can be run in production on a virtual machine, the focus of the Mingle evaluation VM image is on quick access, not on performance. For example, it is known that running the Mingle database and Mingle server on the same VM image will cause performance issues. 
+	
+	</p>
+
+	<p> When running Mingle in production on a VM image, the Mingle database would not be on the same image as the Mingle server. However, we felt it was reasonable to put the Mingle database and the Mingle server on the same VM image in order to speed up evaluation of the core Mingle functionality.</p> </warning>
+  <p>When evaluating Mingle, instead of selecting one of the standard Mingle downloads, select the "VMWare Image" link. After selecting "VMWare Image", you will be given specific instructions on downloading and running the VM image.</p>
+  <note>The Mingle evaluation VM image is a VMWare image. This means that you will need a VMWare player to run the image. If you don't have a VMWare player, the instructions for using the VM image will also discuss how to obtain a VMWare player.</note>
+</topic>

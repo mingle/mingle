@@ -1,0 +1,37 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div class="tabs_pane" id="<%= tabs_div_id = tabs.collect(&:underscored).join('_') %>">
+  <%= hidden_field_tag 'tab', selected_tab -%>
+  <div class="tabs_header clear_float">
+    <ul>
+      <% tabs.each do |tab| -%>
+      <li tab_identifier="<%= tab %>" class='menu_item <%= 'current' if selected_tab.ignore_case_equal?(tab) %>'>
+        <span><%= yield("tab_#{tab.underscored}_title".to_sym) || tab %></span>
+      </li>
+      <% end -%>
+    </ul>
+  </div>
+  <div class='tabs_content'>
+    <%- tabs.each do |tab| -%>
+      <div id="<%= tab.underscored %>_content" tab_identifier="<%= tab %>" class='tab_content' style='<%= "display: none" unless selected_tab.ignore_case_equal?(tab) %>'>
+        <%= yield("tab_#{tab.underscored}_content".to_sym) || "Please use content_for :tab_#{tab.underscored}_content {...} to fill this content" -%>
+      </div>
+    <%- end -%>
+  </div>
+</div>
+
+<%= javascript_with_rescue "Tabs.bindTabs('##{tabs_div_id}', '.menu_item', '.tab_content')" unless (defined?(disable) && disable) %>

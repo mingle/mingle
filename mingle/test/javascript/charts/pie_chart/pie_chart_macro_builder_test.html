@@ -1,0 +1,186 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Pie Chart Macro Builder Test</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <script src="../../../../app/assets/javascripts/thirdparty/prototype.js" type="application/javascript"></script>
+  <script src="../../../../public/javascripts/prototype_ext.js" type="application/javascript"></script>
+
+  <script src="../../../../app/assets/javascripts/easy_charts/mql_builder.js" type="application/javascript"></script>
+  <script src="../../../../app/assets/javascripts/easy_charts/pie_chart/macro_builder.js" type="application/javascript"></script>
+
+  <script src="../../test_assets/sinon-2.3.6.js" type="application/javascript"></script>
+  <script src="../../test_assets/qunit-1.21.0.js" type="application/javascript"></script>
+  <script src="../../test_assets/qunit-phantom.js" type="application/javascript"></script>
+  <link rel="stylesheet" href="../../test_assets/qunit-1.21.0.css" type="text/css"/>
+
+</head>
+<body>
+  <div id="qunit"></div>
+  <script type="application/javascript">
+    var expectedDataMql = 'SELECT "prop1", COUNT(*) WHERE "Type" IN ("Story","Card") AND NOT ("prop2" IN ("valX","valY")) AND TAGGED WITH "tag1"';
+    function FakeCardFilter(property, operator, value, isCardProperty) {
+      return {
+        property: { value: function () {return property; }},
+        operator: { value: function () {return operator; }},
+        value: { value: function () {return value; }},
+        isValid: function () { return property && operator && value; },
+        isForCardProperty: function() { return isCardProperty; }
+      };
+    }
+    QUnit.module('Macro Builder', {
+      beforeEach: function () {
+        this.originalMQLBuilder = MQLBuilder;
+        MQLBuilder = sinon.spy(MQLBuilder);
+        var cardFilters = [
+          new FakeCardFilter('Type', 'eq', ['Story', 'Card']),
+          new FakeCardFilter('prop2', 'ne', ['valX', 'valY'])
+        ];
+        this.chartData = {
+          project: 'project',
+          tags: ['tag1'],
+          property: 'prop1',
+          aggregate: 'count',
+          cardFilters: cardFilters
+        };
+      },
+      afterEach: function () {
+        MQLBuilder = this.originalMQLBuilder;
+      }
+    });
+
+    QUnit.test('testBuildShouldAddDataField', function (assert) {
+      var builder = new MingleUI.EasyCharts.PieChart.MacroBuilder(this.chartData);
+      var macro = builder.build();
+
+      assert.deepEqual(macro, {
+        'pie-chart': {
+          data: expectedDataMql,
+          project: this.chartData.project
+        }
+      });
+    });
+
+    QUnit.test('testBuildShouldCallMqlBuilderToGenerateDataField', function (assert) {
+      var builder = new MingleUI.EasyCharts.PieChart.MacroBuilder(this.chartData);
+      builder.build();
+
+      var builderOptions = MQLBuilder.args[0][0];
+
+      assert.equal(MQLBuilder.callCount, 1);
+      assert.deepEqual(builderOptions, {
+        property: this.chartData.property,
+        aggregateType: this.chartData.aggregate,
+        aggregateProp: undefined,
+        cardTypes: [],
+        project: this.chartData.project,
+         additionalConditions: this.chartData.cardFilters,
+        tags: this.chartData.tags
+      })
+    });
+
+    QUnit.test('testBuildShouldAddTitleWhenGiven', function (assert) {
+      this.chartData.chartTitle = 'chart title';
+      var builder = new MingleUI.EasyCharts.PieChart.MacroBuilder(this.chartData);
+
+      var macroParams  = builder.build()['pie-chart'];
+
+      assert.deepEqual(macroParams, {
+        data: expectedDataMql,
+        project: this.chartData.project,
+        title: 'chart title'
+      });
+    });
+
+    QUnit.test('testBuildShouldAddChartSizeWhenGiven', function (assert) {
+      this.chartData.chartSize = 'medium';
+      var builder = new MingleUI.EasyCharts.PieChart.MacroBuilder(this.chartData);
+
+      var macroParams  = builder.build()['pie-chart'];
+
+      assert.deepEqual(macroParams, {
+        data: expectedDataMql,
+        project: this.chartData.project,
+        'chart-size': 'medium'
+      });
+    });
+
+    QUnit.test('testBuildShouldAddLabelTypeWhenGiven', function (assert) {
+      this.chartData.labelType = 'whole-number';
+      var builder = new MingleUI.EasyCharts.PieChart.MacroBuilder(this.chartData);
+
+      var macroParams  = builder.build()['pie-chart'];
+
+      assert.deepEqual(macroParams, {
+        data: expectedDataMql,
+        project: this.chartData.project,
+        'label-type': 'whole-number'
+      });
+    });
+
+    QUnit.test('testBuildShouldAddLegendPositionWhenGiven', function (assert) {
+      this.chartData.legendPosition = 'right';
+      var builder = new MingleUI.EasyCharts.PieChart.MacroBuilder(this.chartData);
+
+      var macroParams  = builder.build()['pie-chart'];
+
+      assert.deepEqual(macroParams, {
+        data: expectedDataMql,
+        project: this.chartData.project,
+        'legend-position': 'right'
+      });
+    });
+
+    QUnit.test('testBuildShouldBuildMacro', function (assert) {
+      this.chartData.chartTitle = 'chart title';
+      this.chartData.chartSize = 'medium';
+      this.chartData.labelType = 'whole-number';
+      this.chartData.legendPosition = 'right';
+      var builder = new MingleUI.EasyCharts.PieChart.MacroBuilder(this.chartData);
+
+      var macroParams  = builder.build()['pie-chart'];
+
+      assert.deepEqual(macroParams, {
+        data: expectedDataMql,
+        project: this.chartData.project,
+        title: 'chart title',
+        'chart-size': 'medium',
+        'label-type': 'whole-number',
+        'legend-position': 'right'
+      });
+    });
+
+    QUnit.test('testBuildCardCountMqlShouldReturnOnlySelectClauseWhenChartDataIsEmpty', function (assert) {
+      var builder = new MingleUI.EasyCharts.PieChart.MacroBuilder({});
+
+      var macroParams  = builder.buildCardCountMql();
+
+      assert.equal(macroParams,'Select count(*)');
+    });
+
+    QUnit.test('testBuildCardCountMqlShouldReturnOnlySelectClauseWithConditionWhenChartDataIsNotEmpty', function (assert) {
+      var builder = new MingleUI.EasyCharts.PieChart.MacroBuilder(this.chartData);
+
+      var macroParams  = builder.buildCardCountMql();
+
+      assert.equal(macroParams,'Select count(*) where "Type" IN ("Story","Card") AND NOT ("prop2" IN ("valX","valY")) AND TAGGED WITH "tag1"');
+    });
+  </script>
+</body>
+</html>

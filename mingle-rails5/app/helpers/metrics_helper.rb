@@ -1,0 +1,64 @@
+#  Copyright 2020 ThoughtWorks, Inc.
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Affero General Public License as
+#  published by the Free Software Foundation, either version 3 of the
+#  License, or (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Affero General Public License for more details.
+#
+#  You should have received a copy of the GNU Affero General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+
+module MetricsHelper
+
+  def monitoring_events_user_id
+    "#{MingleConfiguration.app_namespace}:#{User.current.login}"
+  end
+
+  def monitoring_events_meta_data
+    {
+        :site_name => MingleConfiguration.app_namespace,
+        :trialing => (CurrentLicense.trial? rescue nil)
+    }
+  end
+
+
+  def metrics_enabled?
+    #Mixpanel metrics_api_key is the token in Mixpanel not API key
+    MingleConfiguration.metrics_api_key.present? && existing_user?
+  end
+
+  def existing_user?
+    !User.current.system? && !User.current.anonymous?
+  end
+
+  def metrics_data
+    {
+      api_key: MingleConfiguration.metrics_api_key,
+      enabled: metrics_enabled?,
+      meta_data: monitoring_events_meta_data,
+      user_id: monitoring_events_user_id
+    }.to_json
+  end
+
+
+  #TODO need to uncomment this section once EventsTracker is moved to rails 5 app
+  def add_monitoring_event(event, event_properties={})
+    if metrics_enabled?
+      events_tracker.track(monitoring_events_user_id, event, monitoring_events_meta_data.merge(event_properties))
+    end
+  end
+
+  def events_tracker
+    @events_tracker || EventsTracker.new
+  end
+  #
+  # testing only
+  # def set_events_tracker(tracker)
+  #   @events_tracker = tracker
+  # end
+end

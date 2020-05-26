@@ -1,0 +1,30 @@
+<browser>
+function getAccessorString(s){
+	return _sahi.getAccessor1(_sahi.getAccessorInfo(eval(s)));
+}
+</browser>
+
+var $fileName = "D:/sahi_v2/scripts/demo/verify_shorthands_inc.sah";
+
+var f = java.io.File($fileName)
+if (f.exists) f["delete"]();
+
+function writeStatement($elStr){
+    _debugToFile("_a" + "ssertEqual('"+ getAccessorString($elStr).replace(/[$]/g, "\\$") + "', getAccessorString(" + _sahi.getAccessor(_eval($elStr)) + "));", $fileName);
+}
+
+_set($length, document.f1.elements.length);
+for (var i=0; i<$length; i++){
+    var $elStr = 'document.f1.elements["'+i+'"]';
+    writeStatement($elStr);
+}
+_set($length, document.links.length);
+for (var i=0; i<$length; i++){
+    var $elStr = 'document.links["'+i+'"]';
+    writeStatement($elStr);
+}
+_set($length, document.images.length);
+for (var i=0; i<$length; i++){
+    var $elStr = 'document.images["'+i+'"]';
+    writeStatement($elStr);
+}

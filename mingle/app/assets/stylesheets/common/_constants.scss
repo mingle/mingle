@@ -1,0 +1,49 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+$GOLDEN_RATIO: 1.61803398875; // ((a + b) / a) : (a / b)
+$MINGLE_PRIMARY_COLOR: #3FBEEA; // rgb(63,190,234)
+$MINGLE_PRIMARY_ACTIVE: #2B8CBC;
+$MINGLE_PRIMARY_CONTRAST_COLOR: #fff;
+$MINGLE_SECONDARY_COLOR:        #666;
+$MINGLE_SECONDARY_CONTRAST_COLOR: #fff;
+
+$MINGLE_EMPTY_DEPENDENCY_COLOR: #E5E5E5;
+$MINGLE_NEW_DEPENDENCY_COLOR: #F24C27;
+$MINGLE_ACCEPTED_DEPENDENCY_COLOR: #EFC94C;
+$MINGLE_RESOLVED_DEPENDENCY_COLOR: #96CA2D;
+$MINGLE_NEW_DEPENDENCY_TEXT_COLOR: white;
+$MINGLE_ACCEPTED_DEPENDENCY_TEXT_COLOR: black;
+$MINGLE_RESOLVED_TEXT_COLOR: white;
+
+$TRACE_COLOR: #c3c3c3;
+$SUBTLE_TRACE_COLOR: #e2e2e2;
+$DEEMPHASIZED_COLOR: #999;
+$EMPHASIZED_COLOR: #000;
+
+$HEADER_BACKGROUND_COLOR: #eee;
+$HEADER_TAB_HOVER_COLOR: #f3f3f3;
+
+$HIGHLIGHT_COLOR: #EF5B6C;
+$CONTENT_LINK_COLOR: $MINGLE_PRIMARY_COLOR;
+
+$MINGLE_PRIMARY_DEEMPHASIZED: rgba($MINGLE_PRIMARY_COLOR, .1);
+
+$DESTRUCTIVE_PRIMARY_COLOR: #dd4337;
+$DESTRUCTIVE_SECONDARY_COLOR: #a5312b;
+
+$INFO_LEVEL_BACKGROUND: #ddebf3;
+$WARNING_LEVEL_BACKGROUND: #ffc;

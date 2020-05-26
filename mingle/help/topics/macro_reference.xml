@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Macro reference">
+<section title="Standard Macros">
+<p>Standard macros appear on the <cref topic="using_the_editing_toolbar">editing toolbar</cref> and can be created using the <cref topic="mingle_macro_builder">Macro Builder</cref>. If you are are familiar with Mingle macros and MQL syntax, you can also write macros by hand by clicking the Mingle icon in the editing toolbar.</p>	
+ 		  <screenshot src="resources/images/editing_toolbar_macros_highlighted.png" />
+<hint>
+	<bullets>
+		<item>Project variables are available as values for most parameters on the standard macros. Any project variable data types which match the types of any chart parameters can be used to generate charts. For example, you can use the date project variable called (Release Start Date) in 'x-labels-start' in data series chart.</item>
+		<item>You can also use THIS CARD.property (where property is any property name) as a value for most parameters on the standard macros. Any property data types which match the types of any chart parameters can be used in THIS CARD.property to generate charts. For example, you can use THIS CARD."Start Date" as the value of the parameter 'x-labels-start' on the data series chart. This will restrict the x-axis to start on the value of the "Start Date" property on the card where it is used.</item>
+		<item>Macro markup is space sensitive and we advise you to stick to the indentation scheme specified in the examples if you write your macro by hand.</item>
+	</bullets>
+</hint>		
+</section>
+	<section file="charts"/>
+	<section file="tables"/>
+	<section title="Query macros">
+		<subsection title="Average query" file="markup_average_query" collapsed="true" />
+		<subsection title="Value query" file="markup_value_query" collapsed="true" />
+	</section>
+
+	<section title="Other macros">
+		<subsection title="Project macro" file="markup_project" collapsed="true"/>
+		<subsection title="Project variable value macro" file="markup_project_variable" collapsed="true"/>
+		<subsection title="Dependency tracker" file="dependency_tracker" collapsed="true"/>
+		<subsection title="Go pipeline status macro" file="markup_go_pipeline_status" collapsed="true" />	
+		<subsection title="OpenSocial gadget macro" file="markup_opensocial_gadget" collapsed="true" />
+	    <subsection title="Google Calendar" file="markup_google_calendar" collapsed="true"/>
+		<subsection title="Google Map" file="markup_google_maps" collapsed="true"/>
+	</section>
+    <section title="Custom macros">
+        <subsection title="Cross project macro" file="cross_project_macros"/>
+    </section>
+	<section title="Also see...">
+		<bullets>
+			<item><cref topic="macro_and_mql_guide">Overview of Mingle reporting using macros and MQL</cref></item>
+			<item><cref topic="building_your_own_macro">Information about writing your own custom macros</cref></item>
+		</bullets>
+	</section>
+</topic>
+
+

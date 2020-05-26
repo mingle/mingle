@@ -1,0 +1,46 @@
+<% yaml = %{
+development:
+  adapter: jdbc
+  driver: oracle.jdbc.OracleDriver 
+  url: jdbc:oracle:thin:@#{ ENV['ORACLEHOST'] || 'localhost' }:1521:#{ ENV['CRUISE_ORACLE_INSTANCE'] || 'LNMNGDB6' }
+  username: #{ ENV['MINGLE_DEVELOPMENT_DB'] || 'mng_dev' }_#{ ENV['CC_HOSTNAME'] }
+  password: #{ ENV['MINGLE_DEVELOPMENT_DB'] || 'mng_dev' }_#{ ENV['CC_HOSTNAME'] }
+  pool: 12
+
+test: 
+  adapter: jdbc
+  driver: oracle.jdbc.OracleDriver 
+  url: jdbc:oracle:thin:@#{ ENV['ORACLEHOST'] || 'localhost' }:1521:#{ ENV['CRUISE_ORACLE_INSTANCE'] || 'LNMNGDB6' }
+  username: #{ ENV['MINGLE_TEST_DB'] || 'mng_test' }_#{ ENV['CC_HOSTNAME'] }
+  password: #{ ENV['MINGLE_TEST_DB'] || 'mng_test' }_#{ ENV['CC_HOSTNAME'] }
+  pool: 12
+  
+production: 
+  adapter:  jdbc
+  driver: oracle.jdbc.OracleDriver 
+  url: jdbc:oracle:thin:@#{ ENV['ORACLEHOST'] || 'localhost' }:1521:#{ ENV['CRUISE_ORACLE_INSTANCE'] || 'LNMNGDB6' }
+  username: #{ ENV['MINGLE_PRODUCTION_DB'] || 'mng_prd' }_#{ ENV['CC_HOSTNAME'] }
+  password: #{ ENV['MINGLE_PRODUCTION_DB'] || 'mng_prd' }_#{ ENV['CC_HOSTNAME'] }
+  pool: 12
+  
+test_upgrade_export:
+  adapter: jdbc
+  driver: oracle.jdbc.OracleDriver 
+  url: jdbc:oracle:thin:@#{ ENV['ORACLEHOST'] || 'localhost' }:1521:#{ ENV['CRUISE_ORACLE_INSTANCE'] || 'LNMNGDB6' }
+  username: #{ ENV['MINGLE_TEST_DB'] || 'mng_test' }_#{ ENV['CC_HOSTNAME'] }
+  password: #{ ENV['MINGLE_TEST_DB'] || 'mng_test' }_#{ ENV['CC_HOSTNAME'] }
+  pool: 12
+
+macro_toolkit_test:
+  adapter: jdbc
+  driver: oracle.jdbc.OracleDriver 
+  url: jdbc:oracle:thin:@#{ ENV['ORACLEHOST'] || 'localhost' }:1521:#{ ENV['CRUISE_ORACLE_INSTANCE'] || 'LNMNGDB6' }
+  username: #{ ENV['MINGLE_TEST_DB'] || 'mng_test' }_#{ ENV['CC_HOSTNAME'] }
+  password: #{ ENV['MINGLE_TEST_DB'] || 'mng_test' }_#{ ENV['CC_HOSTNAME'] }
+  pool: 12
+}
+File.open(File.join(Rails.root, 'config', "database.yml"), 'w') do |f|
+  f.write(yaml)
+end
+%>
+<%= yaml %>

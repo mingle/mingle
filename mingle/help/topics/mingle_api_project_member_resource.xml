@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE section SYSTEM "mingle_help.dtd">
+<section title="Structure of a project member resource" id="project_member_resource">
+  <p>The structure of a project member resource, and its attributes are described below, along with their data type. Also included with each attribute is whether you are allowed to update the value. System generated fields like <strong>id</strong> are provided only as information about the user and cannot be updated through the API.</p>
+  <api_attributes title="project member resource xml - attributes">
+    <api_attribute name="id" type="Integer" readonly="true">system assigned unique identifier for a user.</api_attribute>
+    <api_attribute name="admin" type="Boolean">determines if a user is a Mingle Administrator or not, default is false.</api_attribute>
+    <api_attribute name="readonly_member" type="Boolean">shows whether a user is read-only on the project.</api_attribute>
+    <api_attribute name="user" type="Resource"><strong>name</strong> and <strong>login</strong> of a user who is a member of this project; both String.</api_attribute>
+    <api_attribute name="project" type="Resource"><strong>name</strong> and <strong>identifier</strong> of the project; both String.</api_attribute>
+  </api_attributes>
+</section>

@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Managing users">
+	<note>Only <cref topic="user_roles#mingle_administrator">Mingle administrators</cref> and <cref topic="user_roles#project_administrator">project administrators</cref> have access to "Manage users" page. Both of them can view the data on this page, but only Mingle administrators have permission to update users.</note>
+	<section title="Navigate to the Manage users page..." collapsed = 'true'>
+		<steps>
+			<item>
+				<p><cref topic="signing_in_and_out_of_mingle">Sign in</cref> to Mingle as a Mingle administrator or project administrator.</p>
+			</item>
+			<item>
+				<p>Open the admin menu and click the <link>Users</link> link.</p>
+			</item>
+		</steps>
+		<screenshot alttext="users_option_on_admin_menu" src="resources/images/users_option_on_admin_menu.png"/>
+	</section>
+	<section title="Hide/Show deactivated users" id="hide_show_deactivated_users" collapsed = 'true'>
+		<p>By default, Mingle displays all users on your instance. Use the "Show deactivated users" checkbox to show or hide deactivated users.</p>
+		<screenshot alttext="Show deactivated user page" src="resources/images/show_deactivated_user.png"/>
+		<note>If you choose not to show deactivated users, when you search, only activated users who contain the keywords will be returned.</note>
+	</section>
+	<section title="Search for a user" id="search" collapsed = 'true'>
+		<p>Enter keywords in the search box and click the search icon (or hit the enter key).  The example below returns all users that contains the "dan" in their profile.</p>
+		<screenshot alttext="Search a user" src="resources/images/search_a_user.png"/>
+		<hint>Keywords are searched against sign-in name, display name, email address and version control user name.</hint>
+	</section>
+	<section title="Sort users" id="sort" collapsed = 'true'>
+		<p>By default, Mingle displays users by Display name in ascending order.  Sort users by any column with a sort indicator.</p>
+		<screenshot alttext="Sort users" src="resources/images/sort_users.png"/>
+		<note> Both Mingle administrators and project administrators can sort users.  However, the "Last login" column is only shown to Mingle administrators.</note>
+	</section>	
+	<section title="Open a user profile" id="open_a_user_profile" collapsed = 'true'>
+		<p> Clicking a user's display name will take you to their <cref topic="managing_your_user_profile">profile page</cref>.</p>
+	<screenshot alttext="Click user display name" src="resources/images/open_user_profile.png"/>
+	</section>
+	<section title="Change user type" id="change_user_type"  collapsed = 'true'>
+		<note>Only Mingle administrators can change someone's user type.</note>
+		<p>Mingle has user types: <cref topic="user_roles#full_users_and_light_users">Full user</cref>, <cref topic="user_roles#full_users_and_light_users">Light user</cref> and <cref topic="user_roles#mingle_administrator">Mingle Administrator</cref>.</p>
+                <p>A Mingle administrator will select a user type when <cref topic="creating_user_profiles">creating a new user</cref> and can change it from this page. The user type is determined by the status of the "Light user" checkbox and "Administrator" checkbox.</p>
+		<screenshot alttext="Change user type" src="resources/images/change_user_type.png"/>
+		<note>You cannot revoke your own Mingle administrator rights, this prevents you from accidentally revoking all administrator rights.</note>
+	</section>
+	<section title="Audit user login behavior" id="audit_user_login_behavior"  collapsed = 'true'>
+		<note>Only Mingle administrators can audit user login behavior.</note>
+		<p>Mingle shows a user's last login information.  If a user does not have last login information, it could be one of two things:</p>
+		<bullets>
+			<item>The user has never logged into your Mingle instance.</item>
+			<item>Your Mingle instance was upgraded from an older version (before Mingle 3.3) and the user has not logged in after the instance was upgraded to Mingle 3.3.</item></bullets>
+		<screenshot alttext="Show last login information" src="resources/images/last_login.png"/>
+	</section>
+	<section title="Deactivate a user" id="deactivate_a_user"  collapsed = 'true'>
+		<note> Only Mingle administrator can deactivate or re-active a user.</note>
+		<p>Click on the "deactivate" link to deactivate a user and prevent them from accessing Mingle.  A user's information will be grayed out once the user is deactivated.</p>
+                <p>To reactivate a user, click on the "activate" link.</p>
+		 <screenshot alttext="Deactivated user" src="resources/images/deactivated_user.png"/>
+		
+		<note>
+			<p>You cannot delete a user in Mingle who is a current team member on a project or who has any project history associated to them.  This is so that the history of that user's actions can be maintained.</p>
+			<p>A corollary to this is that you shouldn't therefore re-use a Mingle user id by changing the user's name to a different person. 
+			This is because all history items which were attributed to the original user would appear as though they had been created by the new user.</p>
+		</note>
+	</section>
+	<section title="Delete a user" id="delete_a_user"  collapsed = 'true'>
+		<note>
+		  <bullets>
+		    <item>Only Mingle administrators can delete users from an instance.</item>
+		    <item>A user <strong>cannot</strong> be recovered after a deletion.</item>
+		    <item>The 'Delete user' option is <strong>not</strong> available for users who have any project history associated with them in that instance.</item>
+		  </bullets>
+		</note>  
+		<p>Click on the "Show Deletable Users" button to see what users can be removed from your Mingle instance. Select those users you want to remove and then click on the "Delete" button.</p>
+		<screenshot alttext="Delete user" src="resources/images/show_deletable_users_button.png"/>
+				<screenshot alttext="Delete user" src="resources/images/deletable_users.png"/>
+	</section>
+	<section title="Change password" id="chanage_password" collapsed = 'true'>
+		<note>Only Mingle administrators can change a user's password.</note>
+		<p>Click on the <link>Change password</link> link to change user's password.</p>
+	</section>
+	<section title="Also see...">
+		<bullets>
+			<item>
+				<cref topic="user_roles">Mingle user roles</cref>
+			</item>
+			<item>
+				<cref topic="creating_user_profiles">Creating user profiles</cref>
+			</item>
+			<item>
+				<cref topic="managing_your_user_profile">Managing user profile</cref>
+			</item>
+			<item>
+				<cref topic="managing_project_team_members">Managing project team members</cref>
+			</item>
+			<item>
+				<cref topic="user_groups">Managing project user groups</cref>
+			</item>
+		</bullets>
+	</section>
+</topic>

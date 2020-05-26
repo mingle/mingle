@@ -1,0 +1,95 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="card">
+  <div id="card-top">
+    <div id="card-index">
+      #<%= h card.number %>
+    </div>
+	  <h1 id='card-short-description'>
+	    <%= h card.name %><%= card_name_clippy(card) %>&nbsp;<%= spinner %>
+	  </h1>
+	  <p id="version-info" class="version-info"><%= render :partial => 'shared/version_info', :locals => { :versionable => card, :show_latest_url => card_show_url(:number => card.number) } %></p>
+  </div>
+
+  <div class="tags-container" name="tags-container">
+    <%= tags_widget 'tag_list', card %>
+  </div>
+
+  <div class = "card-content-container">
+    <%= render :partial => "checklists", :locals => {:card => card} %>
+    <%= render :partial => 'dependencies', :locals => { :card => card } %>
+    <%= render :partial => 'card_content',
+      :locals => {
+        :card => card,
+        :popup => false,
+        :empty_description_text => (render :partial => 'add_description_link', :locals => { :card => card })
+      }
+      %>
+  </div>
+
+  <div id="card-bottom-cover">
+    <div id="card-bottom">
+      <h2 class="print-only">Properties</h2>
+      <div id="edit-card-types" class="card_type_widget properties_widget" onclick="PropertyEditor.Init.ondemand(event);">
+        <% form_remote_tag :url => {:action => 'update_property', :project_id => @project.identifier, :card => card.id, :tab => @tab_name},
+        :html => {:id => 'show-card-type-form', :style => 'display:inline'},
+        :before => "$('spinner').show(); linkHandler.disableLinks();",
+        :complete => "$('spinner').hide(); linkHandler.enableLinks();" do -%>
+        <%= hidden_field_tag 'changed_property', @project.card_type_definition.name %>
+        <%= render :partial => "cards/property", :locals => {:card => card, :property => Project.card_type_definition, :mode => "show", :attrs => card_type_editor_attributes(card, "show")} -%>
+        <% end -%>
+        <%- if request.xhr? -%>
+        <%= render :partial => 'toggle_hidden_properties_bar', :locals => { :card => card } %>
+        <%- else -%>
+        <div id='toggle_hidden_properties_bar'> </div>
+        <%- end -%>
+      </div>
+      <%= render :partial => request.xhr? ? 'show_properties_container' : 'show_properties_container_js', :locals => { :card => card } %>
+      <%= clear_float %>
+      <%= render :partial => 'cards_plans/plans', :locals => {:card => card, :project => @project, :editing => false }%>
+      <%= clear_float %>
+    </div>
+  </div>
+</div>
+
+
+<div id="attachments-container">
+  <%= render :partial => "shared/attachments", :locals => { :attachable => card, :mode => "show", :"authorized_to_delete" => authorized_to_delete_attachments } %>
+</div>
+
+<div id="comments-for-print" class="print-only">
+  <h2><%= comments_and_murmurs_tab_title %></h2>
+  <div id="comments-container-for-print">
+  </div>
+</div>
+
+<%# background colour of overlay cannot be transparent, otherwise this will not disable links on IE6 %>
+<div id="card_show_container_overlay" style='background-color: white; opacity: 0.1; display:none; position:absolute'></div>
+
+<div id='tree_cards_quick_add' style='display:none; position:absolute'> </div>
+<%= render :partial => 'tree_node_delete_confirm_box' %>
+<%= render :partial => 'change_card_type_confirmation', :locals => {
+  :multiple => false,
+  :on_cancel_javascript => "window.location = '#{url_for(:action => 'show', :controller => 'cards', :number => card.number)}'",
+  :on_continue_javascript =>  "$('show-card-type-form').onsubmit(); InputingContexts.pop();" } %>
+
+<%= javascript_with_rescue <<-JAVASCRIPT
+  DropList.View.Layout.fix();
+  linkHandler = new LinkHandler(['card_show_container']);
+  $j(".dependencies-drop-down").dependenciesPopover();
+JAVASCRIPT
+-%>

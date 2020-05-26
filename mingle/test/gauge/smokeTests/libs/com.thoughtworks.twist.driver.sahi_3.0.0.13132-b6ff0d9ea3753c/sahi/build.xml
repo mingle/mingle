@@ -1,0 +1,646 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+/**
+ * Copyright  2006  V Narayan Raman
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<project name="sahi" default="all">
+	<property name="sahi.output.dir" value="classes"/>
+	<property name="sahi.testoutput.dir" value="classes"/>
+	<property name="userdata.dir" value="${basedir}/userdata"/>
+	<property name="compiler.debug" value="on"/>
+	<property name="compiler.generate.no.warnings" value="off"/>
+	<property name="compiler.args" value=""/>
+	<property name="compiler.max.memory" value="128m"/>
+	<property name="temp.dir" value="temp/sahi"/>
+	<property name="source" value="1.5"/>
+	<patternset id="compiler.excluded"/>
+
+	<tstamp>
+		<format property="TODAY_IN" pattern="yyyy-MM-dd" locale="en"/>
+	</tstamp>
+
+	<target name="compile" description="compile module sahi">
+		<mkdir dir="${sahi.output.dir}"/>
+		<javac includeantruntime="true"  destdir="${sahi.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}"
+               memoryMaximumSize="${compiler.max.memory}" fork="true" srcdir="src" target="1.5">
+			<classpath>
+				<pathelement location="extlib/xmlrpc/xmlrpc-client-3.0.jar"/>
+				<pathelement location="extlib/xmlrpc/xmlrpc-common-3.0.jar"/>
+				<pathelement location="extlib/xmlrpc/ws-commons-util-1.0.1.jar"/>
+				<pathelement location="extlib/apc/commons-codec-1.3.jar"/>
+				<pathelement location="extlib/mail/activation.jar"/>
+				<pathelement location="extlib/mail/mail.jar"/>
+				<pathelement location="extlib/rhino/js.jar"/>
+				
+				<pathelement location="extlib/bcmail-jdk15-146.jar"/>
+				<pathelement location="extlib/bcprov-jdk15-146.jar"/>
+				<pathelement location="extlib/jetty-6.1.26.jar"/>
+				<pathelement location="extlib/jetty-sslengine-6.1.26.jar"/>
+				<pathelement location="extlib/jetty-start-6.1.26.jar"/>
+				<pathelement location="extlib/jetty-util-6.1.26.jar"/>
+				<pathelement location="extlib/org.slf4j_1.5.0.jar"/>
+			</classpath>
+		</javac>
+		<copy todir="${sahi.output.dir}/net/sf/sahi/resources">
+			<fileset dir="src/net/sf/sahi/resources" includes="*"/>
+		</copy>
+	</target>
+
+	<target name="javadoc">
+		<javadoc access="public" destdir="docs/java_client" doctitle="Sahi Java Driver Client" 
+        	nodeprecated="false" nodeprecatedlist="false" noindex="false" 
+        	nonavbar="false" notree="false"
+        	source="1.5" splitindex="true" use="true" version="true">
+			<fileset dir="src/net/sf/sahi/client/">
+				<include name="*.java"/>
+			</fileset>
+			<fileset dir="src/net/sf/sahi/">
+				<include name="Proxy.java"/>
+			</fileset>
+
+		</javadoc>
+	</target>
+
+	<target name="compile-test" description="compile module sahi test">
+		<mkdir dir="${sahi.output.dir}"/>
+		<javac includeantruntime="true" destdir="${sahi.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}"
+               memoryMaximumSize="${compiler.max.memory}" fork="true" srcdir="test" target="1.5">
+			<classpath>
+				<pathelement location="extlib/ant/ant-testutil.jar"/>
+				<pathelement location="extlib/test/jmock-1.1.0.jar"/>
+				<pathelement location="extlib/test/ant-testutil.jar"/>
+				<pathelement location="extlib/test/jmock-cglib-1.1.0.jar"/>
+				<pathelement location="extlib/xmlrpc/xmlrpc-common-3.0.jar"/>
+				<pathelement location="extlib/xmlrpc/xmlrpc-client-3.0.jar"/>
+				<pathelement location="extlib/xmlrpc/ws-commons-util-1.0.1.jar"/>
+				<pathelement location="extlib/apc/commons-codec-1.3.jar"/>
+				<pathelement location="extlib/test/cglib-nodep-2.1_3.jar"/>
+				<pathelement location="extlib/test/junit.jar"/>
+				<pathelement location="extlib/test/log4j.jar"/>
+				<pathelement location="extlib/rhino/js.jar"/>
+			</classpath>
+		</javac>
+		<copy todir="${sahi.output.dir}">
+			<fileset dir="test" includes="**/*.cmd"/>
+		</copy>
+	</target>
+
+	<target name="start" description="starts proxy">
+		<java classname="net.sf.sahi.Proxy" fork="true">
+			<!--<env key="MOZ_NO_REMOTE" value="1"/>-->
+			<!--<jvmarg line="-Dcom.sun.management.jmxremote"/>-->
+			<!--<jvmarg
+                line="-server -Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5099"/>-->
+			<jvmarg
+                line="-Xmx512m -Xms64m"/>
+			<classpath>
+				<path path="classes"/>
+				<pathelement location="extlib/rhino/js.jar"/>
+				<pathelement location="extlib/apc/commons-codec-1.3.jar"/>
+			</classpath>
+			<sysproperty key="sahi.mode.dev" value="true"/>
+			<arg value="." id="basePath"/>
+			<arg value="./userdata/" id="userdataPath"/>
+		</java>
+	</target>
+
+	<target name="dash" description="starts proxy">
+		<java classname="net.sf.sahi.ui.Dashboard" fork="true">
+			<jvmarg line="-Xmx512m -Xms64m"/>
+			<classpath>
+				<path path="classes"/>
+				<pathelement location="extlib/rhino/js.jar"/>
+				<pathelement location="extlib/apc/commons-codec-1.3.jar"/>
+			</classpath>
+			<sysproperty key="sahi.mode.dev" value="true"/>
+			<arg value="." id="basePath"/>
+			<arg value="./userdata/" id="userdataPath"/>
+		</java>
+	</target>
+
+	<target name="startp" description="starts proxy">
+		<java classname="net.sf.sahi.Proxy" fork="true" dir="bin">
+			<!--<env key="MOZ_NO_REMOTE" value="1"/>-->
+			<jvmarg
+                line="-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5099"/>
+			<classpath>
+				<path path="classes"/>
+				<pathelement location="extlib/rhino/js.jar"/>
+				<pathelement location="extlib/apc/commons-codec-1.3.jar"/>
+			</classpath>
+			<sysproperty key="sahi.mode.dev" value="false"/>
+		</java>
+	</target>
+
+	<target name="startj" description="starts proxy">
+		<java classname="net.sf.sahi.Proxy" fork="true" dir="bin">
+			<!--<env key="MOZ_NO_REMOTE" value="1"/>-->
+			<jvmarg
+                line="-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5099"/>
+			<classpath>
+				<path path="classes"/>
+				<pathelement location="extlib/rhino/js.jar"/>
+				<pathelement location="extlib/apc/commons-codec-1.3.jar"/>
+				<pathelement location="extlib/db/mysql-connector-java-5.0.4-bin.jar"/>
+			</classpath>
+			<sysproperty key="sahi.mode.dev" value="true"/>
+		</java>
+	</target>
+
+	<target name="decorate" description="Decorates doc pages">
+		<java classname="net.sf.sahi.util.HTMLDecorator" fork="true" dir="bin">
+			<jvmarg
+                line="-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5099"/>
+			<classpath path="classes"/>
+			<arg value="../docs/src/layout.htm"/>
+			<arg value="../docs/src/pages"/>
+			<arg value="../docs/"/>
+		</java>
+	</target>
+
+	<target name="manual" description="Create manual">
+		<java classname="net.sf.sahi.util.HTMLDecorator" fork="true" dir="bin">
+			<classpath path="classes"/>
+			<arg value="../docs/src/manual_layout.htm"/>
+			<arg value="../docs/src/manual"/>
+			<arg value="../docs/manual"/>
+		</java>
+	</target>
+
+	<target name="all">
+		<antcall target="clean"/>
+    <!-- <antcall target="test"/> -->
+		<antcall target="clean"/>
+		<antcall target="compile"/>
+		<antcall target="jar"/>
+		<antcall target="jar-ant"/>
+		<antcall target="clean-deploy"/>
+		<antcall target="set-version"/>
+		<antcall target="javadoc"/>
+		<antcall target="installer"/>
+		<antcall target="zip-sahi"/>
+		<antcall target="zip-src"/>
+	</target>
+
+	<target name="quick">
+		<antcall target="compile"/>
+		<antcall target="jar-only"/>
+	</target>
+
+	<target name="set-version">
+		<echo message="${TODAY_IN}" file="config/version.txt"/>
+	</target>
+
+	<target name="clean" description="cleans up class files only">
+		<delete includeEmptyDirs="true" quiet="true" failonerror="false">
+			<fileset dir="classes" includes="**/*.*"/>
+			<fileset dir="classes" includes="**/*"/>
+		</delete>
+	</target>
+
+	<target name="prepare-zip">
+		<mkdir dir="deploy"/>
+		<mkdir dir="${temp.dir}"/>
+		<mkdir dir="${temp.dir}/userdata"/>
+		<mkdir dir="${temp.dir}/userdata/logs"/>
+		<mkdir dir="${temp.dir}/userdata/bin"/>
+		<mkdir dir="${temp.dir}/userdata/scripts"/>
+		<mkdir dir="${temp.dir}/userdata/scripts/demo"/>
+		<mkdir dir="${temp.dir}/extlib"/>
+		<mkdir dir="${temp.dir}/sample_java_project"/>
+
+		<copy file="demo.xml" todir="${temp.dir}/"/>
+		<copy file="userdata/twist-ca.crt" todir="${temp.dir}/userdata/"/>
+		<copy file="userdata/intermediate.jks" todir="${temp.dir}/userdata/"/>
+
+		<copy file="NOTICE.txt" todir="${temp.dir}/"/>
+		<copy file="NOTICE.htm" todir="${temp.dir}/"/>
+
+		<copy file="lib/ant-sahi.jar" todir="${temp.dir}/lib"/>
+		<copy file="lib/sahi.jar" todir="${temp.dir}/lib"/>
+		<copy file="extlib/bcmail-jdk15-146.jar" todir="${temp.dir}/lib"/>
+		<copy file="extlib/bcprov-jdk15-146.jar" todir="${temp.dir}/lib"/>
+		<copy file="extlib/jetty-6.1.26.jar" todir="${temp.dir}/lib"/>
+		<copy file="extlib/jetty-sslengine-6.1.26.jar" todir="${temp.dir}/lib"/>
+		<copy file="extlib/jetty-start-6.1.26.jar" todir="${temp.dir}/lib"/>
+		<copy file="extlib/jetty-util-6.1.26.jar" todir="${temp.dir}/lib"/>
+		<copy file="extlib/org.slf4j_1.5.0.jar" todir="${temp.dir}/lib"/>
+
+		<copy todir="${temp.dir}/bin">
+			<fileset dir="bin">
+				<include name="sahi.bat"/>
+				<include name="sahi.sh"/>
+				<include name="dashboard.bat"/>
+				<include name="dashboard.sh"/>
+				<include name="web.bat"/>
+				<include name="web.sh"/>
+				<include name="scheduler.bat"/>
+				<include name="mail.bat"/>
+			</fileset>
+		</copy>
+		<fixcrlf srcdir="${temp.dir}/bin" eol="unix">
+			<include name="*.sh"/>
+		</fixcrlf>
+		<copy todir="${temp.dir}/userdata/config">
+			<fileset dir="userdata/config">
+				<exclude name="browser_types.xml"/>
+				<exclude name="browser_types/**"/>
+			</fileset>
+		</copy>
+
+		<copy todir="${temp.dir}/userdata/bin">
+			<fileset dir="userdata/bin">
+				<include name="start_sahi.bat"/>
+				<include name="start_dashboard.bat"/>
+				<include name="start_web.bat"/>
+
+				<include name="testrunner.bat"/>
+
+				<include name="start_sahi.sh"/>
+				<include name="start_dashboard.sh"/>
+				<include name="start_web.sh"/>
+				<include name="testrunner.sh"/>
+			</fileset>
+		</copy>
+
+		<fixcrlf srcdir="${temp.dir}/userdata/bin" eol="unix">
+			<include name="*.sh"/>
+		</fixcrlf>
+
+		<copy todir="${temp.dir}/userdata/scripts">
+			<fileset dir="userdata/scripts">
+				<include name="apis.sah"/>
+			</fileset>
+		</copy>
+		<copy todir="${temp.dir}/userdata/scripts/demo">
+			<fileset dir="userdata/scripts/demo">
+				<include name="includes/sahi_demo_include.sah"/>
+				<include name="if_include.sah"/>
+				<include name="blank.sah"/>
+				<include name="demo.suite"/>
+				<include name="google.sah"/>
+				<include name="find_in_google.sah"/>
+				<include name="g2.sah"/>
+				<include name="opentest.sah"/>
+				<include name="sahi_demo.sah"/>
+				<include name="sahi_demo_frames.sah"/>
+				<include name="sahi_demo_include.sah"/>
+				<include name="onchange.sah"/>
+				<include name="confirm.sah"/>
+				<include name="prompt.sah"/>
+				<include name="reset.sah"/>
+				<include name="local_stack.sah"/>
+				<include name="if.sah"/>
+				<include name="while.sah"/>
+				<include name="alert.sah"/>
+				<include name="popup_title.sah"/>
+				<include name="popup_title_name_mix.sah"/>
+				<include name="wait_for.sah"/>
+				<include name="keypress.sah"/>
+				<include name="mouseover.sah"/>
+				<include name="execute.sah"/>
+				<include name="docWrite.sah"/>
+				<include name="wait_long.sah"/>
+				<include name="link_test.sah"/>
+				<include name="opener.sah"/>
+				<include name="wait_for_with_reload.sah"/>
+				<include name="set.sah"/>
+				<include name="set_included.sah"/>
+				<include name="set_included2.sah"/>
+				<include name="label.sah"/>
+				<include name="spandiv.sah"/>
+				<include name="trycatch.sah"/>
+				<include name="globalvar.suite"/>
+				<include name="globalset.sah"/>
+				<include name="globalget.sah"/>
+				<include name="readfile.sah"/>
+				<include name="includes/values.txt"/>
+				<include name="shouldfail/fail.suite"/>
+				<include name="shouldfail/fail_missing.suite"/>
+				<include name="shouldfail/stop_on_error.sah"/>
+				<include name="shouldfail/log_exception_as_failure.sah"/>
+				<include name="shouldfail/log_browser_exception_as_failure.sah"/>
+				<include name="shouldfail/click_null.sah"/>
+				<include name="shouldfail/set_recovery.sah"/>
+				<include name="shouldfail/syntax_error_line_number.sah"/>
+				<include name="modal.sah"/>
+				<include name="save_as.sah"/>
+				<include name="verify_shorthands_gen.sah"/>
+				<include name="verify_shorthands.sah"/>
+				<include name="verify_shorthands_inc.sah"/>
+				<include name="in.sah"/>
+				<include name="window_opener_close.sah"/>
+				<include name="doc_written_popup.sah"/>
+				<include name="headingsTest.sah"/>
+				<include name="fileUpload.sah"/>
+				<include name="errorPages.sah"/>
+				<include name="delayedLoad.sah"/>
+				<include name="hidden.sah"/>
+				<include name="greek.sah"/>
+				<include name="csv.sah"/>
+				<include name="uploadme.txt"/>
+				<include name="uploadme2.txt"/>
+				<include name="docWriteIFrame.sah"/>
+				<include name="select.sah"/>
+				<include name="textarea.sah"/>
+				<include name="libTest.sah"/>
+				<include name="table_2darray.sah"/>
+				<include name="is_visible.sah"/>
+				<include name="map.sah"/>
+				<include name="set_array.sah"/>
+				<include name="zk_speed.sah"/>
+				<include name="google_search_dd.sah"/>
+				<include name="extjs1.sah"/>
+				<include name="events.sah"/>
+				<include name="clicksTest.sah"/>
+				<include name="language.sah"/>
+				<include name="regexp.sah"/>
+				<include name="RegExp_toString_Fix.sah"/>
+				<include name="table_cell.sah"/>
+				<include name="fetchAPIs.sah"/>
+				<include name="browser.sah"/>
+				<include name="204.sah"/>
+				<include name="evalOnRhino.sah"/>
+				<include name="under.sah"/>
+				<include name="testuff.sah"/>
+				<include name="integration.sah"/>
+				<include name="fetch_table_data.sah"/>
+				<include name="clickNative.sah"/>
+				<include name="db.sah"/>
+				<include name="promptUserInput.sah"/>
+				<include name="clickCombo.sah"/>
+				<include name="collect.sah"/>
+				<include name="executeTimeout.sah"/>
+				<include name="readURL.sah"/>
+				<include name="sencha_combobox.sah"/>
+				<include name="strict_visible.sah"/>
+				<include name="close_window.sah"/>
+				<include name="dragDrop.sah"/>
+				<include name="dragDropXY.sah"/>
+			</fileset>
+		</copy>
+		<copy todir="${temp.dir}/extlib">
+			<fileset dir="extlib">
+				<include name="README.txt"/>
+				<include name="rhino/js.jar"/>
+				<include name="apc/commons-codec-1.3.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="${temp.dir}/htdocs">
+			<fileset dir="htdocs">
+				<include name="demo/**"/>
+				<include name="spr/**"/>
+				<exclude name="spr/ext/extjs**"/>
+				<include name="404.htm"/>
+				<include name="favicon.ico"/>
+				<exclude name="**/temp*.htm*"/>
+			</fileset>
+		</copy>
+		<copy todir="${temp.dir}/config">
+			<fileset dir="config"/>
+		</copy>
+		<copy todir="${temp.dir}/editors">
+			<fileset dir="editors"/>
+		</copy>
+		<copy todir="${temp.dir}/ruby">
+			<fileset dir="ruby"/>
+		</copy>
+		<copy todir="${temp.dir}/tools">
+			<fileset dir="tools"/>
+		</copy>
+		<copy todir="${temp.dir}/batch_runners">
+			<fileset dir="batch_runners"/>
+		</copy>
+		<copy todir="${temp.dir}/docs">
+			<fileset dir="docs">
+				<exclude name="**/src/"/>
+				<exclude name="**/sahi_dev/"/>
+				<exclude name="**/tp/"/>
+				<exclude name="**/manual/"/>
+				<exclude name="sahi_tutorial.*"/>
+			</fileset>
+		</copy>
+		<copy todir="${temp.dir}/sample_java_project">
+			<fileset dir="sample_java_project">
+				<include name="compile.bat"/>
+				<include name="run.bat"/>
+				<include name="README.txt"/>
+				<include name=".project"/>
+				<include name=".classpath"/>
+				<include name="src/**/*.java"/>
+				<include name="myuserdata/config/*.*"/>
+			</fileset>
+		</copy>
+
+		<copy todir="${temp.dir}/installer">
+			<fileset dir="installer" />
+		</copy>
+
+		<copy todir="${temp.dir}/sample_java_project" file="test/net/sf/sahi/client/DriverClientTest.java"/>
+		<copy todir="${temp.dir}/sample_java_project" file="test/net/sf/sahi/client/SahiTestCase.java"/>
+
+		<mkdir dir="deploy"/>
+		<replace file="${temp.dir}/htdocs/spr/controller7.htm" token="@build@" value="${TODAY_IN}"/>
+		<replace file="${temp.dir}/docs/changelog.txt" token="@build@" value="${TODAY_IN}"/>
+		<replace file="${temp.dir}/docs/releasenotes.txt" token="@build@" value="${TODAY_IN}"/>
+	</target>
+
+	<target name="installer" depends="prepare-src-zip">
+		<taskdef name="izpack" classpath="extlib/izpack/standalone-compiler411.jar;extlib/izpack/standalone-compiler.jar" classname="com.izforge.izpack.ant.IzPackTask" />
+		<izpack input="installer/install.xml" output="deploy/install_sahi_v35_${DSTAMP}.jar" installertype="standard" basedir="${temp.dir}" izpackdir="." />
+	</target>
+
+	<target name="zip-sahi" depends="clean-temp">
+		<antcall target="prepare-zip"/>
+		<zip file="deploy/sahi_${DSTAMP}.zip" basedir="temp" excludes="**/installer/" />
+		<antcall target="clean-temp"/>
+	</target>
+
+	<target name="prepare-src-zip" depends="prepare-zip">
+		<copy file="build.xml" todir="${temp.dir}/"/>
+		<copy todir="${temp.dir}/src">
+			<fileset dir="src"/>
+		</copy>
+		<copy todir="${temp.dir}/test">
+			<fileset dir="test"/>
+		</copy>
+		<copy todir="${temp.dir}/docs">
+			<fileset dir="docs">
+				<include name="src/**/*.*"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="zip-src" depends="clean-temp">
+		<antcall target="prepare-src-zip"/>
+		<zip file="deploy/sahi-src_${DSTAMP}.zip" basedir="temp"/>
+		<antcall target="clean-temp"/>
+	</target>
+
+	<target name="jar-only">
+		<jar file="lib/sahi.jar">
+			<fileset dir="classes">
+				<exclude name="net/sf/sahi/ant/**.*"/>
+				<exclude name="net/sf/sahi/test/TestRunner.*"/>
+				<exclude name="net/sf/sahi/test/SingleSessionTestRunner.*"/>
+			</fileset>
+			<manifest>
+				<attribute name="Built-By" value="Narayan Raman"/>
+				<attribute name="Main-Class" value="net/sf/sahi/Proxy"/>
+				<section name="YourMainClass">
+					<attribute name="Sealed" value="false"/>
+				</section>
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="jar">
+		<delete dir="lib" />
+		<mkdir dir="lib" />
+		<antcall target="jar-only"></antcall>
+	</target>
+
+	<target name="jar-ant">
+		<jar file="lib/ant-sahi.jar">
+			<fileset dir="classes">
+				<include name="net/sf/sahi/ant/**.*"/>
+				<include name="net/sf/sahi/util/Utils.*"/>
+				<include name="net/sf/sahi/util/FileIsDirectoryException.*"/>
+				<include name="net/sf/sahi/util/FileNotFoundRuntimeException.*"/>
+				<include name="net/sf/sahi/test/TestRunner.*"/>
+				<include name="net/sf/sahi/test/SingleSessionTestRunner.*"/>
+				<include name="net/sf/sahi/test/ShutDownHook.*"/>
+			</fileset>
+		</jar>
+	</target>
+
+	<target name="clean-temp">
+		<delete includeEmptyDirs="true" quiet="true" failonerror="false">
+			<fileset dir="temp" includes="**/*.*"/>
+			<fileset dir="temp" includes="**/*"/>
+		</delete>
+	</target>
+
+	<target name="clean-deploy">
+		<delete includeEmptyDirs="true" quiet="true" failonerror="false">
+			<fileset dir="deploy" includes="**/*.*"/>
+		</delete>
+	</target>
+
+	<target name="test" depends="compile, compile-test">
+		<delete dir="${userdata.dir}/temp/junit/tests" />
+		<mkdir dir="${userdata.dir}/temp/junit/tests"/>
+		<delete quiet="true" includeemptydirs="true">
+			<fileset dir="${userdata.dir}/temp/junit/tests" includes="**/*">
+			</fileset>
+		</delete>
+		<junit dir="." printsummary="false" fork="true" maxMemory="128M">
+			<classpath>
+				<path path="classes"/>
+				<pathelement location="extlib/ant/ant-testutil.jar"/>
+				<pathelement location="extlib/test/jmock-1.1.0.jar"/>
+				<pathelement location="extlib/test/ant-testutil.jar"/>
+				<pathelement location="extlib/test/jmock-cglib-1.1.0.jar"/>
+				<pathelement location="extlib/xmlrpc/xmlrpc-common-3.0.jar" />
+				<pathelement location="extlib/xmlrpc/xmlrpc-client-3.0.jar" />
+				<pathelement location="extlib/xmlrpc/ws-commons-util-1.0.1.jar" />
+				<pathelement location="extlib/apc/commons-codec-1.3.jar" />
+				<pathelement location="extlib/test/cglib-nodep-2.1_3.jar"/>
+				<pathelement location="extlib/test/junit.jar"/>
+				<pathelement location="extlib/test/log4j.jar"/>
+				<pathelement location="extlib/rhino/js.jar"/>
+			</classpath>
+			<formatter type="brief" usefile="file" />
+			<formatter type="xml" />
+			<batchtest fork="true" failureProperty="junit.failed" todir="${userdata.dir}/temp/junit/tests">
+				<fileset dir="test">
+					<include name="net/**/RunSahiTaskTest.java"/>
+				</fileset>
+			</batchtest>
+			<batchtest fork="false" failureProperty="junit.failed" todir="${userdata.dir}/temp/junit/tests">
+				<fileset dir="test">
+					<include name="net/**/*Test.java"/>
+					<exclude name="net/**/RunSahiTaskTest.java"/>
+					<exclude name="net/**/client/Driver*Test.java"/>
+					<exclude name="net/**/client/SahiTestCase.java"/>
+					<exclude name="net/**/client/MockURLTest.java"/>
+					<exclude name="net/**/client/NTLMBrowserTest.java"/>
+					<exclude name="net/**/client/MingleTest.java"/>
+					<exclude name="net/**/test/TestRunnerTest.java"/>
+					<exclude name="net/**/test/SingleSessionTestRunnerTest.java"/>
+				</fileset>
+			</batchtest>
+		</junit>
+		<antcall target="report-gen" />
+		<delete file="bin/junittestrun.out" failonerror="false"/>
+		<fail message="JUnit tests failed. MAKE SURE THAT junit.jar AND log4j.jar ARE PRESENT IN {sahi}/extlib/ FOLDER"
+              if="junit.failed"/>
+	</target>
+
+	<target name="report-gen">
+		<delete dir="${userdata.dir}/temp/junit/reports" />
+		<mkdir dir="${userdata.dir}/temp/junit/reports"/>
+		<junitreport todir="${userdata.dir}/temp/junit/reports" tofile="TESTS-TestSuites-junit.xml">
+			<fileset dir="${userdata.dir}/temp/junit/tests">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<!--<report format="frames" todir="${userdata.dir}/temp/junit/reports/html" />-->
+		</junitreport>
+	</target>
+	<target name="test-client">
+		<junit dir="." printsummary="false" fork="true" maxMemory="128M">
+			<classpath>
+				<pathelement location="extlib/test/junit.jar"/>
+				<pathelement location="extlib/test/log4j.jar"/>
+				<pathelement location="extlib/rhino/js.jar"/>
+				<pathelement location="lib/sahi.jar"/>
+				<path path="classes"/>
+			</classpath>
+			<formatter type="brief" usefile="file"/>
+			<batchtest fork="yes" failureProperty="client.failed">
+				<fileset dir="test">
+					<include name="net/**/client/Driver*Test.java"/>
+				</fileset>
+			</batchtest>
+		</junit>
+		<delete file="bin/junittestrun.out" failonerror="false"/>
+		<fail message="Java client tests failed."
+              if="client.failed"/>
+	</target>
+
+
+	<!--<target name="link-js">-->
+	<!--<tstamp/>-->
+	<!--<delete dir="D:/sahitest"/>-->
+	<!--<mkdir dir="D:/sahitest"/>-->
+	<!--<unzip src="deploy/sahi_${DSTAMP}.zip" dest="D:/sahitest"></unzip>-->
+	<!--</target>-->
+
+	<target name="deploy">
+		<delete dir="D:/sahitest"/>
+		<mkdir dir="D:/sahitest"/>
+		<unzip src="deploy/sahi_${DSTAMP}.zip" dest="D:/sahitest">
+		</unzip>
+	</target>
+
+	<target name="deploy-src">
+		<delete dir="D:/sahitest"/>
+		<mkdir dir="D:/sahitest"/>
+		<unzip src="deploy/sahi-src_${DSTAMP}.zip" dest="D:/sahitest">
+		</unzip>
+	</target>
+
+</project>

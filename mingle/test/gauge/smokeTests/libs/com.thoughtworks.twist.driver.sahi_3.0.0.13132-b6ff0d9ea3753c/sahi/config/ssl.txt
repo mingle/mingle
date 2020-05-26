@@ -1,0 +1,1 @@
+"$keytool" -genkey -alias $domain -keypass "$password" -storepass "$password" -keyalg RSA -keystore "$keystore" -dname "CN=$domain, OU=Sahi, O=Sahi, L=Bangalore, S=Karnataka, C=IN" -validity 3650

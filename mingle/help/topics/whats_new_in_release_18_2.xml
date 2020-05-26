@@ -1,0 +1,41 @@
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+  <?xml version="1.0"?>
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="What's new in Release 18.2">
+	<p>For <cref topic="mingle_onsite">Mingle onsite</cref> customers, please review the <cref topic="upgrading_from_previous_versions">upgrade instructions</cref> before moving to Mingle 18.2.</p>
+	<note>
+	  <p>All of the features below are already available for our Mingle in the cloud customers.</p>
+  </note>
+
+<section title="Exports">
+ 	  <p> <exref url="https://www.thoughtworks.com/mingle/news/2018/07/31/mingle-is-retiring.html"> Mingle is being retired in July 2019</exref>. The Export feature allows export of all the data that has ever been put in Mingle.</p>
+      <p>All cards, pages, murmurs and much more from all projects are easily available as spreadsheets.You may additionally choose to export all history - a collection of every action that has been taken in your project.</p>
+      <p>Mingle Plus customers can also choose to export their programs and dependencies. This feature is available to Mingle administrators only, and can be found in Export tab in the main header</p>
+
+      <p>Read more about the Export feature: <cref topic="mingle_eol"> Mingle End of Life and migration </cref></p>
+ </section>
+
+ <section title="Bug Fixes">
+ 	<bullets>
+      <item>In Mingle Plus, an issue on Firefox with the progress bar seen when saving Objectives is fixed.</item>
+      <item>On a fresh installation of Mingle Plus, the error seen when clicking on the program wall is fixed.</item>
+      <item>The issue with SSL in Mingle 18.1 was fixed.</item>
+    </bullets>
+</section>
+
+</topic>

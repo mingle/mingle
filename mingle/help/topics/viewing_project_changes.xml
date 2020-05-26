@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Viewing project changes - History tab">
+	<section title="Introduction">
+		<p>Clicking the <tab>History</tab> tab lets you view changes made to a project over a specific period of time (by default all changes made today). 
+    		It includes a complete audit log of all project changes which you can filter according to the information you want to see.</p>
+
+		<bullets
+			title="Different team members use the History tab differently according to the information they need">
+			<item>project managers may want to see how much work is being completed and to see who has been working on different features or bugs</item>
+			<item>testers or QAs may want to see which bugs were fixed yesterday</item>
+			<item>developers may want to see what recent changes have been made to the source files</item>
+			<item>business analysts may want to see progress or changes made to their user stories</item>
+			<item>technical writers may want to see which help topics have been reviewed during the week.</item>
+		</bullets>
+		<hint>
+    		Viewing the History tab is a great way to see the areas of the project you've been working on over a certain time. 
+    		You can use this information for time sheets, project reviews, stand ups, or if you've forgotten the name of a card you were working on. 
+    		Generally speaking, use the History tab if you know what you're looking for, or you know when you modified a card.
+    		Otherwise use Mingle's <cref topic="mingle_search">search</cref>.
+    	</hint>
+
+		<p>The Filter history component in the top right lets you filter the exact changes you want to see. </p>
+
+		<bullets title="The top section lets you select">
+			<item>whether you want to view only changes to specific project elements (cards, wiki pages or code revisions)</item>
+			<item>for cards, the specific properties they currently have or have acquired during the timeframe specified in the top History for: section (i.e. Today, Yesterday, Last 7 days, Last 30 days, In all history)</item>
+			<item>specific tags that cards or wiki pages currently have or have acquired during the selected timeframe.</item>
+		</bullets>
+
+		<bullets
+			title="The bottom section you can use in conjunction with the top section or on its own. It lets you select">
+			<item>specific changes made to card properties within the selected timeframe</item>
+			<item>specific tags that have been updated within the selected timeframe</item>
+			<item>cards, wiki pages or code revisions made by specific people within the selected timeframe.</item>
+		</bullets>
+	</section>
+	<section title="How to view project changes">
+		<subsection title="By time" collapsed="true">
+			<steps>
+			<item>
+	    		<p>Click the <tab>History</tab> tab.</p>
+	    		<p>Mingle displays all changes made to the project during the last 24 hours (your local time).</p>
+	    		<p><screenshot alttext="History tab" src="resources/images/history_tab_display.png" /></p>
+	    	</item>
+			<item>
+	    		<p>If you want to view any project changes made longer than 24 hours ago, click a timeframe link at the top of the page.</p>
+	    		<p>Mingle updates this page to include changes made during the time you specified.</p>
+	    	</item>
+			</steps>
+		</subsection>
+		<subsection title="By type" collapsed="true">
+			<steps>
+				<item><p>If you'd like to view specific project changes, select options in the Filter history at the right of the page.</p>
+	    		<p>Mingle updates the History tab to display changes according to the filters you selected.</p>
+				
+		    	<bullets>
+			    	 <item>If you'd like to include only changes made to cards, and/or wiki pages, and/or code revisions, select the checkbox(es) at the top of the Filter history component.</item>
+				<p><screenshot alttext="View changes by types" src="resources/images/view_changes_by_types.png" /></p>    	
+			    	 <item>If you'd like to view changes made to cards or wiki pages according to specific tags they currently have or have acquired during the timeframe you selected, click the Add tags link and type the tag name(s).</item>
+		    	</bullets>
+	    		<p><screenshot alttext="Add tags to filter history" src="resources/images/filter_history_add_tags.png" /></p>    	
+	    		<p>Click the <button>Add tags</button> button to add them to the search filter.</p>
+	    		</item>
+			</steps>	
+		</subsection>			
+
+		<subsection title="By filter" collapsed="true">							
+			<steps>
+			<item>
+	    		<p>If you'd like to view cards changed to a specific property value, or tags changed to a specific tag value within your selected timeframe, select filters from the bottom part of the Filter history component.</p>
+	    		<p>You can select these on their own or in conjunction with the values you selected at the top part.</p>
+	    		<screenshot alttext="Filter history" src="resources/images/filter_history.png" />
+	    		<p>Mingle updates the History tab to display changes according to the filters you selected.</p>
+	    	</item>
+			<item>
+				<p>With the 3.1 release, Mingle provides a new option, (any value), as a value in the history filter. If you select (any value) for any property listed in the history filter, you will be able to view any changes that have been made to that particular property.</p> 
+				<note>This is especially helpful if you only want to know or be notified when a certain workflow you are interested in is changed. e.g. Story status, Bug status.</note>
+	    		<screenshot alttext="(any value) in history" src="resources/images/any_value_in_history.png" />
+			</item>
+		    </steps>
+		</subsection>
+		<subsection title="By user" collapsed="true">
+			<steps>	
+			<item>
+	    		<p>If you would like to view changes made by a specific team member, 
+	    		select their name from the drop down menu at the bottom of the Filter history component.</p>
+	    		<screenshot alttext="Filter history - changed by team member" src="resources/images/changed_by_team_member.png" />
+				<p>Mingle updates the History tab to display changes made only by this team member.</p>
+    		</item>
+			<item>If you'd like to receive updates about project changes and events that occur based on the filters you've selected, you can subscribe via email or Atom feeds.</item>
+			</steps>
+			<hint>You can also select not set in conjunction with a card's changed value to see cards that went from not having a property value to acquiring one. </hint>
+		</subsection>
+	</section>
+	<section title="Subscribing to project changes">    	
+    	<p>In the bottom-right of the History tab is a <sidebar-button>Watch this?</sidebar-button> component. 
+    		Here you can subscribe via email or Atom feeds to changes made in the project based on the information currently displayed on the screen (i.e. based on the filters you've selected).</p>
+    	<bullets>
+	    	 <item><cref topic="subscribing_via_feeds">Subscribing to project changes via Atom feeds</cref></item>
+	    	 <item><cref topic="subscribing_via_email">Subscribing to project changes via email</cref></item>
+    	</bullets>
+    </section>
+</topic>

@@ -1,0 +1,41 @@
+<html>
+<head><title>HTML Controls</title>
+<link rel="stylesheet" type="text/css" href="common.css" media="all" /> 
+</head>
+<body>
+<br/><br/>
+<center>
+<div class="d">
+<h4>Register</h4>
+<br/>
+<form name="f1">
+	<div classs="dinside">
+	<table>
+	<tr><td>User name</td><td><input type="text" name="username" id="uid"></td></tr>
+	<tr><td>Password</td><td><input type="password" name="password" id="pid"></td></tr>
+	<tr><td>Repeat Password</td><td><input type="password" name="password2" id="pid2"></td></tr>
+	<tr><td>Gender</td><td><input type="radio" name="gender" value="M">Male <input type="radio" name="gender" value="F">Female </td></tr>
+	<tr><td>Address</td><td><textarea id="taid" name="address"></textarea></td></tr>
+	<tr><td>Billing Address</td><td><textarea id="btaid" name="billaddress"></textarea></td></tr>
+	<tr><td>State</td><td>
+	<select name="state">
+		<option>Karnataka</option>
+		<option>Tamil Nadu</option>
+		<option>Kerala</option>
+	</select>
+	</td></tr>
+	<tr><td></td><td></td></tr>
+	<tr><td></td><td></td></tr>
+	</table>
+	</div>
+	<input type="checkbox" name="agree" value="1"> I agree to the Terms and Conditions.
+	<br/><br/>
+	<input type="button" value="Register" onclick="alert('Registered Successfully')">
+	<input type="button" value="Cancel" onclick="if (window.confirm('Are you sure?')) window.location.href='login.htm'">
+	
+</form>
+<a href="login.htm">Go back to login</a>
+</div>
+</center>
+</body>
+</html>

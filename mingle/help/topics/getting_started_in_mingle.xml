@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Getting started in Mingle">
+    <p>This section will help you get up and running in Mingle. It's useful if you're coming into an existing project as a team member and need to know the basics of housekeeping and orientation. Your project manager and fellow team members are the best resources for introducing you to a new project since they would have setup Mingle to reflect the project's structure and workflow. There might be some useful <cref topic="viewing_pages">pages</cref> that describe the project's structure and setup.</p>
+    <hint>If you're looking for information about setting up Mingle, see <cref topic="quick_project_setup">Quick project setup</cref>.</hint>
+
+    <section title="Signing in">
+        <p>First of all you'll need to <cref topic="signing_in_and_out_of_mingle">sign in to
+            Mingle</cref>. Your project administrator should have <cref
+                topic="creating_user_profiles">setup your user profile</cref> and <cref
+                topic="managing_project_team_members">added you as a team member</cref> to the
+            project(s) you're working on.</p>
+    </section>
+
+    <section title="Updating your details">
+        <p>Once you've signed in, you may wish to <cref topic="managing_your_user_profile">update
+                your user profile</cref> to make sure your email address is setup and that your
+            source username is correct.</p>
+    </section>
+
+    <section title="Finding your way around">
+        <p>Mingle's very intuitive and getting around shouldn't be too difficult. But <cref
+                topic="getting_around_in_mingle">here are some pointers</cref>.</p>
+    </section>
+
+ 	<section file="need_more_help"/>
+
+    <hint>If you want to find out more about what Mingle can do, see <cref
+            topic="welcome_to_mingle">Welcome to Mingle</cref> and <cref
+            topic="whats_new_in_mingle">What's new in Mingle</cref>.</hint>
+
+</topic>

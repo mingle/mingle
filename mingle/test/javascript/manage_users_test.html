@@ -1,0 +1,161 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>JavaScript unit test file</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+
+  <script src="test_assets/unittest.js" type="text/javascript"></script>
+  <script src="test_assets/unittest_ext.js" type="text/javascript"></script>
+
+  <script src="../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/controls.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/builder.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/manage_users.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/application.js" type="text/javascript"></script>
+
+  <link rel="stylesheet" href="assets/unittest.css" type="text/css" />
+  <link rel="stylesheet" href="test_assets/unittest.css" type="text/css" />
+  <link rel="stylesheet" href="../../public/stylesheets/application.css" type="text/css" />
+</head>
+<body>
+
+<div id="content">
+
+  <div id="header">
+    <h1>JavaScript unit test file</h1>
+    <p>
+      This file tests the manage users search results <strong>manage_users.js</strong>.
+    </p>
+  </div>
+
+  <div id='sandbox'>
+    <h3> sandbox: </h3>
+
+    <form name="user-search" id="user-search" onsubmit="javascript:void(0);">
+      <input type='text' name='search[query]' id='search-query' />
+      <input type="hidden" name="search[order_by]" />
+      <input type="hidden" name="search[direction]" />
+    </form>
+
+    <form name="user-sort" id="user-sort" onsubmit="javascript:void(0);">
+      <input type='hidden' name='search[query]' />
+      <input type="hidden" name="search[order_by]" id="order_by"/>
+      <input type="hidden" name="search[direction]" id="direction"/>
+      <table id='users' class="sortable_table">
+        <thead>
+          <tr>
+            <th><span id="display_name" class="sortable_column">Display name</span></th>
+            <th><span id="sign_in_name" class="sortable_column">Sign-in name</span></th>
+            <th><span id="email" class="sortable_column">Email</span></th>
+            <th><span id="version_control_user_name" class="sortable_column">Version control user name</span></th>
+            <th class="align-center"><span>Light user</span></th>
+            <th class="align-center"><span>Administrator</span></th>
+            <th><span id="last_login_at" class="sortable_column">Last login</span></th>
+            <th><span id="activated">Activate/Deactivate</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Stephen</td>
+            <td>StephenChu</td>
+            <td>stephen@tw.com</td>
+            <td>stephen</td>
+            <td></td>
+            <td></td>
+            <td>1 hour ago</td>
+            <td>Active</td>
+          </tr>
+          <tr>
+            <td>Josh</td>
+            <td>JoshC</td>
+            <td>josh@tw.com</td>
+            <td></td>
+            <td>josh</td>
+            <td></td>
+            <td></td>
+            <td>1 year ago</td>
+            <td>Active</td>
+          </tr>
+          </tbody>
+      </table>
+    </form>
+  </div>
+
+  <!-- Log output -->
+  <div id="testlog"> </div>
+
+</div>
+
+<script type="text/javascript">
+// <![CDATA[
+  SAND_BOX_CONTENT = $('sandbox').innerHTML;
+
+  new Test.Unit.Runner({
+
+    setup: function() {
+      $('sandbox').innerHTML = SAND_BOX_CONTENT;
+
+      this.manageUsers = new ManageUsers("some/url/here");
+      this.manageUsers._ajaxRequest = function() {};
+      new InputElementHelp('search-query',  'Search for user...');
+    },
+
+    testCurrentOrderByShouldBeBlankWhenNoHeadersAreClicked: function() { with(this) {
+      assertEqual('', this.manageUsers.currentOrderBy());
+    }},
+
+    testOnHeaderClickShouldFireAjax: function() { with(this) {
+      var isCalled = false;
+      this.manageUsers._ajaxRequest = function() { isCalled = true; };
+      Event.trigger($('last_login_at'), 'click');
+      assert(isCalled);
+    }},
+
+    testOnHeaderClickShouldSetOrderByColumnAndDirection: function() { with(this) {
+      Event.trigger($('last_login_at'), 'click');
+      assertEqual('last_login_at', this.manageUsers.currentOrderBy());
+      assertEqual('ASC', this.manageUsers.currentDirection());
+    }},
+
+    testOnHeaderClickShouldToggleDirectionContinuouslyForSameColumn: function() { with(this) {
+      Event.trigger($('last_login_at'), 'click');
+      assertEqual('ASC', this.manageUsers.currentDirection());
+      Event.trigger($('last_login_at'), 'click');
+      assertEqual('DESC', this.manageUsers.currentDirection());
+      Event.trigger($('last_login_at'), 'click');
+      assertEqual('ASC', this.manageUsers.currentDirection());
+    }},
+
+    testOnHeaderClickShouldSortAscWhenChangingColumn: function() { with(this) {
+      Event.trigger($('last_login_at'), 'click');
+      assertEqual('ASC', this.manageUsers.currentDirection());
+      Event.trigger($('display_name'), 'click');
+      assertEqual('ASC', this.manageUsers.currentDirection());
+    }}
+
+  }, { testLog: "testlog", test : '' }).run;
+// ]]>
+</script>
+</body>
+</html>

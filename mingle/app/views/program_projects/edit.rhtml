@@ -1,0 +1,59 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%- select_tab :program_project -%>
+<%- content_for :page_header do -%>
+  <div class="page_header" id='page_navigator'>
+    <h1><%= link_to 'Projects', program_program_projects_path(@program) %> &raquo; Edit</h1>
+  </div>
+<%- end -%>
+
+<h1>Define what done means for <%= @project.name %></h1>
+<%
+  enum_properties = @project.text_list_property_definitions_with_hidden
+  selected_property = (@program.status_property_of(@project) || enum_properties.first).name 
+%>
+<% form_for :program_project, :url => {:action => :update, :id => @project.identifier}, :html => {:method => :put} do |f| %>
+  <div class="form_item">
+    <%= hidden_field_tag :back_to_url, request.referer %>
+    <%= f.label 'Project card property:' %>
+    <%= f.collection_select(:status_property_name, enum_properties, :name, :name, {:selected => selected_property}, 
+        :onchange => 'window.programProject.updateDoneStatusPropertyValues(this.value);') %>
+  </div>
+  <div class="form_item">
+    <%= f.label 'Done value:' %>
+    <%
+      property_values = @project.find_property_definition(selected_property, :with_hidden => true).allowed_values
+	  allowed_values = property_values.empty? ? ["No Values Defined"] : property_values
+      selected_value = @program.done_status_of(@project) ? @program.done_status_of(@project).name : allowed_values.first 
+    %>
+    <%= f.collection_select(:done_status, allowed_values, :to_s, :to_s, {:selected => selected_value}) %>
+  </div>
+  <div id="card_types" class="card_type_associations"></div>
+  <%
+     options = { :id => "program_project_submit" }
+     options.merge({ "disabled" => "disabled" }) if property_values.empty?
+  %>
+  <%= render :partial => "shared/planner/action_bar", :locals => {:action_name  => "Save", :cancel_url => program_program_projects_path(@program), :submit_options => options } %>
+
+<%= javascript_with_rescue <<-JAVASCRIPT
+    window.programProject = new ProgramProject('#{program_program_project_path(@program, escape_javascript(@project.identifier))}');
+    var card_types = [#{associated_card_types(@project, selected_property)}];
+    window.programProject.showAssociatedCardTypes(card_types);
+JAVASCRIPT
+%>
+
+<% end %>

@@ -1,0 +1,43 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= render :partial => "confirm_update_actions", :locals => {:location  => "top", :cancel_url => url_for(:action => 'list')} %>
+
+<h1>Update project variable</h1>
+
+<% form_tag({:action => 'update', :id => @project_variable.id}, {:id => 'update-form'}) do -%>
+  <%= hidden_field_tag 'project_variable[name]', params['project_variable']['name'] %>
+  <%= hidden_field_tag 'project_variable[data_type]', params['project_variable']['data_type'] %>
+  <%= hidden_field_tag 'project_variable[card_type_id]', params['project_variable']['card_type_id'] %>
+  <%= hidden_field_tag 'project_variable[value]', params['project_variable']['value'] %>
+  <% params['project_variable']['property_definition_ids'].each do |value| %>
+    <%= hidden_field_tag 'project_variable[property_definition_ids][]', value %>
+  <% end %>
+<% end -%>
+
+<% warning_box do %>
+  <h2>CAUTION! This action has consequences that are final and irrecoverable.</h2>	
+<% end %>
+
+<% info_box do %>
+  <ul>
+    <%= the_following_will_be_deleted('team favorite', @project_variable.team_views_needing_deletion_on_update.collect(&:name)) %>
+    <%= the_following_will_be_deleted('transition', @project_variable.transitions_need_to_be_deleted_on_update.collect(&:name)) %>
+    <li>In addition, any personal favorites using this project variable as a value for a disassociated property will be deleted.</li>
+  </ul>
+<% end -%>
+
+<%= render :partial => "confirm_update_actions", :locals => {:location  => "bottom", :cancel_url => url_for(:action => 'list')} %>

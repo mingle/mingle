@@ -1,0 +1,17 @@
+<span id="contextual_help_identifier" style="display: none;">cards_list</span>
+<span id="contextual_help_title" style="display: none;">Using the Card List view</span>
+<span id="full_contextual_help_link" style="display: none;"><a class="full-contextual-help-link" href="{% helpPathDomain %}/card_list_page.html"  target="_blank">Full help for the List view</a></span>
+
+
+<div>
+  <img src="{% contextPath %}/images/diagram-help-using-tree-card-list.gif" class="help-diagram" />
+
+  <div><p style="text-align:left"><img src="{% contextPath %}/images/icon-help-number-one.png" align="middle" alt='1'/>  Add cards to your project by using the <a href="{% helpPathDomain %}/list_view.html#create_cards_using_quick_add" target="_blank"><b>quick add</b></a> </p></div>
+  <div><p style="text-align:left"><img src="{% contextPath %}/images/icon-help-number-two.png" align="middle" alt='2'/>  Update many cards at once by <a href="{% helpPathDomain %}/list_view.html#update" target="_blank"><b>bulk editing properties and tags</b></a></p></div>
+  <div><p style="text-align:left"><img src="{% contextPath %}/images/icon-help-number-three.png" align="middle" alt='3'/>  <a href="{% helpPathDomain %}/list_view.html#add_columns" target="_blank"><b>Add and remove columns</b></a> to view the most relevant information and <a href="{% helpPathDomain %}/list_view.html#printing" target="_blank"><b>print</b></a> for working offline </p></div>
+  <div><p style="text-align:left"><img src="{% contextPath %}/images/icon-help-number-four.png" align="middle" alt='4'/>  <a href="{% helpPathDomain %}/list_view.html#sorting_cards" target="_blank"><b>Sort</b></a> cards by number (#), name and property column </p></div>
+  <div><p style="text-align:left"><img src="{% contextPath %}/images/icon-help-number-five.png" align="middle" alt='5'/>  Save the view as a <a href="{% helpPathDomain %}/list_view.html#create_favorite" target="_blank"><b>team or personal favorite</b></a> to share with the team and return to later</p></div>
+  <div><p style="text-align:left"><img src="{% contextPath %}/images/icon-help-number-six.png" align="middle" alt='6'/>  <a href="{% helpPathDomain %}/list_view.html#import_export" target="_blank"><b>Import and Export</b></a> cards to add new work to your project or use Mingle data in other systems</p></div>
+</div>
+
+

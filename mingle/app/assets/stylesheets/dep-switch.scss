@@ -1,0 +1,58 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+.dep-switch {
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
+  border: 1px solid #999;
+  border-radius: 2px;
+  -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+
+  input[type="radio"] {
+    display: none;
+  }
+
+  label {
+    float: left;
+    box-sizing: border-box;
+    height: 24px;
+    line-height: 24px;
+    width: 6em;
+
+    text-align: center;
+    font-size: 12px; color: white;
+
+    cursor: pointer;
+
+    &[data-type="resolving"] {
+      background-color: $MINGLE_PRIMARY_COLOR; color: #FFFFFF;
+    }
+
+    &[data-type="raising"] {
+      background-color: #FFFFFF; color: #333333;
+    }
+  }
+
+  .show-raising:checked ~ label[data-type="raising"] {
+    background-color: $MINGLE_PRIMARY_COLOR; color: #FFFFFF;
+  }
+
+  .show-raising:checked ~ label[data-type="resolving"] {
+    background-color: #FFFFFF; color: #333333;
+  }
+}

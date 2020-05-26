@@ -1,0 +1,98 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+/**
+ * tabs.css
+ *
+ * Reusable tab styles across application.
+ */
+
+
+/**
+ * TABLE OF CONTENTS
+ *
+ * =BASE
+ *
+ */
+
+
+/**
+ * =BASE
+ */
+
+.tabs_pane {
+  border-bottom: 1px solid #CCCCCC;
+  border-left: 1px solid #CCCCCC;
+  border-right: 1px solid #CCCCCC;
+}
+
+.tabs_pane a {
+  text-decoration: none;
+}
+ul.tabs_pane,
+.tabs_pane ul {
+  margin: 0em;
+}
+
+.tabs_pane li,
+.tabs_header li {
+  list-style: none;
+}
+
+.tabs_pane .tabs_header {
+  background-color: #999;
+  padding: 10px;
+  padding-bottom: 0;
+  overflow: hidden;
+}
+
+.tabs_header ul {
+  overflow: hidden;
+}
+
+.tabs_header li {
+  float: left;
+  margin: 0 5px 0 0;
+  padding: 0;
+}
+
+.tabs_header span,
+.tabs_header a {
+  display: block;
+  font-size: 11px;
+  padding: 8px 15px;
+  cursor: pointer; /*Firefox*/
+  cursor: hand; /*IE*/
+  background-color: #666;
+  color: #FFF;
+}
+
+.tabs_header span:hover,
+.tabs_header a:hover {
+  background-color: #777;
+}
+
+.tabs_header .current span,
+.tabs_header .current span:hover,
+.tabs_header .current a,
+.tabs_header .current a:hover {
+  background-color: #FFF;
+  color: #000;
+}
+
+.tabs_pane .tabs_content {
+  padding: 10px;
+}

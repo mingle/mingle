@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>String.prototype Extensions test</title>
+
+  <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+
+  <link rel="stylesheet" href="test_assets/qunit-1.21.0.css" type="text/css" />
+</head>
+<body>
+  <div id="qunit"></div>
+  <div id="qunit-fixture"></div>
+
+  <script src="test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+  <script src="test_assets/qunit-phantom.js" type="text/javascript"></script>
+  <script type="text/javascript">
+
+    QUnit.test("isBlank", function(assert) {
+      assert.ok("".isBlank());
+      assert.ok(" ".isBlank());
+      assert.ok(!" abc ".isBlank());
+    });
+
+    QUnit.test("IsInclude", function(assert) {
+      assert.ok("hello world".isInclude('hello'));
+      assert.ok(!"hello wolrd".isInclude('woooo'));
+      assert.ok("hello world".isInclude('hello', 'world'));
+      assert.ok(!"hello world".isInclude('hello', 'woooo'));
+    });
+
+    QUnit.test("WordWrapShouldTruncateWhenAnyWordIsTooLong", function(assert) {
+      assert.equal("ready f...", "ready for dev".truncate(10));
+    });
+
+    QUnit.test("WordWrapShouldTruncateWhenTheOnlyWordIsTooLong", function(assert) {
+      assert.equal("thisist...", "thisistoolong".wordWrap(10));
+    });
+
+    QUnit.test("WordWrapShouldNoWrapOnForwardSlash", function(assert) {
+      assert.equal("ready for...", "ready for analysis/development".wordWrap(12));
+    });
+
+    QUnit.test("WordWrapShouldNotWrapOnComma", function(assert) {
+      assert.equal("ready for...", "ready for analysis,development".wordWrap(12));
+    });
+
+    QUnit.test("WordWrapShouldWrapEmail", function(assert) {
+      assert.equal('proj_admin@e...', "proj_admin@email.com".wordWrap(15));
+   });
+
+    QUnit.test("WordWrapShouldWrapLongEmail", function(assert) {
+      assert.equal('projadmin@th...', "projadmin@thoughtworks.com".wordWrap(15));
+    });
+
+    QUnit.test("WordBreakDoesNotBreakIfNotTooLong", function(assert) {
+      var expected = JSON.stringify(["not too long"]);
+      var actual = JSON.stringify("not too long".wordBreak(12));
+      assert.equal(expected, actual);
+    });
+
+    QUnit.test('testShouldConvertSnakeCaseToCamelCase', function (assert) {
+      assert.equal('camel_case'.toCamelCase(), 'camelCase');
+      assert.equal('camel case_string'.toCamelCase(), 'camelCaseString');
+      assert.equal('Camel case_string'.toCamelCase(), 'camelCaseString');
+    });
+
+    QUnit.test('testShouldConvertStringToCamelCaseForAGivenSeparator', function (assert) {
+      assert.equal('ca_mel-case'.toCamelCase('-'), 'ca_melCase');
+    });
+
+    QUnit.test('testShouldInterpolateForGivenValue', function (assert) {
+      assert.equal('{prefix}Case'.supplant({prefix: 'camel'}), 'camelCase');
+    });
+
+    QUnit.test('testShouldNotInterpolateForAnyDatTypeOtherThanStringAndNumber', function (assert) {
+      assert.equal('{prefix}Case'.supplant({prefix: ['camel']}), '{prefix}Case');
+    });
+
+    QUnit.test('testShouldConvertCamelCaseToSnakeCase', function (assert) {
+      assert.equal('snakeCase'.toSnakeCase(), 'snake_case');
+      assert.equal('snake-case'.toSnakeCase(), 'snake_case');
+      assert.equal('snake-Case'.toSnakeCase(), 'snake_case');
+      assert.equal('Snake Case'.toSnakeCase(), 'snake_case');
+      assert.equal(''.toSnakeCase(), '');
+    });
+
+    QUnit.done(function(result){console.log(result)});
+  </script>
+</body>
+</html>

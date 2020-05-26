@@ -1,0 +1,328 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>JavaScript unit test file</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery.tipsy.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/tooltip.js" type="text/javascript"></script>
+
+  <script src="../../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../test_assets/unittest.js" type="text/javascript"></script>
+  <script src="../test_assets/unittest_ext.js" type="text/javascript"></script>
+
+
+  <script src="../../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/controls.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/slider.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/planner/planner_application.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/application.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/planner/timeline_status.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/planner/timeline.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/planner/timeline/objectives_controller.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/planner/timeline/main_view.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/planner/timeline/main_view_content.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/planner/timeline/objective_creation.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/planner/timeline/objective_editor.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/planner/timeline/plan_calendar.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/planner/timeline/objective.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/planner/timeline/popup.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/planner/timeline/objective_creation_controller.js" type="text/javascript"></script>
+
+  <link rel="stylesheet" href="../test_assets/unittest.css" type="text/css" />
+</head>
+<body>
+
+<div id="content">
+
+  <div id="header">
+    <h1>JavaScript unit test file</h1>
+    <p>
+      This file tests <strong>timeline.js</strong>.
+    </p>
+  </div>
+
+  <style>
+   #add_objective_panel input {
+     width: 100px;
+   }
+
+   #add_objective_panel {
+     position: absolute;
+     display: none;
+   }
+
+   .main_view .objective {
+     position: absolute;
+     background-color: #EEE;
+     border-right: 1px solid black;
+     border-left: 1px solid black;
+   }
+
+   #date_header {
+     margin: 0;
+     padding: 0;
+   }
+
+   #date_header li {
+     display: inline;
+     float: left;
+     padding: 5px 0;
+     margin: 0;
+     text-align: center;
+     height: 11px;
+     line-height: 11px;
+     border-bottom: 1px solid #BBB;
+   }
+
+   .days #date_header li {
+     width: 100px;
+   }
+
+   .weeks #date_header li {
+     width: 210px;
+   }
+
+   #main_view {
+     width: 1024px;
+     height: 200px;
+     overflow: hidden;
+     position: relative;
+     top: 0px;
+     left: 0px;
+   }
+
+  </style>
+  <div id='test-content' style='padding: 0; margin: 0; left: 0px; top: 0px; position: absolute'>
+    <div id="timeline">
+      <div class="granularity-selector">
+        <a href="javascript:void(0)" id="days_selector" onclick="window.timeline.redraw('days'); return false;" class="selected">days</a>
+        <a href="javascript:void(0)" id="weeks_selector" onclick="window.timeline.redraw('weeks'); return false;">weeks</a>
+        <a href="javascript:void(0)" id="months_selector" onclick="window.timeline.redraw('months'); return false;" class="">months</a>
+        <a class="today" href="javascript:void(0)" id="today_selector" onclick="window.timeline.moveToToday(); return false;">today</a>
+      </div>
+      <div id='main_view' class="main_view">
+        <div id="timeline-spinner"></div>
+        <div id='main_view_content' style='float: left; position: relative; background-color: yellow' class="days">
+          <ul id="date_header"></ul>
+          <div id='objective_container' style="position: absolute; left: 0; top: 22px;"></div>
+
+          <div id="quick_info" class="quick_tip">
+            <div id="tip_content" class="quick_tip_content"></div>
+            <div id="tip_anchor" class="quick_tip_anchor"></div>
+          </div>
+
+          <div id="informing_message_box">
+          </div>
+          <div id="objective_popup_panel" class="objective_popup_panel" style="display:none">
+            <div class="top_left top_arrow"></div>
+            <div class="top_right top_arrow"></div>
+            <div id="objective_popup_details" class="objective_popup_details">
+              <a class="close"></a>
+            </div>
+            <div class='bottom_left bottom_arrow'></div>
+            <div class='bottom_right bottom_arrow'></div>
+          </div>
+          <div id='add_objective_panel' class='add_objective_panel'>
+            <div class="top_left top_arrow"></div>
+            <div class="top_right top_arrow"></div>
+            <div class='objective_fields'>
+              <label class='objective_name_label objective-creation-errors'>Name:</label>
+              <span class='objective_name'><input type="text" size="1" name="objective[name]" id="objective_name"></span>
+              <input type="text" size="1" name="objective[start_at]" id="objective_start_at">
+              <input type="text" size="1" name="objective[end_at]" id="objective_end_at">
+              <input type="text" size="1" name="objective[vertical_position]" id="objective_vertical_position">
+            </div>
+            <div class='bottom_left bottom_arrow'></div>
+            <div class='bottom_right bottom_arrow'></div>
+          </div>
+        </div>
+        <div style='clear: both'></div>
+      </div>
+      <div class="overview">
+          <div class="viewport selected">
+          </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Log output -->
+  <div id="testlog"> </div>
+
+</div>
+
+<script type="text/javascript">
+// <![CDATA[
+
+  SANDBOX_CONTENT = $('test-content').innerHTML;
+  WIDTHS = {days: 100, weeks: 210};
+
+  new Test.Unit.Runner({
+    setup: function() {
+     $('test-content').update(SANDBOX_CONTENT);
+      Timeline.GRID_SIZE['weeks'] = 30;
+      Timeline.GRID_SIZE['days'] = 100;
+      this.plan = { start_at: '2011-03-07', end_at: '2011-03-27' };
+      this.timeline = new Timeline('timeline', this.plan, "2011-03-20");
+
+      this.assertWithinViewColumns = function(start, end, objective) { with(this) {
+        var headerColumns = $$('#date_header li');
+
+        var columnStartEdge = headerColumns[start].cumulativeOffset()[0];
+        var columnEndEdge = headerColumns[end].cumulativeOffset()[0] + WIDTHS[this.timeline.mainViewContent.currentGranularity];
+
+        var objectiveStartEdge = objective.element.cumulativeOffset()[0];
+        var objectiveEndEdge = objective.element.cumulativeOffset()[0] + objective.element.getWidth();
+
+        assert(columnStartEdge <= objectiveStartEdge, "objective '" + objective.name + "' does not start at or after column " + start);
+        assert(columnEndEdge >= objectiveEndEdge, "objective '" + objective.name + "' does not end at or before column " + end);
+      }};
+      this.timeline.updateViewport();
+    },
+
+    testInitialLoadHidesSpinner: function() { with(this) {
+      var data = {
+        responseJSON: { objectives: [] }
+      };
+      assertVisible($('timeline-spinner'));
+      this.timeline._renderPlan(data);
+      assertNotVisible($('timeline-spinner'));
+    }},
+
+    testDefaultGranularityIsMonths: function() { with(this) {
+      var data = {
+        responseJSON: { objectives: [] }
+      };
+      this.timeline._renderPlan(data);
+
+      var headerText = $$('#date_header li')[0].innerHTML;
+      assertEqual('March 2011', headerText);
+    }},
+
+    testCenterTimelineForDaysGranularity: function() { with(this) {
+      this.timeline._render([], "months");
+      this.timeline.redraw("days");
+
+      this.timeline.centerTimeline();
+      var halfColumnWidth = 0.5 * WIDTHS['days'];
+      var widthOf13Days = 13 * WIDTHS['days'];
+      var halfViewportWidth = 512;
+      var leftPosition = (halfViewportWidth - (widthOf13Days + halfColumnWidth));
+      assertEqual(leftPosition, this.timeline.mainViewContent.element.positionedOffset()[0]);
+    }},
+
+    testCenterTimelineWhenTodayIsOutOfRange: function() { with(this) {
+      this.timeline.mainViewContent.today = Timeline.DateUtils.resetDay(Timeline.DateUtils.toDate("2012-01-01"));
+      this.timeline._render([], "months");
+      assertEqual(0, this.timeline.centerTimeline());
+      assertEqual(0, this.timeline.mainViewContent.element.positionedOffset()[0]);
+    }},
+
+
+    testCenterTimelineForWeeksGranularity: function() { with(this) {
+      this.timeline = new Timeline('timeline', { start_at: '2011-03-07', end_at: '2012-03-27' }, "2011-05-16");
+      this.timeline._render([], "months");
+      this.timeline.redraw("weeks");
+      var halfColumnWidth = 0.5 * WIDTHS['weeks'];
+      var widthOf10Weeks = 10 * WIDTHS['weeks'];
+      var halfViewportWidth = 512;
+      var leftPosition = (halfViewportWidth - (widthOf10Weeks + halfColumnWidth));
+      assertEqual(leftPosition, this.timeline.mainViewContent.element.positionedOffset()[0]);
+    }},
+
+    testCenterTimelineForMonthsGranularity: function() { with(this) {
+      this.timeline = new Timeline('timeline', { start_at: '2011-03-01', end_at: '2012-10-27' }, "2012-01-02");
+      this.timeline._render([], "months");
+      this.timeline.moveToToday();
+
+      var ignoreBorder = 1;
+      var halfColumnWidth = Math.floor((31 * Timeline.GRID_SIZE['months'] - ignoreBorder ) / 2);
+      var borderOf10Months = 10;
+      var widthOf306Days = 306 * Timeline.GRID_SIZE['months'] - borderOf10Months;
+      var halfViewportWidth = 512;
+      var leftPosition = (halfViewportWidth - (widthOf306Days + halfColumnWidth));
+      assertEqual(leftPosition, this.timeline.mainViewContent.element.positionedOffset()[0]);
+    }},
+
+    testChangeGranularityFromDaysToWeeks: function() { with(this) {
+      this.timeline._render([
+        { start_at: '2011-03-07', end_at : '2011-03-12', vertical_position: 0, name: 'first week' },
+        { start_at: '2011-03-14', end_at : '2011-03-20', vertical_position: 1, name: 'second week' }
+      ], 'months');
+      this.timeline.redraw("days");
+
+      var objectives = this.timeline.mainViewContent.objectives;
+      this.assertWithinViewColumns(0, 5, objectives.first());
+      this.assertWithinViewColumns(7, 13, objectives[1]);
+
+      this.timeline.redraw('weeks');
+
+      var objectives = this.timeline.mainViewContent.objectives;
+      this.assertWithinViewColumns(0, 1, objectives.first());
+      this.assertWithinViewColumns(1, 1, objectives[1]);
+    }},
+
+    testChangeGranularityFromDaystoWeeksWhenObjectiveStartsMidWeek: function() { with(this) {
+      this.timeline._render([
+        { start_at: '2011-03-09', end_at : '2011-03-15', vertical_position: 0, name: 'first week' }
+      ], 'days');
+      this.timeline.redraw('weeks');
+      var center = this.timeline.centerTimeline();
+      var objectives = this.timeline.mainViewContent.objectives;
+
+      var oneWeekWidth = WIDTHS[this.timeline.mainViewContent.currentGranularity];
+      var twoDayWidth = Math.floor(oneWeekWidth / 7 * 2);
+
+      assertEqual(oneWeekWidth, objectives.first().element.getWidth());
+      assertEqual(twoDayWidth, center + objectives.first().element.cumulativeOffset()[0]);
+    }},
+
+    testShouldRemoveObjectiveCreationPopupWhenChangeGranularity: function() { with(this) {
+      this.timeline._render([
+        { start_at: '2011-03-07', end_at : '2011-03-15', vertical_position: 0, name: 'first week' }
+      ], 'days');
+      var viewColumn = this.timeline.mainViewContent.findViewColumnByDate('2011-03-07');
+      var row = 2;
+      Event.triggerEvent(this.timeline.mainViewContent.objectiveContainer, { type: "mousedown", pageX: 200, pageY: 40, which: 1, button: 1 })
+      var creation = this.timeline.objectiveCreationController.objectiveCreation;
+      Event.triggerEvent(this.timeline.mainViewContent.objectiveContainer, { type: "mouseup", pageX: 200, pageY: 40, which: 1, button: 1 })
+      this.timeline.redraw('weeks');
+      assertNull(creation.placeHolder);
+      assertNull(this.timeline.objectiveCreationController.objectiveCreation);
+    }},
+
+    testObjectiveShouldMaintainDatesAfterGranularityChange: function() { with(this) {
+      var objectiveData = { id: 123, start_at: "2011-03-08", end_at: "2011-03-09", name: "Feature", vertical_position: 0, work_done: 1, total_work: 2 };
+      timeline._render([objectiveData], 'months');
+      timeline.redraw('weeks');
+      var objectives = this.timeline.mainViewContent.objectives;
+      assertEqual(Timeline.DateUtils.toDate(objectiveData.start_at).toString(), objectives.first().toJson().start_at);
+      assertEqual(Timeline.DateUtils.toDate(objectiveData.end_at).toString(), objectives.first().toJson().end_at);
+    }}
+
+  }, { testLog: "testlog", test : ''});
+// ]]>
+</script>
+</body>
+</html>

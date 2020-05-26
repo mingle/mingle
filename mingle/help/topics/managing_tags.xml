@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Managing tags">
+    <section title="Introduction">
+    	<p>You may need to update tags if the number of tags available in a Mingle project is becoming unmanageable or if there is a large number of tags that are no longer being used. 
+    		There may be some times when you need to change a tag's name, e.g. if the name of one of your product's features changes.</p>
+    	
+    	<p>You can create and manage tags from the <tab>Project admin</tab> tab, <link>Tags</link> link. From here you can also delete and rename tags.</p>
+    	
+    	<hint>See <cref topic="creating_tags_for_cards_or_wiki_pages">Creating tags for cards or pages</cref> for more information about tags. 
+    		See <cref topic="working_with_tags">Working with tags</cref> for examples of how to use tags.</hint>
+    	
+    </section>
+	
+	<section title="How to manage tags in a project">
+	<steps>
+		<item><cref topic="signing_in_and_out_of_mingle">Sign in</cref> to Mingle as a project administrator and open the project with the tags you want to manage (if you're not already working in the project).</item>
+		<item>
+			<p>Click the <tab>Project admin</tab> tab.</p>
+			<screenshot alttext="Project admin tab" src="resources/images/project_admin_tab.png" />			
+			<p>Mingle displays the Project settings page.	(Note: if you are signed in as a project team member, Mingle displays the Team page.)</p>
+			<screenshot alttext="Project admin menu - tags link" src="resources/images/admin_tags_link.png"></screenshot>
+		</item>
+		<item>
+			<p>Click the <link>Tags</link> link.</p>
+			<p>Mingle displays the <strong>Tags page</strong> with all tags currently in the project.</p>
+			<screenshot alttext="Tags page - tag created successfully" src="resources/images/tags_page_tag_created.png"></screenshot>
+		</item>
+		<item>
+			<bullets title="If you'd like to">
+				<item>
+					<p><strong>delete a tag</strong>, click the <link>Delete</link> link next to a tag.</p>
+					<p>Mingle displays a dialog asking you to confirm. Click the <link>Continue to delete</link> to proceed, (or the <link>Cancel</link> link otherwise)</p>
+					<screenshot alttext="Delete tag confirmation message" src="resources/images/delete_tag_confirmation.png"></screenshot>
+					<p>You can <cref topic="mingle_backup_dialog">create a backup</cref> of your project before continuing by clicking on the <link>Backup</link> link.</p>
+				</item>
+				<item>
+					<p><strong>create a new tag</strong>, click the<link> Create new tag</link> link.</p>
+					<p>Mingle displays the <strong>Create new tag page</strong></p>
+					<screenshot alttext="Create new tag page" src="resources/images/create_new_tag_page.png"></screenshot>
+				</item>
+				<item>
+					<p><strong>edit the tag name</strong>, click the <link>Edit</link> link next to a tag.</p>
+					<p>Mingle displays the <strong>Edit tag page</strong></p>
+					<screenshot alttext="Edit tag page" src="resources/images/edit_tag_page.png"></screenshot>
+				</item>
+		</bullets>
+		</item>
+		<item>
+			<p>Type or update the tag name.</p>
+			<note>Do not include commas. You can add spaces for tags with more than one word.</note>
+		</item>
+		<item>
+			<p>Click the <link>Save/Create tag</link> link.</p>
+			<p>Mingle saves the tag and displays it in the Tags page.</p>
+			<screenshot alttext="Tags page - tag created successfully" src="resources/images/tags_page_tag_created.png"></screenshot>
+		</item>
+	</steps>
+	</section>
+	<section title="Also see...">
+		<bullets>
+			<item><cref topic="working_with_tags">Working with tags</cref></item>
+			<item><cref topic="creating_tags_for_cards_or_wiki_pages">Creating tags for cards or pages</cref></item>
+		</bullets>
+	</section>
+</topic>
+
+

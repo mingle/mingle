@@ -1,0 +1,22 @@
+<html>
+<head><title></title></head>
+<body>
+<script>
+function oc(){
+	alert(document.f1.t1.value());
+}
+function open_win()
+{
+//Modified for Defect id 172887
+win = window.open("/demo/tableTest.htm",'def',"toolbar=no, location=0, status=yes, menubar=no, scrollbars=yes, resizable=yes, width=800, height=600")
+openPage = window.parent.self;
+openPage.opener = window.parent.self;
+openPage.close();
+}
+</script>
+<form name="f1">
+<input type="text" name="t1"><br/>
+<input type="button" value="Click me" onclick="open_win()">
+</form>
+</body>
+</html>

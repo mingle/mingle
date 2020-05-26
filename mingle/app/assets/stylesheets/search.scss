@@ -1,0 +1,142 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+p {
+  &.properties-and-tags {
+    font-style: italic;
+  }
+  &.description {
+    word-wrap: break-word;
+    margin: 0.5em 0em;
+  }
+}
+
+.card {
+  background: url(../images/icon-light-card.gif) no-repeat scroll top left;
+}
+
+.page {
+  background: url(../images/icon-light-page.gif) no-repeat scroll top left;
+}
+
+.revision {
+  background: url(../images/icon-light-revision.gif) no-repeat scroll top left;
+}
+
+.filters .filter {
+  background: #ddd;
+  border: 1px solid #aaa;
+  padding: 4px;
+  margin-bottom: 2.5ex;
+}
+
+#sidebar .filters li {
+  padding-left: 14px;
+  padding-bottom: 0px;
+  padding-top: 2px;
+}
+
+.filters .active {
+  background: url(../images/icon-tick.png);
+  background-repeat: no-repeat;
+  background-position: 0% 80%;
+}
+
+#facets {
+  margin: 7px 0px 0px 0px;
+  float: left;
+  padding-bottom: 10px;
+  li {
+    float: left;
+    margin: 0 5px 0 0;
+    list-style: none;
+    text-align: center;
+  }
+  a {
+    display: block;
+    font-size: 12px;
+    padding: 7px 15px;
+    &:hover {
+      background-color: #ccc;
+    }
+  }
+  .selected a {
+    background-color: #666;
+    color: #fff;
+    &:hover {
+      background-color: #666;
+      color: #fff;
+    }
+  }
+}
+
+#not_found {
+  padding-left: 16px;
+}
+
+#results .fragment {
+  margin: 0.5em 0;
+  display: block;
+}
+
+.search-result {
+  margin: 10px 0 10px 0;
+  min-height: 35px;
+  padding: 0 0 10px 25px;
+  border-bottom: 1px dotted #CCC;
+  h3 {
+    margin: 0px 0px 5px 0px;
+  }
+}
+
+.card-result {
+  background: url(../images/icon-light-card.gif) no-repeat scroll top left;
+}
+
+.page-result {
+  background: url(../images/icon-light-page.gif) no-repeat scroll top left;
+}
+
+.murmur-result {
+  background: url(../images/icon-light-murmur.gif) no-repeat scroll top left;
+}
+
+.result-count {
+  padding-bottom: 10px;
+  color: #999;
+}
+
+.search-result {
+  .fragment_highlight {
+    font-weight: bold;
+  }
+  .term.fragment_highlight {
+    color: #000;
+  }
+}
+
+.search-tips {
+  float: right;
+  padding-right: 10px;
+  padding-top: 15px;
+}
+
+.search-header {
+  display: inline-block;
+  width: 100%;
+  border-bottom: 1px solid #CCC;
+  margin-bottom: 16px;
+}

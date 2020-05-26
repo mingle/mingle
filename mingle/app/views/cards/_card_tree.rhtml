@@ -1,0 +1,40 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= javascript_with_rescue tree_js(display_tree, tab_name, view.to_params) %>
+<span id="tree-loading-spinner">Loading tree...</span>
+<%= render :partial => 'cards/tree_incremental_search' %>
+<div id="tree_view_tool_bar" class='draggable-exemption'>
+  <%= render :partial => 'cards/scrolling_widget' %>
+  <%= render :partial => 'cards/zoom_tracker' %>
+  <a title="Center this tree" id="tree_center_button"  class="button"></a>
+</div>
+
+
+<div id='view_port'>
+  <div id='tree'>
+    <div id="vtree-root" class="root-wrap">
+      <%= render :partial => 'cards/tree_root', :locals => {:root => display_tree.root, :tree_configuration => display_tree.configuration, :view => view} %>
+    </div>
+    <% display_tree.root.children.each_with_index do |node, index| %>
+      <div class="vtree-column <%= v_tree_column_class(display_tree.root, index) %>">
+        <%= render :partial => 'cards/tree_node' , :locals => {:node => node, :index => index}%>
+      </div>
+    <% end %>
+    <div id="vtree-layout-clear" class="clear"></div>
+  </div>  <!-- end of tree -->
+  <%= render :partial => 'cards/tree_node_delete_confirm_box' %>
+</div>

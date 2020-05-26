@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE section SYSTEM "mingle_help.dtd">
+
+<section title="Murmurs card links">
+<p>You can murmur links to other cards and pages Mingle. These card links work by using the existing project <cref topic="card_keywords">card keywords</cref>, such as #card_number for a specific card.</p>
+
+<p>In addition to providing links to other cards and pages, murmurs associated with a card are also displayed on the card in the <cref topic="card_murmurs_and_history_components">Murmurs section</cref> of the card. To associate a murmur with a card either murmur from a card or include a link to that card in the content of you murmur.</p>
+
+<screenshot alttext="Card comments and Murmurs" src="resources/images/murmurs_new_card.png" />
+
+<p>Card links in Mingle will display a tooltip to show you the name of the card when you hover your mouse over the card links. This allows users to better understand the context of any content (murmurs or card descriptions) which contain the card links.</p>
+
+<screenshot alttext="Card comments and Murmurs" src="resources/images/card_linking_tooltip_new.png" />
+
+</section>

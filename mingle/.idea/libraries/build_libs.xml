@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="build-libs">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/development/build_java" />
+    </CLASSES>
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/development/build_java" />
+    </SOURCES>
+    <jarDirectory url="file://$PROJECT_DIR$/development/build_java" recursive="false" />
+    <jarDirectory url="file://$PROJECT_DIR$/development/build_java" recursive="false" type="SOURCES" />
+  </library>
+</component>

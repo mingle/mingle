@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Maximizing card views">
+	
+<section title="Introduction">
+
+<p>	By viewing a card view in the maximized mode you will see only the information you care about (i.e. your cards) and remove other actions from the top of the screen when they are not needed. This will allow for cleaner, more useful views when working with your Mingle cards.  </p> 
+
+<screenshot alttext="Maximized grid view" src="resources/images/maximized_story_wall.png" />
+
+</section> 
+	
+<section title="How to maximize a card view?">	
+	In any card view select the "Maximize view" link to maximize the view. In order to return to the non-maximized view use the "Restore view". 
+</section> 
+	
+<section title="Saving maximized views as favorites">
+		Maximized views can also be saved as <cref topic="creating_a_favorite_card_view">favorites</cref>. 
+</section> 
+
+</topic>

@@ -1,0 +1,54 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<h4 class='popup-title'>
+  <%= objective_name_tag(@objective) %>
+  <div id="objective_date" class="objective_date_range"> <%= @objective.start_at %> &ndash; <%= @objective.end_at%> </div>
+  <%= javascript_with_rescue <<-JAVASCRIPT
+    $("objective_date").innerHTML = Timeline.DateUtils.formatDateString("#{@objective.start_at}") + " &ndash; " + Timeline.DateUtils.formatDateString("#{@objective.end_at}");
+  JAVASCRIPT
+  -%>
+
+</h4>
+<div id="popup-content">
+  <%- if @program.projects.empty? && !readonly_mode? -%>
+    <p>
+      You must <%= link_to "add projects", program_program_projects_path(@program) %> to this plan before you can add work.
+    </p>
+  <% else -%>
+    <div class="objective_details">
+      <p id="objective_work_summary">
+        <% if @objective.works.any? %>
+          <%= "#{work_items} across #{pluralize(@program.projects_with_work_in(@objective).count, "project")}" %>
+        <% elsif authorized?({controller: :works, action: :cards}) %>
+		      <%= link_to("Add work", cards_program_plan_objective_works_path(@program, @objective)) %>  to this feature.
+        <% end %>
+      </p>
+    </div>
+  <%- end -%>
+</div>
+
+<div class="actions">
+  <%= link_to('Add projects', program_program_projects_path(@program), :class => 'action_icon arrow_link') if @program.projects.empty? && !readonly_mode? %>
+  <%= link_to('Add work', cards_program_plan_objective_works_path(@program, @objective), {:class => 'action_icon add_link'}) if @program.projects.any? && authorized?({controller: :works, action: :cards}) %>
+  <%= link_to('View work', view_plan_objective_work_path(@program, @objective), :class => 'action_icon arrow_link') if @objective.works.any? %>
+  <%= link_to("Edit", edit_program_plan_objective_path(@program, @objective), {:class => 'action_icon edit_link'}) if authorized?({controller: :objectives, action: :edit}) %>
+  <%= link_to("Remove", confirm_delete_program_plan_objective_path(@program, @objective), {:class => 'action_icon delete_link'}) if authorized?({controller: :objectives, action: :confirm_delete})  %>
+</div>
+<%= javascript_with_rescue <<-JAVASCRIPT
+  new Timeline.Objective.Progress(#{@objective.progress.to_json}, #{@objective.projections.to_json}, #{@objective.to_json}).renderProgress(#{params['alert_only']});
+JAVASCRIPT
+-%>

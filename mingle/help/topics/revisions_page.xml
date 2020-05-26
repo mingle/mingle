@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Revisions page">
+	<section title="What you can do on this page">
+		<p>The Revision page lets you view details about the changes committed during a revision of the source code. Access this page by clicking a <link>revision number</link> from the <tab>Source</tab> tab.</p>
+		<bullets title="The Revision page shows">
+			<item>when the change took place (relative to today's local date/time)</item>
+			<item>who committed the change (you must <cref topic="managing_your_user_profile">setup your version control user name</cref> in your user profile)</item>
+			<item>the commit message for the change</item>
+			<item>the files that changed (and the nature of the change M = Modified, N = New)</item>
+			<item>the specific changes made within each file (diffs)</item>
+			<item>a link to each original source file (e.g. if you want to view/download the entire source file)</item>
+		</bullets>
+	</section>
+	<section title="Also see...">
+		<bullets>
+			<item><cref topic="linking_source_files_to_cards">Linking source files to bugs and requirements</cref></item>
+			<item><cref topic="setup_source_repository_integration">Setting up source repository integration</cref></item>
+			<item><cref topic="source_tab">Using the source tab</cref></item>
+			<item><cref topic="card_keywords">Using card keywords</cref></item>
+			<item><cref topic="history_tab">Using the history tab</cref></item>
+			<item><cref topic="customizing_projects">Configuring Mingle</cref></item>
+		</bullets>
+	</section>
+</topic>

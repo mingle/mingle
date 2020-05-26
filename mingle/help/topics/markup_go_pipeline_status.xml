@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Go pipeline status macro">
+  <markup_reference title="This macro allows the display of the current status of a Go pipeline in a Mingle wiki page or card. This allows users to view current project status across the two products in a single view.">
+    <hint>For this macro to work, the Mingle and Go administrators must first <cref topic="go_in_mingle">configure the display of Go gadgets in Mingle</cref>.</hint>
+    <markup>
+        pipeline-status-gadget
+          go-url: https://go.example.com
+          pipeline-name: CompileAndTest
+    </markup>
+    <table caption="Parameters">
+  		<header-row>
+  			<col-header>Name</col-header>
+  			<col-header>Meaning</col-header>
+  			<col-header>Required</col-header>
+  			<col-header>Default value</col-header>
+  		</header-row> 
+  		<row>
+  			<label>go-url</label>
+  			<col>The base URL for your Go instance, with or without trailing slash. If you run go with an app context, be sure to include that in the value, e.g, if you're Go URLs look like https://example.com/dev/go/pipelines/... this value would be https://example.com/dev</col>
+  			<col>Yes</col>
+  			<col>N/A</col>
+  		</row>
+  		<row>
+  			<label>pipeline-name</label>
+  			<col>The name of the Go pipeline. The case must match the case specified in the Go configuration.</col>
+  			<col>Yes</col>
+  			<col>N/A</col>
+  		</row>		
+  	</table>
+  	<preview>
+      <screenshot alttext="Go pipeline status on Mingle Overview page." src="resources/images/go_pipeline_gadget_overview.png"/>
+    </preview>
+    
+    <p>When you first attempt to view this macro, you will see a message indicating that you need to authorize Mingle to access data from Go on your behalf, similar to below.</p>  
+    <screenshot src="resources/images/oauth_authorize_data_access.png" alttext="Allow Mingle to access Go data on your behalf." />
+    <p>Clicking the authorize link will open a popup displaying a Go page asking you whether you wish to allow Go to provide your data to Mingle such as below. If you do not currently have a current Go session you will first be asked to login to Go.</p>
+    <screenshot src="resources/images/go_allow_oauth_access.png" alttext="Go asks you to allow it to provide data to Mingle." />
+    <p>Once the user clicks the Yes button the popup will close and the pipeline status gadget will appear.</p>
+    
+    <warning>If a user authorizes on a page containing markup for multiple pipeline status gadgets only the gadget from which authorization was initiated will refresh with the gadget content. To show gadget content across the entire page, the page must be refresh in the browser.</warning>  
+    
+  </markup_reference>
+    
+</topic>

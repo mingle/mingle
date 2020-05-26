@@ -1,0 +1,37 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% remote_form_for @group, :url => group_path(@project.identifier, @group, :page => params[:page]), :html => { :method => :put, :id => "group_name_form"} do %>
+  <h1>
+    <span id="group_name" class="name"><%= @group.name %></span>
+
+    <% if params[:back_to_team] %>
+      <input type='hidden' name='back_to_team' value="<%=params[:back_to_team]%>"/>
+    <% end %>
+  
+    <% if allow_edit? -%>
+      <%= text_field_tag "name", @group.name, :id => "group_name_editor", :class => "inline-editor inline-text-editor", :style =>"display: none;" %>
+      <div id='inline-editor-actions'>
+        <span id="group_update_message" class="update_message" style="display:none">updating...</span>
+        <%= link_to_function 'Edit', :id => "edit-group", :class => 'inline-edit-link' %>
+        <%= link_to_function 'Save', :id => "save-group", :class => 'inline-save-link', :style => "display: none;" %>
+        <%= link_to_function 'Cancel', :id => "cancel-group", :class => 'inline-cancel-link', :style => "display: none;" %>
+      </div>
+    <% end -%>
+  </h1>
+  
+  <%= javascript_with_rescue %{new InlineTextEditor("group_name_form", 'inline-editor-actions')} %>
+<% end %>

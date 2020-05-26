@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<meta name="generator" content="HTML Tidy, see www.w3.org">
+<title>OnBeforeUnload Test</title>
+</head>
+<body>
+<h2>OnBeforeUnload Test</h2>
+Date=<script>document.write(new Date());</script>
+<br/>
+<a href="index.htm">Back</a>
+
+<script>
+function myFn(e){
+	if (!e) e = window.event;
+//	alert("Aaa");
+	//return false;
+	e.returnValue = "hi"
+}
+function addEvent(el, ev, fn) {
+    if (!el) return;
+    if (el.attachEvent) {
+        el.attachEvent("on" + ev, fn);
+    } else if (el.addEventListener) {
+        el.addEventListener(ev, fn, false);
+    }
+};
+function sahiEv(e){
+	if (!e) e = window.event;
+//	alert("Aaa");
+	//return false;
+	e.returnValue = null;
+}
+//window.addEventListener("beforeunload", myFn, false);
+//window.attachEvent("onbeforeunload", myFn);
+addEvent(window, "beforeunload", myFn);
+addEvent(window, "beforeunload", sahiEv);
+//window.onbeforeunload=function(){return 'abaac'};
+</script>
+
+</body>
+</html>

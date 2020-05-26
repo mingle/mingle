@@ -1,0 +1,139 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Project numeric precision">
+	<section title="Introduction">
+		<p>Numeric precision affects the number of decimal places which are stored for numeric project and card property values in Mingle. 
+			It also sets the limit on precision for any calculated values such as <cref topic="aggregate_properties">aggregate</cref> or <cref topic="formula_properties">formula properties</cref>.</p>
+	</section>
+	<section title="How it works">
+		<p>Let us <strong>assume a project precision of 2</strong></p>
+		<subsection title="Managed Lists">
+			<bullets title="When a user enters a first value of 1.0,">
+				<item>Mingle will store the value as 1.0 in the database</item>
+				<item>Mingle will show 1.0 on all cards/reports/charts</item>
+				<item>a new value, of 1.00 or 1 cannot be entered. Mingle would perform a lookup, and treat this as being the same as 1.0</item>
+			</bullets>
+
+			<bullets title="When a user enters a first value of 1.000">
+				<item>Mingle will store the value as 1.00 in the database</item>
+				<item>Mingle will show 1.00 on all cards/reports/charts</item>
+				<item>a new value, of 1.001 or 1 cannot be entered. Mingle would perform a lookup, and treat this as being the same as 1.00</item>
+			</bullets>
+			<note>This is all driven from a desire to surprise the user the least when doing aggregations and calculating formulae.</note>
+		</subsection>
+
+		<subsection title="Unmanaged Lists">
+			<bullets title="When a user enters a first value of 1.0">
+				<item>Mingle will store the value of 1.0 in the database</item>
+				<item>Mingle will show 1.0 on all cards/reports/charts</item>
+				<item>a new value, of 1.00 or 1 can be entered. Mingle would group them in charts/tables and treat them the same as 1.00</item>
+			</bullets>
+			<bullets title="When a user enters a first value of 1.001">
+				<item>Mingle will store the value as 1.00 in the database</item>
+				<item>Mingle will show 1.00 on all cards/reports/charts</item>
+				<item>a new value, of 1.000 or 1.0 can be entered. Mingle would group them in charts/tables and treat them the same as 1.00</item>
+			</bullets>
+			<note>This allows us to get equivalence of values for reporting purposes, while still preventing nasty surprises from cropping up in aggregated/calculated values. Which is the same motivation as above.</note>
+		</subsection>
+		<subsection title="Formulae/Aggregated values">
+
+			<bullets title="When a formula value is calculated, to 8.1 say">
+				<item>Mingle will store the value as 8.10 in the database</item>
+				<item>Mingle will show a value of 8.1 on all cards/reports/charts</item>
+				<item>aggregating this value on 100 cards, would create an aggregate value of 810</item>
+			</bullets>
+			<bullets title="When a formula value is calculated to be 8.129, say">
+				<item>Mingle will store the value as 8.13 in the database</item>
+				<item>Mingle will show as value of 8.13 on all cards/reports/charts</item>
+				<item>aggregating this value on 100 cards, would create an aggregate value of 813</item>
+			</bullets>
+		</subsection>
+	</section>
+
+	<section title="Setting numeric precision">
+		<p>Numeric precision is set by the Mingle Administrator when the project is initially created. It's one of the advanced settings on the <cref topic="project_settings_page">Project settings</cref> page.</p>
+	</section>
+	<section title="Modifying numeric precision" collapsed="true">
+		<warning>This value determines the precision with which your numeric properties are stored and formula properties are calculated. 
+			Decreasing this value could change existing data, permanently losing precision from any numeric values which are stored with greater than the new number of decimal places.</warning>
+		<subsection title="How to modify numeric precision">
+			<steps>
+				<item><cref topic="signing_in_and_out_of_mingle">Sign in</cref> to Mingle and open the project (if you're not currently working in the project).</item>
+				<item>
+					<p>Click the <tab>Project admin</tab> tab.</p> 
+					<screenshot alttext="Project admin tab" src="resources/images/project_admin_tab.png" />
+					<p>Mingle displays the <strong>Project settings</strong> page.</p>
+					<note>if you are logged in as a project team member, Mingle displays the <strong>Team</strong> page.</note>
+					<screenshot alttext="Project settings page - Show advanced options link" src="resources/images/project_settings_advanced_options.png" />
+				</item>
+				<item>
+					<p>Click on the <link>Advanced options</link> link</p>
+					<p>Mingle displays the advanced options fields, including the Numeric precision field with the current precision value displayed.</p>
+					<screenshot alttext="Project settings page - numeric precision" src="resources/images/project_settings_numeric_precision.png" />
+				</item>
+				<item>
+					<p>Change the numeric precision value as required.</p>
+					<warning>The effects of reducing numeric precision are not recoverable.</warning>
+				</item>
+				<item>Click on the <link>Save</link> link to save your work.</item>
+			</steps>
+		</subsection>
+		<subsection title="Consequences of reducing numeric precision">
+			<bullets title="Reducing project precision to 1">
+				<item>
+					<bullets title="if there are two values of 0.99 and 1.01 for a managed list in the database">
+						<item>both values will be deleted</item>
+						<item>a new value of 1.0 will be created</item>
+						<item>all existing views and transitions that used either of the old values will be changed to point to the new value</item>
+						<item>all existing history subscriptions that used either of the old values will be changed to point to the new values</item>
+						<item>all charts and pivots that previously showed two column/bars/pie-sectors will now show one</item>
+					</bullets>
+				</item>
+
+				<item>
+					<bullets title="if there are two values of 0.99 and 1.01 for an unmanaged list in the database">
+						<item>all cards that use either of those values will be changed to use a new value of 1.0</item>
+						<item>since Mingle cannot use unmanaged lists to create views/history subscriptions, there is nothing to be done with them</item>
+						<item>all existing transitions that used the old value will be changed to use the new value of 1.0</item>
+						<item>all charts and pivots that previously showed two column/bars/pie-sectors will now show one</item>
+					</bullets>
+				</item>
+
+				<item>adding new value of 1 for the managed value will not be allowed. Mingle will look up the existing 1.0, and treat the new value as being the same</item>
+				<item>adding new value of 1 for the unmanaged value will be allowed. Mingle would group it along with 1.0 in charts/tables</item>
+				<item>all calculated values of 8.03 will be changed to be 8.0 in the database, but still display as 8 everywhere.</item>
+				<item>an aggregation of 100 cards with this calculated value would be 800</item>
+			</bullets>
+		</subsection>
+		<subsection title="Consequences of increasing numeric precision">
+			<note>Increasing numeric precision will not lose any project data</note>
+			<bullets title="Increasing project precision to 3">
+				<item>an existing value of 1.0 for a managed value in the database will be retained.</item>
+				<item>adding new value of 1.000 for the managed value will not be allowed. Mingle will look up the existing 1.0, and treat the new value as being the same</item>
+				<item>an existing value of 1.0 for an unmanaged value in the database will be retained.</item>
+				<item>adding new value of 1.000 for the unmanaged value will be allowed. Mingle would group them in charts/tables and treat them the same as 1.000</item>
+				<item>if a new value of 1.000 is not added to the unmanaged list, Mingle would display the chart and table labels as being the value with the highest precision less than 3.</item>
+				<item>all cards/charts/reports still show the same values as before.</item>
+				<item>all calculated values of 8.10 will be changed to be 8.100 in the database, but still display as 8.1 everywhere.</item>
+				<item>an aggregation of 100 cards with this calculated value would be 810</item>
+				<item>all transitions and views that used this old value of either 1.0 or 8.10 will all be retained.</item>
+			</bullets>
+		</subsection>
+	</section>
+</topic>

@@ -1,0 +1,139 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Advanced configuration">
+    <section title="Introduction">
+     <p>Mingle configuration options are managed in a configuration directory outside of the installation folder. Having the ability to manage these outside the installation folder means that <cref topic="upgrading_from_previous_versions">upgrading your Mingle instance</cref> and keeping your existing configuration is now much easier.</p>
+
+      <warning>Do not alter your Mingle configuration unless you completely understand the impact of the change. We recommend discussing any configuration changes you are unsure of with the <exref url="@tw_studios_mingle_support_url@">Mingle support team</exref> before they are made. </warning>
+     </section>
+
+    <section title="Specifying a configuration directory">
+      <p>The config directory (configDir) is where Mingle will store project configuration files such as <strong>database.yml</strong>. If unspecified, this defaults to <strong>${mingle.dataDir}/config</strong></p>
+      <p>To avoid problems with future upgrades, this directory should not reside within the Mingle installation folder.</p>
+      <hint>
+        Note that if you are pointing an existing Mingle installation to a new configDir location, remember to move the contents
+        of the configDir and review the settings for correctness.
+      </hint>
+      <subsection title="Unix platforms:">
+        <p>Add the following command-line option:</p>
+        <markup>--mingle.configDir=/path/to/your/configDir</markup>
+      </subsection>
+      <subsection title="Windows:">
+        <p>On Windows, you can set the config directory during installation.</p>
+        <p>
+          If configuring this directory without using the installer, add the following line to the Mingle.vmoptions
+          within your Mingle installation folder:
+        </p>
+        <markup>-Dmingle.configDir=Drive:\path\to\your\configDir</markup>
+      </subsection>
+    </section>
+
+     <section title="mingle.properties configuration options">
+
+       <hint>Please refer to the mingle.properties.example file in your Mingle installation folder as an example of the latest mingle.properties format.</hint>
+
+       <subsection title="Configuring site URLs" id="site_url">
+         <p>These properties are typically specified by the Mingle administrator during the browser-based install or upgrade sequence. However, if the administrator wishes to change these values or set -Dmingle.secureSiteURL at a later date it is necessary to directly edit the mingle.properties file.</p>
+         <p>In general, Mingle generates URLs that are relative to the base URL of the request. However, there are scenarios, such as sending emails and URLs in the <cref topic="mingle_api_events">event API</cref>, where Mingle cannot rely upon publishing URLs relative to a request. For this reason, it is necessary to specify the -Dmingle.siteURL property. The value of this property should be the base URL by which your users access Mingle. If you have fronted Mingle with a reverse proxy, this value should be the base URL for the proxy and not the internal Mingle address. This URL should contain the port if your base URL contains is a non-standard port.</p>
+         <p>Here is an example for a typical usage without a reverse proxy and without SSL</p>
+         <markup>
+           -Dmingle.siteURL=http://mingle.example.com:8080</markup>
+         <p>Here is what a reverse proxy listening on default HTTP port of 80 configuration might look like</p>
+         <markup>
+           -Dmingle.siteURL=http://mingle.example.com
+           -Dmingle.port=8080</markup>
+         <p>Certain features in Mingle, such as Go integration, require an HTTPS(SSL) endpoint. If you have configured the value of -Dmingle.siteURL to an HTTPS base URL, Mingle will use that value when it must display a secure URL. However, if you wish that your primary site URL be HTTP, but still want to have HTTPS endpoints for the features that require SSL, you can specify an optional -Dmingle.secureSiteURL property with a value of the base HTTPS URL.</p>
+         <markup>
+           -Dmingle.siteURL=http://mingle.example.com
+           -Dmingle.secureSiteURL=https://mingle.example.com</markup>
+       </subsection>
+
+       <subsection title="Configuring a swap directory">
+         <p>The swap directory (swapDir) will act as a tmp space in which to store intermediate data such as project exports (.mingle files) while they are being created, project import files that are being imported, excel import content that is being processed for preview and excel import content that is being processed for import. </p>
+         <p>This directory should not be within the Mingle installation folder. To avoid problems with future upgrades, please keep this directory separate from the Mingle installation.</p>
+         <p>On Windows, you can set the swap directory during installation. Additionally, on every platform you can specify a property in mingle.properties to set the swap directory as follows:</p>
+         <markup>-Dmingle.swapDir=/path/to/your/data/tmp</markup>
+         <p>If unspecified, a default context path of /dataDir/tmp will be used. </p>
+        </subsection>
+
+        <subsection title="Configuring a port">
+          <p>On Windows, you can set the network port during installation. Additionally, on every platform you can specify a property in mingle.properties to set the network port from which to run Mingle as follows:</p>
+          <markup>-Dmingle.port=1234</markup>
+          <p>If unspecified, a default of '8080' will be used.</p>
+          <hint>This property is only used to configure the port to which Mingle binds on its host machine. Be sure to also configure -Dmingle.siteURL (discussed above) to the value of the base URL through which users will access Mingle.</hint>
+         </subsection>
+
+        <subsection title="Configuring an alternate app context" id="app_context">
+           <p>You can specify a property in mingle.properties to set an alternate app context as follows:</p>
+           <markup>-Dmingle.appContext=/mingle</markup>
+           <p>If specified, this will configure an app context of /mingle respectively. If unspecified, a default context path of / will be used. </p>
+         </subsection>
+
+          <subsection title="Configuring the log directory">
+           <p>You can specify a property which is the directory you would like to have your logs written to, such as /var/log, as follows: </p>
+           <markup>-Dmingle.logDir=/path/to/log/dir</markup>
+           <p>If unspecified, a default value of "log", under the installation folder, is used.</p>
+              </subsection>
+
+      <subsection title="Configuring the memcached host and port">
+        <p>You can specify two properties in mingle.properties to set a memcache host and port as follows:</p>
+          <markup>-Dmingle.memcachedHost=mingle.mingle.com
+-Dmingle.memcachedPort=11311</markup>
+        <p>This will connect to a memcached server at mingle.mingle.com:11311. If not specified, the default values are localhost &amp; 11211 respectively.</p>
+      </subsection>
+
+      <subsection title="Configuring SSL access" file="configuring_ssl_access" />
+
+    </section> <!-- end of mingle.properties section -->
+
+    <section title="Configuring search engine listener port">
+      <p>If needed, you can change the two ports Mingle uses for its search engine by editing the [mingle_install_dir]/config/elasticsearch.yml file.</p>
+        <markup>transport.tcp.port: 9300</markup>
+        <markup>http.port: 9200</markup>
+    </section>
+
+  <section title="Local help">
+    <p>Mingle help is located on the ThoughtWorks Studios website. The Mingle help files are also packaged with your local Mingle instance. In cases where network access is limited, you may want Mingle to link to your local help rather than the online help.</p>
+    <note>Online help has several advantages to local help. Consider the following before you switch to local help:
+      <bullets>
+        <item>Online help has a search feature (added in Mingle 3.2); local help cannot be searched.</item>
+        <item>Online help may be more up to date than local help. As we make updates to help, we are able to post the latest help online.</item>
+      </bullets>
+    </note>
+    <steps title="Linking to local Mingle help">
+      <item><p>Open [mingle_root]/config/initializers/document.rb</p>
+        <note>mingle_root is the directory where you <cref topic="mingle_onsite">installed Mingle</cref>.</note>
+      </item>
+      <item>
+        <p>Change HELP_DOC_DOMAIN from</p>
+        <markup>HELP_DOC_DOMAIN = ONLINE_HELP_DOC_DOMAIN</markup>
+        <p>to</p>
+        <markup>HELP_DOC_DOMAIN = "/help"</markup>
+      </item>
+    </steps>
+  </section>
+  <section title="Also see...">
+    <bullets>
+      <item><cref topic="mingle_onsite">Mingle onsite</cref></item>
+      <item><cref topic="configure_smtp_connection">SMTP configuration</cref></item>
+      <item><cref topic="configuring_mingle_authentication">Authentication configuration</cref></item>
+      <item><cref topic="configuring_a_database_for_use_with_mingle">Configuring a database for use with Mingle</cref></item>
+    </bullets>
+  </section>
+</topic>

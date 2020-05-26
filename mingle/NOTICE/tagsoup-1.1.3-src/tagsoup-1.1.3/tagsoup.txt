@@ -1,0 +1,126 @@
+TAGSOUP(1)                       User Commands                      TAGSOUP(1)
+
+
+
+NNAAMMEE
+       TagSoup - convert nasty, ugly HTML to clean XHTML
+
+SSYYNNOOPPSSIISS
+       jjaavvaa --jjaarr ttaaggssoouupp--11..11 [ _o_p_t_i_o_n_s ] [ _f_i_l_e_s ]
+
+DDEESSCCRRIIPPTTIIOONN
+       Rectify  arbitrary  HTML into clean XHTML, using a tailored description
+       of HTML.  The output will be well-formed XML, but not necessarily _v_a_l_i_d
+       XHTML.
+
+
+       ----ffiilleess
+              multiple input _f_i_l_e_s should be processed into corresponding out-
+              put files
+
+       ----eennccooddiinngg==_e_n_c_o_d_i_n_g
+              specifies the encoding of input files
+
+       ----oouuttppuutt--eennccooddiinngg==_e_n_c_o_d_i_n_g
+              specifies the encoding of  the  output  (if  the  encoding  name
+              begins with ``utf'', the output will not contain character enti-
+              ties; otherwise, all non-ASCII  characters  are  represented  as
+              entities)
+
+       ----hhttmmll output rectified HTML rather than XML, omitting the XML declara-
+              tion and any namespace declarations
+
+       ----mmeetthhoodd==hhttmmll
+              output rectified HTML rather than XML (end-tags are omitted  for
+              empty  elements, and no character escaping is done in script and
+              style elements)
+
+       ----oommiitt--xxmmll--ddeeccllaarraattiioonn
+              omit the XML declaration
+
+       ----lleexxiiccaall
+              output lexical features (specifically comments and  any  DOCTYPE
+              declaration)
+
+       ----nnoonnss suppress namespaces in output
+
+       ----nnoobbooggoonnss
+              suppress unknown non-HTML elements in output
+
+       ----nnooddeeffaauullttss
+              suppress default attribute values
+
+       ----nnooccoolloonnss
+              change  explicit colons in element and attribute names to under-
+              scores
+
+       ----nnoorreessttaarrtt
+              don't restart any restartable elements
+
+       ----iiggnnoorraabbllee
+              pass through ignorable whitespace  (whitespace  in  element-only
+              content) via SAX method handler ignorableWhitespace
+
+       ----aannyy  treat unknown non-HTML elements as allowing any content
+
+       ----nnooccddaattaa
+              treat  the  CDATA-content  elements _s_c_r_i_p_t and _s_t_y_l_e as ordinary
+              elements (mostly for testing)
+
+       ----ppyyxx  output PYX format rather than XML (mostly for testing)
+
+       ----ppyyxxiinn
+              input is PYX-format HTML (mostly for testing)
+
+       ----rreeuussee
+              reuse the same Parser object internally (for testing only)
+
+       ----hheellpp output basic help
+
+       ----vveerrssiioonn
+              output version number
+
+       TTaaggSSoouupp is a parser and reformatter for nasty, ugly HTML.   Its  normal
+       processing  mode  is  to accept HTML files on the command line, or from
+       the standard input if none are given, and output them as clean  XML  to
+       the  standard output.  The encoding is assumed to be the platform-local
+       encoding on input, and is always UTF-8 on output.
+
+       When the ----ffiilleess option is given, each input file is processed into  an
+       output  file  of  the corresponding name, with the extension changed to
+       _x_h_t_m_l.  If the extension is already _x_h_t_m_l, it is changed to _x_h_t_m_l__.
+
+       TagSoup will repair, by whatever means  necessary,  violations  of  XML
+       well-formedness.   In  particular,  it  will fix up malformed attribute
+       names and supply missing attribute-value quotation marks.  More signif-
+       icantly, it supplies end-tags where HTML allows them to be omitted, and
+       sometimes where it doesn't.  It will even supply start-tags where  nec-
+       essary; for example, if a document begins with a <li> tag, TagSoup will
+       automatically prefix it with <html><body><ul>.
+
+
+BBUUGGSS
+       TagSoup can be fooled by missing close quotes after  attribute  values,
+       and  by  incorrect character encodings (it does not contain an encoding
+       guesser).
+
+       TagSoup doesn't understand namespace declarations, which are not  prop-
+       erly  part  of  HTML.  Instead, any element or attribute name beginning
+       _f_o_o: will be put into the artificial namespace urn:x-prefix:_f_o_o.
+
+       For the same reasons,  namespace-qualified  attributes  like  xml:space
+       can't  be  returned  as default values, though an explicit attribute in
+       the xml namespace will be returned with the proper namespace URI.
+
+AAUUTTHHOORR
+       John Cowan <cowan@ccil.org>
+
+CCOOPPYYRRIIGGHHTT
+       Copyright (C) 2007 John Cowan
+       This is free software; see the source for copying conditions.  There is
+       NO  warranty;  not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR
+       PURPOSE.
+
+
+
+TagSoup 1.1.3                      May 2007                         TAGSOUP(1)

@@ -1,0 +1,48 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= render :partial => 'shared/top_level_header_pills', :locals => { :selected_tab => 'admin' } %>
+
+<h2>Current global configuration:</h2>
+<ul>
+<% MingleConfiguration.global_config.each do |key, value| %>
+<li><%= key %>: <%= value %></li>
+<% end %>
+</ul>
+<hr/>
+
+<h2>Update global configuration: (leave value input blank will delete the config)</h2>
+<% form_tag({:action => 'update_global_configuration'}) do %>
+  <fieldset style="border: dashed red; padding: 7px 9px; margin: 0px 3px;">
+    <legend style="font-weight: bold; color: red">Danger Zone: Override Mingle configuration</legend>
+    <div class="form_item">
+      <label for="name">Name:</label>
+      <%= select_tag('name', options_for_select(mingle_configuration_keys)) %>
+    </div>
+    <div class="form_item">
+      <label for="name">Value:</label>
+      <%= text_field_tag('value', '', :style => "width: 300px") %>
+    </div>
+    <%= submit_tag("Save") %>
+  </fieldset>
+<% end %>
+
+<hr/>
+<h2>User notification</h2>
+
+<%= link_to("Delete current notification", {:action => "delete_global_user_notification"}, :class => "link_as_button delete-notification", :method => "post") -%>
+
+<%= render :partial => "sysadmin/user_notification_form", :locals => {:action => "update_global_user_notification"} %>

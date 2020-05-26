@@ -1,0 +1,115 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% display_errors %>
+
+<%= render :partial => 'shared/contextual_help', :locals => { :params_for_link => { :controller => 'property_definitions', :action => 'new' } } %>
+<% form_tag :action => 'create' do %>
+  <%= render :partial => 'form_action_bar' %>
+  
+  <h1>New property definition</h1>
+  
+  <%= render :partial => 'name_description_form' %>
+  
+  
+    <label>Property type:</label>
+    
+    <% is_user_type = params[:definition_type] == 'user' %>
+    <% is_any_text_type = params[:definition_type] == 'any text' %>
+    <% is_date_type = params[:definition_type] == 'date' %>
+    <% is_number_list_type = params[:definition_type] == 'number list' %>
+    <% is_any_number_type = params[:definition_type] == 'any number' %>
+    <% is_formula_type = params[:definition_type] == 'formula' %>
+    <% is_card_relationship_type = params[:definition_type] == 'card relationship' %>
+    <% is_text_list_type = !is_date_type && !is_any_text_type && !is_user_type && !is_number_list_type && !is_any_number_type && !is_formula_type && !is_card_relationship_type %>
+
+    <div class="form_section">
+    	<h4>Text</h4>
+	    <div>
+	      <%= radio_button_tag 'definition_type', 'text list', is_text_list_type, :onclick => "$('formula-input').hide();" %>&nbsp;&nbsp;Managed text list
+	      <div class="radio-button-notes">(allows a user to choose one value from a pre-defined list that you specify - an example might be a drop-down list of days of the week)</div>
+	    </div>
+    
+	    <div>
+	      <%= radio_button_tag 'definition_type', 'any text', is_any_text_type, :onclick => "$('formula-input').hide();" %>&nbsp;&nbsp;Allow any text
+	      <div class="radio-button-notes">(allows a user the freedom to enter any text for this property. Mingle will not manage these values)</div>
+	    </div>
+    </div><!-- / form_section -->
+	   
+    <div class="form_section">
+    	<h4>Number</h4>
+	    <div>
+	      <%= radio_button_tag 'definition_type', 'number list', is_number_list_type, :onclick => "$('formula-input').hide();" %>&nbsp;&nbsp;Managed number list
+	      <div class="radio-button-notes">(allows a user to choose one value from a pre-defined list that you specify - an example might be a list of available story sizes)</div>
+	    </div>
+  
+	    <div>
+	      <%= radio_button_tag 'definition_type', 'any number', is_any_number_type, :onclick => "$('formula-input').hide();" %>&nbsp;&nbsp;Allow any number
+	      <div class="radio-button-notes">(allows a user the freedom to enter any number for this property. Mingle will not manage these values)</div>
+	    </div>
+    </div>
+
+    <div class="form_section">
+    	<h4>Team</h4>
+	    <div>		
+		    <%= radio_button_tag 'definition_type', 'user', is_user_type, :onclick => "$('formula-input').hide();" %>&nbsp;&nbsp;Automatically generated from the team list
+		    <div class="radio-button-notes">(allows a user to choose a teammate as the value for this property - Mingle will automatically provide the values from the team list)</div>
+		  </div>
+		</div>
+
+
+    <div class="form_section">
+    	<h4>Date</h4>
+	    <div>
+		    <%= radio_button_tag 'definition_type', 'date', is_date_type, :onclick => "$('formula-input').hide();" %>&nbsp;&nbsp;Date
+		    <div class="radio-button-notes">(allows a user to select a date as the value for this property)</div>
+		  </div>
+		</div>
+		
+		
+    <div class="form_section">
+    	<h4>Formula</h4>
+	    <div>
+		    <%= radio_button_tag 'definition_type', 'formula', is_formula_type, :onclick => "$('formula-input').show();" %>&nbsp;&nbsp;Formula<br />
+		    <div class="radio-button-notes">(allows a user to have a value that is calculated from other numeric and date properties on the card)</div>
+		    <div id='formula-input' class="radio-button-input" style='<%= is_formula_type ? "" : "display:none;"%>'>
+		      <%= text_field 'property_definition', 'formula', {:class => 'width-full'} %>
+		      <div>
+  		      <%= check_box_tag 'property_definition[null_is_zero]', 'true', @property_definition.null_is_zero, {:class => 'trailing', :id => 'property_definition_null_is_zero'} %>
+  		      <label for="property_definition_null_is_zero" class="inline">Replace any (not set) numeric property values with zero</label>
+		      </div>
+          
+		    </div>
+		  </div>
+		</div>
+		
+		
+    <div class="form_section">
+    	<h4>Card</h4>
+	    <div>
+		    <%= radio_button_tag 'definition_type', 'card relationship', is_card_relationship_type, :onclick => "$('formula-input').hide();" %>&nbsp;&nbsp;Card
+		    <div class="radio-button-notes">(allows a user to have any existing card as the value for this property)</div>
+		  </div>
+		</div>
+
+
+  <%= render :partial => 'available_cards_form' %>
+	
+  <%= render :partial => 'form_action_bar' %>
+<% end %>
+
+<!-- The following is for when the page is refreshed by the user, and the selected radio button is out of sync with the params. -->
+<%= javascript_with_rescue "($('definition_type_formula').checked) ? $('formula-input').show() : $('formula-input').hide();" -%>

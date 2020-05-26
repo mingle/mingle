@@ -1,0 +1,87 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div class="intructions">
+<p><span class="required">*</span> indicates a required field</p>
+</div>
+
+<% unless Authenticator.managing_user_profile_externally? %>
+  <div class="form_item">
+    <label for="user_login">Sign-in name:<span class='required'>*</span> <span class="notes">(Used every time you sign in to Mingle)</span></label>
+    <%- if local_assigns[:supports_login_update] -%>
+      <%= f.error_message_on :login, :prepend_text => 'Sign-in name ', :css_class => 'field_error' %>
+      <%= f.text_field :login, :class => 'large' %>
+    <%- else -%>
+      <%= f.text_field :login, :class => 'large', :disabled => true %>
+    <%- end -%>
+  </div>
+
+  <div class="form_item">
+    <label for="user_name">Display name:<span class='required'>*</span> <span class="notes">(Used as display name in Mingle, i.e. this is the name other Mingle users see)</span></label>
+    <%= f.error_message_on :name, :prepend_text => 'Display name ', :css_class => 'field_error'%>
+    <%= f.text_field :name, :class => 'large' %>
+  </div>
+
+  <%- if local_assigns[:render_sensitive_information] -%>
+    <div class="form_item">
+      <label for="user_password">
+        Choose password:<span class='required'>*</span> <span class="notes"><%=user_password_note_messages %></span>
+      </label>
+      <%= f.error_message_on :password, :prepend_text => 'Password ', :css_class => 'field_error' %>
+      <%= f.password_field :password, :value => "", :class => 'large' %>
+    </div>
+
+    <div class="form_item">
+      <label for="user_password_confirmation">Confirm password:<span class='required'>*</span></label>
+      <%= f.error_message_on :password_confirmation, :prepend_text => 'Password confirmation ', :css_class => 'field_error' %>
+      <%= f.password_field :password_confirmation, :value => "", :class => 'large' %>
+    </div>
+
+    <div class="form_item">
+      <label>User type:<span class='required'>*</span></label>
+      <ul class="vertical-neighbors">
+        <li>
+          <%= f.radio_button :user_type, 'full', :disabled => max_active_full_users_reached %>
+          Full user <span class="notes">(Can be granted read/write or read-only access to projects)</span>
+        </li>
+        <li>
+          <%= f.radio_button :user_type, 'light', :disabled => max_active_light_users_reached %>
+          Light user <span class="notes">(Can only be granted read-only access to projects)</span>
+        </li>
+        <li>
+          <%= f.radio_button :user_type, 'admin', :disabled => max_active_full_users_reached %>
+          Mingle Administrator <span class="notes">(Has full control of this instance of Mingle)</span>
+        </li>
+      </ul>
+    </div>
+  <%- end -%>
+
+  <div id="user_email_paragraph" class="form_item">
+    <label for="user_email">Email: <span class="notes">(Used for <%= ' gravatar icon, ' if MingleConfiguration.installer? %>subscribing to alerts, etc. Should be of the form sam@email.com)</span></label>
+    <%= f.error_message_on :email, :prepend_text => 'Email ', :css_class => 'field_error' %>
+    <%= f.text_field :email, :class => 'large' %>
+  </div>
+<% end %>
+
+<%- if FEATURES.active?('scm') -%>
+  <div id="user_version_control_user_name_paragraph" class="form_item">
+    <label for="user_version_control_user_name">Version control user name: <span class="notes">(Used to associate your Mingle sign-in name with your source repository user name)</span></label>
+    <%= f.error_message_on :version_control_user_name, :prepend_text => 'Version control user name ', :css_class => 'field_error' %>
+    <%= f.text_field :version_control_user_name, :class => 'large' %>
+  </div>
+<%- end -%>
+
+<%= render :partial => 'users/edit_user_icon' %>

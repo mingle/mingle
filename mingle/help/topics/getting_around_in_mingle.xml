@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Getting around in Mingle">
+    <p>Finding your way around in Mingle is fairly simple and you shouldn't have many problems. However we've provided a few hints, tips and guidelines to help you get around.</p>
+    <section title="Viewing cards">
+    	<p>Viewing cards is the main thing you'll be doing and Mingle gives you several ways to view cards: in a <cref topic="list_view">list view</cref>, a <cref topic="grid_view">grid view</cref>
+    		and if you have a <cref topic="working_with_card_trees">card tree</cref> selected you can also use <cref topic="tree_view">tree view</cref> and <cref topic="hierarchy_view">hierarchy view</cref>.
+    		Select card properties and tags in the Filter list by... section to display the cards you want to work with.</p>
+    	<subsection title="List view">
+    		<p><cref topic="list_view">Viewing cards in a list</cref> is similar to viewing a spreadsheet. You can add/remove columns for different card properties
+    		and re-order the list by clicking a column heading. Click the <tab>All</tab> tab to list all cards in your project.</p>
+    		</subsection>
+    	<subsection title="Grid view">
+    		<p><cref topic="grid_view">Viewing cards in a grid</cref> is like viewing cards on a whiteboard or story board.
+    		You can group and color cards by card property and add different columns.
+    		This lets you drag and drop cards from one card property to another (e.g. from New to In Progress).
+    		You can also set an aggregate value to be displayed at the top of each column. </p>
+    	</subsection>
+    	<subsection title="Tree view">
+    		<p><cref topic="tree_view">Viewing cards in a tree</cref> is enabled when you have selected a <cref topic="card_trees">Card tree</cref> to work with.
+    		In the tree view, cards are displayed in an inverted tree. You can drag and drop cards between parents in the tree, add and remove cards from the tree,
+    		and filter the tree to only show the cards you are interested in.</p>
+    	</subsection>
+    	<subsection title="Hierarchy view">
+    		<p><cref topic="tree_view">Viewing cards in a hierarchy</cref> is enabled when you have selected a <cref topic="card_trees">Card tree</cref> to work with.
+    			In the hierarchy view, cards are displayed in an explorer-like view, where you can drill into parent cards to see children. You can sort the cards,
+    			add and remove columns from the view, and filter to only display the cards you are interested in.</p>
+    	</subsection>
+    </section>
+    <section title="Favorites">
+    	<p>
+    		When you've found the cards you want to work with, you can <cref topic="creating_a_favorite_card_view">save this view as a favorite</cref> for quick access in the future.
+    		Favorites preserve the filters used to display cards, and whether the cards are arranged in a list, grid or other view.
+    		For list views, favorites retain any added columns and whether you sorted a particular column.
+    		For grid views, favorites retain the card properties used to group and color the view, and any columns you added or removed.
+    	</p>
+    </section>
+    <section title="Tabs">
+    <p>Mingle comes with several tabs by default: Overview, All, History and Project admin. (If you have integrated your source repository, Mingle also displays a Source tab.)
+    	Other tabs come from <cref topic="creating_tabs_from_favorites">favorites</cref> or <cref topic="creating_tabs_from_wiki_pages">wiki pages</cref> that have been converted to tabs.</p>
+    <p>Each card view has a link called <link>Update URL</link>. This is identical to the browser address (URL), but gives you a quick way to create links to the current card view.
+    	You can use these links to send to people via email or IM, or to place on a website, blog or Mingle wiki page. In Windows, right-click on this link to bring up options for copying or sending this link.</p>
+    </section>
+    <section title="Search">
+    	<p>Mingle lets you perform a comprehensive <cref topic="mingle_search">free-text search</cref> on any project artifact, including cards, wiki pages and source revisions.
+    		Mingle lets you search for card names, wiki page names, tags, card descriptions and wiki content.
+    		If you have tagged a card or wiki page with a search term, Mingle elevates this term in the search results.</p>
+    	<p>To search in Mingle, type your term in the Search field at the top-right of the page.</p>
+    </section>
+    <section title="Hot keys">
+    	<p>Hot keys lets you do common Mingle actions with a few simple keyboard shortcuts.  You can find the list of hot keys by clicking the keyboard icon in the bottom right of the footer.  You can also find this list by pressing "cmd/ctrl + /"</p>
+    </section>
+    <section title="History filter">
+    	<p>The <cref topic="history_tab">History tab</cref> lets you view all changes made to a project. There may be hundreds or thousands of changes happening during any given day,
+    		but there's probably only several of those changes that are relevant to you. The History filter section on the History tab lets you sort through changes that have happened on a project as they affect your work.
+    		From here you can setup email or feeds that match the filters.</p>
+    </section>
+    <section title="Wiki pages">
+    	<p>To <cref topic="finding_a_wiki_page">locate wiki pages</cref>, click the <tab>Project admin</tab> tab <link>Wiki pages</link> link. You can add any content to wiki pages,
+    		including <cref topic="creating_charts_and_tables_in_wiki_pages">project reporting details</cref> (graphs, charts, tables), and link to any other wiki page or card.
+    		You may also find links to wiki pages on the <cref topic="project_overview_tab">Overview tab</cref> (which is actually a special type of wiki page) or linked from cards.</p>
+    </section>
+    <section title="Links">
+    	<p>One of Mingle's strengths is its ability to create associations between project artifacts, and the main way this happens is through links.
+    		From within cards and wiki pages, you can easily link to other cards and wiki pages. You can create quick links to other cards by using <cref topic="card_keywords">card keywords</cref>,
+    		and this is how you link SVN commit messages to specific cards.</p>
+    </section>
+    <section title="Tags">
+    	<p><cref topic="working_with_tags">Tags</cref> are a quick way to create ad hoc flags and groupings between cards and wiki pages.
+    		You can <cref topic="mingle_search">search</cref> for tags, or <cref topic="filter_list_by_component">filter cards</cref> according to how they are tagged from the main card view or the <tab>History</tab> tab.
+    		Select the <tab>Project admin</tab> tab,  <link>Tags</link> link to manage tags within a project.</p>
+    </section>
+    <section title="Browsing the source repository">
+    <p>If you have Mingle <cref topic="setup_source_repository_integration">integrated with your source repository</cref>, you can view details of each revision and see specific changes to source files (diffs).
+    	Click the <tab>Source</tab> tab to browse the source repository.</p>
+    	<note>If you don't see a <tab>Source</tab> tab, then your project does not have source repository integration setup correctly.</note>
+    </section>
+</topic>

@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="OAuth 2.0">
+    <p>OAuth is an open-standard that enables a user to share private protected resources, e.g. photos or financial records, which she stores on one site or application with another one of her commonly used sites or applications without asking her to share any passwords between the two sites. OAuth is quickly becoming a widely adopted standard, with implementers including Yahoo, Facebook and Twitter.</p>
+  <p>In the context of ThoughtWorks Studios applications the private protected resources are the data. For example, if someone had configured Mingle and Go integration, a Mingle user will only be allowed to see Go Pipelines in Mingle that he would normally be allowed to see in Go. That is, when Mingle show's Go data in its pages, the Go authorization rules are not relaxed to allow all members of that Mingle project to automatically see the pipeline. The same can be said when Go shows Mingle data in its pages. It should also be possible to maintain this principle when showing Mingle or Go content in a 3rd party, non-ThoughtWorks Studios context.</p>
+  <p>In order to make this work, Mingle and Go (and in the future all ThoughtWorks Studios server-based applications) use OAuth 2.0 (v9) as a means of allowing a user of one application to establish his identity in the other application, while also granting the privilege of data access on his behalf. Both applications are OAuth providers. Both applications run a gadget rendering server capable of acting as an OAuth client. Currently, OAuth is only used for gadget-related communication, but we plan on expanding what data can be made available via OAuth in the future.</p>
+  <p>Below is a series of movies we've made that explain how OAuth works. Part 1 covers the basics and is likely enough for most users. Parts 2-4 get into the more technical details of how the protocol works.</p>
+  <youtube playlist="675281900139F609" />
+  
+</topic>

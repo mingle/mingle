@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE subsection SYSTEM "../mingle_help.dtd">
+<item>
+  <p><strong>Java 5 support end-of-life:</strong> As of Mingle 3.3, Java 5 (JDK 1.5) is no longer supported. See <cref topic="system_requirements#operating_system">system requirements</cref> and <cref topic="troubleshooting_mingle_installation_and_upgrade">installation and upgrade troubleshooting help</cref> for more information.</p>
+</item>

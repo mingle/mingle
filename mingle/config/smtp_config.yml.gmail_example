@@ -1,0 +1,11 @@
+smtp_settings:
+  #authentication: 
+  address: smtp.gmail.com
+  port: 587
+  domain: gmail.com
+  tls: true
+  user_name: gmail-user-name
+  password: 
+sender:
+  address: gmail-user-name@gmail.com
+  name: mingle

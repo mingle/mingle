@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Cross Project Reporting">
+    <section title="Introduction">
+        <p>Cross project reporting allows you to report on multiple Mingle projects on a single Mingle project wiki page or card. 
+	
+	For <cref topic="macro_reference#data_series">data series</cref> and <cref topic="macro_reference#stack_bar">stack bar</cref> charts you can also report on multiple projects on a single chart. 
+	
+	This allows you to access data from multiple Mingle projects at once and see the data in a single cohesive view.</p> 
+	          
+        <screenshot alttext="Two projects reporting on the same page - 1" src="resources/images/cross_project_reporting_pies_1.png" /> 
+        <screenshot alttext="Two projects reporting on the same page - 2" src="resources/images/cross_project_reporting_pies_2.png" /> 
+        
+        <p>This feature is particularly useful for large programs of work where you can view individual projects summaries in the context of other projects within the same program. </p>
+
+<p>To create cross project reports like these use the macro's "project" parameter at the chart or the series level. Review the <cref topic="macro_reference">macro reference</cref> for more information. </p> 
+
+   	<hint>The <cref topic="macro_reference#daily_history_chart">daily history chart</cref> does not support the use of the project parameter and therefore, cannot be used to create <cref topic="cross_project_card_page_linking">cross project reports</cref>.</hint>
+   
+
+
+ </section>
+
+<section title="Cross project macros" file="cross_project_macros" collapsed="false" />
+    <section title="How to.."> 
+        <bullets>
+        <item><cref topic="setting_up_cross_project_reporting">Setting up cross project reporting</cref></item>
+        <item><cref topic="viewing_cross_project_reports">Viewing cross project reports</cref></item>
+    </bullets>
+</section>
+    <section title="Also see..">
+                <bullets>
+                    <item><cref topic="creating_charts_and_tables_in_wiki_pages">Creating charts or tables in wiki pages</cref></item>
+                    <item><cref topic="macro_reference">Macro reference</cref></item>
+                    <item><cref topic="cross_project_card_page_linking">Cross project card and wiki linking</cref></item>
+                </bullets>
+             </section>
+
+		
+    
+</topic>

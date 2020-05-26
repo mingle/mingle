@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="What's new in Release 13.3">
+	<p>Please review the <cref topic="upgrading_from_previous_versions">upgrade instructions</cref> before moving to Mingle 13.3.</p>
+	<section title="WYSIWYG Improvements">
+	    <p>Hearing your <exref url="http://support.thoughtworks.com/entries/23424437-Mingle-13-2-Google-Hangout">helpful feedback</exref>, we've made the following improvements to our WYSIWYG editor, which we released in <cref topic="whats_new_in_release_13_2">Mingle 13.2</cref>:</p>
+      <bullets>
+        <bullets>
+            <item><strong>Source tab</strong></item>
+                  <p>We’ve added a source tab to our editing toolbar to give you better control over your content and layout. Click on this to see and modify (e.g. with line breaks and HTML anchor tags) the HTML behind your cards and pages. Simply click again to see formatted content.</p>
+                  <screenshot src="resources/images/source_code.png" />
+            <item><strong>Keyboard shortcuts</strong></item>
+                <p>We’ve added the following keyboard shortcuts to make it easier to modify cards and pages without a mouse:</p>
+                    <bullets>
+                      <bullets>
+                        <item>Numbered list: <strong>CTRL + Shift + 7</strong></item>
+                        <item>Bulleted list: <strong>CTRL + Shift + 8</strong></item>
+                        <item>Inline hyperlink: <strong>CTRL + K</strong></item>
+                        <item>Highlight URL: <strong>CTRL + L</strong></item>
+                      </bullets>
+                    </bullets>  
+                <p>See all <cref topic="keyboard_shortcuts">keyboard shortcuts</cref> supported in our WYSIWYG editor.</p>    
+            <item><strong>Spell check</strong></item>
+                <p>We now underline misspelled words in red so you know when to correct a typo:</p>
+                    <screenshot src="resources/images/spellcheck.png" />
+            <item><strong>Edit button for macros</strong></item>
+                <p>We’ve added an “edit macro button” to help you better understand how to modify your macros in edit mode. If you have a macro in your card or page description, this button will automatically appear when you click or hover over your macro. Click to open the macro widget window and modify your markup.</p>
+                  <screenshot src="resources/images/edit_macro_button.png" />
+        </bullets>    
+      </bullets>
+	</section>
+	<section title="Bug Fixes">
+	    <p>The following bugs have been fixed with 13.3:</p>
+		     <bullets>
+		          <item>Migrate upon export to Excel</item>
+              <item>Program export throws resource not found error after export complete</item>
+              <item>Card import fails if project and program name are the same</item> 
+              <item>Inserting one column layout at end of page results in invisible text</item>
+              <item>Invalid filter in auto-synced objective leaves the rest of the objectives hanging</item>
+              <item>Printing card on card show is not in readable format</item>
+              <item>Grid card popup is not next to the card</item>
+              <item>Card filter dropdown appears far away from filters</item>
+              <item>Cross project rollup macro doesn’t have edit macro option</item>
+              <item>Card copy event feed page throws 500 error</item>
+              <item># in the colour gets replaced by %23 in Macro Editor</item>
+              <item>Additional admin user being added upon upgrade to 13.2.3</item>	 
+              <item>Special characters not parsing when editing macros</item>
+              <item>Mingle with SVN integration crashes JVM</item>
+              <item>Macro class follows text after line break</item>
+		     </bullets>   
+	</section>
+</topic>
+
+
+

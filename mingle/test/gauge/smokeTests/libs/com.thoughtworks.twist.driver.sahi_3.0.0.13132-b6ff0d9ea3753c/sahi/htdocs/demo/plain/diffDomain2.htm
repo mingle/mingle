@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN">
+<html>
+<head>
+<meta name="generator" content="HTML Tidy, see www.w3.org">
+<title></title>
+<script type="text/javascript">
+function areWindowsLoaded(win){
+    try{
+        if (win.location.href == "about:blank") return true;
+    }catch(e){
+        return true; // diff domain
+    }
+    try{
+        var fs = win.frames;
+        if (!fs || fs.length == 0){
+            try{
+                return win.sahiLoaded;
+            }catch(e){
+                return true; // diff domain; don't bother
+            }
+        }else{
+            for (var i=0; i<fs.length; i++){
+                if (!areWindowsLoaded(fs[i])) return false;
+            }
+            if (win.document && win.document.getElementsByTagName("frameset").length == 0) return win.sahiLoaded;
+            else return true;
+        }
+    }
+    catch(ex){
+        sahiLogErr("2 to "+typeof ex);
+        sahiLogErr("3 pr "+ex.prototype);
+        return true;//for diff domains.
+    }
+}
+function ol(){
+    alert("Frameset loaded"+ ". I am "+ (top==self?"":"not ") + "top. "+top.areWindowsLoaded(top));
+}
+function topFn(){
+    alert("topFn");
+}
+window.onload=ol;
+</script>
+</head>
+<frameset rows="*,*,*">
+<frame src="http://www.dom1.com:10000/demo/interact.htm">
+<frame src="http://www.dom2.com:10000/demo/interact.htm">
+<frame src="">
+</frameset>
+</html>
+

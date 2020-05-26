@@ -1,0 +1,63 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= render :partial => 'shared/top_level_header_pills', :locals => { :selected_tab => 'admin' } %>
+
+<h2>Global Notification Message</h2>
+
+<p>
+  Global notifications can be used to message all Mingle users of this instance. The message will appear at the top right corner of the Mingle browser.
+</p>
+
+<%= link_to("Delete current notification", {:action => "delete_global_user_notification"}, :class => "link_as_button delete-notification", :method => "post") -%>
+
+<hr/>
+
+<div class="clearfix">
+
+  <div class="notification-config">
+    <h3>Configure Message</h3>
+    <%= render :partial => "sysadmin/user_notification_form", :locals => {:action => "update_global_user_notification"} %>
+  </div>
+
+  <div class="notification-preview">
+    <h3>Preview</h3>
+    <div class="user-notification">
+      <div class="message">
+        <h2 data-name="user_notification_heading" data-default="Notification Preview"><%= default_text(MingleConfiguration.user_notification_heading, "Notification Preview") %></h2>
+        <%
+          img_html_options = {:class => "notification-avatar", :"data-name" => "user_notification_avatar"}
+          img_html_options[:class] += " hidden" if MingleConfiguration.user_notification_avatar.blank?
+        -%>
+        <% if MingleConfiguration.show_holiday_fun?(user_preference(:i_hate_holidays)) && MingleConfiguration.latest_holiday_name == 'movember' %>
+          <div id="user-notification-avatar" <%= 'class=hidden' if MingleConfiguration.user_notification_avatar.blank? %>>
+            <%= image_tag(default_text(MingleConfiguration.user_notification_avatar, ''), img_html_options) %>
+            <%= image_tag('/images/moustache.png', :class => "moustache #{'hidden' if MingleConfiguration.user_notification_avatar.blank?}") %>
+          </div>
+        <% else %>
+          <%= image_tag(default_text(MingleConfiguration.user_notification_avatar, ''), img_html_options) %>
+        <% end %>
+        <p data-name="user_notification_body" data-default="The content of your notification. Note that all markup will be escaped."><%= default_text(MingleConfiguration.user_notification_body, "The content of your notification. Note that all markup will be escaped.") %></p>
+        <p class="more" data-name="user_notification_url" <%= raw %Q{style="display: none;"} if MingleConfiguration.user_notification_url.blank? -%>>
+          <%= link_to "Read more&hellip;".html_safe, MingleConfiguration.user_notification_url, :target => "_blank" %>
+        </p>
+      </div>
+
+      <a class="read-notification" onclick="return false;" href="#">Got it!</a>
+    </div>
+  </div>
+
+</div>

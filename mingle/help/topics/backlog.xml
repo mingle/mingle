@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "backlog.dtd">
+<chapter title="Backlog">
+	    <p>Program backlogs allow you to manage all the potential and upcoming work in your program. By using the program backlog you can capture high-level objectives that represent value and will be delivered as part of your program.</p>
+	<p>The backlog supports prioritization of your objectives based on relative value and size. Using the backlog in combination with a <cref topic="plan">plan</cref>, which is a part of every <cref topic="program">program</cref>, you can quickly move from prioritizing objectives to planning them across projects.</p>
+		<p>When developing the backlog as one of the central workspaces within the Mingle Program, we wanted to give you the ability to:</p>
+		   <bullets>
+			   <bullets>
+			       <item><strong>Keep your program backlog lean and execute work in small batches</strong></item>
+			       <item><strong>Focus on customer value by articulating problems, not implementing solutions</strong></item>
+			       <item><strong>Analyze work on a just-in-time basis</strong></item>
+	               <item><strong>Collaborate around backlog prioritization</strong></item>		
+		       </bullets>
+		   </bullets>	
+		<p>We used these principles to inform the design of the backlog and its supporting actions: capturing and prioritizing objectives, planning and sharing them with your team, and pruning your backlog.</p>
+	<section title="Capture your objectives" file="capture_objectives" collapsed="true" />
+	<section title="Prioritize your objectives" file="prioritize_objectives" collapsed="true" />
+	<section title="Plan and share objectives with your team" file="plan_and_share_objectives" collapsed="true" />
+	<section title="Prune your backlog" file="prune_backlog" collapsed="true" />
+</chapter>
+
+
+

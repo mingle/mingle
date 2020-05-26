@@ -1,0 +1,335 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>Chart Series Test</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js"
+            type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+    <script src="../../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+    <script src="../../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+
+    <script src="../../../public/javascripts/application.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery.scrollintoview.js"
+            type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/url_helper.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/project_data_store.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/easy_charts/series.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/easy_charts/data_series_chart/series.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/easy_charts/series_parameter.js"
+            type="text/javascript"></script>
+
+    <script src="../test_assets/sinon-2.3.6.js" type="text/javascript"></script>
+    <script src="../test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+    <script src="../test_assets/qunit-phantom.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="../test_assets/qunit-1.21.0.css" type="text/css"/>
+
+</head>
+<body>
+<div id="qunit">
+</div>
+<div id="chart_series"></div>
+<script type="application/javascript">
+  var sandbox = sinon.sandbox.create(sinon.defaultConfig),
+      propDef1 = {
+        name: 'prop1',
+        isNumeric: true,
+        isManaged: true,
+        dataType: 'numeric',
+        operatorOptions: [['is not', 'is not']],
+        propertyValueDetails: [{value: 'p1v2', position: 2}, {value: 'p1v1', position: 1}, {value: 'p1v3', position: 3}]
+      },
+      propDef2 = {
+        name: 'prop2',
+        dataType: 'string',
+        propertyValueDetails: [{value: 'p2v1'}, {value: 'p2v2'}]
+      },
+      propDef3 = {
+        name: 'prop3',
+        isManaged: false,
+        dataType: 'string',
+        operatorOptions: [['is', 'is']],
+        propertyValueDetails: [{value: 'p3v1', position: 2}, {value: 'p3v2', position: 1}]
+      },
+      propDef4 = {
+        name: 'prop4',
+        dataType: 'date'
+      },
+      propDef5 = {
+        name: 'Iteration',
+        dataType: 'card'
+      },
+      propDef6 = {
+        name: 'Sprint',
+        dataType: 'card'
+      },
+      projectData = {
+        identifier: 'sample_project',
+        dateFormat: '%Y/%m/%d',
+        cardTypes: [
+          {
+            id: 1,
+            name: "Story",
+            propertyDefinitions: [propDef1, propDef2, propDef3, propDef5, propDef6]
+          },
+          {
+            id: 2,
+            name: "Work",
+            propertyDefinitions: [propDef1, propDef3, propDef4, propDef5, propDef6]
+          }
+        ],
+        cardTypeNames: [
+          "Story",
+          "Work"
+        ],
+        tags: [],
+        team: [
+          {name: 'User1', login: 'user1'},
+          {name: 'User2', login: 'user2'}
+        ],
+        colors: ["#3D8F84", "#19A657", "#55EB7D"]
+      }, projectDataStore = new ProjectDataStore(projectData);
+  QUnit.module('Series Parameter', {
+    beforeEach: function () {
+      var self = this;
+      this.container = $j('#chart_series');
+
+      this.cardFilters = [
+        {
+          property: 'Type', values: ['Story', 'Work'], operator: 'is'
+        }
+      ];
+
+      this.callBacks = {onUpdate: sandbox.spy(), onAdd: sandbox.spy()};
+      this.stubedAddDeleteSeriesButton = sandbox.spy();
+      this.stubedRemoveDeleteSeriesButton = sandbox.spy();
+      var options = {currentProject:projectData.identifier, cardFilters:this.cardFilters,callBacks:this.callBacks};
+      this.seriesParameter = new MingleUI.EasyCharts.SeriesParameter(this.container, projectDataStore, options);
+
+      this.updatePropertySpy = sandbox.spy();
+      this.seriesIsValidStub = sandbox.stub();
+      this.stubedSeries = sandbox.stub(MingleUI.EasyCharts, 'Series').callsFake(function (options) {
+        return {
+          name: 'Series ' + options.number,
+          value: function () {
+            return {property: 'prop' + options.number, label: 'Series Label ' + options.number}
+          },
+          addDeleteButton: self.stubedAddDeleteSeriesButton,
+          removeDeleteButton: self.stubedRemoveDeleteSeriesButton,
+          updateProperty: self.updatePropertySpy,
+          isValid: self.seriesIsValidStub,
+          htmlContainer: {
+            find: function () {
+              return '#series_1';
+            }
+          }
+        }
+      });
+      this.seriesIsValidStub.returns(true);
+    },
+    afterEach: function () {
+      sandbox.restore();
+      this.container.empty();
+      delete MingleUI.EasyCharts.chartType;
+    }
+
+  }, function () {
+    QUnit.module('Common Test');
+
+    QUnit.test('shouldInitializeSeriesParameter', function (assert) {
+      assert.ok(this.container.find('.series-parameter').is(':visible'));
+    });
+
+    QUnit.test('shouldAddASeriesButton', function (assert) {
+      this.seriesParameter.enable('selectedProperty');
+
+      assert.ok(this.container.find('.series-parameter div.button-container button.add-a-series').is(':visible'));
+    });
+
+    QUnit.test('shouldIsEnabledShouldReturnTrueWhenEnabled', function (assert) {
+      assert.notOk(this.seriesParameter.isEnabled());
+
+      this.seriesParameter.enable('selectedProperty');
+
+      assert.ok(this.seriesParameter.isEnabled());
+    });
+
+    QUnit.test('shouldAddASeriesShouldCallSeriesWithValidArgs', function (assert) {
+      this.seriesParameter.enable('selectedProperty');
+      this.container.find('div.button-container button.add-a-series').click();
+      var seriesData = this.stubedSeries.args[0][0];
+      var expectedSeriesColors = ["#3D8F84", "#19A657", "#55EB7D"];
+
+      assert.equal(seriesData.currentProject, 'sample_project');
+      assert.equal(seriesData.number, 1);
+      assert.equal(seriesData.property, 'selectedProperty');
+      assert.deepEqual(seriesData.colors, expectedSeriesColors );
+      assert.deepEqual(seriesData.projectDataStore, projectDataStore);
+      assert.deepEqual(seriesData.cardFilters[0], {
+        property: 'Type', values: ['Story', 'Work'], operator: 'is'
+      });
+      assert.equal(typeof this.stubedSeries.args[0][1].onUpdate, 'function');
+      assert.equal(this.seriesParameter.buttonContainer.text(), 'Add another series');
+    });
+
+    QUnit.test('shouldTriggerOnAddCallback', function (assert) {
+      this.seriesParameter.enable(function(){
+        return 'selectedProperty';
+      });
+      this.container.find('div.button-container button.add-a-series').click();
+
+      assert.equal(this.callBacks.onAdd.callCount, 1);
+    });
+
+    QUnit.test('valueShouldReturnOnlyValidSeriesData', function (assert) {
+      this.seriesParameter.enable(function(){
+        return 'selectedProperty';
+      });
+      this.container.find('div.button-container button.add-a-series').click();
+
+      this.seriesIsValidStub.onCall(1).returns(false);
+      this.container.find('div.button-container button.add-a-series').click();
+
+      assert.deepEqual(this.seriesParameter.value(), {
+        "Series 1": {
+          "property": "prop1",
+          "label": "Series Label 1"
+        }
+      });
+    });
+
+    QUnit.test('testShouldInvokeUpdatePropertyOnSeriesOnUpdateCall', function (assert) {
+      this.seriesParameter.enable(function(){
+        return 'selectedProperty';
+      });
+      this.container.find('div.button-container button.add-a-series').click();
+      this.seriesParameter.update('prop');
+
+      assert.equal(this.updatePropertySpy.callCount, 1);
+      assert.equal(this.updatePropertySpy.args[0][0], 'prop');
+    });
+
+    QUnit.test('testIsValidShouldReturnTrueIfAnyOfTheSeriesIsValid', function (assert) {
+      this.seriesParameter.enable('selectedProperty');
+      this.seriesIsValidStub.onCall(1).returns(false);
+      this.container.find('div.button-container button.add-a-series').click();
+      this.container.find('div.button-container button.add-a-series').click();
+
+      assert.ok(this.seriesParameter.isValid());
+    });
+
+    QUnit.test('testIsValidShouldReturnFalseIfNoneOfTheSeresIsValid', function (assert) {
+      this.seriesParameter.enable('selectedProperty');
+      this.seriesIsValidStub.onCall(0).returns(false);
+      this.container.find('div.button-container button.add-a-series').click();
+      this.seriesIsValidStub.onCall(1).returns(false);
+      this.container.find('div.button-container button.add-a-series').click();
+
+      assert.notOk(this.seriesParameter.isValid());
+    });
+
+    QUnit.test('testShouldCreateNewSeriesWithUpdatedPropertyAfterPropertyUpdateCall', function(assert){
+      this.seriesParameter.enable('selectedProperty');
+      this.container.find('div.button-container button.add-a-series').click();
+      this.seriesParameter.update('prop');
+      this.container.find('div.button-container button.add-a-series').click();
+
+      assert.equal(this.stubedSeries.args[1][0].property, 'prop');
+    });
+
+    QUnit.test('testGetSeriesCountShouldReturnNumberOfSeries', function (assert) {
+      this.seriesParameter.enable('selectedProperty');
+      assert.equal(this.seriesParameter.getSeriesCount(), 0);
+
+      this.container.find('div.button-container button.add-a-series').click();
+
+      assert.equal(this.seriesParameter.getSeriesCount(), 1);
+    });
+
+    QUnit.test('testGetSeriesNamesShouldReturnSeriesLabelsMappedToSeriesNames', function (assert) {
+      this.seriesParameter.enable('selectedProperty');
+      assert.deepEqual(this.seriesParameter.getSeriesNames(), []);
+
+      this.container.find('div.button-container button.add-a-series').click();
+
+      assert.deepEqual(this.seriesParameter.getSeriesNames(), [['Series Label 1', 'Series 1']]);
+    });
+
+    QUnit.module('Removable Series');
+
+    QUnit.test('testSeriesShouldBeRemovableWhenThereAreMoreThanOneSeries', function (assert) {
+      this.seriesParameter.enable('selectedProperty');
+      this.container.find('div.button-container button.add-a-series').click();
+
+      assert.equal(this.stubedSeries.callCount, 1);
+
+      this.container.find('div.button-container button.add-a-series').click();
+      this.container.find('div.button-container button.add-a-series').click();
+
+      assert.equal(this.stubedSeries.callCount, 3);
+      assert.notOk(this.stubedSeries.args[0][2]);
+      assert.ok(this.stubedSeries.args[1][2]);
+      assert.ok(this.stubedSeries.args[2][2]);
+      assert.equal(this.stubedAddDeleteSeriesButton.callCount, 5);
+
+    });
+
+    QUnit.test('testShouldRemoveDeleteSeriesButtonFromLastSeries', function (assert) {
+      this.seriesParameter.enable('selectedProperty');
+      this.container.find('div.button-container button.add-a-series').click();
+      this.container.find('div.button-container button.add-a-series').click();
+      this.container.find('div.button-container button.add-a-series').click();
+
+      this.stubedSeries.args[0][1].onDelete(this.stubedSeries.returnValues[0]);
+      assert.equal(this.stubedRemoveDeleteSeriesButton.callCount, 0);
+
+      this.stubedSeries.args[1][1].onDelete(this.stubedSeries.returnValues[1]);
+      assert.equal(this.stubedRemoveDeleteSeriesButton.callCount, 1);
+    });
+
+    QUnit.test('testShouldInvokeOnUpdateCallBackWhenAValidSeriesIsRemoved', function (assert) {
+      this.seriesParameter.enable('selectedProperty');
+      this.container.find('div.button-container button.add-a-series').click();
+      this.container.find('div.button-container button.add-a-series').click();
+      this.container.find('div.button-container button.add-a-series').click();
+
+      this.seriesIsValidStub.callsFake(function(){
+        return false;
+      });
+      this.stubedSeries.args[0][1].onDelete(this.stubedSeries.returnValues[0]);
+      assert.equal(this.stubedRemoveDeleteSeriesButton.callCount, 0);
+      assert.equal(this.callBacks.onUpdate.callCount, 1);
+
+      this.seriesIsValidStub.callsFake(function(){
+        return true;
+      });
+
+      this.stubedSeries.args[1][1].onDelete(this.stubedSeries.returnValues[1]);
+      assert.equal(this.stubedRemoveDeleteSeriesButton.callCount, 1);
+      assert.equal(this.callBacks.onUpdate.callCount, 2);
+    });
+  });
+</script>
+</body>
+</html>

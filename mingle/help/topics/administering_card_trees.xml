@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Administering Card Trees">
+    <p>Creating and configuring <strong>Card Trees</strong> in Project Administration</p>
+    <section title="How to...">
+        <bullets>
+            <item><cref topic="creating_a_new_card_tree">Create a card tree</cref></item>
+            <item><cref topic="modifying_an_existing_card_tree">Modify a card tree</cref></item>
+            <item><cref topic="deleting_a_card_tree">Delete a card tree</cref></item>
+            <item><cref topic="aggregate_properties">Define aggregate properties on a card tree</cref></item>
+        </bullets>
+    </section>
+    <bullets title="Also see...">
+        <item><cref topic="working_with_card_trees">Working with card trees</cref></item>
+    </bullets>
+</topic>

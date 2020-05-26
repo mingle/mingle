@@ -1,0 +1,36 @@
+#  Copyright 2020 ThoughtWorks, Inc.
+#  
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Affero General Public License as
+#  published by the Free Software Foundation, either version 3 of the
+#  License, or (at your option) any later version.
+#  
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Affero General Public License for more details.
+#  
+#  You should have received a copy of the GNU Affero General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+mingle.card_events:
+  mingle.indexing.cards
+mingle.page_events:
+  mingle.indexing.pages
+mingle.events.revisions:
+  mingle.feed_cache_populating
+  mingle.history_changes_generation.revisions
+mingle.murmur_events:
+  mingle.murmur.card_linking
+  mingle.indexing.murmurs
+mingle.events.card_versions:
+  mingle.feed_cache_populating
+  mingle.objective.sync
+  mingle.history_changes_generation.cards
+mingle.events.page_versions:
+  mingle.feed_cache_populating
+  mingle.history_changes_generation.pages
+mingle.user_events:
+  mingle.history_generation.user_version_control_name_change_events
+  mingle.indexing.users
+mingle.events.objective_versions:
+  mingle.feed_cache_populating

@@ -1,0 +1,139 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE subsection SYSTEM "mingle_help.dtd">
+<subsection title="Cross project rollup">
+  
+<note>This macro does not appear in the <cref topic="using_the_editing_toolbar">editor toolbar</cref>. To use this macro, use the markup example below as a template for your own cross project reports.</note>
+
+<p>A macro that aggregates property values across multiple projects. This macro only works with Mingle 3.0. The cross-project-rollup macro will work using the following markup:  </p>
+
+<markup>
+   cross-project-rollup
+     project-group:  project_3_0_features_showcase, another_project_in_my_program
+     rows: Feature
+     rows-conditions: Feature != NULL
+     columns:
+     -     label: Number of stories
+           aggregate: count(*)
+           conditions: type = story
+     -     label: Number of Must stories
+           aggregate: count(*)
+           conditions: priority = must and type = story
+     -     label: Estimate of Must stories
+           aggregate: sum(estimate)
+           conditions:  priority = must and type = story
+     total: true
+</markup>
+<preview>
+  <screenshot alttext="Example cross project rollup" src="resources/images/cross_project_rollup_example.png" />
+</preview>
+
+
+<p>The following is a list of parameters and how they should be used with this macro: </p>
+
+<table caption="Parameters">
+  <header-row>
+    <col-header>Name</col-header>
+    <col-header>Meaning</col-header>
+    <col-header>Required</col-header>
+    <col-header>Default value</col-header>
+  </header-row>
+  <group title="Chart-level options" col-headers="true">
+    <row>
+      <label>project-group</label>
+      <col>List of project identifiers</col>
+      <col>No</col>
+      <col>Current project</col>
+    </row>
+    <row>
+      <label>rows</label>
+      <col>A property. Each row is a property value. The order of the rows' property values is alphabetical by card name if a card or tree 
+      relationship property, by number if they are numeric properties, by display name and login if they are team properties, by date if they are date properties, by the bespoke order of the first project if they are text properties.</col>
+      <col>Yes</col>
+      <col />
+    </row>
+    <row>
+      <label>rows-conditions</label>
+      <col><cref topic="mql_reference#where">MQL condition</cref> to restrict the rows shown in the table.</col>
+      <col>No</col>
+      <col />
+    </row>
+    <row>
+      <label>zero-value-rows</label>
+      <col>True or false. Determines whether rows with no value will be shown or not.</col>
+      <col>No</col>
+      <col>True</col>
+    </row>
+      <row>
+        <label>columns</label>
+        <col>Can have many columns. Shown in the order given in the macro markup.</col>
+        <col>Yes</col>
+        <col />
+      </row>
+    </group>
+    <group title="Column-level options" col-headers="true">
+      <row>
+        <label>label</label>
+        <col>Label for the column. Label will default to the column aggregate if not specified.</col>
+        <col>No</col>
+        <col>Column aggregate</col>
+      </row>
+      <row>
+        <label>aggregate</label>
+        <col>Can be Count, Sum(property), Min, Max. Cannot be average. Date properties cannot be aggregated.</col>
+        <col>Yes</col>
+        <col />
+      </row>
+      <row>
+        <label>conditions</label>
+        <col><cref topic="mql_reference#where">MQL condition</cref> to restrict the column aggregation.</col>
+        <col>No</col>
+        <col />
+      </row>
+    </group>
+    <group title="Other options" col-headers="true">
+                <row>
+              <label>total</label>
+              <col>True or false. Sums the column and shown as row if true. Always shown as the bottom row.</col>
+              <col>No</col>
+              <col>True</col>
+            </row>
+
+            <row>
+              <label>sub-totals</label>
+              <col>Only applicable when the column aggregation is count or sum. Calculates a sum of the rows in the column restricted by the subtotal condition. Can have many subtotals. Shown in order given in macro markup. </col>
+              <col>No</col>
+              <col />
+            </row>
+                </group>      
+            <group title="Sub-total options" col-headers="true">
+              <row>
+                <label>conditions</label>
+                <col><cref topic="mql_reference#where">MQL condition</cref>.</col>
+                <col>No</col>
+                <col>Sum total of the column</col>
+              </row>
+                <row>
+                  <label>label</label>
+                  <col>Label for the sub-totals. Label will default to the condition of the subtotal if not specified.</col>
+                  <col>No</col>
+                  <col>Conditions or, if no conditions, empty</col>
+                </row>
+              </group>
+</table>
+</subsection>

@@ -1,0 +1,14 @@
+_navigateTo("/demo/");
+_click(_link("Label Page"));
+_assertNotTrue(_checkbox("c1").checked);
+_click(_label("abcd"));
+_assertTrue(_checkbox("c1").checked);
+
+_assertNotNull(_label("some bold text"));
+
+_assertNotNull(_label("for_c3"));
+_click(_label("for_c3"));
+_assertTrue(_checkbox("c3").checked);
+_click(_checkbox("c3"));
+_assertNotTrue(_checkbox("c3").checked);
+_click(_link("Back"));

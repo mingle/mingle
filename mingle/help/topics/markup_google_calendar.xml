@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<subsection title="Google calendar macro" collapsed="true" id="google_calendar">
+	<p>Mingle 3.2 introduced the macro to create a google calendar.</p>
+	<p>The markup below will display the public Google calendar for US holidays.</p>
+	<markup>
+  google-calendar
+    src: "http://www.google.com/calendar/embed?src=en.usa%23holiday%40group.v.calendar.google.com&amp;ctz=America/Los_Angeles"
+    width: 900
+    height: 700
+</markup>
+
+	<hint>This macro is not available in the wiki toolbar on any cards or wiki pages. Therefore you should manually enter the markup as stated above (or copy and paste) and replace the location of your google calendar as a value of the src parameter.</hint>
+</subsection>

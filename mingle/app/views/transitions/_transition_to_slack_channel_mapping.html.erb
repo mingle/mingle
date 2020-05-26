@@ -1,0 +1,49 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% if @slack_team_info && @team_mapped && MingleConfiguration.transition_to_channel_mapping_enabled? %>
+    <% if read_only %>
+        <% has_channel_mapping = @mapped_transitions.has_key? transition.id %>
+        <% channel = @mapped_transitions[transition.id] %>
+        <div class="mapped_slack_channel">
+          <% if has_channel_mapping %>
+             <p> This transition is mapped to
+               <% if channel.nil? %>
+                   <strong>a private channel </strong>
+              <% elsif channel.private %>
+                   <i class="fa fa-lock"></i><strong><%= channel.name %></strong>
+              <% else %>
+                   <strong><%="##{channel.name}" %></strong></p>
+              <%end%>
+          <% else %>
+              <p>This transition is not mapped to any channel</p>
+          <% end %>
+        </div>
+    <% else %>
+        <div id="slack_integration">
+          <div id="transition_to_slack_channel_mapping">
+            <% prompt = '(not set)' %>
+            <span style="font-weight:600; padding-right:10px">Post transition notification to Slack : </span>
+            <%= mapped_channels = inject_private_channel_if_needed(@mapped_channels, @selected_channel_id, @project)
+              select_tag('selected_slack_channel_id',
+                           grouped_options_for_select(formatted_channels(mapped_channels, false), (@selected_channel_id ||''), prompt).html_safe,
+                disabled: disable_drop_channel_down?(@mapped_channels, @selected_channel_id)) %>
+            <%= hidden_field_tag 'previously_selected_slack_channel_id', (@selected_channel_id || '') %>
+            <%= hidden_field_tag 'is_selected_channel_inaccessible', disable_drop_channel_down?(@mapped_channels, @selected_channel_id) %>
+          </div>
+        </div>
+    <% end %>
+<% end %>

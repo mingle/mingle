@@ -1,0 +1,74 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= render :partial => 'shared/top_level_header_pills', :locals => { :selected_tab => 'admin' } %>
+
+<% form_tag({:action => 'update'}, {:id => 'smtp-config-form'}) do %>
+
+
+  <h1>Email Settings</h1>
+  
+  
+  <h4>SMTP Settings</h4>
+
+    <div class="form_item">
+      <label for="smtp_settings_address">SMTP server address: <span class="notes">(The address of the SMTP server)</span></label>
+  	  <%= text_field "smtp_settings", 'address', :class => 'large' %>
+    </div>
+  
+  	<div class="form_item">
+      <label for="smtp_settings_port">SMTP server port: <span class="notes">(The port of the SMTP server)</span></label>
+  	  <%= text_field 'smtp_settings', 'port', :class => 'large' %>
+  	</div>
+  	
+  	<div class="form_item">
+      <label for="smtp_settings_domain">SMTP domain: <span class="notes">(Contact your email server administrator to obtain the correct value for this field)</span></label>
+  	  <%= text_field "smtp_settings", "domain", :class => 'large' %>
+  	</div>
+  	
+  	<div class="form_item">
+      <label for="smtp_settings_user_name">SMTP server authentication user name: <span class="notes">(The user name used to log into the SMTP server, if any. If set, Mingle will use plain authentication when connecting to the SMTP server.)</span></label>
+  	  <%= text_field "smtp_settings", "user_name", :class => 'large' %>
+  	</div>
+  	
+  	<div class="form_item">
+      <label for="smtp_settings_password">SMTP server authentication password: <span class="notes">(The password used to log into the SMTP server, if any. If set, Mingle will use plain authentication when connecting to the SMTP server.)</span></label>
+  	  <%= password_field "smtp_settings", "password", :class => 'large' %>
+  	</div>
+  	
+    <div class="form_item">
+      <label for="smtp_settings_tls">TLS encryption: <span class="notes">(A type of encryption used by some SMTP servers)</span></label>
+      <%= check_box 'smtp_settings', 'tls', {}, 'true', 'false' %> Use TLS encryption
+    </div>
+
+  
+  
+  <h4>Mingle Settings</h4>
+
+  
+  	<div class="form_item">
+      <label for="sender_address">Sender address: <span class="notes">(The address from which emails will be sent. If this is not set, notifications from Mingle may not be sent properly.)</span></label>
+  	  <%= text_field 'sender', 'address', :class => 'large' %>
+  	</div>
+  
+  	<div class="form_item">
+      <label for="sender_name">Sender name: <span class="notes">(The name under which emails will be sent.)</span></label>
+  	  <%= text_field 'sender', 'name', :class => 'large' %>
+  	</div>
+
+
+  <%= render :partial => 'edit_actions' %>
+<% end %>

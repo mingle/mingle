@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+/**
+ * Copyright  2006  V Narayan Raman
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<project name="demo" default="sahitests">
+	<property name="userdata.dir" value="${basedir}/userdata"/>
+	<property environment="env" />
+	<property name="urlbase" value="sahi.co.in"/>
+	<!--
+	<property name="urlbase" value="gramam"/>
+	-->
+    <taskdef name="sahi" classname="net.sf.sahi.ant.RunSahiTask" classpath="lib/ant-sahi.jar"/>
+    <target name="sahitests" description="start the server and run sahi tests">
+        <parallel>
+            <!--<antcall target="start"/>-->
+            <antcall target="start-web"/>
+            <sequential>
+                <waitfor maxwait="3" maxwaitunit="minute" checkevery="100">
+                    <http url="http://${urlbase}/demo/index.htm"/>
+                </waitfor>
+                <antcall target="runietests"/>
+            	<antcall target="stop-web"/>
+            </sequential>
+        </parallel>
+    </target>
+
+    <target name="ff" description="start the server and run sahi tests">
+        <parallel>
+            <sequential>
+                <waitfor maxwait="3" maxwaitunit="minute" checkevery="100">
+                    <http url="http://${urlbase}/demo/index.htm"/>
+                </waitfor>
+                <antcall target="runfftests"/>
+                <antcall target="stop-web"/>
+            </sequential>
+            <antcall target="start-web"/>
+        </parallel>
+    </target>
+
+    <target name="ie" description="start the server and run sahi tests">
+        <parallel>
+            <sequential>
+                <waitfor maxwait="3" maxwaitunit="minute" checkevery="100">
+                    <http url="http://${urlbase}/demo/index.htm"/>
+                </waitfor>
+                <antcall target="runietests"/>
+                <antcall target="stop-web"/>
+            </sequential>
+            <antcall target="start-web"/>
+        </parallel>
+    </target>
+
+    <target name="runfftests">
+        <sahi suite="../userdata/scripts/demo/demo.suite"
+              browserType="firefox"
+              baseurl="http://${urlbase}/demo/"
+              sahihost="localhost"
+              sahiport="9999"
+              failureproperty="sahi.failed"
+              haltonfailure="false"
+              threads="6">
+            <report type="html"/>
+            <!--<report type="junit" logdir="${userdata.dir}/temp/junit"/>-->
+        </sahi>
+        <antcall target="failsahi"/>
+    </target>
+
+    <target name="runffsingle">
+        <sahi suite="scripts/demo/sahi_demo.sah"
+			  browserType="firefox"
+              baseurl="http://${urlbase}/demo/"
+              sahihost="localhost"
+              sahiport="9999"
+              failureproperty="sahi.failed"
+              haltonfailure="false"
+              threads="3">
+            <report type="html" logdir="logs/playback/mydir"/>
+        </sahi>
+        <antcall target="failsahi"/>
+    </target>
+
+    <target name="runietests">
+        <sahi suite="../userdata/scripts/demo/demo.suite"
+              browserType="ie"
+              baseurl="http://${urlbase}/demo/"
+              sahihost="localhost"
+              sahiport="9999"
+              failureproperty="sahi.failed"
+              haltonfailure="false"
+              threads="6"
+                >
+            <report type="html"/>
+        	<!--<report type="junit" logdir="${userdata.dir}/temp/junit"/>-->
+        </sahi>
+        <antcall target="failsahi"/>
+    </target>
+
+    <target name="runchrometests">
+    	<!-- Use full path in browser if XP-->
+        <sahi suite="../userdata/scripts/demo/demo.suite"
+        	  browserType="chrome"
+              baseurl="http://${urlbase}/demo/"
+              sahihost="localhost"
+              sahiport="9999"
+              failureproperty="sahi.failed"
+              haltonfailure="false"
+              threads="10"
+                >
+            <report type="html"/>
+        	<!--<report type="junit" logdir="${userdata.dir}/temp/junit"/>-->
+        </sahi>
+        <antcall target="failsahi"/>
+    </target>
+
+    <target name="runsafaritests">
+        <sahi suite="../userdata/scripts/demo/demo.suite"
+              browserType="safari"
+              baseurl="http://${urlbase}/demo/"
+              sahihost="localhost"
+              sahiport="9999"
+              failureproperty="sahi.failed"
+              haltonfailure="false"
+              threads="1"
+                >
+            <report type="html"/>
+        	<!--<report type="junit" logdir="${userdata.dir}/temp/junit"/>-->
+        </sahi>
+        <antcall target="failsahi"/>
+    </target>
+
+    <target name="runoperatests">
+        <sahi suite="../userdata/scripts/demo/demo.suite"
+              browserType="opera"
+              baseurl="http://${urlbase}/demo/"
+              sahihost="localhost"
+              sahiport="9999"
+              failureproperty="sahi.failed"
+              haltonfailure="false"
+              threads="1"
+                >
+            <report type="html"/>
+            <report type="junit" logdir="${userdata.dir}/temp/junit"/>
+        </sahi>
+        <antcall target="failsahi"/>
+    </target>
+
+    <target name="runhtmlunittests">
+        <sahi suite="../userdata/scripts/demo/demo.suite"
+              browser="D:/Dev/sahi/SahiHTMLUnit/bin/htmlunit.bat"
+              baseurl="http://${urlbase}/demo/"
+              sahihost="localhost"
+              sahiport="9999"
+              failureproperty="sahi.failed"
+              haltonfailure="false"
+	      	  browserProcessName="java.exe"
+              threads="3"
+                >
+            <report type="html"/>
+        </sahi>
+        <antcall target="failsahi"/>
+    </target>	
+
+    <target name="failsahi" if="sahi.failed">
+    	<!--antcall target="stop-web"/-->
+        <fail message="Sahi tests failed!"/>
+    </target>
+
+    <target name="start-web" description="starts web">
+        <java classname="net.sf.sahi.WebServer" fork="true" dir="bin"
+              jvmargs="-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5006">
+            <classpath location="lib/sahi.jar"/>
+        </java>
+    </target>
+
+    <target name="stop-web" description="stop web server">
+        <get dest="stopserver.htm" src="http://${urlbase}/dyn/stopserver" ignoreerrors="true"/>
+        <delete file="stopserver.htm"/>
+    </target>
+
+
+    <target name="sahireport" description="show report">
+        <exec executable="C:\\Program Files\\Internet Explorer\\iexplore.exe">
+        	<arg value="${userdata.dir}/logs/playback/index.htm"/>
+        </exec>
+    </target>
+
+    <target name="start" description="starts proxy">
+        <java classname="net.sf.sahi.Proxy" fork="true">
+            <!--<env key="MOZ_NO_REMOTE" value="1"/>-->
+            <classpath location="lib/sahi.jar">
+                <pathelement location="extlib/rhino/js.jar"/>
+                <pathelement location="extlib/apc/commons-codec-1.3.jar"/>
+                <fileset dir="extlib" includes="*.jar"/>
+            </classpath>
+            <arg value="." id="basePath"/>
+            <arg value="userdata" id="userdataPath"/>
+        </java>
+    </target>
+
+    <target name="stopsahi" description="stop sahi server">
+        <sahi stop="true" sahihost="localhost" sahiport="9999"/>
+    </target>
+
+    <target name="testglobal">
+        <sahi suite="../userdata/scripts/demo/globalvar.suite"
+              browserType="firefox"
+              baseurl="http://${urlbase}/demo/"
+              sahihost="localhost"
+              sahiport="9999"
+              failureproperty="sahi.failed"
+              haltonfailure="false"
+              threads="1">
+            <report type="html"/>
+            <report type="junit" logdir="${userdata.dir}/temp/junit"/>
+        </sahi>
+        <antcall target="failsahi"/>
+    </target>
+
+
+    <target name="shouldfail">
+        <sahi suite="../userdata/scripts/demo/shouldfail/fail.suite"
+              browserType="firefox"
+              baseurl="http://${urlbase}/demo/"
+              sahihost="localhost"
+              sahiport="9999"
+              failureproperty="sahi.failed"
+              haltonfailure="false"
+              threads="3">
+            <report type="html"/>
+            <report type="junit" logdir="${userdata.dir}/temp/junit"/>
+        </sahi>
+        <antcall target="failsahi"/>
+    </target>
+
+    <target name="shouldfailie">
+        <sahi suite="../userdata/scripts/demo/shouldfail/fail.suite"
+              browserType="ie"
+              baseurl="http://${urlbase}/demo/"
+              sahihost="localhost"
+              sahiport="9999"
+              failureproperty="sahi.failed"
+              haltonfailure="false"
+              threads="3">
+            <report type="html"/>
+            <report type="junit" logdir="${userdata.dir}/temp/junit"/>
+        </sahi>
+        <antcall target="failsahi"/>
+    </target>
+
+	<target name="del_ie_temp">
+		<delete quiet="true" includeemptydirs="true">
+			<fileset dir="${env.LOCALAPPDATA}/Microsoft/Windows/Temporary Internet Files" includes="**/*">
+			</fileset>
+		</delete>
+	</target>
+	
+    <target name="fail_missing">
+        <sahi suite="../userdata/scripts/demo/shouldfail/fail_missing.suite"
+              browserType="firefox"
+              baseurl="http://${urlbase}/demo/"
+              sahihost="localhost"
+              sahiport="9999"
+              failureproperty="sahi.failed"
+              haltonfailure="false"
+              threads="3">
+            <report type="html"/>
+            <report type="junit" logdir="${userdata.dir}/temp/junit"/>
+        </sahi>
+        <antcall target="failsahi"/>
+    </target>
+</project>

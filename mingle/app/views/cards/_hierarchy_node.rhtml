@@ -1,0 +1,47 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<tr class="<%= hierarchy_class(hierarchy_node.level) %> hierarchy card-row <%= 'with-children' if hierarchy_node.has_children? -%>" id="<%= hierarchy_node.html_id %>">
+  <td class="goto-card number">
+    <a href="<%= url_for(:action => :show, :controller => :cards, :number => hierarchy_node.number) %>" 
+       id="card_number_<%= hierarchy_node.number %>"
+       onclick = "HierarchyView.openCard(event, this); return false">
+      <%= hierarchy_node.number %>
+    </a>
+  </td>
+  <td class="hierarchy-type-color-outer">    
+    <div class="goto-card hierarchy-type-color" style='border-left-color:<%= hierarchy_node.color %>; padding-left: <%= (hierarchy_node.level-1) * 20 %>px'>
+      <a href="<%= url_for(:action => :show, :controller => :cards, :number => hierarchy_node.number) %>" 
+         id = "node_<%= hierarchy_node.html_id %>"
+         name = "card_name_link_<%= hierarchy_node.number %>"
+         onclick = "HierarchyView.openCard(event, this); return false">
+        <% if hierarchy_node.has_children? %>
+          <span id='<%= "twisty_for_card_#{hierarchy_node.number}" %>' class="twisty <%= twisty_class(hierarchy_node) %>" onclick="HierarchyView.toggle(<%= hierarchy_node.number %>); return false;">&nbsp;</span>
+        <% else %>
+          <span class='invisible-twisty-sized-object'>&nbsp;</span>
+        <% end %>
+        <%= h(hierarchy_node.name) %>
+        <%= spinner :id => "spinner_#{hierarchy_node.number}" %>
+      </a>
+    </div>
+  </td>
+
+  <% @view.column_property_definitions.each do |prop_def| -%>
+    <td class="goto-card" id="<%=prop_def.html_id%>-cell-for-card-<%=hierarchy_node.number%>">
+      <%= h_or_nbsp hierarchy_node.property_value(prop_def) %>
+    </td>
+  <% end -%>
+</tr>

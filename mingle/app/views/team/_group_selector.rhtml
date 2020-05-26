@@ -1,0 +1,39 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= link_to_function('<span class="dropdown">Groups</span>'.html_safe, {:id => 'assign_groups', :class => 'link_as_button group-link'}) %>
+<div id="group-selector" class="slider-down" style="position: absolute; display:none;">
+  <ul id="options-container" class="group-dropdown">
+    <% @project.user_defined_groups.smart_sort_by(&:name).each do |group| -%>
+      <li><%= tristate_checkbox group.name, "removes[]", group.id, :id => "toggle_group_#{group.html_id}", :class => 'group-checkbox' %></li>
+    <% end -%>
+  </ul>
+  <div class="lightbox_actions">
+    <div class="column-selector-operations-bottom">
+      <%= button_to_function 'Apply', <<-JAVASCRIPT, :id => 'apply_group_memberships_changes', :class => 'link_as_button primary'
+        $(this.form).select('input').each(function(inputField){
+          var clonedInputField = new Element('input', { 'type': 'hidden', name: inputField.name, value: inputField.value } );
+          $('update_memberships').appendChild(clonedInputField);
+        });
+        $('update_memberships').action = $('update_memberships').getAttribute('update_group_memberships');
+        $('update_memberships').submit();
+  JAVASCRIPT
+      -%>
+    </div>
+  </div>
+</div>
+
+<%= javascript_with_rescue "new GroupSelector('group-selector', 'assign_groups', '.tristate-checkbox', #{memberships_json_for(@project, @users)});" -%>

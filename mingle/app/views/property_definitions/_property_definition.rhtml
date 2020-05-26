@@ -1,0 +1,74 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<tr class="<%= cycle('odd', 'even') %> <%= 'hidden-property' if property_definition.hidden? %>" id="prop_def_row_<%= property_definition.id %>">
+  <td>
+    <div><%=h property_definition.name %></div>
+    <div class="notes"><%=h property_definition.description %> (<%= property_definition.describe_type %>)</div> 
+  </td>
+  <td>
+    <div>
+      <%= create_property_values_description(property_definition) %>
+    </div>
+  </td>
+  <td>
+    <%= check_box_to_remote "visibility-#{property_definition.id}", '1', property_definition.hidden?,
+        {
+          :url => {:action => property_definition.hidden? ? :unhide : :confirm_hide, :name => property_definition.name},
+          :before => show_spinner('spinner'),
+          :complete => hide_spinner('spinner'),
+          :method => property_definition.hidden? ? :post : :get
+        },
+        :accessing => ':confirm_hide', 
+        :disable_on_access_denied => true    
+    %>
+    Hide
+  </td>
+  <td>
+    <% if property_definition.lockable? %>
+      <%= check_box_to_remote "restricted-#{property_definition.id}", '1', property_definition.restricted?,
+          {
+            :url => {:action => 'toggle_restricted', :id => property_definition.id},
+            :before => show_spinner('spinner'),
+            :complete => hide_spinner('spinner')
+          },
+          :accessing => ':confirm_hide', 
+          :disable_on_access_denied => true    
+      %> Lock
+    <% else %>
+      (n/a)
+    <% end %>
+  </td>
+  <td>
+    <% if property_definition.transitionable? %>
+      <%= check_box_to_remote "transitiononly-#{property_definition.id}", '1', property_definition.transition_only,
+          {
+            :url => {:action => 'toggle_transition_only', :id => property_definition.id},
+            :before => show_spinner('spinner'),
+            :complete => hide_spinner('spinner')
+          },
+          :accessing => ':confirm_hide', 
+          :disable_on_access_denied => true    
+      %> Yes
+    <% else %>
+      (n/a)
+    <% end%>
+  </td>
+  <td class="align-right standard-link-spacing last">
+    <%= display_edit_link_for property_definition %>
+    <%= display_delete_link_for property_definition %>
+  </td>
+</tr>

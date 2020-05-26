@@ -1,0 +1,28 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div class="search_field">
+<% form_remote_tag(:url => {:controller => 'card_explorer', :action => 'search_cards_for_tree', :tree => tree}, 
+                   :before => show_spinner('spinner-for-Card-Explorer'),
+                   :complete => hide_spinner('spinner-for-Card-Explorer'),
+                   :method => :get,
+                   :html => {:id => 'card_explorer_search_form'}) do %>
+  <div style='position:relative'>
+    <%= text_field_tag('q', nil, :position => 'static', :class => 'card-explorer-search-field', :id => 'card-explorer-q') %>
+    <%= submit_tag('Search', :id => 'card-explorer-search-commit') %>
+  </div> 
+<% end %>
+</div>

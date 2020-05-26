@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_help.dtd">
+<chapter title="Mingle Reporting - Macros and MQL">	
+	<section title="Introduction">
+		<p>This section describes how to create your own charts, graphs and tables on Mingle's Overview tab and other Mingle pages and cards using reporting macros and MQL - the Mingle Query Language.</p>
+	
+		<p>Mingle supports macros that render charts, tables and dashboard panels. You can customize these macros using MQL to generate tables and charts that are specific to your projects.</p>
+		
+		<p><strong>Mingle Query Language (MQL)</strong> is a query language you can use to extract data from your project for use in reporting macros. 
+			MQL is similar to SQL, but with a simplified syntax. In a typical MQL expression you will write SQL-like syntax against your card properties and values.</p>
+	
+		<example title="Here's a quick example of a pie-chart macro">	
+			<markup>pie-chart data: SELECT Feature, SUM(Size) WHERE Type=Story</markup>
+		</example>
+	
+		<p>Creating a macro with the above text and inserting it into any card or page in your project will render a pie chart that breaks down the size of feature groups across all cards with a type of story. (Assuming that your project has card properties named Size, Feature, and Story.)</p>
+	
+		<hint>Mingle includes <cref topic="standard_mingle_templates">several templates</cref> that come with examples of graphs, charts and tables that you can adapt to your own project. 
+			Mingle administrators can view templates by clicking the <link>Manage templates</link> link after <cref topic="signing_in_and_out_of_mingle">signing in to Mingle</cref>.</hint>
+			
+		<warning>
+			<bullets>
+				<item>Macro markup is space sensitive and we advise you to stick to the indentation scheme specified in the examples if you write your macro by hand.</item>
+				<item>It's highly encouraged to have <cref topic="too_many_macros">fewer than 10 macros</cref> on a card or page. Loading such a card or page will slow down your system. Please be aware that in the future Mingle may prevent users from having more than 10 macros on cards or pages.</item>
+			</bullets>		
+		</warning>
+	</section>
+	
+    <section file="mingle_macro_builder" title="Mingle Macro Builder" collapsed="true"/>
+	
+	<section title="Also see...">
+		<bullets>
+			<item><cref topic="macro_reference">Full reference of chart, table, and dashboard macros</cref></item>
+			<item><cref topic="mql_reference">MQL Syntax</cref></item>
+			<item><cref topic="cross_project_reporting">Cross project reporting</cref></item>
+			<item><cref topic="building_your_own_macro">Information about writing your own custom macros</cref></item>
+			<item><cref topic="mingle_tips_and_tricks">Mingle tips and tricks</cref></item>
+					<item><cref topic="explore_mingle">Explore Mingle</cref></item>
+		</bullets>
+	</section>	
+</chapter>
+
+

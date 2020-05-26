@@ -1,0 +1,311 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Forecasting Parameter Test</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js"
+          type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+  <script src="../../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+
+  <script src="../../../public/javascripts/application.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery.scrollintoview.js"
+          type="text/javascript"></script>
+
+  <script src="../../../app/assets/javascripts/single_checkbox.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/text_box.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/drop_down.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/parameter.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/section_helpers.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/forecasting_options.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/forecasting_parameter.js" type="text/javascript"></script>
+
+  <script src="../test_assets/sinon-2.3.6.js" type="text/javascript"></script>
+  <script src="../test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+  <script src="../test_assets/qunit-phantom.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="../test_assets/qunit-1.21.0.css" type="text/css"/>
+
+</head>
+<body>
+<div id="qunit"></div>
+<div id="forecasting_parameter"></div>
+<script type="application/javascript">
+  var sandbox = sinon.sandbox.create(sinon.defaultConfig);
+  QUnit.module('Forecasting Parameter', {
+    beforeEach: function () {
+      this.seriesParameter = {
+        getSeriesNames: function () {
+          return [['Series Name 1', 'Series 1'], ['Series Name 2', 'Series 2']];
+        }
+      };
+      this.startDate = {
+        value: function () {
+          return '01/24/2018';
+        }
+      };
+      this.container = $j('#forecasting_parameter');
+      sandbox.spy(MingleUI.EasyCharts, 'ForecastingOptions');
+      this.onUpdateSpy = sandbox.spy();
+      sandbox.spy(MingleUI.EasyCharts, 'Parameter');
+      this.forecastingParameter = new MingleUI.EasyCharts.ForecastingParameter(this.container, {
+        seriesParameter: this.seriesParameter,
+        startDate: this.startDate
+      }, {
+        onUpdate: this.onUpdateSpy
+      });
+      this.forecastingChartParameter = $j('#forecasting_parameter_forecasting_chart_parameter input');
+      this.fixedDateChartParameter = $j('#forecasting_parameter_fixed_date_chart_parameter input');
+    },
+    afterEach: function () {
+      sandbox.restore();
+      this.container.empty();
+    }
+  }, function () {
+
+    QUnit.test('testShouldInitializeWithNameAndUseGivenContainer', function (assert) {
+      assert.equal(this.forecastingParameter.name, 'forecastingParameter');
+      assert.deepEqual(this.forecastingParameter.htmlContainer, this.container);
+    });
+
+    QUnit.test('testShouldInitializeForecastingChartCheckbox', function (assert) {
+      var forecastingChartData = MingleUI.EasyCharts.Parameter.args[0];
+
+      assert.ok($j('#forecasting_parameter_forecasting_chart_parameter').get(0));
+      assert.deepEqual(forecastingChartData[1], {
+        displayProperty: 'inline-parameter',
+        input_type: 'single-checkbox',
+        label: 'Add forecasting to this chart',
+        name: 'forecasting-chart'
+      });
+      assert.equal(typeof forecastingChartData[2].onUpdate, 'function');
+    });
+
+    QUnit.test('testShouldInitializeFixedDateChartCheckbox', function (assert) {
+      var fixedDateChartData = MingleUI.EasyCharts.Parameter.args[1];
+
+      assert.ok($j('#forecasting_parameter_fixed_date_chart_parameter').get(0));
+      assert.deepEqual(fixedDateChartData[1], {
+        displayProperty: 'inline-parameter',
+        input_type: 'single-checkbox',
+        label: 'Add a fixed date line to this chart',
+        name: 'fixed-date-chart'
+      });
+      assert.equal(typeof fixedDateChartData[2].onUpdate, 'function');
+    });
+
+    QUnit.test('testValueShouldReturnEmptyObjectWhenNoneOfForecastingOptionIsEnabled', function (assert) {
+      assert.deepEqual(this.forecastingParameter.value(), {});
+    });
+
+    QUnit.test('testValueShouldReturnForecastingOptionsValueWhenEitherOfForecastingOptionIsEnabled', function (assert) {
+      $j('#forecasting_parameter_fixed_date_chart_parameter input').click();
+      var forecastingOptions = MingleUI.EasyCharts.ForecastingOptions.returnValues[0];
+      var forecastingOptionsValue = {
+        scopeSeries: 'Series Name 1',
+        completionSeries: 'Series Name 2',
+        targetReleaseDate: '01/31/2018'
+      };
+      sandbox.stub(forecastingOptions, 'value').returns(forecastingOptionsValue);
+
+      assert.equal(this.forecastingParameter.value(), forecastingOptionsValue);
+      assert.equal(forecastingOptions.value.callCount, 1);
+    });
+
+    QUnit.test('testIsValidShouldReturnTrueWhenNoOptionsAreSelected', function (assert) {
+      assert.ok(this.forecastingParameter.isValid());
+
+      $j('#forecasting_parameter_fixed_date_chart_parameter input').click();
+
+      assert.notOk(this.forecastingParameter.isValid());
+
+      $j('#forecasting_parameter_fixed_date_chart_parameter input').click();
+      $j('#forecasting_parameter_forecasting_chart_parameter input').click();
+
+      assert.notOk(this.forecastingParameter.isValid());
+
+      $j('#forecasting_parameter_forecasting_chart_parameter input').click();
+
+      assert.ok(this.forecastingParameter.isValid());
+    });
+
+    QUnit.test('testIsValidShouldReturnForecastingOptionIsValidWhenSomeOptionIsSelected', function (assert) {
+      $j('#forecasting_parameter_fixed_date_chart_parameter input').click();
+      var forecastingOptions = MingleUI.EasyCharts.ForecastingOptions.returnValues[0];
+
+      assert.notOk(this.forecastingParameter.isValid());
+
+      sandbox.stub(forecastingOptions, 'isValid').returns(true);
+
+      assert.ok(this.forecastingParameter.isValid());
+      $j('#forecasting_parameter_fixed_date_chart_parameter input').click();
+      $j('#forecasting_parameter_forecasting_chart_parameter input').click();
+      forecastingOptions = MingleUI.EasyCharts.ForecastingOptions.returnValues[1];
+
+      assert.notOk(this.forecastingParameter.isValid());
+
+      sandbox.stub(forecastingOptions, 'isValid').returns(true);
+
+      assert.ok(this.forecastingParameter.isValid());
+    });
+
+    QUnit.test('testUpdateShouldTriggerUpdateWithSeriesNamesAndStartDate', function (assert) {
+      $j('#forecasting_parameter_fixed_date_chart_parameter input').click();
+      var seriesNames = ['Series Name X', 'Series Name Y'];
+      this.seriesParameter.getSeriesNames = function () {
+        return seriesNames;
+      };
+      this.startDate.value = function () {
+        return '01/31/2018';
+      };
+      var forecastingOptions = MingleUI.EasyCharts.ForecastingOptions.returnValues[0];
+      sandbox.spy(forecastingOptions, 'update');
+
+      this.forecastingParameter.update();
+
+      assert.equal(forecastingOptions.update.callCount, 1);
+      assert.deepEqual(forecastingOptions.update.args[0][0], {
+        hasFixedDate: true,
+        seriesNames: seriesNames,
+        startDate: new Date('01/31/2018')
+      });
+    });
+
+    QUnit.module('Forecasting Chart Option Selected', {
+      beforeEach: function () {
+        this.forecastingChartParameter.click();
+      }
+    });
+
+    QUnit.test('testShouldAddForecastingOptionsWithoutTargetReleaseDate', function (assert) {
+      var forecastingOptionsData = MingleUI.EasyCharts.ForecastingOptions.args[0];
+
+      assert.ok(this.forecastingChartParameter.prop('checked'));
+      assert.ok($j('div.forecast-options-params-container').get(0));
+      assert.ok($j('div.forecasting-options').get(0));
+      assert.equal(forecastingOptionsData[0].get(0), $j('div.forecast-options-params-container').get(0));
+      assert.deepEqual(forecastingOptionsData[1], {
+        hasFixedDate: false,
+        seriesNames: this.seriesParameter.getSeriesNames(),
+        startDate: new Date('01/24/2018')
+      });
+      assert.equal(forecastingOptionsData[2].onUpdate, this.onUpdateSpy);
+    });
+
+    QUnit.test('testShouldRemoveForecastingOptionsWhenForecastingChartOptionIsClickedAgain', function (assert) {
+      assert.ok(this.forecastingChartParameter.prop('checked'));
+      assert.ok($j('div.forecasting-options').get(0));
+
+      this.forecastingChartParameter.click();
+
+      assert.notOk(this.forecastingChartParameter.prop('checked'));
+      assert.notOk($j('div.forecasting-options').get(0));
+    });
+
+    QUnit.test('testShouldTriggerOnUpdate', function (assert) {
+      assert.equal(this.onUpdateSpy.callCount, 1);
+
+      this.forecastingChartParameter.click();
+
+      assert.equal(this.onUpdateSpy.callCount, 2);
+    });
+
+    QUnit.test('testShouldUnselectForecastingChartOptionWhenFixedDateChartOptionIsSelected', function (assert) {
+      var forecastingOptions = MingleUI.EasyCharts.ForecastingOptions.returnValues[0];
+      sandbox.spy(forecastingOptions, 'update');
+      assert.ok(this.forecastingChartParameter.prop('checked'));
+      assert.ok($j('div.forecasting-options').get(0));
+
+      this.fixedDateChartParameter.click();
+
+      assert.notOk(this.forecastingChartParameter.prop('checked'));
+      assert.ok($j('div.forecasting-options').get(0));
+      assert.equal(forecastingOptions.update.callCount, 1);
+      assert.deepEqual(forecastingOptions.update.args[0][0], {
+        hasFixedDate: true,
+        seriesNames: [["Series Name 1", "Series 1"], ["Series Name 2", "Series 2"]],
+        startDate: new Date('01/24/2018')
+      });
+    });
+
+    QUnit.module('Fixed Date Chart Option Selected', {
+      beforeEach: function () {
+        this.fixedDateChartParameter.click();
+      }
+    });
+
+    QUnit.test('testShouldAddForecastingOptionsWithTargetReleaseDate', function (assert) {
+      var forecastingOptionsData = MingleUI.EasyCharts.ForecastingOptions.args[0];
+
+      assert.ok(this.fixedDateChartParameter.prop('checked'));
+      assert.ok($j('div.forecast-options-params-container').get(0));
+      assert.equal(forecastingOptionsData[0].get(0), $j('div.forecast-options-params-container').get(0));
+      assert.deepEqual(forecastingOptionsData[1], {
+        hasFixedDate: true,
+        seriesNames: this.seriesParameter.getSeriesNames(),
+        startDate: new Date('01/24/2018')
+      });
+      assert.equal(forecastingOptionsData[2].onUpdate, this.onUpdateSpy);
+    });
+
+    QUnit.test('testShouldRemoveForecastingOptionsWhenFixedDateChartOptionIsClickedAgain', function (assert) {
+      assert.ok(this.fixedDateChartParameter.prop('checked'));
+      assert.ok($j('div.forecasting-options').get(0));
+
+      this.fixedDateChartParameter.click();
+
+      assert.notOk(this.fixedDateChartParameter.prop('checked'));
+      assert.notOk($j('div.forecasting-options').get(0));
+    });
+
+    QUnit.test('testShouldTriggerOnUpdate', function (assert) {
+      assert.equal(this.onUpdateSpy.callCount, 1);
+
+      this.fixedDateChartParameter.click();
+
+      assert.equal(this.onUpdateSpy.callCount, 2);
+    });
+
+    QUnit.test('testShouldUnselectFixedChartOptionWhenForecastingChartOptionIsSelected', function (assert) {
+      var forecastingOptions = MingleUI.EasyCharts.ForecastingOptions.returnValues[0];
+      sandbox.spy(forecastingOptions, 'update');
+      assert.ok(this.fixedDateChartParameter.prop('checked'));
+      assert.ok($j('div.forecasting-options').get(0));
+
+      this.forecastingChartParameter.click();
+
+      assert.ok(this.forecastingChartParameter.prop('checked'));
+      assert.notOk(this.fixedDateChartParameter.prop('checked'));
+      assert.ok($j('div.forecasting-options').get(0));
+      assert.equal(forecastingOptions.update.callCount, 1);
+      assert.deepEqual(forecastingOptions.update.args[0][0], {
+        hasFixedDate: false,
+        seriesNames: [["Series Name 1", "Series 1"], ["Series Name 2", "Series 2"]],
+        startDate: new Date('01/24/2018')
+      });
+    });
+
+  });
+</script>
+</body>
+</html>

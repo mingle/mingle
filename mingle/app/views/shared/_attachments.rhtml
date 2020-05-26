@@ -1,0 +1,39 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div class="panel-content" data-panel-name="attachments">
+
+  <div class="attachments-dz-header">
+    <h4 class="panel-header" data-total-files="">Attachments</h4>
+    <a class="click-upload primary link_as_button <%= 'disabled' unless authorized_to_delete %>">
+      <i class="fa fa-cloud-upload"></i>
+      <span>Attach files</span>
+    </a>
+  </div>
+
+  <div class="attachments-loading">
+    <i class="fa fa-refresh fa-spin fa-2x"></i>
+  </div>
+  <% controller = defined?(delete_controller) ? delete_controller : params[:controller] -%>
+  <% content_tag(:ul, attachments_data_attrs(attachable).merge(:class => "dropzone #{authorized_to_delete ? 'dz-enabled' : 'dz-disabled'}", :"data-attached" => attachments_as_json(attachable), :"data-delete-url" => url_for(:controller => controller, :action => "remove_attachment", :project_id => project_identifier_from_attachable(attachable), :id => attachable.id, :format => :json), :"data-mode" => mode, :"data-authorized-to-delete" => authorized_to_delete)) do -%>
+    <div class="dz-message" ondragenter="return false;" ondragleave="return false;" ondragover="return false;">
+      <span class="body" ondragenter="return false;" ondragleave="return false;" ondragover="return false;">
+        Drop files here to upload and attach
+      </span>
+    </div>
+  <% end -%>
+
+</div>

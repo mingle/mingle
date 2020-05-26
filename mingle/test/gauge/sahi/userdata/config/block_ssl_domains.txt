@@ -1,0 +1,3 @@
+addons.mozilla.org
+.*.addons.mozilla.org
+sb-ssl.google.com

@@ -1,0 +1,29 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<tr class="cards-header" id ="cards-header">
+  <td colspan="100">
+    <span class="float-right">
+      <%= links_to_remove_screen_furniture(@view) %>
+      <%= render :partial => 'cards/tree_configuration_overview' %>
+      <%= link_to_print %>
+      <%= link_to_this_page %>
+      <%= render :partial => 'cards/column_selector' %>
+    </span>
+  
+    <span class="card_count"><%= @view.describe_current_page %></span>
+  </td>
+</tr>

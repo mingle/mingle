@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE section SYSTEM "mingle_help.dtd">
+<topic title="Creating a card">
+  <p>Because <cref topic="explore_mingle_topic_whats_a_card">cards</cref> are the fundamental unit of work in projects, Mingle provides several ways to create a new card.</p>
+  <section title="Create cards with the blue plus icon" file="creating_cards_with_plus_sign" collapsed="true" />  
+  <section title="Create cards with Quick Add" file="creating_cards_with_quick_add" collapsed="true" />
+  <section title="Create cards with the Quick Add Card" file="creating_cards_with_quick_add_card" collapsed="true" />
+  <section title="Add child cards from tree view" file="create_cards_with_tree_view" collapsed="true" />
+  <section title="Add child cards from parent card" file="create_child_cards_from_parent_card" collapsed="true" />
+  <section title="Using 'Save and Add another'" collapsed="true">
+    <p>On card edit mode, there is a link called 'Save and add another'. Clicking this link will save the current card and directly take you to a new card's edit mode. This feature enables you to create new cards sequentially without exiting card edit mode.</p>
+    <screenshot src="resources/images/save_and_add_another.png"/>
+  </section>
+  <section title="Using Special Headers" collapsed="true">
+    <p>You can create <cref topic="tip_special_headers">special headers</cref> using the corresponding wiki page. Once created, clicking the special header links will take the user to the new card's edit mode page.</p>
+    <screenshot alttext="Special Header" src="resources/images/add_card_from_special_header.png"/>
+  </section>
+  <section title="Using 'Import from Excel'" collapsed="true">
+    <p> You can create cards by importing from Excel. Learn more about <cref topic="import_export_component">Importing cards from Excel</cref>.
+    <hint>When creating a new card via Import from Excel, the 'Number' column is not required as Mingle will automatically assign a unique card number to each imported card. Please note that specifying a card number may update an existing card instead of creating a new card.</hint>
+    </p>
+  </section>
+  <section title="Using REST API" collapsed="true">
+    <p>You can create new cards via the Rest API. Learn more about the <cref topic="mingle_api_card">Mingle Card API</cref>.</p>  
+  </section>
+  
+  <section title="Also see..">
+    <bullets>
+      <item><cref topic="explore_mingle_topic_whats_a_card">What's a card?</cref></item>
+      <item><cref topic="working_with_cards">Working with cards</cref></item>
+      <item><cref topic="viewing_cards">Viewing cards</cref></item>
+      <item><cref topic="card_types">Card types</cref></item>
+    </bullets>
+  </section>
+</topic>

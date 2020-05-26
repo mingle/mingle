@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Wip limit test</title>
+
+    <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js"
+            type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+
+    <script src="../../app/assets/javascripts/mingle_ui.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/alignment.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+    <script src="../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+    <script src="../../public/javascripts/module.js" type="text/javascript"></script>
+    <script src="test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+
+    <script src="test_assets/unittest.js" type="text/javascript"></script>
+    <script src="test_assets/unittest_ext.js" type="text/javascript"></script>
+
+    <script src="../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/controls.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/builder.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/common_utils.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/ui_utils.js" type="text/javascript"></script>
+
+    <script src="../../public/javascripts/application.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/lightbox.js" type="text/javascript"></script>
+
+    <script src="../../public/javascripts/drop_list/base.js" type="text/javascript"></script>
+    <script src="../../public/javascripts/drop_list/view/base.js" type="text/javascript"></script>
+    <script src="../../public/javascripts/drop_list/view/drop_down.js" type="text/javascript"></script>
+    <script src="../../public/javascripts/drop_list/view/drop_link.js" type="text/javascript"></script>
+    <script src="../../public/javascripts/drop_list/view/field.js" type="text/javascript"></script>
+    <script src="../../public/javascripts/drop_list/view/filter.js" type="text/javascript"></script>
+    <script src="../../public/javascripts/drop_list/view/inline_editor.js" type="text/javascript"></script>
+    <script src="../../public/javascripts/drop_list/view/layout.js" type="text/javascript"></script>
+    <script src="../../public/javascripts/drop_list/callback_action.js" type="text/javascript"></script>
+    <script src="../../public/javascripts/drop_list/basic_controller.js" type="text/javascript"></script>
+    <script src="../../public/javascripts/drop_list/filter_action.js" type="text/javascript"></script>
+    <script src="../../public/javascripts/drop_list/inline_edit_action.js" type="text/javascript"></script>
+    <script src="../../public/javascripts/drop_list/model.js" type="text/javascript"></script>
+    <script src="../../public/javascripts/drop_list/option.js" type="text/javascript"></script>
+    <script src="../../public/javascripts/drop_list.js" type="text/javascript"></script>
+
+
+    <script src="../../app/assets/javascripts/wip_limit.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="test_assets/qunit-1.21.0.css" type="text/css"/>
+
+    <style type="text/css">
+        div.lane_header .wip-popover {
+            display: inline-block;
+            cursor: pointer;
+        }
+        div.lane_header .wip-popover .popover-content, div.lane_header .wip-popover .content {
+            display: none;
+            width: 300px;
+            height: auto;
+            cursor: auto;
+            position: absolute;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #c3c3c3;
+            box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.3);
+            z-index: 2;
+        }
+
+        div.lane_header .wip-popover .popover-content:before, div.lane_header .wip-popover .popover-content:after, div.lane_header .wip-popover .content:before, div.lane_header .wip-popover .content:after {
+            position: absolute;
+            content: "";
+        }
+
+        div.lane_header .wip-popover .popover-content:before, div.lane_header .wip-popover .content:before {
+            height: 0;
+            width: 0;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-bottom: 12px solid #c3c3c3;
+        }
+
+        div.lane_header .wip-popover .popover-content:after, div.lane_header .wip-popover .content:after {
+            height: 0;
+            width: 0;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-bottom: 12px solid white;
+        }
+
+        div.lane_header .wip-popover .popover-content:before, div.lane_header .wip-popover .content:before {
+            top: -12px;
+            left: 140px;
+        }
+
+        div.lane_header .wip-popover .popover-content:after, div.lane_header .wip-popover .content:after {
+            top: -11px;
+            left: 140px;
+        }
+
+        div.lane_header .wip-popover .popover-content, div.lane_header .wip-popover .content {
+            margin-top: 12px;
+            margin-left: 0px;
+        }
+
+        div.lane_header .wip-popover.open .popover-content, div.lane_header .wip-popover.open .content {
+            display: block;
+        }
+
+        div.lane_header .wip-popover .content form {
+            margin-bottom: 10px;
+        }
+
+        div.lane_header .wip-popover .content form input {
+            vertical-align: middle;
+            line-height: 22px;
+            min-width: 0;
+        }
+
+        div.lane_header .wip-popover .content form input[type=text] {
+            width: 210px;
+            color: #666666;
+            font-size: 19px;
+            padding: 5px;
+        }
+
+        /* line 533, /Users/dharmenn/WorkSpace/mingle_project/mingle/app/assets/stylesheets/grid_view.scss */
+        div.lane_header .wip-popover .content form input[type=submit].primary {
+            margin: 0;
+            width: auto;
+        }
+
+        /* line 538, /Users/dharmenn/WorkSpace/mingle_project/mingle/app/assets/stylesheets/grid_view.scss */
+        div.lane_header .wip-popover .content .wip-limits-section {
+            margin-bottom: 10px;
+        }
+
+        /* line 539, /Users/dharmenn/WorkSpace/mingle_project/mingle/app/assets/stylesheets/grid_view.scss */
+        div.lane_header .wip-popover .content .wip-limits-section input {
+            width: 48px;
+            height: 24px;
+        }
+
+        /* line 546, /Users/dharmenn/WorkSpace/mingle_project/mingle/app/assets/stylesheets/grid_view.scss */
+        div.lane_header .wip-popover .content input[type=submit] {
+            width: 48px;
+            height: 24px;
+            float: right;
+        }
+
+        /* line 553, /Users/dharmenn/WorkSpace/mingle_project/mingle/app/assets/stylesheets/grid_view.scss */
+        div.lane_header .wip-popover p {
+            font-size: 11px;
+            font-weight: 400;
+            line-height: 22px;
+        }
+    </style>
+
+</head>
+
+<body>
+<div id="qunit"></div>
+    <div class="lane_header">
+        <div class="wip-popover">
+            <div class="content editable-content">
+
+                <div class="wip-limits-section">
+                    <p><strong>Set WIP Limit</strong></p>
+                    <span class="drop-list-panel wip_aggregate_function_selector">
+        <a class="dropdown-arrow" href="javascript:void(0)" id="select_aggregate_type_wip_drop_link"
+           onclick="; return false;" title="Count">Count</a>
+        <input id="wip_type" name="select_wip_type_field" type="hidden" value="count">
+      <div id="select_wip_type_field_drop_down" class="widget-dropdown" style="display: none;"><div
+              class="dropdown-panel"><ul class="options-only-container"
+                                         style="position: static; border: 0px; padding: 0px; margin: 0px;"></ul></div></div></span>
+                    <span class="drop-list-panel wip_aggregate_property_selector">
+        <a class="dropdown-arrow" href="javascript:void(0)" id="select_aggregate_property_wip_drop_link"
+           onclick="; return false;" title="(select property...)">(select property...)</a>
+        <input id="wip_aggregate_property" name="select_wip_aggregate_property_field" type="hidden" value="">
+      <div id="select_wip_aggregate_property_field_drop_down" class="widget-dropdown" style="display: none;"><div
+              class="dropdown-panel"><ul class="options-only-container"
+                                         style="position: static; border: 0px; padding: 0px; margin: 0px;"></ul></div></div></span>
+                    <span><input type="text" name="new_wip_limit" class="wip_limit"></span>
+                </div>
+                <form action="/projects/new_project/cards/list" id="set_wip_limit_form" method="get"></form>
+                <input name="filters[]" type="hidden" value="[Type][is][STORYa]">
+                <input name="filters[]" type="hidden" value="[Status][is][Doinga]">
+                <input id="style" name="style" type="hidden" value="grid">
+                <input id="group_by_lane" name="group_by[lane]" type="hidden" value="status">
+                <input id="group_by_row" name="group_by[row]" type="hidden" value="type">
+                <input id="aggregate_type_column" name="aggregate_type[column]" type="hidden" value="sum">
+                <input id="aggregate_property_column" name="aggregate_property[column]" type="hidden"
+                       value="this is a estimate with long name wooooo">
+                <input id="lanes" name="lanes" type="hidden" value="Doinga,Done">
+                <input id="wip_limits_Done_property" name="wip_limits[Done][property]" type="hidden"
+                       value="newestimate">
+                <input id="wip_limits_Done_limit" name="wip_limits[Done][limit]" type="hidden" value="15">
+                <input id="wip_limits_Done_type" name="wip_limits[Done][type]" type="hidden" value="sum">
+                <input id="wip_limits_Doinga_limit" name="wip_limits[Doinga][limit]" type="hidden" value="30">
+                <input id="wip_limits_Doinga_property" name="wip_limits[Doinga][property]" type="hidden"
+                       value="newestimate">
+                <input id="wip_limits_Doinga_type" name="wip_limits[Doinga][type]" type="hidden" value="Sum">
+                <input id="tab" name="tab" type="hidden" value="latest">
+                <input id="rerank" name="rerank" type="hidden">
+                <input type="submit" value="Set" class="primary" id="set_wip_limit">
+            </div>
+        </div>
+
+    </div>
+    <table class="table-with-nothing-following-it swimming-pool touchable-wall"
+           data-column-aggregate-property="this is a estimate with long name wooooo" data-column-aggregate-type="SUM"
+           data-row-aggregate-type="COUNT" id="swimming-pool" show_tooltip="false">
+        <thead>
+        <th id="lane_f92965e2c8a7afb3c1b9a5c09a263636_header" data-lane-value="Done" class="lane_header draggable_lane">
+
+      <span id="group_lane_title_lane_f92965e2c8a7afb3c1b9a5c09a263636">
+        <div class="editable_lane header-title" unselectable="on">
+          Done
+        </div>
+      </span>
+            <div class="clear-both"><!-- Clear floats --></div>
+            <div class="editable-wip lane-wip" id="done-wip-limit">WIP : 15</div>
+            <input id="select_done_wip_type_field" name="wip_type_config" type="hidden" value="Count">
+            <input id="select_done_wip_limit_field" name="wip_limit_config" type="hidden" value="15">
+        </th>
+        <th id="lane_64324d6871b00f96d74f18f99b49dab6_header" data-lane-value="Doinga"
+            class="lane_header draggable_lane">
+      <span id="group_lane_title_lane_64324d6871b00f96d74f18f99b49dab6">
+          <div class="editable_lane header-title" unselectable="on">
+              Doinga
+          </div>
+      </span>
+            <div class="clear-both"><!-- Clear floats --></div>
+            <div class="editable-wip lane-wip" id="doinga-wip-limit">WIP : 30</div>
+            <input id="select_doinga_wip_type_field" name="wip_type_config" type="hidden" value="Sum">
+            <input id="select_doinga_wip_limit_field" name="wip_limit_config" type="hidden" value="30">
+            <input id="select_doinga_wip_prop_field" name="wip_property_config" type="hidden" value="newestimate">
+
+        </th>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+<script src="test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+<script src="test_assets/qunit-phantom.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+  MingleUI.grid = {
+    start: function() { d("started") },
+    instance: {
+      grid: $j('.swimming-pool')
+    },
+    AggregateCalculator: function(type, property) {
+      return  {
+        calculate: function(cards) {
+          return 5;
+        }
+      }
+    }
+  };
+  WipEditPopup.setupEditableWip($j('.lane_header'), new DropList({
+     "htmlIdPrefix": "select_wip_type_field",
+     "selectOptions": [["Count", "count"], ["Sum", "sum"]],
+     "dropLink": "select_aggregate_type_wip_drop_link",
+     "initialSelected": ["Count", "count"],
+     "onchange": "WipEditPopup.wipTypeChanged(e);"
+   }), new DropList({
+     "htmlIdPrefix": "select_wip_aggregate_property_field",
+     "selectOptions": [["(select property...)", ""], ["NewEstimate", "newestimate", "NewEstimate"], ["test propterty", "test propterty", "test propterty"], ["this is a estimate with long name wooooo", "this is a estimate with long name wooooo", "this is a estimate with long name wooooo"]],
+     "dropLink": "select_aggregate_property_wip_drop_link",
+     "initialSelected": [],
+     "onchange": "javascript:void(0)"
+   }));
+
+  QUnit.module("Wip limit", {
+    afterEach: function () {
+      var click = jQuery.Event("click");
+      click.which = 1;
+      $j('#done-wip-limit').trigger(click);
+    }
+  });
+
+
+  QUnit.test("testShouldDisplayWipLimitPopup", function (assert) {
+    assert.notOk($j('.wip-popover .content').is(':visible'));
+    displayPopupFor('#done-wip-limit');
+    assert.ok($j('.wip-popover .content').is(':visible'));
+  });
+
+  QUnit.test("testSetConfiguredWipType", function (assert) {
+    displayPopupFor('#done-wip-limit');
+    assert.equal('count',$j('.wip-popover .content input[name=select_wip_type_field]').val());
+    assert.equal('Count',$j('.wip-popover .content a#select_aggregate_type_wip_drop_link').text());
+    hidePopupFor('#done-wip-limit');
+    displayPopupFor('#doinga-wip-limit');
+    assert.equal('Sum',$j('.wip-popover .content a#select_aggregate_type_wip_drop_link').text());
+    assert.equal('sum',$j('.wip-popover .content input[name=select_wip_type_field]').val());
+  });
+
+  QUnit.test("testSetConfiguredWipLimit", function (assert) {
+    displayPopupFor('#done-wip-limit');
+    assert.equal(15,$j('.wip-popover .content input[name=new_wip_limit]').val());
+  });
+
+  QUnit.test("testShouldNotDisplayPropertyDropDownWhenConfiguredWipTypeIsCount", function (assert) {
+    displayPopupFor('#done-wip-limit');
+    assert.equal('count',$j('.wip-popover .content input[name=select_wip_type_field]').val());
+    assert.notOk($j('.wip-popover .content a#select_aggregate_property_wip_drop_link').is(':visible'));
+  });
+
+  QUnit.test("testShouldDisplayPropertyDropDownWhenConfiguredWipTypeIsSum", function (assert) {
+    displayPopupFor('#doinga-wip-limit');
+    assert.equal('sum',$j('.wip-popover .content input[name=select_wip_type_field]').val());
+    assert.ok($j('.wip-popover .content a#select_aggregate_property_wip_drop_link').is(':visible'));
+  });
+
+   QUnit.test("testShouldDisplayAggPropDropDownWhenSwitchedFromCountToSum", function (assert) {
+     displayPopupFor('#done-wip-limit');
+     assert.notOk($j('#select_wip_type_field_drop_down').is(':visible'));
+     assert.equal('count',$j('.wip-popover .content input[name=select_wip_type_field]').val());
+     Event.trigger('select_aggregate_type_wip_drop_link', 'click');
+     assert.ok($j('#select_wip_type_field_drop_down').is(':visible'));
+     assert.notOk($j('#select_aggregate_property_wip_drop_link').is(':visible'));
+     $j('#select_wip_type_field_option_Sum').click();
+     assert.ok($j('#select_aggregate_property_wip_drop_link').is(':visible'));
+     assert.equal('(select property...)',$j('#select_aggregate_property_wip_drop_link').text());
+   });
+
+   QUnit.test("testShouldHideAggPropDropDownWhenSwitchedFromCountToSumAndBackToCount", function (assert) {
+     displayPopupFor('#done-wip-limit');
+     Event.trigger('select_aggregate_type_wip_drop_link', 'click');
+     $j('#select_wip_type_field_option_Sum').click();
+     assert.ok($j('#select_aggregate_property_wip_drop_link').is(':visible'));
+     assert.equal('(select property...)',$j('#select_aggregate_property_wip_drop_link').text());
+
+     Event.trigger('select_aggregate_type_wip_drop_link', 'click');
+     $j('#select_wip_type_field_option_Count').click();
+     assert.notOk($j('#select_aggregate_property_wip_drop_link').is(':visible'));
+   });
+
+  QUnit.test("testShouldSelectOptionWhenClickingAnywhereOnADropDownItem", function (assert) {
+    displayPopupFor('#done-wip-limit');
+    Event.trigger('select_aggregate_type_wip_drop_link', 'click');
+    assert.notOk($j('#select_aggregate_property_wip_drop_link').is(':visible'));
+    $j('#select_wip_type_field_option_Sum text').click();
+    assert.ok($j('#select_aggregate_property_wip_drop_link').is(':visible'));
+  });
+
+   QUnit.test("testShouldSetAndResetWipLimitInput", function (assert) {
+     displayPopupFor('#done-wip-limit');
+
+     assert.equal(15, $j('input[name=new_wip_limit]').val());
+
+     Event.trigger('select_aggregate_type_wip_drop_link', 'click');
+     $j('#select_wip_type_field_option_Sum').click();
+
+     assert.equal('', $j('input[name=new_wip_limit]').val());
+
+     Event.trigger('select_aggregate_type_wip_drop_link', 'click');
+     $j('#select_wip_type_field_option_Count').click();
+     assert.equal(15, $j('input[name=new_wip_limit]').val());
+   });
+
+  QUnit.test("testShouldApplyConfiguredWipLimitSwitchingBackToConfiguredWipType", function (assert) {
+    displayPopupFor('#doinga-wip-limit');
+
+    assert.equal('NewEstimate',$j('#select_aggregate_property_wip_drop_link').text());
+    assert.equal('newestimate',$j('#wip_aggregate_property').val());
+
+    Event.trigger('select_aggregate_type_wip_drop_link', 'click');
+    $j('#select_wip_type_field_option_Count').click();
+
+    Event.trigger('select_aggregate_type_wip_drop_link', 'click');
+    $j('#select_wip_type_field_option_Sum').click();
+
+    assert.equal('NewEstimate',$j('#select_aggregate_property_wip_drop_link').text());
+    assert.equal('newestimate',$j('#wip_aggregate_property').val());
+  });
+
+
+   function createLeftClick() {
+     var click = jQuery.Event("click");
+     click.which = 1;
+     return click;
+   }
+   function displayPopupFor(elementId) {
+
+    $j(elementId).trigger(createLeftClick());
+  }
+  function hidePopupFor(elementId) {
+    $j(elementId).trigger(createLeftClick());
+  }
+
+</script>
+</body>
+</html>

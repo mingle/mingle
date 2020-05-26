@@ -1,0 +1,79 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%- select_tab :timeline -%>
+<%- content_for :page_header do -%>
+  <div class="page_header" id='page_navigator'>
+    <h1><%= Objective.find_by_url_identifier(params[:id]).name %> &raquo; Edit</h1>
+  </div>
+<%- end -%>
+
+<div class="instructions">
+  <p><span class="required">*</span> indicates a required field</p>
+</div>
+
+<% form_for [@plan, @objective], :url => program_plan_objective_path(@plan.program, @plan.program.objectives.find_by_url_identifier(params[:id])) do |f| -%>
+  <div id="form_contents">
+    <div class='form_item'>
+      <label for="name" >
+        Feature Name:
+        <span class="required">*</span>
+        <span class="notes">(should not be blank, should only contain letters, number and spaces and must be 80 characters or less):</span>
+      </label>
+      <%= f.text_field :name, :maxlength => '80' %>
+    </div>
+    <div class='form_item'>
+      <label for="start_at" >
+        Start Date:
+        <span class="required">*</span>
+      </label>
+      <%= f.text_field(:start_at, {:value => format_date(@objective.start_at)}) -%>
+      <%= image_tag("icon-calendar.png", :border => 0, :id => "objective_start_at_calendar", :alt => 'Calendar picker') %>
+    </div>
+    <div class='form_item'>
+      <label for="end_at" >
+        End Date:
+        <span class="required">*</span>
+      </label>
+      <%= f.text_field :end_at, {:value => format_date(@objective.end_at)} -%>
+      <%= image_tag("icon-calendar.png", :border => 0, :id => "objective_end_at_calendar", :alt => 'Calendar picker') %>
+    </div>
+  </div>
+
+  <%= render :partial => "shared/planner/action_bar", :locals => {:action_name  => "Save", :cancel_url => program_plan_url(@plan.program) } %>
+
+<% end -%>
+
+<% ['objective_start_at', 'objective_end_at'].each do |date_input_field| %>
+
+  <%= javascript_with_rescue <<-JAVASCRIPT
+    Calendar.setup(
+      {
+        inputField  : "#{date_input_field}",
+        button      : "#{date_input_field}_calendar",
+        align       : "Br",
+        electric    : false,
+        showOthers  : true,
+        weekNumbers : false,
+        firstDayOfWeek : 0,
+        daFormat    : "#{@plan.date_format}",
+        ifFormat    : "#{@plan.date_format}"
+      }
+    );
+  JAVASCRIPT
+  -%>
+
+<% end %>

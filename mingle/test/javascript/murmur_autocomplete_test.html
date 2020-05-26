@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html lang="en">
+<head>
+    <title>JavaScript unit test file</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js"
+    type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/mingle_ui.js" type="text/javascript"></script>
+
+    <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+    <script src="test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+
+    <script src="../../public/javascripts/module.js" type="text/javascript"></script>
+
+    <script src="../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/controls.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/builder.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+    <script src="../../public/javascripts/application.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/murmur_input_autocomplete.js" type="text/javascript"></script>
+    <script src="test_assets/sinon-2.3.6.js" type="text/javascript"></script>
+    <script src="test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+    <script src="test_assets/qunit-phantom.js" type="text/javascript"></script>
+
+</head>
+<body>
+    <div id="qunit"></div>
+    <div id="qunit-fixture"></div>
+    <div id="murmur-list-container">
+        <textarea id="text-input-element" type="textbox" autocomplete="true" data-at-login-autocomplete=true data-users-url="http://mingle.host/projects/some_project/murmurs/at_user_suggestion">Some text</textarea>
+    </div>
+    <script type="text/javascript">
+        var server = null;
+        var usersResponse =[
+        {"label":"@dev_team","value":"@dev_team","icon":"fa-users"},
+        {"label":"@Team","value":"@team","icon":"fa-users"},
+        {"label":"@support","value":"@support","icon":"fa-users"},
+        {"label":"Abhishek Puri (@abhishp)","value":"@abhishp","icon":"https://d154bok5on952z.cloudfront.net/mingle/user/icon/13209/abhishekbachchan.jpg","icon_options":{"style":"background: #55EB7D"}}];
+        var inputElement = null;
+
+
+
+        var respondToFirstRequestInQueue = function(value) {
+            var request = server.requests.shift();
+            if (!request) {
+                throw "No request found";
+            }
+            request.respond(
+                200,
+                { "Content-Type": "application/json" },
+                value
+                )
+        };
+
+
+        QUnit.module( "checklist", {
+            beforeEach: function (assert) {
+                server = sinon.fakeServer.create();
+                inputElement = $j('#text-input-element').get(0);
+            },
+            afterEach: function (assert) {
+                server.restore();
+            }
+        }
+        );
+
+        QUnit.test("atUserAutocompleteShouldBindToTextArea", function (assert) {
+            assert.equal($j('[data-at-login-autocomplete=true]').data('autocomplete-bound'),true)
+        });
+
+        QUnit.test("shouldGetCurrentWordFromInputBox", function(assert){
+            inputElement.value = 'Some Text';
+            inputElement.selectionStart = 2;
+            assert.equal(currentWord(inputElement), "So");
+            inputElement.selectionStart = 4;
+            assert.equal(currentWord(inputElement), "Some");
+            inputElement.selectionStart = 9;
+            assert.equal(currentWord(inputElement), "Text");
+        });
+
+
+        QUnit.test("shouldAddSpaceAfterReplacingLastWord", function(assert){
+            inputElement.value = 'Some Text';
+            replaceCurrentWord(inputElement,'ptyagi');
+
+            assert.equal(inputElement.value, 'Some ptyagi ')
+        });
+
+        QUnit.test("shouldAddSpaceAndReplaceMiddleWord", function(assert){
+            inputElement.value = 'Some TextHere';
+            inputElement.selectionStart = 9;
+            replaceCurrentWord(inputElement,'ptyagi');
+
+            assert.equal(inputElement.value, 'Some ptyagi Here')
+        });
+
+        QUnit.test("shouldNotAddSpaceWhenAlreadyPresent", function(assert){
+            inputElement.value = 'Some Text Here';
+            inputElement.selectionStart = 9;
+            replaceCurrentWord(inputElement,'ptyagi');
+
+            assert.equal(inputElement.value, 'Some ptyagi Here')
+        });
+
+
+
+        QUnit.test("shouldFetchUsersFromUrlWhenLocalCacheEmpty", function(assert){
+            usersCache = null;
+            var term = "abhishp";
+            inputElement.value = term;
+            inputElement.selectionStart = term.length;
+
+            var filterFunc = makeFilter($j, inputElement, 'http://mingle.host/at_user_suggestion');
+            var done = assert.async(2);
+            var actualFilteredUsers = null;
+            var testCallback=function(filteredUsers) {
+                actualFilteredUsers = filteredUsers;
+            };
+            filterFunc({"term": term}, testCallback);
+
+            setTimeout(function(){
+                assert.equal(server.requests.length, 1, "Expected 1 request");
+                respondToFirstRequestInQueue(JSON.stringify(usersResponse));
+                done();
+            });
+
+            setTimeout(function(){
+                assert.equal(usersCache.length, usersResponse.length, "Cache should contain all entries in response");
+                assert.equal(actualFilteredUsers.length, 1, "Should filter exact user");
+                var expected = usersResponse[usersResponse.length - 1];
+                var actual = actualFilteredUsers.first();
+                assert.equal(expected.value, actual.value, "Filtered user entry value should match value");
+                assert.equal(expected.icon, actual.icon, "Filtered user entry value should match icon");
+                assert.equal(expected.label, actual.label, "Filtered user entry value should match label");
+                assert.equal(expected.icon_options.style, actual.icon_options.style, "Filtered user entry value should match icon_options.style");
+                done();
+            });
+        });
+
+        QUnit.test("shouldFilterUsingLocalCacheWhenPresent", function(assert){
+            usersCache = usersResponse;
+            var term = "abhishp";
+            inputElement.value = term;
+            inputElement.selectionStart = term.length;
+
+            var filterFunc = makeFilter($j, inputElement, 'http://mingle.host/at_user_suggestion');
+
+            var testCallback = function(filteredUsers) {
+                assert.equal(filteredUsers.length, 1);
+                assert.equal(filteredUsers.first(), usersResponse[usersResponse.length - 1], "Filter term from complete list");
+            };
+
+            filterFunc({"term": term}, testCallback);
+            assert.equal(server.requests.length, 0, "No ajax requests");
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_help.dtd">
+	<section title="How to install Mingle for Mac OSX" collapsed="true">
+		<steps>
+			<item>Double-click the downloaded file to unzip the contents.</item>
+			<item>Drag the Mingle icon to the Applications folder.</item>
+			<item>Double-click on the Mingle icon to open the launcher.</item>
+			<item>From the launcher you can:		
+				<bullets>
+					<item>select a data directory to store data. This is where Mingle will store project data including icons and attachments. This is not the database location.</item>
+					<item>select a swap directory to store temporary data. This will act as a tmp space in which to store intermediate data such as project exports (.mingle files) while they are being created, project import files that are being imported, excel import content that is being processed for preview and excel import content that is being processed for import. This is not the database location.</item>
+					<item>select a config directory to store configuration data. This is where Mingle will store project configuration files such as database.yml. This is not the database location.</item>
+					<item>select a network port from which to run Mingle. The default for this is '8080' but you can set it to any port that is not currently being used.</item>
+				</bullets>
+			</item>
+			<item>
+Click the Open browser button to start the <cref topic="completing_the_mingle_configuration_wizard">configuration wizard</cref> in your default web browser.</item>
+					
+		</steps>
+		<screenshot alttext="Welcome to Mingle" src="resources/images/installation/setup_wizard.png" />
+
+	</section>
+	

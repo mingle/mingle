@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_help.dtd">
+<chapter title="Card Trees">
+    <section title="Introduction">
+        <p>
+            Card trees allow you to define a hierarchy of parent-child relationships between any card types. A card type can participate in any number of trees, and will inherit relationship properties for each tree it is a member of allowing cards to be linked to their parents in the tree.
+            These relationships can be viewed graphically, as a <cref topic="tree_view">tree view</cref> or <cref topic="hierarchy_view">hierarchy view</cref>, and cards can easily be added and moved around in the tree view. 
+        	You can also see the members of a tree in the <cref topic="list_view">list</cref> and <cref topic="grid_view">grid</cref> views.
+            <cref topic="aggregate_properties">Aggregate properties</cref> can be defined for each card tree. For example you could create an aggregate property to sum the estimates for all the story cards assigned to an iteration card and show that aggregate property in the iteration card.
+        </p>
+        <screenshot alttext="Tree view of a card tree" src="resources/images/card_trees_tree_view.png" />
+    	 <hint>
+    	 	<p>You can use a card tree as a <strong>filter condition</strong> when viewing cards in a <cref topic="grid_view">grid</cref> or <cref topic="list_view">list</cref> view by selecting the card tree in the <strong>Select tree</strong> control located in the header of  any list of cards. 
+    	 		This will restrict the cards listed to only those which are currently included in the specified tree. This restriction will be applied in addition to any other filter conditions you might have set.</p>
+    	 	<p><screenshot alttext="Select a card tree from the All tab " src="resources/images/select_card_tree_in_header.png" /></p>
+    	 </hint>
+    </section>
+    <section title="How to...">
+        <bullets>
+            <item><cref topic="administering_card_trees">Create and configure card trees</cref></item>        
+            <item><cref topic="working_with_card_trees">Work with card trees</cref></item>
+			<item> <video url="http://thoughtworks.wistia.com/medias/cgtj8p8oh5">Use tree to manage requirement.</video> </item>
+        </bullets>
+    </section>
+
+	<section title="Also see...">
+        <bullets>
+            <item><cref topic="tree_view">Tree view</cref></item>        
+            <item><cref topic="working_with_card_trees">Work with card trees</cref></item>
+        </bullets>
+    </section>
+</chapter>

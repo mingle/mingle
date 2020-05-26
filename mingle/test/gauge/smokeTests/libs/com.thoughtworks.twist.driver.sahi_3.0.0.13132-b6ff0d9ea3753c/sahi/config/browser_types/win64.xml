@@ -1,0 +1,93 @@
+<browserTypes>
+	<browserType> 
+		<name>firefox</name> 
+		<displayName>Firefox</displayName>
+		<icon>firefox.png</icon>
+		<path>$ProgramFiles (x86)\Mozilla Firefox\firefox.exe</path>  
+		<options>-profile "$userDir/browser/ff/profiles/sahi$threadNo" -no-remote</options>  
+		<processName>firefox.exe</processName> 
+		<capacity>5</capacity>  
+	</browserType>
+
+	<browserType> 
+		<name>firefox4</name> 
+		<displayName>Firefox 4</displayName>
+		<icon>firefox.png</icon>
+		<path>$ProgramFiles (x86)\Mozilla Firefox 4.0 Beta 7\firefox.exe</path>  
+		<options>-profile "$userDir/browser/ff/profiles/sahi$threadNo" -no-remote</options>  
+		<processName>firefox.exe</processName> 
+		<capacity>5</capacity>  
+	</browserType>
+
+	<browserType> 
+		<name>ie</name>  
+		<displayName>IE 8</displayName>
+		<icon>ie.png</icon>
+		<path>$ProgramFiles (x86)\Internet Explorer\iexplore.exe</path>  
+		<options>-noframemerging</options>  
+		<processName>iexplore.exe</processName>
+		<useSystemProxy>true</useSystemProxy> 
+		<capacity>5</capacity>  
+	</browserType>
+	
+	<!-- 
+	<browserType> 
+		<name>ie</name>  
+		<displayName>IE 7</displayName>
+		<icon>ie.png</icon>
+		<path>$ProgramFiles (x86)\Internet Explorer\iexplore.exe</path>  
+		<options></options>  
+		<processName>iexplore.exe</processName>
+		<useSystemProxy>true</useSystemProxy> 
+		<capacity>5</capacity>  
+	</browserType>	
+	 -->	
+	 
+	<!-- 
+	<browserType> 
+		<name>ie</name>  
+		<displayName>IE 6</displayName>
+		<icon>ie.png</icon>
+		<path>$ProgramFiles (x86)\Internet Explorer\iexplore.exe</path>  
+		<options></options>  
+		<processName>iexplore.exe</processName>
+		<useSystemProxy>true</useSystemProxy> 
+		<capacity>5</capacity>  
+	</browserType>	
+	 -->
+	
+	<browserType> 
+		<name>chrome</name>  
+		<displayName>Chrome</displayName>
+		<icon>chrome.png</icon>
+		<path>$LOCALAPPDATA\Google\Chrome\Application\chrome.exe</path>  
+		<options>--user-data-dir=$userDir\browser\chrome\profiles\sahi$threadNo --proxy-server=localhost:9999 --disable-popup-blocking</options>  
+		<processName>chrome.exe</processName> 
+		<capacity>5</capacity>  
+	</browserType>	
+	
+	<browserType> 
+		<name>safari</name>  
+		<displayName>Safari</displayName>
+		<icon>safari.png</icon>
+		<path>$ProgramFiles (x86)\Safari\Safari.exe</path>  
+		<options> </options>  
+		<processName>safari.exe</processName> 
+		<useSystemProxy>true</useSystemProxy> 
+		<capacity>1</capacity>  
+	</browserType>
+	
+	<browserType> 
+		<name>opera</name>  
+		<displayName>Opera</displayName>
+		<icon>opera.png</icon>
+		<path>$ProgramFiles (x86)\Opera\opera.exe</path>  
+		<options> </options>  
+		<processName>opera.exe</processName> 
+		<useSystemProxy>true</useSystemProxy> 
+		<capacity>1</capacity>  
+	</browserType>
+	
+	
+	
+</browserTypes>

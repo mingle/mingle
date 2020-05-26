@@ -1,0 +1,48 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% if CurrentLicense.status.enterprise? %>
+  <% content_tag(:div) do %>
+    <% if programs(project).any? -%>
+    <div id='programs-container'>
+      <table class="program-list">
+          <tr>
+            <th>Program</th>
+            <th colspan='2'>Features</th>
+          </tr>
+        <% programs(project).smart_sort_by(&:name).each do |program| -%>
+          <tr>
+            <td id="plan_<%= program.identifier %>"><%= link_to program.name.escape_html, program_plan_path(program), :target => "_blank" %></td>
+            <td id="plan_<%= program.identifier %>_objectives">
+              <%= render :partial => 'cards_plans/objectives',
+                         :locals => {:plan => program.plan, :objectives => plan_objectives_of_card(program.plan, card, params[:plan_objectives])} -%>
+            </td>
+            <td>
+              <%- if authorized?("cards:update") -%>
+                <%- if no_objectives_available_for_selection?(program.plan, project) -%>
+                  <span title="No feature available" id="<%= "edit_plan_#{program.identifier}_objectives_link" %>" class='plan-objective disabled'>Edit Features</span>
+                <% else -%>
+                  <%= link_to_remote "Edit Features", {:url => {:controller => 'cards_plans', :action => 'show', :project_id => project.identifier, :number => card.number, :editing => editing, :program_id => program.identifier}, :with => "Object.toQueryString({selected_objectives: $('plan_#{program.identifier}_objective_field').value})"}, {:id => "edit_plan_#{program.identifier}_objectives_link", :class => 'plan-objective'} %>
+                <% end -%>
+              <% end -%>
+            </td>
+          </tr>
+          <% end -%>
+        </table>
+      </div>
+    <% end -%>
+  <% end %>
+<% end %>

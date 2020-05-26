@@ -1,0 +1,24 @@
+_navigateTo("RegExp_toString_Fix.htm");
+
+var $logindate = "04/14/2010";
+
+function testDirect(){
+	_assertExists(_cell(new RegExp($logindate)));
+}
+
+function testRegExpParam(){
+	var $r = new RegExp($logindate);
+	_assertExists(_cell($r));
+}
+
+function testRegExpStub(){
+	var $cell = _cell(new RegExp($logindate));
+	_assertExists($cell);
+}
+
+function testRegExpShortHandStub(){
+	var $r = /04\/14\/2010/;
+	_assertExists(_cell($r));
+}
+
+_runUnitTests();

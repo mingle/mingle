@@ -1,0 +1,32 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<table id="dependencies" class="highlightable-table" data-update-view-url="<%= url_for(:action => "index") %>">
+  <thead>
+  <tr class="table-top">
+    <th data-column="number"><%= heading("Dependency #", :number, @view) %></th>
+    <th data-column="name"><%= heading("Name", :name, @view) %></th>
+    <% @view.columns.each do |column| %>
+      <th data-column="<%= column %>"><%= heading(@view.column_display_name(column), column, @view) %></th>
+    <% end %>
+  </tr>
+  </thead>
+
+  <% [Dependency::NEW, Dependency::ACCEPTED].each do |status| -%>
+    <%= render :partial => 'dependencies/dependencies_by_status', :locals => { :status => status, :lazy_load => false, :limit => nil } %>
+  <% end%>
+  <%= render :partial => 'dependencies/dependencies_by_status', :locals => { :status => Dependency::RESOLVED, :lazy_load => true, :limit => 5 } %>
+</table>

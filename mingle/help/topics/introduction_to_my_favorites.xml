@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+
+<section title="Introduction">
+
+<p>Mingle 3.1 introduces personal favorites called 'My favorites'. My favorites give you a quick way to view the cards you work with regularly in the format you prefer (i.e. grid, list or other view). My favorites are only visible to you and not the rest of the team. You can share your view with other users by using the the "Update URL" feature. </p>
+
+<p>You can create and modify personal card view favorites in the same way as creating and modifying team favorites. You should just save the favorite using the "Add current view to my favorites...". You also can create personal favorite wiki pages by using the "Add current page to my favorites...". </p>
+
+<p>Personal favorites are managed via the <cref topic="managing_your_user_profile">users' profiles</cref>. </p>
+
+<screenshot alttext="My favorites" src="resources/images/my_favorite.png"/>
+
+    </section>

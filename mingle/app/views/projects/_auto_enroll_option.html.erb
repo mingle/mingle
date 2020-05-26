@@ -1,0 +1,59 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% 
+if !['new', 'create'].include?(action_name)
+  return
+end
+
+enable_auto_enroll = !params[:enable_auto_enroll].nil? || false
+all_users_are_full_members = @project.all_users_are_full_members? || true
+all_users_are_read_only_members = @project.all_users_are_read_only_members? || false
+
+-%>
+
+<div><%= check_box_tag 'enable_auto_enroll', nil, enable_auto_enroll %> <label for="enable_auto_enroll" class="inline">Enroll all users as team members</label>
+  <div id='all_users_become_members_options'<%= enable_auto_enroll ? '' : 'class="disabled"' %>>
+    <div>
+    <span onclick='$("project_auto_enroll_user_type_full").click()' style="padding-right: 1em"><%= radio_button_tag('project[auto_enroll_user_type]', AutoEnrollUserType::ALL_USERS_ARE_FULL_MEMBERS, all_users_are_full_members, :disabled => !enable_auto_enroll) %> Enroll all users as <b>full</b> team members</span>
+    </div>
+    
+    <div>
+    <span onclick='$("project_auto_enroll_user_type_readonly").click()'><%= radio_button_tag('project[auto_enroll_user_type]', AutoEnrollUserType::ALL_USERS_ARE_READ_ONLY_MEMBERS, all_users_are_read_only_members, :disabled => !enable_auto_enroll) %> Enroll all users as <b>read only</b> team members</span>
+    </div>
+  </div>
+</div>
+<%= javascript_with_rescue <<-JAVASCRIPT
+  Event.observe('enable_auto_enroll', 'click', function(e) {
+    if($('enable_auto_enroll').checked) {
+      $('project_auto_enroll_user_type_readonly').enable();
+      $('project_auto_enroll_user_type_full').enable();
+      $('all_users_become_members_options').removeClassName('disabled')
+      $('as_member').checked = true
+      $('as_member').disable();
+    }else {
+      $('project_auto_enroll_user_type_readonly').disable();
+      $('project_auto_enroll_user_type_full').disable();
+      $('all_users_become_members_options').addClassName('disabled')
+
+      $('as_member').enable();
+    }
+  })
+  if(#{enable_auto_enroll}) {
+    $('as_member').disable();
+  }
+JAVASCRIPT
+%>

@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+
+<span>
+  <p>User groups are a way to structure the <cref topic="managing_project_team_members">team members</cref> in your <cref topic="quick_project_setup">projects</cref>. You can <cref topic="card_transitions#who_can_execute">restrict</cref> card <cref topic="explore_mingle_topic_workflow">workflow transitions</cref> so that only team members in certain user groups can execute them. For example, if your workflow includes a transition to indicate that story analysis is complete, you may only want team members in the "business analysts" user group to execute the transition. You can define any user groups you want in your project. User groups may be based on roles, organizations, skills, or whatever else you decide.</p>
+  <p>User groups go very well with Mingle <cref topic="managing_mingle_templates">project templates</cref>. You can create workflow transitions associated with user groups in a template. The specific users in the projects created from the template will differ, but the workflow transitions will still be applicable for the team members in the user groups.</p>
+</span>

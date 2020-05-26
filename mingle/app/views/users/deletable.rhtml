@@ -1,0 +1,67 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div class="deletable-users-list">
+  <div class="h1">
+    <h1>Deletable Users</h1>
+    <%= render_help_link('Users Page', :class => 'page-help')%>
+  </div>
+
+  <% form_tag(:action => 'delete') do %>
+    <% action_bar do %>
+      <%= submit_tag 'Delete User(s)', :class => 'primary', :id => 'delete_users', :disabled => "disabled", :onclick => "$('spinner').show();"%>
+      <%= link_to 'Show All Users', {:action => 'list'}, :class => 'show-all-users link_as_button' %>
+      <%= spinner %>
+    <% end %>
+
+    <div class='info'>Showing all <%= @users.size  %> deletable users</div>
+
+    <div class="table_actions clear_float">
+      <div class='selection_actions table_action_group'>
+        Select:
+        <%= link_to_function 'All', :id => "select_all" -%>
+        <%= link_to_function 'None', :id => "select_none" -%>
+      </div>
+    </div>
+    <table id='users' class="highlightable-table sortable_table">
+      <%- if @users.any? -%>
+        <thead>
+          <tr class="table-top">
+            <th class="align-center">&nbsp;</th>
+            <th class="align-center">Display Name</th>
+            <th class="align-center">Sign-in name</th>
+            <th class="align-center">Email</th>
+            <th class="align-center">Light user</th>
+            <th class="align-center">Administrator</th>
+            <th class="align-center">Last Login</th>
+            <th class="align-center">Activate/Deactivate</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%= render :partial => 'deletable_user', :collection => @users %>
+        </tbody>
+      <%- else -%>
+        <tbody>
+          <tr class="table-top">
+            <td class="italic-light">No users can be deleted</td>
+          </tr>
+        </tbody>
+      <%- end -%>
+    </table>
+  <%- end -%>
+</div>
+
+<%= javascript_with_rescue "new CheckboxController([$('delete_users')], $$('.delete_user_selection'));" %>

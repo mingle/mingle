@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_plus.dtd">
+<chapter title="Raising a Dependency" id="mingle_plus">
+	    <p>Dependencies can only be raised within a project. To raise a dependency, open the card that you would like to associate the new dependency with and click on the + icon in the Dependencies section.</p>
+
+		<screenshot alttext="raising a dependency" src="resources/images/raising_a_dependency.png" />
+	    
+	    <bullets>
+	    	<item><strong>Name:</strong> The dependency name</item>
+	    	<item><strong>Description:</strong> Enter any requirements or additional details regarding the dependency here. The description can also be edited once the dependency has been created.</item>
+	    	<item><strong>Desired completion date:</strong> Enter the date that you would like to see the dependency resolved by. This helps the resolving project understand the timeline when accepting dependencies.</item>
+	    	<item><strong>Project:</strong> Select the project that you would like to raise the dependency on.</item>
+	    </bullets>
+
+	    <p>Once you've created the new dependency, it will appear on the card that it was raised on. You will be able to access the dependency by clicking the dependency name. There will also be a dependency icon on the card wall indicating the status of the dependency.</p>
+
+	    <screenshot alttext="raising a dependency complete" src="resources/images/raising_a_dependency_complete.png" />
+
+	    <p>Click <cref topic="dependency_icon_indicators">here</cref> to view dependency icon indicators definitions.</p>
+</chapter>

@@ -1,0 +1,40 @@
+_navigateTo("/demo/window_opener.htm");
+
+_click(_link("No target"));
+_assertEqual("null", _textbox("tx").value);
+
+_click(_link("_self"));
+_assertEqual("null", _textbox("tx").value);
+
+_click(_link("_parent"));
+_assertEqual("null", _textbox("tx").value);
+
+_click(_link("_top"));
+_assertEqual("null", _textbox("tx").value);
+
+_click(_link("Iframe"));
+_assertEqual("null", _textbox("tx").value);
+_assertExists(_textbox("tx[1]"));
+_assertEqual("null", _textbox("tx[1]").value);
+
+_click(_button("Set Name"));
+_click(_link("Self Win One"));
+_assertEqual("null", _textbox("tx").value);
+
+_click(_link("another"));
+_popup("another")._assertExists(_textbox("tx"));
+_popup("another")._assert(_isVisible(_textbox("tx")));
+_popup("another")._assertEqual("GOT IT", _textbox("tx").value);
+_popup("another")._click(_link("No target"));
+_popup("another")._assertEqual("GOT IT", _textbox("tx").value);
+_popup("another")._click(_link("_self"));
+_popup("another")._assertEqual("GOT IT", _textbox("tx").value);
+_popup("another")._click(_link("_parent"));
+_popup("another")._assertEqual("GOT IT", _textbox("tx").value);
+_popup("another")._click(_link("_top"));
+_popup("another")._assertEqual("GOT IT", _textbox("tx").value);
+
+_popup("another")._click(_link("Iframe"));
+_popup("another")._assertExists(_textbox("tx[1]"));
+_popup("another")._assertEqual("null", _textbox("tx[1]").value);
+

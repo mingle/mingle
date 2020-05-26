@@ -1,0 +1,268 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Macro Editor Test</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <script src="../test_assets/sinon-2.3.6.js" type="text/javascript"></script>
+
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+  <script src="../../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/yaml-0.3.0.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/application.js" type="text/javascript"></script>
+
+  <script src="../../../app/assets/javascripts/easy_charts/macro_editor.js" type="text/javascript"></script>
+
+  <script src="../test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+  <script src="../test_assets/qunit-phantom.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="../test_assets/qunit-1.21.0.css" type="text/css"/>
+</head>
+<body>
+<div id="qunit"></div>
+<div id="container"></div>
+<script type="application/javascript">
+  QUnit.module('Macro Editor', {
+    beforeEach: function () {
+      this.container = $j('#container');
+      this.onUpdate = sinon.spy();
+      this.onCancel = sinon.spy();
+      this.previewCallback = sinon.spy();
+      this.errorCallback = sinon.spy();
+    },
+    afterEach: function () {
+      this.container.empty();
+    }
+  }, function () {
+    QUnit.module('With Associated Chart Builder', {
+      beforeEach: function () {
+        this.editor = new MingleUI.EasyCharts.MacroEditor({
+          hasAssociatedChartBuilder: true,
+          chartType:'chart'
+        }, {
+          onUpdate: this.onUpdate,
+          onCancel: this.onCancel,
+          preview: this.previewCallback,
+          onError: this.errorCallback
+        });
+        this.container.append(this.editor.htmlContainer);
+      }
+    });
+
+    QUnit.test('testShouldAddHtmlContainer', function (assert) {
+      assert.ok(this.editor.htmlContainer[0]);
+      assert.ok(this.editor.htmlContainer.is('#charts_macro_form_container'));
+      assert.ok(this.editor.htmlContainer.is(':visible'));
+    });
+
+    QUnit.test('testShouldAddWarningMessage', function (assert) {
+      var warningContainer = this.editor.htmlContainer.find('.macro-edit-warning');
+      assert.ok(warningContainer[0]);
+      assert.equal(warningContainer.find('span.help-text').text(), 'Editing here will restrict you from going back to the Easy Charts form.');
+      assert.equal(warningContainer.find('a.easy-chart-toggle').text(), 'Go back now');
+    });
+
+    QUnit.test('testShouldAddMacroInputTextArea', function (assert) {
+      assert.ok(this.editor.htmlContainer.find('.charts-macro-mql')[0]);
+    });
+
+    QUnit.test('testShouldAddMacroPreviewButton', function (assert) {
+      var macroPreviewContainer = this.editor.htmlContainer.find('.preview-macro-container');
+      var previewButton = macroPreviewContainer.find('button');
+
+      assert.ok(macroPreviewContainer[0]);
+      assert.ok(previewButton.is('.preview-macro'));
+      assert.equal(previewButton.text(), 'Preview');
+    });
+
+    QUnit.test('testDisableShouldHideEditor', function (assert) {
+      this.editor.disable();
+
+      assert.notOk(this.editor.htmlContainer.is(':visible'));
+    });
+
+    QUnit.test('testEnableWithShouldShowEditorAndUpdateTheMacroInputAndTriggerPreviewGeneration', function (assert) {
+      var macro = {chart: {data: 'some data', project: 'some project'}};
+      this.editor.disable();
+      assert.notOk(this.editor.htmlContainer.is(':visible'));
+
+      this.editor.enableWith(macro);
+      var macroInput = this.editor.htmlContainer.find('.charts-macro-mql');
+
+      assert.ok(this.editor.htmlContainer.is(':visible'));
+      assert.equal(macroInput[0], document.activeElement);
+      assert.equal(macroInput.val(), "chart:\n  data: 'some data'\n  project: 'some project'\n");
+      assert.equal(this.previewCallback.callCount, 1);
+      assert.equal(this.previewCallback.args[0][0], macro);
+    });
+
+    QUnit.test('testShouldTriggerOnUpdateWhenMacroValueChanges', function (assert) {
+      var macroInput = this.editor.htmlContainer.find('.charts-macro-mql');
+
+      macroInput.trigger('change');
+      assert.equal(this.onUpdate.callCount, 1);
+
+      macroInput.trigger('keyup');
+      assert.equal(this.onUpdate.callCount, 2);
+
+      macroInput.trigger('paste');
+      assert.equal(this.onUpdate.callCount, 3);
+    });
+
+    QUnit.test('testShouldHideGoBackToEasyChartsButtonWhenMacroValueChanges', function (assert) {
+      var macroInput = this.editor.htmlContainer.find('.charts-macro-mql');
+      this.editor.enableWith({chart: {data: 'some data', project: 'some project'}});
+
+      macroInput.val('chart:\n    data: some data\n    project: project');
+      macroInput.trigger('change');
+
+      assert.equal(this.onUpdate.callCount, 1);
+      assert.notOk(this.editor.htmlContainer.find('.macro-edit-warning a.easy-chart-toggle').is(':visible'));
+    });
+
+    QUnit.test('testShouldShowGoBackToEasyChartsButtonWhenMacroValueChangesBackToInitialValue', function (assert) {
+      var macroInput = this.editor.htmlContainer.find('.charts-macro-mql');
+      this.editor.enableWith({chart: {data: 'some data', project: 'some project'}});
+
+      macroInput.val("chart:\n    data: 'some data'\n    project: project\n");
+      macroInput.trigger('change');
+
+      assert.equal(this.onUpdate.callCount, 1);
+      assert.notOk(this.editor.htmlContainer.find('.macro-edit-warning a.easy-chart-toggle').is(':visible'));
+
+      macroInput.val("chart:\n  data: 'some data'\n  project: 'some project'\n");
+      macroInput.trigger('change');
+
+      assert.equal(this.onUpdate.callCount, 2);
+      assert.ok(this.editor.htmlContainer.find('.macro-edit-warning a.easy-chart-toggle').is(':visible'));
+    });
+
+    QUnit.test('testShouldTriggerOnCancelCallbackWhenGoBackButtonIsClicked', function (assert) {
+      var goBackButton = this.editor.htmlContainer.find('.macro-edit-warning a.easy-chart-toggle');
+
+      goBackButton.click();
+
+      assert.equal(this.onCancel.callCount, 1);
+      assert.notOk(this.editor.htmlContainer.is(':visible'));
+    });
+
+    QUnit.test('testShouldTriggerPreviewCallbackWhenPreviewButtonIsClicked', function (assert) {
+      var previewButton = this.editor.htmlContainer.find('.preview-macro');
+      this.editor.htmlContainer.find('.charts-macro-mql').val('chart: \n    data: some data\n    project: project');
+
+      previewButton.click();
+
+      assert.equal(this.previewCallback.callCount, 1);
+      assert.deepEqual(this.previewCallback.args[0][0], {chart: {data: 'some data',   project: 'project' }});
+      assert.equal(this.previewCallback.args[0].length, 1);
+    });
+
+    QUnit.test('testShouldTriggerErrorCallbackWhenMacroFormatIsInvalid', function (assert) {
+      var previewButton = this.editor.htmlContainer.find('.preview-macro');
+      this.editor.htmlContainer.find('.charts-macro-mql').val('---chart--- : \naaaa  \n Invalid data');
+
+      previewButton.click();
+
+      assert.equal(this.previewCallback.callCount, 0);
+      assert.equal(this.errorCallback.callCount, 1);
+      assert.equal(this.errorCallback.args[0][0], 'Invalid Macro format.');
+      assert.equal(this.errorCallback.args[0].length, 1);
+    });
+
+    QUnit.test('testGetMacroValueShouldWrapMacroInDoubleBraces', function (assert) {
+      this.editor.htmlContainer.find('.charts-macro-mql').val('chart: \n    data: some data\n    project: project');
+
+      assert.deepEqual(this.editor.getMacroValue(), {chart: {data: 'some data',    project: 'project'}});
+    });
+
+    QUnit.test('testMacroTypeShouldReturnMQL', function (assert) {
+      assert.equal(this.editor.macroType, 'mql');
+    });
+
+    QUnit.test('testShouldNotTriggerGeneratePreviewCallback', function (assert) {
+      assert.equal(this.previewCallback.callCount, 0);
+    });
+
+    QUnit.module('Without Associated Chart Builder', {
+      beforeEach: function () {
+        this.editor = new MingleUI.EasyCharts.MacroEditor({
+          hasAssociatedChartBuilder: false,
+          macroType:'some-macro',
+          macro: 'some-macro\n  macro-param: value'
+        }, {
+          onUpdate: this.onUpdate,
+          onCancel: this.onCancel,
+          preview: this.previewCallback
+        });
+        this.container.append(this.editor.htmlContainer);
+      }
+    });
+
+    QUnit.test('testShouldAddBlankWarningMessage', function (assert) {
+      assert.ok(this.editor.htmlContainer.find('.macro-edit-warning')[0]);
+      assert.notOk(this.editor.htmlContainer.find('.macro-edit-warning').text());
+    });
+
+    QUnit.test('testShouldInitializeWithGivenMacro', function (assert) {
+      assert.equal(this.editor.htmlContainer.find('textarea').val(), 'some-macro\n  macro-param: value');
+    });
+
+    QUnit.test('testShouldTriggerGeneratePreviewCallbackWithInitialMacro', function (assert) {
+      assert.equal(this.previewCallback.callCount, 1);
+      assert.deepEqual(this.previewCallback.args[0][0], {'some-macro':{'macro-param': 'value'}});
+      assert.equal(this.previewCallback.args[0].length, 1);
+    });
+
+    QUnit.test('testShouldGenerateMacroForNestedParameters', function (assert) {
+      var macro = {
+        'chart-macro': {
+          name: "name",
+          seriesParameter: [
+            {
+              label: 'Series label',
+              combine: 'overlay-bottom',
+              hidden: false,
+              color: '#ffffff',
+              property: 'prop1',
+              project: 'project',
+              aggregate: 'count',
+              type: 'Bar'
+            }
+          ]
+        }
+      };
+      this.editor.enableWith(macro);
+      assert.equal(this.editor.htmlContainer.find('textarea').val(), "chart-macro:\n" +
+          "  name: name\n" +
+          "  seriesParameter:\n" +
+          "    -\n" +
+          "      label: 'Series label'\n" +
+          "      combine: overlay-bottom\n" +
+          "      hidden: false\n" +
+          "      color: '#ffffff'\n" +
+          "      property: prop1\n" +
+          "      project: project\n" +
+          "      aggregate: count\n" +
+          "      type: Bar\n");
+    });
+  });
+
+</script>
+</body>

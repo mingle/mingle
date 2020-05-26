@@ -1,0 +1,43 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%- select_tab :dependencies -%>
+<div id="program-dependency-filter-container">
+
+    <%= render :partial => "dependencies/filter_switch", :locals => {:raising_url => url_for(:action => "dependencies", :filter => "raising"), :resolving_url => url_for(:action => "dependencies", :filter => "resolving")} %>
+
+    <div class="filter-name">dependencies by</div>
+    <div class="project-dropdown">
+      <span><%= @view.projects == @program.projects ? "All projects" : pluralize(@view.projects.size, 'project') %></span>
+      <span class="caret"><i class="fa fa-caret-down"></i></span>
+      <div class="popover-content">
+        <% form_tag(url_for(:action => 'dependencies'), :method => "get") do %>
+        <div class="select-all">
+          <label><%= check_box_tag("select-all-projects", '', @view.projects == @program.projects) %>Select All</label>
+        </div>
+        <ul>
+          <% @program.projects.each do |project| %>
+          <li><label><%= check_box_tag("project_ids[]", project.id, @view.projects.include?(project)) %><%= project.name %></label></li>
+          <% end %>
+        </ul>
+        <div class="actions">
+          <%= submit_tag 'Apply', {:class => 'select-projects-button primary'} %>
+        </div>
+        <% end %>
+      </div>
+    </div>
+</div>
+<%= render :partial => 'program_dependencies/dependencies' %>

@@ -1,0 +1,52 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<table id="<%= id %>" class="table-with-nothing-following-it highlightable-table">
+  <thead>
+    <tr class="table-top">
+      <th>Name</th>
+      <th>Style</th>
+      <th class="last">&nbsp;</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if views.empty? -%>
+      <tr>
+        <td colspan="5" class="italic-light align-center last">There are currently no <%= section %>s to list.</td>
+      </tr>
+    <% end -%>
+    
+    <% reset_cycle('rows-rotator') -%>
+    <% for view in views %>
+      <% is_card_list_view = view.is_a?(CardListView) %>
+      <% favorite = is_card_list_view ? view.favorite : view.favorites.of_team.first %>
+      <tr class="<%= cycle('odd', 'even', :name => 'rows-rotator') %> text-light" id='<%= "#{view.class.name.tableize.singularize}_#{view.id}" %>'>
+        <td><%= link_to h(favorite.name), {:controller => 'favorites', :action => 'show', :id => favorite.id}, :class => 'favorite-link' %></td>
+        <td><%=h view.style_description %></td>
+        <td class="align-right standard-link-spacing last" style="width: 15em;">
+            <%= link_to "Make #{move_to}", {:action => "move_to_#{move_to.dashed.underscore}", :id => favorite.id}, :method => :post, :id => "move-to-#{move_to.dashed}-#{view.html_id}" if view.tabbable? %>
+
+            <% if is_card_list_view %>
+              <%= link_to 'Delete', {:action => 'delete', :id => favorite.id}, :confirm => 'Are you sure?', :method => :post, :id => "destroy-#{view.html_id}" %>
+            <% else %>
+              <%= link_to "Remove #{section}", {:action => "remove_#{section.dashed.underscore}", :id => favorite.id}, :method => :post, :id => "remove-from-#{section.dashed}-#{view.html_id}" %>
+            <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

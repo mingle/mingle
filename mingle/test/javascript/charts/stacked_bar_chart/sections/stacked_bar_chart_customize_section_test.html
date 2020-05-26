@@ -1,0 +1,558 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Stacked Bar Chart Customize Chart Section Test</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <script src="../../../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+  <script src="../../../../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../../../../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+
+  <script src="../../../../../public/javascripts/application.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/drop_down.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/text_box.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/single_checkbox.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/parameter.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/group_parameter.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/section_helpers.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/sections/customize_chart_section.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/stacked_bar_chart/sections/customize_chart_section.js" type="text/javascript"></script>
+
+  <script src="../../../test_assets/sinon-2.3.6.js" type="text/javascript"></script>
+  <script src="../../../test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+  <script src="../../../test_assets/qunit-phantom.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="../../../test_assets/qunit-1.21.0.css" type="text/css"/>
+
+</head>
+  <body>
+    <div id="qunit"></div>
+    <div id="stack_bar_chart_wizard"></div>
+    <script type="application/javascript">
+      var defaults = {
+        chartSize: 'medium',
+        labelFontAngle: 45,
+        legendPosition: 'right',
+        showGuideLines: true
+      }, paramDefs = [
+        {
+          name: 'chart-title',
+          input_type: 'textbox',
+          label: 'Chart title',
+          placeholder: 'Chart title'
+        },
+        {
+          name: 'customization-title-group',
+          input_type: 'group-parameter',
+          param_defs: [
+            {
+              name: 'x-axis-title',
+              initial_value: '',
+              input_type: 'textbox',
+              label: 'X-axis title',
+              placeholder: 'X-axis title'
+            },
+            {
+              name: 'y-axis-title',
+              initial_value: '',
+              input_type: 'textbox',
+              label: 'Y-axis title',
+              placeholder: 'Y-axis title'
+            }
+          ]
+        },
+        {
+          name: 'customization-group-1',
+          input_type: 'group-parameter',
+          param_defs: [
+            {
+              name: 'chart-size',
+              initial_value: defaults.chartSize,
+              allowed_values: [['Small', 'small'], ['Medium', 'medium'], ['Large', 'large']],
+              multiple_values_allowed: false,
+              input_type: 'dropdown',
+              label: 'Chart size'
+            },
+            {
+              name: 'legend-position',
+              initial_value: defaults.legendPosition,
+              allowed_values: [['Right', 'right'], ['Bottom', 'bottom']],
+              multiple_values_allowed: false,
+              input_type: 'dropdown',
+              label: 'Legend position'
+            },
+            {
+              name: 'label-font-angle',
+              initial_value: defaults.labelFontAngle,
+              allowed_values: [['Slant', 45], ['Vertical', 90], ['Horizontal', 0]],
+              multiple_values_allowed: false,
+              input_type: 'dropdown',
+              label: 'Label angle'
+            }
+          ]
+        },
+        {
+          name: 'show-guide-lines',
+          input_type: 'single-checkbox',
+          label: 'Show guide lines',
+          checked: 'checked',
+          displayProperty:'inline-parameter'
+        }
+      ];
+
+      QUnit.module('Stacked Bar Chart Customize Chart Section', {
+        beforeEach: function () {
+          MingleUI.EasyCharts.chartType = 'stacked-bar-chart';
+          this.onUpdate = sinon.spy();
+          this.callbacks = {onUpdate: this.onUpdate};
+          sinon.spy(MingleUI.EasyCharts, 'Parameter');
+          sinon.spy(MingleUI.EasyCharts.Sections, 'CustomizeChartSection');
+        },
+        afterEach: function () {
+          MingleUI.EasyCharts.Parameter.restore();
+          MingleUI.EasyCharts.Sections.CustomizeChartSection.restore();
+        }
+      }, function () {
+        QUnit.module('Common Test', {
+          beforeEach: function () {
+            this.section = new MingleUI.EasyCharts.StackedBarChart.Sections.CustomizeChartSection({}, this.callbacks);
+          }
+        });
+
+        QUnit.test('testShouldAddTitle', function(assert) {
+          var titleContainer = this.section.htmlContainer.find('div.section-title-container');
+
+          assert.ok(this.section.htmlContainer.hasClass('disabled'));
+          assert.notOk(this.section.isEnabled());
+          assert.equal(titleContainer.text(), '3Customize the chart');
+          assert.equal(titleContainer.find('span.section-number').text(), '3');
+          assert.equal(titleContainer.find('span.section-title').text(), 'Customize the chart');
+        });
+
+        QUnit.test('testShouldCreateACustomizeChartSection', function (assert) {
+          var sectionArgs = MingleUI.EasyCharts.Sections.CustomizeChartSection.args[0];
+
+          assert.equal(MingleUI.EasyCharts.Sections.CustomizeChartSection.callCount, 1);
+          var expectedSectionData = {
+            name: 'stackedBarChartCustomizeChartSection',
+            initialData: {},
+            paramNames: ['chartTitle', 'xAxisTitle', 'yAxisTitle', 'chartSize', 'legendPosition', 'labelFontAngle', 'showGuideLines'],
+            parameterDefinitions: paramDefs,
+            defaults: defaults
+          };
+          assert.deepEqual(sectionArgs[0], expectedSectionData);
+          assert.equal(sectionArgs[1], this.callbacks);
+        });
+
+        QUnit.test('tetIsValidShouldReturnTrueAlways', function (assert) {
+          assert.ok(this.section.isValid());
+        });
+
+        QUnit.module('Disabled Customize Chart Section',{
+          beforeEach: function () {
+            this.section = new MingleUI.EasyCharts.StackedBarChart.Sections.CustomizeChartSection({}, this.callbacks);
+          }
+        });
+
+        QUnit.test('testShouldEnableCustomizeChartSection', function(assert) {
+          this.section.enableWith();
+          assert.notOk(this.section.htmlContainer.hasClass('disabled'));
+          assert.ok(this.section.isEnabled());
+        });
+
+        QUnit.test('testValuesShouldReturnDefaultValues', function (assert) {
+          assert.deepEqual(this.section.values(), defaults);
+        });
+
+        QUnit.module('Enabled Customize Chart Section', {
+          beforeEach: function() {
+            this.section = new MingleUI.EasyCharts.StackedBarChart.Sections.CustomizeChartSection({}, this.callbacks);
+            this.section.enableWith();
+          }
+        });
+
+        QUnit.test('testShouldDisableCustomizeChartSection', function(assert) {
+          assert.notOk(this.section.htmlContainer.hasClass('disabled'));
+          assert.ok(this.section.isEnabled());
+
+          this.section.disable();
+
+          assert.ok(this.section.htmlContainer.hasClass('disabled'));
+          assert.notOk(this.section.isEnabled());
+        });
+
+        QUnit.test('tetShouldAddChartTitleTextBox', function (assert) {
+          var chartTitleParams = MingleUI.EasyCharts.Parameter.args[0], chartTitleParamDef = paramDefs[0];
+
+          assert.equal(MingleUI.EasyCharts.Parameter.callCount, 9);
+          assert.equal(chartTitleParams[0], 'stacked_bar_chart_customize_chart_section');
+          assert.deepEqual(chartTitleParams[1], chartTitleParamDef);
+          assert.equal(typeof chartTitleParams[2].onUpdate, 'function');
+
+          assert.ok(this.section.htmlContainer.find('div#stacked_bar_chart_customize_chart_section_chart_title_parameter')[0]);
+          assert.equal(this.section.htmlContainer.find('div#stacked_bar_chart_customize_chart_section_chart_title_parameter .parameter-label').text(), chartTitleParamDef.label);
+          assert.ok(this.section.htmlContainer.find('div#stacked_bar_chart_customize_chart_section_chart_title_parameter .parameter')[0]);
+          assert.ok(this.section.htmlContainer.find('#stacked_bar_chart_customize_chart_section_chart_title_parameter .parameter input')[0]);
+        });
+
+        QUnit.test('testShouldAddXAxisTitleTextBox', function (assert) {
+          var xAxisTitleParams = MingleUI.EasyCharts.Parameter.args[2], xAxisTitleParamDef = paramDefs[1].param_defs[0];
+
+          assert.equal(MingleUI.EasyCharts.Parameter.callCount, 9);
+          assert.equal(xAxisTitleParams[0], 'customization_title_group');
+          assert.deepEqual(xAxisTitleParams[1], xAxisTitleParamDef);
+          assert.equal(typeof xAxisTitleParams[2].onUpdate, 'function');
+
+          assert.ok(this.section.htmlContainer.find('div#customization_title_group_x_axis_title_parameter')[0]);
+          assert.equal(this.section.htmlContainer.find('div#customization_title_group_x_axis_title_parameter .parameter-label').text(), xAxisTitleParamDef.label);
+          assert.ok(this.section.htmlContainer.find('div#customization_title_group_x_axis_title_parameter .parameter')[0]);
+          assert.ok(this.section.htmlContainer.find('#customization_title_group_x_axis_title_parameter .parameter input')[0]);
+        });
+
+        QUnit.test('testShouldAddYAxisTitleTextBox', function (assert) {
+          var yAxisTitleParams = MingleUI.EasyCharts.Parameter.args[3], yAxisTitleParamDef = paramDefs[1].param_defs[1];
+
+          assert.equal(MingleUI.EasyCharts.Parameter.callCount, 9);
+          assert.equal(yAxisTitleParams[0], 'customization_title_group');
+          assert.deepEqual(yAxisTitleParams[1], yAxisTitleParamDef);
+          assert.equal(typeof yAxisTitleParams[2].onUpdate, 'function');
+
+          assert.ok(this.section.htmlContainer.find('div#customization_title_group_y_axis_title_parameter')[0]);
+          assert.equal(this.section.htmlContainer.find('div#customization_title_group_y_axis_title_parameter .parameter-label').text(), yAxisTitleParamDef.label);
+          assert.ok(this.section.htmlContainer.find('div#customization_title_group_y_axis_title_parameter .parameter')[0]);
+          assert.ok(this.section.htmlContainer.find('#customization_title_group_y_axis_title_parameter .parameter input')[0]);
+        });
+
+        QUnit.test('testShouldAddChartSizeDropDown', function (assert) {
+          var chartSizeParams = MingleUI.EasyCharts.Parameter.args[5], chartSizeParamDef = paramDefs[2].param_defs[0];
+
+          assert.equal(MingleUI.EasyCharts.Parameter.callCount, 9);
+          assert.equal(MingleUI.EasyCharts.Parameter.args[4][1].input_type, 'group-parameter');
+          assert.equal(chartSizeParams[0], 'customization_group1');
+          assert.deepEqual(chartSizeParams[1], chartSizeParamDef);
+          assert.equal(typeof chartSizeParams[2].onUpdate, 'function');
+
+          var customizeChartGroupContainer = this.section.htmlContainer.find('div#stacked_bar_chart_customize_chart_section_customization_group_1_parameter'),
+              groupParameterContainer = customizeChartGroupContainer.find('.parameter');
+
+          assert.ok(customizeChartGroupContainer[0]);
+          assert.notOk(customizeChartGroupContainer.find('> .parameter-label')[0]);
+          assert.ok(groupParameterContainer[0]);
+          assert.equal(groupParameterContainer.find('#customization_group1_chart_size_parameter .parameter-label').text(), chartSizeParamDef.label);
+          assert.equal(groupParameterContainer.find('#customization_group1_chart_size_parameter .options-container').text(), 'SmallMediumLarge');
+          assert.equal(groupParameterContainer.find('#customization_group1_chart_size_parameter .selected-value').text(), 'Medium');
+        });
+
+        QUnit.test('testShouldAddLegendPositionDropDown', function (assert) {
+          var labelTypeParams = MingleUI.EasyCharts.Parameter.args[6], labelAngleParamDef = paramDefs[2].param_defs[1];
+
+          assert.equal(MingleUI.EasyCharts.Parameter.callCount, 9);
+          assert.equal(MingleUI.EasyCharts.Parameter.args[4][1].input_type, 'group-parameter');
+          assert.equal(labelTypeParams[0], 'customization_group1');
+          assert.deepEqual(labelTypeParams[1], labelAngleParamDef);
+          assert.equal(typeof labelTypeParams[2].onUpdate, 'function');
+
+          var customizeChartGroupContainer = this.section.htmlContainer.find('div#stacked_bar_chart_customize_chart_section_customization_group_1_parameter'),
+              groupParameterContainer = customizeChartGroupContainer.find('.parameter');
+
+          assert.ok(customizeChartGroupContainer[0]);
+          assert.notOk(customizeChartGroupContainer.find('> .parameter-label')[0]);
+          assert.ok(groupParameterContainer[0]);
+          assert.equal(groupParameterContainer.find('#customization_group1_legend_position_parameter .parameter-label').text(), labelAngleParamDef.label);
+          var options = groupParameterContainer.find('#customization_group1_legend_position_parameter .options-container li');
+          assert.equal($j(options[0]).text(), 'Right');
+          assert.equal($j(options[1]).text(), 'Bottom');
+          assert.equal(groupParameterContainer.find('#customization_group1_legend_position_parameter .selected-value').text(), 'Right');
+        });
+
+        QUnit.test('testShouldAddLabelFontAngleDropDown', function (assert) {
+          var labelTypeParams = MingleUI.EasyCharts.Parameter.args[7], labelAngleParamDef = paramDefs[2].param_defs[2];
+
+          assert.equal(MingleUI.EasyCharts.Parameter.callCount, 9);
+          assert.equal(MingleUI.EasyCharts.Parameter.args[4][1].input_type, 'group-parameter');
+          assert.equal(labelTypeParams[0], 'customization_group1');
+          assert.deepEqual(labelTypeParams[1], labelAngleParamDef);
+          assert.equal(typeof labelTypeParams[2].onUpdate, 'function');
+
+          var customizeChartGroupContainer = this.section.htmlContainer.find('div#stacked_bar_chart_customize_chart_section_customization_group_1_parameter'),
+              groupParameterContainer = customizeChartGroupContainer.find('.parameter');
+
+          assert.ok(customizeChartGroupContainer[0]);
+          assert.notOk(customizeChartGroupContainer.find('> .parameter-label')[0]);
+          assert.ok(groupParameterContainer[0]);
+          assert.equal(groupParameterContainer.find('#customization_group1_label_font_angle_parameter .parameter-label').text(), labelAngleParamDef.label);
+          var options = groupParameterContainer.find('#customization_group1_label_font_angle_parameter .options-container li');
+          assert.equal($j(options[0]).text(), 'Slant');
+          assert.equal($j(options[1]).text(), 'Vertical');
+          assert.equal($j(options[2]).text(), 'Horizontal');
+          assert.equal(groupParameterContainer.find('#customization_group1_label_font_angle_parameter .selected-value').text(), 'Slant');
+        });
+
+        QUnit.test('testShouldAddShowGuideLinesCheckbox', function (assert) {
+          var showGuideLinesParams = MingleUI.EasyCharts.Parameter.args[8], showGuideLinesParamDef = paramDefs[3];
+
+          assert.equal(MingleUI.EasyCharts.Parameter.callCount, 9);
+          assert.equal(showGuideLinesParams[0], 'stacked_bar_chart_customize_chart_section');
+          assert.deepEqual(showGuideLinesParams[1], showGuideLinesParamDef);
+          assert.equal(typeof showGuideLinesParams[2].onUpdate, 'function');
+
+          assert.ok(this.section.htmlContainer.find('div#stacked_bar_chart_customize_chart_section_show_guide_lines_parameter')[0]);
+          assert.equal(this.section.htmlContainer.find('div#stacked_bar_chart_customize_chart_section_show_guide_lines_parameter .parameter-label').text(), showGuideLinesParamDef.label);
+          assert.ok(this.section.htmlContainer.find('div#stacked_bar_chart_customize_chart_section_show_guide_lines_parameter .single-checkbox')[0]);
+        });
+
+        QUnit.test('testShouldTriggerOnUpdateWhenAnythingChanges', function (assert) {
+
+          this.section.htmlContainer.find('#stacked_bar_chart_customize_chart_section_chart_title_parameter .parameter input').val('chart title').blur();
+
+          assert.equal(this.onUpdate.callCount, 1);
+          assert.equal(this.onUpdate.args[0][0], this.section);
+
+          this.section.htmlContainer.find('#customization_title_group_x_axis_title_parameter input').val('x axis title').blur();
+
+          assert.equal(this.onUpdate.callCount, 2);
+          assert.equal(this.onUpdate.args[1][0], this.section);
+
+          this.section.htmlContainer.find('#customization_title_group_y_axis_title_parameter input').val('y axis title').blur();
+
+          assert.equal(this.onUpdate.callCount, 3);
+          assert.equal(this.onUpdate.args[2][0], this.section);
+
+          this.section.htmlContainer.find('#customization_group1_chart_size_parameter li:contains("Small")').click();
+
+          assert.equal(this.onUpdate.callCount, 4);
+          assert.equal(this.onUpdate.args[3][0], this.section);
+
+          this.section.htmlContainer.find('#customization_group1_legend_position_parameter li:contains("Bottom")').click();
+
+          assert.equal(this.onUpdate.callCount, 5);
+          assert.equal(this.onUpdate.args[4][0], this.section);
+
+          this.section.htmlContainer.find('#customization_group1_label_font_angle_parameter li:contains("Vertical")').click();
+
+          assert.equal(this.onUpdate.callCount, 6);
+          assert.equal(this.onUpdate.args[5][0], this.section);
+        });
+
+        QUnit.test('testValuesShouldReturnAllSelectedValues', function (assert) {
+          this.section.htmlContainer.find('#stacked_bar_chart_customize_chart_section_chart_title_parameter .parameter input').val('chart title').blur();
+          this.section.htmlContainer.find('#customization_title_group_x_axis_title_parameter input').val('foo').blur();
+          this.section.htmlContainer.find('#customization_title_group_y_axis_title_parameter input').val('bar').blur();
+
+          assert.deepEqual(this.section.values(), {
+            chartTitle: 'chart title',
+            xAxisTitle: 'foo',
+            yAxisTitle: 'bar',
+            chartSize: 'medium',
+            legendPosition: 'right',
+            labelFontAngle: 45,
+            showGuideLines: true
+          })
+        });
+
+        QUnit.test('testValuesShouldReturnUpdatedTitleEvenWhenOnUpdateWasNotCalled', function (assert) {
+          assert.deepEqual(this.section.values(), {
+            chartTitle: '',
+            xAxisTitle: '',
+            yAxisTitle: '',
+            chartSize: 'medium',
+            legendPosition: 'right',
+            labelFontAngle: 45,
+            showGuideLines: true
+          });
+
+          this.section.htmlContainer.find('#stacked_bar_chart_customize_chart_section_chart_title_parameter .parameter input').val('chart title');
+          this.section.htmlContainer.find('#customization_title_group_x_axis_title_parameter input').val('foo');
+          this.section.htmlContainer.find('#customization_title_group_y_axis_title_parameter input').val('bar');
+
+          assert.equal(this.onUpdate.callCount, 0);
+
+          assert.deepEqual(this.section.values(), {
+            chartTitle: 'chart title',
+            xAxisTitle: 'foo',
+            yAxisTitle: 'bar',
+            chartSize: 'medium',
+            legendPosition: 'right',
+            labelFontAngle: 45,
+            showGuideLines: true
+          });
+        });
+
+        QUnit.module('Enable Customize ChartSection With Initial Data', {
+          beforeEach: function () {
+            this.initialData = {
+              chartTitle: 'my chart',
+              chartSize: 'large',
+              xAxisTitle: 'title-x',
+              yAxisTitle: 'title-y',
+              labelFontAngle: 90,
+              legendPosition: 'bottom',
+              showGuideLines: false,
+              foo: 'bar'
+            };
+            this.section =  new MingleUI.EasyCharts.StackedBarChart.Sections.CustomizeChartSection(this.initialData, this.callbacks);
+            this.section.enableWith();
+          }
+        });
+
+        QUnit.test('testShouldAddChartTitleTextBoxWithInitialValue', function (assert) {
+          var chartTitleParams = MingleUI.EasyCharts.Parameter.args[0], chartTitleParamDef = paramDefs[0],
+              expectedInitialData = $j.extend({}, this.initialData);
+
+          delete expectedInitialData.foo;
+
+          assert.equal(MingleUI.EasyCharts.Parameter.callCount, 9);
+          assert.equal(chartTitleParams[0], 'stacked_bar_chart_customize_chart_section');
+          assert.deepEqual(chartTitleParams[1], chartTitleParamDef);
+          assert.equal(typeof chartTitleParams[2].onUpdate, 'function');
+          assert.deepEqual(chartTitleParams[2].initialData, expectedInitialData);
+
+          assert.ok(this.section.htmlContainer.find('div#stacked_bar_chart_customize_chart_section_chart_title_parameter')[0]);
+          assert.equal(this.section.htmlContainer.find('div#stacked_bar_chart_customize_chart_section_chart_title_parameter .parameter-label').text(), chartTitleParamDef.label);
+          assert.ok(this.section.htmlContainer.find('div#stacked_bar_chart_customize_chart_section_chart_title_parameter .parameter')[0]);
+          assert.ok(this.section.htmlContainer.find('#stacked_bar_chart_customize_chart_section_chart_title_parameter .parameter input')[0]);
+          assert.equal(this.section.htmlContainer.find('#stacked_bar_chart_customize_chart_section_chart_title_parameter input').val(), 'my chart');
+        });
+
+        QUnit.test('testShouldAddXAxisTitleTextBoxWithInitialValue', function (assert) {
+          var xAxisTitleParams = MingleUI.EasyCharts.Parameter.args[2], xAxisTitleParamDef = paramDefs[1].param_defs[0];
+
+          assert.equal(MingleUI.EasyCharts.Parameter.callCount, 9);
+          assert.equal(xAxisTitleParams[0], 'customization_title_group');
+          assert.deepEqual(xAxisTitleParams[1], xAxisTitleParamDef);
+          assert.equal(typeof xAxisTitleParams[2].onUpdate, 'function');
+
+          assert.ok(this.section.htmlContainer.find('div#customization_title_group_x_axis_title_parameter')[0]);
+          assert.equal(this.section.htmlContainer.find('div#customization_title_group_x_axis_title_parameter .parameter-label').text(), xAxisTitleParamDef.label);
+          assert.ok(this.section.htmlContainer.find('div#customization_title_group_x_axis_title_parameter .parameter')[0]);
+          assert.ok(this.section.htmlContainer.find('#customization_title_group_x_axis_title_parameter .parameter input')[0]);
+          assert.equal(this.section.htmlContainer.find('#customization_title_group_x_axis_title_parameter input').val(), 'title-x');
+        });
+
+        QUnit.test('testShouldAddYAxisTitleTextBoxWithInitialValue', function (assert) {
+          var yAxisTitleParams = MingleUI.EasyCharts.Parameter.args[3], yAxisTitleParamDef = paramDefs[1].param_defs[1];
+
+          assert.equal(MingleUI.EasyCharts.Parameter.callCount, 9);
+          assert.equal(yAxisTitleParams[0], 'customization_title_group');
+          assert.deepEqual(yAxisTitleParams[1], yAxisTitleParamDef);
+          assert.equal(typeof yAxisTitleParams[2].onUpdate, 'function');
+
+          assert.ok(this.section.htmlContainer.find('div#customization_title_group_y_axis_title_parameter')[0]);
+          assert.equal(this.section.htmlContainer.find('div#customization_title_group_y_axis_title_parameter .parameter-label').text(), yAxisTitleParamDef.label);
+          assert.ok(this.section.htmlContainer.find('div#customization_title_group_y_axis_title_parameter .parameter')[0]);
+          assert.ok(this.section.htmlContainer.find('#customization_title_group_y_axis_title_parameter .parameter input')[0]);
+          assert.equal(this.section.htmlContainer.find('#customization_title_group_y_axis_title_parameter input').val(), 'title-y');
+        });
+
+        QUnit.test('testShouldAddChartSizeDropDownWithInitialValue', function (assert) {
+          var chartSizeParams = MingleUI.EasyCharts.Parameter.args[5], chartSizeParamDef = paramDefs[2].param_defs[0];
+
+          assert.equal(MingleUI.EasyCharts.Parameter.callCount, 9);
+          assert.equal(MingleUI.EasyCharts.Parameter.args[4][1].input_type, 'group-parameter');
+          assert.equal(chartSizeParams[0], 'customization_group1');
+          assert.deepEqual(chartSizeParams[1], chartSizeParamDef);
+          assert.equal(typeof chartSizeParams[2].onUpdate, 'function');
+
+          var customizeChartGroupContainer = this.section.htmlContainer.find('div#stacked_bar_chart_customize_chart_section_customization_group_1_parameter'),
+              groupParameterContainer = customizeChartGroupContainer.find('.parameter');
+
+          assert.ok(customizeChartGroupContainer[0]);
+          assert.notOk(customizeChartGroupContainer.find('> .parameter-label')[0]);
+          assert.ok(groupParameterContainer[0]);
+          assert.equal(groupParameterContainer.find('#customization_group1_chart_size_parameter .parameter-label').text(), chartSizeParamDef.label);
+          assert.equal(groupParameterContainer.find('#customization_group1_chart_size_parameter .options-container').text(), 'SmallMediumLarge');
+          assert.equal(groupParameterContainer.find('#customization_group1_chart_size_parameter .selected-value').text(), 'Large');
+        });
+
+        QUnit.test('testShouldAddLegendPositionDropDownWithInitialValue', function (assert) {
+          var chartSizeParams = MingleUI.EasyCharts.Parameter.args[6], chartSizeParamDef = paramDefs[2].param_defs[1];
+
+          assert.equal(MingleUI.EasyCharts.Parameter.callCount, 9);
+          assert.equal(MingleUI.EasyCharts.Parameter.args[4][1].input_type, 'group-parameter');
+          assert.equal(chartSizeParams[0], 'customization_group1');
+          assert.deepEqual(chartSizeParams[1], chartSizeParamDef);
+          assert.equal(typeof chartSizeParams[2].onUpdate, 'function');
+
+          var customizeChartGroupContainer = this.section.htmlContainer.find('div#stacked_bar_chart_customize_chart_section_customization_group_1_parameter'),
+              groupParameterContainer = customizeChartGroupContainer.find('.parameter');
+
+          assert.ok(customizeChartGroupContainer[0]);
+          assert.notOk(customizeChartGroupContainer.find('> .parameter-label')[0]);
+          assert.ok(groupParameterContainer[0]);
+          assert.equal(groupParameterContainer.find('#customization_group1_legend_position_parameter .parameter-label').text(), chartSizeParamDef.label);
+          var options = groupParameterContainer.find('#customization_group1_legend_position_parameter .options-container li');
+          assert.equal($j(options[0]).text(), 'Right');
+          assert.equal($j(options[1]).text(), 'Bottom');
+          assert.equal(groupParameterContainer.find('#customization_group1_legend_position_parameter .selected-value').text(), 'Bottom');
+        });
+
+        QUnit.test('testShouldAddLabelFontAngleDropDownWithInitialValue', function (assert) {
+          var labelTypeParams = MingleUI.EasyCharts.Parameter.args[7], labelAngleParamDef = paramDefs[2].param_defs[2];
+
+          assert.equal(MingleUI.EasyCharts.Parameter.callCount, 9);
+          assert.equal(MingleUI.EasyCharts.Parameter.args[4][1].input_type, 'group-parameter');
+          assert.equal(labelTypeParams[0], 'customization_group1');
+          assert.deepEqual(labelTypeParams[1], labelAngleParamDef);
+          assert.equal(typeof labelTypeParams[2].onUpdate, 'function');
+
+          var customizeChartGroupContainer = this.section.htmlContainer.find('div#stacked_bar_chart_customize_chart_section_customization_group_1_parameter'),
+              groupParameterContainer = customizeChartGroupContainer.find('.parameter');
+
+          assert.ok(customizeChartGroupContainer[0]);
+          assert.notOk(customizeChartGroupContainer.find('> .parameter-label')[0]);
+          assert.ok(groupParameterContainer[0]);
+          assert.equal(groupParameterContainer.find('#customization_group1_label_font_angle_parameter .parameter-label').text(), labelAngleParamDef.label);
+          var options = groupParameterContainer.find('#customization_group1_label_font_angle_parameter .options-container li');
+          assert.equal($j(options[0]).text(), 'Slant');
+          assert.equal($j(options[1]).text(), 'Vertical');
+          assert.equal($j(options[2]).text(), 'Horizontal');
+          assert.equal(groupParameterContainer.find('#customization_group1_label_font_angle_parameter .selected-value').text(), 'Vertical');
+        });
+
+        QUnit.test('testShouldAddShowGuideLinesCheckboxWithFalse', function (assert) {
+          var showGuideLinesParams = MingleUI.EasyCharts.Parameter.args[8], showGuideLinesParamDef = paramDefs[3];
+
+          assert.equal(MingleUI.EasyCharts.Parameter.callCount, 9);
+          assert.equal(showGuideLinesParams[0], 'stacked_bar_chart_customize_chart_section');
+          assert.deepEqual(showGuideLinesParams[1], showGuideLinesParamDef);
+          assert.equal(typeof showGuideLinesParams[2].onUpdate, 'function');
+
+          assert.ok(this.section.htmlContainer.find('div#stacked_bar_chart_customize_chart_section_show_guide_lines_parameter')[0]);
+          assert.equal(this.section.htmlContainer.find('div#stacked_bar_chart_customize_chart_section_show_guide_lines_parameter .parameter-label').text(), showGuideLinesParamDef.label);
+          assert.ok(this.section.htmlContainer.find('div#stacked_bar_chart_customize_chart_section_show_guide_lines_parameter .single-checkbox')[0]);
+        });
+
+        QUnit.test('testShouldReturnInitialValuesAsSectionValue', function (assert) {
+          assert.deepEqual(this.section.values(), {
+            chartTitle: 'my chart',
+            xAxisTitle: 'title-x',
+            yAxisTitle: 'title-y',
+            chartSize: 'large',
+            legendPosition: 'bottom',
+            labelFontAngle: 90,
+            showGuideLines: false
+          });
+        });
+
+      });
+
+    </script>
+  </body>
+</html>

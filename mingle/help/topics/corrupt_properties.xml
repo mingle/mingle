@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_help.dtd">
+<chapter title="Resolving issues with corrupt properties">
+
+	<section title="What to do if your project has a corrupt property warning?">
+	<p>Sometimes, unusually, card properties can become corrupted. This is when data Mingle requires and expects to be available for certain properties is not available. If this is the case a warning message may be displayed in your project informing you that there is a problem that Mingle cannot resolve. To resolve this issue the corrupted property requires deletion by a Project or Mingle admin.</p>
+	
+		<screenshot alttext="Corrupt property warning" src="resources/images/corrupt_property_warning.png" />
+	
+	<p>When accessing the project with a problematic property admins should see a detailed message explaining which property is corrupt and that it is necessary to delete this property to resolve the issue. By clicking on the corrupt property name in the warning message you will be directed to the appropriate place to delete the affected property. </p>
+	
+		<screenshot alttext="Admin corrupt property warning" src="resources/images/admin_corrupt_property_warning.png" />
+		
+		<p>For some properties, such as relationship properties, the warning message may not suggest deletion of the problematic property. This is because corruption of this property may indicate a more complex issue and resolution may not be as simple as deleting the property. In this case we recommend that the administrator contact our support team (@tw_studios_mingle_support_url@) who will help you resolve your project corruption issues.</p>
+	
+	</section>
+	
+	<section title="What to do if you are having issues creating or working with card properties?">
+	<p>In the event that you or other users on your project are having issues working with properties but there is no warning message detailing how to resolve this issue, you may check the health of your project from the "Advanced project admin" menu. As an admin user you can use the "Project health check" option to check your project for corrupt properties. Following use of this option a warning banner will appear in the project if there are any corrupt properties. Please refer to the warning message and the instructions above to resolve issues with corrupt properties. </p>
+	
+	<p>If you use the "Project health check" and are not warned about any corrupt properties but are still experiencing problems working with card properties, please contact our support team (@tw_studios_mingle_support_url@) who will assist you.</p>
+	</section>
+	<section title="How to...">
+		<bullets>
+			<item>
+				<cref topic="creating_card_properties">Create card
+    properties</cref>
+			</item>
+			<item>
+				<cref topic="modifying_or_deleting_card_properties">Modify or Delete
+    card properties</cref>
+			</item>
+		</bullets>
+	</section>
+</chapter>

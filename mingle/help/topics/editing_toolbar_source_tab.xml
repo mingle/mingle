@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE subsection SYSTEM "mingle_help.dtd">
+<subsection title="Source Tab">
+  <p>In <cref topic="whats_new_mingle_13.3">Mingle 13.3</cref>, we've added a source tab to our editing toolbar to give you better control over your content and layout. Click on this to see and modify (e.g. with line breaks and <cref topic="tip_using_html_anchor">HTML anchor tags</cref>) the HTML behind your cards and pages. Simply click again to see formatted content.</p>
+    <screenshot src="resources/images/source_code.png" />
+</subsection>

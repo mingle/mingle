@@ -1,0 +1,57 @@
+<div class="dashboard">
+
+  <div class="yui-g dashboard">
+      <div class="yui-u first">
+
+      </div>
+      <div class="yui-u">
+
+       </div>
+  </div>
+
+</div>
+
+{% dashboard %}
+
+{% left-column %}
+
+h2. Feature Complete
+
+{{
+      ratio-bar-chart
+        totals: SELECT Feature, SUM(Size) WHERE Type = Story
+        restrict-ratio-with: Status = Closed
+}}
+
+h2. Feature Complete
+
+{{
+      ratio-bar-chart
+        totals: SELECT Feature, SUM(Size) WHERE Type = Story
+        restrict-ratio-with: Status = Closed
+}}
+
+{% left-column %}
+
+
+{% right-column %}
+
+h2. Feature Complete
+
+{{
+      ratio-bar-chart
+        totals: SELECT Feature, SUM(Size) WHERE Type = Story
+        restrict-ratio-with: Status = Closed
+}}
+
+h2. Feature Complete
+
+{{
+      ratio-bar-chart
+        totals: SELECT Feature, SUM(Size) WHERE Type = Story
+        restrict-ratio-with: Status = Closed
+}}
+
+{% right-column %}
+
+{% dashboard %}

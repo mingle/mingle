@@ -1,0 +1,86 @@
+var $sessionInfo = _sessionInfo();
+_log($sessionInfo)
+
+_log($sessionInfo.threadNumber);
+
+
+var $suiteInfo = _suiteInfo();
+_log($suiteInfo);
+
+_click(_link("Link Test"));
+_click(_link("linkByContent"));
+_click(_link("Back"));
+_click(_link("Back"));
+
+function setUp(){
+	_navigateTo("linkTest.htm");
+	_setValue(_textbox("t1"), "");
+}
+
+function testLinkWithReturnTrue(){
+	_click(_link("link with return true"));
+	_assertExists(_textarea("ta1"));
+	_assertEqual("", _textarea("ta1").value);
+}
+
+function testLinkWithReturnFalse(){
+	_click(_link("link with return false"));
+	_assertExists(_textbox("t1"));
+	_assertEqual("formTest link with return false", _textbox("t1").value);
+	_assertExists(_link("linkByContent"));
+}
+
+
+function testLinkWithReturnValueFalse(){
+	_click(_link("link with returnValue=false"));
+	_assertExists(_textbox("t1"));
+	_assertEqual("formTest link with returnValue=false", _textbox("t1").value);
+}
+
+function testLinkWithHandlerAddedViaJS(){
+	_click(_link("added handler using js"));
+	_assertExists(_textbox("t1"));
+	_assertEqual("myFn called", _textbox("t1").value);
+}
+
+function testImageWithLink(){
+	_click(_image("imgWithLink"));
+	_assertExists(_link("Link Test"));
+}
+
+function testImageWithLinkNoClick(){
+	_click(_image("imgWithLinkNoClick"));
+	_assertExists(_textbox("t1"));
+	_assertEqual("myFn called", _textbox("t1").value);
+}
+
+function testLinkByTitle(){
+	_assertEqual("Don't use my text to identify. Use my title.", _getText(_link("with title")));
+	_click(_link("Don't use my text to identify. Use my title."));
+	_assertExists(_link("Link Test"));
+}
+
+function testLinkWithImageOnclickReturningFalse(){
+	_click(_image("imageWithReturnFalse"));
+	_assert(location.href.indexOf("linkTest.htm") != -1); // on same page
+}
+
+function testImageOnclickCanChangeHref(){
+	_click(_image("imageWithOnclickChangingHref"));
+	_assert(location.href.indexOf("tableTest.htm") != -1); // goes to tableTest
+}
+
+function testIframeLoadedViaLinkClickDoesNotStopTest(){
+	_click(_link("click here"));
+	_click(_link("Link Test")); 
+}
+
+_runUnitTests();
+// Test using base tag and page loading target as the iframe
+
+_navigateTo("/demo/base.html");
+_click(_link("Link Test"));
+_assertExists(_heading2("Link Test"));
+_click(_link("Form Test"));
+_assertExists(_heading2("Form Test"));
+

@@ -1,0 +1,51 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%- form_for :workflow, :url => { :action => 'generate' }, :html => { :id => 'workflow_form' } do |f| -%>
+  <%= render :partial => 'action_bar', :locals => {:position => 'top'} %>
+
+  <%= page_title_and_h1("Generate transition workflow") %>
+
+  <div id='content-simple'>
+    <ul class="transition-actions inline-list">
+      <li>
+        <%= f.label nil, 'Select card type:', :for => 'card_type_id' %>
+        <%= f.collection_select 'card_type_id', @project.card_types, :id, :name, { :prompt => TransitionWorkflowsHelper::WORKFLOW_DROPDOWN_PROMPT }, :id => 'card_type_id', :class => 'card-type-selection' %>
+      </li>
+
+      <li>
+        <%= f.label nil, 'Select property:', :for => 'property_definition_id' %>
+        <%= f.select 'property_definition_id', [], { :prompt => TransitionWorkflowsHelper::WORKFLOW_DROPDOWN_PROMPT }, :id => 'property_definition_id', :class => 'property-definition-selection' %>
+        <%= spinner :id => 'preview_spinner' %>
+      </li>
+    </ul>
+
+    <div id='preview_transitions'></div>
+  </div>
+
+  <%= render :partial => 'action_bar', :locals => {:position => 'bottom'} %>
+
+<%- end -%>
+
+<%= javascript_with_rescue <<-JAVASCRIPT
+
+  TransitionWorkflowGenerator.instance = new TransitionWorkflowGenerator('card_type_id', 'property_definition_id', 'preview_transitions', 'preview_spinner', '.generate_transitions', '.cancel', #{card_type_properties.to_json}, {
+    prompt       : '#{TransitionWorkflowsHelper::WORKFLOW_DROPDOWN_PROMPT}',
+    previewUrl   : '#{url_for(:action => 'preview')}',
+    returnUrl    : '#{url_for(:controller => 'transitions', :action => 'list')}' });
+
+JAVASCRIPT
+-%>

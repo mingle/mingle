@@ -1,0 +1,217 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+#export-container {
+  .eol-link{
+    color: #3fbeea;
+    text-decoration: underline;
+  }
+  #cancel-data-export {
+    margin-top: 10px;
+    display: none;
+  }
+  #export-description {
+    margin-bottom: 10px;
+    #mingle-admins-list {
+      margin-left: 30px;
+    }
+  }
+  .export-status {
+    padding-top: 10px;
+    .data-export-download-link {
+      margin-top: 10px;
+    }
+    #in-progress-message {
+      display: none;
+    }
+
+    .export-progress-bar {
+      overflow: hidden;
+      background-color: #f5f5f5;
+      border-radius: 1px;
+      -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+      box-sizing: border-box;
+      margin: 5px 5px 5px 0;
+      width: 50%;
+
+      .ui-progressbar-value {
+        position: relative;
+        margin: 0;
+        border: none;
+        background-color: $MINGLE_PRIMARY_COLOR;
+        display: block !important;
+        border-radius: 0;
+        float: left;
+        height: 100%;
+        background-size: 40px 40px;
+        -webkit-animation: progress-bar-stripes 2s linear infinite;
+        animation: progress-bar-stripes 2s linear infinite;
+
+        .progress-msg {
+          position: absolute;
+          padding-left: 10px;
+          font-weight: 900;
+          line-height: 22px;
+        }
+      }
+
+      .transition {
+        -webkit-transition: width 0.4s ease;
+        transition: width 0.6s ease;
+        background-image: -webkit-linear-gradient(-45deg, rgba(255, 255, 255, 0.3) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0.4) 75%, transparent 75%, transparent);
+        background-image: -moz-linear-gradient(-45deg, rgba(255, 255, 255, 0.3) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0.4) 75%, transparent 75%, transparent);
+        background-image: linear-gradient(-45deg, rgba(255, 255, 255, 0.3) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0.4) 75%, transparent 75%, transparent);
+      }
+    }
+
+    &.error {
+      .export-progress-bar {
+        .ui-progressbar-value {
+          background: #a59393 none;
+          -webkit-transition: none;
+          transition: none;
+        }
+      }
+
+    }
+  }
+
+  .data-export-download-link {
+    display: block;
+    margin-top: 5px;
+  }
+  .accordion-toggle {
+    position: relative;
+    display: block;
+    padding: 1px 5px;
+    font-size: 21px;
+    color: $MINGLE_PRIMARY_COLOR;
+    text-decoration: none;
+    border-radius: 0;
+    border: none;
+    cursor: pointer;
+    &.ui-state-default {
+      background: white;
+    }
+    span.ui-accordion-header-icon {
+      position: absolute;
+      top: 4px;
+      left: 161px;
+      text-indent: 1px;
+      font-size: 21px;
+      font-weight: 600;
+      height: auto;
+    }
+  }
+  .accordion-content{
+    border: none;
+    padding: 10px;
+  }
+}
+#readonly-warning.info-box {
+  line-height: 1.5em;
+  background: #ddebf3 none;
+  padding: 10px 15px !important;
+  font-weight: 400;
+
+  a.link {
+    text-decoration: underline;
+  }
+
+  h4 {
+    margin: 0 0 5px 0;
+    padding: 0;
+  }
+}
+#export-container {
+  form p, .form_item {
+    padding: 0;
+  }
+
+}
+
+#export-checklist-form {
+  margin-top: 25px;
+  margin-left: -5px;
+
+  #projects-data, #programs-data{
+    .section-description {
+      margin-bottom: 15px;
+    }
+  }
+
+  .export-checklist-section {
+    width: 100%;
+    margin-bottom: 30px;
+
+    h2 {
+      padding: 0 0 10px 0;
+      border-bottom: 1px dashed #CCC;
+      color: #666;
+    }
+    .section-description {
+      margin-top: 15px;
+      margin-bottom: 5px;
+      #history-warning {
+        font-weight: 600;
+        text-decoration: underline;
+      }
+    }
+
+    .export-data-type, .export-checkbox, .history-checkbox, .select-all-data, .select-all-history {
+      display: table-cell;
+      vertical-align: middle;
+      padding: 10px;
+    }
+    .export-checkbox, .select-all-data {
+      width: 100px;
+    }
+    .data-type-name, .data-type-info {
+      display: table-cell;
+      vertical-align: middle;
+      padding-right: 20px;
+    }
+
+    .export-data-type {
+      width: 500px;
+    }
+
+    .data-type-name {
+      width: 210px;
+    }
+
+    .data-type-info {
+      width: 250px;
+    }
+
+    .export-checkbox, .history-checkbox, .select-all-for-export {
+      label {
+        display: inline;
+        padding-left: 5px;
+      }
+    }
+    .project-data, .program-data {
+      display: block;
+      &:nth-child(odd) {
+        background: #eee;
+      }
+    }
+    .select-all-for-export {
+      background: #eee;
+    }
+  }
+}

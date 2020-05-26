@@ -1,0 +1,67 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="transition_popup_div">
+  <% required_properties = transition.require_user_to_enter_property_definitions
+     lightbox = Lightbox.with_close_link_and_close_button(self, 'Cancel', '', :class => 'remove-button popup-close', :onclick => onCancel)
+     lightbox.header "Complete transition", spinner(:id => 'transition_spinner_id')
+     lightbox.body do %>
+        <p class="instructions">
+          Please provide this required information in order to <%= transition.name.bold %> (<span class="required">*</span> indicates a required field):
+        </p>
+
+        <div id="sets-properties-widget" class="properties_widget">
+          <% transition.accepts_user_input_property_definitions_in_smart_order.each do |pd| %>
+            <%= render transition_popup_property_editor(pd, transition, card, transition_popup_field_name(pd), required_properties) %>
+          <% end %>
+        </div>
+
+        <%= clear_float %>
+
+        <div class="transition_comment ie-height-fix">
+          <label><%= comment_name %>: <% if transition.require_comment %><span class="required">*</span><% end %></label>
+          <textarea name="comment[content]" id="popup-comment"
+          rows="5" onKeyUp = "TransitionPopupForm.instance.onChange()"
+          data-users-url="<%= at_user_suggestion_path %>"
+          data-at-login-autocomplete="true"
+          autofocus="true"></textarea>
+          <% if card %>
+            <% card.available_tree_configurations.each do |tree_configuration| %>
+              <% tree_configuration.relationships_available_to(card).each do |prop_def| %>
+                <%= hidden_field_tag "", card.property_value(prop_def).field_value, :id => "transition_popup_#{prop_def.html_id}_field" %>
+              <% end %>
+            <% end %>
+
+          <% end %>
+        </div>
+    <% end
+       lightbox.complete_action 'transition_button_container' do %>
+         <%= submit_tag "Complete" , :id => 'complete_transition', :class => 'primary', :disabled => !transition.completable_on?(card) %>
+      <% end %>
+
+  <%# see LinkHandler to see what this div is used for. background colour of overlay cannot be transparent, otherwise this will not disable links on IE6. %>
+  <div id="transition_button_container_overlay" style='background-color: white; opacity: 0.1; display:none; position:absolute'></div>
+
+  <%= javascript_with_rescue <<-JAVASCRIPT
+    var requiredPropertyIds = $A(#{required_properties.collect { |pd| transition_popup_field_name(pd) }.to_json});
+    TransitionPopupForm.attach(requiredPropertyIds, #{transition.require_comment.to_json});
+    DropList.View.Layout.fix();
+    transitionLinkHandler = new LinkHandler(['transition_button_container']);
+    $j("#popup-comment").at_user_autocomplete();
+    $j("#complete_transition").withProgressBar({ event: "click" });
+JAVASCRIPT
+-%>
+</div>

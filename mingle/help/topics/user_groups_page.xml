@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="User groups page">
+  <section title="What you can do on this page">
+    <p>The user groups page displays all user groups in the project. All team members can see how many team members are in a user group. Additionally, Mingle administrators and project administrators can:</p>
+    <bullets>
+      <item>Create a new user group.</item>
+      <item>Click on a user group name to <cref topic="user_group_page">modify the team members in the user group</cref>.</item>
+      <item>Delete user groups.</item>
+    </bullets>
+    <screenshot alttext="User groups page" src="resources/images/user_groups_page.png" />
+  </section>
+  <section title="Also see...">
+    <bullets>
+      <item><cref topic="user_group_page">Manage team members in a user group</cref></item>
+      <item><cref topic="card_transitions#who_can_execute">Limit transitions to team members of specific user groups</cref></item>
+      <item><cref topic="managing_project_team_members#manage_user_groups">Add and remove team members from user groups from the team list page</cref></item>
+    </bullets>
+  </section>
+</topic>

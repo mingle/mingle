@@ -1,0 +1,36 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div class="comment-item murmur-item">
+
+  <div class="comment word_break <%= 'mentioned' if discussion_item.mentioned_current_user? %>">
+    <div class="word_break commenter">
+      <div class="user-icon"><%= image_tag_for_user_icon(discussion_item.author, :size => '32x32') %></div>
+      <div class="comment_content_wrapper">
+        <div id="murmur_content_<%= discussion_item.id %>" class="murmur-content comment-content">
+          <div class="truncated-content">
+            <%= render :partial => 'murmurs/truncated_murmur_content', :locals => { :murmur => discussion_item, :page_source => :comment, :show_murmurs_in_context_link => true } %>
+          </div>
+        </div>
+        <span class="comment-created-by"><%= h discussion_item.author.name %></span> from <span class="comment-source">Murmurs</span>
+        <div class="comment-context">
+          <%= replace_card_links(discussion_item.describe_origin ? "murmured from #{discussion_item.describe_origin}" : "murmured") %>
+          at <%=Project.current.format_time(discussion_item.created_at) %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

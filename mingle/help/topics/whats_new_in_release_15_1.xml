@@ -1,0 +1,125 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="What's new in Release 15.1">
+	<p>For <cref topic="mingle_onsite">Mingle onsite</cref> customers, please review the <cref topic="upgrading_from_previous_versions">upgrade instructions</cref> before moving to Mingle 15.1</p>
+	<note>
+	  <item>All of the features below are already available for our Mingle in the cloud customers.</item>
+  </note>
+
+	<section title="Drag and Drop Attachments">
+	  <p>You can now drag and drop images and files directly into your card and avoid the hassle of needing to search for your documents.</p>
+    <p><screenshot alttext="attachments container" src="resources/images/d+d_attachment.gif"/></p>
+	</section>
+
+  <section title="Time Tracker Functionality">
+    <p>If you are using table queries in any of your Mingle projects, you can now update any number properties inline within the table itself. Just set the 'edit-any-number-property' parameter to true in your table query macro to make use of this feature.</p>
+    <p><screenshot alttext="table query example" src="resources/images/tables_query_example.png"/></p>
+	</section>
+
+  <section title="Checklists">
+    <p>Checklist items are a great way to quickly capture small tasks that are part of your Mingle card. You can add as many items as you'd like and even rearrange them by clicking and dragging them to prioritize the items.</p>
+    <p><screenshot alttext="checklist whats new" src="resources/images/checklist_whats_new.png"/></p>
+	</section>
+
+  <section title="Murmurs tab in card preview">
+    <p>Mingle cards now have Murmurs tab on the card preview so you can easily add a murmur right from the card. Now all your information related to a card can be easily viewed in one place. The murmur will also show in the global murmurs panel with the card number tagged automatically.</p>
+	</section>
+
+  <section title="Murmur conversations">
+    <p>Mingle now groups your team's murmurs and replies in the global murmur panel and makes it easy to follow a conversation.</p>
+	</section>
+
+  <section title="Fuzzy Search">
+    <p>You can search for card titles and card numbers to quickly access the card information from anywhere within your project.</p>
+	</section>
+
+  <section title="Hotkeys">
+    <p>Keyboard shortcuts are now available in Mingle. It's so easy to scroll through your backlog, you won't even need your right hand. To see the full list of keyboard shortcuts, click on the keyboard icon on the bottom right of the footer.</p>
+	</section>
+
+  <section title="Right click for spell check">
+    <p>We've changed our right click options in the "WYSIWYG" to allow for your browser's spell checker. If you want to access Mingle's right click options, simply hold down "cmd/ctrl + right click"</p>
+	</section>
+
+  <section title="Added story titles to murmur emails">
+    <p>When someone murmurs @ you from a card, the murmur email now includes the card title and number.</p>
+	</section>
+
+  <section title="Added search to team member list">
+    <p>Last release, we introduced the team member list in the footer which allowed you to quickly assign a user to a card. We've added the ability to search for a team member to make it easier for large teams to find the right person. </p>
+	</section>
+
+  <section title="Edit properties from card preview">
+    <p>Editing card properties is now easier than ever now that we've introduced the ability to edit directly from the card preview. </p>
+	</section>
+
+  <section title="Transitions in drop down">
+    <p>We've cleaned up the card preview by grouping all of your card transitions into one easily managable button. </p>
+	<p><screenshot alttext="transition drop down" src="resources/images/transitions_dropdown_example.png"/></p>
+  </section>
+
+  <section title="Card type moved">
+    <p>We've moved the card type to the upper left corner of the card preview to distinguish it from your card properties.</p>
+	</section>
+
+  <section title="Delete button on card preview">
+    <p>We've surfaced the delete button to the card preview.</p>
+	</section>
+
+  <section title="Tree properties now appear in the card preview">
+    <p>Tree properties are just as important as your regular card properties. They are now displayed alongside the rest of your card properties at the bottom of the card preview. You can edit tree properties from card preview just like any other properties.</p>
+	</section>
+
+  <section title="Rank cards defaults to on">
+    <p>To help you prioritize cards, we've defaulted "rank cards" to be checked. You can always turn it off by simply unchecking "rank cards"</p>
+	</section>
+
+	<section title="Bug fixes">
+	  <p>The following bugs have been fixed with 15.1:</p>
+	    <bullets>
+			 <item>Invalid filter params causes 5xx errors</item>
+			 <item>Clicking on card number does not directly open in full view</item>
+			 <item>Random admin is used for formula property updated in history</item>
+			 <item>Card types with long names are ignored when changing from card preview tab</item>
+			 <item>User with an email with a name starting with non A-Z character has broken profile image</item>
+			 <item>User profile page is broken if there is a hidden project</item>
+			 <item>User can create an anonymous accessible project by importing</item>
+			 <item>License warning should not block API calls</item>
+			 <item>404 when triggering transitions that require a value</item>
+			 <item>Tree relationships cleared when non-admin users set a tag on card preview</item>
+			 <item>Replying to murmur sends duplicate email</item>
+			 <item>Enter key brings cursor to top of CKEditor; not the next line</item>
+			 <item>Rows and columns not aggregating non-whole numbers correctly</item>
+			 <item>Import to excel; cannot import to tree property</item>
+			 <item>Cross project reports not linking to outside projects</item>
+			 <item>Macros in two column panel are not formatted correctly</item>
+			 <item>Hidden properties should not be visible on card preview</item>
+			 <item>Card defaults on hidden, transition-only property causes error</item>
+			 <item>Cannot replace image in card body</item>
+			 <item>Can't edit card defaults when there is a macro timeout in the card description</item>
+			 <item>Card properties are not editable on card preview for full users</item>
+			 <item>Sort column by maximum prevents drag and drop</item>
+			 <item>[firefox]Fixed button to remove column lane from disappearing</item>
+			 <item>[firefox]cmd/ctrl + v doesn't work when pasting images</item>
+			 <item>Card query 'group by' does not work with AND</item>
+			 <item>Chrome and IE missing content type for .odt attachments</item>
+  	  </bullets>
+	</section>
+
+</topic>

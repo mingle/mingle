@@ -1,0 +1,391 @@
+<!--
+/**
+ * Copyright  2006  V Narayan Raman
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<html>
+<head><title>Sahi Controller</title></head>
+<body>
+<script src="/_s_/spr/controller4.js"></script>
+<script>
+_c.sahisid = "$sahisid";
+</script>
+<style>
+a, body, input, td, textarea, select {
+    font-size: 8pt;
+    font-family: verdana;
+}
+ul.tabs {
+	padding: 0px;
+	margin: 0px;
+}
+ul.tabs li.hiTab {
+	font-weight: bold;
+	background-color: #ddd;
+	padding: 4px 8px;
+}
+ul.tabs li.normalTab {
+	font-weight: normal;
+}
+ul.tabs li {
+	font-family: verdana;
+	#font-size: 9pt;
+	display: inline;
+	background-color: silver;
+	border: 1px solid gray;
+	padding: 2px 8px;
+	margin-right: 2px;
+	cursor: pointer;
+}
+div.hiTab {
+	font-weight: bold;
+}
+div.normalTab {
+	font-weight: normal;
+	cursor: pointer;
+}
+.field {
+	width: 250px;
+}
+.b {
+	xtext-transform: uppercase;
+	xfont-size: 7pt;
+	cursor: pointer;
+	width: 60px;
+	xfont-family: verdana;
+	padding: 0px;
+}
+.ta {
+	width: 392px;
+	height: 100px;
+	margin: 3px;
+}
+.topB {
+	xtext-transform: uppercase;
+	xfont-size: 7pt;
+	cursor: pointer;
+	font-family: verdana;
+	padding: 0px;
+}
+.step {
+	cursor: pointer;
+}
+.stepsPart {
+	background-color: #ccc;
+}
+.cImg {
+	cursor: pointer;
+	border: 1px solid white;
+	padding: 1px;
+}
+.cImg_toggle {
+	cursor: pointer;
+	border: 1px solid white;
+	padding: 1px;
+}
+.fileInput{
+	cursor: pointer;
+}
+.editorbox{
+	width:100%;
+	height:199px;
+	border:0px;
+}
+</style>
+
+
+
+<div style="margin:5px 0px 15px 0px;">
+<ul class="tabs">
+<li id="tscripts">Scripts</li>
+<li id="tlogs">Logs</li>
+<li id="tabout">About</li>
+</ul>
+</div>
+
+
+
+<!--Scripts tab start-->
+<div id="tscriptsbox" style="">
+<div style="margin:5px 0px;">
+<ul class="tabs">
+<li id="trecorder" onclick="_c.setWorkArea('trecorderWA')">Record</li>
+<li id="tplay" onclick="_c.setWorkArea('tplayWA')">Play</li>
+<!--<li id="tedit" onclick="_c.setWorkArea('teditWA')">Edit</li>-->
+</ul>
+</div>
+
+<!--Play tab start-->
+<div class="content" id="tplaybox" style="display:none">
+
+<!-- Play: open file start -->
+<div id="tpbs_filebox">
+<style>
+.pb_sel{width:300px;}
+</style>
+<table>
+<tr><td>Script</td><td><input class="fileInput" type="text" id="pbScript" style="width:280px;" readOnly="true" onclick="_c.chooseScript()">
+<img onclick="_c.chooseScript()" class="cImg" title="Choose file" src="/_s_/spr/images/folder.png"/></td></tr>
+<tr><td>Start URL</td><td><input type="text" id="pbStartURL" style="width:265px" class="pb_sel"> <input type="button" class="topB" value="Set" onclick="_c.pbSetScript()"/></td></tr>
+</table>
+<script>
+//_c.pbLoadFoldersAndScripts();
+</script>
+</div>
+<!-- Play: open file end -->
+<div style="float:right;padding-right:5px;margin-top:10px;">
+Script: <input type="button" class="topB" value="Edit" onclick="_c.pbEditPlayed()"/>
+</div>
+<div style="margin-top:10px;">
+<!--<img src="/_s_/spr/images/media-playback-start.png" class="cImg" title="Play" onclick="_c.pbPlay()">
+<img src="/_s_/spr/images/media-playback-pause.png" class="cImg" title="Play" onclick="_c.pbPause()">
+<img src="/_s_/spr/images/media-skip-forward.png" class="cImg" title="Play" onclick="_c.pbPlay()">
+<img src="/_s_/spr/images/media-playback-stop.png" class="cImg" title="Play" onclick="_c.pbStop()">
+-->
+<input type="button" class="topB" value="Play" onclick="_c.pbPlay()"/>
+<input type="button" class="topB" value="Pause" onclick="_c.pbPause()"/>
+<input class="topB" type="button" value="Step" onclick="_c.pbStep()"/>
+<input type="button" class="topB" value="Stop" onclick="_c.pbStop()"/>
+</div>
+<!--<input type="text" value="0" style="width:20px;">-->
+<div id="tplayWA" style="margin-top:5px;width:99%;height:200px;overflow:auto;border:1px solid gray;background-color:#eee"></div>
+</div>
+<!--Play tab end-->
+<!--Edit tab start-->
+<!--<div class="content" id="teditbox" style="display:none">
+
+<table>
+<tr><td width="70px">Script</td><td><input class="fileInput" type="text" id="edit_script" style="width:280px" readOnly="true" onclick="_c.chooseEdit()"> 
+<img  onclick="_c.chooseEdit()" class="cImg" title="Choose file" src="/_s_/spr/images/folder.png"/></td></tr>
+</table>
+
+<div style="margin: 10px 0px;">
+<input class="topB" type="button" value="Save">
+<input type="button" class="topB" value="Save As" onclick="_c.pbPause()"/>
+<input class="topB" type="button" value="Revert" onclick="_c.openScript()">
+</div>
+<textarea id="teditWA" style="width:99%;height:220px;">
+Choose a script and click open...
+</textarea>
+</div>
+--><!--Edit tab end-->
+<!--Recorder tab start-->
+<div class="content" id="trecorderbox" style="display:none">
+<!--<div style="margin:15px 0px 5px 0px;">
+<div style="float:right;padding-right:5px">
+
+|Save in: <input class="fileInput" type="text" style="width:230px;" id="record_script" readOnly="true" onclick="_c.chooseSave()">
+<img  onclick="_c.chooseSave()" class="cImg" title="Choose file" src="/_s_/spr/images/folder.png"/>
+
+<img src="/_s_/spr/images/media-floppy.png" class="cImg" title="Save" onclick="_c.save($('record_script').value, _c.getRecorderWA().value, false)">
+|&nbsp;&nbsp;
+<img src="/_s_/spr/images/edit-clear.png" class="cImg" title="Clear" onclick="_c.clearSteps()">
+<img src="/_s_/spr/images/document-new.png" class="cImg" title="New" onclick="_c.clearSteps(true);">
+</div>
+<div>
+<img id="record" style="border:1px solid white" src="/_s_/spr/images/media-record.png" class="cImg" title="Record" onclick="_c.toggleRecording()">
+<img src="/_s_/spr/images/media-playback-start.png" class="cImg" title="Play" onclick="_c.playFromRecorder()">
+</div> 
+</div>
+--><table width="100%" onmouseup="_c.stopDrag(event)" onmousemove="_c.resizeSection(event)" onclick="_c.stopDrag(event)">
+<tr>
+<td style="width:100px;" id="fileTD">
+<div style="margin:2px;">
+<img onclick="_c.createNewScript()" class="cImg" title="Choose file" src="/_s_/spr/images/document-new.png"/>
+<img onclick="_c.chooseOpen()" class="cImg" title="Choose file" src="/_s_/spr/images/folder.png"/>
+<input type="hidden" id="current_script"/>
+</div>
+<div style="border:1px solid gray;height:200px;overflow:auto;" id="editorsListDiv">
+</div>
+</td>
+<td style="border:0px;width:2px;">
+<div style="width:2px;background-color:gray;cursor:w-resize;height:100px;margin:20px 0px;" onmousedown="_c.startDrag(event)" onmouseup="_c.stopDrag(event)" id="divider"></div>
+</td>
+<td>
+
+<div style="float:right">
+<img onclick="_c.saveCurrent()" class="cImg" title="Choose file" src="/_s_/spr/images/media-floppy.png"/>
+<img class="cImg" src="/_s_/spr/images/view-refresh.png" onclick="_c.showRecordedSteps()"/>
+<img src="/_s_/spr/images/edit-clear.png" class="cImg" title="Clear" onclick="_c.clearSteps()">
+</div>
+
+<img id="record" onmouseout="_c.onRecordMouseOut()" onmouseover="_c.onRecordMouseOver()" src="/_s_/spr/images/media-record.png" class="cImg_toggle" title="Record" onclick="_c.toggleRecording()">
+<img src="/_s_/spr/images/media-playback-start.png" class="cImg" title="Play" onclick="_c.playFromRecorder()">
+<div id="editorsDiv" style="height:200px;border:1px solid gray;">
+<!--<textarea class="ta" style="width:99%;height:200px;" id="trecorderWA" onkeyup="_c.setFileAndSaveSteps()"></textarea>-->
+</div>
+</td>
+</tr>
+</table>
+<script>
+var edSet = new EditorSet("editorsDiv", "editorsListDiv");
+</script>
+<!--<iframe src="/_s_/spr/controller/rte_blank.htm" style="width:99%;height:220px;" id="trecorderWA" osnkeyup="_c.saveSteps()" onload="alert(123);this.contentWindow.document.designMode='on'"></iframe>-->
+</div>
+
+<script>
+disableSelection($('divider'));
+</script>
+
+<!--Recorder tab end-->
+
+<!-- Spy start -->
+<div style="float:right;margin-right:5px;">
+<!--<input class="topB" type="button" value="Experiment" onclick="_c.experiment();">-->
+<input class="topB" type="button" value="Inspect" onclick="_c.inspect();">
+<input class="topB" type="button" value="Eval" onclick="_c.evalEx()">
+</div>
+
+<div style="margin:10px 0px 10px 0px;"><ul class="tabs">
+<li id="tspy">Accessor Spy</li>
+<li id="teval">Eval</li>
+<li id="thistory">History</li>
+</ul></div>
+<div  style="">
+<div id="tspybox" style="display:none">
+<table><tr><td>
+<table>
+<tr>
+<td>Accessor</td><td>
+<input onkeypress="_c.reIdentifyQ(event)" class="field" id="accessor" type="text" name="accessor">
+</td>
+</tr>
+<tr>
+<td>Alternatives</td><td>
+<select onchange="$('accessor').value=this.value" class="field" id="alternatives" name="alternatives"></select>
+</td>
+</tr>
+<tr>
+<td>Value/Text</td><td><input class="field" id="aValue" type="text" name="aValue"></td>
+</tr>
+<tr>
+<td>Window</td><td><input id="windowName" type="text" name="windowName"></td>
+</tr>
+<tr>
+<td>Assert</td><td>
+<select onchange="_c.addStep(_c.getSelectedAssertion());this.selectedIndex=0;" class="field" id="assertions" name="assertions"></select>
+</td>
+</tr>
+</table>
+</td><td>
+<input class="b" type="button" name="click" value="Hilight" onclick="_c.highlight()"><br/>
+<input class="b" type="button" name="click" value="Props" onclick="_c.showProps()"><br/>
+<hr/>
+<input class="b" type="button" name="click" value="Hover" onclick="_c.hover()"><br/>
+<input class="b" type="button" name="click" value="Click" onclick="_c.click()"><br/>
+<input class="b" type="button" name="click" value="Set" onclick="_c.setValue()"><br/>
+</td></tr></table>
+<input class="b" id="wait" type="button" value="Wait"> &nbsp; 
+<input class="topB" id="navigateTo" type="button" value="Navigate To" onclick="_c.assert()">
+</div>
+<div id="tevalbox" style="display:none">
+<textarea id="eval" style="width:400px;height:55px;"></textarea>
+<input type="button" value="Evaluate" onclick="_c.evalEx2()"/><br/>
+<textarea id="result" style="width:400px;height:70px"></textarea>
+</div>
+<div id="thistorybox" style="display:none">
+<textarea id="history" style="width:400px;height:150px" readOnly="true"></textarea>
+</div>
+</div>
+<!-- Spy end -->
+
+</div>
+<!--Scripts tab end-->
+
+
+<!--Logs tab start-->
+<div class="content" id="tlogsbox" style="display:none">
+Logs 
+&nbsp; <img class="cImg" src="/_s_/spr/images/view-refresh.png" onclick="$('logIFrame').contentWindow.location.reload()"/>
+&nbsp; <img class="cImg" src="/_s_/spr/images/go-previous.png" onclick="$('logIFrame').contentWindow.history.back()"/>
+&nbsp; <img class="cImg" src="/_s_/spr/images/go-next.png" onclick="$('logIFrame').contentWindow.history.forward()"/>
+<iframe id="logIFrame" width="99%" height="90%"></iframe>
+<script>
+window.setTimeout("$('logIFrame').src='/_s_/dyn/Log_viewLogs'", 1000);
+</script>
+</div>
+<!--Logs tab end-->
+
+<!--About tab start-->
+<div class="content" id="taboutbox" style="display:none">
+Sahi Software
+</div>
+<!--About tab end-->
+
+<!-- Common start -->
+<input type="hidden" id="currentLogFileName"/>
+
+<!-- File open start -->
+<style>
+.pb_sel{width:250px;}
+#dfile_open {
+	display: none;
+	position: absolute;
+	width: 347px;
+	sheight: 130px;
+	top: 100px;
+	left: 25px;
+	background-color: #bdb;
+	border: 1px outset olive;
+	padding: 10px;
+}
+</style>
+<div id="dfile_open">
+<div style="margin:5px 0px;">
+<ul class="tabs">
+<li id="tfile">File</li>
+<li id="turl">Url</li>
+</ul>
+</div>
+
+<div id="tfilebox" style="margin:10px;">
+<table>
+<tr><td></td><td>Folder</td><td><select id="pbFolders" class="pb_sel" onchange="_c.pbLoadScripts(this.value)"><option>Choose folder</option></select></td></tr>
+<tr id="oldScriptOption">
+<td><input onclick="_c.chooseScriptType('pbScripts', 'newScript')" type="radio" name="scriptType" checked="true" id="pbScriptsRadio" value="old"></td>
+<td><label for="pbScriptsRadio">Script</label></td>
+<td><select id="pbScripts" class="pb_sel"><option>-- Choose Script --</option></select></td></tr>
+<tr id="newScriptOption">
+<td><input onclick="_c.chooseScriptType('newScript', 'pbScripts')" type="radio" name="scriptType" id="newScriptRadio" value="new"></td>
+<td><label for="newScriptRadio">New</label></td><td>
+<input type="text" id="newScript" class="pb_sel"/></td></tr>
+</table>
+</div>
+
+<div id="turlbox" style="margin:20px 0px;">
+URL: <input type="text" id="url" class="pb_sel"/>
+</div>
+
+<div>
+<input id="dfile_open_button" type="button" class="topB" value="Open" onclick="_c.pickFile()"/>
+<input type="button" class="topB" value="Cancel" onclick="$('dfile_open').style.display='none';"/>
+<!--<input type="checkbox" id="dfile_append" name="dfile_append" checked="true"/><label for="dfile_append">Append</label>
+--></div>
+</div>
+<!-- File open end -->
+
+<!-- Common end -->
+
+<script>
+var tabGroup1 = new TabGroup("tabGroup1", ["tscripts", "tlogs", "tabout"], "tscripts");
+var tabGroup2 = new TabGroup("tabGroup2", ["tplay", "trecorder"], "trecorder");
+var spyTabs = new TabGroup("spyTabs", ["tspy", "teval", "thistory"], "tspy");
+var openTabs = new TabGroup("openTabs", ["tfile", "turl"], "tfile");
+_c.makeImgButtons();
+</script>
+
+
+</body>
+</html>

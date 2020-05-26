@@ -1,0 +1,54 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%-
+  options[:display_value] ||= '(not set)'
+  @initial_selection = initial_value_for_drop_list([options[:display_value], options[:value]], options[:select_options])
+  @link_class = options[:read_only] ? "transition-hidden-protected" : ""
+-%>
+
+<%= yield %>
+<%= hidden_field_tag(options[:field_name], @initial_selection.last, :id =>"#{options[:html_id_prefix]}_field") %>
+
+<%-
+  append_recent_users = prop_def.is_a?(UserPropertyDefinition) || options[:append_recent_users]
+  dl_options = {
+    :select_options                 => options[:select_options],
+    :html_id_prefix                 => options[:html_id_prefix],
+    :onchange                       => options[:onchange],
+    :support_inline_edit            => options[:support_inline_edit],
+    :support_filter                 => options[:support_filter],
+    :appended_actions               => options[:appended_actions],
+    :inline_add_option_action_title => options[:new_value_message],
+    :initial_selected               => @initial_selection,
+    :numeric                        => prop_def.numeric?,
+    :allow_blank                    => !options[:input_required],
+    :prompt                         => options[:prompt],
+    :onblur                         => options[:onblur],
+    :before                         => options[:before],
+    :centerAlign                    => options[:centerAlign]
+  }
+-%>
+
+<% unless options[:read_only] %>
+  <%= javascript_with_rescue <<-JAVASCRIPT
+    var opts = #{js_options(dl_options)};
+    #{"MingleUI.initUserSelector(opts, 'id');" if append_recent_users}
+    var droplist = new DropList(opts);
+    #{"window.droplists.push(droplist);" if options[:add_droplists_to_array]}
+JAVASCRIPT
+-%>
+<% end %>

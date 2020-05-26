@@ -1,0 +1,410 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>
+      JavaScript unit test file
+    </title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/jquery/jquery.tipsy.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+    <script src="../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+    <script src="test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+
+    <script src="test_assets/unittest.js" type="text/javascript"></script>
+    <script src="test_assets/unittest_ext.js" type="text/javascript"></script>
+
+    <script type="text/javascript">MingleUI = {};</script>
+    <script src="../../app/assets/javascripts/draggable_icon.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/icon_droppable.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/live/view.js" type="text/javascript"></script>
+
+    <script src="test_assets/jquery.mockjax.js" type="text/javascript"></script>
+    <script src="test_assets/jquery.simulate.js" type="text/javascript"></script>
+
+    <link rel="stylesheet" href="assets/unittest.css" type="text/css" />
+    <link rel="stylesheet" href="test_assets/unittest.css" type="text/css" />
+    <style type="text/css" media="screen">
+      #content {
+        padding-top: 0px;
+      }
+      .tipsy {
+position:fixed;
+}
+      div.card-icon {
+        position: relative;
+        width:160px;
+        height:80px;
+        border:1px solid;
+      }
+
+      .card-icon .avatars {
+        border: 1px solid yellow;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+      }
+
+      .card-icon .slot {
+        width: 40px;
+        height: 40px;
+
+
+        float: left;
+        wdith: 32px;
+        height: 32px;
+        border: 1px solid green;
+      }
+
+      .card-icon .slot.selected {
+        border: 1px solid red;
+      }
+
+
+      .avatar {
+      width: 32px;
+      height: 32px;
+      }
+
+      #deletion-tray {
+        height: 40px;
+        border: 1px solid blue;
+      }
+
+      #deletion-tray .slot{
+        height: 38px;
+        width: 38px;
+        margin: 0 auto;
+        border: 1px solid red;
+        text-align: center;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div id="content">
+      <p>This file tests </strong> assiging icons by drag and drop</strong>.</p>
+
+      <div style='border:solid 1px' id='sandbox'>
+        <div class="card-icon" id="c1" data-value-update-url="http://example.com/c1/update">
+          <div class="fa-spin"> </div>
+           #1 eat bamboo
+          <div class="avatars" data-slot-ids="[&quot;Owner&quot;,&quot;Pair&quot;]"></div>
+        </div>
+       <br />
+        <div class="card-icon" id="c2" data-value-update-url="http://example.com/c2/update">
+          <div class="fa-spin" > </div>
+           #2 eat more bamboo
+          <div class="avatars" data-slot-ids="[&quot;Owner&quot;,&quot;Pair&quot;]"></div>
+        </div>
+       <br />
+      <div class="card-icon-placeholder-toggle" data-value="false"></div>
+
+        <div class="team-list">
+          <img class="avatar" id="a1" src="http://static2.businessinsider.com/image/51dd6b0ceab8eaa223000013/chinas-panda-diplomacy-has-entered-a-lucrative-new-phase.jpg" data-name="Panda 1" data-value-identifier="pan1" />
+
+          <img class="avatar" id="a2" src="http://upload.wikimedia.org/wikipedia/commons/c/cd/Panda_Cub_from_Wolong%2C_Sichuan%2C_China.JPG" data-name="Panda 2" data-value-identifier="pan2"/>
+        </div>
+       <br />
+
+
+         <div id="deletion-tray"><div class="slot"></div></div>
+      </div>
+      <!-- Log output -->
+      <div id="testlog"></div>
+    </div>
+    <script type="text/javascript">
+// <![CDATA[
+
+(function($) {
+  $.fn.iconDroppable.WARNING_REMOVAL_DELAY = 200;
+  SAND_BOX_CONTENT = $('#sandbox').html();
+
+  var helpers = {
+    simulateDragTo: function(icon, to, offset, callback) {
+      var icon = $(icon);
+      var to = $(to);
+      var dx = to.offset().left - icon.offset().left;
+      var dy = to.offset().top - icon.offset().top;
+      window.scrollTo(0, 0);
+      icon.simulate("drag", {dx: dx + offset.x, dy: dy + offset.y, moves: 100});
+      if(callback) {
+        this.wait(200, callback.bind(this));
+      }
+    },
+
+    nthRequest: function(index) {
+      var requests = $.mockjax.mockedAjaxCalls();
+      return requests[index];
+    },
+
+
+    lastRequest: function(url) {
+      var requests = $.mockjax.mockedAjaxCalls();
+      if (url) {
+        requests = $.grep(requests, function(r) {
+          return r.url === url
+        })
+      }
+      return requests[requests.length - 1];
+    },
+
+    isUnAssignRequest: function(request, property) {
+      return (
+        ("properties" in request.data) &&
+        (property in request.data["properties"]) &&
+        request.data["properties"][property] === null
+      );
+    },
+
+
+    valueAssigned: function(card, property) {
+      return $(card).find(".slot[data-slot-id='"+ property +"'] img.avatar:visible").data("value-identifier");
+    }
+  };
+
+  new Test.Unit.Runner({
+
+    setup: function() {
+      $.extend(this, helpers);
+      $.mockjax.clear();
+      $(".tipsy").remove();
+      this.c1_update_url = "http://example.com/c1/update";
+      this.c2_update_url = "http://example.com/c2/update";
+
+      $('#sandbox').html(SAND_BOX_CONTENT);
+      $(".avatar").draggableIcon();
+      $('.card-icon').iconDroppable({
+        accept: '.avatar',
+        slotContainer: '.avatars',
+        deletionTray: $('#deletion-tray'),
+        spinner: '.fa-spin'
+      });
+
+      $.mockjax({
+        url: this.c1_update_url,
+        responseTime: 0,
+        type: 'POST'
+      });
+
+      $.mockjax({
+        url: this.c2_update_url,
+        responseTime: 0,
+        type: 'POST'
+      });
+    },
+
+    testDragToAssign: function() { with(this) {
+      simulateDragTo("#a1", "#c1", {x: 2, y:2}, function() {
+        assertEqual("pan1", valueAssigned("#c1", 'Owner'));
+        assertEqual("Owner: Panda 1", $("#c1 .slot[data-slot-id='Owner'] .avatar").attr("title"));
+        assertEqual("pan1", nthRequest(0).data.properties.Owner);
+      });
+    }},
+
+
+    testDragToAssignMultipleIconInSameCard: function() { with(this) {
+      simulateDragTo("#a1", "#c1", {x: 2, y:2}, function() {
+        simulateDragTo("#a2", "#c1", {x: 2, y:2}, function() {
+          assertEqual("pan1", valueAssigned("#c1", 'Owner'));
+          assertEqual("pan2", valueAssigned("#c1", 'Pair'));
+
+          assertEqual("Owner: Panda 1", $("#c1 .slot[data-slot-id='Owner'] .avatar").attr("title"));
+          assertEqual("Pair: Panda 2", $("#c1 .slot[data-slot-id='Pair'] .avatar").attr("title"));
+
+          assertEqual("pan1", nthRequest(0).data.properties.Owner);
+          assertEqual("pan2", nthRequest(1).data.properties.Pair);
+        });
+      });
+    }},
+
+    testDragToDeletionTrayToUnassign: function() { with(this) {
+      simulateDragTo("#a1", "#c1", {x: 2, y:2}, function() {
+        simulateDragTo("#c1 .avatar", "#deletion-tray .slot", {x: 2, y:2}, function(){
+          assert($("#c1").find("img").length === 0);
+          assert(isUnAssignRequest(lastRequest(c1_update_url), 'Owner'));
+        });
+      });
+    }},
+
+    testDragFromOneCardToAnother: function() { with(this) {
+      simulateDragTo("#a1", "#c1", { x: 1, y:2 }, function() {
+        simulateDragTo("#c1 .slot[data-slot-id='Owner'] .avatar", "#c2", { x: 2, y: 2 }, function() {
+          assertEqual('pan1', valueAssigned("#c2", "Owner"));
+          assertEqual("pan1", lastRequest(c2_update_url).data.properties.Owner);
+          assert(isUnAssignRequest(lastRequest(c1_update_url), "Owner"));
+        });
+      });
+    }},
+
+    testDragBetweenCardSlots: function() { with(this) {
+      simulateDragTo("#a1", "#c1", { x: 1, y: 2 }, function() {
+        simulateDragTo("#c1 .slot[data-slot-id='Owner'] .avatar", "#c1", { x: 2, y: 2 }, function() {
+          assertEqual('pan1', valueAssigned("#c1", "Pair"));
+          assertNull(valueAssigned("#c1", "Owner"));
+          assertEqual("pan1", nthRequest(1).data.properties.Pair);
+          assert(isUnAssignRequest(nthRequest(2), 'Owner'));
+        });
+      });
+    }},
+
+    testDragToTheSameSlotShouldBeANoOp: function() { with(this) {
+      simulateDragTo("#a1", "#c1", { x: 1, y: 2 }, function() {
+        $.mockjax.clear();
+        simulateDragTo("#c1 .slot[data-slot-id='Owner'] .avatar", "#c1", { x: 150, y: 2 }, function() {
+          assertEqual('pan1', valueAssigned("#c1", "Owner"));
+          assertNull(valueAssigned("#c1", "Pair"));
+          assertEqual(0, $.mockjax.mockedAjaxCalls().length);
+        });
+      });
+    }},
+
+    testShouldShowErrorMessageOnCardWhenAssignServerUpdateFailed: function() { with(this) {
+      $.mockjax.clear();
+
+      $.mockjax({
+        url: this.c1_update_url,
+        type: 'POST',
+        responseTime: 0,
+        status: 404,
+        responseText: 'not found'
+      });
+
+      simulateDragTo("#a1", "#c1", { x: 1, y: 2 }, function() {
+        assert($("#c1 .update-error").length);
+        assertEqual('pan1', valueAssigned("#c1", "Owner"));
+
+        wait(400, function() {
+          assert(!$("#c1 .update-error").length);
+          assert(!$("#c1 .slot img").length);
+          assertEqual(null, valueAssigned("#c1", "Owner"));
+        }.bind(this));
+      });
+    }},
+
+    testShouldRevertToOldIconWhenAssignFailed: function() { with(this) {
+      simulateDragTo("#a1", "#c1", { x: 1, y: 2 });
+      assertEqual('pan1', valueAssigned("#c1", "Owner"));
+
+      $.mockjax.clear();
+      $.mockjax({
+        url: this.c1_update_url,
+        type: 'POST',
+        responseTime: 0,
+        status: 404,
+        responseText: 'not found'
+      });
+
+      simulateDragTo("#a2", "#c1", { x: 1, y: 2 }, function() {
+        assert($("#c1 .update-error").length);
+        assertEqual('pan2', valueAssigned("#c1", "Owner"));
+        wait(400, function() {
+          assert(!$("#c1 .update-error").length);
+          assertEqual('pan1', valueAssigned("#c1", "Owner"));
+        }.bind(this));
+      });
+    }},
+
+    testShouldRevertBackWhenUnassignFailed: function() { with(this) {
+      simulateDragTo("#a1", "#c1", { x: 1, y: 2 }, function() {
+        $.mockjax.clear();
+        $.mockjax({
+          url: this.c1_update_url,
+          type: 'POST',
+          responseTime: 0,
+          status: 404,
+          responseText: 'not found'
+        });
+
+        simulateDragTo("#c1 .avatar", "#deletion-tray .slot", {x: 2, y:2}, function() {
+          assert($("#c1 .update-error").length);
+          assertEqual(null, valueAssigned("#c1", "Owner"));
+          wait(400, function() {
+            assert(!$("#c1 .update-error").length);
+            assertEqual('pan1', valueAssigned("#c1", "Owner"));
+          }.bind(this));
+        })
+      });
+
+    }},
+
+    testShouldRevertBackBothCardWhenAssigningBetweenCardAssignFailed: function() { with(this) {
+      simulateDragTo("#a1", "#c1", { x: 1, y: 2 }, function() {
+        $.mockjax.clear();
+        $.mockjax({
+          url: this.c2_update_url,
+          type: 'POST',
+          responseTime: 0,
+          status: 404,
+          responseText: 'not found'
+        });
+
+        simulateDragTo("#c1 .slot[data-slot-id='Owner'] .avatar", "#c2", { x: 2, y: 2 }, function() {
+          assert($("#c2 .update-error").length);
+          assertEqual('pan1', valueAssigned("#c2", "Owner"));
+          assertEqual(null, valueAssigned("#c1", "Owner"));
+          wait(400, function() {
+            assertEqual(null, valueAssigned("#c2", "Owner"));
+            assertEqual("pan1", valueAssigned("#c1", "Owner"));
+          }.bind(this));
+        });
+
+      });
+    }},
+
+    testShouldRevertBackUnassignWhenAssigningBetweenCardUnAssignFailed: function() { with(this) {
+      // simulateDragTo("#a1", "#c1", { x: 1, y: 2 }, function() {
+      //   $.mockjax.clear();
+      //   $.mockjax({
+      //     url: this.c2_update_url,
+      //     type: 'POST',
+      //     responseTime: 0,
+      //   });
+      //
+      //   $.mockjax({
+      //     url: this.c1_update_url,
+      //     type: 'POST',
+      //     responseTime: 0,
+      //     status: 404,
+      //     responseText: 'not found'
+      //   });
+      //
+      //   simulateDragTo("#c1 .slot[data-slot-id='Owner'] .avatar", "#c2", { x: 2, y: 2 }, function() {
+      //     assert($("#c1 .update-error").length);
+      //     assertEqual('pan1', valueAssigned("#c2", "Owner"));
+      //     assertEqual(null, valueAssigned("#c1", "Owner"));
+      //     wait(1000, function() {
+      //       assertEqual("pan1", valueAssigned("#c2", "Owner"));
+      //       assertEqual("pan1", valueAssigned("#c1", "Owner"));
+      //     }.bind(this));
+      //   });
+      //
+      // });
+    }}
+
+
+  }, { testLog: "testlog", test : '' }).run;
+})(jQuery);
+
+// ]]>
+</script>
+  </body>
+</html>

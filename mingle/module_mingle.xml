@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<project name="module_mingle" default="compile.module.mingle">
+  <dirname property="module.mingle.basedir" file="${ant.file.module_mingle}"/>
+
+  <property name="module.jdk.home.mingle" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.mingle" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.mingle" value="${project.jdk.classpath}"/>
+
+  <property name="compiler.args.mingle" value="${compiler.args}"/>
+
+  <property name="mingle.output.dir" value="${module.mingle.basedir}/tmp/classes/production/mingle"/>
+  <property name="mingle.testoutput.dir" value="${module.mingle.basedir}/tmp/classes/test/mingle"/>
+
+  <path id="mingle.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+
+  <path id="mingle.module.classpath">
+    <path refid="${module.jdk.classpath.mingle}"/>
+    <pathelement location="${basedir}/vendor/java/hsqldb-1.8.0.7.jar"/>
+    <pathelement location="${basedir}/vendor/java/jetty-plus-6.1.19.jar"/>
+    <pathelement location="${basedir}/vendor/java/activation-1.1.jar"/>
+    <pathelement location="${basedir}/vendor/java/derby-10.2.2.0.jar"/>
+    <pathelement location="${basedir}/vendor/java/ant.jar"/>
+    <pathelement location="${basedir}/vendor/java/jetty-6.1.19.jar"/>
+    <pathelement location="${basedir}/vendor/java/commons-pool-1.3.jar"/>
+    <pathelement location="${basedir}/vendor/java/postgresql-8.2-505.jdbc3.jar"/>
+    <pathelement location="${basedir}/vendor/java/jruby-complete-1.7.27.jar"/>
+    <pathelement location="${basedir}/vendor/java/jetty-util-6.1.19.jar"/>
+    <pathelement location="${basedir}/vendor/java/servlet-api.jar"/>
+    <pathelement location="${idea.home}/lib/javaee.jar"/>
+  </path>
+
+  <path id="mingle.runtime.module.classpath">
+    <pathelement location="${mingle.output.dir}"/>
+    <pathelement location="${mingle.testoutput.dir}"/>
+    <pathelement location="${basedir}/vendor/java/hsqldb-1.8.0.7.jar"/>
+    <pathelement location="${basedir}/vendor/java/jetty-plus-6.1.19.jar"/>
+    <pathelement location="${basedir}/vendor/java/activation-1.1.jar"/>
+    <pathelement location="${basedir}/vendor/java/derby-10.2.2.0.jar"/>
+    <pathelement location="${basedir}/vendor/java/ant.jar"/>
+    <pathelement location="${basedir}/vendor/java/jetty-6.1.19.jar"/>
+    <pathelement location="${basedir}/vendor/java/commons-pool-1.3.jar"/>
+    <pathelement location="${basedir}/vendor/java/postgresql-8.2-505.jdbc3.jar"/>
+    <pathelement location="${basedir}/vendor/java/jruby-complete-1.7.27.jar"/>
+    <pathelement location="${basedir}/vendor/java/jetty-util-6.1.19.jar"/>
+    <pathelement location="${basedir}/vendor/java/servlet-api.jar"/>
+    <pathelement location="${idea.home}/lib/javaee.jar"/>
+  </path>
+
+
+  <patternset id="excluded.from.module.mingle">
+    <patternset refid="ignored.files"/>
+  </patternset>
+
+  <patternset id="excluded.from.compilation.mingle">
+    <patternset refid="excluded.from.module.mingle"/>
+  </patternset>
+
+
+  <target name="compile.module.mingle" depends="compile.module.mingle.production,compile.module.mingle.tests" description="Compile module mingle"/>
+
+  <target name="compile.module.mingle.production" description="Compile module mingle; production classes"/>
+
+  <target name="compile.module.mingle.tests" depends="compile.module.mingle.production" description="compile module mingle; test classes" unless="skip.tests"/>
+
+  <target name="clean.module.mingle" description="cleanup module">
+    <delete dir="${mingle.output.dir}"/>
+    <delete dir="${mingle.testoutput.dir}"/>
+  </target>
+
+  <target name="j2ee.build.mingleweb" depends="compile.module.mingle" description="Build configured Java EE directories and archives for facet &apos;Web&apos;"/>
+
+  <!-- Call the target to build exploded directory for facet 'Web'.
+       Path to the exploded directory is specified by parameter 'j2ee.dir.exploded' -->
+  <target name="j2ee.build.exploded.mingleweb" description="Build exploded directory for facet &apos;Web&apos;">
+    <copy file="${module.mingle.basedir}/config/web.xml" tofile="${j2ee.dir.exploded}/WEB-INF/web.xml"/>
+    <copy todir="${j2ee.dir.exploded}/WEB-INF">
+      <fileset dir="${module.mingle.basedir}/config"/>
+    </copy>
+  </target>
+
+  <!-- Call the target to build war archive for facet 'Web'.
+       Path to the archive file is specified by parameter 'j2ee.path.jar' -->
+  <target name="j2ee.build.jar.mingleweb" description="Build Java EE archive for facet &apos;Web&apos;">
+    <dirname property="jar.dir" file="${j2ee.path.jar}"/>
+    <mkdir dir="${jar.dir}"/>
+    <jar destfile="${j2ee.path.jar}" duplicate="preserve">
+      <manifest>
+        <attribute name="Created-By" value="IntelliJ IDEA"/>
+        <attribute name="Manifest-Version" value="1.0"/>
+      </manifest>
+      <zipfileset dir="${module.mingle.basedir}/config" prefix="WEB-INF"/>
+      <zipfileset file="${module.mingle.basedir}/config/web.xml" prefix="WEB-INF"/>
+    </jar>
+  </target>
+</project>

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>SwitchingDatasource test</title>
+
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/live/switching_datasource.js" type="text/javascript"></script>
+
+  <link rel="stylesheet" href="../test_assets/qunit-1.21.0.css" type="text/css" />
+</head>
+<body>
+  <div id="qunit"></div>
+  <div id="qunit-fixture"></div>
+
+  <script src="../test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+  <script src="../test_assets/qunit-phantom.js" type="text/javascript"></script>
+  <script type="text/javascript">
+
+    function FoobarbaseDatasource(endpoint, options) { // a Firebase-like service :)
+      var eventHolder = $("<div/>");
+
+      function parseTag(url) {
+        var parts = url.split("/");
+        return parseInt(parts[parts.length - 2], 10);
+      }
+
+      this.tag = function() {
+        return parseTag(endpoint).toString();
+      };
+
+      this.endpointAt = function (tag) {
+        return endpoint.replace("/" + parseTag(endpoint) + "/", "/" + tag + "/");
+      };
+
+      this.nextEndpoint = function() {
+        return this.endpointAt(parseTag(endpoint) + 1);
+      };
+
+      this.prevEndpoint = function() {
+        return this.endpointAt(parseTag(endpoint) - 1);
+      };
+
+      this.on = function(event, handler) {
+        eventHolder.on(event, eventWrapper(handler));
+        return this;
+      };
+
+      this.terminate = function() {
+        eventHolder.off();
+        this.status = "dead";
+      };
+
+      // used only by tests
+
+      function eventWrapper(fn) {
+        return function(e, snapshot, previous) {
+          fn(snapshot, previous);
+        };
+      }
+
+      this.status = "online";
+      this.fakeEventEmitter = eventHolder;
+    }
+
+    FoobarbaseDatasource.nextTag = function(tag) {
+      return (parseInt(tag, 10) + 1).toString();
+    };
+    FoobarbaseDatasource.prevTag = function(tag) {
+      return (parseInt(tag, 10) - 1).toString();
+    };
+
+    function map(array, method) {
+      var result = [];
+
+      for (var i = 0, len = array.length; i < len; i++) {
+        result.push(method(array[i]));
+      }
+
+      return result;
+    }
+
+    function pluck(array, property) {
+      return map(array, function(obj) {
+        return obj[property];
+      });
+    }
+
+    function invoke(array, method) {
+      return map(array, function(obj) {
+        return obj[method]();
+      });
+    }
+
+    function FederatedFoobar() {
+      var eventHolder = $("<div/>");
+
+      function eventWrapper(fn) {
+        return function(e, tag) {
+          fn(tag);
+        };
+      }
+
+      Fixture.registerFed(this);
+
+      this.useStrategy = function(handler) {
+        eventHolder.on("value", eventWrapper(handler));
+      };
+
+      this.broadcast = function(newTag) {
+        eventHolder.trigger("value", [newTag.toString()]);
+      };
+    }
+
+    // less typing :)
+    SwitchingDatasource = MingleUI.live.SwitchingDatasource;
+    FirebaseDatasource = MingleUI.live.FirebaseDatasource;
+
+    var Fixture = (function() {
+      var messages = [], federated = [], listening = null;
+
+      return {
+        endpoints: function () {
+          var base = "http://foobarbase.com/live_ish/";
+
+          return [
+            base + "1/events",
+            base + "2/events",
+            base + "3/events"
+          ];
+        },
+        federatedEndpoint: "http://foobarbase.com/current",
+        registerFed: function(fed) {
+          federated.push(fed);
+        },
+        fed: function() { return federated; },
+        messages: function() { return messages; },
+        receiver: function(snapshot, previous) { messages.push(snapshot); },
+        listening: function() { return listening; },
+        listen: function(bool) {listening = !!bool; },
+        reset: function() {
+          messages = [], federated = [], listening = null;
+        }
+      };
+
+    })();
+
+    // mock Firebase
+    Firebase = function Foobarbase(url) {
+      var parser = $("<a/>").get(0);
+      parser.href = url;
+
+      this.root = function() {
+        return [parser.protocol, "//", parser.hostname, "/"].join("");
+      };
+
+      this.toString = function() {
+        return url;
+      };
+
+      function stub() {
+        return this;
+      }
+
+      this.authWithCustomToken = stub;
+      this.orderByChild = stub;
+      this.startAt = stub;
+      this.limitToLast = stub;
+
+      this.on = function() { Fixture.listen(true); };
+      this.off = function() { Fixture.listen(false); };
+    };
+
+    QUnit.module("SwitchingDatasource tests", { beforeEach: Fixture.reset });
+
+    QUnit.test("Sets up datasources", function(assert) {
+      var ds = new SwitchingDatasource(Fixture.endpoints(), $.noop, {provider: FoobarbaseDatasource});
+
+      var actual = invoke(ds.sources, "tag");
+      assert.strictEqual(3, ds.sources.length, "all datasources should have been added");
+      assert.deepEqual(actual, ["1", "2", "3"], "order of datasources should be maintained");
+    });
+
+    QUnit.test("Listens on all datasources", function(assert) {
+      var ds = new SwitchingDatasource(Fixture.endpoints(), Fixture.receiver, {provider: FoobarbaseDatasource});
+      var publishers = pluck(ds.sources, "fakeEventEmitter");
+
+      var previous = publishers[0], current = publishers[1], next = publishers[2];
+      previous.trigger("child_added", ["prev-source", null]);
+      current.trigger("child_added", ["current-source", null]);
+      next.trigger("child_added", ["next-source", null]);
+
+      assert.deepEqual(Fixture.messages(), ["prev-source", "current-source", "next-source"]);
+    });
+
+    QUnit.test("Federated tag flushes all datasources if it is outside of the current datasource tag range", function(assert) {
+      var ds = new SwitchingDatasource(Fixture.endpoints(), Fixture.receiver, {
+        provider: FoobarbaseDatasource,
+        federation: {
+          endpoint: Fixture.federatedEndpoint,
+          provider: FederatedFoobar
+        }
+      });
+
+      assert.deepEqual(invoke(ds.sources, "tag"), ["1", "2", "3"], "datasources should initially reflect configured endpoints");
+
+      Fixture.fed()[0].broadcast(3); // simulate tag federation
+
+      assert.deepEqual(invoke(ds.sources, "tag"), ["1", "2", "3"], "when federated tag is already in the list of datasources, do nothing");
+
+      Fixture.fed()[0].broadcast(5); // simulate tag federation
+
+      assert.deepEqual(invoke(ds.sources, "tag"), ["4", "5", "6"], "datasources should be flushed and renewed when federated tag is not included in current set");
+    });
+
+    QUnit.test("Performs switch when latest datasource receives data", function(assert) {
+      var ds = new SwitchingDatasource(Fixture.endpoints(), Fixture.receiver, {provider: FoobarbaseDatasource});
+      assert.deepEqual(invoke(ds.sources, "tag"), ["1", "2", "3"], "should start with original datasource set");
+
+      var publishers = pluck(ds.sources, "fakeEventEmitter");
+
+      var previous = publishers[0], current = publishers[1], next = publishers[2];
+      previous.trigger("child_added", ["prev-source", null]);
+      current.trigger("child_added", ["current-source", null]);
+
+      assert.deepEqual(invoke(ds.sources, "tag"), ["1", "2", "3"], "switch is not triggered by data on current or previous datasources");
+      assert.deepEqual(invoke(ds.sources, "tag"), ["1", "2", "3"]);
+      assert.deepEqual(Fixture.messages(), ["prev-source", "current-source"]);
+
+      var evict = ds.sources[0];
+      next.trigger("child_added", ["next-source", null]);
+
+      assert.deepEqual(Fixture.messages(), ["prev-source", "current-source", "next-source"]);
+      assert.deepEqual(invoke(ds.sources, "tag"), ["2", "3", "4"], "should switch datasource when next datasource receives data");
+      assert.deepEqual(pluck(ds.sources, "status"), ["online", "online", "online"], "all active datasources are still online");
+      assert.strictEqual(evict.status, "dead", "evicted datasource should be terminated");
+    });
+
+    QUnit.module("FirebaseDatasource tests", { beforeEach: Fixture.reset });
+
+    QUnit.test("FirebaseDatasource.nextTag() should calculate the next retention date (adding 7 days)", function(assert) {
+      assert.strictEqual(FirebaseDatasource.nextTag("2016-01-04"), "2016-01-11", "should add 7 days to current date");
+      assert.strictEqual(FirebaseDatasource.nextTag("2015-12-28"), "2016-01-04", "should work across year boundaries");
+      assert.strictEqual(FirebaseDatasource.nextTag("2016-02-23"), "2016-03-01", "should work around leap years at the end of Feb");
+      assert.strictEqual(FirebaseDatasource.nextTag("2015-02-23"), "2015-03-02", "should work around normal years at the end of Feb");
+    });
+
+    QUnit.test("FirebaseDatasource.prevTag() should calculate the previous retention date (subtracting 7 days)", function(assert) {
+      assert.strictEqual(FirebaseDatasource.prevTag("2016-01-11"), "2016-01-04", "should add 7 days to current date");
+      assert.strictEqual(FirebaseDatasource.prevTag("2016-01-04"), "2015-12-28", "should work across year boundaries");
+      assert.strictEqual(FirebaseDatasource.prevTag("2016-03-01"), "2016-02-23", "should work around leap years at the end of Feb");
+      assert.strictEqual(FirebaseDatasource.prevTag("2015-03-02"), "2015-02-23", "should work around normal years at the end of Feb");
+    });
+
+    QUnit.test("FirebaseDatasource functionality", function(assert) {
+      var ds = new FirebaseDatasource("http://foobarbase.com/live_ish/2016-01-25/events", {token: "hello"});
+
+      assert.strictEqual(ds.nextEndpoint(), "http://foobarbase.com/live_ish/2016-02-01/events", "should generate endpoint in the future");
+      assert.strictEqual(ds.prevEndpoint(), "http://foobarbase.com/live_ish/2016-01-18/events", "should generate endpoint in the past");
+      assert.strictEqual(ds.endpointAt("2016-01-04"), "http://foobarbase.com/live_ish/2016-01-04/events", "should generate endpoint at an arbitrary date");
+      assert.strictEqual(ds.tag(), "2016-01-25", "should parse tag from configured endpoint");
+
+      ds.on("child_added", $.noop);
+      assert.strictEqual(Fixture.listening(), true, "should listen for data after binding listener");
+
+      ds.terminate();
+      assert.strictEqual(Fixture.listening(), false, "should stop listening on termination");
+    });
+
+    QUnit.done(function(result){console.log(result);});
+  </script>
+</body>
+</html>

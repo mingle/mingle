@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE subsection SYSTEM "mingle_help.dtd">
+<section title="Manage user group membership" id="manage_user_groups">
+	<todo>Write this section (#10038)</todo>
+      <p>The team list shows which <cref topic="user_groups">user groups</cref> each team member belongs to. You can add and remove team members from user groups on this page. In the following screenshot, two team members have been selected and the "Groups" button has been clicked. You can see from the list of user groups that both team members belong to the "BAs" user group. At this point, you could remove both of them from the "BAs" user group or add them both to any of the other user groups.</p>
+      <screenshot alttext="Managing user groups from team list" src="resources/images/team_list_user_groups.png"></screenshot>
+      <note>
+        <p>If a user group is partially checked, it means that some, but not all selected team members are part of the user group. In the following screenshot, Brenda and Dan are selected. Brenda is in the "BAs" user group, but Dan is not. Therefore, the "BAs" user group is partially checked. Likewise, the "Developers" user group is partially checked because Dan is in that user group, but Brenda is not.</p>
+      <screenshot alttext="Partially checked user groups" src="resources/images/team_list_user_groups_partially_checked.png"></screenshot>
+      </note>
+</section>

@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Printing cards">
+	<section title="Printing a single card">
+		<p>In Mingle 2.3, we provide the ability to print a single card.</p>
+		<p>Click on the 'Print' link from the action bar on a card view.</p>
+			<screenshot alttext="single card print" src="resources/images/single_card_print_link.png"/>
+			<p>The printed card includes</p>
+			<bullets>
+				<item>card number</item>
+				<item>card title</item>
+				<item>card version information</item>
+				<item>all card description</item>
+				<item>all properties and values</item>
+				<item>card murmurs</item>
+				<item>names of all attachments (if any)</item>
+				<item>tags</item>
+			</bullets>
+	</section>
+	
+	<section title="Printing multiple cards" id="printing_from_card_list">
+		<p>You can print multiple cards from the card list view.</p>
+		<subsection file="card_printing_from_list_view" />
+	</section>
+	
+	<bullets title="Also see...">
+	   			<item><cref topic="list_view">List view</cref></item>
+				<item><cref topic="card_view_page">Card view</cref></item>
+	  </bullets>
+</topic>

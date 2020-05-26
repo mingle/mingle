@@ -1,0 +1,44 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<tr class="<%=row_class(user) %>" id="<%= user.html_id %>" <%= raw(add_title_if_is_light_user(user)) %>>
+  <% content_tag('td', :accessing => 'team:destroy') do -%>
+    <%= check_box_tag('selected_users[]', user.id, Array(params[:selected_users]).include?(user.id.to_s), :id => "selected_membership_#{user.id}", :class => 'select-membership') %>
+  <%- end -%>
+
+  <td class='user-name'><%= team_member_link(user) %></td>
+
+  <td><%= user.login %></td>
+
+  <% # this doesn't map to a real action so we are hijacking one with the same permission level %>
+  <%= content_tag("td", h(user.email), :class => 'email') if authorized?(:controller => 'projects', :action => 'request_membership') %>
+
+  <td class="permissions_column">
+    <div class="member_permission">
+      <span class='drop-list-panel' id="permission-container-for-<%= user.html_id %>">
+        <%- if can_current_user_modify_user_permissions?(user) -%>
+          <%= render :partial => 'permission_droplist', :locals => { :user => user, :droplist => user_permission_droplist(user) } %>
+        <% else %>
+          <span class="role_name"><%= @project.role_for(user).name %></span>
+        <% end %>
+      </span>
+    </div>
+  </td>
+
+  <td id="<%= "#{user.html_id}_groups" %>"><%= raw @project.groups_for_member(user).sort_by {|g| g.name.downcase }.map {|g| link_to(h(g.name), group_show_url(:id => g.id, :back_to_team => true))}.join(', ') %>
+  </td>
+
+</tr>

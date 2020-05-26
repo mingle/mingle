@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE section SYSTEM "mingle_help.dtd">
+<section title="Git integration for Mingle in the Cloud" id="git_saas">
+<p>The following instructions outline how to integrate your Git repo with your Mingle project. You can integrate multiple Git repos to a single project and connect a single Git repo to multiple projects. However, you must integrate one Git repo to one Mingle project at a time.</p>
+<note>
+  <bullets>
+    <item>This integration allows your Git commits to be pushed as <cref topic="murmurs">murmurs</cref> to your Mingle project under the murmurs tab and, when you mention the card number in your commit message, the individual card as well.</item>
+    <item><strong>TIP</strong>: If you <cref topic="murmurs">murmur</cref> at an existing team member (e.g. @user) in your Git commit message that person will also receive an email notification.</item>
+  </bullets>
+</note>    
+  <subsection title="Requirements">
+    <bullets>
+      <item>Git server repository on UNIX/Linux OS</item>
+      <item>Ruby 1.9+, and rubygems. (If you need it on ruby 1.8, <exref url="http://support.thoughtworks.com/anonymous_requests/new">contact our Support team</exref> so we can fix it.)</item>
+    </bullets>  
+  </subsection>
+  
+  <subsection title="Steps">
+    <steps>
+      <item><strong><cref topic="creating_user_profiles">Create a new user</cref> in Mingle for the Git integration</strong> (<ital>N.B. Only Mingle admins can create new users.</ital>)</item>
+          <bullets>
+              <item>Suggested username: Git (We suggest this so the murmurs will appear under a "Git" heading.)</item>
+              <item>Suggested login: "git" or project specific name. (For example, we want to integrate git with project “mingle”, so I use “mingle_git” as this user’s login name.)</item>
+          </bullets>      
+      <item><strong>Assign the user to the project you want to integrate with your Git repository</strong></item> 
+          <bullets>
+              <item>Go to the new user’s profile page</item>
+              <item>Open the “<cref topic="configuring_hmac_authentication">HMAC Auth Key</cref>” tab and generate a new HMAC key (<ital>N.B. Only Mingle admins can generate an HMAC key for other users.</ital>)</item>
+              <item>Keep the downloaded credentials as you’ll need them later to configure your Git repository</item>
+          </bullets>
+      <item><strong>Log on to your Git server</strong></item>   
+      <item><strong>Install ruby gem “murmurs” as root</strong></item>    
+          <bullets>
+              <item>Check out this documents for <exref url="https://github.com/mingle/murmurs">more details of this murmurs gem</exref>.</item>
+          </bullets>
+      <item><strong>Install Mingle Git integration hook by typing the following command (you may need to execute as the user having write permission to the git repository path):</strong></item>   
+          <bullets>
+              <item>murmurs -a [your git repository location]</item>
+              <note>Note: In some OS ruby 1.9, the script may be renamed murmurs 1.9</note>
+          </bullets>
+      <item><strong>In your Git repository, setup the following configs:</strong></item>   
+          <steps>
+             <item>git config hooks.minglemurmursurl "https://<strong>your-site</strong>.mingle-api.thoughtworks.com/api/v2/projects/<strong>your-project</strong>/murmurs.xml"</item>
+             <item>git config hooks.mingleaccesskeyid [your git integration user access key id]</item>
+             <item>git config hooks.mingleaccesssecretkey [your git integration user access secret key]</item>
+          </steps>      
+    </steps>
+  </subsection>
+  
+  <subsection title="Test your Git Integration">
+    <p>If you want to try out the integration before running it on your production Git server, you can use the following to get a feel for how your Git server will integrate with your Mingle project. (Please install murmurs gem, and get all configurations mentioned above ready before you start.)</p>
+    <steps>
+       <item><strong>Create a local git repository</strong></item>
+           <bullets>
+               <item>cd /tmp</item>
+               <item>mkdir mingle_test</item>
+               <item>cd mingle_test</item>
+               <item>git init --bare</item>
+           </bullets>  
+       <item><strong>Setup murmurs git integration</strong></item>
+            <bullets>
+               <item>murmurs -a /tmp/mingle_test</item>
+               <item>cd /tmp/mingle_test</item>
+               <item>git config hooks.minglemurmursurl "https://<strong>your-site</strong>.mingle-api.thoughtworks.com/api/v2/projects/<strong>your-project</strong>/murmurs.xml"</item>
+               <item>git config hooks.mingleaccesskeyid [Mingle user access key id]</item>
+               <item>git config hooks.mingleaccesssecretkey [Mingle user access secret key]</item>
+            </bullets>       
+       <item><strong>Clone a local test repository</strong></item>
+            <bullets>
+               <item>cd /tmp</item>
+               <item>git clone mingle_test mingle_test_local</item>
+            </bullets>
+       <item><strong>Make an empty commit and push to origin master to trigger post-receive hook on origin repository</strong></item>
+            <bullets>
+               <item>cd mingle_test_local</item>
+               <item>git commit --allow-empty -m "hello world, this is git mingle integration test"</item>
+               <item>git push origin master</item>
+            </bullets> 
+      </steps>        
+    </subsection>             
+      
+</section>

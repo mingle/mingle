@@ -1,0 +1,65 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% if CurrentLicense.status.enterprise? && card.is_a?(Card) -%>
+<div class="dependencies-drop-down prevent-inline-edit view-mode-only" data-create-url="<%= url_for :controller => :dependencies, :action => :create %>">
+
+  <div class="dependencies-popover">
+    <h3 class="card-content-heading">
+      <i class="mng mng-dep-base"></i> Dependencies
+      <% if authorized?(:controller => :dependencies, :action => :create) %>
+        <i class="fa fa-plus dependencies-caret"></i>
+      <% end %>
+    </h3>
+
+    <% if authorized?(:controller => :dependencies, :action => :create) %>
+      <div class="content">
+
+        <input type="hidden" name="dependencies[raising_card_number]" value="<%= card.number %>"/>
+
+        <label>
+          Name:
+          <input type="text" name="dependencies[name]" maxlength="255" />
+        </label>
+
+        <label>
+          Description:
+          <textarea type="text" name="dependencies[description]"></textarea>
+        </label>
+
+        <label>
+          Desired Completion Date:
+          <input type="text" name="dependencies[desired_end_date]" placeholder="yyyy-mm-dd"/>
+        </label>
+
+        <label>
+          Project:
+          <%=
+            select("dependencies", "resolving_project_id", projects_accepting_dependencies())
+          %>
+        </label>
+
+        <div class="actions">
+          <input type="submit" value="Add" class="primary" disabled />
+        </div>
+
+      </div>
+    <% end %>
+  </div>
+  <%= render :partial => "cards/popup_dependencies_list", :locals => {:dependencies => card.raised_dependencies, :dependency_type => 'raising' } %>
+  <%= render :partial => "cards/popup_dependencies_list", :locals => {:dependencies => card.dependencies_resolving, :dependency_type => 'resolving' } %>
+</div>
+<% end -%>

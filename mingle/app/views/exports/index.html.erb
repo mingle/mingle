@@ -1,0 +1,71 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= render :partial => 'shared/top_level_header_pills', :locals => {:selected_tab => 'export_data'} %>
+<% content_tag(:div, :id => 'export-container', 'data-export' => @export.to_json) do %>
+	<h1>
+		Export Mingle data
+	</h1>
+  <% if User.current.admin? %>
+    <p id="export-description">With Mingle’s
+      <a href='https://www.thoughtworks.com/mingle/news/2018/07/31/mingle-is-retiring.html' target='blank' class="eol-link">End of Life announcement</a>, we
+      want to give you the ability to export all the data in this Mingle instance. Select what you would like to export.
+      When the export is complete, it will be available to download. More information about the export structure is available in our <a href='https://www.thoughtworks.com/mingle/docs/mingle_eol.html' target='blank' class="eol-link">Help documentation</a>. </p>
+    <div class="export-status">
+      <p class="message"></p>
+      <p id="in-progress-message">The export is in progress and may take some time. You can return to this page later; the export will continue even if you’re not on this page. <br/> <br/></p>
+      <div class="export-trigger-info"></div>
+      <div class="export-progress-bar"></div>
+    </div>
+    <input id='cancel-data-export' value='Cancel' type="button" />
+    <% content_tag(:form, {:id => 'export-checklist-form', :autocomplete => "off"}) do -%>
+      <h1 class="accordion-toggle" >
+        Export Options
+      </h1>
+      <div id="export-checklist" class="accordion-content">
+        <%= render :partial => 'user_data', :locals => {:users_count => @users_count, :admins_count => @admins_count, :user_icons_count => @user_icons_count} %>
+        <%= render :partial => 'projects_data', :locals => {:projects => @projects} %>
+        <% if CurrentLicense.registration.enterprise? -%>
+          <%= render :partial => 'programs_data', :locals => {:programs => @programs} if Program.count != 0 %>
+          <%= render :partial => 'dependencies_data', :locals => {:dependencies_count => @dependencies_count} if @dependencies_count != 0 %>
+        <% end %>
+        <p>If you have any queries about the export, please refer to our <a href='https://www.thoughtworks.com/mingle/docs/mingle_eol.html' target='blank' class="eol-link">Help documentation</a> or write to us at <a class="eol-link" href="mailto:support@thoughtworks.com">support@thoughtworks.com</a></p>
+        <br/>
+        <input class='primary' id='mingle-data-export' value='Start Export' type="button" />
+      </div>
+    <% end %>
+  <% else -%>
+    <div id="export-description">
+      <p>With Mingle’s
+        <a href='https://www.thoughtworks.com/mingle/news/2018/07/31/mingle-is-retiring.html' target='blank' class="eol-link">End of Life announcement</a>,
+        we
+        want to give you the ability to export all the data in this Mingle instance.</p>
+      <br/>
+      <p><a href='https://www.thoughtworks.com/mingle/docs/mingle_eol.html' target='blank' class="eol-link">How to export</a></p>
+      <br/>
+      <p><strong>Who can export</strong></p>
+      <br/>
+      <p>Any Mingle administrator can start the export:</p>
+      <ul id="mingle-admins-list">
+        <% User.admins.shift_each! do |admin| -%>
+          <li>
+            <%= admin.name %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+<% end %>

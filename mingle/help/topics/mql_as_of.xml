@@ -1,0 +1,126 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<section title="Using AS OF in MQL">
+<p>Mingle supports a feature to query historical card information. Using this feature, you can see what the final values of a card property are at the end of a day.</p>
+<note>
+  <p>This feature has not been fully integrated into Mingle, but we believe it provides enough value, even in an introductory state, to be included as part of the product. In particular, with the introduction of the <cref topic="macro_reference#daily_history_chart">daily history chart</cref>, we wanted to provide a way to verify and analyze the chart data, which querying historical card data allows. See the specific limitation warnings below.</p>
+</note>
+<subsection title="Example Data">
+  <p>The easiest way to understand querying historical card information is to see an example. The example below runs against a Mingle project with the following card data:</p>
+  <p>At the end of July 12, 2010, the project contains the following cards:</p>
+  <table>
+    <header-row>
+      <col-header>Number</col-header>
+      <col-header>Estimate</col-header>
+      <col-header>Status</col-header>
+    </header-row>
+    <row>
+      <col>1</col>
+      <col>2</col>
+      <col>Open</col>
+    </row>
+    <row>
+      <col>2</col>
+      <col>8</col>
+      <col>Open</col>
+    </row>
+  </table>
+  <p>On July 13, 2010, card #3 was added and there were some changes made to the existing cards:</p>
+  <table>
+    <header-row>
+      <col-header>Number</col-header>
+      <col-header>Estimate</col-header>
+      <col-header>Status</col-header>
+    </header-row>
+    <row>
+      <col>1</col>
+      <col>5</col>
+      <col>Open</col>
+    </row>
+    <row>
+      <col>2</col>
+      <col>8</col>
+      <col>Closed</col>
+    </row>
+    <row>
+      <col>3</col>
+      <col>1</col>
+      <col>Open</col>
+    </row>
+  </table>
+</subsection>
+<subsection title="MQL 'AS OF' date">
+  <p>In Mingle 3.2, you can now execute MQL "AS OF" a certain date. For example, running against the example data above, the following MQL query:</p>
+  <markup>SELECT Number, Estimate AS OF "July 12, 2010" WHERE Status=Open</markup>
+  <p>will yield the following results:</p>
+  <table>
+    <header-row>
+      <col-header>Number</col-header>
+      <col-header>Estimate</col-header>
+    </header-row>
+    <row>
+      <col>1</col>
+      <col>2</col>
+    </row>
+    <row>
+      <col>2</col>
+      <col>8</col>
+    </row>
+  </table>
+  <p>Some things to notice:</p>
+  <bullets>
+    <item><strong>AS OF "July 12, 2010"</strong> is between the SELECT clause and the WHERE condition.</item>
+    <item>The values that are returned are the values as of July 12, 2010. Notice in the example data above that the Estimate for card #1 was changed from "2" to "5" on July 13, 2010. The query results show that card #1 has an Estimate of "2", which was the case on July 12, 2010.</item>
+    <item>The WHERE condition is compared against the card data as of July 12, 2010. Notice in the example data above that the Status for card #2 was changed from "Open" to "Closed" on July 13, 2010. The results include card #2, because it had a status of "Open" on July 12, 2010.</item>
+    <item>Cards that have been added after the "AS OF" date aren't included, even if they match the WHERE condition. Card #3 has an "Open" Status on July 13, 2010. However, the card did not exist at the end of July 12, 2010, so it is not included in the results.</item>
+  </bullets>
+  <warning><p>As noted above, querying historical card information is not fully integrated into Mingle. The only place that we have specifically intended the "AS OF" functionality to work is in the <cref topic="macro_reference#table_query">table query macro</cref>. For example,</p>
+    <markup>table query: SELECT Number, Estimate AS OF "July 12, 2010" WHERE Status=Open</markup>
+    <p>is how you would use the query examples above.</p>
+    <p>Most importantly, we have not tested where the "AS OF" functionality <strong>does not</strong> work. The behavior of "AS OF" in any other area of Mingle is officially "undefined" - meaning that you may or may not get the results you expect. <strong>If you attempt to use "AS OF" in any other area, make sure you have saved any data you don't want to lose</strong>.</p>
+  </warning>
+  <note>
+    <p>Regular MQL without an "AS OF" clause, continues to work in Mingle 3.2. For example, running against the example data above, the following MQL query:</p>
+    <markup>SELECT Number, Estimate WHERE Status=Open</markup>
+    <p>will yield the following results:</p>
+    <table>
+      <header-row>
+        <col-header>Number</col-header>
+        <col-header>Estimate</col-header>
+      </header-row>
+      <row>
+        <col>1</col>
+        <col>5</col>
+      </row>
+      <row>
+        <col>3</col>
+        <col>1</col>
+      </row>
+    </table>
+    <p>This is standard MQL that has always been available in Mingle.</p>
+  </note>
+</subsection>
+<subsection title="Limitations">
+  <p>Querying card history has some limitations that regular MQL does not have. These limitations are due to the historical information that is available in Mingle. When you use "AS OF" in a MQL statement, you will not be able to use the following:</p>
+  <bullets>
+    <item><cref topic="mql_reference#from_tree">FROM TREE</cref> to select cards from a tree.</item>
+    <item><cref topic="mql_reference#tagged_with">Tagged with</cref> to select cards with tags.</item>
+  </bullets>
+</subsection>
+</section>

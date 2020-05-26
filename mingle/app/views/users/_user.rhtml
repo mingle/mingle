@@ -1,0 +1,66 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<tr id='<%= user.html_id %>' class="<%=row_class(user)%>">
+  <td><%= user_link(user, :id => "show-profile-#{user.id}") %></td>
+  <td><%= user.login %></td>
+  <td><%= user.email %></td>
+  <%- if FEATURES.active?('scm') -%>
+  <td><%= user.version_control_user_name %></td>
+  <%- end -%>
+  <td class="align-center">
+    <%= check_box_to_remote "light-user", '1', user.light?,
+          {
+            :url => {:action => 'toggle_light', :id => user.id}.merge(list_action_params),
+            :before => show_spinner('spinner'),
+            :complete => hide_spinner('spinner'),
+          },
+          :id => "light-user-#{user.id}",
+          :disabled => !allow_change_to_light?(user),
+          :disable_on_access_denied => true
+    %>
+  </td>
+  <td class="align-center">
+    <%= check_box_to_remote "admin-user", '1', user.admin?,
+          {
+            :url => {:action => 'toggle_admin', :id => user}.merge(list_action_params),
+            :before => show_spinner('spinner'),
+            :complete => hide_spinner('spinner'),
+          },
+          :id => "admin-user-#{user.id}",
+          :disabled => !allow_change_to_admin?(user),
+          :disable_on_access_denied => true
+    %>
+  </td>
+  <%- if authorized?(:controller => 'users', :action => 'toggle_activate') -%>
+  <td><%= time_since_last_login(user) %></td>
+  <%- end -%>
+  <td>
+    <%= user.activation_state %>
+    <%= link_to_remote("(#{user.activated? ? 'deactivate' : 'activate'})",
+                       {
+                         :url => {:action => 'toggle_activate', :id => user.id}.merge(list_action_params),
+                         :before => show_spinner('spinner'),
+                         :complete => hide_spinner('spinner'),
+                       },
+                       { :id  => "#{user.html_id}_toggle_activation", :class => 'actionable' } )  if can_activate_user?(user) %>
+  </td>
+  <%- if can_update_password? -%>
+    <td class="standard-link-spacing normal-font">
+      <%= link_to("Change password", {:action => 'change_password', :id => user}.merge(list_action_params), :id => "change-password-#{user.id}", :class => 'actionable' ) if supports_password_change? %>
+    </td>
+  <%- end -%>
+</tr>

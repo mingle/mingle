@@ -1,0 +1,251 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+#slack_integration {
+  #slack-notification-subscription {
+    margin-top: 10px;
+  }
+  .title {
+    margin-bottom: 20px;
+  }
+
+  .slack-team, .slack-link, .slack-help-link {
+    font-weight: bolder;
+    cursor: pointer;
+    color: $MINGLE_PRIMARY_COLOR;
+
+    &:hover {
+      color: $MINGLE_PRIMARY_ACTIVE;
+    }
+  }
+
+  .content {
+    font-size: larger;
+
+    .status {
+
+      .help-text {
+        margin: 10px 0 5px 0;
+
+        em {
+          font-weight: bolder;
+          color: #4c4c4c;
+        }
+      }
+
+      .slack-tnc-submit {
+        margin-top: 10px;
+        border: 1px solid $MINGLE_PRIMARY_COLOR;
+        color: $MINGLE_PRIMARY_COLOR;
+
+        &:hover {
+          background-color: $MINGLE_PRIMARY_COLOR;
+          color: white;
+        }
+
+        &:disabled {
+          border: 1px solid #666666;
+          color: #666;
+
+          &:hover {
+            background-color: #EEE;
+          }
+        }
+      }
+    }
+
+    .slack-user {
+      font-weight: bolder;
+    }
+  }
+
+  #select_slack_channel {
+    .note {
+      margin: 10px 0px;
+    }
+
+    p {
+      padding-bottom: 10px;
+    }
+
+    select {
+      font-family: 'FontAwesome', Arial;
+      min-width: 100px;
+
+      option {
+        padding: 1px;
+      }
+
+      .cancel[disabled] {
+        background: #EEE;
+        border: 1px #c9c9c9 solid;
+      }
+    }
+
+    #slack_authorization, .authorisation-note {
+      padding: 10px 0 5px 0;
+    }
+
+    #authorization-steps {
+      padding: 10px 10px 0 10px;
+      background: #f3f3f3;
+      margin-bottom: 10px;
+      display: inline-block;
+      position: relative;
+
+      &:before {
+        content: "";
+        height: 0;
+        width: 0;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-bottom: 10px solid #f3f3f3;
+        position: absolute;
+        top: -8px;
+      }
+    }
+  }
+
+  .remove-slack-integration {
+    margin-top: 25px;
+
+    .help-text {
+      padding-bottom: 5px;
+    }
+
+    .remove_integration_form {
+      margin-top: 10px;
+    }
+  }
+
+  .next-steps {
+    margin-top: 25px;
+  }
+
+  .actions {
+    margin-top: 10px;
+  }
+
+  .slack-terms-and-conditions-container {
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+    #eula_acceptance {
+      margin-right: 5px;
+    }
+
+    .tnc-switch {
+      font-weight: bolder;
+      cursor: pointer;
+      color: $MINGLE_PRIMARY_COLOR;
+
+      &:hover {
+        color: $MINGLE_PRIMARY_ACTIVE;
+      }
+    }
+
+    .tnc {
+      background-color: #F0F0F0;
+      margin: 20px;
+      padding: 10px;
+      max-width: 600px;
+      text-align: justify;
+      position: relative;
+
+      &:before {
+        content: "";
+        height: 0;
+        width: 0;
+        border-left: 20px solid transparent;
+        border-right: 20px solid transparent;
+        border-bottom: 20px solid #F0F0F0;
+        position: absolute;
+        top: -18px;
+        left: 150px;
+      }
+    }
+  }
+  #slack-notification-subscription {
+    h3 {
+      margin-top: 20px;
+    }
+
+    .subscription-note {
+      margin-top: 8px;
+      margin-bottom: 5px;
+    }
+  }
+  .map-multiple-channel {
+    #add-remove-channels-header {
+      h2 {
+        font-size: 16px;
+        font-weight: 400;
+      }
+      margin-bottom: 10px;
+    }
+    #add-remove-channels-content {
+    }
+  }
+  .primary-channel-mapped-massage {
+    margin-bottom: 25px;
+    .heading {
+      margin-bottom: 10px;
+    }
+    .primary-channel {
+      strong {
+        font-weight: 500;
+        color: rgba(51, 51, 51, 0.77);
+      }
+      span {
+        margin-left: 2px;
+      }
+    }
+  }
+
+  #slack-channel-list {
+    display: flex;
+    flex-direction: row;
+
+    .slack-channel-container {
+      margin-top: 0px;
+      margin-left: 0px;
+      margin-right: 20px;
+      overflow-y: auto;
+      padding: 0 10px 5px 0;
+      max-height: 250px ;
+      li {
+        display: -webkit-box;
+        display: -moz-box;
+        display: -ms-box;
+        display: box;
+        input {
+          cursor: pointer;
+          margin-right: 10px;
+        }
+      }
+    }
+    .slack-channel-group-level {
+      width: 130px;
+      border-bottom: 1px dotted gray;
+      strong {
+        font-weight: 500;
+      }
+    }
+  }
+  #transition_to_slack_channel_mapping{
+    margin-bottom: 20px;
+  }
+}

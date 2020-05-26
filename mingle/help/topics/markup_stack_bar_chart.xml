@@ -1,0 +1,249 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE subsection SYSTEM "mingle_help.dtd">
+<subsection title="Stacked bar chart" id="stack_bar">
+  <markup_reference
+    title="Suppose you are tracking when cards enter scope, have been fully prepared for development, and are completed. 
+    You would like a chart that can display a running total of cards in each of those three states at the end of each iteration. 
+    To most effectively use the stack-bar-chart to display this sort of chart you will need to track three separate 'iteration' properties, each specifying when the card entered a particular state.">
+    <note>
+      <bullets>
+        <item>Macro markup is space sensitive and we advise you to stick to the indentation scheme specified in the example. If you add project as a parameter this needs to be added to a new line as shown in the markup below.</item>
+        <item>You can use the stack bar chart to create a <cref topic="markup_cumulative_flow_diagram">cumulative flow diagram</cref>.</item>
+      </bullets>       
+    </note>
+    <icon alttext="Stack bar chart toolbar icon"
+      src="resources/images/toolbar_ratio_bar_chart_icon.png" />
+    <markup>
+  stack-bar-chart
+    conditions: 'Release' = '2.3' AND 'Type' = 'Story' AND NOT 'Iteration' = NULL
+    labels: SELECT DISTINCT 'Iteration'
+    cumulative: true
+    project: agile
+    series:
+    - label: Closed
+      color: green
+      type: bar
+      data: SELECT 'Closed Iteration', COUNT(*) WHERE NOT 'Closed Iteration' = NULL
+      combine: overlay-bottom
+    - label: Analysis Complete
+      color: yellow
+      type: bar
+      data: SELECT 'Analysis Complete Iteration', COUNT(*) WHERE NOT 'Analysis Complete Iteration' = NULL
+      combine: overlay-bottom
+    - label: Entire Scope
+      color: blue
+      type: bar
+      data: SELECT 'Entered Scope Iteration', COUNT(*) WHERE NOT 'Entered Scope Iteration' = NULL
+      combine: total
+    </markup>
+    <preview>
+      <screenshot alttext="Example stack bar chart" src="resources/images/charts_stack_bar_chart_example.png" />
+    </preview>
+  </markup_reference>
+  <table caption="Parameters">
+    <header-row>
+      <col-header>Name</col-header>
+      <col-header>Meaning</col-header>
+      <col-header>Required</col-header>
+      <col-header>Default value</col-header>
+    </header-row>
+    <group title="Chart-level options" col-headers="true">
+    <row>
+      <label>conditions</label>
+      <col><cref topic="mql_reference#where">MQL condition</cref> that restricts the cards which will be included in all of the data series</col>
+      <col>No</col>
+      <col>If not specified, all cards will be considered for each series.</col>
+    </row>
+    <row>
+      <label>labels</label>
+      <col><cref topic="mql_reference">MQL query</cref> that returns a list of values to be used as labels across the x-axis. Using the example above, all values for a card type 'Iteration' are returned and used as labels for the x-axis in the stack bar chart. You must use 'SELECT' statement. This works similarly as x-labels-conditions or x-labels-property on data series chart. </col>
+      <col>No</col>
+      <col>If not specified, the values of the first property specified on the 'data' parameter on 'series level' will be used as the x-axis labels. </col>
+    </row>
+    <row>
+      <label>cumulative</label>
+      <col>Whether each data series includes all previous series. I.e., if a bar shows only data for that x-axis label, or a running total, including its own data and all previous bars.</col>
+      <col>No</col>
+      <col>TRUE</col>
+    </row>
+    <row>
+      <label>x-label-start</label>
+      <col>Allow user to specify the start value for labels on the x axis. Must be a valid, existing value for the x labels property. Defaults to first value for the x labels property. When x labels property is a date property, the value can be earlier than any existing value. Note that when plotting a cumulative chart, this parameter does not impact the scope of included cards in any data accumulation. I.e, this parameter only impacts the scope of what is drawn. Use the conditions parameter to restrict the cards to be accumulated.</col>
+      <col>No</col>
+      <col>If not specified, the first label value returned by the label query will be used.</col>
+    </row>
+    <row>
+      <label>x-label-end</label>
+      <col>Allow user to specify the end value for labels on the x axis. Must be a valid, existing value for the x labels property. Defaults to last value for the x labels property. When x labels property is a date property, the value can be later than any existing value. Note that when plotting a cumulative chart, this parameter does not impact the scope of included cards in any data accumulation. I.e, this parameter only impacts the scope of what is drawn. Use the conditions parameter to restrict the cards to be accumulated.</col>
+      <col>No</col>
+      <col>If not specified, the last label value returned by the label query will be used.</col>
+    </row>
+    <row>
+      <label>x-label-step</label>
+      <col>Allow user to specify that only every N labels should be displayed on the x-axis. This is useful when plotting against a property with many values, such as date properties. Default is 1, except in the case of date properties with more than 14 values, in which case the default is 7.
+      </col>
+      <col>No</col>
+      <col>If not specified, the following defaults will be used depending on what kind of property is used on the x-axis. 5 days at a time for Date Properties. Every label value for others.</col>
+    </row>
+    <row>
+      <label>x-labels-tree</label>
+      <col>When charting against a card property, this parameter allows the user to specify a tree from which to define the x-labels values. Using this parameter will mean x-labels are displayed as hierarchical names and card numbers will not be used. In practice this is likely only to be needed in the situation where charts are used to visualize data from multiple projects and where the cards that represent the data in these projects (e.g. "Release 1" or "Iteration 1") are not the same card numbers.
+        </col>
+      <col>No</col>
+      <col>If not specified card numbers will be used to as x-labels values.</col>
+    </row>
+    <row>
+      <label>x-title</label>
+      <col>The title for the x-axis. Use this to override the default if there is a better name to explain what the labels represent.</col>
+      <col>No</col>
+      <col>If not specified, the property name of the series with a combine of 'total' series will be used. If no series is specified with a of 'total', the property of the very first series will be used.</col>
+    </row>
+    <row>
+      <label>y-title</label>
+      <col>The title for the y-axis.</col>
+      <col>No</col>
+      <col>If not specified, this will default to the property name of the first series.</col>
+    </row>
+    <row>
+      <label>three-d</label>
+      <col>If set to true, 3-d effects will be turned on. Data series of type bar will be shown as rectangular columns. Data series of type area will be shown in different layers, stacked one behind the other. Line graphs do not benefit much from 3-d effects.</col>
+      <col>No</col>
+      <col>false</col>
+    </row>
+        <row>
+          <label>chart-height</label>
+          <col>Specify the height of the entire chart (plot area plus legend) in pixels.</col>
+          <col>No</col>
+          <col>300</col>
+        </row>
+        <row>
+          <label>chart-width</label>
+          <col>Specify the width of the entire chart (plot area plus legend) in pixels.</col>
+          <col>No</col>
+          <col>400</col>
+        </row>
+        <row>
+          <label>plot-height</label>
+          <col>Specify the height of the plot area in pixels.</col>
+          <col>No</col>
+          <col>220</col>
+        </row>
+        <row>
+          <label>plot-width</label>
+          <col>Specify the width of the plot area in pixels.</col>
+          <col>No</col>
+          <col>230</col>
+        </row>
+          <row>
+            <label>plot-x-offset</label>
+            <col>Specify the length of the offset of the plot area from the right of the chart area in pixels. Increasing the offset will move the plot closer to the centre of the chart area.</col>
+            <col>No</col>
+            <col>50</col>
+          </row>
+          <row>
+            <label>plot-y-offset</label>
+            <col>Specify the length of the offset of the plot area from the top of the chart area in pixels. Increasing the offset will move the plot closer to the centre of the chart area.</col>
+            <col>No</col>
+            <col>10</col>
+          </row>
+          <row>
+            <label>label-font-angle</label>
+            <col>Angle of the x-axis labels.</col>
+            <col>No</col>
+            <col>45</col>
+          </row>
+            <row>
+              <label>legend-top-offset</label>
+              <col>Specify the offset of the legend from the top of the chart area in pixels. Increasing the offset will move the legend lower in the chart area. </col>
+              <col>No</col>
+              <col>5</col>
+            </row>
+            <row>
+              <label>legend-offset</label>
+              <col>Specify the offset of the legend from the right side of the plot area in pixels. A negative offset will move the legend inside the plot area. </col>
+              <col>No</col>
+              <col>20</col>
+            </row>
+              <row>
+                <label>legend-max-width</label>
+                <col>Specify the maximum width of the legend in pixels. Legend labels will wrap to fit the maximum width.</col>
+                <col>No</col>
+                <col>120</col>
+              </row>
+      <row>
+      <label>series</label>
+      <col>A list of data series. Each series represents a portion of each bar on the bar chart. When type is set to area or line, each series represents a different chart line. (Note that each series need not select the same property for this chart to be meaningful. Each series must select data that is of the same type and same scale, but not the exact same property.)</col>
+      <col>Yes.  At least one series must be specified.</col>
+      <col />
+    </row>
+    </group>
+        <group title="Chart-level options that can be overridden by any individual series" col-headers="true">
+      <row>
+        <label>project</label>
+        <col>Any valid project identifier, specifying which project’s cards will be plotted by this chart. Authorization will be enforced upon view. That is, if a user does not have access to a project, the card or wiki page will not be available for that user.</col>
+        <col>No</col>
+        <col>Default is the project to which the page or card containing the macro belongs to.</col>
+      </row>
+    </group>
+        <group title="Series-level options" col-headers="true">
+    <row>
+      <label>label</label>
+      <col>The name of this series to appear in the chart's legend</col>
+      <col>No</col>
+      <col />
+    </row>
+    <row>
+      <label>color</label>
+      <col>A hex string or standard web color to be used when rendering a series</col>
+      <col>No</col>
+      <col />
+    </row>
+    <row>
+      <label>data</label>
+      <col>A <cref topic="mql_reference">MQL query</cref> that selects property values and an aggregation of those values. The property values will be used to group the aggregation. The aggregation represents how much of the bar will be represented by this series.</col>
+      <col>Yes</col>
+      <col />
+    </row>
+    <row>
+      <label>combine</label>
+      <col>How to combine the value of this series with the values of other series in a given bar. Valid values are total, overlay-top, and overlay-bottom. Use total to specify that a series represents the full height of the bar. Use overlay-bottom to have this series render in a stack, starting at the bottom of the bar. Use overlay-top to have this series render in a stack, starting at the top of the bar. </col>
+      <col>Yes</col>
+      <col />
+    </row>
+    <row>
+      <label>type</label>
+      <col>How to draw a series. Valid values are area, line, and bar.</col>
+      <col>No</col>
+      <col>bar</col>
+    </row>
+    <row>
+      <label>hidden</label>
+      <col>Will the graph for this data series show up in the final graph? Use this to not show data series that are only used for calculation. This is similar to setting the series color to transparent.</col>
+      <col>No</col>
+      <col>false</col>
+    </row>
+    <row>
+      <label>project</label>
+      <col>Any valid project identifier, specifying which project’s cards will be plotted by this series. Authorization will be enforced upon view. That is, if a user does not have access to a project, the card or wiki page will not be available for that user.</col>
+      <col>No</col>
+      <col>Defaults to what is defined at the chart level.</col>
+    </row>
+    </group>
+  </table>
+</subsection>

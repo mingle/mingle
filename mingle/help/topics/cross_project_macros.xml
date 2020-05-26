@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE section SYSTEM "mingle_help.dtd">
+<section title="Cross project macros" id="cross_project_macros">
+<p>Mingle 3.0 includes updates to the <cref topic="building_your_own_macro">Macro Development Toolkit</cref> to facilitate cross project reporting for program management. As an example of the cross project macro functionality available via the Macro Development Toolkit, Mingle 3.0 ships with a new macro called <cref topic="markup_cross_project_rollup">cross-project-rollup</cref>.</p>
+<subsection title="Cross project rollup" file="markup_cross_project_rollup" collapsed="true" />
+</section>

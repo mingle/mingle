@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Creating a new aggregate property">
+	<section title="Navigate to the Aggregate properties page" collapsed="true" file="navigate_to_aggregate_properties_page" />
+	<screenshot alttext="Aggregate properties page" src="resources/images/aggregate_properties_page.png" caption="Aggregate properties page"/>
+	<section title="Create the aggregate property...">
+		<subsection title="Select the card type">
+			<p>To add an aggregate property, click on the <link>Edit aggregates</link> link on the card type where you want the aggregate property to be reported. 
+           For example, if you wanted to show the sum of the estimates for all stories in an Epic, you would create the aggregate property at the Epic card level. Mingle will display the Aggregate properties control.</p>
+		</subsection>
+		<screenshot alttext="Aggregate properties control" src="resources/images/aggregate_properties_control.png"/>
+		<subsection title="Configure the aggregation...">
+			<bullets>
+				<item>Enter a <strong>name</strong> for the new aggregate property</item>
+				<item>
+					<p>Select the aggregation type you want to apply (<strong>Sum, Average, Minimum, Maximum, Count</strong>)</p>
+					<note>Aggregate properties <strong>ignore values of (not set)</strong>, so the Average of [1, 3, 6, (not set)] is 3; and the Min of [1, 3, 7, (not set)] is 1;</note>
+				</item>
+				<item>Select the <strong>scope</strong> for the aggregation. You can choose between <strong>a specific card type</strong>, <strong>All descendants</strong> or <strong>Define condition...</strong>. 
+            		<bullets><item><strong>A specific card type</strong> will apply the aggregation to only descendants of the currently selected level in the tree which are of the specified type</item><item><strong>All descendants</strong> will aggregate the selected property for all descendants regardless of type</item><item><strong>Define condition...</strong> will aggregate the children cards that meet the <cref topic="mql_reference">specified MQL condition</cref>. For example, if you want to aggregate stories and bugs but not tasks you can use "Type = Story or Type = Bug and Type != Task" or if you want to aggregate only the Must stories then use a query such as "Type = Story and Priority = Must"</item></bullets>
+				</item>
+				<item>
+					<p><strong>Select the property</strong> which you want to aggregate from the list of available child properties. In the case of Count, no property can be selected.</p>
+					<p>The list of available properties is made up of numeric properties that belong to the card type chosen in the scope dropdown. 
+                		(In the case of all descendants, it is all numeric properties that belong to at least one of the card types falling below the aggregate level)</p>
+					<note>For <strong>All descendants</strong> - if the property is not present in all descendant card types, the aggregation ignores types which do not declare the property.</note>
+				</item>
+			</bullets>
+		</subsection>
+		<subsection title="Save your work...">
+			<p>Click on the <button>Add aggregate property</button> button to create the new aggregate property</p>
+			<p>Mingle will display the new aggregate property in the list at the bottom of the Aggregate property control.</p>
+			<hint>
+				<p>To check that the aggregate property is working as you expect, open a card of the appropriate type which is a member of the tree in which you created the aggregate property, and take a look at the value.</p>
+				<p>Aggregate values are re-computed in the background, so it may take a few moments before your changes are visible.</p>
+			</hint>
+		</subsection>
+	</section>
+	<section title="Also see...">
+		<bullets>
+			<item>
+				<cref topic="modifying_or_deleting_aggregate_properties">Modifying or deleting aggregate properties</cref>
+			</item>
+			<item>
+				<cref topic="card_trees">Card trees</cref>
+			</item>
+		</bullets>
+	</section>
+</topic>

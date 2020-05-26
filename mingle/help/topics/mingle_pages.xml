@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_help.dtd">
+<topic title="Mingle pages">
+  <section title="Instance pages">
+    <p>These are the pages that outside of a particular project or plan.</p>
+    <note>The instance pages that are available for you are determined by your user role. In particular, many of these pages are only available to Mingle administrators.</note>
+    <bullets>
+      <item><cref topic="about_page">About page</cref></item>
+      <item><cref topic="all_projects_page">Projects page</cref></item>
+      <item><cref topic="configure_database_page">Configure database page</cref></item>
+      <item><cref topic="configure_email_settings_page">Configure email settings page</cref></item>
+      <item><cref topic="edit_profile_page">Edit profile page</cref></item>
+      <item><cref topic="explore_mingle_page">Explore mingle page</cref></item>
+      <item><cref topic="manage_templates_page">Manage templates page</cref></item>
+      <item><cref topic="sign_in_page">Sign in page</cref></item>
+      <item><cref topic="sign_out_page">Sign out page</cref></item>
+      <item><cref topic="manage_users_page">Users page</cref></item>
+    </bullets>
+  </section>
+  <section title="Project pages">
+    <bullets>
+      <item><cref topic="all_projects_page">Projects page</cref></item>
+      <item><cref topic="advanced_project_administration_page">Advanced project administration page</cref></item>
+      <item><cref topic="card_grid_page">Card grid page</cref></item>
+      <item><cref topic="card_list_page">Card list page</cref></item>
+      <item><cref topic="card_keywords_page">Card keywords page</cref></item>
+      <item><cref topic="card_properties_page">Card properties page</cref></item>
+      <item><cref topic="card_property_values_page">Card property values page</cref></item>
+      <item><cref topic="card_transitions_page">Card transitions page</cref></item>
+      <item><cref topic="admin_card_trees_page">Card trees page</cref></item>
+      <item><cref topic="card_view_page">Card view page</cref></item>
+      <item><cref topic="explore_mingle_page">Explore mingle page</cref></item>
+      <item><cref topic="favorites_and_tabs_page">Favorites and tabs page</cref></item>
+      <item><cref topic="transition_workflow_page">Generate transition workflow page</cref></item>
+      <item><cref topic="history_tab">History tab</cref></item>
+      <item><cref topic="murmurs_project_collaboration_settings">Murmurs settings page</cref></item>
+      <item><cref topic="project_overview_tab">Overview tab</cref></item>
+      <item><cref topic="working_with_pages">Page</cref></item>
+      <item><cref topic="pages_page">"Pages" page</cref></item>
+      <item><cref topic="project_settings_page">Project settings page</cref></item>
+      <item><cref topic="revisions_page">Revisions page</cref></item>
+      <item><cref topic="source_tab">Source tab</cref></item>
+      <item><cref topic="tags_page">Tags page</cref></item>
+      <item><cref topic="project_team_page">Team page</cref></item>
+      <item><cref topic="user_group_page">User group page</cref></item>
+      <item><cref topic="user_groups_page">User groups page</cref></item>
+    </bullets>
+  </section>
+  <section title="Project components">
+    <p>You will frequently encounter the same components on different pages. Once you understand how a component works on a particular page, you can apply that understanding to every page that uses the component.</p>
+    <bullets>
+      <item><cref topic="card_murmurs_and_history_components">Card murmurs and history</cref></item>
+      <item><cref topic="my_favorites_component">My favorites</cref></item>
+      <item><cref topic="favorites_component">Favorites </cref></item>
+      <item><cref topic="filter_history_component">Filter history</cref></item>
+      <item><cref topic="filter_list_by_component">Filter cards</cref></item>
+      <item><cref topic="formatting_help_component">Formatting help</cref></item>
+      <item><cref topic="import_export_component">Import / Export</cref></item>
+      <item><cref topic="managing_favorites_and_tabs">Favorites</cref></item>
+      <item><cref topic="subscription_component">Subscription</cref></item>
+      <item><cref topic="page_history_component">History</cref></item>
+    </bullets>
+  </section>
+</topic>

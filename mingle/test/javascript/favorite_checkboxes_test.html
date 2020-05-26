@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>JavaScript unit test file</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+  <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+
+  <script src="test_assets/unittest.js" type="text/javascript"></script>
+  <script src="test_assets/unittest_ext.js" type="text/javascript"></script>
+
+
+  <script src="../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/controls.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/builder.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+
+  <script src="../../public/javascripts/application.js" type="text/javascript"></script>
+
+  <link rel="stylesheet" href="assets/unittest.css" type="text/css" />
+  <link rel="stylesheet" href="test_assets/unittest.css" type="text/css" />
+</head>
+<body>
+
+<div id="content">
+
+  <div id="header">
+    <h1>JavaScript unit test file</h1>
+    <p>
+      This file tests the FavoriteCheckboxes class in <strong>application.js</strong>.
+    </p>
+  </div>
+  <!-- Log output -->
+  <div id="testlog"> </div>
+
+  <div style ='border:solid 1px' id='sandbox'>
+    <h3> sandbox: </h3>
+    <form onsubmit='Prototype.emptyFunction' id="top_status">
+      <span id="wiki-favorite-and-tab-control-wrapper">
+        <a id="top_favorite_link" class="wiki-favorite-unselected" title="Make team favorite">Make team favorite</a>
+        <a id="bottom_favorite_link" class="wiki-favorite-unselected" title="Make team favorite">Make team favorite</a>
+      </span>
+      <input id="top_status[favorite]" name="status[favorite]" type="checkbox" value="true" />
+      <input id="top_status[tab]" name="status[tab]" type="checkbox" value="true" />
+      <input id="bottom_status[favorite]" name="status[favorite]" type="checkbox" value="true" />
+      <input id="bottom_status[tab]" name="status[tab]" type="checkbox" value="true" />
+    </form>
+  </div>
+
+  <div id='mock'></div>
+</div>
+
+<script type="text/javascript">
+// <![CDATA[
+  new Test.Unit.Runner({
+
+    setup: function() {
+      if (navigator.appVersion.match(/Konqueror|Safari|KHTML/) != null){
+        return;
+      }
+      $('top_status[favorite]').checked = false;
+      $('bottom_status[favorite]').checked = false;
+
+      this.addTabLinks = function(){
+        this._addTabLink('top');
+        this._addTabLink('bottom');
+      };
+
+      this._addTabLink = function(id_prefix){
+        var tab_link = Builder.node('a', {id : id_prefix + '_tab_link', className: 'wiki-tab-unselected', title: 'Make tab'}, 'Make tab');
+        $('wiki-favorite-and-tab-control-wrapper').appendChild(tab_link);
+      };
+
+      this.favoriteCheckboxes = new FavoriteCheckboxes();
+    },
+
+    teardown: function() {
+      if (navigator.appVersion.match(/Konqueror|Safari|KHTML/) != null){
+        return;
+      }
+      this._removeTabLink = function(id_prefix){
+        var tab_link = $(id_prefix + '_tab_link');
+        if (tab_link) { tab_link.remove(); }
+      };
+      this._removeTabLink('top');
+      this._removeTabLink('bottom');
+      this.favoriteCheckboxes = null;
+    },
+
+    testFavoriteLinkOnClickShouldUpdateTheFavoriteCheckboxes: function() { with(this) {
+      if (navigator.appVersion.match(/Konqueror|Safari|KHTML/) != null){
+        return;
+      }
+      this.favoriteCheckboxes.favoriteLinkOnClick();
+      assertEqual(true, $('top_status[favorite]').checked)
+      assertEqual(true, $('bottom_status[favorite]').checked)
+      this.favoriteCheckboxes.favoriteLinkOnClick();
+      assertEqual(false, $('top_status[favorite]').checked)
+      assertEqual(false, $('bottom_status[favorite]').checked)
+    }},
+
+    testTabLinkOnClickShouldUpdateTheTabCheckboxes: function() { with(this) {
+      if (navigator.appVersion.match(/Konqueror|Safari|KHTML/) != null){
+        return;
+      }
+      this.addTabLinks();
+      this.favoriteCheckboxes.tabLinkOnClick();
+      assertEqual(true, $('top_status[tab]').checked)
+      assertEqual(true, $('bottom_status[tab]').checked)
+      this.favoriteCheckboxes.tabLinkOnClick();
+      assertEqual(false, $('top_status[tab]').checked)
+      assertEqual(false, $('bottom_status[tab]').checked)
+    }}
+  }, "testlog");
+// ]]>
+</script>
+</body>
+</html>

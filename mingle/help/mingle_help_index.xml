@@ -1,0 +1,214 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE index SYSTEM "topics\mingle_help.dtd">
+<index>
+  <entry reference="welcome_to_mingle">
+    <entry reference="whats_new_in_mingle"/>
+    <entry reference="mingle_tips_and_tricks"/>
+  </entry>
+  <entry reference="mingle_eol"/>
+  <entry reference="getting_started_in_mingle">
+    <entry reference="creating_mingle_projects"/>
+    <entry reference="quick_project_setup" />
+    <entry reference="explore_mingle" />
+    <entry reference="need_more_help" />
+  </entry>
+   <entry reference="using_mingle">
+     <entry reference="signing_in_and_out_of_mingle" />
+     <entry reference="getting_around_in_mingle" />
+     <entry reference="mingle_search" />
+   </entry>  
+   <entry reference="working_with_cards">
+        <entry reference="creating_a_card" >
+          <entry reference="formatting_help_component" />
+          <entry reference="attaching_and_inserting_objects_and_links" />
+        </entry>
+        <entry reference="viewing_cards">
+             <entry reference="finding_cards_to_work_with" />
+             <entry reference="filter_list_by_component" />
+             <entry reference="maximizing_card_views" />
+             <entry reference="list_view" />
+             <entry reference="grid_view" >
+                 <entry reference="card_rankings" />
+             </entry>
+        </entry>      
+     		<entry reference="updating_cards">
+     			<entry reference="updating_cards_in_bulk" />
+     		</entry>
+       	<entry reference="viewing_card_history_and_murmurs" />
+       	<entry reference="linking_source_files_to_cards" />
+       	<entry reference="murmurs_card_links"/>
+       	<entry reference="copying_a_card"/>
+       	<entry reference="deleting_a_card"/>
+       	<entry reference="card_printing" />
+   </entry>  
+ 	<entry reference="working_with_pages">
+ 	  <entry reference="creating_a_page">
+ 	      <entry reference="formatting_help_component" />
+        <entry reference="attaching_and_inserting_objects_and_links" />
+    </entry>    
+ 		<entry reference="finding_a_page" />
+ 	    <entry reference="recently_viewed_pages_control" />
+ 	    <entry reference="viewing_previous_versions_of_pages" />	  
+ 	    <entry reference="setting_up_quick_header_links" />
+ 	    <entry reference="collaborating_with_pages" />
+       <entry reference="deleting_a_page"/>
+   </entry>    
+   <entry reference="working_with_tags">
+       <entry reference="creating_tags_for_cards_or_pages" />
+   </entry>
+   <entry reference="working_with_card_trees">
+       <entry reference="viewing_a_card_tree">
+         <entry reference="hierarchy_view" />
+         <entry reference="tree_view" />
+         <entry reference="tree_filter" />
+       </entry>
+       <entry reference="adding_and_removing_cards_from_a_tree" />
+   </entry>
+   <entry reference="managing_your_user_profile" />
+   <entry reference="viewing_project_changes">
+       <entry reference="subscribing_via_feeds" />
+       <entry reference="subscribing_via_email" />
+   </entry>
+   <entry reference="murmurs">
+       <entry reference="using_murmurs"/>
+   </entry>
+   <entry reference="customizing_projects">
+     <entry reference="managing_mingle_templates" />
+     <entry reference="manage_users_page" >
+       <entry reference="creating_user_profiles" />
+       <entry reference="managing_your_user_profile" />
+       <entry reference="user_roles" />
+     </entry>
+     <entry reference="managing_project_team_members">
+       <entry reference="add_all_users_as_team_members"/>
+       <entry reference="add_user_to_multiple_projects"/>
+      <entry reference="user_groups"/>
+     </entry>
+     <entry reference="card_types">
+       <entry reference="maintaining_card_types" />
+       <entry reference="card_defaults" />
+     </entry>
+     <entry reference="card_properties">
+       <entry reference="creating_card_properties" />
+       <entry reference="modifying_or_deleting_card_properties" />
+       <entry reference="formula_properties">
+         <entry reference="creating_a_formula_property" />
+         <entry reference="formula_property_examples" />
+       </entry>
+       <entry reference="relationship_properties" />
+       <entry reference="maintain_card_property_values" />
+       <entry reference="transition_only_properties" />
+     </entry>
+     <entry reference="card_keywords">
+       <entry reference="creating_card_keywords" />
+       <entry reference="updating_card_keywords" />
+     </entry>
+     <entry reference="managing_favorites_and_tabs">
+       <entry reference="creating_a_favorite_card_view" />
+       <entry reference="creating_a_favorite_page" />
+       <entry reference="creating_tabs_from_favorites" />
+       <entry reference="creating_tabs_from_pages" />
+       <entry reference="updating_a_favorite_and_a_tab" />
+     </entry>    
+     <entry reference="managing_tags" />
+     <entry reference="project_variables">
+       <entry reference="creating_project_variables" />
+       <entry reference="modifying_or_deleting_project_variables" />
+     </entry>
+     <entry reference="card_trees">
+       <entry reference="administering_card_trees">
+         <entry reference="creating_a_new_card_tree" />
+         <entry reference="modifying_an_existing_card_tree" />
+         <entry reference="deleting_a_card_tree" />
+       </entry>
+       <entry reference="working_with_card_trees">
+         <entry reference="viewing_a_card_tree" />
+         <entry reference="adding_and_removing_cards_from_a_tree" />
+       </entry>
+       <entry reference="aggregate_properties">
+         <entry reference="creating_a_new_aggregate_property" />
+         <entry reference="modifying_or_deleting_aggregate_properties" />
+       </entry>
+     </entry>
+     <entry reference="card_transitions">
+       <entry reference="creating_card_transitions" />
+       <entry reference="card_transition_filters" />
+       <entry reference="transition_workflow_page" />
+       <entry reference="modifying_or_deleting_card_transitions" />
+       <entry reference="automated_transitions" />
+     </entry>
+     <entry reference="project_numeric_precision" />
+     <entry reference="murmurs">
+     </entry>
+   </entry>
+   <entry reference="macro_and_mql_guide">
+     <entry reference="creating_charts_and_tables" />		
+     <entry reference="macro_reference" />
+     <entry reference="mql_reference" />
+     <entry reference="mingle_macro_builder" />
+     <entry reference="cross_project_reporting">
+       <entry reference="setting_up_cross_project_reporting" />
+       <entry reference="viewing_cross_project_reports" />
+     </entry>
+     <entry reference="cycle_time_analytics" />
+   </entry>
+  <entry reference="mingle_plus" >
+    <entry reference="program"> 
+     <entry reference="backlog" >
+         <entry reference="capture_objectives" />
+         <entry reference="prioritize_objectives" />
+         <entry reference="plan_and_share_objectives" />
+         <entry reference="prune_backlog" />
+     </entry>
+ 	<entry reference="plan" >  
+ 		<entry reference="define_your_plan" />
+ 		<entry reference="check_status_and_progress" />
+ 	    <entry reference="identify_whom_to_talk_to" />
+ 	</entry>	
+ 	<entry reference="projects_program" />
+  <entry reference="dependencies" >
+    <entry reference="program_dependency_board" /> 	
+    <entry reference="dependency_tab" />     
+    <entry reference="raising_a_dependency" />  
+    <entry reference="accepting_a_dependency" />  
+    <entry reference="resolving_a_dependency" />  
+    <entry reference="administering_dependencies" />  
+    <entry reference="dependency_icon_indicators" />  
+  </entry>
+ 	<entry reference="program_admin" >
+ 	  <entry reference="create_update_program" />
+ 	  <entry reference="add_program_members" />
+ 	  <entry reference="export_import_program" />	  
+ 	  <entry reference="delete_program" />
+  </entry>  
+  </entry>  
+  </entry>
+  <entry reference="mingle_api"/>
+  <entry reference="integrations">
+  <entry reference="setup_source_repository_integration_saas"/>
+  <entry reference="slack_integration">
+    <entry reference="setup_slack"/>
+      <entry reference="features_slack"/>
+    </entry>
+</entry>
+  <entry reference="mingle_onsite" >
+   <entry reference="go_integration" />
+  </entry> 
+  <entry reference="mingle_pages" />	
+</index>

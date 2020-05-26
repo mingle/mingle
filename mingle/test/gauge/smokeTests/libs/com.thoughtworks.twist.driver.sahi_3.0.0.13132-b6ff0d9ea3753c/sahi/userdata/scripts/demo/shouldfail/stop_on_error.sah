@@ -1,0 +1,49 @@
+var $thrownError = false;
+var $continued = false;
+try{
+	_click(_link("Link Test"));
+	_click(_link("linkByContent"));
+	_click(_link("BackXX"));
+	$continued = true;
+	_click(_link("Back"));
+}catch(e){
+	$thrownError = true;
+}
+_assertTrue($thrownError);
+_assertFalse($continued);
+
+
+_navigateTo("/demo/index.htm");
+$thrownError = false;
+$continued = false;
+_continueOnError();
+try{
+	_click(_link("Link Test"));
+	_click(_link("linkByContent"));
+	_click(_link("BackXX")); // SHOULD FAIL ON THIS LINE ONLY
+	$continued = true;
+	_click(_link("Back"));
+}catch(e){
+	$thrownError = true;
+}
+_assertFalse($thrownError);
+_assertTrue($continued);
+
+
+
+
+_navigateTo("/demo/index.htm");
+$thrownError = false;
+$continued = false;
+_stopOnError();
+try{
+	_click(_link("Link Test"));
+	_click(_link("linkByContent"));
+	_click(_link("BackXX"));
+	$continued = true;
+	_click(_link("Back"));
+}catch(e){
+	$thrownError = true;
+}
+_assertTrue($thrownError);
+_assertFalse($continued);

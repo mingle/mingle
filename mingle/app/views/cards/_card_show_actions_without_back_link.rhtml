@@ -1,0 +1,53 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= render :partial => 'card_edit_link', :locals => { :card => @card, :location => location } %>
+
+<a onclick="try{$('tag_list-tags-editor-container').down('.close-button').click()}catch(e){};if(window.print){window.print();}else{alert('Sorry, your browser dosen\'t support print');};return false;" href="javascript:void(0)" class="print-single link_as_button">Print</a>
+
+<%= link_to_remote 'Delete', { :url => { :action => 'confirm_delete', :number => @card.number } }, :class => 'link_as_button delete' %>
+
+<%= link_to_remote 'Copy to...', { :url => { :action => 'copy_to_project_selection', :number => @card.number }, :method => 'get', :before => 'InputingContexts.push(new LightboxInputingContext());' }, :class => 'link_as_button copy-to' %>
+
+<% if (@transitions || []).any? -%>
+
+  <div class="action_bar_separator transitions_actions">
+  <span>Transition(s):</span>
+
+
+  <% (@transitions || []).each do |transition| -%>
+    <div class="action">
+    <% if require_popup?(transition) %>
+      <%= link_to_remote h(transition.name),
+              {:method => 'get',
+               :url => {:action => 'require_popup_for_transition', :transition_id => transition.id, :id => @card},
+               :before => "actionBarLinkHandler.disableLinks(); $('spinner').show();",
+               :complete => "actionBarLinkHandler.enableLinks(); $('spinner').hide();",
+              },
+              {:class => 'link_as_button', :id => "transition_#{transition.id}"} %>
+    <% else %>
+      <%= link_to_remote(h(transition.name),
+              {:url => {:action => 'transition', :transition_id => transition.id, :id => @card.id},
+              :before => "actionBarLinkHandler.disableLinks(); $('spinner').show();",
+              :complete => "actionBarLinkHandler.enableLinks(); $('spinner').hide();",
+              :method => 'post'},
+              {:class => 'link_as_button', :id => "transition_#{transition.id}"}) %>
+    <% end %>
+    </div>
+  <% end -%>
+
+  </div>
+<% end -%>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE subsection SYSTEM "mingle_help.dtd">
+<section title="Using the tree filter">
+	<p>The tree filter is similar to the
+<cref topic="filter_list_by_component">list view card filter</cref>, except
+that it allows you to set filter conditions separately for each card type in
+the tree.</p>
+	<screenshot alttext="card tree - tree filter" src="resources/images/card_trees_tree_view_tree_filter.png"/>
+	<example title="Some tree filter examples">
+		<bullets title="User selects to view cards with Release-size > 30 and Iteration-priority = high. The following cards are displayed">
+			<item>All Release cards with size &gt; 30</item>
+			<item>All high priority Iteration cards within releases that have size
+    &gt; 30</item>
+			<item>All stories belonging to the above iterations</item>
+		</bullets>
+		<bullets title="User selects to view cards with Story Priority = High">
+			<item>This would display all release cards and all iteration cards</item>
+			<item>Only story cards having priority = High would be displayed</item>
+			<item>If a Release or Iteration does not contain a story with priority set
+    to High, it is still displayed, but its child stories are not</item>
+		</bullets>
+		<bullets title="If filter criteria is defined as Release = R1">
+			<item>R1 is displayed</item>
+			<item>Only iterations and stories which belong to R1 will be
+    displayed</item>
+		</bullets>
+	</example>
+	<p>You can choose to hide all cards of a given type in
+the tree by checking the box next to the card type in the <strong>Do
+not</strong> show section at the top of the filter.</p>
+	<steps>
+		<item>
+			<p><strong>To add a new filter condition</strong>, click on the
+    <link>Add a filter</link> link. A new row will be inserted into the filter
+    control.</p>
+			<screenshot alttext="New filter condition" src="resources/images/new_tree_filter_condition.png"/>
+		</item>
+		<item>
+			<p><strong>Choose a property</strong> by clicking on the
+    <link>(select...)</link> link. You will be able to choose any property
+    which is associated with the card type.</p>
+		</item>
+		<item>
+			<p><strong>Choose a comparison operator</strong> by clicking on the
+    <link>is</link> link. The options available will depend on what is
+    applicable to the property you selected in the step above. You won't be
+    able to select anything except the default until you've selected a
+    property, because the allowable values are dependent on the property
+    selected.</p>
+			<bullets title="Full list of comparison operators">
+				<item><strong>is</strong> - the default operator; will restrict the
+        property to only the value specified.</item>
+				<item><strong>is not</strong> - will restrict the property to only
+        values other than the one specified.</item>
+				<item><strong>is less than</strong> - shown when the property is
+        ordered. Will restrict the property to values which are strictly less
+        than the specified value. Does not include cards having the property
+        value equal to the specified value.</item>
+				<item><strong>is greater than</strong> - shown when the property is
+        ordered. Will restrict the property to values which are strictly
+        greater than the specified value. Does not include cards having the
+        property value equal to the specified value.</item>
+				<item><strong>is before</strong> - shown when the property is a date,
+        equivalent to <strong>is less than</strong>. Does not include cards
+        having the property value equal to the specified date.</item>
+				<item><strong>is after</strong> - shown when the property is a date,
+        equivalent to <strong>is greater than</strong>. Does not include cards
+        having the property value equal to the specified date.</item>
+			</bullets>
+			<note>
+				<bullets>
+					<item>Properties can have a natural order, such as numbers or dates -
+        in this case that natural ordering is used to resolve 'is less/greater
+        than' conditions.</item>
+					<item>Managed properties, where the allowable values are specified in
+        a list - use the sort order of the list to resolve 'is less/greater
+        than' conditions. <todo>the rule is that the list is sorted in
+        ascending order from top to bottom, should add graphics here to
+        explain</todo></item>
+				</bullets>
+			</note>
+		</item>
+		<item>
+			<p><strong>Choose a value</strong> by clicking on the
+    <link>(any)</link> link. The options available will depend on what is
+    applicable to the property you selected in the step above. You won't be
+    able to select anything except the default until you've selected a
+    property, because the allowable values are dependent on the property
+    selected.</p>
+			<note>
+				<p>There are several special values which can appear
+    here:</p>
+				<bullets>
+					<item><strong>(any)</strong> - Specifies cards having any value for
+        the selected property. Available for operators <strong>is</strong> and
+        <strong>is not</strong>. This is the same as having no condition for
+        the property at all.</item>
+					<item><strong>(not set)</strong> - Specifies cards which have no value
+        set for the property. Available for operators <strong>is</strong> and
+        <strong>is not</strong>. This is analogous to the 'null' term in SQL.
+        It is not available for mandatory Mingle card properties such as
+        Type.</item>
+					<item><strong>(current user)</strong> - Specifies cards which have the
+        currently logged in user assigned to the selected property. Available
+        for operators <strong>is</strong> and <strong>is not</strong>.
+        Available for properties which take Mingle users as values.</item>
+					<item><strong>(today)</strong> - Specifies cards which have the
+        current date assigned to the selected property. Available for
+        operators <strong>is</strong>, <strong>is not</strong>, <strong>is
+        before</strong>, <strong>is after</strong>. Available for date
+        properties.</item>
+				</bullets>
+			</note>
+			<bullets title="The available values depend on the data type of the property you selected">
+				<item>if you selected the <strong>Type property</strong>, then you
+        will be presented with the list of all card types and the special
+        value (any).</item>
+				<item>if you selected a <strong>Managed List property</strong>, then you
+        will be presented with the list of all values that have been specified
+        in the managed list and the special values (any), (not set).</item>
+				<item>if you selected a <strong>Date</strong>, then you will be presented
+        with a calendar widget that will allow you to select a date, as well
+        as the special values (any), (not set) and (today).</item>
+				<item>if you selected a <strong>Team member property</strong>, then you
+        will be presented with a list of the current team members, as well as
+        the special values (any), (not set) and (current user).</item>
+			</bullets>
+		</item>
+		<item>Your new filter condition will be applied as soon as you've selected
+    a value, and you should see the results reflected in the cards displayed
+    in the view.</item>
+		<item>You can optionally filter the tree by specifying tags. Click on the
+    <link>Add tags</link> link, type in the tags separated by commas, and
+    click the <button>Add tags</button> button. Only cards which have all of
+    the specified tags will be displayed.</item>
+		<item>
+			<p><strong>To remove a filter condition</strong>, simply click on
+    the <screenshot alttext="Delete filter condition button" src="resources/images/delete_filter_condition_button.png"/>
+    next to the condition you want to remove. Again, the effect of removing
+    the condition will immediately be reflected in the view.</p>
+		</item>
+	</steps>
+</section>

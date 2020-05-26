@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="What's new in Release 15.2">
+	<p>For <cref topic="mingle_onsite">Mingle onsite</cref> customers, please review the <cref topic="upgrading_from_previous_versions">upgrade instructions</cref> before moving to Mingle 15.2</p>
+	<note>
+	  <item>All of the features below are already available for our Mingle in the cloud customers.</item>
+  </note>
+
+  <section title="Dependency Management for Mingle Plus">
+	  <p>Mingle's new dependency management feature provides end-to-end visibility of all dependencies within a program. Team members can raise, accept, and resolve cross-team dependencies through peer-to-peer dialogue within Mingle.</p>
+    <p><screenshot alttext="program dependency board" src="resources/images/program_dependency_board.png"/></p>
+	</section>
+
+  <section title="Add/Remove Rows to the Grid View">
+    <p>Mingle now allows you to add and remove rows on the grid view in the same way as you add and remove columns.</p>
+    <p><screenshot alttext="add and remove rows" src="resources/images/add_and_remove_rows.gif"/></p>
+	</section>
+
+  <section title="Copy Card within the Same Project">
+    <p>Copying cards within the same project can help when you are bulk creating similar cards, splitting a story, or for many other reasons.</p>
+	</section>
+
+  <section title="Improved Viewing and Downloading of Attachments">
+    <p>Based on feedback from users, we widened the attachments container to show the full length of file names. We've also provided individual action buttons to view or download each file.</p>
+    <p><screenshot alttext="improved attachments container" src="resources/images/improved_attachments_container.png"/></p>
+	</section>
+   
+  <section title="Improved Team Member Property Load Times">
+    <p>Instead of immediately loading all team members when viewing a team member property, Mingle will now load your 5 most recently selected users with an option to load more.</p>
+    <p><screenshot alttext="improved team member property" src="resources/images/improved_team_member_property_load.png"/></p>
+	</section>
+
+  <section title="Exposed Timestamps in Events API">
+    <p>Every change event in Mingle's Event API will not include a timestamp (mingle_timestamp). If you are doing any reporting outside of Mingle, having the timestamp will provide you with more accurate data.</p>
+	</section> 	
+
+  <section title="Improved Security of Mingle">
+    <p>We care about your security. We've made a number of security enhancements at all levels of Mingle.</p>
+	</section>
+
+	<section title="Bug fixes">
+	  <p>The following bugs have been fixed with 15.2:</p>
+	    <bullets>
+			<item>Fixed issue where Mingle was not displaying truncated property names correctly.</item>
+			<item>Fixed issue where macros were not validating dates allowing users to enter a date far into the future, which could cause performance issues.</item>
+			<item>Fixed issue of overwriting existing attachments with the same name when copying a card.</item>
+			<item>Fixed issue of anonymous users having write access in certain areas of a project.</item>
+			<item>Fixed print formatting issues when printing cards.</item>
+			<item>Fixed issue where CKEditor was not loading in edit mode.</item>
+			<item>Fixed issue in CKEditor where bold button was not disabling properly.</item>
+			<item>Fixed issue where card descriptions were not properly formatted when exporting to Excel.</item>
+			<item>Fixed issue in card full view murmurs where tagged users were not highlighted in blue.</item>
+  	  </bullets>
+	</section>
+
+</topic>

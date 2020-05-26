@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Murmurs page">
+	<section title="What you can do on this page">
+		<p>From this page administrators can modify the project's Murmurs settings. Users can use this page as a reference for their project's Murmurs settings.</p>
+		</section>
+		<section title="Also see...">
+		<bullets>
+			<item><cref topic="murmurs">Murmurs overview</cref></item>
+			<item><cref topic="using_murmurs">Using Murmurs</cref></item>
+		</bullets>
+	</section>
+</topic>
+

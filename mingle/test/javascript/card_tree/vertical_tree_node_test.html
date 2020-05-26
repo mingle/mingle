@@ -1,0 +1,180 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>
+      JavaScript unit test file
+    </title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+    <script src="../../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+    <script src="../test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+
+    <script src="../test_assets/unittest.js" type="text/javascript"></script>
+    <script src="../test_assets/unittest_ext.js" type="text/javascript"></script>
+
+
+    <script src="../../../public/javascripts/module.js" type="text/javascript"></script>
+
+    <script src="../../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/thirdparty/controls.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/thirdparty/builder.js" type="text/javascript"></script>
+    <script src="../../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+
+    <script src="../../../public/javascripts/application.js" type="text/javascript"></script>
+    <script src="../../../public/javascripts/smart_sort.js" type="text/javascript"></script>
+    <script src="../../../public/javascripts/card_tree/tree_node_base.js" type="text/javascript"></script>
+    <script src="../../../public/javascripts/card_tree/node_parser.js" type="text/javascript"></script>
+    <script src="../../../public/javascripts/card_tree/vertical_tree_node.js" type="text/javascript"></script>
+
+
+    <link rel="stylesheet" href="assets/unittest.css" type="text/css" />
+    <link rel="stylesheet" href="../test_assets/unittest.css" type="text/css" />
+  </head>
+  <body>
+    <div id="content">
+      <div id="header">
+        <h1>
+          JavaScript unit test file
+        </h1>
+        <p>
+          This file tests <strong>VerticalTreeNode</strong> class in <strong>card_tree/vertical_tree_node.js</strong>.
+        </p>
+      </div><!-- Log output -->
+      <div id="testlog"></div>
+      <div style='border:solid 1px' id='sandbox'>
+        <h3> sandbox: </h3>
+        <textarea id="sample-vertical-tree" style="display: none;">
+          <div id="tree">
+            <div class="vtree-node" number="0" id="node_0"></div>
+            <div class="vtree-column first-column">
+              <div class="vtree-node" number="1" id="card_1">
+                <div class="card-wrapper"><div class="vtree-card"><div class="card-name">Acard</div></div></div>
+                <div class="sub-tree"></div>
+              </div>
+            </div>
+
+            <div class="vtree-column last-column">
+              <div class="vtree-node" number="2" id="card_2">
+                <div class="card-wrapper"><div class="vtree-card">#2</div></div>
+                <div class="sub-tree">
+                  <div class="vtree-node" number="3" id="card_3">
+                    <div class="card-wrapper"><div class="vtree-card"><div class="card-name">Bcard</div></div></div>
+                    <div class="sub-tree no-child"></div>
+                  </div>
+                  <div class="vtree-node last" number="4" id="card_4">
+                    <div class="card-wrapper"><div class="vtree-card"><div class="card-name">Wcard</div></div></div>
+                    <div class="sub-tree no-child"></div>
+                  </div>
+                </div>
+              </div>
+              <div id="vtree-layout-clear" class="clear"/>
+
+            </div>
+          </div>
+        </textarea>
+        <div id="vertical-tree">
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+// <![CDATA[
+
+  new Test.Unit.Runner({
+
+    setup: function() {
+      $('vertical-tree').innerHTML = $('sample-vertical-tree').value;
+      this.structure = {number: 0, html_id: "node_0", children: [
+                        {number: 1, html_id: "card_1", cardName: 'Acard', children: []},
+                        {number: 2, html_id: "card_2", children: [
+                          {number: 3, html_id: "card_3", cardName: 'Bcard',children: []},
+                          {number: 4, html_id: "card_4", cardName: 'Wcard',children: []}
+                        ]}
+                      ]};
+      this.parser = new TreeNodesParser(VerticalTreeNode);
+      this.root = this.parser.parse(this.structure);
+      this.node1 = this.root.findNodeByNumber(1);
+      this.node2 = this.root.findNodeByNumber(2);
+      this.node3 = this.root.findNodeByNumber(3);
+      this.node4 = this.root.findNodeByNumber(4);
+    },
+
+    test_should_add_child: function() { with(this) {
+      node1.addChild(node3)
+      assertEqual(1, node1.element.select('.sub-tree .vtree-node').size());
+      assertEqual(node3.element, node1.element.select('.sub-tree .vtree-node')[0]);
+    }},
+
+    test_should_remove_child_from_old_parent_after_add: function() {with(this){
+      node1.addChild(node3)
+      assertEqual(1, node2.element.select('.sub-tree .vtree-node').size());
+    }},
+
+    test_should_refresh_parent_children_correctly_after_move_between_node: function(){ with(this){
+      assert(!node3.element.hasClassName('last'));
+      assert(node4.element.hasClassName('last'));
+
+      node1.addChild(node3);
+      assert(node3.element.hasClassName('last'));
+      assert(node4.element.hasClassName('last'));
+    }},
+
+    test_should_refresh_parent_child_correctly_when_node_was_removed: function(){with(this){
+      assert(!node3.element.hasClassName('last'));
+      assert(node4.element.hasClassName('last'));
+
+      node1.addChild(node4);
+      assert(node4.element.hasClassName('last'));
+      assert(node3.element.hasClassName('last'));
+    }},
+
+    test_add_node_to_parent_should_create_a_new_column_when_parent_is_root: function(){with(this){
+      assertEqual(2, $$(".vtree-column").size());
+      root.addChild(node3);
+      assertEqual(3, $$(".vtree-column").size());
+    }},
+
+    test_add_node_to_parent_should_remove_no_child_class_in_parent_node: function(){with(this){
+      assert(node3.element.down('.sub-tree').hasClassName('no-child'));
+      node3.addChild(node4);
+      assert(!node3.element.down('.sub-tree').hasClassName('no-child'));
+    }},
+
+    test_get_next_node: function(){ with(this){
+      assertEqual(node2, node1.nextNode());
+      assertEqual(node4, node3.nextNode());
+      assertEqual(null, node4.nextNode());
+      assertEqual(null, root.nextNode());
+    }},
+
+    test_add_node_to_parent_should_sort_children_in_correct_sequence: function(){with(this){
+      assertEqual(2, $$('#card_2 .vtree-node').size())
+      assertEqual($('card_3'), $$('#card_2 .vtree-node')[0])
+      assertEqual($('card_4'), $$('#card_2 .vtree-node')[1])
+      node2.addChild(node1);
+      assertEqual(3, $$('#card_2 .vtree-node').size())
+      assertEqual($('card_1'), $$('#card_2 .vtree-node')[0])
+      // assertEqual($$('#card_2 .vtree-node')[1], $('card_3'))
+      // assertEqual($$('#card_2 .vtree-node')[2], $('card_4'))
+    }}
+  }, { testLog: "testlog", test: ''}).run;
+// ]]>
+</script>
+  </body>
+</html>

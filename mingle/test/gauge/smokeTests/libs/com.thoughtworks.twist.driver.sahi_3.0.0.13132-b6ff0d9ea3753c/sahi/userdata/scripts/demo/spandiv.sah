@@ -1,0 +1,33 @@
+_click(_link("Span and Div Page"));
+
+function testNewLineIsIgnored(){
+	_assertNotNull(_spandiv("span with newline"));
+	_assertContainsText("span with newline", _spandiv("span with newline"));
+}
+
+function test_nbsp_IsIgnored(){
+	_assertExists(_span("span with nbsp space"));
+	_assert(_isVisible(_span("span with nbsp space")));
+	_assertEqual("span with nbsp space", _getText(_span("span with nbsp space")));
+}
+
+function testBRTagReplacedWithSpace(){
+	_assertExists(_span("span with br"));
+	_assertEqual("span with<br><br><br>br", _span("span with br").innerHTML.toLowerCase());
+	_assert(_isVisible(_span("span with br")));
+	_assertEqual("span with br", _getText(_span("span with br")));
+	_assertContainsText("span with br", _span("span with br"));	
+	if (_condition(_span("span with br").textContent)){
+		_assertEqual("span withbr", _span("span with br").textContent);
+	}
+}
+
+function testInnermostElementWithRegExpLikeIdentifier(){
+	_assertExists(_div("*Region"));
+	_assertExists(_label("*Region"));
+}
+
+function testInnermostElementReturned(){
+	_assertEqual("requiredMark", _span("xx").className);
+}
+_runUnitTests();

@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Database migration">
+    <section title="Are you ready for 3.0?">
+
+<p>Mingle 3.0 will not longer support MySQL database. Mingle will continue to support <cref topic="configuring_a_database_for_use_with_mingle"> Postgres and Oracle databases</cref>. In order to help our existing customers migrate from MySQL we have some migration options available.</p>    
+    </section>
+    
+      <section title="Migrating to Postgres">
+        
+      <subsection title="MySQL to Postgres script">
+      
+      <p>In order to help migrate your existing MySQL 2.3 or 2.3.1 database to Postgres 2.3 or 2.3.1 we have a database migration script available called mingle-dbmigrate-x_x. This tool can be found in &#60;MINGLE_HOME&#62;/tools/mingle-dbmigrate-x_x.zip directory where &#60;MINGLE HOME&#62; is the directory where Mingle 3.0 is installed.</p>
+      
+      <p>To use this tool, please unzip mingle-dbmigrate-x_x.zip and follow the instructions in &#60;MINGLE_HOME&#62;/tools/mingle-dbmigrate-x_x/README.</p>
+
+      </subsection>
+      
+      <hint>If you just wish to migrate your existing projects you may also use the export and import tool described below.</hint>
+      
+      </section>
+      
+      <section title="Migrating to Oracle">
+	        
+         <p>In order to aid migration to Oracle you may like to use the Mingle's export and import tool.</p>
+       <subsection file="export_import_tool"/>
+	  
+	  </section>
+   
+</topic>
+
+

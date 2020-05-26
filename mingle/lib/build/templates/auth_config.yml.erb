@@ -1,0 +1,39 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+authentication: ldap
+ldap_settings:
+  ldapserver: chidc01.corporate.thoughtworks.com
+  ldapport: 389
+  ldapbinduser: ldapbind@corporate.thoughtworks.com
+  ldapbindpasswd: tworker1!
+  ldapbasedn: ou=Employees,ou=Enterprise,ou=Principal,dc=Corporate,dc=ThoughtWorks,dc=COM
+  ldapfilter: sAMAccountName
+  ldapobjectclass: organizationalPerson
+  ldap_map_fullname: cn
+  ldap_map_mail: mail
+  auto_enroll: true
+  ldapusessl: false
+  ldapusetls: true
+  ldaptruststore: c:/mingle/cacerts
+basic_auth_enabled: true
+basic_authentication: ldap
+#cas_settings:
+#  cas_host: cas.thoughtworks.com
+#  cas_port: 443
+#  cas_uri: /cas
+#  cas_root_cert_path: c:/mingle/cacert.pem
+#  auto_enroll: true

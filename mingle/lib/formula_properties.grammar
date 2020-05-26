@@ -1,0 +1,113 @@
+# $Id: calc.y,v 1.4 2005/11/20 13:29:32 aamine Exp $
+#
+# Very simple calculater.
+
+#  Copyright 2020 ThoughtWorks, Inc.
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Affero General Public License as
+#  published by the Free Software Foundation, either version 3 of the
+#  License, or (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Affero General Public License for more details.
+#
+#  You should have received a copy of the GNU Affero General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+#
+
+class FormulaParser
+
+options no_result_var
+
+prechigh
+  nonassoc UMINUS
+  left MULTIPLY DIVIDE
+  left PLUS MINUS
+preclow
+
+token NUMBER UMINUS PLUS MINUS MULTIPLY DIVIDE L_PAREN R_PAREN L_CURLY R_CURLY L_BOX R_BOX TODAY IDENTIFIER
+
+
+rule
+  target: exp { Formula::Output.new(val[0]) }
+
+  exp: exp PLUS exp { Formula::Addition.new(val[0], val[2]) }
+     | exp MINUS exp { Formula::Subtraction.new(val[0], val[2]) }
+     | exp MULTIPLY exp { Formula::Multiplication.new(val[0], val[2]) }
+     | exp DIVIDE exp { Formula::Division.new(val[0], val[2]) }
+     | L_PAREN exp R_PAREN { Formula.new(val[1]) }
+     | L_CURLY exp R_CURLY { Formula.new(val[1], ['{', '}']) }
+     | L_BOX exp R_BOX { Formula.new(val[1], ['[', ']']) }
+     | MINUS exp  =UMINUS { Formula::Negation.new(val[1]) }
+     | NUMBER { Formula::Primitive.create(val[0]) }
+     | IDENTIFIER { Formula::CardPropertyValue.new(val[0], @null_is_zero) }
+end
+
+----- header ----
+require 'strscan'
+---- inner ----
+
+def unquote(value)
+  case value
+  when /^'(.*)'$/ then $1
+  when /^"(.*)"$/ then $1
+  else value
+  end
+end
+
+def escape_repeated_quotes(str)
+  str.gsub(/''/, "'").gsub(/""/, '"')
+end
+
+def parse(str, null_is_zero=false)
+  @input = str
+  @null_is_zero = null_is_zero
+  tokens = []
+  str = "" if str.nil?
+
+  scanner = StringScanner.new(str)
+
+  until scanner.eos?
+    case
+    when scanner.scan(/\s+/)
+      # ignore space
+    when m = scanner.scan(/((\d+\.?\d*)|(\d*\.?\d+))/)
+      tokens.push [:NUMBER, m.to_num]
+    when m = scanner.scan(/\+/i)
+      tokens.push [:PLUS, m]
+    when m = scanner.scan(/\-/i)
+      tokens.push [:MINUS, m]
+    when m = scanner.scan(/\*/i)
+      tokens.push [:MULTIPLY, m]
+    when m = scanner.scan(/\//i)
+      tokens.push [:DIVIDE, m]
+    when m = scanner.scan(/\(/i)
+      tokens.push [:L_PAREN, m]
+    when m = scanner.scan(/\)/i)
+      tokens.push [:R_PAREN, m]
+    when m = scanner.scan(/\{/i)
+      tokens.push [:L_CURLY, m]
+    when m = scanner.scan(/\}/i)
+      tokens.push [:R_CURLY, m]
+    when m = scanner.scan(/\[/i)
+      tokens.push [:L_BOX, m]
+    when m = scanner.scan(/\]/i)
+      tokens.push [:R_BOX, m]
+    when m = scanner.scan(/'((('')|[^'])+)'/)
+      tokens.push   [:IDENTIFIER, escape_repeated_quotes(unquote(m))]
+    when m = scanner.scan(/"((("")|[^"])+)"/)
+      tokens.push   [:IDENTIFIER, escape_repeated_quotes(unquote(m))]
+    when m = scanner.scan(/(""|''|[!@$%\^_\\~`{}|;.,:?<>]|[^\s\/\+\-\*\(\)\[\]&=#;"'])+/)
+      tokens.push   [:IDENTIFIER, escape_repeated_quotes(m)]
+    else
+      unexpected_chars = scanner.peek(10)
+      unexpected_chars += ".." if unexpected_chars.length > 9
+      raise "Unexpected characters encountered: #{unexpected_chars}"
+    end
+  end
+  tokens.push [false, false]
+  yyparse(tokens, :each)
+end

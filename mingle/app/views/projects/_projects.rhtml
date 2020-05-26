@@ -1,0 +1,96 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%- if authorized?(:controller => 'projects', :action => 'new') -%>
+  <% action_bar do %>
+    <%= link_to 'New project', {:action => 'new'}, {:class => 'project-new link_as_button primary'} %>
+    <%= link_to 'Import project', {:controller => 'project_import', :project_type => 'projects'}, {:class => 'project-import  link_as_button'} %>
+<% end %>
+<% end -%>
+
+<div class="projects_list">
+  <%= render :partial => 'empty_deliverable_list', :locals => {:deliverables => @projects, :model => 'project'} %>
+</div>
+
+<div class="projects_list">
+<% if !@projects.empty? -%>
+  <% @projects.shift_each! do |project| -%>
+    <% styled_box :class => 'project' do %>
+      <% accessible = User.current.accessible?(project) -%>
+      <% if accessible %>
+        <%= link_to_open_project("<div class='project-icon-holder'>#{icon_for(project)}</div>".html_safe, project) %>
+      <% else %>
+        <div class='project-icon-holder'><%= icon_for(project) %></div>
+      <% end %>
+
+      <div class="project-description">
+        <h2>
+          <% if accessible %>
+            <%= link_to_open_project(project.name.escape_html, project) %>
+          <% else %>
+            <span class="not-accessible-project"><%= h project.name %></span>
+          <% end %>
+
+          <%= spinner(:id => "#{project.identifier}_spinner") %>
+        </h2>
+        <p <%= %{class="not-accessible-project"} unless accessible %>><%=h project.description %></p>
+        <% if User.current.admin? -%>
+          <%= link_to "<i class=\"fa fa-times-circle\"></i> Delete this".html_safe, {:action => "delete", :project_id => project.identifier}, {:class => "delete-light"} %>
+          <%= link_to_remote("Create template from this project",
+                { :before => "disableTemplateCreate('#{escape_javascript(project.identifier)}')",
+                  :complete => "allowTemplateCreate('#{escape_javascript(project.identifier)}')",
+                  :url => {:controller => 'templates', :action => 'templatize', :project_id => project.identifier}
+                },
+                {:class => 'template-light link-with-icon template_link', :id => "create_template_#{project.identifier}"})
+          %>
+          <a id="disabled_create_template_<%= project.identifier %>" style='display: none' class='template-light link-with-icon disabled_link'>Create template from this project</a>
+        <% end -%>
+          <% if project.requestable_for?(User.current)  %>
+            <%= link_to "Request membership", url_for(:action => 'request_membership', :project_id => project.identifier), {:class => 'request-membership-light link-with-icon'} %>
+          <% end -%>
+        <% if MingleConfiguration.show_all_project_admins? && !User.current.anonymous? %>
+          <%= link_to_remote "<i class=\"fa fa-user\"></i> Project admins".html_safe,
+                                  {
+                                      :url => {:action => :admins, :project_id => project.identifier},
+                                      :method => :get
+                                  },
+                                  :accessing => ':admins'
+          %>
+        <% end -%>
+      </div>
+      <%= clear_float %>
+    <% end -%>
+  <% end -%>
+<% end -%>
+
+</div>
+
+<%= javascript_with_rescue <<-JAVASCRIPT
+    disableTemplateCreate = function (project) {
+      $(project + '_spinner').show();
+      $('create_template_' + project).hide();
+      $('disabled_create_template_' + project).show();
+    };
+
+    allowTemplateCreate = function (project) {
+      $(project + '_spinner').hide();
+      $('create_template_' + project).show();
+      $('disabled_create_template_' + project).hide();
+    };
+JAVASCRIPT
+-%>
+
+<%= @project = nil -%>

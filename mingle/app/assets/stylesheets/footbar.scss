@@ -1,0 +1,190 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+#ft {
+  background-color: rgb(51, 51, 51);
+  background-color: rgba(51, 51, 51, 0.9);
+  border-top: 1px solid #555;
+  color: #bbb;
+  font-size: 11px;
+  height: 34px;
+  line-height: 34px;
+  margin: 0;
+  padding: 0;
+  z-index: 8000;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  > * {
+    padding-right: 5px;
+  }
+
+  li {
+    list-style: none;
+  }
+  a {
+    color: #fff;
+  }
+
+  .in-app-frame {
+    height: 40px;
+    width: 160px;
+    overflow: hidden;
+  }
+
+  #copyright {
+    text-align: right;
+    margin-top: 45px;
+  }
+
+  #magic_card_container {
+    float: left;
+    user-select: none;
+    -moz-user-select: none;
+    border-left: none;
+    cursor: move;
+    padding: 3px 2px 2px;
+  }
+
+  /* when change the border or margin, please also update MagicCard#cardBorderWidths and MagicCard#cardMargins */
+  .magic_card {
+    background: #fff;
+    height: 27px;
+    margin-left: 5px;
+    width: 44px;
+
+    &:hover {
+      @include transform(rotate(7deg));
+    }
+  }
+
+  .magic-card-inner {
+    border-left: 5px solid $HIGHLIGHT_COLOR;
+    height: 100%;
+    width: 100%
+  }
+
+  #magic_card {
+    float: left;
+    user-select: none;
+    -moz-user-select: none;
+    border-right: 1px solid #555;
+    border-left: none;
+    cursor: pointer;
+    margin-left: 10px;
+
+    #choices {
+      position: fixed;
+      bottom: 34px;
+      left: 0;
+      background-color: rgba(51, 51, 51, 0.9);
+      color: #bbb;
+      line-height: 26px;
+      margin: 0;
+      padding: 0;
+      z-index: 10000;
+      a {
+        float: none;
+        display: block;
+        padding: 0 10px;
+        &:hover {
+          background: #777;
+        }
+      }
+    }
+
+    a {
+      padding-right: 10px;
+
+      &:before {
+        @include fa_icon($fa-var-plus-circle);
+        color: $MINGLE_PRIMARY_CONTRAST_COLOR;
+        font-size: 1.5em;
+        vertical-align: middle;
+      }
+    }
+  }
+
+  #support {
+    border: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      margin: 0;
+      padding: 0 10px;
+      list-style: none;
+      float: right;
+      border-left: 1px solid #555;
+      line-height: inherit;
+      white-space: nowrap;
+    }
+
+    a {
+      display: block;
+    }
+
+    .avatar {
+      margin-right: 5px;
+      border: 1px solid #888;
+    }
+
+    .notification {
+      .fa-bell-o, .fa-bell {
+        font-size: 1.5em;
+        line-height: 34px;
+        vertical-align: middle;
+        margin-right: 0.15em;
+      }
+
+      .fa-bell {
+        color: $MINGLE_PRIMARY_COLOR
+      }
+
+      a {
+        display: inline;
+      }
+    }
+
+    .twitter-icon {
+      font-size: 1.5em;
+      &:after {
+        @include fa_icon($fa-var-twitter);
+        line-height: inherit;
+        padding: 0;
+      }
+    }
+  }
+
+  .low-on-licenses-alert {
+    color: #fff;
+    font-size: larger;
+    font-weight: bolder;
+    text-decoration: underline;
+    float: left;
+  }
+}
+
+#page-identifier-profile-login #ft a.privacy-policy {
+  color: #999999;
+  text-decoration: underline;
+}
+
+.checkbox label {
+  display: inline;
+}

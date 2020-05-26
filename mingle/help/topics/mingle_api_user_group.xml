@@ -1,0 +1,169 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="User group API">
+  <section title="User groups">
+    <p><cref topic="user_groups">User groups</cref> are a way to organize team members in a project. The user group API is helpful for retrieving the team members that belong to a user group.</p>
+  </section>
+
+    <section title="Structure of a group resource">
+    <p>The attributes of a group resource are described below, along with their data type.</p>
+
+    <api_attributes title="groups resource xml - attributes">
+      <api_attribute name="id" type="Integer" readonly="true">system assigned unique identifier for a user group.</api_attribute>
+      <api_attribute name="name" type="String">this is the name of the user group.</api_attribute>
+      <api_attribute name="project_members" type="Array">list all the team members that belong to this user group. Information about each project member resource is in the <cref topic="mingle_api_user_group#project_member_resource">next section</cref>.</api_attribute>
+    </api_attributes>
+    </section>
+    <section title="Structure of a project member resource" file="mingle_api_project_member_resource"/>
+
+    <section title="Get all user groups for a project" >
+    <api_reference>
+      <p>Reference</p>
+      <code>
+Request Method: GET
+URL: /api/v2/projects/<subst>project_identifier</subst>/groups.xml
+Parameters: NA
+      </code>
+
+      <p>Example</p>
+      <code>
+GET
+
+http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/groups.xml
+      </code>
+
+      <p>Explanation</p>
+      <p>The above is an example of a GET request to a Mingle server running at your.mingle.server, port 8080. The request is made with the authorization credentials of yourname/password. The URL of /api/v2/projects/test_project/groups.xml represents the listing of all group resources for the project with identifier test_project.</p>
+
+    <p>Result</p>
+    <p>If you were authorized to perform the operation, and the resource was available, you should get an xml document that looks something like the following.</p>
+
+    <code>
+<![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<groups type="array">
+  <group>
+    <id type="integer">6</id>
+    <name>BAs</name>
+    <projects_members type="array">
+      <projects_member>
+        <id type="integer">9</id>
+        <admin type="boolean">false</admin>
+        <readonly_member type="boolean">false</readonly_member>
+        <user url="http://localhost:8080/mingle/api/v2/users/5.xml">
+          <name>Thomas</name>
+          <login>thomas</login>
+        </user>
+        <project url="http://localhost:8080/mingle/api/v2/projects/test_project.xml">
+          <name>test project</name>
+          <identifier>test_project</identifier>
+        </project>
+      </projects_member>
+    </projects_members>
+  </group>
+  ...
+  <group>
+    <id type="integer">7</id>
+    <name>Developers</name>
+    <projects_members type="array">
+      <projects_member>
+        <id type="integer">7</id>
+        <admin type="boolean">false</admin>
+        <readonly_member type="boolean">false</readonly_member>
+        <user url="http://localhost:8080/mingle/api/v2/users/6.xml">
+          <name>James</name>
+          <login>james</login>
+        </user>
+        <project url="http://localhost:8080/mingle/api/v2/projects/test_project.xml">
+          <name>test project</name>
+          <identifier>test_project</identifier>
+        </project>
+      </projects_member>
+      <projects_member>
+        <id type="integer">7</id>
+        <admin type="boolean">false</admin>
+        <readonly_member type="boolean">false</readonly_member>
+        <user url="http://localhost:8080/mingle/api/v2/users/7.xml">
+          <name>Kenneth</name>
+          <login>kenneth</login>
+        </user>
+        <project url="http://localhost:8080/mingle/api/v2/projects/test_project.xml">
+          <name>test project</name>
+          <identifier>test_project</identifier>
+        </project>
+      </projects_member>
+    </projects_members>
+  </group>
+</groups>
+]]>
+    </code>
+
+    </api_reference>
+    </section>
+
+  <section title="Get a single user group for a project">
+
+    <api_reference>
+      <p>Reference</p>
+      <code>
+Request Method: GET
+URL: /api/v2/projects/<subst>project_identifier</subst>/groups/group_id.xml
+Parameters: NA
+      </code>
+
+      <p>Example</p>
+      <code>
+GET
+
+http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/groups/114.xml
+      </code>
+
+      <p>Explanation</p>
+      <p>The above is an example of a GET request to a Mingle server running at your.mingle.server, port 8080. The request is made with the authorization credentials of yourname/password. The URL of /api/v2/projects/test_project/groups/114.xml represents the listing of a group resource for the project with identifier test_project.</p>
+
+      <p>Result</p>
+      <p>If you were authorized to perform the operation, and the resource was available, you should get an xml document that looks something like the following. </p>
+
+      <code>
+<![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<group>
+  <id type="integer">6</id>
+  <name>BAs</name>
+  <projects_members type="array">
+    <projects_member>
+      <id type="integer">9</id>
+      <admin type="boolean">false</admin>
+      <readonly_member type="boolean">false</readonly_member>
+      <user url="http://localhost:8080/mingle/api/v2/users/5.xml">
+        <name>Thomas</name>
+        <login>thomas</login>
+      </user>
+      <project url="http://localhost:8080/mingle/api/v2/projects/test_project.xml">
+        <name>test project</name>
+        <identifier>test_project</identifier>
+      </project>
+    </projects_member>
+  </projects_members>
+</group>
+]]>
+      </code>
+    </api_reference>
+  </section>
+</topic>

@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE section SYSTEM "mingle_help.dtd">
+<section title="Create cards with Quick Add" id="create_cards_using_quick_add">
+	<p>
+		Quick Add allows you to create a new card from any project page. The Quick Add button can be found on the bottom left of your browser window in the task tray.
+	</p>
+	<p><screenshot src="resources/images/quick_add.png"/></p>
+	
+	<p>
+		The Quick Add button makes it easy to create cards with default values preset for the selected <cref topic="card_types">card type</cref>.
+	</p>
+	<p><screenshot src="resources/images/add_new_card_without_quick_add_card.png"/></p>
+</section>

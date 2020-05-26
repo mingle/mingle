@@ -1,0 +1,54 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% if target.can_hide? %>
+    <span class="hide-lane" id="<%= "#{target.html_id}_hide_lane" %>">
+    <span class="fa fa-minus-circle"></span>
+      <%= link_to '', hide_lane_url(@view, self), :class => 'hide-lane-url',
+                  :id => "#{target.html_id}_hide_lane_link" %>
+      <%= register_card_list_view_link("#{target.html_id}_hide_lane_link", {}) -%>
+  </span>
+<% end %>
+
+
+<%
+  editable = can_edit_header?(target) ? 'editable_lane' : ''
+  data_edit_url = can_edit_header?(target) ? rename_lane_url(@view, self) : ''
+%>
+<span id='group_<%= target.axis %>_title_<%= target.html_id %>'>
+    <div class="<%= editable -%> header-title wip-enabled" unselectable="on"><%=
+        target_title = target.title
+        if header_card = target.header_card(@controller.card_context)
+          link_to(h(target_title), card_show_url(:number => header_card.number))
+        else
+          h(target_title)
+        end
+      -%><span unselectable="on" id='<%= target.html_id %>_agg_value' class="<%= target.axis %>-card-number aggregate"></span>
+    </div>
+  <%= link_to '', data_edit_url, :id => "#{target.html_id}_edit_url_link", :class => 'edit-lane-url-link' %>
+  <%= register_card_list_view_link("#{target.html_id}_edit_url_link", {}) -%>
+</span>
+<% if should_render_wip_limit %>
+    <%= clear_float %>
+    <% hex_target_title = target_title.to_hex_string %>
+    <% (wip = @view.wip_limits_for(target)) %>
+    <% wip_class = (can_edit_header? ? 'editable-wip' : 'readonly-wip') -%>
+    <% wip_class += ' hide' if @view.hide_wip_limits? -%>
+    <%= content_tag(:div, "WIP : #{(wip ? wip[:limit] : '(not set)')}", :id => "#{hex_target_title}-wip-limit", :class => wip_class + ' lane-wip') %>
+    <%= hidden_field_tag('wip_type_config', (wip ? wip[:type].humanize : 'Count'), :id =>"select_#{hex_target_title}_wip_type_field") %>
+    <%= hidden_field_tag('wip_limit_config', (wip ? wip[:limit] : ''), :id =>"select_#{hex_target_title}_wip_limit_field") %>
+    <%= hidden_field_tag('wip_property_config', wip[:property], :id =>"select_#{hex_target_title}_wip_prop_field") if wip && wip[:type].downcase.eql?('sum') %>
+<% end %>

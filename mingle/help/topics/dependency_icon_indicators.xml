@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_plus.dtd">
+<chapter title="Dependency Icon Indicators" id="mingle_plus">
+		<p>Dependencies are represented by the icons below. You will notice these icons in the Program Dependency Board, Dependency Tab, and cards in a card wall. The icons on cards are color coded to indicate different statuses of the dependency.</p>
+
+        	<bullets> 
+        		<item><p><strong>Dependency icon:</strong></p>
+        		<screenshot alttext="dependency icon" src="resources/images/dependency_icon.png" /></item>
+				<item><p><strong>New raising dependency:</strong></p>
+				<screenshot alttext="new raising dependency" src="resources/images/new_raising_dependency.png" /></item>
+				<item><p><strong>Accepted raising dependency:</strong></p>
+				<screenshot alttext="accepted raising dependency" src="resources/images/accepted_raising_dependency.png" /></item>
+				<item><p><strong>Resolved raising dependency:</strong></p>
+				<screenshot alttext="resolved raising dependency" src="resources/images/resolved_raising_dependency.png" /></item>
+				<item><p><strong>Accepted resolving dependency:</strong></p>
+				<screenshot alttext="accepted resolving dependency" src="resources/images/accepted_resolving_dependency.png" /></item>
+				<item><p><strong>Resolved resolving dependency:</strong></p>
+				<screenshot alttext="resolved resolving dependency" src="resources/images/resolved_resolving_dependency.png" /></item>
+			</bullets>
+</chapter>

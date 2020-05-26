@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE subsection SYSTEM "mingle_help.dtd">
+<subsection title="Create a new project from scratch" collapsed="true">
+	<steps>
+	<item><p>To create a new project, click the <link>New project</link> link on the <strong>Current projects</strong> page (the first page you see after installation or logging on - click the <strong>Mingle logo</strong> to display this page).</p>
+		<screenshot alttext="Empty all projects page" src="resources/images/installation/create_new_project_link.png"/>
+	</item>
+	<item><p>Enter project name and select the 'Blank'.</p>
+		<screenshot alttext="New project from template" src="resources/images/installation/all_projects_new_from_scratch.png"/>
+		<hint>The <cref topic="project_settings_page">Advanced Options</cref> are already set with default values and are available for further project customization.</hint>
+	</item>
+	<item><p>Click the 'Create project' link to complete project creation.</p>
+		<screenshot alttext="New project from template" src="resources/images/installation/complete_create_project_link.png"/>
+	</item>
+	</steps>
+</subsection>

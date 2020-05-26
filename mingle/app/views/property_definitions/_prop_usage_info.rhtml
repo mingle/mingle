@@ -1,0 +1,33 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<ul>
+  <li>Used by <b><%= enumerate(@property_definition.card_count, 'card') %></b>.
+    <div class="bullet-qualifier">
+  <b>Important</b>: values for this property cannot be recovered and will no longer be displayed in history. If you wish to maintain history related to this property please use the hide property feature instead of continuing with this deletion.
+    </div>
+  </li>
+
+  <%= the_following_will_be_deleted('favorite', @project.favorites.of_card_list_views.using(@property_definition).collect(&:name).smart_sort) %>
+  <%= the_following_will_be_deleted('tabbed view', @project.tabs.of_card_list_views.using(@property_definition).collect(&:name).smart_sort) %>
+  <%= the_following_will_be_deleted('transition', @property_definition.transitions.collect(&:name)) %>
+
+  <li>Pages and tables/charts that use this property will no longer work.</li>
+
+  <li>Previously subscribed atom feeds that use this property will no longer provide new data.</li>
+  
+  <li>Card versions previously containing only changes to this property will no longer appear in history.</li>
+</ul>

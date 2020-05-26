@@ -1,0 +1,21 @@
+production:
+  url: jdbc:postgresql://localhost:5432/multitenancy
+  adapter: jdbc
+  driver: org.postgresql.Driver
+  password: ''
+  username: <%= user %>
+  pool: 12
+development:
+  url: jdbc:postgresql://localhost:5432/multitenancy
+  adapter: jdbc
+  driver: org.postgresql.Driver
+  password: ''
+  username: <%= user %>
+  pool: 12
+test:
+  url: jdbc:postgresql://localhost:5432/multitenancy
+  adapter: jdbc
+  driver: org.postgresql.Driver
+  password: ''
+  username: <%= user %>
+  pool: 12

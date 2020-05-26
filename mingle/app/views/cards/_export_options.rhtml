@@ -1,0 +1,45 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% lightbox = Lightbox.with_close_link_and_close_button(self, 'Cancel', '', :class => 'remove-button popup-close', :id => 'close_export_excel_lightbox')
+   lightbox.header "Export cards", spinner(:id => 'card_export_spinner') %>
+   <% form_tag({:controller => 'cards', :action => 'csv_export'}, :id => 'csv_export_form') do -%>
+   <% lightbox.body do %>
+   <%= hidden_field_tag :skip_download %>
+   <% if @view.support_columns? -%>
+      <p id="visible_columns_option">Columns to include in export:</p>
+      <div class="checkbox_row"><%= radio_button_tag 'include_all_columns', 'no', !UserDisplayPreference.current_user_prefs.read_preference(:export_all_columns), :id => 'visible_columns_yes' %><label for="visible_columns_yes">Visible columns only</label></div>
+      <div class="checkbox_row"><%= radio_button_tag 'include_all_columns', 'yes', UserDisplayPreference.current_user_prefs.read_preference(:export_all_columns), :id => 'visible_columns_no' %><label for="visible_columns_no">All</label></div>
+    <% end -%>
+    <p>Include card descriptions?</p>
+    <div class="checkbox_row"><%= radio_button_tag 'export_descriptions', 'yes', UserDisplayPreference.current_user_prefs.read_preference(:include_description), :id => 'export_descriptions_yes' %><label for="export_descriptions_yes">Yes</label></div>
+    <div class="checkbox_row"><%= radio_button_tag 'export_descriptions', 'no', !UserDisplayPreference.current_user_prefs.read_preference(:include_description), :id => 'export_descriptions_no' %><label for="export_descriptions_no">No</label></div>
+    <%= hidden_view_tags(@view) %>
+  <% end
+     lightbox.complete_action do -%>
+       <%= link_to_function "Export", "submitExport()", :id => 'export_to_excel', :class => 'link_as_button primary'  %>
+  <% end -%>
+<% end -%>
+<%= javascript_with_rescue <<-JAVASCRIPT
+window.submitExport = function() {
+  $('card_export_spinner').show();
+  $('export_to_excel').addClassName('disabled')
+  $('csv_export_form').submit();
+  InputingContexts.pop();
+  return true;
+}
+JAVASCRIPT
+-%>

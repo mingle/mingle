@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+
+<topic title="Configuring a database for use with Mingle">
+  
+  <section title='Introduction and advice'>
+    
+  	<p>
+  	  Before you can install Mingle, you must install a database for Mingle to use. We <strong>highly recommended</strong> using PostgreSQL. Support for Oracle (10g or 11g) is also available but is limited to Mingle Plus only.
+  	</p>
+
+    <warning>
+      In order that we can offer you the best support, you should <strong>never</strong> directly access the Mingle database. All integrations should be done using the <cref topic="mingle_api">supported APIs</cref>.
+    </warning>
+
+  </section>
+	
+  <section title="Installing PostgreSQL" file="installing_postgres"/>
+
+  <section title="Installing Oracle" file="installing_oracle" collapsed="true"/>
+	
+  <subsection title="Next step">
+    After configuring the database, you can now <cref topic="mingle_onsite">install Mingle</cref>.
+  </subsection>
+</topic>

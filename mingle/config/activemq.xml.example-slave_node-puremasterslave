@@ -1,0 +1,79 @@
+<!--
+
+This configuration can be used for a slave node in a simple "Pure Master-Slave" configuration:
+
+  http://activemq.apache.org/pure-master-slave.html
+
+Limitations: There can be only one slave node.
+
+Summary:
+
+The master node needs no special configuration, and the slave node only needs to know the
+URI for the master broker (see <masterConnector/>).
+
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:amq="http://activemq.apache.org/schema/core"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+                           http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core-5.5.0.xsd">
+
+    <!-- Allows us to use system properties as variables in this configuration file -->
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"/>
+    <broker xmlns="http://activemq.apache.org/schema/core"
+            useJmx="false"
+            advisorySupport="false"
+            persistent="true"
+            populateJMSXUserID="true"
+            useShutdownHook="true"
+            brokerName="localhost"
+            deleteAllMessagesOnStartup="false"
+            enableStatistics="true"
+            tmpDataDirectory="${mingle.dataDir}/activemq-data/tmp_storage">
+
+        <destinationPolicy>
+            <policyMap>
+                <policyEntries>
+                    <policyEntry queue="mingle.>" producerFlowControl="false"/>
+                </policyEntries>
+            </policyMap>
+        </destinationPolicy>
+
+        <persistenceAdapter>
+            <kahaPersistenceAdapter directory="${mingle.dataDir}/activemq-data"/>
+        </persistenceAdapter>
+
+        <plugins>
+            <simpleAuthenticationPlugin>
+                <users>
+                    <authenticationUser username="mingle" password="password" groups="admin"/>
+                </users>
+            </simpleAuthenticationPlugin>
+        </plugins>
+
+        <services>
+            <masterConnector remoteURI= "tcp://masterhost:61616" userName="mingle" password="password"/>
+        </services>
+        <systemUsage>
+            <systemUsage>
+                <memoryUsage>
+                    <memoryUsage limit="64 mb"/>
+                </memoryUsage>
+                <storeUsage>
+                    <storeUsage limit="1 gb"/>
+                </storeUsage>
+                <tempUsage>
+                    <tempUsage limit="100 mb"/>
+                </tempUsage>
+            </systemUsage>
+        </systemUsage>
+
+        <!-- establish a connector on port 61616 -->
+        <transportConnectors>
+            <transportConnector name="tcp" uri="tcp://0.0.0.0:61616" updateClusterClients="true" updateClusterClientsOnRemove="true"/>
+        </transportConnectors>
+
+    </broker>
+
+</beans>

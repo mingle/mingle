@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE section SYSTEM "mingle_help.dtd">
+<chapter title="Release Planning Tip - Use the Grid View">
+    <p>Use aggregations in column headings in the <cref topic="grid_view">grid view</cref> to help with release planning.</p>
+	<p>Check out this video to see <video url="http://thoughtworks.wistia.com/medias/d0pss4cbcg">how to do iteration planning.</video></p>
+
+    <steps>
+        <item> Set up your project structure using <cref topic="card_trees">card trees</cref> to define relationships among your project's various card types. (Check out this <exref url="http://www.thoughtworks.com/products/iteration-planning">new how-to video</exref> for extra help.)</item>
+        <item> <cref topic="creating_a_card">Create stories</cref> and assign estimates for them using <cref topic="card_properties">card properties</cref>.</item>
+        <item> On the grid view, <cref topic="what_you_can_do_on_the_grid_view#group_cards">group cards</cref> by iteration and <cref topic="what_you_can_do_on_the_grid_view#color_cards">color by priority</cref>.</item>
+        <item> Select to view sum of estimate for every lane / iteration.</item>
+        <item> By dragging and dropping cards across iterations you can view the change in total size of every iteration in the lane heading.</item>
+    </steps>
+    <screenshot alttext="Release Wall" src="resources/images/release_planning.png"/>
+</chapter>

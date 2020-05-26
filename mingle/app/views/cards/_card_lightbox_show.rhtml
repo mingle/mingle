@@ -1,0 +1,89 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div class="card-popup-lightbox">
+  <% lightbox = Lightbox.with_close_link(self, "Close", "") -%>
+  <% lightbox.body("card_show_lightbox_content", nil,
+    :"data-viewer-color" => Color.for(User.current.name),
+    :"data-viewer-handle" => User.current.id,
+    :"data-editable" => allowed_to_edit,
+    :"data-card-identifier" => unique_card_identifier(card),
+    :"data-color" => card.color(params[:color_by]) || card.card_type.color,
+    :"data-transitions-count"=> card.transitions.count) do -%>
+
+    <%= render :partial => "shared/lightbox_flyout", :locals => {:renderable => card, :delete_controller => controller_name, :authorized_to_delete_attachments => authorized_to_delete_attachments} -%>
+
+    <% form_tag({:action => "update", :controller => "cards", :format => 'json', :id => card.id, :bypassMingleAjaxErrorHandler => true}, { "data-tag-editor-standalone-ajax" => true, 'data-remote' => true, :class => 'inline-edit-form view-mode', 'data-card-number' => card.number, 'data-editable-id' => url_for(:controller => 'cards', :action => 'show', :number => card.number), "data-edit-url" => url_for(:controller => "cards", :action => "edit", :number => card.number) }) do %>
+    <div class="view-mode-only card_settings popover">
+      <i href="javascript:void(0);" class="card_settings_gear fa fa-gear"></i>
+      <a href="javascript:void(0);" class="card_settings_gear card_settings_caret"></a>
+      <div class="content">
+        <%= render :partial => "cards/card_settings_drop_down" %>
+      </div>
+    </div>
+    <%= lightbox_close_button(:class => 'view-mode-only', :skip_default_click_handler => true) %>
+
+    <div>
+      <%= render :partial => 'cards/card_type_editor', :locals => { :card => card } %>
+      <%= render :partial => 'cards/card_title', :locals => { :card => card } %>
+
+       <div class="tags-container" name="tags-container">
+         <% if allowed_to_edit %>
+           <%= render :partial => "tags/tags_editor", :locals => {:tag_names => card.tags.map(&:name), :project => @project, :tag_field_name  => 'tagged_with', :auto_submit => true, :sortable => true, :"update_order_url" => url_for(:action => 'reorder_tags', :controller => 'cards', :taggable_id => card.id) } %>
+         <% else %>
+           <%= render :partial => 'shared/readonly_tags_panel', :locals => {:event => card} %>
+         <% end %>
+
+       </div>
+       <div class = "card-content-container">
+         <%= render :partial => 'cards/checklists', :locals => {:card => card} %>
+         <%= render :partial => 'cards/dependencies', :locals => { :card => card } %>
+         <%= render :partial => 'cards/card_content', :locals => {:card => card, :popup => true, :empty_description_text => "(no description)"} %>
+       </div>
+      <% if allowed_to_edit %>
+        <div class="progress-bar-wrapper">
+          <%= render :partial => "cards/card_properties", :locals => { :card => card, :properties_expanded => false } %>
+        </div>
+      <% else %>
+        <%= render :partial => "cards/properties_on_lightbox", :locals => { :card => card, :properties_expanded => false } %>
+      <% end %>
+
+      <div class='actions'>
+        <%= link_to_function('Edit', "javascript:void(0)", :accessing => ':edit', :class => 'primary link_as_button view-mode-only enter-edit', :onclick => "MingleUI.EasyCharts.ActionTracker.resetRecordedEvents()" ) %>
+        <%= link_to 'Delete', {:controller => 'cards', :action => 'confirm_delete', :number => card.number}, :class => 'link_as_button delete view-mode-only', :'data-remote' => true %>
+        <%= render(:partial => 'cards/card_transitions_button', :locals => {:card => card}) %>
+        <%= link_to('<i class="fa fa-expand"></i> Full View'.html_safe,
+            { :controller => 'cards', :action => 'show', :number => card.number },
+            { :class => "link_as_button view-mode-only",
+              :onclick => "if(!TreeView.isUsingTree()) return true; TreeView.tree.openCard(event, this); return false"}) %>
+        <div class="edit-mode-only">
+            <%= link_to 'Save', "javascript:void(0)",  {:class => 'save-content primary link_as_button save-button', :onclick => "MingleUI.EasyCharts.ActionTracker.postCreateEvents();"} %>
+            <%= link_to 'Save & Close', "javascript:void(0)",  {:class => 'close-after-save-button save-content link_as_button', :onclick => "MingleUI.EasyCharts.ActionTracker.postCreateEvents();"} %>
+
+
+          <%= link_to 'Cancel', "javascript:void(0)", {:class => 'cancel-edit link_as_button'} %>
+        </div>
+      </div>
+    </div>
+    <% end -%>
+    <% if render_transition_forms %>
+      <div sytle="display:none">
+        <%= render :partial => 'cards/transition_executor_forms' %>
+      </div>
+    <% end %>
+  <% end -%>
+
+</div>

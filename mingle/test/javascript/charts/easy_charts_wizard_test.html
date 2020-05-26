@@ -1,0 +1,467 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Easy Charts Wizard Test</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <script src="../test_assets/sinon-2.3.6.js" type="text/javascript"></script>
+
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js"
+          type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery.tag-it.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/tinycolor.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+  <script src="../../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/yaml-0.3.0.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/application.js" type="text/javascript"></script>
+
+  <script src="../../../app/assets/javascripts/url_helper.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/drop_down.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/text_box.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/tags_filter.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/project_data_store.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/mingle_tag_storage.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/mingle_tageditor.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/parameter.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/pair_parameter.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/group_parameter.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/section_helpers.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/card_filters.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/card_filter.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/mql_builder.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/card_filter_value_wrapper.js"
+          type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/pie_chart/macro_builder.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/preview_generator.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/preview_container.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/macro_editor.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/sections/data_section.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/pie_chart/sections/build_chart_section.js"
+          type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/pie_chart/sections/customize_chart_section.js"
+          type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/ratio_bar_chart/sections/build_chart_section.js"
+          type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/ratio_bar_chart/sections/customize_chart_section.js"
+          type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/stacked_bar_chart/sections/build_chart_section.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/stacked_bar_chart/sections/build_chart_section.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/cumulative_flow_graph/sections/build_chart_section.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/data_series_chart/sections/build_chart_section.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/data_series_chart/sections/customize_chart_section.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/daily_history_chart/sections/build_chart_section.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/cumulative_flow_graph/sections/customize_chart_section.js" type="text/javascript"></script>
+  <script type="application/javascript">
+    MingleUI.EasyCharts.Sections.DataSection = function () {
+      return {
+        values: function () {},
+        isValid: function() {return false; },
+        selectedCardTypes: function () { return []; }
+      };
+    };
+  </script>
+  <script src="../../../app/assets/javascripts/easy_charts/chart_builder.js" type="text/javascript"></script>
+  <script type="application/javascript">
+    sinon.spy(MingleUI.EasyCharts, 'ChartBuilder');
+    var disableButtonSpy = sinon.spy(), enableButtonSpy = sinon.spy(), CKEDITOR = {
+      dialog: {
+        getCurrent: function () {
+          return {
+            disableButton: disableButtonSpy,
+            enableButton: enableButtonSpy
+          }
+        }
+      }
+    };
+
+  </script>
+  <script src="../../../app/assets/javascripts/easy_charts/easy_charts_wizard.js" type="text/javascript"></script>
+
+  <script src="../test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+  <script src="../test_assets/qunit-phantom.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="../test_assets/qunit-1.21.0.css" type="text/css"/>
+</head>
+<body>
+<div id="qunit"></div>
+<div id="chart_wizard_container"></div>
+
+<script type="application/javascript">
+
+  /////TODO: change the way enable and disable spies work so that we don't assert on magical numbers like 3 and 4.
+  var initialProject = 'mingle';
+  QUnit.module('Easy Charts Wizard', {
+    beforeEach: function () {
+      MingleUI.EasyCharts.Sections.BuildChartSection = function () {};
+      MingleUI.EasyCharts.Sections.CustomizeChartSection = function () {};
+      this.server = sinon.fakeServer.create();
+      this.container = $j('#chart_wizard_container');
+      sinon.spy(MingleUI.EasyCharts, 'PreviewGenerator');
+      sinon.spy(MingleUI.EasyCharts, 'PreviewContainer');
+      sinon.spy(MingleUI.EasyCharts, 'MacroEditor');
+
+      this.server.respondWith('GET', '/api/v2/projects/mingle/cards/execute_mql.json\\?mql=Select+count\\(\\*\\)',
+          [200, {'Content-Type': 'application/json'}, JSON.stringify([{'Count ': 123}])]);
+      this.server.respondWith('GET', '/api/v2/projects/mingle/chart_data.json',
+          [200, {'Content-Type': 'application/json'}, JSON.stringify({identifier: 'mingle', name: 'Mingle', cardTypes: [],team:[]})]);
+    },
+    afterEach: function () {
+      this.container.empty();
+      this.server.restore();
+      MingleUI.EasyCharts.PreviewGenerator.restore();
+      MingleUI.EasyCharts.PreviewContainer.restore();
+      MingleUI.EasyCharts.MacroEditor.restore();
+      MingleUI.EasyCharts.ChartBuilder.reset();
+      disableButtonSpy.reset();
+      enableButtonSpy.reset();
+    }
+  }, function () {
+    QUnit.module('With easy charts support', {
+      beforeEach: function () {
+        this.wizard = new MingleUI.EasyCharts.EasyChartsWizard(this.container, 'pie-chart', {
+          supportedInEasyCharts: true,
+          chartData: {project: initialProject, initialProject: initialProject},
+          contentProvider: {
+            type: 'card',
+            id: 1
+          },
+          macroHelpUrls: {'pie-chart': "www.help.com/link"}
+        });
+        this.stubbedChartBuilder = MingleUI.EasyCharts.ChartBuilder.returnValues[0];
+        this.stubbedMacroEditor = MingleUI.EasyCharts.MacroEditor.returnValues[0];
+        this.stubbedPreviewGenerator = MingleUI.EasyCharts.PreviewGenerator.returnValues[0];
+        this.stubbedPreviewContainer = MingleUI.EasyCharts.PreviewContainer.returnValues[0];
+        sinon.spy(this.stubbedPreviewGenerator, 'enable');
+        sinon.stub(this.stubbedPreviewGenerator, 'generate');
+        this.server.respond();
+      }
+    });
+
+    QUnit.test('testShouldSetChartType', function (assert) {
+      assert.equal(MingleUI.EasyCharts.chartType, 'pie-chart');
+    });
+
+    QUnit.test('testShouldInitializeChartBuilder', function (assert) {
+      var chartBuilderArgs = MingleUI.EasyCharts.ChartBuilder.args[0];
+
+      assert.equal(MingleUI.EasyCharts.ChartBuilder.callCount, 1);
+      assert.equal(chartBuilderArgs[0], 'pie-chart');
+      assert.deepEqual(chartBuilderArgs[1], {project: initialProject, initialProject: initialProject});
+      assert.equal(typeof chartBuilderArgs[2].preview, 'function');
+      assert.equal(typeof chartBuilderArgs[2].resetPreview, 'function');
+      assert.equal(typeof chartBuilderArgs[2].updateCardCount, 'function');
+      assert.equal(typeof chartBuilderArgs[2].initialized, 'function');
+    });
+
+    QUnit.test('testShouldDisableInsertButtonOnInitialize', function (assert) {
+      assert.equal(disableButtonSpy.callCount, 3);
+      assert.equal(disableButtonSpy.args[0][0], 'insert');
+    });
+
+    QUnit.test('testShouldInitializePreviewGeneratorAndEnableIt', function (assert) {
+      var previewGeneratorArgs = MingleUI.EasyCharts.PreviewGenerator.args[0];
+      assert.equal(MingleUI.EasyCharts.PreviewGenerator.callCount, 1);
+
+      assert.equal(previewGeneratorArgs[0], this.stubbedPreviewContainer);
+      assert.deepEqual(previewGeneratorArgs[1], {
+        chartType: 'pie-chart',
+        projectIdentifier: 'mingle',
+        contentProvider: {
+          type: 'card',
+          id: 1
+        }
+      });
+      assert.equal(typeof previewGeneratorArgs[2].onSuccess, 'function');
+      assert.equal(typeof previewGeneratorArgs[2].onError, 'function');
+      assert.equal(this.stubbedPreviewGenerator.enable.callCount, 1);
+    });
+
+    QUnit.test('testShouldDisableInsertButtonWhenPreviewGenerationFails', function (assert) {
+      MingleUI.EasyCharts.PreviewGenerator.args[0][2].onError();
+
+      assert.equal(disableButtonSpy.callCount, 4);
+      assert.equal(disableButtonSpy.args[0][0], 'insert');
+    });
+
+    QUnit.test('testShouldEnableInsertButtonWhenPreviewGenerationSucceeds', function (assert) {
+      sinon.stub(this.stubbedChartBuilder, 'enableInsert').returns(true);
+      MingleUI.EasyCharts.PreviewGenerator.args[0][2].onSuccess();
+
+      assert.equal(enableButtonSpy.callCount, 1);
+      assert.equal(enableButtonSpy.args[0][0], 'insert');
+    });
+
+    QUnit.test('testShouldCreatePreviewContainer', function (assert) {
+      var previewContainerArgs = MingleUI.EasyCharts.PreviewContainer.args[0];
+
+      assert.equal(MingleUI.EasyCharts.PreviewContainer.callCount, 1);
+      assert.equal(previewContainerArgs[0], 'www.help.com/link');
+
+      assert.ok(this.wizard.htmlContainer.find('.easy-charts-preview-panel-container'));
+    });
+
+    QUnit.test('testShouldCreateMacroEditor', function (assert) {
+      var macroEditorArgs = MingleUI.EasyCharts.MacroEditor.args[0];
+
+      assert.equal(MingleUI.EasyCharts.MacroEditor.callCount, 1);
+
+      var macroEditorContainer = this.wizard.htmlContainer.find('#charts_macro_form_container');
+      assert.ok(macroEditorContainer[0]);
+      assert.notOk(macroEditorContainer.is(':visible'));
+      assert.deepEqual(macroEditorArgs[0], {
+        hasAssociatedChartBuilder: true,
+        macro: undefined,
+        macroType:'pie-chart'
+      });
+      assert.equal(typeof macroEditorArgs[1].preview, 'function');
+      assert.equal(typeof macroEditorArgs[1].onUpdate, 'function');
+      assert.equal(typeof macroEditorArgs[1].onCancel, 'function');
+    });
+
+    QUnit.test('testShouldAddShowMacroEditorButton', function (assert) {
+      var showMacroEditorButton = this.wizard.htmlContainer.find('.show-macro-editor-container button.show-macro-editor');
+
+      assert.ok(showMacroEditorButton[0]);
+      assert.equal(showMacroEditorButton.text(), 'Customize with MQL');
+    });
+
+    QUnit.test('testShouldGeneratePreviewWhenChartBuilderTriggersPreviewCallback', function (assert) {
+      sinon.stub(this.stubbedChartBuilder, 'enableInsert').returns(true);
+      MingleUI.EasyCharts.ChartBuilder.args[0][2].preview('macro value');
+
+      assert.equal(this.stubbedPreviewGenerator.generate.callCount, 1);
+      assert.deepEqual(this.stubbedPreviewGenerator.generate.args[0], ['macro value', undefined]);
+    });
+
+    QUnit.test('testShouldResetPreviewWhenChartBuilderTriggersResetPreviewCallback', function (assert) {
+      sinon.spy(this.stubbedPreviewContainer, 'reset');
+      MingleUI.EasyCharts.ChartBuilder.args[0][2].resetPreview();
+
+      assert.equal(this.stubbedPreviewContainer.reset.callCount, 1);
+      assert.equal(disableButtonSpy.callCount, 4);
+      assert.equal(disableButtonSpy.args[0][0], 'insert');
+    });
+
+    QUnit.test('testShouldEnableMacroEditorWhenShowMacroEditorButtonIsClicked', function (assert) {
+      var macroValue = {
+        'pie-chart': {
+          data: "SELECT 'property', aggregate WHERE condition",
+          project: 'mingle'
+        }
+      };
+      var showMacroEditorButton = this.wizard.htmlContainer.find('.show-macro-editor-container button.show-macro-editor');
+      sinon.stub(this.stubbedChartBuilder, 'disable');
+      assert.ok(showMacroEditorButton.is(':visible'));
+      assert.notOk(this.wizard.htmlContainer.find('#charts_macro_form_container').is(':visible'));
+      sinon.spy(this.stubbedMacroEditor, 'enableWith');
+      sinon.stub(this.stubbedChartBuilder, 'getMacroValue').returns(macroValue);
+
+      showMacroEditorButton.click();
+
+      assert.notOk(showMacroEditorButton.is(':visible'));
+      assert.equal(this.stubbedChartBuilder.disable.callCount, 1);
+      assert.ok(this.wizard.htmlContainer.find('#charts_macro_form_container').is(':visible'));
+      assert.equal(MingleUI.EasyCharts.MacroEditor.returnValues[0].enableWith.callCount, 1);
+      assert.deepEqual(MingleUI.EasyCharts.MacroEditor.returnValues[0].enableWith.args[0][0], macroValue);
+    });
+
+    QUnit.test('testShouldGeneratePreviewWhenMacroEditorTriggersPreviewCallback', function (assert) {
+      sinon.stub(this.stubbedChartBuilder, 'enableInsert').returns(true);
+      MingleUI.EasyCharts.MacroEditor.args[0][1].preview('macro value', 'mql');
+
+      assert.equal(this.stubbedPreviewGenerator.generate.callCount, 1);
+      assert.deepEqual(this.stubbedPreviewGenerator.generate.args[0], ['macro value', 'mql']);
+    });
+
+    QUnit.test('testShouldResetPreviewAndDisableInsertButtonWhenMacroEditorTriggersOnUpdate', function (assert) {
+      sinon.spy(this.stubbedPreviewContainer, 'reset');
+      MingleUI.EasyCharts.MacroEditor.args[0][1].onUpdate();
+
+      assert.equal(this.stubbedPreviewContainer.reset.callCount, 1);
+      assert.equal(disableButtonSpy.callCount, 4);
+      assert.equal(disableButtonSpy.args[0][0], 'insert');
+    });
+
+    QUnit.test('testShouldHideMacroEditorAndShowEasyChartsFormAndGeneratePreviewWhenOnCancelIsTriggered', function (assert) {
+      var showMacroEditorButton = this.wizard.htmlContainer.find('.show-macro-editor-container button.show-macro-editor');
+      sinon.stub(this.stubbedChartBuilder, 'getMacroValue').returns({});
+      sinon.stub(this.stubbedChartBuilder, 'enable');
+      sinon.stub(this.stubbedChartBuilder, 'disable');
+      assert.ok(this.wizard.htmlContainer.find('.chart-builder-form-container').is(':visible'));
+      showMacroEditorButton.click();
+
+      assert.equal(this.stubbedChartBuilder.disable.callCount, 1);
+      assert.notOk(showMacroEditorButton.is(':visible'));
+      sinon.spy(MingleUI.EasyCharts.MacroEditor.returnValues[0], 'disable');
+
+      MingleUI.EasyCharts.MacroEditor.args[0][1].onCancel();
+
+      assert.equal(this.stubbedChartBuilder.enable.callCount, 1);
+      assert.ok(showMacroEditorButton.is(':visible'));
+    });
+
+    QUnit.test('testGetChartDataShouldBuildChartDataFromSectionsWhenChartBuilderFormVisible', function (assert) {
+      sinon.stub(this.stubbedChartBuilder, 'getMacroValue').returns('macro value');
+
+      assert.deepEqual(this.wizard.getChartData(), {
+        content_provider: {
+          id: 1,
+          provider_type: 'card'
+        },
+        macro_editor: 'macro value',
+        macro_type: "pie-chart"
+      });
+    });
+
+    QUnit.test('testGetChartDataShouldBuildChartDataFromMacroEditorWhenChartBuilderFormIsNotVisible', function (assert) {
+      sinon.stub(this.stubbedChartBuilder, 'isEnabled').returns(false);
+
+      sinon.stub(this.stubbedMacroEditor, 'getMacroValue').returns('macro value');
+
+      assert.deepEqual(this.wizard.getChartData(), {
+        content_provider: {
+          id: 1,
+          provider_type: 'card'
+        },
+        macro_editor: 'macro value',
+        macro_type: "pie-chart"
+      });
+    });
+
+    QUnit.test('testShouldTriggerUpdateCardCountPreviewOnPreviewGeneratorWhenChartBuilderTriggerUpdateCardCount', function (assert) {
+      sinon.stub(this.stubbedPreviewGenerator, 'updateCardCountPreview');
+      MingleUI.EasyCharts.ChartBuilder.args[0][2].updateCardCount('mingle', 'cardCountMql');
+
+      assert.equal(this.stubbedPreviewGenerator.updateCardCountPreview.callCount, 1);
+      assert.deepEqual(this.stubbedPreviewGenerator.updateCardCountPreview.args[0], ['mingle', 'cardCountMql']);
+    });
+
+    QUnit.test('testEnableInsertButtonShouldInvokeChartBuilderEnableInsert',function (assert) {
+      sinon.stub(this.stubbedChartBuilder, 'enableInsert');
+      MingleUI.EasyCharts.PreviewGenerator.args[0][2].onSuccess();
+
+      assert.equal(this.stubbedChartBuilder.enableInsert.callCount, 1);
+    });
+
+    QUnit.test('testGeneratePreviewForChartBuilderDisablesInsertButtonIfChartBuilderEnableInsertIsFalse',function (assert) {
+      sinon.stub(this.stubbedChartBuilder, 'enableInsert').returns(false);
+
+      assert.equal(disableButtonSpy.callCount, 3);
+
+      MingleUI.EasyCharts.ChartBuilder.args[0][2].preview();
+
+      assert.equal(this.stubbedChartBuilder.enableInsert.callCount, 1);
+      assert.equal(disableButtonSpy.callCount, 4);
+      assert.equal(disableButtonSpy.args[0][0], 'insert');
+    });
+
+    QUnit.test('testOnErrorTriggeredOnChartBuilderDisablesInsertButton', function (assert) {
+      disableButtonSpy.reset();
+      assert.equal(disableButtonSpy.callCount, 0);
+
+      MingleUI.EasyCharts.ChartBuilder.args[0][2].onError('blah blah');
+
+      assert.equal(disableButtonSpy.callCount, 1);
+      assert.equal(disableButtonSpy.args[0][0], 'insert');
+    });
+
+    QUnit.module('Without EasyChartsSupport', {
+      beforeEach: function () {
+        this.wizard =  new MingleUI.EasyCharts.EasyChartsWizard(this.container, 'pie-chart', {
+          supportedInEasyCharts: false,
+          macro: 'pie-chart\n  data: some data value',
+          chartData: {project: initialProject, initialProject: initialProject},
+          contentProvider: {
+            type: 'card',
+            id: 1
+          },
+          macroHelpUrls: {'pie-chart': "www.help.com/link"}
+        });
+        this.stubbedMacroEditor = MingleUI.EasyCharts.MacroEditor.returnValues[0];
+        this.stubbedPreviewGenerator = MingleUI.EasyCharts.PreviewGenerator.returnValues[0];
+        this.stubbedPreviewContainer = MingleUI.EasyCharts.PreviewContainer.returnValues[0];
+        sinon.spy(this.stubbedPreviewGenerator, 'enable');
+        sinon.stub(this.stubbedPreviewGenerator, 'generate');
+        this.server.respond();
+      }
+    });
+
+    QUnit.test('testShouldNotInitializeChartBuilder', function (assert) {
+      assert.equal(MingleUI.EasyCharts.ChartBuilder.callCount, 0);
+    });
+
+    QUnit.test('testShouldInitializePreviewGeneratorAndNotCallEnable', function (assert) {
+      var previewGeneratorArgs = MingleUI.EasyCharts.PreviewGenerator.args[0];
+      assert.equal(MingleUI.EasyCharts.PreviewGenerator.callCount, 1);
+
+      assert.equal(previewGeneratorArgs[0], this.stubbedPreviewContainer);
+      assert.deepEqual(previewGeneratorArgs[1], {
+        chartType: 'pie-chart',
+        projectIdentifier: 'mingle',
+        contentProvider: {
+          type: 'card',
+          id: 1
+        }
+      });
+      assert.equal(typeof previewGeneratorArgs[2].onSuccess, 'function');
+      assert.equal(typeof previewGeneratorArgs[2].onError, 'function');
+      assert.equal(this.stubbedPreviewGenerator.enable.callCount, 0);
+    });
+
+
+    QUnit.test('testShouldNotInitializeCustomizeWithMqlButton', function (assert) {
+      assert.notOk(this.wizard.htmlContainer.find('div.show-macro-editor-container')[0]);
+      assert.notOk(this.wizard.htmlContainer.find('button.show-macro-editor')[0]);
+    });
+
+    QUnit.test('testShouldAddMacroEditor', function (assert) {
+      var macroEditorArgs = MingleUI.EasyCharts.MacroEditor.args[0], expectedMacroEditorData = {
+        hasAssociatedChartBuilder: false,
+        macro: 'pie-chart\n  data: some data value',
+        macroType:'pie-chart'
+      };
+
+      assert.equal(MingleUI.EasyCharts.MacroEditor.callCount, 1);
+
+      var macroEditorContainer = this.wizard.htmlContainer.find('#charts_macro_form_container');
+      assert.ok(macroEditorContainer[0]);
+      assert.ok(macroEditorContainer.is(':visible'));
+      assert.deepEqual(macroEditorArgs[0], expectedMacroEditorData);
+      assert.equal(typeof macroEditorArgs[1].preview, 'function');
+      assert.equal(typeof macroEditorArgs[1].onUpdate, 'function');
+      assert.equal(typeof macroEditorArgs[1].onError, 'function');
+      assert.equal(typeof macroEditorArgs[1].onCancel, 'function');
+      assert.equal(macroEditorContainer.find('textarea').val(), expectedMacroEditorData.macro);
+    });
+
+    QUnit.test('testShouldReturnMacroContent', function (assert) {
+      assert.deepEqual(this.wizard.getChartData(), {
+        content_provider: {
+          id: 1,
+          provider_type: 'card'
+        },
+        macro_editor: {'pie-chart':{ data: 'some data value'}},
+        macro_type: "pie-chart"
+      });
+    });
+  });
+</script>
+</body>
+</html>

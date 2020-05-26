@@ -1,0 +1,4 @@
+#Assert that project <Java> is displayed on plan projects list of plan <Finance> and status is <define a managed text property in this project>
+*Open plan <Finance> in days view
+*Open "Projects" page
+*Assert links "define a managed text property in this project" present for project "Java"

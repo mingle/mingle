@@ -1,0 +1,53 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= render :partial => 'shared/admin_actions'%>
+
+<%= render :partial => 'shared/title_bar', :locals => { :action_partial_path => 'transitions/action_bar', :title => 'Card transitions', :help_link_name => 'Card Transitions Page'} %>
+
+<div id='content-simple'>
+  <ul class="transition-actions inline-list">
+    <li>
+      <%= label 'filter', nil, 'Filter by card type:', :for => 'card-types-filter' %>
+      <%= collection_select 'filter', 'card_type_id', @project.card_types, :id, :name, { :prompt => 'All' }, :id => 'card-types-filter', :class => 'card-type-selection' %>
+    </li>
+  
+    <li>
+      <%= label 'filter', nil, 'Show workflow for:', :for => 'property-definitions-of-card-type-filter' %>
+      <%= select_tag 'property_definition', "", :id => 'property-definitions-of-card-type-filter', :class => 'property-definition-selection' %>
+    </li>
+  </ul>
+  
+  <div id="no-transition-message" class="no-transition-message" style="display: none;">
+    There are currently no transitions to list.<% if authorized?(:controller => 'transitions', :action => 'new') %> You can <%= link_to_function 'create a new transition', "Transition.navigateToUrl('#{url_for(:action => :new)}')", :accessing => 'transitions:new' %> or <%= link_to 'generate a new transition workflow', {:controller => 'transition_workflows', :action => 'new'} %>.<% end %>
+  </div>
+  
+  <div id="all-transitions">    
+    <%= render :partial => 'transition', :collection => @transitions, :locals => { :actions_from => 'display_actions', :show_action_links => true } %>
+  </div>
+</div>
+
+<%= render :partial => 'shared/background_color_notice' %>
+<%= render :partial => 'transitions/action_bar', :locals => { :position => 'bottom' } %>
+
+<%= javascript_with_rescue <<-JAVASCRIPT
+  TransitionsFiltersManager.instance = new TransitionsFiltersManager(
+    #{card_type_properties_mapping.to_json},
+    #{Transition.map_from_transition_id_to_card_type_and_property_definitions(@transitions).to_json},
+    #{(params[:filter] || {}).to_json},
+    #{{ 'createdTransitionId' => params[:created_transition_id], 'updatedTransitionId' => params[:updated_transition_id] }.to_json});
+JAVASCRIPT
+-%>

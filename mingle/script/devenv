@@ -1,0 +1,36 @@
+#!/bin/bash
+#  Copyright 2020 ThoughtWorks, Inc.
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Affero General Public License as
+#  published by the Free Software Foundation, either version 3 of the
+#  License, or (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Affero General Public License for more details.
+#
+#  You should have received a copy of the GNU Affero General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+
+readonly invocation="$_" # this needs to be the first line. only works in bash - sorry ZSH'ers.
+
+echo ""
+echo "*********"
+echo "THIS SCRIPT ($0) IS DEPRECATED - ONLY USEFUL IF YOU ARE NOT USING RBENV OR RVM TO MANAGE YOUR RUBY ENVIRONMENT"
+echo "*********"
+echo ""
+
+if [[ "$invocation" == $0 ]]; then
+  echo "This script is intended to be sourced, not run as a separate process/shell."
+  echo "Better yet, just install the rbenv-vars plugin and completely ignore this obsoleted file. This is a fallback script for developers not using Rbenv or RVM."
+  exit 1
+fi
+
+echo -e "\nInstall the rbenv-vars plugin and you will no longer need to source this script!\n"
+echo -e " - to install rbenv-vars, run \`script/build\` or clone https://github.com/sstephenson/rbenv-vars to your \$HOME/.rbenv/plugins/ directory\n\n"
+
+# bash needs env variables to be quoted because of the special chars, but rbenv-vars needs them NOT quoted
+# so just quote them on the fly, evaluate and export
+eval $(sed -En -e 's/^([^=]+)=(.+)$/export \1="\2"/p' .rbenv-vars)

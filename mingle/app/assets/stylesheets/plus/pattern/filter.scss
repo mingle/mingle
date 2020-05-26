@@ -1,0 +1,106 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+/**
+ * filter.css
+ *
+ * Style for project cards filter
+ */
+
+/**
+ * TABLE OF CONTENTS
+ *
+ * =BASE
+ * =ENHANCEMENTS
+ */
+
+.condition-container {
+  font-size: 11px;
+  display: block;
+  padding: 5px 0;
+  background: #eeeeee url(../../../images/shared/backgrounds/bg_gradient_50.png) repeat-x;
+  border: 1px solid #CCC;
+  margin-bottom: 4px;
+  width: 100%;
+  a, p {
+    cursor: pointer;
+    /*Firefox*/
+    cursor: hand;
+    /*IE*/
+  }
+}
+
+.first-operand, .operator, .second-operand, .condition-actions {
+  float: left;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+}
+
+.first-operand {
+  float: left;
+  width: 29%;
+  padding-left: 5px;
+  p!, a! {}
+}
+
+.operator {
+  width: 28%;
+  float: left;
+}
+
+.second-operand {
+  width: 35%;
+  float: left;
+  a {
+    display: inline;
+  }
+}
+
+.condition-actions {
+  float: right;
+  width: 6%;
+  a {
+    float: right;
+    margin-right: 5px;
+    &.filter-delete-link {
+      img {
+        display: none;
+      }
+      background: url("../../../images/shared/icons/icon_close_14.png") no-repeat scroll left 50% transparent;
+      display: block;
+      height: 14px;
+      padding: 0;
+      width: 14px;
+    }
+  }
+}
+
+/* hide the inline image and use a background image */
+
+.condition-container a {
+  background: url("../../../images/shared/icons/icon_arrow_down_black_small.png") no-repeat scroll right center transparent;
+  color: #333333;
+  padding-right: 13px;
+}
+
+#add_new_filter_link {
+  text-align: left;
+  margin-top: 5px;
+}
+

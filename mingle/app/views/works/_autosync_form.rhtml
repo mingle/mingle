@@ -1,0 +1,67 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% form_tag(cards_program_plan_objective_works_path(@plan.program, @objective), :id => 'autosync_form', :class => "clear_float") do -%>
+   <div class='autosync'>
+     <%= check_box_tag 'autosync', 'on', @autosync_filter.present? %><label for='autosync'>Auto-sync</label> <span class="notes">(only cards that continue to match this filter will belong to this feature.)</span>
+   </div>
+   <div class="autosync-help">
+     <%= render_help_link('Auto Sync') %>
+   </div>
+   <%= render :partial => 'filter_cards_params', :locals => {:prefix => 'autosync'} %>
+
+   <div id="autosync_confirmation" style="display: none;">
+     <% lightbox = Lightbox.with_close_link_and_close_button(self, 'Cancel', '', :id => 'cancel', :onclick => "cancelAutoSyncChange()", :class => 'remove-button popup-close')
+        lightbox.header "Confirm enable synchronization", spinner(:id => 'autosync_spinner')
+        lightbox.body do %>
+          <% info_box do %>
+            <div id='autosync_confirmation_content'>
+             <p><%= auto_sync_filter_message(@matching_card_count) %> By activating auto-sync for <%= @project.name.bold %>:
+               <ul>
+               <li>These and all cards that match your filter settings in the future will be automatically added to <%= @objective.name.bold %>. </li>
+               <li>Cards that have already been added will remain if the cards match your filter settings. </li>
+               <li>Cards that do not match your filter settings will be automatically removed from <%= @objective.name.bold %>.</li>
+               </ul>
+             </p>
+            </div>
+         <% end %>
+     <% end
+        lightbox.complete_action do -%>
+          <%= link_to_function "Enable Auto-Sync", "submitAutoSyncChange()", :id => 'enable_auto_sync', :class => 'link_as_button primary'  %>
+        <% end -%>
+   </div>
+
+   <%= javascript_with_rescue <<-JAVASCRIPT
+   window.submitAutoSyncChange = function() {
+     $('autosync_spinner').show();
+     $('autosync_form').submit();
+     return true;
+   }
+   window.cancelAutoSyncChange = function() {
+     $('autosync').checked = false;
+   }
+   $('autosync').observe('click', function(event) {
+     if ($('autosync').checked) {
+       InputingContexts.push(new LightboxInputingContext());
+       InputingContexts.update($('autosync_confirmation').innerHTML);
+     } else {
+       return submitAutoSyncChange();
+     }
+   })
+   JAVASCRIPT
+   -%>
+
+<% end -%>

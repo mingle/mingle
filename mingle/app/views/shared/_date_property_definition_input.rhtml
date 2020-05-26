@@ -1,0 +1,65 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%
+  options[:not_set_display_name] ||= '(not set)'
+  calendar_image_title = options[:read_only] ? '' : 'Pick a date'
+%>
+
+  <span id="<%= options[:html_id_prefix] %>_date_panel" class="date-property">
+    <a id="<%= options[:html_id_prefix] %>_edit_link" style="display:inline;"  <% if options[:read_only] %>class = "transition-hidden-protected"<% end %>><%= h (options[:display_value].blank? ? options[:not_set_display_name] : options[:display_value]) %></a>
+    <% unless options[:read_only] %>
+      <%= image_tag("icon-calendar.png", :border => 0, :id => "#{options[:html_id_prefix]}_calendar", :alt => 'Calendar picker', :title => calendar_image_title) %>
+    <% end %>  
+    <%= text_field_tag options[:field_name], 
+          property_value_for_inline_editor(options[:value], options[:is_mixed_value]).blank? ? '' : options[:display_value],
+          :id => "#{options[:html_id_prefix]}_editor",
+          :style =>"display:none;" %>
+  </span>
+
+<%
+  dl_options = {:onchange => options[:onchange], :is_mixed_value => options[:is_mixed_value]}
+-%>
+
+<% unless options[:read_only] %>
+
+  <%= javascript_with_rescue <<-JAVASCRIPT
+    var #{options[:html_id_prefix]}_datePropertyEditor = new DatePropertyEditor('#{options[:html_id_prefix]}', '#{options[:value]}', '#{options[:not_set_display_name]}', 'edit_link', 'editor', #{js_options dl_options})
+
+    function #{options[:html_id_prefix]}_update(calendar) {
+      #{options[:html_id_prefix]}_datePropertyEditor._onUpdateFromCalendarWidget(calendar);
+    }
+
+    Calendar.setup(
+      {
+        inputField  : "#{options[:html_id_prefix]}_editor",
+        ifFormat    : #{@project.date_format.to_json},
+        displayArea : "#{options[:html_id_prefix]}_edit_link",
+        daFormat    : #{@project.date_format.to_json},
+        button      : "#{options[:html_id_prefix]}_calendar",
+        align       : "Br",
+        electric    : false,
+        showOthers  : true,
+        weekNumbers : false,
+        firstDayOfWeek : 0,
+        onUpdate    : #{options[:html_id_prefix]}_update,
+        cache       : true
+      }
+    );
+JAVASCRIPT
+-%>
+
+<% end %>

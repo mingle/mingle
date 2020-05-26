@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Viewing card history and murmurs">
+    <section title="Introduction">
+    	<p>Mingle lets your project team view a complete history of all changes made to a card, and any murmurs made against that card.</p>
+    	<hint>You can view a complete history of all changes made to a project (or to specific card types, wiki pages or revisions) by clicking the main <tab>History</tab> tab.
+    		You can even subscribe via <cref topic="subscribing_via_feeds">feeds</cref> or <cref topic="subscribing_via_email">email</cref> to stay up-to-date with any relevant project changes.</hint>
+    	<p>You can view a card's history and murmurs in the top right corner of the screen when viewing a card.</p>
+    	<screenshot alttext="Card murmur control" src="resources/images/murmurs_new_card.png" />
+
+    	<p>By default, all murmurs for a card show first with a blank space to add a new murmur.</p>
+    	<p>Click the History component to display card history.</p>
+    	<screenshot alttext="Card history control" src="resources/images/card_history_new.png" />
+
+    	<p>Click the <link>View</link> link next to a card version to see the card's status at that version.</p>
+    	<screenshot alttext="Older card version" src="resources/images/older_card_vers.png" />
+    	<p>And click the <link>Show latest</link> link to return to the current version.</p>
+    </section>
+
+	<section title="Card history">
+		<p>Mingle creates an entry against card history and revises the card version number each time somebody makes a change to a card.
+		Whenever there's a change to a card Mingle creates a snapshot of the previous version, so you can view the state of a card at any stage throughout its lifecycle.</p>
+
+		<bullets title="You may want to view previous versions of a card page if: ">
+			<item>you or a team member accidentally overwrote a card's content</item>
+			<item>you want to view information captured at an earlier stage of your project</item>
+			<item>you remembered that there was some useful information or attachment in a previous version of a card.</item>
+		</bullets>
+
+		<bullets title="For each card's historical version, Mingle shows:">
+			<item>who updated the card and when (relative to your current time)</item>
+			<item>a summary of the changes made for each version</item>
+			<item>a link to view a previous card version.</item>
+		</bullets>
+
+		<bullets title="Mingle updates card history whenever you or a team member:">
+			<item>creates or imports a new card (version 1)</item>
+			<item>changes the card's description</item>
+			<item>adds a murmur</item>
+			<item>commits source code and includes the card number in the commit message</item>
+			<item>changes a card as part of a bulk update</item>
+			<item>adds, edits or removes tags</item>
+			<item>updates a card property (from either opening the card, or dragging it to another property value within the Grid view). If you change more than one property, Mingle creates more than one history entry/card version)</item>
+			<item>clicks a transition link</item>
+			<item>imports an updated version of the card.</item>
+		</bullets>
+		<hint>You can use card transitions to update multiple card properties at once. Clicking a transition link only updates a card's history once - regardless of how many card properties it updates.</hint>
+	</section>
+	<section title="Card murmurs">
+
+		<hint>Murmurs aren't designed as a substitute for talking to your teammates. Their main purpose is to contribute collective knowledge about the development process and project progress.</hint>
+
+		<p>Card murmurs are a way to discuss and explain team actions and decisions relating to cards. For example, murmurs can explain reasons why a developer fixed a bug a certain way, or provide clarification to a developer implementing a user story.</p>
+
+		<p>You can add card murmurs whenever you open a card because the murmurs field is open and ready for you to type by default.</p>
+      <p><screenshot alttext="create a murmur from the card" src="resources/images/murmurs_card_popup.png"/></p>
+
+    <p>Click here to learn more about <cref topic="murmurs">murmurs</cref>.</p>
+	<subsection file="murmurs_card_links"/>
+	</section>
+</topic>

@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Easy chart for Daily History Chart">
+<p>This chart helps you to track data across a given time frame. Here your x-axis are always dates. You can use this chart to create a burnup or a burndown chart. <cref topic="choosing_between_daily_history_chart_and_data_series_chart">This guide</cref> helps you understand the difference between them. Check out our <cref topic="ec_daily_history_charts#ec_sample_dailyhistorycharts">sample daily history charts</cref>.</p>
+        <screenshot alttext="Example data series chart1" src="resources/images/ec_daily_history_chart_intro.png" />
+
+    <strong><p>CREATE A DAILY HISTORY CHART</p></strong>
+    <p>To create a daily history chart on a page or a card, follow these steps:</p>
+    <bullets>
+        <item>In the editor, click on the Daily History chart button.</item>
+        <item>In the Easy Charts form, start by selecting the data that will go into your chart. This is similar to the filters you use to make various views in Mingle.</item>
+        <screenshot alttext="Daily history chart section1" src="resources/images/ec_dailyhistory_chart_section1.gif"/>
+            <p>Click on <i>Proceed to Step 2</i> when you’re done with this step.</p>
+        <item>Next, build the chart. </item>
+        <p>Please set a valid start and end date for your chart along with the x-label interval between two x-labels.</p>
+        <p>Select the aggregation for this chart. It could be the number of cards or an aggregation of numeric type card property.</p>
+        <screenshot alttext="Daily history chart section2" src="resources/images/ec_dailyhistory_chart_section2.gif"/>
+        <item>The Daily History chart requires that you specify atleast one series. Click on the Add a Series button to get started.</item>
+        <p>Specify what you’d like to call this series. Then use the dropdowns to select the data that   defines this series.</p>
+        <p>You can customize how this series should look. When you’re done, you could either Add Another Series, or Proceed to Step 3.</p>
+            <screenshot alttext="Daily history chart section3" src="resources/images/ec_dailyhistory_chart_section3.gif"/>
+        <item>Customize how you want the chart to look. You can select a size, the angle of the X-axis labels, and a color for the series. Additionally, you can give the chart, the X-axis and the Y-axis titles of your choice.</item>
+        <screenshot alttext="Daily history chart section4" src="resources/images/ec_dailyhistory_chart_section4.gif"/>
+        <p>Click on Insert to complete the chart and insert it into the page or card. </p>
+        <item>Daily History chart uses your project’s history to plot the chart. It looks at the events in your project. You will see the chart trying to prepare the data after you save it on a page/card. On refreshing the page, you will see the chart making progress for the series that you have added.</item>
+        <screenshot alttext="Daily history chart section5" src="resources/images/ec_dailyhistory_chart_section5.gif"/>
+    </bullets>
+    <strong>Notes</strong>
+    <bullets>
+        <item>You can use project variables in your chart setup. For instance, if you’d like the daily history chart to represent work for the current release at any point of time, you can do so without having to update the chart each release! You will have to use the project variables by editing the MQL after the chart is created.</item>
+        <item>If you’re inserting a daily history chart into a card description, you can refer to the card itself in your chart setup by selecting THIS CARD as a property value. For instance, if you want a daily history chart in a Release card to represent the number of story cards, use Release is THIS CARD in the filters.</item>
+        <screenshot alttext="Data series section5" src="resources/images/ec_dailyhistory_chart_using_this_card.gif"/>
+    </bullets>
+    <p>
+        <strong>CUSTOMIZE USING MQL:</strong>
+    </p>
+    <p>You can build or further customize a daily history chart using Mingle Query Language. Here’s a sample MQL snippet:</p>
+    <markup>
+    daily-history-chart
+      aggregate: SUM('Pre-Release Estimate')
+      chart-conditions: release = 'Release 3' AND Type = Story
+      start-date: 07 Jun 2010
+      end-date: 18 Jun 2010
+      chart-height: 350
+      chart-width: 500
+      y-title: Total Scope
+      series:
+      - label: all
+        color: gray
+        line-width: 1
+      - label: must
+        color: black
+        conditions: 'Release Priority' = must
+      - label: analysis complete
+        color: green
+        line-width: 2
+        conditions: 'story status' > 'analysis in progress'
+      - label: dev complete
+        color: orange
+        line-width: 2
+        conditions: 'story status' > 'development in progress'
+      - label: signed off
+        color: purple
+        line-width: 2
+        conditions: 'story status' > 'signoff in progress'
+      - label: Closed
+        color: blue
+        line-width: 2
+        conditions: 'story status' = 'closed'
+    </markup>
+    <p>Some additional customizations you can set up in MQL are:</p>
+    <bullets>
+        <item>AS OF</item>
+        <item>FROM TREE </item>
+        <item>THIS CARD.Property</item>
+        <item>Use relationship operators on non-numeric properties (where ‘Due Date’ is greater than ‘Release Date’)</item>
+        <item>Custom chart width and height</item>
+        <item>Custom colours</item>
+    </bullets>
+    <section title="Sample data series charts:" id="ec_sample_dailyhistorycharts">
+         <p><strong>Burn-up chart including all status:</strong></p>
+            <screenshot alttext="Burn-up chart" src="resources/images/ec_daily_history_chart_example1.png" />
+         <p><strong>Burndown chart variation:</strong></p>   
+            <screenshot alttext="Burn-up chart" src="resources/images/ec_daily_history_chart_example2.png" />
+    </section>
+</topic>

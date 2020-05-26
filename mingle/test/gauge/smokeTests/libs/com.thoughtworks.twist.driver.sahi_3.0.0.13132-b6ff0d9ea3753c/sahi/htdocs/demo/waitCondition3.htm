@@ -1,0 +1,23 @@
+<html>
+<head>
+<title>
+
+</title>
+</head>
+
+<body>
+
+Page 3
+
+Will populate field after a second.
+
+<form>
+<input type="text" id="t1" value="old value">
+</form>
+<script>
+	window.setTimeout("document.getElementById('t1').value='populated'", 1000);		
+    window.setTimeout("document.getElementById('t1').value=''", 3000);		
+</script>
+</body>
+
+</html>

@@ -1,0 +1,33 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%
+# todo: refactor update_favorite_and_tab_status into small actions
+# using one action 'update_favorite_and_tab_status' to update favorite and tab status makes user access check complex, we should split them into small action which makes test easier and user privileges map with right action. right now, we use :controller => 'favorites', :action => 'move_to_tab' to validate 'Make as tab' link to get right privilege validation instead of update_favorite_and_tab_status.
+-%>
+<% if admin_user_or_not_a_tab? %>
+  <%= link_to_function favorite_title, "favoriteCheckboxes.favoriteLinkOnClick();", :title => favorite_title, :class => is_a_team_favorite_or_tab(@page) ? 'wiki-favorite-selected' : 'wiki-favorite-unselected', :id => "#{location}_favorite_link", :disabled => !admin_user_or_not_a_tab?, :accessing => ':update_favorite_and_tab_status' %>
+<% end %>
+
+<%= link_to_function tab_title, "favoriteCheckboxes.tabLinkOnClick();", :title => tab_title, :class => is_a_tab(@page) ? 'wiki-tab-selected' : 'wiki-tab-unselected', :id => "#{location}_tab_link", :accessing => 'favorites:move_to_tab' %>
+
+<% form_remote_tag :url => {:action => 'update_favorite_and_tab_status', :page_identifier => @page.identifier, :controller => 'pages', :validate => true},
+                   :html => {:id => "#{location}_status"},
+                   :before => "Element.show('top_spinner'); Element.show('bottom_spinner')",
+                   :complete => "Element.hide('top_spinner'); Element.hide('bottom_spinner')" do -%>
+  <%= check_box_tag "status[favorite]", true, is_a_team_favorite_or_tab(@page), :disabled => !admin_user_or_not_a_tab?, :style => "display: none;", :id => "#{location}_status[favorite]" %>
+  <%= check_box_tag "status[tab]", true, is_a_tab(@page), :style => "display: none;", :id => "#{location}_status[tab]" %>
+<% end -%>

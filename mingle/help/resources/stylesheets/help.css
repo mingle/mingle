@@ -1,0 +1,459 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+/*
+ * Help styles
+ */
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 1rem 0;
+}
+
+a {
+  color:#0076BA;
+  text-decoration:none;
+}
+
+.content-container li {
+  margin: 0 0 10px 0;
+}
+
+ol
+{
+  list-style-type: decimal;
+  margin-left: 20px;
+}
+
+table
+{
+  margin: 0em;
+  margin-bottom: 1em;
+  width: auto;
+  border-collapse: collapse;
+  border: 1px solid #CCC;
+}
+
+table caption {
+  font-weight: bold;
+  margin: 1em 0 0.5em 0;
+}
+
+table .table-header
+{
+  background: #EEE;
+}
+
+table .group-header
+{
+  background: #CCCCCC;
+}
+
+
+table .inline a
+{
+  display: inline;
+}
+
+table th,td
+{
+  padding-left: 15px !important;
+  padding-right: 15px !important;
+}
+
+/* Table visuals */
+tr.odd td,
+tr.odd th {
+  background-color: #FFFFFF;
+}
+
+
+tr.even td,
+tr.even th
+  {
+    background: #f0f0e9;
+  }
+
+/* Masthead */
+div#hd {
+  background: #3FBEEA;
+  color: #FFFFFF;
+  height: 60px;
+  overflow: hidden;
+}
+
+div#hd h5 {
+  background: url(images/new_logo_mingle.png) no-repeat left 8px;
+  padding: 0 0 0 165px;
+  margin: 5px 0 0 10px;
+  height: 57px;
+  line-height: 57px;
+  color: #fff;
+}
+
+div#hd a {
+  color: #FFF;
+}
+
+
+#nav {
+  background: #eee;
+}
+ul {
+  padding-left: 10px;
+}
+
+div#nav ul
+{
+  list-style: none;
+  margin: 0;
+}
+
+div#nav ul.toc
+{
+  padding: 15px;
+}
+
+div#nav ul.toc li
+{
+  font-weight: bold;
+  border-bottom: 1px dotted #ccc;
+  margin-bottom: 10px;
+}
+
+div#nav ul.toc li ul li
+{
+  font-weight: normal;
+  border-bottom: none;
+  margin-bottom: 0 !important;
+}
+
+div#nav ul ul li {
+}
+
+
+div#nav ul li a {
+  display: block;
+  padding: 4px 8px;
+  text-decoration: none;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+}
+
+div#nav ul li a.current,
+div#nav ul li a:hover {
+  background-color: #FFF;
+}
+
+div#nav ul li a.current {
+  color: #000;
+}
+
+#nav {
+  display: none;
+}
+
+.nav-toggle {
+  display: block;
+  width: 100%
+}
+#search_form {
+  display: none;
+}
+#zenbox_tab {
+  display: none !important;
+}
+
+@media (min-width: 750px) {
+  #nav {
+    display: block;
+  }
+  #search_form {
+    display: block;
+  }
+
+  .nav-toggle {
+    display: none;
+  }
+  #zenbox_tab {
+    display: block !important;
+  }
+}
+
+
+div.main {
+  padding: 2rem 2rem 2rem 0;
+}
+
+/* Collapsible headings */
+
+div.collapsed {
+  display: none;
+}
+
+.collapsible-heading,
+.collapsed-heading {
+  cursor: pointer;
+  padding-left: 25px;
+}
+
+h1.collapsible-heading,
+h1.collapsed-heading,
+.topic collapsible-heading:first-child,
+.topic collapsed-heading:first-child;
+{
+  border: 0;
+}
+
+.collapsible-heading
+{
+  background: url(images/arrow_open.png) no-repeat 5px 50%;
+}
+
+.collapsed-heading
+{
+  background: url(images/arrow_closed.png) no-repeat 5px 50%;
+}
+
+span.todo {
+  color: red;
+}
+
+img {
+  margin: 10px;
+  max-width: 95%;
+}
+
+h5.steps-title,
+h5.bullets-title {
+  margin-bottom: 0px;
+  padding-left: 20px;
+  margin-top: 15px;
+}
+
+
+ul {
+  margin-bottom: 10px;
+}
+
+
+
+ol.titled-steps {
+  margin-top: 8px;
+  padding-left: 1rem;
+}
+
+
+
+ul.titled-bullets {
+  margin-top: 8px;
+  padding-left: 1rem;
+}
+
+img.placeholder {
+  border: 3px dashed red;
+}
+
+/* Call outs */
+
+.ab-bg
+{
+  background-color: transparent;
+}
+
+.ab-corner
+{
+  display: none;
+}
+
+.lvl1
+{
+  border-width: 0px 5px;
+  height: 1px;
+}
+
+.lvl2
+{
+  border-width: 0px 3px;
+  height: 1px;
+}
+
+.lvl3
+{
+  border-width: 0px 2px;
+  height: 1px;
+}
+
+.lvl4
+{
+  border-width: 0px 1px;
+  height: 2px;
+}
+
+/* Information boxes */
+
+p.box
+{
+  margin: 0;
+}
+
+.note-box,
+.hint-box,
+.warning-box {
+  background-color: #eee;
+  background-position: 9px 9px;
+  background-repeat: no-repeat;
+  padding: 10px 10px 10px 35px !important;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  margin: 10px 0;
+}
+
+
+
+.note-box {
+  background-image: url(images/icon_info_16.png);
+  background-color: #dfedf3;
+}
+
+.hint-box {
+  background-image: url(images/icon_info_16.png);
+  background-color: #dfedf3;
+}
+
+.warning-box {
+  background-image: url(images/icon_error_16.png);
+  background-color: #fcf6d8;
+}
+
+
+
+
+/* Under construction */
+
+.under-construction-container
+{
+  background: transparent url(images/bg-chevron.png) repeat scroll left top;
+  margin-top: 2.2em;
+  padding: 1em;
+}
+
+.under-construction-content
+{
+  background: #FFCF9B url(images/icon-under-construction.png) no-repeat scroll 15px center;
+  padding: 1em 1em 1em 125px;
+}
+
+.under-construction-content p
+{
+  color: #660000;
+  margin: 0em;
+  padding: 0.25em 0em;
+}
+
+div#ft {
+  margin: 10px;
+  border-top: 1px dotted #CCC;
+  padding-top: 10px;
+  text-align: right;
+}
+
+/* help doc content styles */
+
+.code,
+.markup,
+.formula
+ {
+   background: #333;
+   margin: 10px 0;
+   padding: 10px;
+   font-family: Consolas, Monaco, "Courier New", courier, monospace;
+   color: #f6eea6;
+   overflow: auto;
+   -moz-border-radius: 4px;
+   -webkit-border-radius: 4px;
+   border-radius: 4px;
+ }
+
+.code a,
+.markup a,
+.formula a {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.markup-reference
+{
+  margin-top: 0;
+  border-bottom: 0.15em dashed #C7CFD5;
+}
+
+.markup-reference p,
+.markup-reference table
+ {
+   margin: 1em;
+ }
+
+.markup-reference p.preview img
+{
+  margin: 0;
+}
+
+.markup-reference img.icon
+{
+  margin: 0 1em 1em 1em;
+}
+
+.markup-reference pre
+{
+  margin: 0 1em 1em 0;
+}
+
+.markup-reference img.icon
+{
+  float: left;
+}
+
+h4.preview
+{
+  margin: 1em 1em 0 1em;
+}
+
+.content-container {
+  margin: 5px 0 10px 25px;
+}
+
+.content-container img {
+
+}
+
+img.pro
+{
+  border-width: 0;
+  margin: 0 0 -3px 0;
+}
+
+.section,
+.topic,
+.subsection {
+  border-top: 1px solid #CCC;
+}
+
+.subsection {
+  margin-top: 10px;
+}

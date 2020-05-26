@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE subsection SYSTEM "mingle_helitem.dtd">
+<section title="Also see" collapsed="false">
+  <bullets>
+  <item><cref topic="go_integration">Integration Mingle with Go - an overview</cref></item>
+  <item><cref topic="go_in_mingle">Configuring the display of Go gadgets in mingle</cref></item>
+  <item><cref topic="markup_go_pipeline_status">Reference for Go pipeline status macro</cref></item>
+  <item><cref topic="markup_opensocial_gadget">Reference for OpenSocial gadget macro</cref></item>
+  <item><cref topic="what_is_oauth">What is OAuth?</cref></item>
+  <item><cref topic="what_is_opensocial">What is OpenSocial?</cref></item>
+</bullets>
+</section>

@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Subscribing to project changes via email">
+    <section title="Introduction">    	
+    	<p>Email updates are one of two methods you can use to receive notification of changes to Mingle projects as they happen 
+    		(the other way is <cref topic="subscribing_via_feeds">via Atom feeds</cref>).</p>
+    		
+    	<p>When you subscribe via email, Mingle emails you straight away to confirm that you have subscribed to project changes 
+    		that meet the criteria you selected. Each email you receive provides a link that lets you unsubscribe from the current feed.</p>
+    		
+    	<note>Before you can subscribe to project emails, the project administrator must <cref topic="configure_smtp_connection">setup SMTP email configuration</cref>. 
+    		You must enter your email address in your Mingle user profile before you can receive emails.</note>
+    		
+    	<subsection title="How to subscribe to project changes using email">    	
+    	<steps>
+    		<item><cref topic="signing_in_and_out_of_mingle">Sign in</cref> to Mingle and select the project with the changes you want to view (if not already working within the project).</item>
+	    	<item>
+	    		<p><cref topic="viewing_project_changes">Select Filter history items</cref> according to the changes you want to monitor.</p>
+	    		<p><screenshot alttext="history filter" src="resources/images/history_filter_side_bar.png" /></p>
+	    	</item>
+	    	<item>
+	    		<p>Click the <link>Via email</link> link.</p>
+	    		<p><screenshot alttext="Filter history - watch this" src="resources/images/filter_history_watch_this.png" /></p>
+	    	</item>	    	
+    		<item>Mingle emails a confirmation to your registered email address describing the changes to which you've subscribed. 
+    			You will now receive email updates any time project changes match the selected history filters. 
+    			You can subscribe from the email updates at any time by clicking the Unsubscribe link.</item>
+    	</steps>
+    	</subsection>
+<subsection title="Managing email subscriptions" file="managing_email_subscriptions"/>
+    </section>
+	<section title="Also see...">
+		<bullets>
+			<item><cref topic="viewing_project_changes">Viewing project changes (History tab)</cref></item>
+			<item><cref topic="managing_email_subscriptions">Managing email subscriptions</cref></item>
+			<item><cref topic="tip_subscribe_to_feeds">Subscribe to history feeds</cref></item>
+		</bullets>
+	</section>
+</topic>
+
+

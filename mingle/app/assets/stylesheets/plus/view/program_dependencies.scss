@@ -1,0 +1,230 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+#program-dependency-filter-container {
+  margin-bottom: 5px;
+  label {
+    margin: 0;
+  }
+
+  .filter-name {
+    line-height: 26px;
+    display: inline-block;
+    margin-left: 5px;
+  }
+
+  .project-dropdown {
+    @include popover($direction: none,
+    $width: auto,
+    $height: auto,
+    $popOffset: 0px,
+    $triangleOffset: 0px);
+
+    line-height: 26px;
+    display: inline-block;
+    border: 1px solid #888;
+    padding: 0 12px;
+    margin-left: 5px;
+    position: relative;
+
+    .popover-content {
+      left: -1px;
+      top: 27px;
+      padding: 0;
+      min-width: 120px;
+      white-space: nowrap;
+
+      label {
+        cursor: pointer;
+      }
+
+      input[type=checkbox] {
+        margin-right: 3px;
+      }
+
+      .select-all {
+        border-bottom: 1px solid #c3c3c3;
+        padding: 2px 15px 2px 10px;
+        &:hover {
+          background-color: #ffec80;
+        }
+      }
+      ul {
+        li {
+          &:hover {
+            background-color: #ffec80;
+          }
+          padding: 2px 15px 2px 10px;
+          list-style: none;
+          margin: 0;
+        }
+      }
+      .actions {
+        margin: 0;
+        font-size: 11px;
+        overflow: hidden;
+        padding: 10px;
+        border-top: 1px solid #c3c3c3;
+        input {
+          margin: 0;
+        }
+      }
+    }
+
+    .caret {
+      margin-left: 2px;
+    }
+  }
+}
+
+table#program-dependencies {
+  border-collapse: separate;
+  table-layout: fixed;
+  min-height: 400px;
+  font-size: 12px;
+
+  .dummy-cell {
+    background-color: #FAFAFA;
+    width: 85px;
+    vertical-align: middle;
+  }
+
+  th {
+    font-weight: bold;
+    background-color: #FAFAFA;
+    border: 5px solid #FFF;
+    border-top: none;
+    padding: 15px 5px 15px;
+    text-align: center;
+    position: relative;
+    vertical-align: middle;
+    width: auto;
+  }
+
+  tbody {
+    td.new-dependencies {
+      .dependency-icon {
+        border-left: 6px solid $MINGLE_NEW_DEPENDENCY_COLOR;
+      }
+    }
+
+    td.accepted-dependencies {
+      .dependency-icon {
+        border-left: 6px solid $MINGLE_ACCEPTED_DEPENDENCY_COLOR;
+      }
+    }
+
+    td.resolved-dependencies {
+      .dependency-icon {
+        border-left: 6px solid $MINGLE_RESOLVED_DEPENDENCY_COLOR;
+      }
+    }
+
+    td {
+      background-color: #f3f3f3;
+      border: 5px solid #FFF;
+      border-bottom: 0;
+
+      .dependency-icon {
+        overflow: hidden;
+        position: relative;
+        display:inline;
+        float:left;
+        margin: 4px;
+        width: 142px;
+        height: 94px;
+        background-color:#FFFFFF;
+        border: none;
+        color: #333;
+        user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -webkit-box-shadow: 2px 3px 2px 0px rgba(50, 50, 50, 0.36);
+        -moz-box-shadow: 1px 1px 2px 0px rgba(50, 50, 50, 0.36);
+        box-shadow: 1px 1px 2px 0px rgba(50, 50, 50, 0.36);
+        cursor: pointer;
+
+        .dependency-inner-wrapper {
+          padding: 5px 10px;
+
+          .dependency-summary-number {
+            float: right;
+            font-weight: bold;
+            margin: 0 0 0 5px;
+
+            .fa-exclamation-triangle {
+              display: block;
+              text-align: right;
+            }
+          }
+
+          .dependency-name {
+            height: 70px;
+            overflow: hidden;
+          }
+
+          .desired-date {
+            font-size: 11px;
+            padding-top: 5px;
+            text-align: right;
+          }
+        }
+      }
+    }
+
+    th {
+      border: 5px solid #FFF;
+      border-bottom: 0px;
+      word-wrap: break-word;
+    }
+  }
+}
+
+.program_dependencies {
+  font-weight: 300;
+
+  .lightbox {
+    width: 829px;
+
+    .lightbox_content_wrapper {
+      background: none;
+      border: none;
+      overflow: visible;
+
+      .lightbox_content {
+        box-sizing: border-box;
+        .card-type-editor-container {
+          box-sizing: border-box;
+        }
+
+        .card-properties {
+          width: 100%;
+          display: inline-block;
+        }
+
+        .dependency-properties {
+          box-sizing: border-box;
+          overflow: hidden;
+        }
+      }
+    }
+  }
+}
+
+.multiple-dependencies-icon:before {
+  @include mng_icon("\e900"); /* mng-dep-base */
+  padding: 0 2px 0 0;
+}

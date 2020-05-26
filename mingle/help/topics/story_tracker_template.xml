@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_help.dtd">
+<chapter title="Story tracker template (2.3)">
+	<section title="Introduction">
+		<p> The story tracker template shows how Mingle can be used to track development progress using just a single card type and a few properties. This template may be particularly useful for users new to Mingle or those who just need a simple structure to begin tracking stories. </p>
+
+		<bullets title="There are:">
+			<item> 17 cards created</item>
+			<item> 1 <cref topic="card_types">card type</cref></item>
+			<item> 3 different <cref topic="card_properties">cards properties</cref></item>
+			<item> 3 <cref topic="card_transitions">cards transitions</cref>
+			</item>
+			<item>a couple of simple <cref topic="creating_charts_and_tables_in_wiki_pages">charts and tables</cref> on the project overview page that have been created to illustrate the status of the
+				project </item>
+		</bullets>
+	</section>
+	<section title="Card and property set-up">
+		<p>There is one card type in the project: "Story"</p>
+		<subsection  title="Card properties" file="story_tracker_template_properties_table" collapsed="true"/>
+		<p>There are 3 card properties in use in this project.</p>
+	</section>
+	<section title="Transitions">
+		<p>All the transitions in this template are used to help impose a simple workflow allowing users to move stories between statuses. For example, using the "Move Story to Open" transition will set the story to the status "Open" and request the user add an estimate to the story. This will help ensure that all open and closed stories have an estimate. </p>
+	</section>
+	<section title="Charts and tables">
+		<screenshot alttext="Simple story tracker charts" src="resources/images/story_tracker_charts.png"></screenshot>
+<p>There is one chart and one table on the project overview page that shows the current status of the project. The "Stories remaining" table shows all the stories that have not been completed. The pie chart shows how many of the MUST stories have been completed.</p>
+	</section>
+
+	<section title="Favorites and tabs">
+    <p>There are 2 saved Favorites and tabs in the project. Both are currently been used a tabs. 
+      <bullets>
+			<item>Story Wall - shows the current status of stories in the project. </item>
+			<item>Story Backlog - shows all the stories that still have to be completed.</item>
+		</bullets>
+	</p>
+			
+	</section>
+
+	<section title="Also see...">
+		<bullets>
+			<item>
+				<cref topic="standard_mingle_templates">Standard Mingle templates</cref>
+			</item>
+			<item>
+				<cref topic="quick_project_setup">Quick project setup</cref>
+			</item>
+			<item>
+				<cref topic="creating_mingle_projects">Creating Mingle projects</cref>
+			</item>
+			<item>
+				<cref topic="customizing_projects">Customizing projects</cref>
+			</item>
+			<item>
+				<cref topic="managing_mingle_templates">Managing Mingle templates</cref>
+				<todo>I haven't created this topic yet</todo>
+			</item>
+		</bullets>
+	</section>
+</chapter>

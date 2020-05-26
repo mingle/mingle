@@ -1,0 +1,24 @@
+<html>
+<head>
+<title>Click Combo</title>
+</head>
+<body>
+<script>
+function show(e){
+	if (!e) e = window.event;
+	var el = document.getElementById("tb");
+	var s = "";
+	if (e.ctrlKey) s += "<ctrl>";
+	if (e.altKey) s += "<alt>";
+	if (e.shiftKey) s += "<shift>";
+	if (e.metaKey) s += "<meta>";
+	el.value = s + "click";
+}
+</script>
+<div onclick="show(event)" style="height:100px;width:300px;border:1px solid gray;">
+<div style=";padding:35px;text-align:center">Experiment Zone</div>
+</div>
+<br/>
+<input type="text" id="tb">
+</body>
+</html>

@@ -1,0 +1,26 @@
+var $searchTerm = "\\\"sahi web automation\\\"";
+var $expectedUrl = "http://www.thoughtworks.com";
+
+function checkLink($i){
+	if (_getGlobal("found") == "true"){
+		return false;
+	}
+	var ls = document.links;
+	for (var i=0; i<ls.length; i++){	
+		if (ls[i].href.indexOf($expectedUrl) == 0){
+			__setGlobal("found", "true");
+			__click(ls[i]);
+			return;
+		}
+	}
+	__click(_link($i));
+}
+
+
+_setValue(_textbox("q"), $searchTerm);
+_click(_submit("Google Search"));
+_setGlobal("found", "false");
+
+for (var i=0; i<10; i++){
+	_eval(checkLink(""+i));
+}

@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>JavaScript unit test file</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+  <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+
+  <script src="test_assets/unittest.js" type="text/javascript"></script>
+  <script src="test_assets/unittest_ext.js" type="text/javascript"></script>
+
+
+  <script src="../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/controls.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/builder.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+
+  <script src="../../public/javascripts/application.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/contextual_help.js" type="text/javascript"></script>
+
+  <link rel="stylesheet" href="assets/unittest.css" type="text/css" />
+  <link rel="stylesheet" href="test_assets/unittest.css" type="text/css" />
+</head>
+<body>
+  <div id="content">
+    <div id="header">
+      <h1>JavaScript unit test file</h1>
+      <p>
+        This file tests the ContextualHelpController class in <strong>contextual_help.js</strong>.
+      </p>
+    </div>
+
+    <div id="sandbox">
+      <span id="data">
+        <span id="contextual_help_identifier" style="display: none;">card_types_list</span>
+        <span id="contextual_help_title" style="display: none;">What you can do with Card Types</span>
+        <span id="full_contextual_help_link" style="display: none;"><a class="full-contextual-help-link" href="/my_help_domain/help/card_types.html" target="_blank">Full help for Card Types</a></span>
+      </span>
+      <div id="contextual_help_container" style="display:none">Contextual Help House
+        <div class="action-bar contextual-helper-connector-top">Connector Top
+
+          <div class="contextual_help_title_bar">
+            <div>
+              <span>
+                <a href="" id="hide_contextual_help_link">Hide Help</a>
+              </span>
+              <span id="full_contextual_help_link_placeholder" style="float:right;"></span>
+              <span id="contextual_help_title_placeholder" class="contextual_help_title"></span>
+              <div class="clear-both"></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="action-bar" id="bottom_action_bar">
+        <a id="contextual_help_link">Hide help inside action bar</a>
+      </div>
+    </div>
+
+    <div id="testlog"></div>
+  </div>
+
+<script type="text/javascript">
+  // <![CDATA[
+  SAND_BOX_CONTENT = $('sandbox').innerHTML;
+
+  new Test.Unit.Runner({
+
+    setup: function() {
+      $('sandbox').innerHTML = SAND_BOX_CONTENT;
+
+      this.house = $('contextual_help_container');
+
+      this.assertHelpLink = function(expectedText, element) {
+        this.assertMatch(new RegExp(expectedText), element.innerHTML);
+        if (expectedText.match(/Hide/)) {
+          this.assert(element.hasClassName('selected'));
+        } else {
+          this.assert(!element.hasClassName('selected'));
+        }
+      };
+    },
+
+    testInjectContentShouldSetTitleToContextualHelpTitle: function() { with(this) {
+      ContextualHelpController.injectContent($("data").innerHTML);
+      assertEqual('What you can do with Card Types', $('contextual_help_title_placeholder').innerHTML);
+    }},
+
+    testInjectContentShouldSetFullTitleToFullContextualHelpLink: function() { with(this) {
+      ContextualHelpController.injectContent($("data").innerHTML);
+      var expected = $('full_contextual_help_link').innerHTML;
+      assertEqual(expected, $('full_contextual_help_link_placeholder').innerHTML);
+    }},
+
+    testToggleShouldShowAndHideHouseCorrectly: function() { with(this) {
+      ContextualHelpController.injectContent($("data").innerHTML);
+      assertNotVisible(this.house);
+      ContextualHelpController.toggle();
+      assertVisible(this.house);
+      this.assertHelpLink('Hide help', $('contextual_help_link'));
+
+      ContextualHelpController.toggle();
+      assertNotVisible(this.house);
+      assertMatch(/Show help/, $('contextual_help_link').innerHTML);
+
+      ContextualHelpController.toggle();
+      assertVisible(this.house);
+      assertMatch(/Hide help/, $('contextual_help_link').innerHTML);
+    }}
+
+  }, { testLog : "testlog", test : '' });
+  // ]]>
+</script>
+
+  </body>
+</html>

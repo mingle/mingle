@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Updating cards in bulk">
+    <section title="Introduction">
+    	<p>From the card <cref topic="list_view">List view</cref>, you can select multiple cards for bulk updates.</p>    	
+    	<bullets title="Once you've selected the cards you want to update, you can">
+	    	 <item>delete the cards</item>
+	    	 <item>update card properties</item>
+	    	 <item>apply a <cref topic="card_transitions">card transition</cref></item>
+	    	 <item>add or remove tags</item>
+    	</bullets>
+    </section>
+	
+	<section title="How to update multiple cards at once">
+		<steps>
+			<item><cref topic="signing_in_and_out_of_mingle">Sign in</cref> to Mingle and open the project with the cards you want to update (if not already working in the project).</item>
+			<item>Open a <cref topic="list_view">list view</cref>, the default <tab>All</tab> tab is a good place to start if there are no more specific tabs to choose.</item>
+			<item>
+				<p><cref topic="filter_list_by_component">Locate the cards</cref> you want to update.</p>
+				<p><screenshot alttext="List view - page header controls highlighted" src="resources/images/list_view_select_cards.png" /></p>
+			</item>			
+			<item><strong>Select the cards</strong> you want to update by clicking the checkbox next to each card. You can click the <link>All</link> link or the <link>None</link> link to select or deselect all cards on the page.</item>
+			<item>
+				<p>
+					The 'All' checkbox by default will select all cards that exist on the current page that you are viewing. 
+					After selecting 'All' you will also be presented with a link to select all of the cards in the entire view (across all pages). 
+					Clicking this link will select all of the cards in the entire view and make those cards available for bulk operations.
+				</p>
+				<p><screenshot alttext="List view - select all cards in current view" src="resources/images/list_view_select_all_cards_in_view.png" /></p>
+			</item>			
+			<item>Clicking 'None' at any time will de-select all cards on the current page or view (whichever is applicable).</item>
+		</steps>
+		<subsection title="Deleting cards" file="deleting_a_card" collapsed="false"/>
+		<subsection title="Tagging">
+			<p>To add, edit or remove tags attached to cards, click the <button>Tag</button> button.</p>
+			<p>Mingle displays any current tags for the selected card(s) and lets you add more.</p>
+			<screenshot alttext="List view - update multiple tags" src="resources/images/update_multiple_tags.png" />		
+			<p>If you'd like to remove tags from the selected card(s), simply click the X next to the tag.</p>
+			<p>To tag the selected cards, type the tag name(s) and click the <button>Add tags</button> button. (Separate tags with commas.)</p>
+			<p>You can close the tags control by clicking on the <button>Close</button> button. Don't forget to save any new tags before you close the control.</p>
+		</subsection>
+		
+		<subsection title="Updating properties">
+			<p>To update card property values for the selected cards, click the <button>Edit properties</button> button.</p>
+			<screenshot alttext="List view - update multiple property values" src="resources/images/edit_multiple_properties.png"></screenshot>
+		
+			<p>Mingle displays all card properties setup for the project.</p>
+			<p>Click the name of the card property you want to update and select the property value.</p>
+			<warning>
+				If you have selected cards of different types, then Mingle will display <strong>Type (mixed value)</strong>.
+				If you change this value - you will be changing the type of the selected cards to the new value. 
+				This action will lose data from any properties that are not shared between the original card types and the new card type.
+				You should carefully consider the consequences of doing this, as the changes are not recoverable.
+				<p><screenshot alttext="Warning - changing card type" src="resources/images/bulk_edit_mixed_card_types.png"></screenshot></p>
+			</warning>
+		</subsection>
+		
+		<subsection title="Applying transitions">
+			<p>To apply a transition, select an option from the menu at the top of the list.</p>	
+			<p><screenshot alttext="List view - apply a transition" src="resources/images/bulk_edit_apply_transition.png"></screenshot></p>
+			<p>Mingle updates the selected cards' properties according to the way the <cref topic="creating_card_transitions">transition is setup</cref>.</p>
+			<note>Mingle only displays the option to apply transitions if one or more selected cards <cref topic="card_transitions">meet the conditions for a transition</cref></note>.
+		</subsection>
+
+
+    </section>
+</topic>
+
+

@@ -1,0 +1,3 @@
+USE_RUBY?=1.9
+CLASSPATH=lib/start.jar:lib/version.jar:config:vendor/java/*:vendor/java/tomcat-8/*:vendor/java/elastic_search/*
+JAVA_OPTS=-XX:+TieredCompilation -XX:TieredStopAtLevel=1 -noverify -Xmx1536m -Dfile.encoding=UTF-8 -XX:NewSize=128m -XX:+UseConcMarkSweepGC -XX:+HeapDumpOnOutOfMemoryError -Djruby.compat.version=$USE_RUBY -Dmingle.logDir=log -Dmingle.dataDir=tmp -Dmingle.configDir=config -Dlog4j.configuration=log4j.properties.development -Duser.language=en -Duser.country=US -Djava.awt.headless=true -Dfile.encoding=UTF-8 -Dnet.spy.log.LoggerImpl=net.spy.memcached.compat.log.Log4JLogger -Djava.library.path= -Djava.util.logging.config.file=config/logging.properties

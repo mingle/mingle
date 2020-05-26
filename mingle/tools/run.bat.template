@@ -1,0 +1,46 @@
+rem  Copyright 2020 ThoughtWorks, Inc.
+rem  
+rem  This program is free software: you can redistribute it and/or modify
+rem  it under the terms of the GNU Affero General Public License as
+rem  published by the Free Software Foundation, either version 3 of the
+rem  License, or (at your option) any later version.
+rem  
+rem  This program is distributed in the hope that it will be useful,
+rem  but WITHOUT ANY WARRANTY; without even the implied warranty of
+rem  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+rem  GNU Affero General Public License for more details.
+rem  
+rem  You should have received a copy of the GNU Affero General Public License
+rem  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+
+@echo off
+rem ---------------------------------------------------------------------------
+rem run.bat - Start Script for the JRuby Interpreter
+
+setlocal
+call "%~dp0run_optparse.bat" %*
+if '%E%'=='1' GOTO END
+
+rem use packaged JRE by default
+if '%USE_SYSTEM_JAVA%' NEQ 'true' (SET JAVA_HOME=%~dp0..\jre)
+
+rem use production gemset
+set RAILS_ENV=production
+
+set GEM_PATH=%~dp0..\webapps\ROOT\WEB-INF\gems
+set GEM_HOME=%~dp0..\webapps\ROOT\WEB-INF\gems
+set BUNDLE_GEMFILE=%~dp0..\webapps\ROOT\WEB-INF\Gemfile
+set BUNDLE_WITHOUT=test:development
+
+call "%~dp0..\script\configure_jvm.bat"
+
+call "%~dp0..\script\set_classpath.bat"
+
+%JAVA_CMD% -server %JAVA_OPTS% -Djruby.shell="cmd.exe" -cp "%CLASSPATH%" com.thoughtworks.mingle.Main --<%= MINGLE_RUBY_VERSION%> "%TOOL%" "%FILE_NAME%"
+set E=%ERRORLEVEL%
+
+:END
+rem 1. exit must be on the same line in order to see local %E% variable!
+rem 2. we must use cmd /c in order for the exit code properly returned!
+rem    See JRUBY-2094 for more details.
+endlocal & cmd /c exit /b %E%

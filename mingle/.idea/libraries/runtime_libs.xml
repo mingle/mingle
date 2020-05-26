@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="runtime-libs">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/vendor/java" />
+      <root url="file://$PROJECT_DIR$/vendor/java/elastic_search" />
+      <root url="file://$PROJECT_DIR$/vendor/java/tomcat-8" />
+    </CLASSES>
+    <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/vendor/java" recursive="false" />
+    <jarDirectory url="file://$PROJECT_DIR$/vendor/java/elastic_search" recursive="false" />
+    <jarDirectory url="file://$PROJECT_DIR$/vendor/java/tomcat-8" recursive="false" />
+  </library>
+</component>

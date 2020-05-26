@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<project name="mingle" default="all">
+
+
+    <property file="mingle.properties"/>
+    <!-- Uncomment the following property if no tests compilation is needed -->
+    <!--
+   <property name="skip.tests" value="true"/>
+    -->
+    <!-- Compiler options -->
+
+    <property name="compiler.debug" value="on"/>
+    <property name="compiler.generate.no.warnings" value="off"/>
+    <property name="compiler.args" value=""/>
+    <property name="compiler.max.memory" value="128m"/>
+    <patternset id="ignored.files">
+        <exclude name="**/CVS/**"/>
+        <exclude name="**/SCCS/**"/>
+        <exclude name="**/RCS/**"/>
+        <exclude name="**/rcs/**"/>
+        <exclude name="**/.DS_Store/**"/>
+        <exclude name="**/.svn/**"/>
+        <exclude name="**/.hg/**"/>
+        <exclude name="**/.er/**"/>
+        <exclude name="**/.sbas/**"/>
+        <exclude name="**/.IJI.*/**"/>
+        <exclude name="**/vssver.scc/**"/>
+        <exclude name="**/.git/**"/>
+        <exclude name="**/vssver2.scc/**"/>
+        <exclude name="**/.pyc/**"/>
+        <exclude name="**/.pyo/**"/>
+        <exclude name="**/*.pyc/**"/>
+        <exclude name="**/*.pyo/**"/>
+    </patternset>
+    <patternset id="library.patterns">
+        <include name="*.zip"/>
+        <include name="*.war"/>
+        <include name="*.egg"/>
+        <include name="*.ear"/>
+        <include name="*.swc"/>
+        <include name="*.jar"/>
+    </patternset>
+    <patternset id="compiler.resources">
+        <include name="**/?*.properties"/>
+        <include name="**/?*.xml"/>
+        <include name="**/?*.gif"/>
+        <include name="**/?*.png"/>
+        <include name="**/?*.jpeg"/>
+        <include name="**/?*.jpg"/>
+        <include name="**/?*.html"/>
+        <include name="**/?*.dtd"/>
+        <include name="**/?*.tld"/>
+    </patternset>
+
+    <!-- JDK definitions -->
+
+    <property name="jdk.bin.1.5" value="${jdk.home.1.5}/bin"/>
+    <path id="jdk.classpath.1.5">
+        <fileset dir="${jdk.home.1.5}">
+            <include name="../../1.5/Home/lib/deploy.jar"/>
+            <include name="../../1.5/Home/lib/dt.jar"/>
+            <include name="../../1.5/Home/lib/javaws.jar"/>
+            <include name="../../1.5/Home/lib/jce.jar"/>
+            <include name="../../1.5/Home/lib/plugin.jar"/>
+            <include name="../../1.5/Home/lib/sa-jdi.jar"/>
+            <include name="../../1.5/Home/../Classes/charsets.jar"/>
+            <include name="../../1.5/Home/../Classes/classes.jar"/>
+            <include name="../../1.5/Home/../Classes/dt.jar"/>
+            <include name="../../1.5/Home/../Classes/jce.jar"/>
+            <include name="../../1.5/Home/../Classes/jconsole.jar"/>
+            <include name="../../1.5/Home/../Classes/jsse.jar"/>
+            <include name="../../1.5/Home/../Classes/laf.jar"/>
+            <include name="../../1.5/Home/../Classes/ui.jar"/>
+            <include name="../../1.5/Home/lib/ext/apple_provider.jar"/>
+            <include name="../../1.5/Home/lib/ext/dnsns.jar"/>
+            <include name="../../1.5/Home/lib/ext/localedata.jar"/>
+            <include name="../../1.5/Home/lib/ext/sunjce_provider.jar"/>
+            <include name="../../1.5/Home/lib/ext/sunpkcs11.jar"/>
+        </fileset>
+    </path>
+
+    <property name="project.jdk.home" value="${jdk.home.1.5}"/>
+    <property name="project.jdk.bin" value="${jdk.bin.1.5}"/>
+    <property name="project.jdk.classpath" value="jdk.classpath.1.5"/>
+
+
+    <!-- Global Libraries -->
+
+
+    <!-- Application Server Libraries -->
+
+    <!-- Modules -->
+
+    <import file="${basedir}/module_mingle.xml"/>
+
+    <import file="${basedir}/installer/start/module_start.xml"/>
+
+    <import file="${basedir}/installer/secret/module_secret.xml"/>
+
+    <import file="${basedir}/installer/version/module_version.xml"/>
+
+    <import file="${basedir}/module_memorytest.xml"/>
+
+    <import file="${basedir}/module_deploy_installer.xml"/>
+
+    <import file="${basedir}/module_vmware_image.xml"/>
+
+    <target name="init" description="Build initialization">
+        <!-- Perform any build initialization in this target -->
+    </target>
+
+    <target name="clean" depends="clean.module.mingle, clean.module.start, clean.module.secret"
+            description="cleanup all"/>
+
+    <target name="all" depends="init, clean, j2ee.build.mingleweb, compile.module.start, compile.module.secret"
+            description="build all"/>
+</project>

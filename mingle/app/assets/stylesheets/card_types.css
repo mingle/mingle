@@ -1,0 +1,141 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+/* for edit card defaults */
+#card,
+.card
+{
+	border: 1px solid #AAAAAA;
+	margin: 1em;
+}
+
+#card-top,
+.card-top
+{
+  border-bottom:1px dotted #DDDDDD;
+  padding: 0.65em;
+}
+
+#card-top h1,
+.card-top h1
+{
+  padding: 0;
+}
+
+#card-bottom,
+.card-bottom
+{
+  background-color:#FFFAF6;
+  border-bottom:1px solid #FFF2E5;
+  border-top:1px dotted #DDDDDD;
+}
+
+.col1
+{
+  width: 20%;
+}
+
+.col2
+{
+  width: 30%;
+}
+
+.col3
+{
+  width: 12%;
+}
+
+.col4
+{
+  width: 12%;
+}
+
+.col5
+{
+  width: inherit;
+}
+
+table.draggable-table-top {
+  margin: 0;
+}
+
+#page-identifier-card_types-list table.draggable-table-top th {
+  border-top: 0;
+  background: #ffffff;
+}
+
+
+#page-identifier-card_types-list #content {
+  border: 1px solid #CCC;
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.25);
+  -webkit-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.25);
+  margin-bottom: 10px;
+}
+
+#page-identifier-card_types-list table.highlightable-table {
+  box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    -o-box-shadow: none;
+}
+
+#page-identifier-card_types-edit_defaults #card {
+  border: 0;
+}
+
+
+
+table.draggable-table
+{
+  margin-top: 0em;
+  margin-bottom: 0em;
+  border: 0px;
+  border-bottom: 1px solid #CCC;
+}
+
+table.draggable-table tbody
+{
+  border-bottom: none !important;
+  border-top: none !important;
+}
+
+table.draggable-table td
+{
+  border: 0px;
+  border-left: 1px solid #ccc;
+}
+
+#content {
+  overflow: inherit; !important
+}
+
+#content li {
+  list-style: none;
+}
+
+.action-column {
+  text-align: right;
+  padding-right: 0.1em;
+  padding-left: 0.1em;
+}
+
+.draggable-table .action-column a,
+.draggable-table .action-column span
+{
+  margin-right: 0.3em;
+  margin-left: 0.2em;
+}

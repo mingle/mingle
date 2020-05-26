@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE subsection SYSTEM "mingle_help.dtd">
+<subsection title="Table - based on a query" collapsed="true" id="table_query">
+	<markup_reference
+		title="Display a table with two columns, name and number - one row for each card that has a property 'Priority' set to 'Critical' and a property 'Release' set to 'Release One.' As usual, quotes are used only when grouping words with spaces in them.">
+		<icon alttext="Table query toolbar icon" src="resources/images/toolbar_table_query_icon.png" />
+		<markup>
+    table
+      query: SELECT number, name, status, 'story points' WHERE Type = Story
+      project: project_one
+			edit-any-number-property: true
+		</markup>
+		<p>This is how your macro will appear when you insert it into your card:</p>
+			<screenshot alttext="Example table - from query" src="resources/images/tables_query_example.png" />
+    <note>
+      <bullets>
+        <item>This table contains links to the cards. If you would like links to cards in your table, include number as one of the properties in the query.</item>
+        <item>Macro markup is space sensitive and we advise you to stick to the indentation scheme specified in the example. If you add project as a parameter this needs to be added to a new line as shown in the markup below.</item>
+      </bullets>
+    </note>
+	</markup_reference>
+	<table caption="Parameters">
+		<header-row>
+			<col-header>Name</col-header>
+			<col-header>Meaning</col-header>
+			<col-header>Required</col-header>
+			<col-header>Default value</col-header>
+		</header-row>
+    <row>
+      <label>query</label>
+      <col>A custom MQL query, the results of executing this query will be shown in the table.</col>
+      <col>One, and only one, of query or <cref topic="markup_table_view">view</cref> is required.</col>
+      <col />
+    </row>
+		<row>
+			<label>project</label>
+			<col>Any valid project identifier, specifying which project’s cards will be displayed. Authorization will be enforced upon view. That is, if a user does not have access to a project, that data series will not be included in the chart for that user. Default is the project to which the page or card containing the macro belongs.</col>
+			<col>No</col>
+			<col>Default is the project to which the page or card containing the macro belongs to.</col>
+		</row>
+		<row>
+			<label>edit-any-number-property</label>
+			<col>Any card property of type number. Allows you to directly edit card properties of the cards listed in the table macro.</col>
+			<col>No</col>
+			<col />
+		</row>
+	</table>
+</subsection>

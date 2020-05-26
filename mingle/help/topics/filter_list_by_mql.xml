@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Using the Advanced (MQL) filter">
+	<section title="Introducing the Advanced filter">
+		<p>Mingle 2.1 introduced the ability to filter cards by MQL. The Advanced filter is very useful if you need more powerful searches that the <cref topic="filter_list_by_widget">regular filter</cref> cannot provide, such as finding cards that are either of a particular card type OR a particular card property value. The Advanced filter uses MQL to filter cards in the same way that MQL is used in Mingle's macros. </p>
+		<hint>To use MQL to filter cards you may want to make yourself familiar with it by reviewing the <cref topic="macro_and_mql_guide">Macro and MQL reference</cref>.</hint>
+	</section>
+	<section title="When to use the Advanced filter">
+		<p> The Advanced filter can be used on the <cref topic="list_view">card list</cref> and <cref topic="grid_view">grid</cref> views to find specific cards. The Advanced filter cannot be used on the card list and grid views when a tree is selected but the <cref topic="tree_filter">tree filter</cref> is available to filter in these views. The Advanced filter can be used to filter cards using the same type of queries as are used in the <cref topic="filter_list_by_widget">regular filter</cref>.</p>
+		
+		<p>The Advanced filter can also be used to filter for more complex and specific card searches.  For example, if you want to find one type of card with one status and another type of card with either of two different statuses you could use a MQL query such as this:</p>
+	
+		<markup>(Type = Story AND Status = Open) OR (Type = Defect AND ('Defect status' = Open OR 'Defect Status' = New)) </markup>
+		
+			<preview><screenshot alttext="Example Advanced filter" src="resources/images/example_mql_filter.png"/></preview>
+			
+		<p>This MQL query will return all cards of type Story AND any cards of type Defect that have a Defect Status property where the value is Open or New.
+<hint>For more information on combining MQL queries see "How to combine MQL queries" below</hint>	
+	  </p>
+	</section>
+	<section title="Using MQL in the card filter">
+		<todo>add info on selecting the correct tab etc... and picture</todo>
+		<p>The <cref topic="mql_reference">MQL syntax</cref> that should be used to filter the cards is the same as that used in the WHERE or conditions parts of Mingle <cref topic="macro_reference">macros</cref>. </p>
+		<subsection title="How to specify simple MQL queries">
+			<bullets>
+				<item>
+					<p>	To find cards that are Defects use: 
+			<markup>Type = Defect </markup>
+			This MQL query will return all cards of type Defect and no other card types. </p>
+				</item>
+				<item>
+					<p>	To find all cards that are not Open use: 
+			<markup>Status != Open </markup> 
+			
+		This MQL query will return any card types that have a Status property where the value is NOT Open. 
+		</p>
+				</item>
+			</bullets>
+			<note>If the specified property is valid for multiple card types all types that are relevant will be returned in the results.</note>
+		</subsection>
+		<subsection title="How to combine MQL queries">
+			<p>	You can combine MQL conditions using AND, OR or parentheses. </p>
+			<bullets>
+				<p>
+					<item>To find cards that are either stories OR are Open use: 
+		<markup>Type = Story OR Status = Open</markup>
+		This MQL query will return all cards of type Story AND any cards of any card type that have a Status property where the value is Open. 
+	</item>
+				</p>
+				<item>
+					<p>	To find cards that are Open stories: 
+				<markup>Type = Story AND Status = Open</markup>
+			This MQL query will return only cards of type Story that have a Status property where the value is Open. </p>
+				</item>
+				<item>
+					<p>	To find cards that are either stories in any status OR open defects: 
+						<markup>Type = Story OR (Type = Defect AND Status = Open) </markup> 
+						This MQL query will return all cards of type Story AND cards of type Defect that have a Status property where the value is Open. </p>
+				</item>
+			</bullets>
+		</subsection>
+		<subsection title="How to use MQL keywords"><p>There are several MQL keywords that can also be used in the Advanced filter to quickly refine the cards. </p>
+						To find cards for the 'current user':
+			<markup>Owner = CURRENT USER AND 'Fixed on' = TODAY </markup>
+			<hint>For more information on MQL keywords see <cref topic="mql_reference">MQL reference</cref>.</hint>		
+		</subsection>
+		<subsection title="How to avoid MQL errors">
+			<p> Unlike MQL that is used in some of the Mingle macros, MQL filtering does not support the use of SELECT, WHERE, AVG, COUNT, SUM, ORDER BY, GROUP BY or THIS CARD. Using these in the filter will result in a MQL syntax error. 
+	</p>
+		</subsection>
+	</section>
+	<section title="Saving Advanced filters as favorites and tabs">
+		<p> Like the regular filter, Advanced filters can be saved as <cref topic="managing_favorites_and_tabs">favorites and tabs</cref>. Simply filter your cards by the required MQL and use the 'Add current view to team favorites...' link.</p>
+	</section>
+	<section title="Also see..">
+		<bullets>
+			<item>
+				<cref topic="filter_list_by_widget">Card filtering</cref>
+			</item>
+			<item>
+				<cref topic="mql_reference">MQL reference</cref>
+			</item>
+		</bullets>
+	</section>
+</topic>

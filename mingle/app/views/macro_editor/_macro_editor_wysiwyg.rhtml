@@ -1,0 +1,61 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% macro_def = @macro_editor.macro_def %>
+<div id="wysiwyg_macro_editor_dialog">
+  <div id="macro_editor" style="display:none;">
+    <%= render_help_link(macro_def.name, :class => 'page-help-at-action-bar', :content => 'Help') %>
+    <% form_remote_tag(:url => {:action => 'preview'},
+            :before => show_spinner("macro_editor_spinner") + "macroEditor.scrollToPreview();",
+            :complete => hide_spinner("macro_editor_spinner") + "$j('#macro_preview').html(request.responseText)",
+            :html => {:id => 'macro_editor_preview_form'}) do %>
+      <%= submit_tag 'Preview', :style => 'display:none' %>
+      <%= render @macro_editor.content_provider %>
+      <%= hidden_field_tag 'macro_type', macro_def.name %>
+      <ul>
+          <li id="<%= macro_def.edit_panel_html_id %>" class="macro-edit-panel" style="display:none;">
+            <h3>Chart level options</h3>
+              <div class="chart-editor">
+                <%= render :partial => 'multiple_parameter_input', :locals => {:macro_def_name => macro_def.name} %>
+                <% macro_def.parameter_definitions.each_with_index do |param_def, index|
+                %>
+                  <%= render :partial => 'parameter_definition_input', :locals => {:macro_def => macro_def,
+                                                                                   :param_def => param_def,
+                                                                                   :param_name => "macro_editor[#{macro_def.name}][#{param_def.parameter_name}]",
+                                                                                   :param_id => "#{macro_def.name}_#{param_def.parameter_name}_parameter",
+                                                                                   :index => index,
+                                                                                   :input_id => nil }%>
+                <% end %>
+              </div>
+              <% if macro_def.support_series? -%>
+                <div class='series-editors'></div>
+              <% end %>
+          </li>
+      </ul>
+      <div class="clear"></div>
+      <div id="preview_panel_container" class="preview-panel-container">
+        <div id="macro_preview" class="preview-panel wiki"></div>
+      </div>
+    <% end -%>
+  </div>
+</div>
+
+<%= javascript_with_rescue <<-JAVASCRIPT
+  window.macroEditor = new MacroBuilder('macro_editor', '#{macro_def.name}', #{MacroEditor::macro_as_json(macro_def.name)}, '#{url_for(:action => 'new_series_editor')}');
+  macroEditor.show();
+  IEInputEnterKeyFix.attach('macro_editor_preview_form');
+JAVASCRIPT
+-%>

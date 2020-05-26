@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="SCM Configuration API">
+	
+<cref topic="mingle_onsite">Mingle onsite</cref> supports <cref topic="setup_source_repository_integration">source repository integration</cref> with Subversion, Perforce, Mercurial and Git. This can be configured via the SCM Configuration API.
+
+
+<note><p>Please note:</p>
+	<bullets>
+		<item>All the API resources and examples refer to <strong>v2 of the API</strong>. Support for v1 of the API was deprecated in fall 2012. Please refer to this <exref url="http://support.thoughtworks.com/entries/22029412-End-of-life-for-Version-1-of-the-Mingle-API">announcement</exref> in our Mingle community for more information about this deprecation.</item>
+		<item>Please note that all POST and PUT requests must be in XML format by default. This is not illustrated in the examples here. To specify parameters as shown in the examples you will have to set the request header for Content-Type to "application/x-www-form-urlencoded".</item>
+	</bullets>
+</note>
+
+
+	<subsection title="Subversion configuration" file="mingle_api_subversion_configuration" collapsed="true" />
+	<subsection title="Mercurial configuration" file="mingle_api_mercurial_configuration" collapsed="true" />
+	<subsection title="Perforce configuration" file="mingle_api_perforce_configuration" collapsed="true" />
+	<subsection title="Git configuration" file="mingle_api_git_configuration" collapsed="true" />
+</topic>

@@ -1,0 +1,14 @@
+function testReset($id){
+	_assertNotNull(_reset($id));
+	_setValue(_textbox("resetTest"), "gibberish");
+	_assertNotNull(_textbox("resetTest"));
+	_assertEqual("gibberish", _textbox("resetTest").value);
+	_click(_reset($id));
+	_assertNotNull(_textbox("resetTest"));
+	_assertEqual("", _textbox("resetTest").value);
+}
+
+testReset("Reset Me");
+testReset("resetName[1]");
+testReset("resetId1");
+testReset(3);

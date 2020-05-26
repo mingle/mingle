@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Updating cards">
+    <section title="Introduction">
+    	<p>Mingle gives you many options for updating cards, both individually and in bulk.</p>
+    </section>
+	<section title="Updating individual cards">
+    	<p>First <cref topic="finding_cards_to_work_with">find and open</cref> the card you want to update.</p>
+		<p><screenshot alttext="Card view page - controls highlighted" src="resources/images/edit_individual_card.png" caption="Card view page - updating an individual card"></screenshot></p>
+		<subsection title="Posting Murmurs">
+    		<p>When you open an individual card, you can post <cref topic="murmurs">Murmurs</cref>.</p>
+		</subsection>
+		<subsection title="Updating the card description">
+    		<p>If you don't yet have a card description, Mingle displays an <link>"Add description"</link> link, which you can click to include a card description. Otherwise click the <link>"Edit"</link> button to open the card and update an existing description.</p>
+<p>Mingle will always return you to the latest version of the description when you open it to edit. From here you can format the description, add links and attach graphics and documents. Learn more about <cref topic="formatting_help_component">creating and formatting card content</cref> using Mingle's rich text editor.</p>
+		</subsection>
+		<subsection title="Updating tags">
+	    	<p>Click the <link>Add tags</link> link to apply new tags. Or if there are existing tags, you can click the <link>Edit tags</link> link to add or remove tags.
+	    		You can quickly remove a tag by clicking on the cross next to the tag. See <cref topic="working_with_tags">Working with tags</cref> for details.</p>
+    	</subsection>
+		<subsection title="Updating checklists">
+	    	<p>Click the plus icon next to Checklists to create a new checklist item. Hover over the checklist item to rearrange the order. You can view the completed items when at least one item has been checked off by clicking on "Show completed items." To remove a checklist item, simply click the "x" next to the item.</p>
+    	</subsection>
+		<subsection title="Applying transitions">
+	    	<p>If a card matches the card property values in a transition, one or more transition links display on the card (in the example above, there is a transition called Start User Story). Click the transition link to update the card's status. See Using transitions for details.</p>
+		</subsection>
+		<subsection title="Updating card properties">
+			<p>You can either update a card property by selecting an existing value or by creating a new value. Depending on the property type, you will be presented with the allowable values or asked to type in a new value. To select an existing value for a card property, you can either click on a value that is presented to you or begin to type in a keyword. The latter is helpful if a card property has a long value list because as you type the keyword only the values that match the entered keyword will be presented.
+
+					<p><screenshot alttext="card property value selector" src="resources/images/property_value_selector.png" caption="card property value selector"></screenshot></p>
+
+From here you can create new card property values for <cref topic="card_property_types">managed list properties</cref> by selecting the <link>New value...</link> link if the property is unlocked.</p>
+
+		</subsection>
+		<subsection title="Add a card to a tree">
+			<p>You can <cref topic="adding_and_removing_cards_from_a_tree">add a card to a tree</cref> or change it's parent in the <cref topic="card_trees">tree</cref> by assigning a parent card id to a relationship property.
+				These properties are displayed in a box with the name of the corresponding card tree as a title.</p>
+		</subsection>
+	</section>
+	<section title="Updating cards in bulk">
+    	<p>When viewing cards in Mingle's List view, you can select multiple cards and perform bulk actions on them.
+    		See <cref topic="updating_cards_in_bulk">Updating cards in bulk</cref> for details.</p>
+    </section>
+	<section title="Also see...">
+    	<bullets>
+    		<item><cref topic="import_export_component"> Importing and exporting cards</cref></item>
+	    	 <item><cref topic="viewing_cards">Viewing cards</cref></item>
+	    	 <item><cref topic="creating_card_properties">Creating card properties</cref></item>
+	    	 <item><cref topic="creating_card_keywords">Creating card keywords</cref></item>
+	    	 <item><cref topic="creating_card_transitions">Creating card transitions</cref></item>
+    		<item><cref topic="card_trees">Card trees</cref></item>
+    		<item><cref topic="aggregate_properties">Aggregate properties</cref> and <cref topic="formula_properties">Formula properties</cref></item>
+    	</bullets>
+
+    </section>
+</topic>

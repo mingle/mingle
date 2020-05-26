@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+<head>
+<meta name="generator" content="HTML Tidy, see www.w3.org">
+<title></title>
+<script type="text/javascript">
+function fn1(){
+    alert(this.window == top);
+}
+function abc(){
+    top.fn1 = fn1;
+    window.location.href = location.href;
+    //fn1();
+}
+alert("child "+top.areWindowsLoaded(top));
+sahiLoaded = true;
+</script>
+</head>
+<body>
+<form name="f1"><input type="text" name="t1"><br>
+<input type="button" value="click me" onclick="abc()"><br>
+</form>
+</body>
+</html>
+

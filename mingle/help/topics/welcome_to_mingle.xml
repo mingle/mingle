@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_help.dtd">
+<chapter title="Welcome to Mingle">
+	<section title="Introduction">
+		<p>Mingle is an Agile project management application from <exref url="http://www.thoughtworks.com/products/">ThoughtWorks Studios</exref> for teams that need to make real-time decisions using real-time data. Mingle provides project intelligence and supports all team activity.</p>
+	</section>
+	<section title="Video">
+			<p> A 4:30 demonstration of <video url="http://thoughtworks.wistia.com/medias/6fk7o08teg">All Things Mingle.</video> </p>	
+	</section>
+	<section title="Quick links">
+		<p>Want help fast? Try out these quick links to get you up and running in no time. </p>
+		
+		<subsection title="Getting started">
+			<p>Start collaborating in Mingle now. Here's how:</p>
+			<bullets>
+				<item><cref topic="quick_project_setup">Quick project setup</cref> - We know you probably don't like to read thick manuals so if you read nothing else this section is for you</item>
+				<item><cref topic="creating_mingle_projects">Creating projects</cref> - Before you can use Mingle you need to create your project. Learn what is needed here</item>
+				<item><cref topic="creating_user_profiles">Creating users</cref> - Learn how to register users for use in Mingle</item>
+				<item><cref topic="customizing_projects">Customizing projects</cref> - If you're responsible for setting up and managing a project this section is for you</item>
+			</bullets>
+		</subsection>
+		<subsection title="Using Mingle">
+			<p>Once your Mingle projects have been set-up and you're ready to work, read these sections to find out how to use Mingle. </p>
+				<bullets>
+					<item><cref topic="using_mingle">Using Mingle</cref> - Once a project is up and running this section takes you through Mingle's features</item>
+					<item><cref topic="getting_around_in_mingle">Getting around in Mingle</cref> - Find out how to navigate and get to the information you want</item>
+					<item><cref topic="working_with_cards">Working with cards</cref> - They are the foundation of all Mingle projects. Look here to learn how to work with cards</item>
+					<item><cref topic="working_with_pages">Working with pages</cref> - Create pages and report on projects by reading the Mingle help</item>
+					<item><cref topic="working_with_card_trees">Working with card trees</cref> - Take a look here to find out more about creating and using card trees</item>
+				</bullets>
+		</subsection>	
+	</section>
+	<section title="See Mingle in use">
+		<p>
+		Watch <video url="http://www.thoughtworks.com/products/mingle-agile-project-management/resources#Videos">how-to videos</video> of Mingle on the ThoughtWorks Studios website.
+		</p>
+	</section>
+	<subsection title="Mingle Onsite">
+		<p>If you're not using Mingle in the cloud and need to install <cref topic="mingle_onsite">Mingle onsite</cref>, this section is for you.</p>
+		<bullets>
+		<item><cref topic="system_requirements">System requirements</cref> - Find out what the system requirements are before you install Mingle</item>
+		<item><cref topic="configuring_a_database_for_use_with_mingle">Configuring a database</cref> - Understand how to configure a database for use with Mingle</item>
+		<item><cref topic="mingle_onsite">Mingle onsite</cref> - Learn how to download and install Mingle</item>
+		<item><cref topic="upgrading_from_previous_versions">Upgrading from a previous version of Mingle</cref> - Read about upgrading from previous versions of Mingle </item>
+		<item><exref url="http://support.thoughtworks.com/entries/23725582-Mingle-in-the-cloud-FAQ">Mingle vs. Mingle onsite FAQ</exref> - Learn about the differences between Mingle in the cloud and installed</item>
+		</bullets>
+		<note>Starting with Mingle 3.0 MySQL will no longer be supported. All existing MySQL users will need to <cref topic="database_migration">migrate</cref> their data to Postgres or Oracle before upgrading to Mingle versions later than Mingle 3.0.</note>
+	</subsection>
+	<section file="need_more_help"/>
+	<section title="Also see...">
+    <bullets>
+      <item><cref topic="getting_started_in_mingle">Getting started in Mingle</cref></item>
+      <item><cref topic="creating_mingle_projects">Creating Mingle projects</cref></item>
+      <item><cref topic="customizing_projects">Customizing projects</cref></item>
+      <item><cref topic="creating_user_profiles">Creating user profiles</cref></item>
+      <item><cref topic="whats_new_in_mingle">What's new in Mingle</cref></item>
+      <item><cref topic="mingle_tips_and_tricks">Mingle tips and tricks</cref></item>
+    </bullets>
+  </section>
+	<section title="ThoughtWorks Studios">
+		<p>
+			<bullets>
+				<item><exref url="http://www.thoughtworks-studios.com">Learn more about ThoughtWorks Studios</exref></item>
+					</bullets>
+		</p>
+	</section>
+	
+	
+
+</chapter>

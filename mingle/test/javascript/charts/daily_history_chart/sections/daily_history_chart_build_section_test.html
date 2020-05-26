@@ -1,0 +1,686 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Daily History Chart Build Chart Section Test</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <script src="../../../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js"
+          type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+  <script src="../../../../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../../../../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+
+  <script src="../../../../../public/javascripts/application.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/drop_down.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/text_box.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/url_helper.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/project_data_store.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/color_picker.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/color_selector.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/single_checkbox.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/parameter.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/pair_parameter.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/series_parameter.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/forecasting_parameter.js"
+          type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/group_parameter.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/section_helpers.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/card_filter_value_wrapper.js"
+          type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/property_definition_filter.js"
+          type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/card_filter.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/series.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/card_filters.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/property_definition_filter.js"
+          type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/card_type_filter.js" type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/sections/build_chart_section.js"
+          type="text/javascript"></script>
+  <script src="../../../../../app/assets/javascripts/easy_charts/daily_history_chart/sections/build_chart_section.js"
+          type="text/javascript"></script>
+
+  <script src="../../../test_assets/sinon-2.3.6.js" type="text/javascript"></script>
+  <script src="../../../test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+  <script src="../../../test_assets/qunit-phantom.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="../../../test_assets/qunit-1.21.0.css" type="text/css"/>
+
+</head>
+<body>
+<div id="qunit">
+</div>
+<div id="daily_history_chart_wizard"></div>
+<script type="application/javascript">
+  var paramDefs = [
+    {
+      name: 'customization-group-1',
+      input_type: 'group-parameter',
+      param_defs: [
+        {
+          name: 'start-date',
+          input_type: 'textbox',
+          label: 'Start date',
+          isDateType: true,
+          config: {date: {minDate: "-5y", dateFormat: 'd, M, yy'}},
+          placeholder: 'Start date'
+        },
+        {
+          name: 'end-date',
+          input_type: 'textbox',
+          label: 'End date',
+          isDateType: true,
+          placeholder: 'End date'
+        }
+      ]
+    },
+    {
+      name: 'x-label-interval',
+      label: 'X label interval',
+      input_type: 'dropdown',
+      initial_value: 7,
+      allowed_values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+      multiple_values_allowed: false,
+      placeholder: 'X label interval'
+    },
+    {
+      input_type: 'pair-parameter',
+      label: 'What determines the Y-value of each series?',
+      connecting_text: 'of',
+      name: 'aggregate-pair',
+      param_defs: [
+        {
+          name: 'aggregate',
+          initial_value: 'count',
+          allowed_values: [['Number of cards', 'count'], ['Sum', 'sum'], ['Average', 'avg']],
+          multiple_values_allowed: false,
+          input_type: 'dropdown'
+        }, {
+          name: 'aggregate-property',
+          initial_value: null,
+          allowed_values: [],
+          multiple_values_allowed: false,
+          input_type: 'dropdown'
+        }
+      ]
+    }
+  ], currentProjectData = {
+    identifier: 'currentProject',
+    cardTypes: [
+      {
+        name: 'Card',
+        id: 1,
+        propertyDefinitions: [
+          {
+            name: 'prop1',
+            isNumeric: true,
+            isManaged: true,
+            operatorOptions: [['is not', 'is not']],
+            propertyValueDetails: [{value: 'p1v1'}, {value: 'p1v2'}]
+          },
+          {name: 'prop2', propertyValueDetails: [{value: 'p2v1'}, {value: 'p2v2'}]},
+          {name: 'prop3', isManaged: false, operatorOptions: [['is', 'is']]}
+        ]
+      },
+      {
+        name: 'Story',
+        id: 2,
+        propertyDefinitions: [
+          {
+            name: 'prop1',
+            isNumeric: true,
+            isManaged: true,
+            operatorOptions: [['is not', 'is not']],
+            propertyValueDetails: [{value: 'p1v1'}, {value: 'p1v2'}]
+          },
+          {name: 'prop3', isManaged: false, operatorOptions: [['is', 'is']]},
+          {name: 'prop4', propertyValueDetails: [{value: 'p4v1'}, {value: 'p4v2'}]}
+        ]
+      },
+      {
+        name: 'Release',
+        id: 3,
+        propertyDefinitions: [{name: 'prop5', isNumeric: true}, {name: 'prop6'}, {name: 'prop7'}]
+      }
+    ],
+    team: []
+  }, projectDataStore = new ProjectDataStore(currentProjectData);
+
+  QUnit.module('Daily History Chart Build Chart Section', {
+    beforeEach: function () {
+      this.onUpdate = sinon.spy();
+      this.onComplete = sinon.spy();
+      this.container = $j('#daily_history_chart_wizard');
+      sinon.spy(MingleUI.EasyCharts.Sections, 'BuildChartSection');
+      this.callbacks = {
+        onUpdate: this.onUpdate,
+        onComplete: this.onComplete
+      };
+      this.projectData = projectDataStore.dataFor(currentProjectData.identifier);
+      this.selectedCardTypes = ['Story', 'Card'];
+    },
+    afterEach: function () {
+      this.container.empty();
+      MingleUI.EasyCharts.Sections.BuildChartSection.restore();
+    }
+
+  }, function () {
+    QUnit.module('Common Test', {
+      beforeEach: function () {
+        this.section = new MingleUI.EasyCharts.DailyHistoryChart.Sections.BuildChartSection({}, this.callbacks);
+      },
+      afterEach: function () {
+
+      }
+    });
+    QUnit.test('testShouldAddTitle', function (assert) {
+      var titleContainer = this.section.htmlContainer.find('div.section-title-container');
+
+      assert.equal(titleContainer.text(), '2Build the chart');
+      assert.equal(titleContainer.find('span.section-number').text(), '2');
+      assert.equal(titleContainer.find('span.section-title').text(), 'Build the chart');
+    });
+
+    QUnit.test('testShouldCreateBuildChartSection', function (assert) {
+      var sectionArgs = MingleUI.EasyCharts.Sections.BuildChartSection.args[0];
+
+      assert.equal(MingleUI.EasyCharts.Sections.BuildChartSection.callCount, 1);
+      assert.equal(sectionArgs[0].name, 'dailyHistoryChartBuildChartSection');
+      assert.deepEqual(sectionArgs[0].parameterDefinitions, paramDefs);
+      assert.equal(typeof sectionArgs[0].extensionMethods.updateProperties, 'function');
+      assert.equal(sectionArgs[0].aggregatePairName, 'aggregate-pair');
+      assert.equal(sectionArgs[1].onUpdate, this.callbacks.onUpdate);
+      assert.equal(sectionArgs[1].onComplete, this.callbacks.onComplete);
+      assert.equal(sectionArgs[1].onEnabled.name, "sectionEnabled");
+      assert.equal(sectionArgs[1].startDate.name, "startDateUpdated");
+      assert.equal(sectionArgs[1].endDate.name, "enableSeriesParameter");
+    });
+
+    QUnit.test('testShouldUpdateAggregatePropertyDropDowns', function (assert) {
+      var sectionArgs = MingleUI.EasyCharts.Sections.BuildChartSection.args[0],
+          aggregateProperties = ['Story Points'],
+          setPairValuesSpy = sinon.spy(), params = {
+            aggregatePair: {setPairValues: setPairValuesSpy}
+          };
+
+      sectionArgs[0].extensionMethods.updateProperties(params, [], aggregateProperties);
+
+      assert.equal(setPairValuesSpy.callCount, 1);
+      assert.deepEqual(setPairValuesSpy.args[0][0], aggregateProperties);
+    });
+
+    QUnit.module('Disabled Section', {
+      beforeEach: function () {
+        this.section = new MingleUI.EasyCharts.DailyHistoryChart.Sections.BuildChartSection({}, this.callbacks);
+        this.container.append(this.section.htmlContainer);
+      }
+    });
+
+    QUnit.test('testShouldInitializeDisabledSection', function (assert) {
+      assert.ok(this.section.htmlContainer.hasClass('disabled'));
+    });
+
+    QUnit.test('testIsEnabledShouldReturnFalse', function (assert) {
+      assert.notOk(this.section.isEnabled());
+    });
+
+    QUnit.test('testDisableShouldRemoveParamsContainer', function (assert) {
+      this.section.enableWith(this.projectData, this.selectedCardTypes);
+
+      assert.notOk(this.section.htmlContainer.hasClass('disabled'));
+      assert.ok(this.section.htmlContainer.find('.section-params-container')[0]);
+
+      this.section.disable();
+
+      assert.ok(this.section.htmlContainer.hasClass('disabled'));
+      assert.notOk(this.section.htmlContainer.find('.section-params-container')[0]);
+      assert.notOk(this.section.isEnabled());
+    });
+
+    QUnit.test('testValuesShouldReturnEmptyObject', function (assert) {
+      assert.deepEqual(this.section.values(), {});
+    });
+
+    QUnit.module('Enabled Section', {
+      beforeEach: function () {
+        var data = {
+          Story: {
+            name: 'Story',
+            id: 2,
+            propertyDefinitions: [
+              {
+                name: 'prop1',
+                isNumeric: true,
+                isManaged: true,
+                operatorOptions: [['is not', 'is not']],
+                propertyValueDetails: [{value: 'p1v1'}, {value: 'p1v2'}]
+              },
+              {name: 'prop3', isManaged: false, operatorOptions: [['is', 'is']]},
+              {name: 'prop4', propertyValueDetails: [{value: 'p4v1'}, {value: 'p4v2'}]}
+            ]
+          }, Card: {
+            name: 'Card',
+            id: 1,
+            propertyDefinitions: [
+              {
+                name: 'prop1',
+                isNumeric: true,
+                isManaged: true,
+                operatorOptions: [['is not', 'is not']],
+                propertyValueDetails: [{value: 'p1v1'}, {value: 'p1v2'}]
+              },
+              {name: 'prop2', propertyValueDetails: [{value: 'p2v1'}, {value: 'p2v2'}]},
+              {name: 'prop3', isManaged: false, operatorOptions: [['is', 'is']]}
+            ]
+          }
+        };
+        this.server = sinon.fakeServer.create();
+        this.server.respondWith("GET", "/api/v2/projects/currentProject/card_types/1.json?include_property_values=true",
+            [200, {"Content-Type": "application/json"}, JSON.stringify(data.Card)]);
+        this.server.respondWith("GET", "/api/v2/projects/currentProject/card_types/2.json?include_property_values=true",
+            [200, {"Content-Type": "application/json"}, JSON.stringify(data.Story)]);
+        this.server.respond();
+        this.section = new MingleUI.EasyCharts.DailyHistoryChart.Sections.BuildChartSection({}, this.callbacks, projectDataStore);
+        this.seriesParameterSpy = sinon.spy(MingleUI.EasyCharts, 'SeriesParameter');
+        this.section.enableWith(this.projectData, this.selectedCardTypes);
+        this.container.append(this.section.htmlContainer);
+      },
+      afterEach: function () {
+        this.server.restore();
+        this.seriesParameterSpy.restore();
+        this.container.empty();
+      }
+    }, function () {
+
+      QUnit.test('testShouldInitializeSeriesParameter', function (assert) {
+        assert.equal(this.seriesParameterSpy.callCount, 1);
+        assert.deepEqual(this.seriesParameterSpy.args[0].length, 3);
+        assert.deepEqual(this.seriesParameterSpy.args[0][0], this.section.htmlContainer);
+        assert.deepEqual(this.seriesParameterSpy.args[0][2].cardFilters, [
+          {
+            "operator": "is",
+            "property": "Type",
+            "values": [
+              "Story",
+              "Card"
+            ]
+          }
+        ]);
+        assert.deepEqual(this.seriesParameterSpy.args[0][2].currentProject, "currentProject");
+        assert.deepEqual(this.seriesParameterSpy.args[0][2].seriesConfig, {
+          "aggregate-pair": {
+            "isRequired": false
+          },
+          "burn-down": {
+            "isRequired": false
+          },
+          "filters": {
+            "isRequired": true,
+            "label": "What conditions determine this series?",
+            "disableProjectVariables": true,
+            "propertyDefinitionFilters": [
+              "aggregate"
+            ]
+          },
+          "group": {
+            "isRequired": true,
+            "values": {
+              "color": {
+                "isRequired": true
+              },
+              "combine": {
+                "isRequired": false
+              },
+              "series-type": {
+                "isRequired": false
+              }
+            }
+          },
+          "hidden": {
+            "isRequired": false
+          },
+          "project": {
+            "isRequired": false
+          },
+          "property": {
+            "isRequired": false
+          },
+          "tags-filter": {
+            "isRequired": false
+          },
+          "trend-line": {
+            "isRequired": false
+          }
+        });
+      });
+
+      QUnit.test('testShouldAddAggregateDropDown', function (assert) {
+        assert.ok(this.section.htmlContainer.find('div#daily_history_chart_build_chart_section_aggregate_pair_parameter')[0]);
+        assert.equal(this.section.htmlContainer.find('div#daily_history_chart_build_chart_section_aggregate_pair_parameter .parameter-label').text(), paramDefs[2].label);
+        assert.ok(this.section.htmlContainer.find('div#daily_history_chart_build_chart_section_aggregate_pair_parameter .parameter')[0]);
+        assert.equal(this.section.htmlContainer.find('#daily_history_chart_build_chart_section_aggregate_pair_parameter .parameter #aggregate_pair_aggregate_parameter .options-container').text(), 'Number of cardsSumAverage');
+        assert.equal(this.section.htmlContainer.find('#daily_history_chart_build_chart_section_aggregate_pair_parameter .parameter #aggregate_pair_aggregate_parameter .selected-value').text(), 'Number of cards');
+      });
+
+      QUnit.test('testShouldAddHiddenAggregatePropertyDropDown', function (assert) {
+        assert.ok(this.section.htmlContainer.find('div#daily_history_chart_build_chart_section_aggregate_pair_parameter')[0]);
+        assert.equal(this.section.htmlContainer.find('div#daily_history_chart_build_chart_section_aggregate_pair_parameter .parameter-label').text(), paramDefs[2].label);
+        assert.ok(this.section.htmlContainer.find('div#daily_history_chart_build_chart_section_aggregate_pair_parameter .parameter')[0]);
+        assert.notOk(this.section.htmlContainer.find('#daily_history_chart_build_chart_section_aggregate_pair_parameter .parameter #aggregate_pair_aggregate_property_parameter').is(':visible'));
+        assert.equal(this.section.htmlContainer.find('#daily_history_chart_build_chart_section_aggregate_pair_parameter .parameter #aggregate_pair_aggregate_property_parameter .options-container').text(), 'prop1');
+        assert.equal(this.section.htmlContainer.find('#daily_history_chart_build_chart_section_aggregate_pair_parameter .parameter #aggregate_pair_aggregate_property_parameter .selected-value').text(), '(not set)');
+      });
+
+      QUnit.test('testShouldShowAggregatePropertyWhenAggregateIsSum', function (assert) {
+        this.section.htmlContainer.find('#daily_history_chart_build_chart_section_aggregate_pair_parameter .parameter #aggregate_pair_aggregate_parameter li:contains("Sum")').click();
+        assert.ok(this.section.htmlContainer.find('#daily_history_chart_build_chart_section_aggregate_pair_parameter .parameter #aggregate_pair_aggregate_property_parameter').is(':visible'));
+      });
+
+      QUnit.test('testShouldShowAggregatePropertyWhenAggregateIsAverage', function (assert) {
+        this.section.htmlContainer.find('#daily_history_chart_build_chart_section_aggregate_pair_parameter .parameter #aggregate_pair_aggregate_parameter li:contains("Average")').click();
+
+        assert.ok(this.section.htmlContainer.find('#daily_history_chart_build_chart_section_aggregate_pair_parameter .parameter #aggregate_pair_aggregate_property_parameter').is(':visible'));
+      });
+
+      QUnit.test('testShouldHideAggregatePropertyWhenAggregateIsCount', function (assert) {
+        this.section.htmlContainer.find('#daily_history_chart_build_chart_section_aggregate_pair_parameter .parameter #aggregate_pair_aggregate_parameter li:contains("Sum")').click();
+
+        assert.ok(this.section.htmlContainer.find('#daily_history_chart_build_chart_section_aggregate_pair_parameter .parameter #aggregate_pair_aggregate_property_parameter').is(':visible'));
+
+        this.section.htmlContainer.find('#daily_history_chart_build_chart_section_aggregate_pair_parameter .parameter #aggregate_pair_aggregate_parameter li:contains("Number of cards")').click();
+
+        assert.notOk(this.section.htmlContainer.find('#daily_history_chart_build_chart_section_aggregate_pair_parameter .parameter #aggregate_pair_aggregate_property_parameter').is(':visible'));
+      });
+
+      QUnit.test('testShouldAddStartAndEndDateOption', function (assert) {
+        assert.ok(this.section.htmlContainer.find('div#daily_history_chart_build_chart_section_customization_group_1_parameter')[0]);
+        assert.ok(this.section.htmlContainer.find('div#customization_group1_start_date_parameter')[0]);
+        assert.ok(this.section.htmlContainer.find('div#customization_group1_end_date_parameter')[0]);
+      });
+
+      QUnit.test('testShouldLimitDateOnEndDateToBeAfterStartDate', function (assert) {
+        var datePickerSpy = sinon.spy(jQuery.fn.init(), 'datepicker');
+        this.section.htmlContainer.find('div#customization_group1_start_date_parameter input').val("11/11/2017");
+        this.section.htmlContainer.find('div#customization_group1_start_date_parameter input').trigger('blur');
+        assert.equal(1, datePickerSpy.callCount);
+        assert.equal("option", datePickerSpy.args[0][0]);
+        assert.deepEqual(datePickerSpy.args[0][1], {
+          minDate: '12, Nov, 2017',
+          maxDate: undefined,
+          dateFormat: 'd, M, yy'
+        });
+        datePickerSpy.restore();
+      });
+
+      QUnit.test('testShouldEnableSeriesParameterOnlyWhenStartDateAndEndDateAreSet', function (assert) {
+        var seriesParameterSpy = sinon.spy(this.section.seriesParameter, 'enable');
+        this.section.htmlContainer.find('div#customization_group1_start_date_parameter input').val("11/11/2017");
+        this.section.htmlContainer.find('div#customization_group1_start_date_parameter input').trigger("blur");
+
+        assert.equal(seriesParameterSpy.callCount, 0);
+
+        this.section.htmlContainer.find('div#customization_group1_end_date_parameter input').val("14/11/2017");
+        this.section.htmlContainer.find('div#customization_group1_end_date_parameter input').trigger("blur");
+
+        assert.equal(seriesParameterSpy.callCount, 1);
+
+        this.section.htmlContainer.find('div#customization_group1_start_date_parameter input').val("10/11/2017");
+        this.section.htmlContainer.find('div#customization_group1_start_date_parameter input').trigger('blur');
+
+        assert.equal(seriesParameterSpy.callCount, 1);
+        seriesParameterSpy.restore();
+      });
+
+      QUnit.test('testSectionIsValidWhenStartAndEndDateIsSet', function (assert) {
+        assert.notOk(this.section.isValid());
+        this.section.htmlContainer.find('div#customization_group1_start_date_parameter input').val("11/11/2017");
+        this.section.htmlContainer.find('div#customization_group1_start_date_parameter input').trigger("blur");
+
+        assert.notOk(this.section.isValid());
+
+        this.section.htmlContainer.find('div#customization_group1_end_date_parameter input').val("14/11/2017");
+        this.section.htmlContainer.find('div#customization_group1_end_date_parameter input').trigger("blur");
+
+        assert.ok(this.section.isValid());
+      });
+
+      QUnit.test('testValueHasSeriesDataWhenNewSeriesIsAdded', function (assert) {
+        this.section.htmlContainer.find('div#customization_group1_start_date_parameter input').val("11/11/2017");
+        this.section.htmlContainer.find('div#customization_group1_start_date_parameter input').trigger("blur");
+
+        assert.ok($j.isEmptyObject(this.section.values().seriesParameter));
+
+        this.section.htmlContainer.find('div#customization_group1_end_date_parameter input').val("14/11/2017");
+        this.section.htmlContainer.find('div#customization_group1_end_date_parameter input').trigger("blur");
+
+        assert.ok($j.isEmptyObject(this.section.values().seriesParameter));
+
+        this.section.htmlContainer.find('.add-a-series').click();
+        assert.notOk($j.isEmptyObject(this.section.values().seriesParameter));
+        assert.equal(Object.keys(this.section.values().seriesParameter).length, 1);
+      });
+
+      QUnit.test('testOnUpdateIsCalledWhenSeriesIsAdded', function (assert) {
+        this.section.htmlContainer.find('div#customization_group1_start_date_parameter input').val("11/11/2018");
+        this.section.htmlContainer.find('div#customization_group1_start_date_parameter input').trigger("blur");
+
+        this.section.htmlContainer.find('div#customization_group1_end_date_parameter input').val("14/11/2018");
+        this.section.htmlContainer.find('div#customization_group1_end_date_parameter input').trigger("blur");
+
+        assert.equal(this.onUpdate.callCount, 2);
+        this.section.htmlContainer.find('.add-a-series').click();
+        assert.equal(this.onUpdate.callCount, 3)
+      });
+
+      QUnit.test('testNextSectionButtonIsAddedIntoSeriesButtonContainerWhenSeriesIsAdded', function (assert) {
+        this.section.htmlContainer.find('div#customization_group1_start_date_parameter input').val("11/11/2018");
+        this.section.htmlContainer.find('div#customization_group1_start_date_parameter input').trigger("blur");
+
+        this.section.htmlContainer.find('div#customization_group1_end_date_parameter input').val("14/11/2018");
+        this.section.htmlContainer.find('div#customization_group1_end_date_parameter input').trigger("blur");
+
+        this.section.htmlContainer.find('.add-a-series').click();
+
+        assert.ok(this.section.htmlContainer.find('.series-parameter .button-container .enable-customize-section').is('button'));
+      });
+
+      QUnit.test('testAggregateValueIsAddedWhenSectionIsAddedAgain', function (assert) {
+        this.section.disable();
+        this.section.enableWith(this.projectData, this.selectedCardTypes);
+        assert.equal(this.section.values().aggregate, 'count')
+      });
+
+      QUnit.test('testShouldDisableEndDateUntilStartDateIsSet', function (assert) {
+        assert.ok(this.section.params.customizationGroup1.params.endDate.disabled());
+        assert.notOk(this.section.params.customizationGroup1.params.startDate.disabled());
+
+        this.section.htmlContainer.find('div#customization_group1_start_date_parameter input').val("Invalid blah");
+        this.section.htmlContainer.find('div#customization_group1_start_date_parameter input').trigger("blur");
+
+        assert.ok(this.section.params.customizationGroup1.params.endDate.disabled());
+        assert.notOk(this.section.params.customizationGroup1.params.startDate.disabled());
+
+        this.section.htmlContainer.find('div#customization_group1_start_date_parameter input').val("01/01/2018");
+        this.section.htmlContainer.find('div#customization_group1_start_date_parameter input').trigger("blur");
+
+        assert.notOk(this.section.params.customizationGroup1.params.endDate.disabled());
+        assert.notOk(this.section.params.customizationGroup1.params.startDate.disabled());
+      });
+
+      QUnit.test('testValuesHasStartDateEndDateAndAggregate', function (assert) {
+        this.section.htmlContainer.find('div#customization_group1_start_date_parameter input').val("11/11/2017");
+        this.section.htmlContainer.find('div#customization_group1_start_date_parameter input').trigger("blur");
+
+        assert.deepEqual(this.section.values(), {
+          startDate: '11/11/2017',
+          aggregate: 'count',
+          seriesParameter: {},
+          forecastingParameter: {},
+          xLabelInterval: '7'
+        });
+
+        this.section.htmlContainer.find('div#customization_group1_end_date_parameter input').val("14/11/2017");
+        this.section.htmlContainer.find('div#customization_group1_end_date_parameter input').trigger("blur");
+
+        assert.deepEqual(this.section.values(), {
+          startDate: '11/11/2017',
+          endDate: '14/11/2017',
+          aggregate: 'count',
+          seriesParameter: {},
+          forecastingParameter: {},
+          xLabelInterval: '7'
+        });
+
+        this.section.htmlContainer.find('#daily_history_chart_build_chart_section_aggregate_pair_parameter .parameter #aggregate_pair_aggregate_parameter li:contains("Sum")').click();
+        this.section.htmlContainer.find('#daily_history_chart_build_chart_section_aggregate_pair_parameter .parameter #aggregate_pair_aggregate_property_parameter li:contains("prop1")').click();
+
+        assert.deepEqual(this.section.values(), {
+          startDate: '11/11/2017',
+          endDate: '14/11/2017',
+          aggregate: 'sum',
+          aggregateProperty: 'prop1',
+          seriesParameter: {},
+          forecastingParameter: {},
+          xLabelInterval: '7'
+        });
+
+        this.section.htmlContainer.find('#daily_history_chart_build_chart_section_x_label_interval_parameter li:contains("10")').click();
+        assert.deepEqual(this.section.values(), {
+          startDate: '11/11/2017',
+          endDate: '14/11/2017',
+          aggregate: 'sum',
+          aggregateProperty: 'prop1',
+          seriesParameter: {},
+          forecastingParameter: {},
+          xLabelInterval: '10'
+        });
+      });
+
+      QUnit.module('Forecasting Options', {
+        beforeEach: function () {
+          this.section.htmlContainer.find('div#customization_group1_start_date_parameter input').val("11/11/2018");
+          this.section.htmlContainer.find('div#customization_group1_start_date_parameter input').trigger("blur");
+          this.section.htmlContainer.find('div#customization_group1_end_date_parameter input').val("14/11/2018");
+          this.section.htmlContainer.find('div#customization_group1_end_date_parameter input').trigger("blur");
+          this.section.htmlContainer.find('.add-a-series').click();
+        }
+      });
+
+      QUnit.test('testShouldAddForecastingOptionsAfterAddingSecondSeries', function (assert) {
+        sinon.stub(MingleUI.EasyCharts, 'ForecastingParameter');
+        assert.notOk(this.section.htmlContainer.find('div.forecasting-parameter-container').get(0));
+
+        this.section.htmlContainer.find('.add-a-series').click();
+
+        assert.ok(this.section.htmlContainer.find('div.forecasting-parameter-container').get(0));
+        assert.equal(MingleUI.EasyCharts.ForecastingParameter.callCount, 1);
+        assert.deepEqual(MingleUI.EasyCharts.ForecastingParameter.args[0][1], {
+          seriesParameter: this.section.seriesParameter,
+          startDate: this.section.params.customizationGroup1.params.startDate
+        });
+        assert.deepEqual(MingleUI.EasyCharts.ForecastingParameter.args[0][1], {
+          seriesParameter: this.section.seriesParameter,
+          startDate: this.section.params.customizationGroup1.params.startDate
+        });
+        assert.equal(typeof MingleUI.EasyCharts.ForecastingParameter.args[0][2].onUpdate, 'function');
+        MingleUI.EasyCharts.ForecastingParameter.restore();
+      });
+
+      QUnit.test('testShouldCallUpdateOnForecastingOptionsOnAndAfterAddingThirdSeries', function (assert) {
+        this.section.htmlContainer.find('.add-a-series').click();
+        sinon.spy(this.section.forecastingParameter, 'update');
+        this.section.htmlContainer.find('.add-a-series').click();
+
+        assert.ok(this.section.htmlContainer.find('div.forecasting-parameter-container').get(0));
+        assert.equal(this.section.forecastingParameter.update.callCount, 1);
+
+        this.section.htmlContainer.find('.add-a-series').click();
+        assert.equal(this.section.forecastingParameter.update.callCount, 2);
+      });
+
+      QUnit.test('testShouldCallUpdateOnForecastingParameterWhenSeriesChangesUpdates', function (assert) {
+        sinon.spy(MingleUI.EasyCharts, 'Series');
+        this.section.htmlContainer.find('.add-a-series').click();
+        sinon.spy(this.section.forecastingParameter, 'update');
+        assert.equal(this.section.forecastingParameter.update.callCount, 0);
+
+        MingleUI.EasyCharts.Series.args[0][1].onUpdate();
+
+        assert.ok(this.section.htmlContainer.find('div.forecasting-parameter-container').get(0));
+        assert.equal(this.section.forecastingParameter.update.callCount, 1);
+        MingleUI.EasyCharts.Series.restore();
+      });
+
+      QUnit.test('testShouldCallUpdateOnForecastingParameterWhenStartDateChanges', function (assert) {
+        this.section.htmlContainer.find('.add-a-series').click();
+        sinon.spy(this.section.forecastingParameter, 'update');
+        assert.equal(this.section.forecastingParameter.update.callCount, 0);
+
+        this.section.htmlContainer.find('div#customization_group1_start_date_parameter input').val("01/24/2018");
+        this.section.htmlContainer.find('div#customization_group1_start_date_parameter input').trigger("blur");
+
+        assert.ok(this.section.htmlContainer.find('div.forecasting-parameter-container').get(0));
+        assert.equal(this.section.forecastingParameter.update.callCount, 1);
+      });
+
+      QUnit.test('testShouldBeValidWhenForecastingParameterIsValid', function (assert) {
+        this.section.htmlContainer.find('.add-a-series').click();
+        sinon.stub(this.section.forecastingParameter, 'isValid').returns(true);
+
+        assert.ok(this.section.htmlContainer.find('div.forecasting-parameter-container').get(0));
+        assert.ok(this.section.isValid());
+      });
+
+      QUnit.test('testShouldBeInvalidWhenForecastingParameterIsInvalid', function (assert) {
+        this.section.htmlContainer.find('.add-a-series').click();
+        sinon.stub(this.section.forecastingParameter, 'isValid').returns(false);
+
+        assert.ok(this.section.htmlContainer.find('div.forecasting-parameter-container').get(0));
+        assert.notOk(this.section.isValid());
+      });
+
+      QUnit.test('testValueShouldIncludeForecastingParamsInValues', function (assert) {
+        this.section.htmlContainer.find('.add-a-series').click();
+        sinon.stub(this.section.forecastingParameter, 'value').returns({
+          scopeSeries: 'Series 1',
+          completionSeries: 'Series 2'
+        });
+
+        var sectionValues = this.section.values();
+
+        assert.equal(sectionValues.forecastingParameter.scopeSeries, 'Series 1');
+        assert.equal(sectionValues.forecastingParameter.completionSeries, 'Series 2');
+      });
+
+      QUnit.test('testShouldRemoveForecastingParameterWhenSeriesIsDeletedAndSeriesCountIsLessThan2', function (assert) {
+        assert.notOk(this.section.htmlContainer.find('div.forecasting-parameter-container .section-params-container').get(0));
+
+        this.section.htmlContainer.find('.add-a-series').click();
+
+        assert.ok(this.section.htmlContainer.find('div.forecasting-parameter-container .section-params-container').get(0));
+
+        this.section.htmlContainer.find('.delete-series-icon:last').click();
+
+        assert.notOk(this.section.htmlContainer.find('div.forecasting-parameter-container .section-params-container').get(0));
+      });
+    });
+  });
+</script>
+</body>
+</html>

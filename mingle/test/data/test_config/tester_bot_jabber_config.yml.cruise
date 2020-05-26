@@ -1,0 +1,4 @@
+host: fmtstdmngjab02.thoughtworks.com
+conference_service: <%= (ENV['HOSTNAME'] || raise("please setup a uniq environment variable HOSTNAME for the Jabber tests")).split('.').first %>.fmtstdmngjab02
+mingle_server_bot_login: mingle.tester.bot
+mingle_server_bot_password: tw0rk3r

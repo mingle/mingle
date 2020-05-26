@@ -1,0 +1,681 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>Drop Down Test</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+
+    <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js"
+            type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/jquery/jquery.scrollintoview.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+    <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+    <script src="../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+    <script src="../../public/javascripts/application.js" type="text/javascript"></script>
+
+    <script src="test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../app/assets/javascripts/ui_utils.js" type="text/javascript"></script>
+
+    <script src="../../app/assets/javascripts/drop_down.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="test_assets/qunit-1.21.0.css" type="text/css"/>
+    <script src="test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+    <script src="test_assets/qunit-phantom.js" type="text/javascript"></script>
+    <script src="test_assets/sinon-2.3.6.js" type="text/javascript"></script>
+
+</head>
+<body>
+<div id="qunit">
+</div>
+
+<div id="drop_down" ></div>
+<div id="drop_down2" ></div>
+
+<div id="single_select_drop_down"></div>
+
+<div id="multi_select_drop_down"></div>
+
+<script type="text/javascript">
+  var dropDown = $j('div#drop_down');
+  var singleDropDown = $j('div#single_select_drop_down');
+  var multipleDropDown = $j('div#multi_select_drop_down');
+  function dropDownHandle(dropDown) {return dropDown.find('.drop-down-toggle') }
+  function optionsContainer(dropDown) { return dropDown.find('.options-container') }
+  function selectValue(dropdown, name, value) {  optionsContainer(dropdown).find('#{name}_{value}'.supplant({name: name, value: value.toSnakeCase()})).click(); }
+  function resetDropDown(dropDown) {
+    dropDown.empty();
+    dropDown.removeClass('disabled').removeClass('drop-down-contianer');// removing element from dom so that existing events binding gets removed;
+  }
+
+  QUnit.module("Drop Down", {
+    beforeEach: function () {
+      this.onValueChange = sinon.spy();
+      this.dropDown = new MingleUI.DropDown('dropDown', dropDown, ["FirstValue", "SelectedValue"], {onValueChange: this.onValueChange});
+    },
+    afterEach: function () {
+      resetDropDown(dropDown);
+    }
+  });
+
+  QUnit.test('testShouldAddDropDownContainerClassToContainer', function (assert) {
+    assert.ok(this.dropDown.htmlContainer.hasClass('drop-down-container'));
+  });
+
+  QUnit.test("testShouldSetNotSetAsDefaultValue", function (assert) {
+    assert.equal(dropDownHandle(dropDown).text(), '(not set)');
+  });
+
+  QUnit.test('testShouldInitializeDisabledDropDown', function (assert) {
+    resetDropDown(dropDown);
+    this.dropDown = new MingleUI.DropDown('dropDown', dropDown, ["FirstValue", "SelectedValue"], {onValueChange: this.onValueChange, disabled: true});
+
+    assert.ok(this.dropDown._disabled);
+    assert.ok(this.dropDown.htmlContainer.hasClass('disabled'));
+
+    selectValue(dropDown, 'dropDown', 'FirstValue');
+
+    assert.equal(this.onValueChange.callCount, 0);
+  });
+
+  QUnit.test('testDisableShouldHideOptionContainerAndAddDisableClass', function (assert) {
+    dropDownHandle(dropDown).click();
+
+    assert.ok(this.dropDown._optionsContainer.is(':visible'));
+    assert.notOk(this.dropDown.htmlContainer.hasClass('disabled'));
+
+    this.dropDown.disable();
+
+    assert.notOk(this.dropDown._optionsContainer.is(':visible'));
+    assert.ok(this.dropDown.htmlContainer.hasClass('disabled'));
+  });
+
+  QUnit.test('testShouldNotOpenOptionsDropDownWhenDisabled', function (assert) {
+    dropDownHandle(dropDown).click();
+    assert.ok(this.dropDown._optionsContainer.is(':visible'));
+
+    this.dropDown.disable();
+
+    assert.notOk(this.dropDown._optionsContainer.is(':visible'));
+
+    dropDownHandle(dropDown).click();
+    assert.notOk(this.dropDown._optionsContainer.is(':visible'));
+  });
+
+  QUnit.test("testShouldTriggerCallbackOnlyOnChangingSelectedValue", function (assert) {
+    assert.equal(dropDownHandle(dropDown).text(), '(not set)');
+    dropDownHandle(dropDown).click();
+    selectValue(dropDown, 'dropDown', 'FirstValue');
+    assert.equal(this.onValueChange.callCount, 1);
+    selectValue(dropDown, 'dropDown', 'FirstValue');
+    assert.equal(this.onValueChange.callCount, 1);
+  });
+
+  QUnit.test("testShouldResetTheSelectedValeToNotSet", function (assert) {
+    selectValue(dropDown, 'dropDown', 'FirstValue');
+    assert.equal(dropDownHandle(dropDown).text(), 'FirstValue');
+
+    this.dropDown.reset();
+
+    assert.equal(dropDownHandle(dropDown).text(), '(not set)');
+    assert.equal(optionsContainer(dropDown).text(), '');
+  });
+
+  QUnit.test("testShouldClearOptionsAndResetTheSelectedValue", function (assert) {
+    selectValue(dropDown, 'dropDown', 'FirstValue');
+    assert.equal(dropDownHandle(dropDown).text(), 'FirstValue');
+
+    this.dropDown.clear();
+
+    assert.equal(dropDownHandle(dropDown).text(), '(not set)');
+    assert.equal(optionsContainer(dropDown).text(), '');
+  });
+
+  QUnit.test("testShouldUpdateTheDropDownOptions", function (assert) {
+    assert.equal(optionsContainer(dropDown).text(), 'FirstValueSelectedValue');
+
+    this.dropDown.updateOptions(['NewVal1','NewVal2','NewVal3'],'');
+
+    assert.equal(dropDownHandle(dropDown).text(), '(not set)');
+    assert.equal(optionsContainer(dropDown).text(), 'NewVal1NewVal2NewVal3');
+  });
+
+  QUnit.test("testDropDownOptionUpdatedShouldBeCalledOnUpdatedValues", function (assert) {
+    assert.equal(optionsContainer(dropDown).text(), 'FirstValueSelectedValue');
+    this.dropDown.updateOptions(['FirstValue','NewVal1','NewVal2'], '');
+
+    assert.equal(dropDownHandle(dropDown).text(), '(not set)');
+    assert.equal(optionsContainer(dropDown).text(), 'FirstValueNewVal1NewVal2');
+
+    selectValue(dropDown, 'dropDown', 'FirstValue');
+
+    assert.equal(dropDownHandle(dropDown).text(), 'FirstValue');
+    assert.equal(this.onValueChange.callCount, 1);
+  });
+
+  QUnit.test("testShouldSetNameForTheDropDown", function (assert) {
+    assert.equal(this.dropDown.name, 'dropDown');
+  });
+
+  QUnit.test("testShouldInitializeHtmlContainersIfMissing", function (assert) {
+    new MingleUI.DropDown('dropDown', dropDown, ["FirstValue", "SelectedValue"], {initialValue: "FirstValue"});
+
+    assert.equal(optionsContainer(dropDown).find('li').text(), 'FirstValueSelectedValue');
+    assert.equal(dropDownHandle(dropDown).text(), 'FirstValue');
+  });
+
+  QUnit.test("testShouldAllowCustomDefaultValues", function (assert) {
+    new MingleUI.DropDown('dropDown', dropDown, ["FirstValue", "SelectedValue"], {defaultOption: "foobar"});
+
+    assert.equal(dropDownHandle(dropDown).text(), 'foobar');
+  });
+
+  QUnit.test('testShouldAddSelectedValueToTitleForDropDown', function (assert) {
+    selectValue(dropDown, 'dropDown', 'FirstValue');
+
+    assert.equal(dropDownHandle(dropDown).find('.selected-value').attr('title'), 'FirstValue');
+  });
+
+  QUnit.test('testShouldBeAbleToAddOption',function (assert) {
+    this.dropDown.addOption('AddedOption', 'AddedValue', false );
+
+    assert.equal(optionsContainer(dropDown).text(),'FirstValueSelectedValueAddedOption');
+    assert.equal(dropDownHandle(dropDown).text(),'(not set)');
+
+    selectValue(dropDown, 'dropDown', 'AddedValue');
+    assert.equal(dropDownHandle(dropDown).text(),'AddedOption');
+    assert.equal(this.dropDown.value(), 'AddedValue');
+  });
+
+  QUnit.test('testShouldDropDownOptionsShouldBeVisibleAfterOptionIsAddedAndThereIsAClickOnThePage',function (assert) {
+    optionsContainer(dropDown).show();
+    this.dropDown.addOption('AddedOption', 'AddedValue', false, true);
+    $j(document).click();
+
+    assert.ok(optionsContainer(dropDown).is(':visible'));
+    assert.equal(optionsContainer(dropDown).text(),'FirstValueSelectedValueAddedOption');
+    assert.equal(dropDownHandle(dropDown).text(),'(not set)');
+
+    selectValue(dropDown, 'dropDown', 'AddedValue');
+    assert.equal(dropDownHandle(dropDown).text(),'AddedOption');
+    assert.equal(this.dropDown.value(), 'AddedValue');
+  });
+
+  QUnit.test('testShouldBeAbleToAddOptionAndSelectIt',function (assert) {
+    selectValue(dropDown, 'dropDown', 'SelectedValue');
+    assert.equal(dropDownHandle(dropDown).text(),'SelectedValue');
+    assert.equal(this.onValueChange.callCount, 1);
+
+    this.dropDown.addOption('AddedOption', 'AddedValue', true);
+
+    assert.equal(this.onValueChange.callCount, 2);
+    assert.equal(optionsContainer(dropDown).text(),'FirstValueSelectedValueAddedOption');
+    assert.equal(dropDownHandle(dropDown).text(),'AddedOption');
+    assert.equal(this.dropDown.value(), 'AddedValue');
+  });
+
+  QUnit.test('testShouldNotAddDuplicateOption',function (assert) {
+    this.dropDown.addOption('FirstValue', 'FirstValue', false);
+    assert.equal(this.onValueChange.callCount, 0);
+
+    assert.equal(optionsContainer(dropDown).text(), 'FirstValueSelectedValue');
+
+    this.dropDown.addOption('FirstValue', 'FirstValue', true);
+    assert.equal(this.dropDown.value(), 'FirstValue');
+    assert.equal(this.onValueChange.callCount, 1);
+  });
+
+  QUnit.test('testSetAccessibilityOptionShouldAddAccessibilityOptionWithGivenClassAtTheEndOfDropDown', function (assert) {
+    var actionTriggered = false;
+    var action = function() { actionTriggered = true; };
+    var content = 'accessibility option';
+    this.dropDown.setAccessibilityOption(new DropDownAccessibilityOption(content, action, {class: 'foo'} ));
+
+    assert.equal(this.dropDown._optionsContainer.find('.accessibility-option.foo').text(), content);
+    assert.equal(optionsContainer(dropDown).text(), 'FirstValueSelectedValueaccessibility option');
+
+    this.dropDown._optionsContainer.find('.accessibility-option.foo').click();
+
+    assert.ok(actionTriggered);
+  });
+
+  QUnit.test('testSetAccessibilityOptionShouldRemoveExistingAccessibilityOptionWhenSettingItUpAgain', function (assert) {
+    var actionTriggered = false;
+    var action = function() { actionTriggered = true; };
+    var content1 = 'accessibility option 1';
+    var content2 = 'accessibility option 2';
+    this.dropDown.setAccessibilityOption(new DropDownAccessibilityOption(content1, action, {class: 'foo'} ));
+
+    var accessibilityOption = this.dropDown._optionsContainer.find('.accessibility-option.foo');
+    assert.equal(accessibilityOption.text(), content1);
+
+    this.dropDown.setAccessibilityOption(new DropDownAccessibilityOption(content2, action, {class: 'bar'} ));
+
+    var newAccessibilityOption = this.dropDown._optionsContainer.find('.accessibility-option.bar');
+    assert.equal(newAccessibilityOption.text(), content2);
+    assert.notOk(this.dropDown._optionsContainer.find('.accessibility-option.foo')[0]);
+  });
+
+  QUnit.test('testSetAccessibilityOptionShouldAddOptionToTopWhenPositionIsFirst', function(assert) {
+    var action = function() { };
+    var content = 'accessibility option';
+    this.dropDown.setAccessibilityOption(new DropDownAccessibilityOption(content, action, {class: 'foo', position: 'top'} ));
+
+    assert.equal(optionsContainer(dropDown).text(), 'accessibility optionFirstValueSelectedValue');
+  });
+
+  QUnit.test('testSetAccessibilityOptionShouldCallSetupCallbackAfterAddingTheOption', function(assert) {
+    var action = function() { }, content = 'accessibility option', setup = sinon.stub().callsFake(function (trigger) {
+      assert.ok(this.dropDown._optionsContainer.find('.accessibility-option.foo')[0]);
+      assert.equal(trigger, this.dropDown._optionsContainer.find('.accessibility-option.foo')[0]);
+    }.bind(this));
+
+    assert.notOk(this.dropDown._optionsContainer.find('.accessibility-option.foo')[0]);
+    this.dropDown.setAccessibilityOption(new DropDownAccessibilityOption(content, action, {class: 'foo', setup: setup }));
+
+    assert.equal(setup.callCount, 1);
+  });
+
+  QUnit.test('testUpdateOptionsShouldRemoveAccessibilityOption', function (assert) {
+    var content = 'accessibility option';
+    var action = function() {};
+    this.dropDown.setAccessibilityOption(new DropDownAccessibilityOption(content, action, {class: 'foo'} ));
+
+    assert.equal(this.dropDown._optionsContainer.find('.accessibility-option.foo').text(), content);
+
+    this.dropDown.updateOptions(['NewValueOne','NewValueTwo']);
+
+    assert.notOk(this.dropDown._optionsContainer.find('.accessibility-option.foo')[0]);
+  });
+
+  QUnit.test('testAddOptionShouldAddOptionBeforeAccessibilityOptionWhenAccessibilityOptionIsAtLastPosition', function (assert) {
+    var content = 'accessibility option';
+    var action = function() {};
+    this.dropDown.setAccessibilityOption(new DropDownAccessibilityOption(content, action, {class: 'foo'} ));
+
+    assert.equal(this.dropDown._optionsContainer.find('.accessibility-option.foo').text(), content);
+    assert.equal(optionsContainer(dropDown).text(), 'FirstValueSelectedValueaccessibility option');
+
+    this.dropDown.addOption('NewOption', 'NewValue');
+
+    assert.equal(optionsContainer(dropDown).text(), 'FirstValueSelectedValueNewOptionaccessibility option');
+  });
+
+  QUnit.test('testShouldNotTriggerOnUpdateWhenAddingOptionsSilently',function (assert) {
+    selectValue(dropDown, 'dropDown', 'SelectedValue');
+    assert.equal(dropDownHandle(dropDown).text(),'SelectedValue');
+    assert.equal(this.onValueChange.callCount, 1);
+
+    this.dropDown.addOption('AddedOption', 'AddedValue', true, false, true);
+
+    assert.equal(this.onValueChange.callCount, 1);
+    assert.equal(optionsContainer(dropDown).text(),'FirstValueSelectedValueAddedOption');
+    assert.equal(dropDownHandle(dropDown).text(),'AddedOption');
+    assert.equal(this.dropDown.value(), 'AddedValue');
+  });
+
+  QUnit.module('Drop Down with style option', {
+      beforeEach: function () {
+        this.dropDown2 = $j('div#drop_down');
+        this.onValueChange = sinon.spy();
+        this.dropDown = new MingleUI.DropDown('dropDown2', this.dropDown2, [{
+          text: 'val1',
+          value: 'value1',
+          styleClass: 'style1'
+        }, {text: 'val2', value: 'value2', styleClass: 'style2'}], {
+          onValueChange: this.onValueChange,
+          initialValue: 'value1'
+        });
+      },
+      afterEach: function () {
+        resetDropDown(this.dropDown2);
+      }
+    }, function () {
+      QUnit.test('testStyleClassesAreAddedForValues', function (assert) {
+        var firstOptionLabel = optionsContainer(this.dropDown2).find('#dropDown2_value1 span');
+        var secondOptionLabel = optionsContainer(this.dropDown2).find('#dropDown2_value2 span');
+        assert.ok(firstOptionLabel.hasClass('style1'));
+        assert.ok(secondOptionLabel.hasClass('style2'));
+
+        assert.ok(dropDownHandle(this.dropDown2).find("span").hasClass('style1'));
+
+        selectValue(this.dropDown2, 'dropDown2', 'value2');
+        assert.equal('value2', this.dropDown.value());
+        assert.ok(dropDownHandle(this.dropDown2).find("span").hasClass('style2'));
+        assert.notOk(dropDownHandle(this.dropDown2).find("span").hasClass('style1'));
+      });
+
+      QUnit.test('testResetShouldRemoveStyleClass', function (assert) {
+        assert.ok(dropDownHandle(this.dropDown2).find("span").hasClass('style1'));
+        assert.equal('value1', this.dropDown.value());
+
+        this.dropDown.reset();
+        assert.notOk(dropDownHandle(this.dropDown2).find("span").hasClass('style1'));
+      });
+    });
+
+  QUnit.module("Disabled Drop Down", {
+    beforeEach: function () {
+      this.onValueChange = sinon.spy();
+      this.dropDown = new MingleUI.DropDown('dropDown', dropDown, ["FirstValue", "SelectedValue"], {onValueChange: this.onValueChange, disabled:true});
+    },
+    afterEach: function () {
+      resetDropDown(dropDown);
+    }
+  });
+
+  QUnit.test('testShouldEnableDropDownAndRemoveDisableClass', function (assert) {
+    this.dropDown.enable();
+    assert.notOk(this.dropDown._disabled);
+    assert.notOk(this.dropDown.htmlContainer.hasClass('disabled'));
+
+  });
+
+  QUnit.test('testShouldOpenDropDownOptionContainerWhenEnabled', function (assert) {
+    this.dropDown.enable();
+    this.dropDown._optionsContainer.hide();
+    assert.notOk(this.dropDown._optionsContainer.is(':visible'));
+
+    dropDownHandle(dropDown).click();
+
+    assert.ok(this.dropDown._optionsContainer.is(':visible'));
+    $j(document).click();
+    assert.notOk(this.dropDown._optionsContainer.is(':visible'));
+  });
+
+  QUnit.module("Single Select Drop Down", {
+    beforeEach: function () {
+      this.dropDown = new MingleUI.DropDown('single', singleDropDown, ["FirstValue", "SelectedValue"], {initialValue: "SelectedValue"});
+    },
+    afterEach: function () {
+      resetDropDown(singleDropDown);
+    }
+  }, function () {
+
+    QUnit.test("testShouldDisplaySelectedValue", function (assert) {
+      assert.equal(dropDownHandle(singleDropDown).text(), 'SelectedValue');
+    });
+
+    QUnit.test("testShouldDisplayOnlyCurrentlySelectedValue", function (assert) {
+      assert.equal(dropDownHandle(singleDropDown).text(), 'SelectedValue');
+
+      selectValue(singleDropDown, 'single', 'FirstValue');
+
+      assert.equal(dropDownHandle(singleDropDown).text(), 'FirstValue');
+    });
+
+    QUnit.test("testDropDownShouldCloseWhenClickedOutsideDropDownOptions", function (assert) {
+      dropDownHandle(singleDropDown).click();
+      assert.ok(optionsContainer(singleDropDown).is(':visible'));
+
+      $j('body').click();
+
+      assert.notOk(optionsContainer(singleDropDown).is(':visible'));
+    });
+
+    QUnit.test("testDropDownShouldCloseWhenValueIsSelected", function (assert) {
+      dropDownHandle(singleDropDown).click();
+      assert.ok(optionsContainer(singleDropDown).is(':visible'));
+
+      selectValue(singleDropDown, 'single', 'FirstValue');
+
+      assert.notOk(optionsContainer(singleDropDown).is(':visible'));
+    });
+
+    QUnit.test("testSingleSelectDropDownShouldNotHaveCheckbox", function (assert) {
+      dropDownHandle(singleDropDown).click();
+
+      assert.notOk($j('div[name="macro_editor[pie-chart][single]"] .options-container li input[type=checkbox]').is(':visible'));
+    });
+
+    QUnit.test("testDropDownShouldNotDoAnyThingWhenExistingSelectedValueIsSelectedAgain", function (assert) {
+      dropDownHandle(singleDropDown).click();
+      assert.equal(dropDownHandle(singleDropDown).text(),'SelectedValue');
+
+      selectValue(singleDropDown, 'single', 'SelectedValue');
+
+      assert.equal(dropDownHandle(singleDropDown).text(), 'SelectedValue');
+    });
+
+    QUnit.test("testShouldAllowPreviouslySelectedValueToBeSelectedAgain", function (assert) {
+      assert.equal(dropDownHandle(singleDropDown).text(), 'SelectedValue');
+      selectValue(singleDropDown, 'single', 'FirstValue');
+      assert.equal(dropDownHandle(singleDropDown).text(), 'FirstValue');
+
+      selectValue(singleDropDown, 'single', 'SelectedValue');
+
+      assert.equal(dropDownHandle(singleDropDown).text(), 'SelectedValue');
+    });
+
+    QUnit.test('testHasValueShouldReturnTrueWhenValueIsSelected', function (assert) {
+      resetDropDown(singleDropDown);
+      var dropDown = new MingleUI.DropDown('single', singleDropDown, ["FirstValue", "SelectedValue"], {});
+
+      assert.notOk(dropDown.hasValue());
+
+      selectValue(singleDropDown, 'single', 'SelectedValue');
+
+      assert.ok(dropDown.hasValue());
+    });
+
+    QUnit.test('testShouldCompareInitialValueInCaseInsensitiveManner',function (assert) {
+      resetDropDown(dropDown);
+      this.dropDown = new MingleUI.DropDown('dropDown', dropDown, ["FirstValue", "SelectedValue"], {
+        onValueChange: this.onValueChange,
+        initialValue: 'fIrStVaLuE'
+      });
+
+      assert.equal(dropDownHandle(dropDown).text(), 'FirstValue');
+      assert.equal(this.dropDown.value(), 'FirstValue');
+    });
+
+    QUnit.test('testTextShouldReturnDisplayTextOfSelectedOption', function (assert) {
+      assert.equal(this.dropDown.text(), 'SelectedValue');
+    });
+  });
+
+  QUnit.module("Multi Select Drop Down", {
+    beforeEach: function () {
+      this.onValueChange = sinon.spy();
+      this.multiDropDown = new MingleUI.DropDown('multiple', multipleDropDown,
+                                                 ["FirstValue", "SecondValue", "ThirdValue", "SelectedValue"],
+                                                 {initialValue: "SelectedValue", multiSelect: true, onValueChange: this.onValueChange});
+    },
+    afterEach: function () {
+      resetDropDown(multipleDropDown);
+    }
+  });
+
+  QUnit.test("testMultiSelectDropDownShouldHaveCheckbox", function (assert) {
+    dropDownHandle(multipleDropDown).click();
+
+    assert.ok(optionsContainer(multipleDropDown).find('li input[type=checkbox]').is(':visible'));
+  });
+
+  QUnit.test("testShouldDisplayAllSelectedValues", function (assert) {
+    dropDownHandle(multipleDropDown).click();
+    selectValue(multipleDropDown, 'multiple', 'FirstValue');
+
+    assert.equal(dropDownHandle(multipleDropDown).text(), 'FirstValue, SelectedValue');
+  });
+
+  QUnit.test("testShouldRemoveUnSelectedValues", function (assert) {
+    dropDownHandle(multipleDropDown).click();
+    selectValue(multipleDropDown, 'multiple', 'ThirdValue');
+    selectValue(multipleDropDown, 'multiple', 'FirstValue');
+    selectValue(multipleDropDown, 'multiple', 'SecondValue');
+    assert.equal(dropDownHandle(multipleDropDown).text(), 'FirstValue, SecondValue, ThirdValue, SelectedValue');
+    selectValue(multipleDropDown, 'multiple', 'SelectedValue');
+    assert.equal(dropDownHandle(multipleDropDown).text(), 'FirstValue, SecondValue, ThirdValue');
+
+    selectValue(multipleDropDown, 'multiple', 'SecondValue');
+
+    assert.equal(dropDownHandle(multipleDropDown).text(), 'FirstValue, ThirdValue');
+  });
+
+  QUnit.test('testShouldBeAbleToAddOption', function(assert) {
+    this.multiDropDown.addOption('AddedOption','AddedValue', false);
+
+    assert.equal(optionsContainer(multipleDropDown).text(),'FirstValueSecondValueThirdValueSelectedValueAddedOption');
+    assert.equal(dropDownHandle(multipleDropDown).text(),'SelectedValue');
+    selectValue(multipleDropDown, 'multiple', 'AddedValue');
+
+    assert.equal(dropDownHandle(multipleDropDown).text(), 'SelectedValue, AddedOption');
+    assert.deepEqual(this.multiDropDown.value(), ['SelectedValue', 'AddedValue']);
+  });
+
+  QUnit.test('testShouldBeAbleToAddOptionAndSelectIt', function(assert) {
+    var selected = false;
+    this.multiDropDown._onValueChange = function() {
+      selected = true;
+    };
+    assert.equal(dropDownHandle(multipleDropDown).text(), 'SelectedValue');
+
+    this.multiDropDown.addOption('AddedOption','AddedValue', true);
+
+    assert.ok(selected);
+    assert.equal(optionsContainer(multipleDropDown).text(),'FirstValueSecondValueThirdValueSelectedValueAddedOption');
+    assert.equal(dropDownHandle(multipleDropDown).text(),'SelectedValue, AddedOption');
+    assert.deepEqual(this.multiDropDown.value(), ['SelectedValue', 'AddedValue']);
+    assert.ok(optionsContainer(multipleDropDown).find('li#multiple_added_value input[type=checkbox]').is(':checked'))
+  });
+
+  QUnit.test('testAddOptionShouldNotUnselectExistingOptionWhenAlreadySelected', function (assert) {
+    this.multiDropDown.addOption('SelectedValue', 'SelectedValue', true);
+
+    assert.equal(this.onValueChange.callCount, 0);
+    assert.equal(dropDownHandle(multipleDropDown).text(), 'SelectedValue');
+    assert.deepEqual(this.multiDropDown.value(), ['SelectedValue']);
+    assert.ok(optionsContainer(multipleDropDown).find('li#multiple_selected_value input[type=checkbox]').is(':checked'))
+  });
+
+  QUnit.test('testAddOptionShouldSelectExistingOption', function (assert) {
+    this.multiDropDown.addOption('FirstValue', 'FirstValue', true);
+
+    assert.equal(this.onValueChange.callCount, 1);
+    assert.equal(dropDownHandle(multipleDropDown).text(), 'FirstValue, SelectedValue');
+    assert.deepEqual(this.multiDropDown.value(), ['FirstValue', 'SelectedValue']);
+    assert.ok(optionsContainer(multipleDropDown).find('li#multiple_first_value input[type=checkbox]').is(':checked'));
+  });
+
+  QUnit.test('testHasValueShouldReturnTrueWhenAtLeastOneValueIsSelected', function (assert) {
+    assert.ok(this.multiDropDown.hasValue());
+
+    selectValue(multipleDropDown, 'multiple', 'SecondValue');
+
+    assert.ok(this.multiDropDown.hasValue());
+
+    selectValue(multipleDropDown, 'multiple', 'SecondValue');
+    selectValue(multipleDropDown, 'multiple', 'SelectedValue');
+
+    assert.notOk(this.multiDropDown.hasValue());
+  });
+
+  QUnit.test('testShouldBeAbleToSpecifyMultipleInitialValues', function (assert) {
+    resetDropDown(multipleDropDown);
+    this.multiDropDown = new MingleUI.DropDown('multiple', multipleDropDown,
+        ['FirstValue', 'SecondValue', 'ThirdValue', 'SelectedValue'],
+        {initialValue: ['SelectedValue', 'ThirdValue', 'FirstValue'], multiSelect: true, onValueChange: this.onValueChange});
+
+    assert.equal(dropDownHandle(multipleDropDown).text(), 'FirstValue, ThirdValue, SelectedValue');
+    assert.deepEqual(this.multiDropDown.value(), ['FirstValue', 'ThirdValue', 'SelectedValue'])
+  });
+
+  QUnit.test('testShouldBeAbleToSpecifyMultipleInitialValuesForOptionsWithDifferentValues', function (assert) {
+    resetDropDown(multipleDropDown);
+    this.multiDropDown = new MingleUI.DropDown('multiple', multipleDropDown,
+        [['FirstValue', 'FV'], 'SecondValue', 'ThirdValue', ['SelectedValue', 'selV']],
+        {initialValue: [['SelectedValue','selv'], 'ThirdValue', 'Fv'], multiSelect: true, onValueChange: this.onValueChange});
+
+    assert.equal(dropDownHandle(multipleDropDown).text(), 'FirstValue, ThirdValue, SelectedValue');
+    assert.deepEqual(this.multiDropDown.value(), ['FV', 'ThirdValue', 'selV'])
+  });
+
+  QUnit.test('testTextShouldReturnDisplayTextOfSelectedOptions', function (assert) {
+    selectValue(multipleDropDown, 'multiple', 'ThirdValue');
+
+    assert.deepEqual(this.multiDropDown.text(), ['ThirdValue','SelectedValue']);
+  });
+
+  QUnit.module('Multiple Drop Downs on same page', {
+    beforeEach: function() {
+      new MingleUI.DropDown('single', singleDropDown, ["FirstValue", "SelectedValue"], {initialValue: "SelectedValue"});
+      new MingleUI.DropDown('multiple', multipleDropDown,
+          ["FirstValue", "SecondValue", "ThirdValue", "SelectedValue"],
+          {initialValue: "SelectedValue", multiSelect: true});
+    },
+    afterEach: function() {
+      resetDropDown(singleDropDown);
+      resetDropDown(multipleDropDown);
+    }
+  });
+
+  QUnit.test('testShouldCloseOtherDropDownsOnTheSamePage', function(assert) {
+    dropDownHandle(singleDropDown).click();
+    assert.ok(optionsContainer(singleDropDown).is(':visible'));
+    assert.notOk(optionsContainer(multipleDropDown).is(':visible'));
+
+    dropDownHandle(multipleDropDown).click();
+
+    assert.notOk(optionsContainer(singleDropDown).is(':visible'));
+    assert.ok(optionsContainer(multipleDropDown).is(':visible'));
+  });
+
+  QUnit.module('Drop Down Accessibility Option', {});
+
+  QUnit.test('testShouldReturnActionCallback', function (assert) {
+    function action() {}
+    var dropDownAccessibilityOption = new DropDownAccessibilityOption('content', action);
+
+    assert.equal(dropDownAccessibilityOption.callbacks.action, action);
+  });
+
+  QUnit.test('testShouldReturnHtmlParams', function (assert) {
+    function action() {}
+    var dropDownAccessibilityOption = new DropDownAccessibilityOption('content', action, {class: 'foo'});
+
+    assert.deepEqual(dropDownAccessibilityOption.htmlParams, {
+      text: 'content',
+      class: 'accessibility-option foo',
+      title: 'content'
+    });
+  });
+
+  QUnit.test('testShouldReturnSetupCallback', function (assert) {
+    function action() {}
+    function setup() {}
+    var dropDownAccessibilityOption = new DropDownAccessibilityOption('content', action, {setup: setup});
+
+    assert.deepEqual(dropDownAccessibilityOption.callbacks, {
+      action: action,
+      setup: setup
+    });
+  });
+
+  QUnit.test('testIsFirstOptionShouldReturnTrueWhenPositionIsTop', function (assert) {
+    function action() {}
+    assert.ok(new DropDownAccessibilityOption('content', action, {position: 'top'}).isFirstOption());
+
+    assert.notOk(new DropDownAccessibilityOption('content', action).isFirstOption());
+  });
+
+</script>
+</body>
+</html>
+

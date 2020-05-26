@@ -1,0 +1,9 @@
+*0.2.1*
+
+* implemented add method for monotone [srbaker]
+
+* Fixed monotone test and added some doco [rinkrank]
+
+* add server and port options to Monotone::initialize [srbaker]
+
+* Added changelog file [rinkrank]

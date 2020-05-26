@@ -1,0 +1,61 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div class="card-popup-lightbox">
+  <% lightbox = Lightbox.with_close_link(self, "Close", "") -%>
+  <% lightbox.body("card_show_lightbox_content", "view-mode",
+    :"data-viewer-color" => Color.for(User.current.name),
+    :"data-viewer-handle" => User.current.id,
+    :"data-editable" => false,
+    :"data-card-identifier" => unique_card_identifier(card),
+    :"data-color" => card.card_type.color) do -%>
+    <%= lightbox_close_button -%>
+    <%= render :partial => 'cards/card_type_editor', :locals => { :displaying_older_version => true, :card => card } %>
+    <div class="card-title">
+      <h1>
+        <span class="card-number"><%= card.number -%></span>
+        <span class="card-name view-mode-only"><%= card.name -%></span>
+      </h1>
+    </div>
+
+    <div class="tags-container">
+      <%= render :partial => 'shared/readonly_tags_panel', :locals => {:event => card} %>
+    </div>
+
+    <div class="card-content-container">
+       <%= render :partial => 'dependencies', :locals => { :card => card} %>
+       <%= render :partial => 'cards/card_content', :locals => {:card => card, :popup => false, :empty_description_text => "(no description)"} %>
+    </div>
+    <div class="card-properties prevent-inline-edit">
+      <% card.property_definitions.each_with_index do |property, index| -%>
+        <% expandable = index >= 4 %>
+        <span class='property-in-popup <%= 'expandable' if expandable %>' style="<%= 'display:none;' if expandable %>">
+          <span class='property-name'><%=h truncate_words(property.name, 40) %>:</span><span class='emphasize'><%=h truncate(card.display_value(property)) %></span>
+        </span>&nbsp;
+
+        <% if (index + 1) % 4 == 0 %>
+          <%= clear_float %>
+        <% end %>
+      <% end %>
+
+      <%= clear_float %>
+
+      <% if card.property_definitions.size > 5 %>
+        <div class="show-more-card-properties fa fa-chevron-down"></div>
+      <% end %>
+    </div>
+  <% end -%>
+</div>

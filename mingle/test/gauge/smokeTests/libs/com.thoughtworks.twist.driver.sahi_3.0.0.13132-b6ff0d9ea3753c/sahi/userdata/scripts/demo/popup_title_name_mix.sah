@@ -1,0 +1,23 @@
+_click(_link("Window Open Test"));
+_click(_link("Window Open Test With Title"));
+_click(_link("Table Test"));
+_popup("popWin")._click(_link("Link Test"));
+_click(_link("Back"));
+_popup("With Title")._click(_link("Form Test"));
+_click(_link("Table Test"));
+_popup("With Title")._setValue(_textbox("t1"), "d");
+_click(_link("Back"));
+_popup("With Title")._setValue(_textbox(1), "e");
+_click(_link("Table Test"));
+_popup("With Title")._setValue(_textbox("name"), "f");
+_popup("popWin")._assertNotNull(_link("linkByHtml"));
+
+_assertNotNull(_cell("CellWithId"));
+_assertEqual("Cell with id", _getCellText(_cell("CellWithId")));
+_popup('With Title')._click(_link("Break Frames"));
+//Use partial regex with quotes
+_popup("/Sahi/")._click(_link("Close Self"));
+// Use regex without quotes
+_popup(/p.*Win/)._click(_link("Break Frames"));
+_popup("/.*/")._click(_link("Close Self"));
+_click(_link("Back"));

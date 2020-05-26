@@ -1,0 +1,49 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="asynch-request-progress-div">
+  
+  <div class='lightbox_header'>
+    <%= render :partial => @asynch_request.view_header %>
+  </div>  
+
+  <div id='lightbox_scrolling_canvas' class='lightbox_content_wrapper'>
+    <div class="lightbox_content">
+      <%= render :partial => 'asynch_requests/flash' -%>
+      <%= clear_float %>
+      <p><div id='progress-bar'><div id='progress-indicator'> &nbsp;</div></div></p>
+    </div>
+  </div>  
+
+  <div class="lightbox_actions">
+    <% action_bar :id => 'close_lightbox_link', :style => 'display:none' do -%>
+      <% if defined?(close_url) %>
+        <%= link_to 'Close', close_url, :class => 'cancel link_as_button' %>
+      <% else %>
+        <%= link_to_function "Close", "#{enable_links} InputingContexts.pop()", :class => 'cancel link_as_button' %>
+      <% end %>
+    <% end -%>
+  </div>
+</div>
+
+<%= javascript_with_rescue "ProgressBar.update('progress-indicator', #{@asynch_request.progress_percent})" -%>
+
+<%= javascript_with_rescue delayed_remote_call(:url => @asynch_request.callback_url(params, deliverable)) -%>
+
+<%= javascript_with_rescue <<-JAVASCRIPT
+  #{asynch_request_progress_lightbox_fix_height_js}
+JAVASCRIPT
+-%>

@@ -1,0 +1,101 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+table tbody {
+  a {
+    &.twisty, &:visited.twisty {
+      display: block;
+      float: left;
+      height: 16px;
+      width: 16px;
+      margin-right: 5px;
+      margin-left: 5px;
+    }
+  }
+  span.twisty {
+    display: block;
+    float: left;
+    height: 16px;
+    width: 16px;
+    margin-right: 5px;
+    margin-left: 5px;
+  }
+}
+
+.expanded {
+  background: transparent url(../images/shared/icons/icon_triangle_down.png) no-repeat center center;
+}
+
+.collapsed {
+  background: transparent url(../images/shared/icons/icon_triangle_right.png) no-repeat center center;
+}
+
+.invisible-twisty-sized-object {
+  height: 11px;
+  width: 11px;
+  padding: 0.3em 0.6em !important;
+}
+
+.level0 {
+  .twisty, .invisible-twisty-sized-object {
+    margin-left: 0px;
+  }
+}
+
+.level1 {
+  .twisty, .invisible-twisty-sized-object {
+    margin-left: 15px;
+  }
+}
+
+.level2 {
+  .twisty, .invisible-twisty-sized-object {
+    margin-left: 30px;
+  }
+}
+
+.level3 {
+  .twisty, .invisible-twisty-sized-object {
+    margin-left: 45px;
+  }
+}
+
+.level4 {
+  .twisty, .invisible-twisty-sized-object {
+    margin-left: 60px;
+  }
+}
+
+.level5 {
+  .twisty, .invisible-twisty-sized-object {
+    margin-left: 75px;
+  }
+}
+
+.level6 {
+  .twisty, .invisible-twisty-sized-object {
+    margin-left: 90px;
+  }
+}
+
+tr.reference_descendant {
+  .name {
+    font-style: italic;
+  }
+  img {
+    margin-right: 3px;
+  }
+}

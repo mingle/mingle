@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Planning Releases, Sprints and Iterations">
+
+    <p>If you plan to break down your project into sprints or iterations, we recommend you use Mingle's <cref topic="card_trees">card trees</cref>.</p>
+
+    <screenshot alttext="Tree view of a card tree" src="resources/images/card_trees_tree_view.png" />
+
+    <section title="Benefits of using card trees">
+        <bullets>
+            <item>
+                Card trees provide additional card views, the <cref topic="tree_view">tree view</cref> and <cref topic="hierarchy_view">hierarchy view</cref>.  They allow you to easily see and manage the relationship between your cards.
+                <bullets>
+                    <item>e.g. Release -> Sprint -> Story -> Task -> Defect</item>
+                </bullets>
+            </item>
+            <item>
+                You will get to use <cref topic="aggregate_properties">aggregate properties</cref> which are great for reporting on descendant cards. 
+                <bullets>
+                    <item>e.g. calculating velocity for each sprint, counting the number of defects logged and fixed for each sprint or release, etc.</item>
+                </bullets>
+            </item>
+        </bullets>
+    </section>
+
+    <section file="tip_release_planning" />
+
+    <section title="Other Tips">
+        <bullets>
+            <item>Keep your Mingle project simple. Introduce more complexity and structure as you need it. Ask yourself if you are getting value from each hierarchy in your card tree.</item>
+            <item>Create a few Mingle projects using <cref topic="quick_project_setup#create_a_new_project_from_template">Mingle's templates</cref> to see example card trees used in Scrum and XP projects.</item>
+        </bullets>
+    </section>
+
+	<section title="Also see...">
+        <bullets>
+	<item><cref topic="explore_mingle">Explore Mingle</cref></item>
+        </bullets>
+    </section>
+
+
+</topic>

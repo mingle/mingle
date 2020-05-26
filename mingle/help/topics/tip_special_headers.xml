@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE section SYSTEM "mingle_help.dtd">
+<chapter title="Special Header">
+  <p>Use <cref topic="setting_up_quick_header_links">special header</cref> links to create new cards with a single click!</p> 
+<topic title="Creating and using special headers">
+	<steps>
+			<item>Create a page called Special:HeaderActions</item>
+			<item>Add URL link on this page to create a new card based on card types in your project. For example, to create a link called +Story for card type Story in your project, type in "+Story" and link it to this URL: <markup>/projects/project_identifier/cards/new?properties[type]=Story</markup></item>
+          <note>Starting from 13.2.2, the value query and project macros are not supported as part of URL. See <exref url="http://support.thoughtworks.com/entries/23699073-Macros-in-URL-Not-Supported-from-13-2">related Knowledge Base article</exref>.</note>
+          <note>Make sure you choose the right Protocol. For Mingle in the Cloud, it should always be HTTPS.</note>
+          
+			<screenshot alttext="Special Header" src="resources/images/special_header_tip.png"/>
+			<item>Saving this page will result in a link '+Story' being displayed across all pages of Mingle. These links will be available to all users of the project</item>
+			<screenshot alttext="Special Header" src="resources/images/add_card_from_special_header.png"/>
+			<item>New cards created using this link use card defaults specified in the project admin section</item>
+	</steps>	
+	</topic>		
+</chapter>

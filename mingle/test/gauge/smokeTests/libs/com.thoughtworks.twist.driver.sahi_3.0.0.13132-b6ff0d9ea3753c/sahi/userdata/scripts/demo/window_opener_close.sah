@@ -1,0 +1,12 @@
+_navigateTo("/demo/window_opener_close.htm");
+_setValue(_textbox("t1"), "dda");
+_click(_button("Click me"));
+_popup("abcd")._setValue(_textbox("t1"), "dad");
+_popup("abcd")._click(_button("Click me"));
+_popup("def")._assertExists(_cell("CellWithId"));
+_popup("def")._assertEqual("Cell with id", _getText(_cell("CellWithId")));
+_popup("def")._assertContainsText("Cell with id", _cell("CellWithId"));
+_popup("def")._click(_link("Back[1]"));
+_popup("def")._click(_link("Close Self"));
+_setValue(_textbox("t1"), "ddadd");
+_setValue(_textbox("t1"), "");

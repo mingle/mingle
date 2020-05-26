@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Creating user profiles">
+	
+    <note>Only Mingle administrators can create and manage user profiles.</note>
+	<p>All users must be registered in Mingle with their own profile before they can sign in.</p>
+	<p>When you first create a user profile in Mingle, they will not have access to any projects by default, you must open a project and make them a team member of that project. The exceptions to this are i. if you create a user as a Mingle administrator, in which case they will have full access to all projects and ii. if the project has been configured to <cref topic="add_all_users_as_team_members">Add all users as team members</cref> then a newly added user would be added to that project. </p>
+	
+	<steps title="How to create a new user profile">	
+		<item>
+		  <p><cref topic="signing_in_and_out_of_mingle">Sign in</cref> to Mingle as a Mingle administrator.</p>
+			<p>Open the admin menu and click the <link>Users</link> link.</p>
+			</item>
+		<screenshot alttext="users_option_on_admin_menu" src="resources/images/users_option_on_admin_menu.png"/>
+		
+			
+		<item>
+			<p>Mingle displays the Manage users page.</p>
+			<screenshot alttext="Manage users page" src="resources/images/manage_users_page.png"></screenshot>
+		</item>	
+		<item>
+			<p>Click the <link>New user</link> link.</p>
+			<p>Mingle displays the New user page.</p>
+			<screenshot alttext="New user page" src="resources/images/new_user_dialog.png"></screenshot>
+		</item>
+		    <item>Type a <strong>Sign-in name</strong> for the user. It is a good idea if this name matches their corporate username, not only will it be easier to remember, but it may be linked to your company's LDAP or Active Directory server. You can use <strong>&#43;</strong>, <strong>&#46;</strong>, <strong>&#45;</strong>, <strong>&#64;</strong> and <strong>&#95;</strong> in usernames.</item>
+			<item>Type the user's <strong>Display name</strong>.</item>
+			<item>Type and retype a <strong>Password</strong> for this user. This will most likely be an interim password that the user can change when they first log on. Tell users that it is a good idea if this password matches their corporate password, not only will it be easier to remember, but it may be linked to your company's LDAP or Active Directory server.</item>
+			<item>Select the <strong>User type</strong> for this user. By default this will be a "Full user" unless <cref topic="mingle_licenses">your license</cref> is restricting the type of user that can be created.</item>
+			<item>Finally you can complete the <cref topic="non_essential_profile_details">non essential profile details</cref> such as Jabber user name, Version control user name, Email and Icon. If you do not complete them the user can update this later.</item>
+  			<item>Click the <button>Create this profile</button> button to complete creation.</item>
+		</steps>
+		
+	<section title="Also see...">	
+		<bullets>
+			<item><cref topic="user_roles">About Mingle user roles</cref></item>
+			<item><cref topic="manage_users_page">Managing users</cref></item>
+		</bullets>	
+	</section>
+</topic>

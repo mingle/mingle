@@ -1,0 +1,19 @@
+development:
+  database: <%= "#{ENV['MINGLE_DEVELOPMENT_DB']}_#{ENV['DTR_RUNNER_NAME']}" %>
+  adapter: postgresql
+  username: <%= ENV['DATABASE_USERNAME'] || 'mingle_builder' %>
+  password: 
+  host: <%= ENV['DTR_DATABASE_HOST'] || 'fmtstdmngpcb04.thoughtworks.com' %>
+  port: 5432
+  min_messages: ERROR
+  pool: 12
+
+test:
+  database: <%= "#{ENV['MINGLE_TEST_DB']}_#{ENV['DTR_RUNNER_NAME']}" %>
+  adapter: postgresql
+  username: <%= ENV['DATABASE_USERNAME'] || 'mingle_builder' %>
+  password: 
+  host: <%= ENV['DTR_DATABASE_HOST'] || 'fmtstdmngpcb04.thoughtworks.com' %>
+  port: 5432
+  min_messages: ERROR
+  pool: 12

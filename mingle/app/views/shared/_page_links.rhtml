@@ -1,0 +1,55 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%
+  # todo: clean up this addional_params need to clean up all place using card_list_view#to_params
+  # because card list view's to_params used in too many place, so when we need add favorite_id into
+  # the page link params, we have to add it seperated, because there is too much
+  # place need to confirm that don't need the favorite_id param but using to_params
+  addional_params = {} if addional_params.blank?
+-%>
+<p class='pages' id="page_links">
+  <% if paged_object.multipage? %>
+    <% if paged_object.previous_page %>
+      <%= link_to_with_long_url_handling 'Previous', paged_object.pre_page_options.merge(addional_params), {:class => 'pagination-previous'} %>
+    <% else -%>
+      Previous
+    <% end %>
+
+    <% available_pages = paged_object.available_pages # the calculating is expensive %>
+    
+    <% paged_object.pages.each_with_index do |page, index| -%>
+      <% if paged_object.current_page?(page) %>        
+        <span class="page-num highlight-warning"><%= page.to_s %></span>
+        <%- @render_next_elipsis = true -%>
+      <% elsif available_pages.include?(page) %>
+        <%= link_to_with_long_url_handling page.to_s, paged_object.to_params.merge(:page => page.to_i).merge(addional_params), {:class => 'page-num', :id => "page_" + page.to_s } %>
+        <%- @render_next_elipsis = true -%>
+      <% else %>
+        <%- if @render_next_elipsis -%>...<%- end -%>
+        <%- @render_next_elipsis = false -%>
+      <% end %>
+    <% end -%>
+    
+    <% if paged_object.next_page  %>
+      <%= link_to_with_long_url_handling 'Next', paged_object.next_page_options.merge(addional_params), {:class => 'pagination-next'} %>
+    <% else -%>
+      Next
+    <% end %>
+    
+  <% end %>
+</p>
+  

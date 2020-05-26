@@ -1,0 +1,31 @@
+_navigateTo("under.htm");
+
+function testFormElement(){
+	_assertEqual(_checkbox("cbj"), _checkbox(0, _under(_cell("Check A"))));
+	_assertEqual(_checkbox("cbm"), _checkbox(0, _under(_cell("Check B"))));
+
+	_assertEqual(_checkbox(1), _checkbox("cb", _under(_cell("Check A"))));
+	_assertEqual(_checkbox(4), _checkbox("cb", _under(_cell("Check B"))));
+}
+
+function testTag(){
+	_assertEqual(_cell("Jaja"), _cell(0, _under(_cell("Name"))));
+	_assertEqual(_cell("Maja"), _cell(0, _under(_cell("Name[1]"))));
+
+	_assertEqual(_cell("Baja"), _cell(1, _under(_cell("Name"))));
+	_assertEqual(_cell("Paja"), _cell(1, _under(_cell("Name[1]"))));
+}
+
+function testNestedUnder(){
+	_assertEqual("aaa", _getText(_cell(0, _under(_tableHeader("In-Progress", _under(_tableHeader("Ready")))))));
+	_assertEqual("bbb", _getText(_cell(0, _under(_tableHeader("Done", _under(_tableHeader("Ready")))))));
+	_assertEqual("ccc", _getText(_cell(0, _under(_tableHeader("In-Progress", _under(_tableHeader("Development")))))));
+	_assertEqual("ddd", _getText(_cell(0, _under(_tableHeader("Done", _under(_tableHeader("Development")))))));
+	_assertEqual("eee", _getText(_cell(0, _under(_tableHeader("Complete")))));
+	_assertEqual("aaa", _getText(_cell(0, _under(_tableHeader("Ready")))));
+	_assertEqual("bbb", _getText(_cell(1, _under(_tableHeader("Ready")))));
+	_assertEqual("bbb2", _getText(_cell(0, _near(_cell("aaa2")), _under(_tableHeader("Done", _under(_tableHeader("Ready")))))));
+	_assertEqual("ddd2", _getText(_cell(0, _near(_cell("aaa2")), _under(_tableHeader("Done", _under(_tableHeader("Development")))))));
+}
+
+_runUnitTests();

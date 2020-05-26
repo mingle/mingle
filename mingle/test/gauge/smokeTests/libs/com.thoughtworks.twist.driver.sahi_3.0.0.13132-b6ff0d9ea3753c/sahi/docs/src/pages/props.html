@@ -1,0 +1,71 @@
+<!--Sahi - Configuration (sahi.properties)-->
+<pre>
+    # Sahi configuration file
+
+    <a href="#port">proxy.port=9999</a>
+
+    # dirs. Relative paths are relative to bin dir. Separate directories with semi-colon
+    # scripts.dir=../scripts;D:\\my\\project1\\scripts;D:\\my\\project2\\scripts
+    scripts.dir=../scripts;
+    script.extension=sah;sahi;inc
+    # default log directory.
+    logs.dir=../logs
+    # Directory where auto generated ssl cerificates are stored
+    certs.dir=../certs/
+
+    # Use external proxy server
+    ext.proxy.enable=false
+    ext.proxy.host=203.236.20.129
+    ext.proxy.port=80
+
+    # Sets the hotkey which when pressed and doubleclicked,
+    # will open the Sahi controller window.
+    # Can specify ALT, SHIFT or CTRL
+    <a href="#hotkey">controller.hotkey = ALT</a>
+
+    # Increase this if you get random connection refused exceptions or if tests hang after some time.
+    suite.time_between_tests=1000
+
+    # Script execution params
+
+    #Time delay between steps
+    script.time_between_steps=100
+    #Time delay between retries once an error occurs
+    script.time_between_steps_on_error=1000
+    #Number of retries once an error occurs
+    script.max_reattempts_on_error=5
+    #Number of cycles Sahi will wait for the page to load before it proceeds with execution
+    script.max_cycles_for_page_load=50
+
+    # For automatic SSL keystore creation.
+    ssl.auto_create_keystore=true
+    ssl.password=sahipassword
+    # Full file path to keytool utility if not in the system path
+    # This is generally in the &lt;java_home&gt;/bin directory
+    keytool.path=keytool
+
+
+</pre>
+<br>
+
+
+<h4><a name="port">proxy.port=9999</a></h4>
+
+Port which the Sahi proxy server uses.<br>
+This should be the same as used in the browser proxy settings.
+
+<h4><a name="#hotkey">Hot Key</a></h4>
+
+When the Hot Key is pressed and the page is doubleclicked, the Sahi
+Controller window is displayed.<br>
+By default, the Hot Key is set to ALT.<br>
+If ALT does not work on your platform, you could configure the
+hotkey in this file. <br>
+The hot key could be any one of ALT, SHIFT or CTRL keys. <br>
+Note that popup blockers may prevent the Controller window from
+coming up.<br>
+So first turn off popup blockers on your browser.<br>
+Sometimes CTRL-ALT-DblClick works on some browsers since that
+temporarily turns off some blockers.<br>
+<br>
+

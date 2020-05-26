@@ -1,0 +1,60 @@
+<!--[form:card]-->
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= hidden_field_tag 'add_another', false %>
+
+<div id="card">
+  <div id="card-top">
+    <h1 id='card-index'>#<%= h ((@card && @card.number) || @project.next_likely_number) %></h1>
+
+    <div id="card-edit-title-container">
+      <div id="card-edit-title">
+        <%= text_field 'card', 'name', {:id => 'card_name', :onkeydown => "MingleUI.cmd.saveOnKeyHandler(event)"} %>
+      </div>
+    </div>
+
+    <%= clear_float %>
+
+    <% if @card.versions.any? -%>
+      <p class="version-info"><%= render :partial => 'shared/version_info', :locals => { :versionable => @card, :show_latest_url => card_show_url(:number => @card.number) } %></p>
+    <% end -%>
+  </div>
+
+  <div class="tags-container" name="tags-container">
+    <%= render :partial => "tags/tags_editor", :locals => {:tag_names => tag_names, :project => @project, :tag_field_name  => 'tagged_with', :icon => true, :auto_submit => false, :edit_mode => true} %>
+  </div>
+
+    <%= clear_float %>
+    <%= render :partial => "renderable/wysiwyg_editor", :locals => { :renderable => @card, :field_name => "description"} %>
+  <div class="clear-both"></div>
+  <div id="card-bottom">
+    <%= render :partial => 'card_type_and_properties_widget' %>
+
+    <%= render :partial => 'cards_plans/plans', :locals => { :card => @card, :project => @project, :editing => true }%>
+
+    <%= hidden_field_tag('comment[content]', comment_in_params, :id => 'edit-card-comment') %>
+    <%= hidden_field_tag('original_card_type', @card.card_type_name, :id => 'original_card_type') %>
+  </div>
+</div>
+
+<div id="attachments-container">
+  <%= render :partial => "shared/attachments", :locals => {:attachable => @card, :mode => "edit", :"authorized_to_delete" => authorized_to_delete_attachments } %>
+</div>
+
+<%= clear_float %>
+
+<!--[eoform:card]-->

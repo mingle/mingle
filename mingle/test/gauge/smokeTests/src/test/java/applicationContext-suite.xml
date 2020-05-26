@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  applicationContext-suite.xml configures all beans with suite scope, for example drivers or the System Under Test itself.
+  The default name and classpath location of this file can be overridden by -DsuiteContext=
+  This can be used to run the same test suite against different configurations.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:lang="http://www.springframework.org/schema/lang" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans org/springframework/beans/factory/xml/spring-beans-2.5.xsd http://www.springframework.org/schema/lang org/springframework/scripting/config/spring-lang-2.5.xsd">
+  <!--
+    The PropertyPlaceholderConfigurer loads properties from a file to be used in this configuration file.
+    The SYSTEM_PROPERTIES_MODE_OVERRIDE enables overriding property values from the command line.
+  -->
+  <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE"/>
+    <property name="locations">
+      <value>classpath:twist.properties</value>
+    </property>
+  </bean>
+  <!-- Uncomment this to set system properties. -->
+  <!-- You may delete entry for http.proxyUser and http.proxyPassword if your environment doesn't need it -->
+  <!--
+  <bean id="systemproperty" class="com.thoughtworks.twist.core.SystemPropertyInitializingBean">
+    <property name="systemProperties">
+       <map>
+        <entry key="http.proxyHost" value="hostName"/>
+        <entry key="http.proxyPort" value="port"/>
+        <entry key="http.proxyUser" value="proxyUser"/>
+        <entry key="http.proxyPassword" value="proxyPassword"/>
+      </map>
+    </property>
+  </bean>
+  -->
+    <bean class="com.thoughtworks.twist.driver.sahi.DriverClient" destroy-method="stop" id="sahiDriverFactory" init-method="start" lazy-init="true">
+        <property name="sahiBasePath" value="${sahi.basePath}"/>
+        <property name="sahiNTLM" value="${sahi.ntlm}"/>
+        <property name="sahiNTLMUser" value="${sahi.ntlm_user}"/>
+    </bean>
+
+    <bean destroy-method="close" factory-bean="sahiDriverFactory" factory-method="getBrowser" id="browser" lazy-init="true" scope="prototype">
+        <constructor-arg value="${sahi.browserLocation}"/>
+        <constructor-arg value="${sahi.browserExecutable}"/>
+        <constructor-arg value="${sahi.browserOptions}"/>
+    </bean>
+    
+    <bean class="com.thoughtworks.mingle.planner.smokeTest.util.JRubyScriptRunner" id="jRubyScriptRunner">
+    	<!-- set debugMode to true to see all executed ruby code output -->
+    	<property name="debugMode" value="true"/>
+    </bean>    
+<bean class="com.thoughtworks.twist.core.execution.TwistDataStoreFactory" id="twistDataStoreFactory"/>
+   <bean factory-bean="twistDataStoreFactory" factory-method="getSuiteStore" id="twistSuiteStore" scope="singleton"/>
+</beans>

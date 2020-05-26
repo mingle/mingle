@@ -1,0 +1,9 @@
+test/javascript/charts/stacked_bar_chart/sections/stacked_bar_chart_build_section_test.html
+test/javascript/project_data_store_test.html
+test/javascript/charts/chart_renderer_test.html
+.rbenv-vars
+script/dual_server.sh
+config/environment.rb
+db/oracle_structure.sql
+db/postgresql_structure.sql
+app/models/user.rb

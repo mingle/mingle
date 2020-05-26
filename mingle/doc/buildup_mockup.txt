@@ -1,0 +1,109 @@
+{% dashboard-full-width %}
+{{
+  status
+    color     : green
+    message   : >
+      Continued good progress against plan and excellent team morale has us on course for our 
+      July 1st release provided key risks are mitigated.
+}}
+{% dashboard-full-width %}
+
+
+{% dashboard-two-columns %}
+
+{% dashboard-left-column %}
+
+{% dashboard-panel %}
+h2. Overall progress
+{{
+  stacked-bar-chart
+    name: Overall progress
+    where  : Type = Story AND Release = 1
+    series:
+      - label       : Original
+        color       : yellow
+        stack       : total
+        data        : >
+          SELECT Iteration, SUM(Size)
+          WHERE Status = Open
+          GROUP BY Iteration
+          ORDER BY Iteration
+      - label       : In Production
+        color       : dark-green
+        stack       : overlay-bottom
+        data        : >
+          SELECT 'In Production on Iteration', SUM(Size)
+          WHERE Status = 'In Production'
+          GROUP BY 'In Production on Iteration'
+      - label       : Completed
+        color       : green
+        stack       : overlay-bottom
+        data        : >
+          SELECT 'Completed on Iteration', SUM(Size)
+          WHERE Status IN ('Closed', 'Completed')
+          GROUP BY 'Completed on Iteration'
+      - label       : In Progress
+        color       : light-green
+        stack       : overlay-bottom
+        data        : >
+          SELECT Iteration, SUM(Size)
+          WHERE Status = 'In Progress'
+          GROUP BY Iteration
+      - label       : New
+        color       : red
+        stack       : overlay-top
+        data        : >
+          SELECT 'Came Into Scope on Iteration', SUM(Size)
+          WHERE Status = 'Open' AND NOT 'Came Into Scope on Iteration' = 1
+          GROUP BY 'Came Into Scope on Iteration'
+}}
+{% dashboard-panel %}
+
+{% dashboard-panel %}
+h2. Progress - Last Iteration
+
+TODO
+{% dashboard-panel %}
+
+{% dashboard-left-column %}
+
+{% dashboard-right-column %}
+
+{% dashboard-panel %}
+h2. Feature completeness
+{{
+  ratio-bar-chart
+    total : SELECT Feature, SUM(Size) WHERE Type = Story AND Release = 1 GROUP BY Feature
+    ratio : Status IN (Closed, Completed)
+}}
+{% dashboard-panel %}
+
+{% dashboard-panel %}
+h2. Progress - Last iteration
+
+{% dashboard-panel %}
+
+{% dashboard-panel %}
+h2. Milestones
+
+|_. Description |_. Date |_. Status |
+| Internal alpha to all departments | 20th March 2007 | On track |
+| Public beta | 15th May 2007 | On track |
+{% dashboard-panel %}
+
+{% dashboard-right-column %}
+
+{% dashboard-two-columns %}
+
+
+{% dashboard-full-width %}
+
+{% dashboard-panel %}
+h2. Risks and Issues
+{{
+  card-list
+    for : SELECT Type, Description, Who, When, Status WHERE Type IN (Action, Risk)
+}}
+{% dashboard-panel %}
+
+{% dashboard-full-width %}

@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Copying a card">
+	<section title="Copying a card from one project to another">
+	<p>	Mingle allows you to copy cards from one project to another. This functionality will help teams manage work across and between projects.</p>	
+		
+		<steps title="In order to copy a card:">
+		<item>view the card that you want to copy</item>
+		<item>select the "Copy to..." button. If you have permissions to create cards in other projects you will be presented with list of all projects where you can create a card <strong>and</strong> where the card type you are copying also exists</item>
+		<screenshot alttext="copy_card" src="resources/images/copy_card.png"></screenshot>
+		<item>select a project to copy to and continue</item>
+		<item>select "continue to copy" to confirm the copy</item>
+		<item>your card will be copied and you will be given a link to the new card in your other project</item>
+		</steps>
+
+	<note>Please note that only the current version of the card will be copied. The copy will not include any murmurs or history. Relationship properties, tree memberships and any properties that do not exist in the destination project will not be copied.</note>
+			
+	</section>
+	
+	<section title="Also see..">
+                <bullets>
+                    <item><cref topic="cross_project_card_page_linking">Cross project card and wiki linking</cref></item>
+					<item><cref topic="cross_project_reporting">Cross project reporting</cref></item>
+					<item><cref topic="mingle_api_events#card_events">Copied to and copied from card events</cref></item>
+                </bullets>
+             </section>
+ 
+</topic>
+
+

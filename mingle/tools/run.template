@@ -1,0 +1,42 @@
+#!/bin/bash
+# vim: ai et sts=2 sw=2
+
+#  Copyright 2020 ThoughtWorks, Inc.
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Affero General Public License as
+#  published by the Free Software Foundation, either version 3 of the
+#  License, or (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Affero General Public License for more details.
+#
+#  You should have received a copy of the GNU Affero General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+
+#########################################################
+# Mingle configurations for JRuby execution environment #
+#########################################################
+
+dir=$(cd `dirname $0`/.. && pwd)
+
+# validate that we run this script from the correct location
+# since we have some issues with relative paths
+[ "`pwd`" = "$dir" ] || die "this script must be run from MINGLE_INSTALL_DIR ($dir). aborting!"
+
+source $dir/tools/run_optparse.sh
+
+export RAILS_ENV="production"
+
+export GEM_PATH=$dir/webapps/ROOT/WEB-INF/gems
+export GEM_HOME=$dir/webapps/ROOT/WEB-INF/gems
+export BUNDLE_GEMFILE=$dir/webapps/ROOT/WEB-INF/Gemfile
+export BUNDLE_WITHOUT=test:development
+
+# setting desired Java classpath
+source $dir/script/set_classpath.sh
+source $dir/script/configure_jvm.sh
+
+$JAVA_CMD -server $JAVA_OPTS -Djruby.shell="/bin/sh" com.thoughtworks.mingle.Main --<%= MINGLE_RUBY_VERSION%> "$TOOL" "$FILE_NAME"

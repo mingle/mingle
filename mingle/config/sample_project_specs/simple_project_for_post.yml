@@ -1,0 +1,49 @@
+#  Copyright 2020 ThoughtWorks, Inc.
+#  
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Affero General Public License as
+#  published by the Free Software Foundation, either version 3 of the
+#  License, or (at your option) any later version.
+#  
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Affero General Public License for more details.
+#  
+#  You should have received a copy of the GNU Affero General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+project:
+  name: Your First Project
+  identifier: your_first_project
+  current_user_as_member: true
+ordered_tab_identifiers:
+  - Board
+  - Overview
+  - All
+  - History
+card_types:
+  - name: Card
+property_definitions:
+  - name: Status
+    data_type: string
+    is_managed: "true"
+    card_types:
+      - name: Card
+    property_value_details:
+      - value: Doing
+        color: '#30f200'
+        position: 1
+      - value: Done
+        color: '#087300'
+        position: 2
+  - name: Owner
+    data_type: user
+    card_types:
+      - name: Card
+tabs:
+  - name: Board
+    style: grid
+    color_by: Status
+    group_by:
+      lane: Status
+    lanes: ' ,Doing,Done'

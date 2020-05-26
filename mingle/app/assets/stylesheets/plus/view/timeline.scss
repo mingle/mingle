@@ -1,0 +1,197 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+.timeline {
+  -moz-user-select: -moz-none;
+  -webkit-user-select: none;
+  .main_view {
+    height: 446px;
+    left: 0;
+    overflow: hidden;
+    position: relative;
+    top: 0;
+  }
+  .informing_message_box {
+    background-color: #DFEDFE;
+    border: 1px solid #C5D9EF;
+    left: 50%;
+    margin-left: -210px;
+    padding: 10px;
+    position: fixed;
+    top: 300px;
+    white-space: nowrap;
+    width: 260px;
+    z-index: 10;
+  }
+}
+
+#timeline-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
+.timeline {
+  .informing_message_box p:last-child {
+    margin-bottom: 0;
+  }
+  .main_view_content {
+    border-right: solid 1px #DDD;
+    border-top: solid 1px #DDD;
+    left: 0;
+    top: 0;
+    position: absolute;
+  }
+  #objective_container {
+    position: absolute;
+    top: 22px;
+    left: 0;
+    z-index: 2;
+    &.readonly-objective-container {
+      .objective{
+        cursor:pointer !important;
+        .right_handle, .left_handle{
+          cursor:pointer !important;
+        }
+      }
+    }
+  }
+  #date_header {
+    height: 21px;
+    border-bottom: 1px solid #BBB;
+    position: absolute;
+    z-index: 1;
+    li {
+      display: inline;
+      float: left;
+      padding: 5px 0;
+      text-align: center;
+      height: 431px;
+      line-height: 11px;
+      border-right: 1px solid #ccc;
+    }
+  }
+  .days #date_header li {
+    width: 92px;
+  }
+  .weeks #date_header li {
+    width: 167px;
+  }
+  .months #date_header li {
+    width: 185px;
+  }
+  #today_marker {
+    background: #FFEC80;
+    position: absolute;
+    top: 22px;
+    z-index: 0;
+  }
+  .overview {
+    background: #BBB;
+    height: 24px;
+    left: 0;
+    padding: 0 2px;
+    position: relative;
+    top: 0;
+    .viewport {
+      background: #333333 url(../../../images/planner/backgrounds/bg_gradient_40.png) repeat;
+      cursor: move;
+      height: 20px !important;
+      margin: 2px 0;
+      position: absolute;
+    }
+  }
+  .main_view {
+    .objective {
+      background: #dddddd url(../../../images/planner/backgrounds/bg_gradient_40.png) repeat;
+      border: 1px solid #CCC;
+      height: 28px;
+      overflow: hidden;
+      position: absolute;
+      &:hover {
+        border: 1px solid #BBB;
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+        -moz-box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+        -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+      }
+      .name {
+        color: #333;
+        line-height: 28px;
+        /* should match height of objective */
+        margin: 0 14px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: block;
+        overflow: hidden;
+      }
+      .right_handle {
+        background: url(../../../images/planner/icon_draggable.png) no-repeat center center;
+        cursor: col-resize;
+        height: 30px;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 14px;
+      }
+      .left_handle {
+        background: url(../../../images/planner/icon_draggable.png) no-repeat center center;
+        cursor: col-resize;
+        height: 30px;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 14px;
+      }
+    }
+    .moveable {
+      cursor: move;
+    }
+    .objective input {
+      width: 90px;
+    }
+  }
+}
+
+.granularity-selector {
+  padding-top: 6px;
+  a {
+    color: #FFF;
+    font-size: 12px;
+    padding: 7px 15px;
+    text-transform: capitalize;
+    &:hover {
+      background-color: #AAA;
+    }
+    &.selected {
+      background-color: #fff;
+      color: #111;
+      &:hover {
+        background-color: #fff;
+        color: #111;
+      }
+    }
+  }
+}
+
+.plan-dates {
+  float: right;
+  margin-top: 5px;
+  margin-right: 10px;
+}
+
+#date_header li {
+  margin: 0;
+}

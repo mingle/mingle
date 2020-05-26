@@ -1,0 +1,51 @@
+{
+  "contributors": [
+    "Mingle Team <mingle-dev@example.com> (https://twstudios.mingle-staging.thoughtworks.com)"
+  ],
+  "dependencies": {
+    "@rails/webpacker": "^3.2.2",
+    "axios": "^0.18.0",
+    "caniuse-lite": "^1.0.30000810",
+    "css-loader": "^0.28.10",
+    "mixpanel-browser": "^2.18.0",
+    "v-click-outside": "^1.0.5",
+    "vue": "^2.5.13",
+    "vue-ckeditor2": "^1.25.0",
+    "vue-js-modal": "1.3.12",
+    "vue-loader": "^14.1.1",
+    "vue-resource": "^1.4.0",
+    "vue-select": "https://github.com/meghaagr24/vue-select.git#deselect-bug-fix",
+    "vue-tables-2": "^1.4.50",
+    "vue-template-compiler": "^2.5.13",
+    "vuedraggable": "^2.16.0",
+    "vuex": "^3.0.1"
+  },
+  "devDependencies": {
+    "@vue/test-utils": "^1.0.0-beta.12",
+    "auditjs": "^2.4.2",
+    "hawkeye-scanner": "^1.0.2",
+    "karma": "2.0.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-firefox-launcher": "^1.1.0",
+    "karma-mocha": "^1.3.0",
+    "karma-phantomjs-launcher": "^1.0.4",
+    "karma-sinon": "^1.0.5",
+    "karma-webpack": "^2.0.9",
+    "mocha": "^5.0.1",
+    "sinon": "^4.4.0",
+    "webpack": "^3.0.0",
+    "webpack-dev-server": "^2.11.1"
+  },
+  "license": "UNLICENSED",
+  "name": "mingle-rails5-frontend",
+  "resolutions": {
+    "qs": "~6.5.0",
+    "brace-expansion": "1.1.7",
+    "ckeditor": "4.8.0"
+  },
+  "scripts": {
+    "audit": "auditjs -l warn -w auditjs.whitelist.json -r && hawkeye scan -m node-nsp",
+    "ci-test": "karma start karma.conf.js --single-run --browsers Chrome",
+    "dev-test": "karma start karma.conf.js --browsers Chrome"
+  }
+}

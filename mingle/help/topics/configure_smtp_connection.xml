@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE section SYSTEM "mingle_help.dtd">
+<section title="Configure the SMTP connection">	
+	<note>The SMTP connection settings can be edited by a Mingle administrator at any time by clicking on 
+		the <link>Email</link> link  from the instance Admin menu.</note>
+	<p>
+		Complete details for the SMTP (outbound email) server. For details of the values to enter here, please contact your organization's email server administrator.
+	</p>
+	<bullets>
+		<item>Type or update the SMTP server <strong>address</strong>.</item>
+		<item>
+			Type or update the SMTP server <strong>port</strong> number. Typical ports are <strong>25</strong> and <strong>587</strong>.
+		</item>
+		<item>Type or update the SMTP <strong>domain</strong>.</item>
+		<item>If your organization's SMTP server requires a <strong>user name</strong> and <strong>password</strong>, type them here.</item>
+		<item>If your organization's SMTP server requires TLS encryption, be sure to tick the TLS checkbox.</item>
+		<item>Type the email <strong>Sender address</strong> from which you want Mingle to send emails (this will also become the <strong>Reply To</strong> address).</item>
+		<item>Type the <strong>Sender name</strong> from whom you want Mingle to send emails.</item>
+	</bullets>
+	<screenshot alttext="Configure the SMTP connection" src="resources/images/installation/smtp.png" />
+
+</section>
+

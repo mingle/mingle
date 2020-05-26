@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE subsection SYSTEM "mingle_help.dtd">
+<subsection title="Deleting a project or a template" >
+
+ <p>To delete a project or a template, navigate to the Current projects page or the Available templates page and click on the <link>'Delete this'</link> link that corresponds to project or template that you wish to delete. </p>
+	<bullets>
+		<item><p>Delete a project from the Current projects page.</p>
+			<screenshot alttext="Deleting a project" src="resources/images/delete_a_project.png"/>
+		</item>
+		<item><p>Delete a template from the Available templates page. You can navigate to this page by clicking "Project templates" link on Admin menu. </p>
+			<screenshot alttext="Go to available templates page" src="resources/images/installation/template_option_on_admin_menu.png"/>
+			<br/>
+      <todo>Replace screenshot with new style</todo>
+			<screenshot alttext="Deleting a template" src="resources/images/delete_a_template.png"/>
+		</item>
+	</bullets>
+</subsection>

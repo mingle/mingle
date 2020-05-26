@@ -1,0 +1,168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Favorites Saving Test</title>
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js"
+  type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/mingle_ui.js" type="text/javascript"></script>
+
+  <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+
+  <script src="../../public/javascripts/module.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/card_list_view/params_change_listener.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/card_list_view/rails_params.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/card_list_view/params_controller.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/card_list_view/card_list_view_link.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/jsloader.js" type="text/javascript"></script>
+
+  <script src="../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/controls.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/builder.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery.caret-1.5.2.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/application.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/favorites.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/with_progress_bar.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/ajax_error_handler.js" type="text/javascript"></script>
+  <script src="test_assets/sinon-2.3.6.js" type="text/javascript"></script>
+  <script src="test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+  <script src="test_assets/qunit-phantom.js" type="text/javascript"></script>
+
+  <link rel="../../app/assets/style/sidebar.scss">
+  <link>
+</head>
+
+<body>
+  <div id='test-subject'>
+    <div id="favorites-container">
+    <ul>
+    <li id="favorite-7">
+    <div class="favorite-item-container" data-rename-url="/projects/test/favorites/rename" data-project-id="1" data-favorite-id="7">
+      <span class="view-mode-only" style="float:right">
+        <a href="http://test.host/projects/test/cards/create_view" class="icon update-saved-view" id="cardlistview_7" title="Save current view as 'My favourite'" data-name="My favourite">SaveIcon</a>
+      </span>
+      <span class="view-mode-only">
+       <a href="/projects/test/favorites/show/7" class="favorite-link">My favourite</a>
+      </span>
+    </div>
+    </div>
+    </li>
+    </ul>
+  </div>
+  <div id="qunit"></div>
+  <div id="qunit-fixture"></div>
+  <script>
+    var server;
+    QUnit.module("bind_save", {
+      beforeEach: function (_assert) {
+          server = sinon.fakeServer.create();
+          MingleJavascript.executeAll();
+          ParamsController.update({a: "b"});
+      },
+      afterEach: function (_assert) {
+          $j('.favorite-update-success').remove();
+          $j('.favorite-update-failure').remove();
+          server.restore();
+      }
+    });
+
+    QUnit.test("testShouldSaveFavoriteWithOptionsFromLinkHrefSuccessfully", function (assert) {
+      var saveViewLink = $j('.update-saved-view');
+      saveViewLink.click();
+      var done = assert.async(1);
+
+      setTimeout(function() {
+        assert.equal(server.requests.length, 1);
+
+        var request = server.requests.pop();
+        assert.equal(request.method, "POST");
+        var expectedRequestData = saveViewLink.attr("href").split("?")[1];
+        assert.equal(request.requestBody, expectedRequestData);
+        request.respond(
+          200,
+          { "Content-Type": "text/plain" },
+          ""
+        );
+        done();
+      });
+
+    });
+
+    QUnit.test("testShouldShowMessageOnSaveSuccess", function (assert) {
+      var saveViewLink = $j('.update-saved-view');
+      saveViewLink.click();
+      var done = assert.async(2);
+
+      setTimeout(function() {
+        assert.equal(server.requests.length, 1);
+        var request = server.requests.pop();
+         request.respond(
+            200,
+            { "Content-Type": "text/plain" },
+            ""
+          );
+        done();
+      });
+
+      setTimeout(function() {
+        assert.equal($j('.favorite-update-success').text(), "Favorite saved successfully");
+        done();
+      });
+    });
+
+    QUnit.test("testShouldShowMessageOnSaveFailure", function (assert) {
+      var saveViewLink = $j('.update-saved-view');
+      saveViewLink.click();
+      var errorMessage = "Server error message";
+      var done = assert.async(2);
+
+
+      setTimeout(function() {
+        assert.equal(server.requests.length, 1);
+        var request = server.requests.pop();
+        request.respond(
+          422,
+          { "Content-Type": "text/plain" },
+          errorMessage
+        );
+        done();
+      });
+
+      setTimeout(function() {
+        assert.equal($j('.favorite-update-failure').text(), "Favorite save failed : " + errorMessage);
+        done();
+      });
+    });
+
+    QUnit.test("testShouldBindToParamsControllerAndRecieveUpdates", function (assert) {
+      updatedParams = {"prop1": "val1", "prop2": "val2"};
+      ParamsController.update(updatedParams)
+      var saveViewLink = $j('.update-saved-view');
+      var newParams = decodeURIComponent(saveViewLink.attr("href").split("\?")[1]);
+      var expectedParams = Object.toQueryString(updatedParams) + "&view[name]="+ saveViewLink.data("name");
+      assert.equal(newParams, expectedParams);
+    });
+  </script>
+</div>
+</body>
+</html>

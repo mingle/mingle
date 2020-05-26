@@ -1,0 +1,60 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% @available_prop_defs = @project_variable.all_available_property_definitions -%>
+<% checked_property_definitions ||= @project_variable.property_definitions %>
+<p>
+<% unless @available_prop_defs.size > 0 %>
+  There are no card properties with current data type in this project. 
+  <%= link_to 'Return to card properties list', :controller => 'property_definitions', :action => 'index' %>
+<% else %>
+  <label>Select the properties which will offer the variable as an option: </label>
+  <div id="content">
+    <table id="enum-table-top" class="list_table last_wrapper">
+      <thead>
+        <tr class="table-top select-row">           
+          <th colspan="2" class="last">
+            Select: 
+            <% checkbox_container = 'checkbox_container' -%>
+            <%= link_to_function 'All',
+                  "$A($('#{checkbox_container}').getElementsByTagName('input')).each(function(checkbox){checkbox.checked = true});", 
+                  :id => "select_all" -%>
+            <%= link_to_function 'None', "$A($('#{checkbox_container}').getElementsByTagName('input')).each(function(checkbox){checkbox.checked = false;});", :id => 'select_none' -%>
+          </th>
+        </tr>
+        <tr>
+          <th>Available</th>
+          <th class="last">Property</th>
+        </tr>
+      </thead>
+      <tbody id="checkbox_container">
+      <% @available_prop_defs.each do |prop_def| -%>
+        <tr class="<%= cycle('odd', 'even')%> <%= "hidden-property" if prop_def.hidden? %>" id="<%= prop_def.html_id %>">
+          <td class="checkbox">
+          <% checked = checked_property_definitions.include?(prop_def) -%>
+          <%= check_box_tag("project_variable[property_definition_ids][]", prop_def.id, checked, {:id => "property_definitions[#{prop_def.id}]"}) %>
+          </td>
+          <td class="last" id="project_variable_property_name_<%= prop_def.id %>">
+            <%= h prop_def.name %>
+          </td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
+</p>
+<%= render :partial => 'shared/background_color_notice' %>

@@ -1,0 +1,237 @@
+#  Copyright 2020 ThoughtWorks, Inc.
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Affero General Public License as
+#  published by the Free Software Foundation, either version 3 of the
+#  License, or (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Affero General Public License for more details.
+#
+#  You should have received a copy of the GNU Affero General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+#
+
+class Mql::Parser
+
+options no_result_var
+
+prechigh
+  right NOT
+  left BOOLEAN_OPERATION
+preclow
+
+
+token LITERAL OPEN_BRACE CLOSE_BRACE COMMA STAR DOT
+
+token SELECT DISTINCT PROPERTY
+      WHERE COMPARISON BOOLEAN_OPERATION NULL IN PLAN CURRENT_USER NUMBER THIS_CARD TAGGED_WITH NOT
+      FROM_TREE
+      AS_OF
+      GROUP_BY
+      ORDER_BY ORDER
+
+rule
+  target
+  : statements
+  ;
+
+  statements
+  : statements statement                                  { node :statements, val[0].ast + [val[1]] }
+  | statement                                             { node :statements, [val[0]] }
+  ;
+
+  statement
+  : SELECT columns                                        { node :select, :columns => val[1], :distinct => false }
+  | SELECT DISTINCT columns                               { node :select, :columns => val[2], :distinct => true }
+  | AS_OF LITERAL                                         { node :as_of, val[1] }
+  | WHERE conditions                                      { node :where, val[1] }
+  | ORDER_BY properties                                   { node :order_by, val[1] }
+  | GROUP_BY properties                                   { node :group_by, val[1] }
+  | FROM_TREE literals                                    { node :from, :trees => val[1] }
+  ;
+
+  columns
+  : column                                                { [val[0]] }
+  | columns COMMA column                                  { val[0] + [val[2]] }
+  ;
+
+  column
+  : aggregate_function
+  | property
+  ;
+
+  aggregate_function
+  : LITERAL OPEN_BRACE aggregate_target CLOSE_BRACE       { node :aggregate, :function => val[0], :property => val[2] }
+  ;
+
+  aggregate_target
+  : property
+  | STAR
+  ;
+
+  conditions
+  : conditions BOOLEAN_OPERATION conditions               { node val[1].downcase.to_sym, [val[0], val[2]] }
+  | NOT conditions                                        { node :not, val[1] }
+  | OPEN_BRACE conditions CLOSE_BRACE                     { val[1] }
+  | condition                                             { val[0] }
+  ;
+
+  condition
+  : property COMPARISON property_value                    { node :comparision, val }
+  | TAGGED_WITH literals                                  { node :tagged, :with => val[1] }
+  | property IN values                                    { node :in, :property => val[0], :values => val[2] }
+  | IN PLAN literal                                       { node :in, :plan => val[2] }
+  ;
+
+  property_value
+  : literal                                               { val[0] }
+  | CURRENT_USER                                          { node :context, :type => 'user' }
+  | THIS_CARD DOT property                                { node :context, :type => 'card', :property => val[2] }
+  | THIS_CARD                                             { node :context, :type => 'card' }
+  | NUMBER LITERAL                                        { node :card_number, val[1] }
+  | NULL                                                  { node :null }
+  | project_variable                                      { val[0] }
+  | PROPERTY property_name                                { node :property, :name => val[1] }
+  ;
+
+  project_variable
+  : OPEN_BRACE literal CLOSE_BRACE                        { node :project_variable, val[1] }
+  ;
+
+  properties
+  : properties COMMA property                             { val[0] + [val[2]] }
+  | property                                              { [val[0]] }
+  ;
+
+  property
+  : property_name                                         { node :property, :name => val[0] }
+  | NUMBER                                                { node :property, :name => val[0] }
+  | PROPERTY property_name                                { node :property, :name => val[1] }
+  | property ORDER                                        { node :property, :name => val[0].ast[:name], :order => val[1] }
+  | property NUMBER                                       { node :property, :name => val[0].ast[:name], :key => 'number' }
+  ;
+
+  property_name
+  : literal
+  | PROPERTY
+  ;
+
+  values
+  : OPEN_BRACE literals CLOSE_BRACE                       { val[1] }
+  | OPEN_BRACE statements CLOSE_BRACE                     { val[1] }
+  ;
+
+  literals
+  : literals COMMA literal                                { node :literals, val[0].ast + [val[2]] }
+  | literal                                               { node :literals, [val[0]] }
+  ;
+
+  literal
+  : LITERAL literal                                       { val[0] + ' ' + val[1] }
+  | LITERAL                                               { val[0] }
+  | PLAN                                                  { val[0] }
+
+end
+----- header ----
+require 'strscan'
+require 'ast'
+
+---- inner ----
+include Ast
+
+def unquote(value)
+  case value
+  when /^'(.*)'$/ then $1
+  when /^"(.*)"$/ then $1
+  else value
+  end
+end
+
+def unescape_quote(value)
+  value.gsub(/\\(['|"])/, '\1')
+end
+
+def parse(str)
+  @input = str
+  tokens = []
+  str = "" if str.nil?
+  scanner = StringScanner.new(str + ' ')
+
+  until scanner.eos?
+    case
+    when scanner.scan(/\s+/)
+      # ignore space
+    when m = scanner.scan(/select\b/i)
+      tokens.push [:SELECT, m]
+    when m = scanner.scan(/distinct\b/i)
+      tokens.push [:DISTINCT, m]
+    when m = scanner.scan(/[\.]/)
+      tokens.push [:DOT, m]
+    when m = scanner.scan(/from\s+tree\b/i)
+      tokens.push [:FROM_TREE, m]
+    when m = scanner.scan(/where\b/i)
+      tokens.push [:WHERE, m]
+    when m = scanner.scan(/order\s+by\b/i)
+      tokens.push [:ORDER_BY, m]
+    when m = scanner.scan(/tagged\s+with\b/i)
+      tokens.push [:TAGGED_WITH, m]
+    when m = scanner.scan(/plan\b/i)
+      tokens.push [:PLAN, m]
+    when m = scanner.scan(/in\b/i)
+      tokens.push [:IN, m]
+    when m = scanner.scan(/group\s+by\b/i)
+      tokens.push [:GROUP_BY, m]
+    when m = scanner.scan(/\bnull\b/i)
+      tokens.push [:NULL, m]
+    when m = scanner.scan(/current\s+user/i)
+      tokens.push [:CURRENT_USER, m]
+    when m = scanner.scan(/this\s+card/i)
+      tokens.push [:THIS_CARD, m]
+    when m = scanner.scan(/property\b/i)
+      tokens.push [:PROPERTY, m]
+    when m = scanner.scan(/(and|or)\b/i)
+      tokens.push [:BOOLEAN_OPERATION, m]
+    when m = scanner.scan(/(is\snot\s|not\s=)/i)
+      tokens.push [:COMPARISON, '!=']
+    when m = scanner.scan(/(is\s)/i)
+      tokens.push [:COMPARISON, '=']
+    when m = scanner.scan(/(>=|<=)/)
+      tokens.push [:COMPARISON, m]
+    when m = scanner.scan(/(=|!=|>|<)/)
+      tokens.push [:COMPARISON, m]
+    when m = scanner.scan(/not\b/i)
+      tokens.push [:NOT, m]
+    when m = scanner.scan(/(desc|asc)\b/i)
+      tokens.push [:ORDER, m]
+    when m = scanner.scan(/as\s+of\b/i)
+      tokens.push [:AS_OF, m]
+    when m = scanner.scan(/\(/)
+      tokens.push [:OPEN_BRACE, m]
+    when m = scanner.scan(/\)/)
+      tokens.push [:CLOSE_BRACE, m]
+    when m = scanner.scan(/,/)
+      tokens.push [:COMMA, m]
+    when m = scanner.scan(/\*/)
+      tokens.push [:STAR, m]
+    when m = scanner.scan(/numbers?\b/i)
+      tokens.push [:NUMBER, m]
+    when m = scanner.scan(/'(((\\')|[^'])*)'/) # single quoted literal
+      tokens.push [:LITERAL, unescape_quote(unquote(m))]
+    when m = scanner.scan(/"(((\\")|[^"])*)"/) # double quoted literal
+      tokens.push [:LITERAL, unescape_quote(unquote(m))]
+    when m = scanner.scan(/\d{4}-\d{1,2}-\d{1,2}\b/)  # date literal
+      tokens.push [:LITERAL, m]
+    when m = scanner.scan(/((\d+\.?\d*)|(\d*\.?\d+))\b/)  # numerical literal
+      tokens.push [:LITERAL, m]
+    when m = scanner.scan(/(\\"|\\'|[^\b\s\(\)\*\.,\=\!><\$\%\#])+/) #rest
+      tokens.push [:LITERAL, unescape_quote(m)]
+    else
+      raise "unexpected characters #{scanner.peek(5)}"
+    end
+  end
+  tokens.push [false, false]
+  yyparse(tokens, :each)
+end

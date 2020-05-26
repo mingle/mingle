@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<meta name="generator" content="HTML Tidy, see www.w3.org">
+<title>Sahi Tests</title>
+<script type="text/javascript">
+function clicked(){
+	document.f1.t2.value+="clicked\n";
+}
+function downed(){
+	document.f1.t2.value+="downed\n";
+}
+function upped(){
+	document.f1.t2.value+="upped\n";
+}
+function pressed(){
+	document.f1.t2.value+="pressed\n";
+}
+</script>
+</head>
+<body>
+<h2>Key event test</h2>
+<form name="f1">
+<input type="text" name="t1" onclick="clicked()" onkeydown="downed()" onkeyup="upped()" onkeypress="pressed()"><br/>
+<textarea name="t2" rows="30"></textarea>
+</form>
+<br>
+</body>
+</html>
+

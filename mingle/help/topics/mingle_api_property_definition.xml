@@ -1,0 +1,252 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Property Definition API">
+  	<section title="Property Definitions">
+    <p><cref topic="card_properties">Property definitions</cref> are the basis of the way you configure a project. Once a project is configured, the list of property definitions is a useful thing to have so that you can determine the card table structure for the project. One of the uses of this API is to get the column names of each property definition to be used when you update a card resource.</p>
+    <p>Before using this API, we recommend that familiarize yourself with <cref topic="card_properties">property definitions</cref>.</p>
+  </section>  
+
+  	<section title="Structure of a property definition resource">
+    <p>The attributes of a property definition resource are described below, along with their data type.  Also included with each attribute is whether you are allowed to update the value. System generated fields like <strong>id</strong> are provided only as information about the property definition and cannot be updated through the API.</p>
+
+	<note>Some attributes are only available to specific types of properties. For example, a formula attribute is only available for a formula property definition.</note>
+	
+    <api_attributes title="property definitions resource xml - attributes">
+    	<api_attribute name="id" type="Integer" readonly="true">system assigned unique identifier for a property definition.</api_attribute>
+    	<api_attribute name="name" type="String">this is the name of the property definition.</api_attribute>
+    	<api_attribute name="description" type="String" />
+    	<api_attribute name="data_type" type="String">this field determine what data type of the property definition. Below shows what each value means. You can use following values when creating a new card property.
+  			<p>
+    			<bullets>
+      			<item>string - text property</item>
+      			<item>numeric - numeric property</item>
+      			<item>date - date property</item>
+      			<item>user - user property</item>
+      			<item>formula - formula property</item>
+      			<item>card - card property</item>
+    			</bullets>
+  			</p>
+      </api_attribute>
+    	<api_attribute name="is_numeric" type="Boolean">determines if the property definition is a numeric property. Only Managed/Unmanaged numeric properties have this set to true.</api_attribute>
+    	<api_attribute name="hidden" type="Boolean">determines if team members can see the property in the card anywhere other than in MQL reports.</api_attribute>
+    	<api_attribute name="restricted" type="Boolean">determines if a managed property definition can have any more values added to it through card show/edit pages. This corresponds to 'locked' in the Mingle card properties page.</api_attribute>
+    	<api_attribute name="transition_only" type="Boolean">this determines if the property can be updated directly or only through a transition.</api_attribute>
+    	<api_attribute name="project" type="Resource"><strong>name</strong> and <strong>identifier</strong> of a project this property belongs to; both String, readonly.</api_attribute>
+    	<api_attribute name="column_name" type="String" readonly="true">this field is the name of the database column that the property definition creates in the cards table of the project. These column names determine the attributes in a card resource for this project.</api_attribute>
+    	<api_attribute name="position" type="Integer" readonly="true">indicates the level of this property in a tree. e.g. 1 indicates this property exist in a 1 level tree relationship property which connects the first and the second card type in tree.</api_attribute>
+    	<api_attribute name="property_values_description" type="Resource" readonly="true">indicates the property type such as 'Managed text list', 'Managed number list', 'Automatically generated from the team list', 'Formula' or 'Any card'.</api_attribute>
+    	<api_attribute name="card_types" type="Array">list all the card types this property is available to.</api_attribute>
+    	<api_attribute name="property_value_details" type="Array" readonly="true">list all the values for this card property. This attribute is only available for 'Managed text list' or 'Managed number list' type of card property. </api_attribute>
+    	<api_attribute name="is_managed" type="Boolean">this field determine whether this property is "Managed list" or "Any". This is a required attribute when creating a text or a numeric card property.</api_attribute>
+    	<api_attribute name="formula" type="String">the property formula. This attribute is only available and required when creating a formula type of card property.</api_attribute>
+      <api_attribute name="null_is_zero" type="Boolean">whether or not to <cref topic="formula_property_examples#replace_not_set">replace numeric (not set) values with zero</cref> when calculating the formula result. This attribute is only available when creating a formula type of card property.</api_attribute>
+    </api_attributes>
+    </section>  
+
+    <section title="Get all property definitions for a project" >
+		<api_reference>
+      <p><strong>Reference</strong></p>
+      <code>
+    Request Method: GET
+    URL: /api/v2/projects/<subst>project_identifier</subst>/property_definitions.xml
+    Parameters: NA
+      </code>
+
+      	<p><strong>Example</strong></p>
+      	<code>
+    GET
+
+    http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/property_definitions.xml
+		</code>
+
+      	<p><strong>Explanation</strong></p>
+      	<p>The above is an example of a GET request to a Mingle server running at your.mingle.server, port 8080. The request is made with the authorization credentials of yourname/password. The URL of /api/v2/projects/test_project/property_definitions.xml represents the listing of all property definition resources for the project with identifier test_project.</p>
+
+		<note>Along with regular property types, such as text, numeric, user, formula and card data type, aggregate and tree relationship properties will be also returned. Returned properties will be smart sorted by the property name. </note>
+		<hint>For managed text and managed numeric properties, all of its values are listed, e.g. for the managed text property, Status, its three available values New, Open and Closed will be returned.</hint> 
+		
+		<p><strong>Result</strong></p>
+	      <p>If you were authorized to perform the operation, and the resource was available, you should get an xml document that looks something like the following.</p>
+
+		<code>
+<![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<property_definitions type="array">
+	<property_definition>
+    <id type="integer">116</id>
+    <name>Owner</name>
+    <description>
+    </description>
+    <data_type>user</data_type>
+    <is_numeric type="boolean">false</is_numeric>
+    <hidden type="boolean">false</hidden>
+    <restricted type="boolean">false</restricted>
+    <transition_only type="boolean">false</transition_only>
+    <project url="http://localhost:8080/api/v2/projects/test_project.xml">
+      <name>test project</name>
+      <identifier>test_project</identifier>
+    </project>
+    <column_name>cp_owner_user_id</column_name>
+    <position nil="true"></position>
+    <property_values_description>Automatically generated from the team list</property_values_description>
+  </property_definition>
+	...
+  <property_definition>
+    <id type="integer">111</id>
+    <name>Release</name>
+    <description nil="true"></description>
+    <data_type>card</data_type>
+    <is_numeric type="boolean">false</is_numeric>
+    <hidden type="boolean">false</hidden>
+    <restricted type="boolean">false</restricted>
+    <transition_only type="boolean">false</transition_only>
+    <project url="http://localhost:8080/api/v2/projects/test_project.xml">
+      <name>test project</name>
+      <identifier>test_project</identifier>
+    </project>
+    <column_name>cp_release_card_id</column_name>
+    <position type="integer">1</position>
+    <property_values_description>Any card used in tree</property_values_description>
+  </property_definition>
+</property_definitions>
+        ]]>
+		</code>	
+			
+		</api_reference>
+    </section> 
+
+	<section title="Get a single property definition for a project">  
+
+		<api_reference>
+	      <p><strong>Reference</strong></p>
+	      <code>
+	        Request Method: GET
+	        URL: /api/v2/projects/<subst>project_identifier</subst>/property_definitions/property_id.xml
+	        Parameters: NA
+	      </code>
+
+	      <p><strong>Example</strong></p>
+	      <code>
+	        GET
+
+	        http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/property_definitions/114.xml
+	      </code>
+
+	      <p><strong>Explanation</strong></p>
+	      <p>The above is an example of a GET request to a Mingle server running at your.mingle.server, port 8080. The request is made with the authorization credentials of yourname/password. The URL of /api/v2/projects/test_project/property_definitions/114.xml represents the listing of a property definition resource for the project with identifier test_project.</p>
+
+	      <p><strong>Result</strong></p>
+	      <p>If you were authorized to perform the operation, and the resource was available, you should get an xml document that looks something like the following. </p>
+
+		<code>
+<![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<property_definition>
+  <id type="integer">114</id>
+  <name>Status</name>
+  <description>
+  </description>
+  <data_type>string</data_type>
+  <is_numeric type="boolean">false</is_numeric>
+  <hidden type="boolean">false</hidden>
+  <restricted type="boolean">false</restricted>
+  <transition_only type="boolean">false</transition_only>
+  <project url="http://localhost:8080/api/v2/projects/test_project.xml">
+    <name>test project</name>
+    <identifier>test_project</identifier>
+  </project>
+  <column_name>cp_status</column_name>
+  <position nil="true"></position>
+  <property_values_description>Managed text list</property_values_description>
+  <property_value_details type="array">
+    <property_value>
+      <id type="integer">117</id>
+      <value>New</value>
+      <color nil="true"></color>
+      <position type="integer">1</position>
+    </property_value>
+    <property_value>
+      <id type="integer">118</id>
+      <value>Open</value>
+      <color nil="true"></color>
+      <position type="integer">2</position>
+    </property_value>
+    <property_value>
+      <id type="integer">119</id>
+      <value>Closed</value>
+      <color nil="true"></color>
+      <position type="integer">3</position>
+    </property_value>
+  </property_value_details>
+</property_definition>
+        ]]>
+         </code>
+	    </api_reference>
+	</section>
+ 
+	<section title="Create a card property">
+		<p><strong>Reference</strong></p>
+	    <code>
+	Request Method: POST
+	
+	URL: /api/v2/projects/project_identifier/property_definitions.xml
+	
+	Parameters: 
+			property_definition[name]=String (required)
+			property_definition[data_type]=String (required)
+			property_definition[is_managed]=String (required only if creating a numeric or text type of card property)
+			property_definition[formula]=String (required only if creating a formula type of card property)
+			property_definition[null_is_zero]=Boolean (only available when creating a formula type of card property)
+			property_definition[description]=String
+			property_definition[card_types][][name]=String
+	    </code>
+
+	    <p><strong>Example</strong></p>
+	    <code>
+	POST
+
+	http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/property_definitions.xml
+	
+		property_definition[name]=Status
+		property_definition[data_type]=String
+		property_definition[is_managed]=true
+		property_definition[card_types][][name]=Story
+	    </code>
+
+	    <p><strong>Explanation</strong></p>
+	    <p> The above is an example of a POST request to a Mingle server running at your.mingle.server, port 8080. The request is made with the authorization credentials of yourname/password. Upon execution of this request, the post parameters will be used to create a card property on the project with identifier "test_project". This card property will be a managed text property which is called 'Status' and would be available for a card type 'Story'. </p>
+
+		<hint>You can assign multiple card types by providing multiple card type parameters when you create a new card property.</hint>
+		<hint>Please note that you can create a formula type of card property via API. 
+			<p><code>
+	Formula property 
+				
+		property_definition[data_type]=formula
+		property_definition[formula]=size * 1
+    property_definition[null_is_zero]=true
+			</code></p>
+		</hint>
+		
+		<p><strong>Result</strong></p>
+	    <p>If you were authorized to perform the operation, and the operation succeeded, you will be returned a location attribute in the http header of the response, which is a url from which you can get the card resource that was created.
+		</p>
+		
+	</section>
+	
+</topic>

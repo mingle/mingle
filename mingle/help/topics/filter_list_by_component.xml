@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Mingle card filters">
+  <p>Card filters are one of the most powerful ways to get to the cards you are looking for in Mingle. In addition to the <cref topic="filter_list_by_widget">regular card filter</cref> Mingle 2.1 saw the addition of <cref topic="filter_list_by_mql">MQL filtering</cref>.</p>
+  
+  <note>Cards that are in a tree have a special <cref topic="tree_filter">tree filter</cref>.</note> 
+  
+  <section title="Getting started">
+    <p>The Mingle card filter has a few moving parts which can be used in ways ranging from easy and simple to extremely powerful as your familiarity with Mingle grows.</p>
+    <p>The easiest way to filter cards is using the <cref topic="filter_list_by_widget">regular card filter</cref> which helps you build up your filters to refine the cards that you see. For those who are familiar with <cref topic="mql_reference">MQL</cref> or need more powerful searches, such as finding cards that are either of a particular card type OR a particular card property value, you can use the <cref topic="filter_list_by_mql">MQL filter</cref>.</p>
+  </section>
+  
+  <section title="Using the card filter and MQL filter together">
+    <p> Only one of the regular card filter and the MQL filter can be used on a card view at a time. The filter highlight will indicate which filter is active. </p>
+    <p><screenshot alttext="Active MQL filter" src="resources/images/active_mql_filter.png"/></p>
+    <p> If you would like to use the other filter then select the tab for that filter and use the 'Apply now' button to make that filter the active filter. This filter will be highlighted and the other filter will be inactive.</p>
+    <p> <screenshot alttext="Active MQL filter" src="resources/images/inactive_filter.png"/> </p>
+  </section>
+  
+  <section title="How to...">
+    <bullets>
+      <item><cref topic="filter_list_by_widget">Use the regular card filter</cref></item>
+      <item><cref topic="filter_list_by_mql">Use the MQL filter</cref></item>
+      <item><cref topic="tree_filter">Use the tree filter</cref></item>
+    </bullets>
+  </section>
+</topic>

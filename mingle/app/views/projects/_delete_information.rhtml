@@ -1,0 +1,36 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= render :partial => 'shared/irrecoverable_warning' %>
+
+<% info_box do %>
+  <p><b>We recommend that you create a <%= link_to_remote 'backup before you continue', {:url => {:controller => 'project_exports', :action => 'create'}} %>.</b></p>
+
+  <% if thing_to_delete.last_activity -%>
+    <p>Last activity on this project was <b><%= distance_of_time_in_words_to_now thing_to_delete.last_activity %></b> ago.</p>
+  <% else -%>
+    <p>No significant activity has occurred since this project was created <b><%= distance_of_time_in_words_to_now thing_to_delete.created_at %></b> ago.</p>
+  <% end -%>
+
+  <p>This project currently has <b><%= humanized_count(thing_to_delete, 'cards') rescue "no cards"; %></b> and <b><%= humanized_count(thing_to_delete, 'pages') rescue "no pages" %></b>.</p>
+  <p>It currently has <b><%= thing_to_delete.users.count rescue "no users" %></b> registered users:</p>
+
+  <ul>
+    <% for user in (thing_to_delete.users rescue []) -%>
+      <li><%= link_to h(user.name), :project_id => nil, :controller => 'users', :action => 'show', :id => user %></li>
+    <% end -%>
+  </ul>
+<% end %>

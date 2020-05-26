@@ -1,0 +1,41 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%- form_tag :action => 'assign_to_projects', :id => @user.id do -%>
+<%- lightbox = Lightbox.with_close_link_and_close_button(self, 'Cancel', '', :accessing => ':select_project_assignments', :class => 'remove-button popup-close')
+    lightbox.header "Add #{@user.name} to:"
+    lightbox.body do -%>
+    <table id="project_assignment_table" class="lightbox_table">
+      <thead>
+        <tr><th>Project</th><th>Permissions</th><th/></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <%= clear_float %>
+    <%= button_to_function "Add Another", nil, :id => "add_new_project_assignment", :class => 'add_link', :accessing => ':select_project_assignments' %>
+<%- end  
+    lightbox.complete_action do -%>
+      <%= link_to_function "Save", nil, :class => 'link_as_button primary disabled', :id => 'assign_projects_submit', :accessing => ':assign_to_projects' %>
+<%- end -%>
+<%- end -%>
+
+<%= javascript_with_rescue <<-JAVASCRIPT
+      ProjectAssignment.create('project_assignment_table', 'add_new_project_assignment', 'assign_projects_submit', #{js_options(
+          :projects => @user.unassigned_projects_administered_by(User.current).map { |project| [ project.name, project.identifier ] },
+          :permissions => @user.project_role_candidates.map(&:name_id_pair)
+        )});
+    JAVASCRIPT
+-%>

@@ -1,0 +1,33 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%- styled_box :class => 'under_the_hood_item', :style => 'position: relative;' do -%>
+
+  <h3><%= name.capitalize %> Log</h3>
+  <%= yield -%>
+
+  <% form_tag({:action => 'toggle_logging_level'}, :method => :put) do %>
+    <span class="checkbox">
+      <%= radio_button_tag 'logger', logger_param, debug_on, :id => "logger_#{logger_param}_enabled", :onclick => 'this.form.submit(); return false;' %>
+      <label for="<%= "logger_#{logger_param}_enabled" %>">Enabled</label>
+    </span>
+
+    <span class="checkbox">
+      <%= radio_button_tag 'logger', logger_param, !debug_on, :id => "logger_#{logger_param}_disabled", :onclick => 'this.form.submit(); return false;' %>
+      <label for="<%= "logger_#{logger_param}_disabled" %>">Disabled</label>
+    </span>
+  <%- end -%>
+<%- end -%>

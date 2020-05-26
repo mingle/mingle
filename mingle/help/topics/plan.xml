@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_help.dtd">
+<chapter title="Plan">
+	<section title="What are plans?" id="plan">
+		<p>A plan is part of a <cref topic="program">Mingle program</cref>. It provides collaboration and visibility across multiple, independent teams, helping them coordinate work and adapt plans as they progress. To develop the plan workspace, we followed four main principles:</p>
+		   <bullets>
+			   <bullets>
+			       <item><strong>Encourage transparency and collaboration</strong></item>
+			       <item><strong>Encourage focus on customer value</strong></item>
+			       <item><strong>Provide realistic information</strong></item>
+                   <item><strong>Support each team's unique and evolving process</strong></item>		
+		       </bullets>
+		   </bullets>	
+	</section>
+	<section title="What do plans support?">
+		<p>Plans help you coordinate collaboration across teams, communicate shared goals, and adapt your program as work progresses by allowing you to define your plan, check its status and progress, and identify whom to talk to as it changes. As you perform these actions, Mingle Plus provides realistic information to support visibility and collaboration, focus on delivering value, and your teams’ unique and evolving processes.</p>
+	</section>	
+	<section title="Define your plan" file="define_your_plan" collapsed="true" />
+	<section title="Check the status and progress of your plan" file="check_status_and_progress" collapsed="true" />
+	<section title="Identify whom to talk to as your plan changes" file="identify_whom_to_talk_to" collapsed="true" />
+</chapter>

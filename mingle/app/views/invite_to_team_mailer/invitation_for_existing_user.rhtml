@@ -1,0 +1,31 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% mingle_color = '#00a25b' %>
+<div style="width:100%; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; background-color:#f3f3f3; padding:20px 0">
+	<center>
+		<div style="background-color: white; width: 400px; padding: 20px; marging-top: 20px;">
+			<div style="margin-top:10px; font-size: x-large; font-weight: 900">Hi <%= @invitee.name %>,</div>
+			<p><%= @inviter.name %> has invited you to join the Mingle project:</p>
+                        <p style="font-size: medium; margin-bottom: 35px"><%= @project.name %></p>
+			<a href="<%= @invitation_link %>" style="font-size: large; margin-bottom: 20px;display: inline-block;border-radius: 5px; background-color:<%= mingle_color %>;color: white;padding: 15px 39px;text-decoration: none;">Accept Invitation</a>
+			<hr style="border-bottom: #ddd solid 1px; border-top: none" />
+			<p style="margin-top: 35px; width: 270px;">
+				<strong>What's Mingle?</strong><br /> It's the best agile tool for teams who refuse mediocrity. Be great. Work your way. Check out <a target="_blank" style="color:<%= mingle_color %>; text-decoration: none" href="http://www.thoughtworks.com/mingle">www.thoughtworks.com/mingle</a> or follow us on Twitter <a target="_blank" href="https://www.twitter.com/thatsmingle" style="color:<%= mingle_color %>; text-decoration: none">@thatsmingle</a>.
+			</p>
+	  </div>
+	</center>
+</div>

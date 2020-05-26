@@ -1,0 +1,14 @@
+_include("if_include.sah");
+_debug("-----------------------------------------");
+_click(_link("Link Test"));
+_click(_link("Back"));
+_click(_link("Form Test"));
+_assertNotNull(_textbox("t1"));
+
+insideIf();
+_click(_link("Form Test"));
+_setValue(_textbox("t1"), "not blank anymore");
+insideIf();
+_click(_link("Form Test"));
+_setValue(_textbox("t1"), "");
+insideIf();

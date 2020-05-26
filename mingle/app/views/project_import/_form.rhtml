@@ -1,0 +1,41 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% form_tag({:controller => 'project_import', :action => 'import'}, {:multipart => true, :id => 'import-form'}) do -%>
+<div class="form_item">
+  <label for="import">
+    Exported file<span class="required">*</span>:
+    <span class="notes">(this will have a '<%= import_file_extension %>' extension) Limited to a maximum of 2GB.
+ If you need to import a larger project, use the <a href="http://www.thoughtworks.com/mingle/docs/export_import_tool.html">bulk import tool</a>.
+</span>
+  </label>
+  <%= file_field_tag 'import' %>
+</div>
+
+<div class="form_item">
+  <label for="project_name">New <%= project_or_template %> name:</label>
+  <%= text_field('project', 'name', :class => 'large') %>
+</div>
+
+<div class="form_item">
+  <label for="project_identifier">New <%= project_or_template %> identifier:</label>
+  <%= text_field 'project', 'identifier', :maxlength => Identifiable::IDENTIFIER_MAX_LEN, :class => 'large' %>
+</div>
+
+<%= render :partial => 'form_action_bar', :locals => {:action => 'Import project'}%>
+<% end %>
+
+<%= synchronized_inputs "#project_name", "#project_identifier" %>

@@ -1,0 +1,4 @@
+-Dmingle.dataDir=${mingleDataDir}
+-Dmingle.configDir=${mingleConfigDir}
+-Djruby.compile.invokedynamic=false
+-include-options ${mingleConfigDir}/mingle.properties

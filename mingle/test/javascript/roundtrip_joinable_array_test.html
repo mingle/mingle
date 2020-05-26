@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>JavaScript unit test file</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+
+  <script src="test_assets/unittest.js" type="text/javascript"></script>
+  <script src="test_assets/unittest_ext.js" type="text/javascript"></script>
+
+  <script src="../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/controls.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/builder.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+
+  <script src="../../public/javascripts/application.js" type="text/javascript"></script>
+
+  <link rel="stylesheet" href="assets/unittest.css" type="text/css" />
+  <link rel="stylesheet" href="test_assets/unittest.css" type="text/css" />
+</head>
+<body>
+
+<div id="content">
+
+  <div id="header">
+    <h1>JavaScript unit test file</h1>
+    <p>
+      This file tests RoundtripJoinableArray class  in <strong>application.js</strong>.
+    </p>
+  </div>
+
+  <!-- Log output -->
+  <div id="testlog"> </div>
+
+</div>
+
+<script type="text/javascript">
+// <![CDATA[
+  new Test.Unit.Runner({
+
+    testParseStrSplitByCommaToArray: function() { with(this) {
+      assertArrayEqual(['1', '2'], RoundtripJoinableArray.fromStr('1,2'));
+      assertArrayEqual(['1,2', '3'], RoundtripJoinableArray.fromStr('1\\,2,3'));
+      assertArrayEqual(['1,2\\', '3'], RoundtripJoinableArray.fromStr('1\\,2\\\\,3'));
+      assertArrayEqual(['1\\,2\\', '\\\\3'], RoundtripJoinableArray.fromStr('1\\\\\\,2\\\\,\\\\\\\\3'))
+    }},
+
+    testArrayToSSplitedByComma: function() { with(this) {
+      assertEqual('', RoundtripJoinableArray.joinFromArray([null]))
+      assertEqual('1,2', RoundtripJoinableArray.joinFromArray(['1', '2']))
+      assertEqual('1\\,2,3', RoundtripJoinableArray.joinFromArray(['1,2', '3']))
+      assertEqual('1\\,2\\\\,3', RoundtripJoinableArray.joinFromArray(['1,2\\', '3']))
+      assertEqual('1\\\\\\,2\\\\,\\\\\\\\3', RoundtripJoinableArray.joinFromArray(['1\\,2\\', '\\\\3']))
+    }},
+
+    testToSShouldBeUniqAndCompact: function() { with(this) {
+      assertEqual('1', RoundtripJoinableArray.joinFromArray([null, '1', '1']));
+    }},
+
+    testRoundtrip: function() { with(this) {
+      assertEqual('1\\,2\\\\,3', RoundtripJoinableArray.joinFromArray(RoundtripJoinableArray.fromStr('1\\,2\\\\,3')));
+      assertArrayEqual(['1\\,2\\', '\\\\3'],
+        RoundtripJoinableArray.fromStr(RoundtripJoinableArray.joinFromArray(['1\\,2\\', '\\\\3'])))
+
+      assertArrayEqual([], RoundtripJoinableArray.fromStr(RoundtripJoinableArray.joinFromArray([])))
+      assertEqual("", RoundtripJoinableArray.joinFromArray(RoundtripJoinableArray.fromStr("")))
+    }}
+
+  }, "testlog");
+// ]]>
+</script>
+</body>
+</html>

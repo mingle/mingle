@@ -1,0 +1,44 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div class='color-panel' id ='color_panel_<%= color_provider.id %>'>
+  <% url_options = form_options[:url] %>
+  <% form_html_id = "color_legend_form_#{color_provider.id}"%>
+  <% if authorized?({:controller => controller_name}.merge(url_options)) %>
+  <% html_options = (form_options[:html] || {}).merge({'data-remote' => true, 'data-type' => 'script', :id => form_html_id}) %>
+  <% hidden_color_field_id = "color_provider_color_#{color_provider.id}" %>
+    <% form_tag(url_options, html_options) do -%>
+      <%= hidden_field_tag "color_provider_color", color_provider.color, :id => hidden_color_field_id, :onchange => "$j(this.form).trigger('submit.rails');" %>
+      <%= color_block color_provider.color %>
+    <% end %>
+    <%= register_xhr_refreshable_card_list_view_form(form_html_id) %>
+
+  <% else %>
+    <%= color_block color_provider.color %>
+  <% end %>
+</div>
+
+<% if authorized?(controller: form_options[:url][:controller], action: form_options[:url][:action]) %>
+  <%= javascript_with_rescue <<-JAVASCRIPT
+  $j("#color_panel_#{color_provider.id}").colorSelector({
+    onColorSelect: function(color) {
+      $j("##{hidden_color_field_id}").val(color);
+      $j("##{hidden_color_field_id}").trigger('change');
+    }
+  });
+  JAVASCRIPT
+  -%>
+<% end %>

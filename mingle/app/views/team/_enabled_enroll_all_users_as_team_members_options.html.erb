@@ -1,0 +1,54 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%
+  all_users_are_full_members = @project.all_users_are_full_members? || true
+  all_users_are_read_only_members = @project.all_users_are_read_only_members? || false
+
+  hide_option, show_option = cookies['enroll_all_users_as_team_members_options'] == 'hide' ? ['display: none', nil] : [nil, 'display: none']
+-%>
+<% info_box(:style => "", :id => "enroll_notice", :class => "team-confirm-box") do -%>
+<div>
+  <div>
+    <b>Enroll all users as team members currently is enabled</b>
+    <%= link_to_function "(hide options)", :id => 'hide_enroll_all_users_as_team_members_options', :style => hide_option do |page|
+      page["enroll_all_users_as_team_members_options"].hide
+      page["hide_enroll_all_users_as_team_members_options"].hide
+      page["show_enroll_all_users_as_team_members_options"].show
+      page << "new Cookie('enroll_all_users_as_team_members_options', 'hide', 30)"
+    end -%>
+    <%= link_to_function "(show options)", :id => 'show_enroll_all_users_as_team_members_options', :style => show_option do |page|
+      page["enroll_all_users_as_team_members_options"].show
+      page["hide_enroll_all_users_as_team_members_options"].show
+      page["show_enroll_all_users_as_team_members_options"].hide
+      page << "new Cookie('enroll_all_users_as_team_members_options', '', -1)"
+    end -%>
+    <%= spinner %>
+  </div>
+  <div id="enroll_all_users_as_team_members_options" style="<%= hide_option %>">
+    This means any users added to this instance of Mingle will also be added to this project.
+    You can select below whether new team members are added as 'full' or 'read only' by default.
+    <% form_remote_tag(
+          :before => '$("spinner").show()',
+          :complete => '$("spinner").hide()',
+          :url => {:action => :enable_auto_enroll}, 
+          :html => {:id => 'enable_auto_enroll_form', :style => 'margin-top: 1em'}) do -%>
+      <span><%= radio_button_tag('auto_enroll_user_type', AutoEnrollUserType::ALL_USERS_ARE_FULL_MEMBERS, all_users_are_full_members, :onclick => '$("enable_auto_enroll_form").onsubmit()') %> Enroll all users as <b>full</b> team members</span>
+      <span><%= radio_button_tag('auto_enroll_user_type', AutoEnrollUserType::ALL_USERS_ARE_READ_ONLY_MEMBERS, all_users_are_read_only_members, :onclick => '$("enable_auto_enroll_form").onsubmit()') %> Enroll all users as <b>read only</b> team members</span>
+    <% end -%>
+  </div>
+</div>
+<% end -%>

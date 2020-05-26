@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Updating a favorite and a tab">
+	
+	<hint>If you want to edit a <cref topic="managing_my_favorites">My favorite</cref> you can follow the same steps below. </hint>
+
+	<section title="How to rename favorites" collapsed="true">
+		<p>Hover over a favorite and click on the pencil icon. Enter the new name and hit Save.</p>
+		<screenshot alttext="Renaming favorites gif" src="resources/images/rename_favorites.gif" />
+	</section>
+	
+    <section title="How to update a team favorite card view" collapsed="true">
+        <steps>
+        	<item><p><cref topic="signing_in_and_out_of_mingle">Sign in</cref> to Mingle and open the project (if you're not currently working in the project).</p></item>
+        	<item><p>Open the <sidebar-button>Favorites</sidebar-button> sidebar control.</p></item>
+        	<item><p>Open the favorite that you want to update, by clicking on the named link in the list.</p></item>
+	<screenshot alttext="Favorites sidebar control - select favorite link" src="resources/images/select_favorites_link.png" />
+			
+        	<item>
+        		<bullets title="Update the view">
+        			<item>Change the view style, e.g. from list to grid.</item>
+        			<item>Change the filter conditions.</item>
+        			<item>Add or remove columns.</item>
+        			<item>Change the sort order, coloration, or aggregation if you're using a grid view.</item>
+        		</bullets>
+        	</item>
+        	<item><p>Once you're happy with the updated view, open the <sidebar-button>Favorites</sidebar-button> sidebar control.</p>
+        	</item>
+        	<item><p>Click the 'update' icon which is provided next to the favorite name. This will override the previous definition of the favorite with the new one. </p>
+        		<screenshot alttext="Update a favorite" src="resources/images/updating_a_favorite.png" />
+			<p>You can manage this tab via <tab>Project admin</tab> tab <link>Favorites &amp; tabs</link> link.</p>
+			</item>
+        </steps>
+    </section>
+	<section title="How to update a team favorite wiki page" collapsed="true">
+		<p>To update a team favorite wiki page, you can just open the page in <cref topic="editing_and_deleting_wiki_pages">edit mode</cref>, make your changes and save them. The wiki page will be updated and the favorite will display the new page contents.</p>
+	</section>
+	<section title="How to update a tab" collapsed="true">
+		<steps>
+			<item><p>Change the view, e.g. view style, filter conditions, add/remove columns, grid view settings</p></item>
+			<item><p>Once you're happy with the changes you made, click the <button>Save</button> button. </p>
+        		<screenshot alttext="Update a tab" src="resources/images/update_tab_new.png" />
+      </item>
+		</steps>
+	</section>
+	
+	<section title="How to rename and reorder tabs" collapsed="true" id="reorder_tabs">
+		<steps>
+			<item><p>To rename your tab, just hover over the tab you want to rename and and click the pencil icon:</p></item>
+			
+			        <screenshot alttext="Update a tab" src="resources/images/rename_tab.png" />
+			
+			<item>
+			      <p>To reorder your tabs, just drag and drop as you see fit:</p>
+  	        <p><screenshot alttext="Murmurs in use" src="resources/images/tactile_tabs.gif"/></p>
+      </item>
+		</steps>
+	</section>
+	
+</topic>
+
+

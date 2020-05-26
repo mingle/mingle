@@ -1,0 +1,58 @@
+#  Copyright 2020 ThoughtWorks, Inc.
+#  
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Affero General Public License as
+#  published by the Free Software Foundation, either version 3 of the
+#  License, or (at your option) any later version.
+#  
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Affero General Public License for more details.
+#  
+#  You should have received a copy of the GNU Affero General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+---
+cards_reindexing_processors:
+  command: ReIndexingCardsProcessor.run_once(:batch_size => 100)
+  interval: 5
+  minIdle: 2
+  worker_count: 6
+  parallelizable: true
+murmurs_reindexing_processors:
+  command: ReIndexingMurmursProcessor.run_once(:batch_size => 100)
+  interval: 5
+  minIdle: 2
+  worker_count: 4
+  parallelizable: true
+pages_reindexing_processors:
+  command: ReIndexingPagesProcessor.run_once(:batch_size => 50)
+  interval: 5
+  minIdle: 2
+  worker_count: 2
+  parallelizable: true
+projects_reindexing_processors:
+  command: ReIndexingProjectsProcessor.run_once(:batch_size => 40)
+  interval: 60
+  minIdle: 2
+  worker_count: 2
+  parallelizable: true
+dependencies_reindexing_processors:
+  command: ReIndexingDependenciesProcessor.run_once(:batch_size => 50)
+  interval: 10
+  minIdle: 2
+  worker_count: 2
+  parallelizable: true
+reindex_all_sites:
+  command: ReindexAllTenantsProcessor.reindex_all_tenants
+  interval: 30
+  minIdle: 1
+  runOnce: true
+  worker_count: 1
+  parallelizable: false
+reindex_site:
+  command: ReindexingSiteProcessor.run_once(:batch_size => 5)
+  interval: 5
+  minIdle: 1
+  worker_count: 2
+  parallelizable: false

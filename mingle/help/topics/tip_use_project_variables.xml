@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE section SYSTEM "mingle_help.dtd">
+<chapter title="Using project variables">
+  <p>You can use project variables to update tables, charts and favorites in a single step.</p>
+  <p>As an example, you could create a project variable called, 'Current Iteration' and assign it a value.</p>
+  <screenshot alttext="Create plv" src="resources/images/plv_list_current_iteration.png"/>
+  <p>When you start a new iteration, you can update the 'Current Iteration' project variable and Mingle will refer to the new iteration wherever the project variable is used. Areas where you can use project variables include:</p>
+  <bullets>
+    <item>
+      <p>MQL conditions in charts and tables.</p>
+      <markup>
+    pie-chart
+      data: SELECT Feature, COUNT(*) WHERE TYPE = Story AND Iteration = (Current Iteration)
+      </markup>
+      <screenshot alttext="project variable in use in chart" src="resources/images/plv_used_in_chart_mql.png"/>
+    </item>
+    <item>
+      <p>Chart and table parameters. In this example, the daily history chart uses the 'Iteration start date' and 'Iteration end date' project variables to set values for the start-date and end-date parameters, respectively.</p>
+      <markup>
+  daily-history-chart
+    aggregate: SUM('Estimate')
+    start-date: (Iteration start date)
+    end-date: (Iteration end date)
+    [chart definition continues...]
+      </markup>
+    </item>
+    <item>
+      <p>Filters on card views.</p>
+      <screenshot alttext="project variables in filters" src="resources/images/plv_filter.png"/>
+    </item>
+    <item>
+      <p>Transitions.</p>
+      <screenshot alttext="project variable in use in transition" src="resources/images/plv_transition.png"/>
+    </item>
+    <item>
+      <p>Setting card property values.</p>
+      <screenshot alttext="setting a card value to a project variable" src="resources/images/plv_card_value.png"/>
+    </item>
+  </bullets>
+</chapter>

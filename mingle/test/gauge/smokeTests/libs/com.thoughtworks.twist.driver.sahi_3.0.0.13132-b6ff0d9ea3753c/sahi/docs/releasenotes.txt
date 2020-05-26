@@ -1,0 +1,20 @@
+Sahi V3 Release 2013-04-25
+
+Requirements
+------------
+
+* JRE 1.5 or above
+* ant, log4j.jar and junit.jar if the module is to be rebuilt.
+
+License
+-------
+Apache 2 License
+
+Changes
+--------------------
+See changelog.txt
+
+Installation guide
+------------------
+Please refer to docs directory in release.
+

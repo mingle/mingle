@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE index SYSTEM "topics\mingle_help.dtd">
+
+<section title="Need more help?">
+<p>There are a variety of different ways to get help and information about administering and using Mingle:</p>
+	<bullets>
+	<item><cref topic="explore_mingle_page">Explore Mingle</cref> - use Mingle's "Explore Mingle" pages to guide you to help about Mingle's capabilities and features</item>
+	<item><exref url="@tw_mingle_help_base_url@">Search Mingle help</exref> - use Mingle's online help search to find the specific help pages you need</item>
+	<item><cref topic="mingle_contextual_help">Contextual help</cref> - use Mingle's inline contextual help to learn more about the view or admin page you're using</item>
+	<item><exref url="@tw_studios_mingle_support_url@">Contact Support</exref> - contact the ThoughtWorks Studios Support team for expert product advice and support</item>
+	<item>
+	<exref url="http://support.thoughtworks.com/categories/7607-Mingle-Community-Support">Mingle Community</exref> - get access to the knowledge and help of the larger Mingle community at the ThoughtWorks Studios Community</item>
+	<item>
+	  <video url="http://www.thoughtworks.com/products/mingle-agile-project-management/resources#Videos">How-to videos</video> - watch step-by-step how-to videos of Mingle's various capabilities on the ThoughtWorks Studios website
+	</item>
+			</bullets>
+</section>

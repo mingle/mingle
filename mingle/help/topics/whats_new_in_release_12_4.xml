@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="What's new in Release 12.4">
+	<p>Please review the <cref topic="upgrading_from_previous_versions">upgrade instructions</cref> before moving to Mingle 12.4.</p>
+	<section title="Mingle Plus Enhancements">
+		<p>In <cref topic="whats_new_in_release_12_2">Mingle 12.2</cref>, we introduced Mingle Plus and our new Planner feature. With Mingle 12.4, we have extended the Program Management capabilities of Mingle Plus to include Programs, Program Backlogs and Plans as part of a complete Agile Program Management solution.</p> 
+		<section title="Mingle Programs">
+		    <p>Mingle programs allow you to organize Mingle projects into higher level groups with a program <cref topic="backlog">backlog</cref> and a program <cref topic="plan">plan</cref>. Programs encourage collaboration and transparency across multiple projects and can help you overcome the problems that often hinder successful cross-team coordination and collaboration. They support the capture, prioritization, planning and tracking of objectives across projects at the program level.</p> 
+		   <screenshot src="resources/images/projects_program.png"/> 
+			<p>Learn more about <cref topic="program">Mingle programs</cref>.</p>
+		</section>
+		<section title="Program Backlog">
+		    <p>As part of its Program Management Solution, Mingle 12.4 now includes program backlogs.</p>
+		    <screenshot src="resources/images/prioritize.png"/> 
+		    <p>Program backlogs allow you to manage all the potential and upcoming work in your program. By using the program backlog you can capture high-level objectives that represent value and will be delivered as part of the program. The backlog supports prioritization and ranking objectives based relative value and size. Using the backlog in combination with <cref topic="plan">plans</cref> (introduced in <cref topic="whats_new_in_release_12_2">release 12.2</cref>), you can quickly move from prioritizing objectives to planning them across projects.</p> 
+			<p>Learn more about <cref topic="backlog">program backlogs</cref>.</p>
+		</section>
+		<section title="Other Enhancements">
+			<p>You can now <cref topic="define_your_plan#done_definition">define “done”</cref> for a project in your program to more than one value. For example, you can now set "done" to be all values greater than one specified value in your workflow. This allows you to get a more accurate view of work complete in a project at the program level.</p>
+		</section>	
+	</section>
+	<section title="Mingle Enhancements">
+		<section title="Increased security for attachments">
+			<p>We have increased the security of Mingle’s card and wiki page attachments by ensuring that a user has the correct project permissions before accessing a Mingle attachment. This will ensure that no one can access attachments if they are not a member of the project that the attachment belongs to.</p>
+		</section>
+		<section title="End of Life of the Mingle-Jira connector">
+			<p>With the 12.4 release of Mingle, we will no longer provide support for the <exref url="http://support.thoughtworks.com/entries/21583268-mingle-jira-connector-v2-release">Mingle-Jira connector</exref> built by ThoughtWorks Studios. For more information about this change, please see our <exref url="http://support.thoughtworks.com/entries/22553082-end-of-life-for-the-mingle-jira-connector">community post</exref>.</p>
+		</section>		
+	</section>		
+	<section title="Bug Fixes">
+	    <p>The following bugs have been fixed with 12.4:</p>
+		     <bullets>
+		       <item>Load error when testing SMTP settings</item>
+	           <item>Project member cannot retrieve project.xml</item>
+	           <item>Italicized words are not searchable</item>
+	           <item>Moving objective on plan timeline view opens pop-over with stale information</item>
+	           <item>Action button on light-box is overlapped by the bottom tray</item>
+	           <item>Fail to import the project that contains a user with a different login, but identical email to an existing user</item>
+	           <item>Fail to export projects with project import/export tool</item>
+			   <item>Reset password url expires when password does not match for the first time</item>	
+		     </bullets>   
+	</section>
+</topic>

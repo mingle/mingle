@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>JavaScript unit test file</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+  <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/module.js" type="text/javascript"></script>
+  <script src="test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+
+  <script src="test_assets/unittest.js" type="text/javascript"></script>
+  <script src="test_assets/unittest_ext.js" type="text/javascript"></script>
+
+  <script src="../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/controls.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/builder.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+
+  <script src="../../public/javascripts/application.js" type="text/javascript"></script>
+
+  <script src="../../public/javascripts/drop_list/base.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/view/base.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/view/drop_down.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/view/drop_link.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/view/field.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/view/filter.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/view/inline_editor.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/view/layout.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/callback_action.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/basic_controller.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/filter_action.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/inline_edit_action.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/model.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/option.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list.js" type="text/javascript"></script>
+
+  <link rel="stylesheet" href="test_assets/unittest.css" type="text/css" />
+
+</head>
+<body>
+
+<div id="content" >
+  <div id="header">
+    <h1>JavaScript unit test file</h1>
+    <p>
+      This file tests <strong>DropList.Model</strong> class in <strong>drop_list/model.js</strong>.
+    </p>
+  </div>
+  <!-- Log output -->
+  <div id="testlog"> </div>
+
+  </div>
+
+</div>
+
+<script type="text/javascript">
+// <![CDATA[
+
+  new Test.Unit.Runner({
+    testFilterShouldFireEventWithCorrectlyMarkedOptions: function() { with(this) {
+      var model = new DropList.Model([ ['thought', '1'], ['thoughtworks', '2'], ['consultant', '3'] ], false);
+      var eventFired = false;
+      model.observe('filterValueChanged', function(options) {
+        eventFired = true;
+        assertEqual(3, options.size());
+        assertArrayEqual([ 'thought', false ],      [ options[0].name, options[0].hidden ]);
+        assertArrayEqual([ 'thoughtworks', false ], [ options[1].name, options[1].hidden ]);
+        assertArrayEqual([ 'consultant', true ],    [ options[2].name, options[2].hidden ]);
+      });
+      model.filter('thought');
+      assert(eventFired, 'Event was never fired.');
+    }},
+
+    testFilterShouldPerformCaseInsensitivePatternMatch: function() { with(this) {
+      var model = new DropList.Model([ ['thought', '1'], ['thoughtworks', '2'], ['consultant', '3'] ], false);
+      var eventFired = false;
+      model.observe('filterValueChanged', function(options) {
+        eventFired = true;
+        assertEqual(3, options.size());
+        assertArrayEqual([ 'thought', false ],      [ options[0].name, options[0].hidden ]);
+        assertArrayEqual([ 'thoughtworks', false ], [ options[1].name, options[1].hidden ]);
+        assertArrayEqual([ 'consultant', true ],    [ options[2].name, options[2].hidden ]);
+      });
+      model.filter('tHouGHt');
+      assert(eventFired, 'Event was never fired.');
+    }},
+
+    testIsSelectedShouldReturnCurrentSelection: function() { with(this) {
+      var model = new DropList.Model();
+
+      model.replaceOptions([['open', '1'], ['closed', '2']]);
+      model.initSelection(['closed', '2']);
+      assert(model.isSelected(model.getOptionByValue('2')));
+
+      model.changeSelection(model.getOptionByValue('1'))
+      assert(model.isSelected(model.getOptionByValue('1')));
+      assert(!model.isSelected(model.getOptionByValue('2')));
+    }},
+
+    testValueShouldBeReplacedWithEmptyStringWhenNull: function() { with(this) {
+      assertEqual('', new DropList.Option('name', null).value);
+    }},
+
+    testShouldNotTriggerDupliatedFilterEventWhenValueIsSame: function() { with(this) {
+      var model = new DropList.Model([ ['thought', '1'], ['thoughtworks', '2'], ['consultant', '3'] ], false);
+      var eventFiredNum = 0;
+      model.observe('filterValueChanged', function(options) {
+        eventFiredNum++;
+      });
+      model.filter('thought');
+      model.filter('thought');
+      assertEqual(eventFiredNum, 1);
+    }},
+
+    testShouldNotTriggerFilterEventWhenFilterWithNothingRightAfterInitialized: function() { with(this) {
+      var model = new DropList.Model([ ['thought', '1'], ['thoughtworks', '2'], ['consultant', '3'] ], false);
+      var eventFiredNum = 0;
+      model.observe('filterValueChanged', function(options) {
+        eventFiredNum++;
+      });
+      model.filter("");
+      model.filter("");
+      assertEqual(eventFiredNum, 0);
+    }},
+
+    testShouldStripFilterInputValue: function() { with(this) {
+      var model = new DropList.Model([ ['thought', '1'], ['thoughtworks', '2'], ['consultant', '3'] ], false);
+      model.filter(' thought');
+      assertEqual(2, model.getVisibleOptions().size());
+    }},
+
+    testShouldHandleTheThirdValueAsTooltipOfTheOption: function() { with(this) {
+      var model = new DropList.Model([ ['thought', '1', 'tooltip']], false);
+      assertEqual('tooltip', model.getOptionByValue('1').tooltip);
+    }},
+
+    testShouldSetTooltipWithNameIfNoTooltipSpecified: function() { with(this) {
+      var model = new DropList.Model([ ['thought', '1']], false);
+      assertEqual('thought', model.getOptionByValue('1').tooltip);
+
+      model.initSelection(["(select...)", "somevalue"]);
+      assertEqual('(select...)', model.selection.tooltip);
+    }}
+
+  }, { testLog: "testlog", test : '' }).run;
+// ]]>
+</script>
+</body>
+</html>

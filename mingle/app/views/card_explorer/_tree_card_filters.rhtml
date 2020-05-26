@@ -1,0 +1,40 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% collapsible "Filter by...", true do -%>
+  <% form_tag({:action => 'filter_tree_cards', :controller => 'card_explorer', :tree => @tree.id}, 
+        { :id => 'tree_card_filter',  :onsubmit => "return new FiltersForm(this, #{spinner_id.to_json}).submit()"}) do -%>
+    <div class="align-center" id="filter-widget" ></div>
+
+    <%= clear_float %>
+
+    <div id='add_new_filter_link'class="align-center">
+      <%= link_to_function('Add a filter', 'window.mingle_filters.addNewFilter()', :id => 'add_a_new_filter_for_explorer') %>
+    </div>
+    
+     <%= hidden_view_tags view, :except => [:filters, :tagged_with, :all_cards_selected] %>
+  <% end -%>
+<% end -%>
+
+<%= javascript_with_rescue <<-FILTERS
+      cardTypes = [];
+      #{@tree.all_card_types.collect {|card_type| 'cardTypes.push(' + to_js_card_type(card_type) + ");"}.join}
+      cardTypeDefinition = new CardTypeDefinition('Type', [['is', 'is'], ['is not', 'is not']], cardTypes);
+      window.mingle_filters = new Filters(cardTypeDefinition, 'tree_card_filter', 'filter-widget', "#{image_path('shared/icons/icon_close_14.png')}", "#{image_path('icon-calendar.png')}");
+      window.mingle_filters.addFilters(#{to_js_filters((defined?(view) && view) ? view.filters : [])});       
+      $('tree_card_filter').onsubmit();
+FILTERS
+%>

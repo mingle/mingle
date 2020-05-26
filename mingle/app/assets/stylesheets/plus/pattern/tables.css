@@ -1,0 +1,134 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+/**
+ * pattern_tables.css
+ *
+ * Reusable style such as Select All actions
+ */
+
+ /**
+ * TABLE OF CONTENTS
+ * 
+ * =TABLES
+ * =LIST_TABLE
+ * =SELECTABLE_TABLE
+ * =HIGHLIGHTABLE_TABLE
+ * =TABLE ACTIONS
+ */
+
+/**
+ * =TABLES
+ */
+table {
+  width:100%;
+}
+
+
+/**
+ * =LIST_TABLE
+ */
+.list_table th, 
+.list_table td {
+  border-collapse:collapse;
+  border:1px solid #CCC;
+  color:#333333;
+  padding:8px 10px;
+}
+.list_table th {
+  background:url("../../../images/shared/backgrounds/bg_gradient_50.png") repeat scroll left top #EEEEEE;
+  background-color:#EEEEEE;
+  font-weight:bold;
+  text-align: left;
+}
+.list_table .disabled td {
+  background-color: #DDD;
+}
+.list_table th.number {
+  width: 1%;
+}
+.list_table .actionable {
+  color: #0076BA;
+}
+
+.list_table .checkbox {
+  width: 1%;
+  text-align: center;
+}
+
+/**
+ * =SELECTABLE_TABLE
+ */
+
+
+/**
+ * = HIGHLIGHTABLE_TABLE
+ */
+
+.highlightable_table {
+  border: 1px solid #DDD;
+  border-collapse: collapse;
+  margin: 0;
+  width: 100%;
+}
+
+.highlightable_table th {
+  background: #EEE url(../../../images/shared/backgrounds/bg_gradient_50.png) left top;
+}
+
+.highlightable_table tbody tr:hover
+{
+   background-color: #E3F0F3; 
+}
+
+
+/**
+* =TABLE ACTIONS
+*/
+.table_actions {
+  background-color: #EEEEEE;
+  border: 1px solid #CCC;
+  border-bottom: 0;
+  margin-top: 10px;
+  overflow: hidden;
+  padding: 10px;  
+}
+.table_action_group {
+  float: left;
+  margin-right: 10px;
+}
+.selection_actions {
+  padding: 8px 5px 5px 0;
+}
+.selection_actions a {
+  border-left: 1px solid #CCCCCC;
+  margin-left: 10px;
+  padding-left: 10px;
+}
+.selection_actions a.disabled {
+  color: #AAA;
+}
+.selection_actions a.disabled:hover {
+  cursor: default;
+}
+.selection_actions a:first-child {
+  border: 0;
+  margin: 0 0 0 7px;
+  padding: 0;
+}
+.list_table td.results_notice {
+  font-style: italic;
+}

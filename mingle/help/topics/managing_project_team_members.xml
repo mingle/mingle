@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Managing project team members">
+	<section title="Introduction">
+		<p>Before you can start assigning cards to people in Mingle you must add them to your project as project team members or project administrators. Until users are granted team member status for your project they will be unable to see your project on the <cref topic="all_projects_page">Projects page</cref> after signing into Mingle.</p>
+		<note>Before you can add project team members/administrators, you must set them up as users in Mingle. You must be a Mingle administrator to add users. Mingle administrators and project administrators can grant team member or project administrator status for projects. See <cref topic="user_roles">user roles</cref> for more details about access privileges in Mingle.</note>
+		<subsection title="Team members">
+			<p>Before users can work in a project you must grant them a team member role (Full, read only or project admin).</p>
+		</subsection>
+		<subsection title="Project administrators">
+			<p>You can choose to make a team member a project administrator. Project administrators have full control over the projects to which they are assigned. Project admins cannot manage Mingle at a global level e.g. they ca not create new projects or users as only those with Mingle administrator role can do this.</p>
+		</subsection>
+	</section>
+	<section title="View existing project team members" collapsed = 'true'>
+		<steps>
+			<item><cref topic="signing_in_and_out_of_mingle">Sign in</cref> to Mingle as a project administrator and open the project with the team members you want to add or change (if you're not already working in the project).</item>
+			<item>
+				<p>Click the Project admin tab on the right. Mingle displays the Project settings page.</p>
+				<screenshot alttext="Project admin tab" src="resources/images/project_admin_tab_team_page_link.png"/>
+				<note>If you are logged in as a project team member Mingle displays the Team page.</note>
+			</item>
+			<item>
+				<p>Click the Team member link. Mingle displays the Team page with the information of all existing team members.</p>
+				<screenshot alttext="Project team page" src="resources/images/project_team_page.png"/>
+				<note>In the example above Dan Smith is grayed out because he has been <cref topic="manage_users_page#deactivate_a_user">deactivated</cref> at the Mingle instance level.</note>
+			</item>
+		</steps>
+	</section>
+	<section title="Search for a team member" collapsed = 'true' file="search_for_a_program_team_member" />
+	<section title="Manage existing project team members" collapsed = 'true' id="manage_existing_team_members" file="manage_existing_project_team_members" />
+	<section title="Manage user group membership" id="manage_user_groups" collapsed = 'true' file="manage_user_group_membership"/>		
+	<section title="Add new team member" collapsed = 'true' file="add_new_project_team_member"/>
+	<section title="Add all users as team members" collapsed = 'true'>
+		<p>If you want all users added to the Mingle instance to be members of a project you can enable this option via the team members page.</p>
+		<p>See <cref topic="add_all_users_as_team_members">add all users as team members</cref> for more details about adding all users as team members.</p>
+	</section>
+	<section title="Add user to multiple projects" collapsed = 'true'>
+		<p>If you are managing more than one project, you can <cref topic="add_user_to_multiple_projects"> add user to multiple projects</cref> at once.</p>
+	</section>
+	<section title="View all project administrators on the Projects page" collapsed = 'true'>
+		<p>Users can find out who the project administrators are for projects they might not be part of.</p>
+		<screenshot alttext="Project administrators list" src="resources/images/show_project_admins_list.png"/>
+		<p>To enable this feature:</p>
+		<bullets>
+			<item>The Mingle administrator will have to turn this on for a Mingle instance.</item>
+			<screenshot alttext="Turn on show project admins list" src="resources/images/turn_on_project_admins_list.gif"/>
+		<item> <cref topic="project_settings_page#request_membership"> Request membership</cref> will have to be enabled on the projects that choose to make the admins list visible. </item>
+		</bullets>
+	</section>
+	<section title="Also see...">
+		<bullets>
+			<item>
+				<cref topic="creating_user_profiles">Creating user profiles</cref>
+			</item>
+			<item>
+				<cref topic="user_roles">About Mingle user roles</cref>
+			</item>
+			<item>
+				<cref topic="customizing_projects">Configuring Mingle</cref>
+			</item>
+			<item>
+			  <cref topic="add_all_users_as_team_members">Add all users as team members</cref> 
+		  </item>
+			<item>
+			  <cref topic="add_user_to_multiple_projects">Add user to multiple projects</cref> 
+		  </item>
+		<item><cref topic="user_groups">User groups</cref></item>
+		</bullets>
+	</section>
+</topic>

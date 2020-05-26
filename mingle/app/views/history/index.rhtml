@@ -1,0 +1,75 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% @sidebar = capture do -%>
+  <% collapsible('Filter history', true, {:style => {:collapsible_content_style => 'collapsible_content_light'}}) do -%>
+    <% form_tag({:action => "index"}, {:id => 'filter_form', :onsubmit => "return new FiltersForm(this, 'spinner-for-Filter-history', 'feed-spinner').submitViaPost()"}) do -%>
+      <p class="section-heading"><b>Only</b> show updates to:</p>
+
+      <ul id="limit-to">
+        <li><%= check_box_tag('filter_types[cards]', 'Card::Version', include_cards?, :class => 'filter_type', :onclick => "$('filter_form').onsubmit()")%> Cards</li>
+        <li><%= check_box_tag('filter_types[pages]', 'Page::Version', include_pages?, :class => 'filter_type', :onclick => "$('filter_form').onsubmit()")%> Pages</li>
+        <% if @project.has_source_repository? -%>
+        <li><%= check_box_tag('filter_types[revisions]', 'Revision', include_revisions?, :class => 'filter_type', :onclick => "$('filter_form').onsubmit()")%> <%= repository_vocabulary['revision'].titleize.pluralize %></li>
+        <% end -%>
+      </ul>
+
+      <% collapsible('Where they have been:', true, {:style => {:collapsible_style => 'slim'}, :visibility_preference => :history_have_been_visible}) do -%>
+        <%= render :partial => 'shared/filter_widget', :locals => {:filters => params[:involved_filter_properties] || {}, :field_name => 'involved_filter_properties', :html_id => 'involved_filter_widget', :onchange => "$('filter_form').onsubmit()"} %>
+        <%= clear_float %>
+        <div class="align-center">
+          <p class="text-light">...and were tagged:</p>
+
+          <%= render :partial => 'tags/tags_editor', :locals => {:tag_names => Tag.parse(params[:involved_filter_tags]), :tag_field_name  => 'involved_filter_tags', :icon => false, :project => @project, :auto_submit => true } %>
+        </div>
+      <% end -%>
+
+      <% collapsible("Where they changed #{History::NAMED_PERIODS[@period].description} to:", true, {:style => {:collapsible_style => 'slim'}, :visibility_preference => :history_changed_to_visible}) do -%>
+
+        <%= render :partial => 'shared/filter_widget', :locals => {:filters => params[:acquired_filter_properties] || {}, :field_name => 'acquired_filter_properties', :html_id_prefix => 'acquired', :html_id => 'acquired_filter_widget', :onchange => "$('filter_form').onsubmit()"} %>
+        <%= clear_float %>
+        <div class="align-center">
+          <p class="text-light">...be tagged with:</p>
+
+          <%= render :partial => 'tags/tags_editor', :locals => {:tag_names => Tag.parse(params[:acquired_filter_tags]), :tag_field_name  => 'acquired_filter_tags', :icon => false, :project => @project, :auto_submit => true } %>
+        </div>
+      <% end -%>
+
+      <%= hidden_field_tag :period, @period %>
+      <p class="section-heading">Where they were changed by:</p>
+      <p><%= select_tag 'filter_user', options_for_select([['Select team member...', '']] + @project.users.sort_by{|u| u.name.downcase}.collect{|member| [member.name, member.id.to_s]}, @filter_user_id), :onchange => "$('filter_form').onsubmit()" %></p>
+      <%= button_to_function 'Reset', "window.location = '#{url_for(:action => 'index', :period => @period)}'", :name => 'reset' %>
+    <% end -%>
+  <% end -%>
+  <%= render :partial => 'feed', :locals => {:request_params => @request_params} %>
+<% end -%>
+
+<%= render :partial => 'periods'%>
+
+<div id="history-results">
+  <%= render :partial => 'shared/events',
+    :locals => { :include_object_name => true, :include_version_links => true,
+                 :show_initially => true, :history => @history, :page => @page, :project => @project, :popup => false} %>
+</div>
+
+<%= render :partial => 'shared/page_links', :locals => {:paged_object => @history} %>
+<%= javascript_with_rescue <<-JAVASCRIPT
+
+CardHistory.loader = new ReloadHistoryTabLoader(#{url_for_current_history_page.inspect});
+historyLoader = CardHistory.loader;
+
+JAVASCRIPT
+-%>

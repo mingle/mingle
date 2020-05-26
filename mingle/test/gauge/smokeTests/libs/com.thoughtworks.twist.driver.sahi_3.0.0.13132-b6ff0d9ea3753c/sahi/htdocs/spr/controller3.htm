@@ -1,0 +1,267 @@
+<!--
+/**
+ * Copyright  2006  V Narayan Raman
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<html>
+<head><title>Sahi Controller</title></head>
+<body>
+<style>
+ul.tabs {
+	padding: 0px;
+	margin: 0px;
+	margin-bottom: 10px;
+}
+ul.tabs li{
+	font-family: verdana;
+	font-size: 9pt;
+	display:inline;
+	background-color: silver;
+	border:1px solid gray;
+	padding: 2px 5px;
+	margin-right: 2px; 
+}
+.field{
+	width:250px;
+}
+.b{text-transform:uppercase;font-size:7pt;cursor:pointer;width: 60px;}
+.ta{width: 400px; height: 100px;}
+.topB{text-transform:uppercase;font-size:7pt;cursor:pointer;}
+xbody{font-family:arial;}
+.step{cursor:pointer;}
+</style>
+<script>
+var Controller = function(){
+	this.lastMessage = null;
+    this.escapeMap = {
+            '\b': '\\b',
+            '\t': '\\t',
+            '\n': '\\n',
+            '\f': '\\f',
+            '\r': '\\r',
+            '"' : '\\"',
+            '\\': '\\\\'
+        };	
+	this.listen();
+};
+Controller.prototype.getServerVar = function (name, isGlobal) {
+    var v = this.sendToServer("/_s_/dyn/SessionState_getVar?name=" + encodeURIComponent(name) + "&isglobal="+(isGlobal?1:0));
+    return eval("(" + v + ")");
+};
+Controller.prototype.sendToServer = function (url) {
+    try {
+        var rand = (new Date()).getTime() + Math.floor(Math.random() * (10000));
+        var http = this.createRequestObject();
+        url = url + (url.indexOf("?") == -1 ? "?" : "&") + "t=" + rand;
+        var post = url.substring(url.indexOf("?") + 1);
+        url = url.substring(0, url.indexOf("?"));
+        http.open("POST", url, false);
+        http.send(post);
+        return http.responseText;
+    } catch(ex) {
+        this.handleException(ex)
+    }
+};
+Controller.prototype.createRequestObject = function () {
+    var obj;
+    if (window.XMLHttpRequest){
+        // If IE7, Mozilla, Safari, etc: Use native object
+        obj = new XMLHttpRequest()
+    }else {
+        if (window.ActiveXObject){
+            // ...otherwise, use the ActiveX control for IE5.x and IE6
+            obj = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+    }
+    return obj;
+};
+function $(id){return document.getElementById(id);}
+Controller.prototype.listen = function(){
+	var msg = this.getServerVar("Sahi_MessageForController");
+	if (msg != null && msg != "" && msg != this.lastMessage){
+		//alert(msg);
+		this.lastMessage = msg;
+		var res = null;
+		try{ 
+		 	res = eval("(" +msg +")");
+			if (res.accessor) $("accessor").value = res.accessor; 
+			if (res.alternatives) {
+				this.populateOptions($("alternatives"), res.alternatives);
+				//$("alternatives").value = res.alternatives;
+			} 
+			if (res.value) $("aValue").value = res.value; 
+			if (res.windowName) $("windowName").value = res.windowName; 
+			if (res.mode == "RECORD"){
+				 if (res.script) $("script").value = res.script;
+				 $("steps").innerHTML += "<div class='step' onclick='_c.editStep(this)'>" + res.script + "</div>";
+			}
+			if (res.result) $("result").value = res.result;
+		}catch (e){
+			res = e.message;
+		}
+		//this.setServerVar("Sahi_MessageForBrowser", "{result: "+s_v(res)+"}");
+	}
+	window.setTimeout("_c.listen()", 200);
+};
+Controller.prototype.setServerVar = function (name, value, isGlobal) {
+    this.sendToServer("/_s_/dyn/SessionState_setVar?name=" + encodeURIComponent(name) + "&value=" + encodeURIComponent(this.toJSON(value)) + "&isglobal="+(isGlobal?1:0));
+};
+Controller.prototype.toJSON = function(el){
+    if (el == null || el == undefined) return 'null';
+    if (el instanceof Date){
+        return String(el);
+    }else if (typeof el == 'string'){
+        if (/["\\\x00-\x1f]/.test(el)) {
+            return '"' + el.replace(/([\x00-\x1f\\"])/g, function (a, b) {
+                var c = _c.escapeMap[b];
+                if (c) {
+                    return c;
+                }
+                c = b.charCodeAt();
+                return '\\u00' +
+                    Math.floor(c / 16).toString(16) +
+                    (c % 16).toString(16);
+            }) + '"';
+        }
+        return '"' + el + '"';
+    }else if (el instanceof Array){
+        var ar = [];
+        for (var i=0; i<el.length; i++){
+            ar[i] = this.toJSON(el[i]);
+        }
+        return '[' + ar.join(',') + ']';
+    }else if (typeof el == 'number'){
+        return new String(el);
+    }else if (typeof el == 'boolean'){
+        return String(el);
+    }else if (el instanceof Object){
+        var ar = [];
+        for (var k in el){
+            var v = el[k];
+            if (typeof v != 'function'){
+                ar[ar.length] = this.toJSON(k) + ':' + this.toJSON(v);
+            }
+        }
+        return '{' + ar.join(',') + '}';
+    }
+};
+Controller.prototype.populateOptions = function(el, opts, selectedOpt, defaultOpt, prefix) {
+    el.options.length = 0;
+    if (defaultOpt) {
+        el.options[0] = new Option(defaultOpt, "");
+    }
+    var len = opts.length;
+    for (var i = 0; i < len; i++) {
+        var ix = el.options.length;
+        if (prefix) {
+            if (opts[i].indexOf(prefix) == 0) {
+                el.options[ix] = new Option(opts[i].substring(prefix.length), opts[i]);
+                if (opts[i] == selectedOpt) el.options[ix].selected = true;
+            }
+        } else {
+            el.options[ix] = new Option(opts[i], opts[i]);
+            if (opts[i] == selectedOpt) el.options[ix].selected = true;
+        }
+    }
+    //    alert(el.options.length)
+}
+Controller.prototype.getText = function(el){
+	return this.isIE() || this.isSafariLike() ? el.innerText : el.textContent;	
+}
+Controller.prototype.isIE = function () {return navigator.appName == "Microsoft Internet Explorer";};
+Controller.prototype.isFF3 = function () {return navigator.userAgent.match(/Firefox\/3/) != null;};
+Controller.prototype.isFF = function () {return navigator.userAgent.match(/Firefox/) != null;};
+Controller.prototype.isChrome = function () {return navigator.userAgent.match(/Chrome/) != null;};
+Controller.prototype.isSafariLike = function () {return /Konqueror|Safari|KHTML/.test(navigator.userAgent);};
+
+var _c = new Controller();
+Controller.prototype.evalEx = function(){
+	this.setServerVar("Sahi_MessageForBrowser", $("evalEx").value);
+}
+Controller.prototype.startRecording = function(){
+	this.setServerVar("Sahi_MessageForBrowser", "_sahi.startRecording()");	
+}
+Controller.prototype.stopRecording = function(){
+	this.setServerVar("Sahi_MessageForBrowser", "_sahi.stopRecording()");	
+}
+Controller.prototype.editStep = function(el){
+	$("script").value = this.getText(el);   
+}
+Controller.prototype.clearSteps = function(){
+	$("steps").innerHTML = "";
+}
+</script>
+<ul class="tabs">
+<li id="trecorder">Recorder</li>
+<li id="tplayback">Playback</li>
+<li id="tscript">Scripts</li>
+</ul>
+<div class="content" id="crecorder">
+<!-- 
+<table>
+<tr><td>Folder</td><td><select><option>Choose folder</option></select></td></tr>
+<tr><td>Script</td><td><input type="textbox"/></td></tr>
+</table>
+ -->
+ <div>
+<div style="float:right">
+<input class="topB" type="button" value="Save"> 
+<input class="topB" type="button" value="Clear" onclick="_c.clearSteps()"></div>
+<div>
+<input class="topB" type="button" value="Record" onclick="_c.startRecording()">
+<input class="topB" type="button" value="Stop" onclick="_c.stopRecording()">
+</div> 
+</div>
+<div class="ta" style="height:200px;border:1px solid gray;overflow:auto" id="steps"></div><br/>
+<textarea class="ta" style="height:80px;" id="script"></textarea><br/>
+<div style="float:right">
+<input class="topB" type="button" value="Append" onclick="_c.appendStep()"> 
+<input class="topB" type="button" value="Replace" onclick="_c.replaceStep()">
+</div> 
+
+With selected text: <input class="topB" type="button" value="Inspect" title="Inspect selection">
+<input class="topB" type="button" value="Eval" onclick="_c.evalEx()"> 
+<div>
+<table><tr><td>
+<table>
+<tr>
+<td>Accessor</td><td><input class="field" id="accessor" type="text" name="accessor"></td>
+</tr>
+<tr>
+<td>Alternatives</td><td><select class="field" id="alternatives" name="alternatives"></select></td>
+</tr>
+<tr>
+<td>Value</td><td><input class="field" id="aValue" type="text" name="aValue"></td>
+</tr>
+<tr>
+<td>Window</td><td><input id="windowName" type="text" name="windowName"></td>
+</tr>
+</table>
+</td><td>
+<input class="b" type="button" name="click" value="Hover"><br/>
+<input class="b" type="button" name="click" value="Click"><br/>
+<input class="b" type="button" name="click" value="Hilight"><br/>
+<input class="b" type="button" name="click" value="Set"><br/>
+</td></tr></table>
+<input class="b" type="button" value="Wait">
+</div>
+</div>
+<div class="content" id="tplayback">
+</div>
+<div class="content" id="tscript">
+
+</div>
+</body>
+</html>

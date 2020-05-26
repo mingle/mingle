@@ -1,0 +1,17 @@
+function check(close){
+	_navigateTo("/demo/docWriteIFrame.htm");
+	_setValue(_textbox("t1"), "aa");
+	_click(_button("Click me " + (close ? "(doc closed)" : "(doc not closed)")));
+	_click(_link("My link"));
+	_setValue(_textbox("t1[1]"), "ss");
+	_click(_button("Click me " + (close ? "(doc closed)" : "(doc not closed)") + "[1]"));
+	_click(_checkbox("check1"));
+	_assertEqual("false", ""+_lastAlert());
+}
+
+_navigateTo("/demo/index.htm")
+_click(_link("Link Test"));
+_click(_link("Back"));
+
+check(true);
+check(false);

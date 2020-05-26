@@ -1,0 +1,53 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div class='content'>
+  <table id='global_personal_views' class='highlightable-table'>
+    <thead>
+      <tr>
+        <th>Project</th>
+        <th>Name</th>
+        <th>Style</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render :partial => 'shared/no_records', :locals => { :colspan => 6, :css_hidden => true, :model => 'favorites' } %>
+      <%- for favorited_item in (@user.personal_views + @user.personal_pages) -%>
+      <%- favorite = favorited_item.is_a?(CardListView) ? favorited_item.favorite : favorited_item.favorites.personal(@user).first -%>
+      <tr id='<%= dom_id(favorited_item) %>' class="<%= cycle('odd', 'even', :name => 'global') %> text-light">
+        <% Project.find_by_id(favorited_item.project_id).with_active_project  do |project| %>
+          <td><%=h project.name %></td>
+          <td><%= link_to h(favorite.name), {:controller => 'favorites', :action => 'show', :project_id => project.identifier, :id => favorite.id}, :class => 'favorite-link' %></td>
+          <td><%=h favorited_item.style_description %></td>
+          <td class="align-right standard-link-spacing last" style="width: 15em;">
+            <%= link_to_remote 'Delete', 
+             :url => { :controller => 'personal_favorites', :action => 'destroy', :project_id => project.identifier, :id => favorite.id },
+             :confirm => 'Are you sure?',
+             :method => :post, 
+             :id => "destroy-#{favorited_item.html_id}",
+             :before   => show_spinner('global_delete_personal_view_spinner'),
+             :complete => hide_spinner('global_delete_personal_view_spinner') %>
+          </td>
+          <% end %>
+        </tr>
+      <% end  %>
+    </tbody>
+  </table>
+</div>
+
+<%= javascript_with_rescue "SubscriptionsCounter.add(['global_personal_views']);" %>
+

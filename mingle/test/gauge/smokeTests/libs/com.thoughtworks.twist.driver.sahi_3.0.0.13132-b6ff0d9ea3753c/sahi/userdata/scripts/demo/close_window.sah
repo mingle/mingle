@@ -1,0 +1,4 @@
+_click(_link("Window Open Test"));
+_popup("popWin")._click(_link("Form Test"));
+_popup("popWin")._closeWindow();
+_click(_link("Link Test"));

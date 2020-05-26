@@ -1,0 +1,46 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+@mixin default-button {
+  padding: 5px 13px;
+  background-color: transparent;
+  margin-right:5px;
+  text-align: center;
+  border: 0;
+  font: {
+    size: 11px;
+    family: Arial, Helvetica, sans-serif;
+  }
+  text-transform: uppercase;
+  color: $MINGLE_SECONDARY_COLOR;
+  min-width: 90px;
+  border: 1px solid $MINGLE_SECONDARY_COLOR;
+  display: inline-block;
+  text-decoration: none;
+  line-height: 13px;
+  &:hover {
+    cursor: pointer;
+    background-color: $MINGLE_SECONDARY_COLOR;
+    color: $MINGLE_SECONDARY_CONTRAST_COLOR;
+  };
+  &:visited {
+    color: $MINGLE_SECONDARY_COLOR;
+
+    &:hover {
+      color: $MINGLE_SECONDARY_CONTRAST_COLOR;
+    }
+  }
+}

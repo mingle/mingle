@@ -1,0 +1,110 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+
+<%= render :partial => 'shared/admin_actions'%>
+
+<% action_bar do %>
+  <%= render_help_link('Card Property Values Page', :class => 'page-help-at-action-bar')%>
+  <%= link_to 'Up', {:controller => 'property_definitions', :action => 'index'}, :class => 'up action-bar-separator' %>
+  <%= render :partial => 'enumeration_values/property_action_bar' %>
+<% end %>
+
+<h1><%= h @prop_def.name %><%= spinner %></h1>
+
+<%= render :partial => 'quick_adding' %>
+
+<div id="content">
+  <table id="enum-table-top" class="list_table">
+    <thead>
+      <tr class="table-top">
+        <th class="col1">Value</th>
+        <th class="col2">Where used</th>
+        <th class="col3 align-center">Reporting color</th>
+        <% if allow_reorder? -%>
+          <th class="col4 align-center">Order</th>
+        <% end -%>
+        <th class="col5 last">&nbsp;</th>
+      </tr>
+    </thead>
+    <% if @enumeration_values.empty? -%>
+    <tbody>
+      <tr>
+        <td colspan="5" class="italic-light align-center last">There are currently no values to list. You can create a new value from the action bar.</td>
+      </tr>
+    </tbody>
+    <% end -%>
+  </table>
+
+  <ul id='reorder_container_<%= @prop_def.id %>' class='compact-list'>
+    <% for enum_value in @enumeration_values -%>
+      <% count_of_cards = enum_value.as_property_value.card_count %>
+      <% count_of_transitions = enum_value.as_property_value.transition_count %>
+
+      <li id='enumeration_value_<%= enum_value.id %>' class="enumeration_value">
+        <table class="enum-draggable-table highlightable-table">
+          <tbody>
+            <tr>
+              <td class="col1">
+                <% form_tag({:action => 'update_name'}, {:id => "enumeration_value_#{enum_value.id}_form"}) do %>
+                  <span id="enumeration_value_<%= enum_value.id %>_name" class="name" title="<%=h enum_value.value %>"><%=h enum_value.value %></span>
+                  <span id="enumeration_value_<%= enum_value.id %>_update_message" class="update_message" style="display:none">updating...</span>
+
+                  <%= hidden_field_tag 'id', enum_value.id %>
+                  <%= text_field_tag "name",
+                        enum_value.value,
+                        :id => "enumeration_value_#{enum_value.id}_name_editor",
+                        :class => "inline-editor inline-text-editor",
+                        :style =>"display:none;" %>
+                  <% end %>
+              </td>
+
+              <td class="col2">
+
+                <%= card_count_link(enum_value, count_of_cards) %>,
+                <%= enumerate(count_of_transitions, 'transition') %>
+              </td>
+
+              <td class="col3 align-center">
+                <%= render color_panel_for(enum_value) %>
+              </td>
+
+              <% if allow_reorder? -%>
+                <td class="vertical-grip col4 align-center">
+                  <%= link_to_function 'Drag', :id => "drag_enumeration_value_#{enum_value.id}", :class => 'link_button draggable' %>
+                </td>
+              <% end -%>
+
+              <td class="inline_action_column col5 standard-link-spacing last">
+                <div id="inline-editor-actions-<%= enum_value.id %>">
+                  <% show_delete_link = ((count_of_cards + count_of_transitions) == 0) %>
+                  <%= render :partial => 'enumeration_values/action_bar', :locals => { :enumeration_value => enum_value, :show_delete_link => show_delete_link } -%>
+                  <%= javascript_with_rescue %[ new InlineTextEditor("enumeration_value_#{enum_value.id}_form", 'inline-editor-actions-#{enum_value.id}') ] %>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </li>
+    <% end %>
+  </ul>
+</div>
+
+<%= sortable_element("reorder_container_#{@prop_def.id}",
+                      :url => { :controller => 'property_definitions', :action => "reorder", :id => @prop_def },
+                      :before => "$('spinner').show()",
+                      :complete => "$('spinner').hide(); $j('.enumeration_value').css('z-index', '')",
+                      :handle => 'link_button') if allow_reorder? %>

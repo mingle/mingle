@@ -1,0 +1,53 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% view_params = defined?(@view) ? @view.to_params : {} %>
+<div id="<%= html_id %>">
+<%
+  onchange = nil unless defined?(onchange)
+  track_changed_property = nil unless defined?(track_changed_property)
+%>
+
+<div id="<%= mode %>_default_property_definitions_container" class='properties_widget'>
+<% prop_def_holder.property_definitions_without_tree.each do |property| %>
+  <%= render :partial => "cards/property", :locals => property_editor_locals(property, card, mode, :onchange => onchange_for_property_editor(property, onchange, track_changed_property)) %>
+<% end %>
+</div>
+<%= clear_float %>
+
+<% prop_def_holder.available_tree_configurations.each do |tree_configuration| %>
+  <div id="<%= "#{mode}_group_#{tree_configuration.html_id}" %>" class="properties_widget tree_properties_widget">
+    <div class="tree_group">
+      from <%= show_go_to_tree_link(mode, tree_configuration) %>
+      <span class="divider"></span>
+      <%= raw show_add_children_link(mode, card, tree_configuration, @tab_name) %>
+      <%= raw delete_from_tree_link(mode, card, tree_configuration, @tab_name, view_params) %>
+      <%= show_tree_belonging_information_and_actions(mode, card, tree_configuration) %>
+    </div>
+
+    <% tree_configuration.relationships_available_to(prop_def_holder).each do |property| %>
+      <%= render :partial => "cards/property", :locals => property_editor_locals(property, card, mode, :onchange => onchange_for_property_editor(property, onchange, track_changed_property)) %>
+    <% end %>
+
+    <% tree_configuration.aggregate_property_definitions_available_to(prop_def_holder).each do |property| %>
+      <%= render :partial => "cards/property", :locals => property_editor_locals(property, card, mode) %>
+    <% end %>
+
+    <%= clear_float %>
+  </div>
+
+<% end %>
+</div>

@@ -1,0 +1,59 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= render :partial => 'shared/top_level_header_pills', :locals => { :selected_tab => 'admin' } %>
+<div id="slack_integration" >
+  <div class="title">
+    <h1>Slack Integration</h1>
+  </div>
+  <div class="content">
+    <% if MingleConfiguration.slack_app_url && !@slack_integrated %>
+        <p>Mingle offers a range of features for a team to collaborate via Slack.</p>
+        <br>
+        <p>  For your reference, there is a list of all available features in our Help docs: <a href="<%= link_to_help('/features_slack.html') %>" class='slack-help-link'>Mingle + Slack features</a>.</p>
+        <br>
+    <% end %>
+    <span class="status">
+      <% if MingleConfiguration.slack_app_url && @slack_integrated %>
+        <div>You are all set! This Mingle instance is linked with the Slack team: <a href="<%= @team_info[:url] %>" class="slack-team"><%= @team_info[:name] %></a></div>
+        <div class="next-steps">
+          <h2>What's next</h2>
+          <p class="help-text">Every project on Mingle can be linked to one or more channels on Slack. Project admins can set this up from <em>Project Admin > Integrations > Slack</em>.</p>
+          <p>For your reference, there is a list of all available features in our Help docs: <a href="<%= link_to_help('/features_slack.html') %>" class='slack-help-link'>Mingle + Slack features</a>. We hope you enjoy Mingle + Slack!</p>
+        </div>
+        <% unless @revoke_in_progress %>
+          <div class="remove-slack-integration">
+            <h2>Remove Integration</h2>
+            <p class="help-text">To delink this Mingle instance from Slack, click on the button below. This will remove the integrations for all the projects and team members linked through this instance.</p>
+            <%= check_box_tag 'remove_tenant_integration', nil, false, :onclick => "Slack.removeIntegrationChecked('tenant')" %> <label for="remove_tenant_integration" class="inline">This action is not recoverable.</label>
+            <%= button_to('Remove Integration', {:action => 'remove_slack_integration'}, {:id => 'remove_tenant_integration_submit', :disabled => true, :method => 'delete', :class=> 'remove_integration_form'}) %>
+          </div>
+        <% end %>
+      <% else %>
+        <% if authorized?(action: :add_slack_integration) %>
+          <div>
+            To get started, we will need to link this Mingle instance to your organization's Slack team.
+          </div>
+          <% form_tag({controller: :integrations, :action => :add_slack_integration}, {id: 'add_to_slack_form', method: :post}) do %>
+            <%= render partial: 'slack/slack_terms_and_conditions', locals: {form_id: 'add_to_slack_form', terms: add_to_slack_terms,
+                                                                             submit_text: 'Add to Slack', submit_class: 'add-to-slack',
+                                                                             eula_context: 'add_to_slack'} %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </span>
+  </div>
+</div>

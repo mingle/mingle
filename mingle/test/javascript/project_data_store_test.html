@@ -1,0 +1,716 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Project Data Store Test</title>
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+
+  <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="application/javascript"></script>
+  <script src="../../public/javascripts/prototype_ext.js" type="application/javascript"></script>
+
+  <script src="../../app/assets/javascripts/project_data_store.js" type="application/javascript"></script>
+  <script src="../../app/assets/javascripts/url_helper.js" type="application/javascript"></script>
+
+  <script src="test_assets/sinon-2.3.6.js" type="application/javascript"></script>
+  <script src="test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+  <script src="test_assets/qunit-phantom.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="test_assets/qunit-1.21.0.css" type="text/css"/>
+
+</head>
+<body>
+<div id="qunit">
+</div>
+<script type="application/javascript">
+  var secondProjectData = {
+    name: 'Second Project',
+    dateFormat: '%d %b %Y',
+    identifier: 'secondProject',
+    cardTypes: [
+      {name: 'Feature', id: 3, propertyDefinitions: [{
+        name: 'Sprint',
+        dataType: 'card',
+        isNumeric: false,
+        isManaged: false
+      }]}
+    ],
+    tags: [
+      {name: 'tag3', color: '#EEE'},
+      {name: 'tag4', color: '#000'}
+    ],
+    team: [
+      {name: "User5", login: "user5"},
+      {name: "User6", login: "user6"},
+      {name: "User7", login: "user7"},
+      {name: "User8",login: "user8" }
+    ]
+  };
+
+  QUnit.module('Project Data Store', {
+    beforeEach: function() {
+      this.initialData = {
+        identifier: 'project_identifier',
+        cardTypes: [
+          {name: 'Card', id: 1, propertyDefinitions: [{name: 'prop1', isNumeric: true}, {name: 'prop2'}, {name: 'prop3'}]},
+          {name: 'Story', id: 2, propertyDefinitions: [{name: 'prop1', isNumeric: true}, {name: 'prop3'}, {name: 'prop4'}]},
+          {name: 'Release', id: 3, propertyDefinitions: [{name: 'prop5', isNumeric: true}, {name: 'prop6'}, {name: 'prop7'}]}
+        ],
+        tags: [
+          {name: 'tag 1', color: '#FFF'},
+          {name: 'tag 2', color: '#111'}
+        ],
+        team: [
+          {name: "User1", login: "user1"},
+          {name: "User2", login: "user2"},
+          {name: "User3", login: "user3"},
+          {name: "User4",login: "user4" }
+        ]
+      };
+      this.server = sinon.fakeServer.create();
+    },
+    afterEach: function() {
+      this.server.restore();
+    }
+  });
+
+  QUnit.test('testShouldReturnProjectDataForGivenProject', function (assert) {
+    var projectDataStore = new ProjectDataStore(this.initialData);
+    var projectData = projectDataStore.dataFor('project_identifier');
+
+    assert.equal(projectData.identifier, this.initialData.identifier);
+  });
+
+  QUnit.test('testDataForShouldInvokeCallbackWithProjectDataWhenCallbackIsGiven', function (assert) {
+    var callback = sinon.spy();
+    var projectDataStore = new ProjectDataStore(this.initialData);
+    projectDataStore.dataFor('project_identifier', callback);
+
+    assert.equal(callback.callCount, 1);
+    assert.equal(callback.args[0][0].identifier, 'project_identifier');
+  });
+
+  QUnit.test('testDataForShouldFetchProjectDataWhenCallbackIsGivenAndNoDataPresent', function (assert) {
+    var callback = sinon.spy();
+    var projectDataStore = new ProjectDataStore(this.initialData);
+    this.server.respondWith("GET", "/api/v2/projects/secondProject/chart_data.json",
+        [200, {"Content-Type": "application/json"}, JSON.stringify(secondProjectData)]);
+
+    projectDataStore.dataFor('secondProject', callback);
+    assert.equal(this.server.requests.length, 1);
+    this.server.respond();
+
+    assert.equal(callback.callCount, 1);
+    assert.equal(callback.args[0][0].identifier, secondProjectData.identifier);
+    assert.equal(callback.args[0][0].name, secondProjectData.name);
+    assert.equal(callback.args[0][0].dateFormat, secondProjectData.dateFormat);
+  });
+
+  QUnit.test('testDataForShouldNotInvokeCallbackWhenServerRespondsWithError', function (assert) {
+    var callback = sinon.spy();
+    var projectDataStore = new ProjectDataStore(this.initialData);
+    this.server.respondWith("GET", "/api/v2/projects/secondProject/char_data.json",
+        [404, {"Content-Type": "application/json"}, '']);
+
+    projectDataStore.dataFor('secondProject', callback);
+    assert.equal(this.server.requests.length, 1);
+    this.server.respond();
+
+    assert.equal(callback.callCount, 0);
+  });
+
+  QUnit.test('testDataForShouldNotFetchProjectDataAgain', function (assert) {
+    var callback = sinon.spy();
+    var projectDataStore = new ProjectDataStore(this.initialData);
+    this.server.respondWith("GET", "/api/v2/projects/secondProject/chart_data.json",
+        [200, {"Content-Type": "application/json"}, JSON.stringify(secondProjectData)]);
+
+    projectDataStore.dataFor('secondProject', callback);
+    assert.equal(this.server.requests.length, 1);
+    this.server.respond();
+
+    assert.equal(callback.callCount, 1);
+
+    projectDataStore.dataFor('secondProject', callback);
+    assert.equal(this.server.requests.length, 1);
+
+    assert.equal(callback.callCount, 2);
+
+  });
+
+  QUnit.test('testAccessibleProjectsShouldTriggerCallbackWithProjectData', function (assert) {
+    var callback = sinon.spy();
+    var projects = [
+      {name: 'Project One', identifier: 'project1'},
+      {name: 'Project Two', identifier: 'project2'},
+      {name: 'Project Three', identifier: 'project3'}
+    ];
+    var projectDataStore = new ProjectDataStore(this.initialData);
+    this.server.respondWith("GET", "/api/v2/projects.json?exclude_requestable=true",
+        [200, {"Content-Type": "application/json"}, JSON.stringify(projects)]);
+
+    projectDataStore.accessibleProjects(callback);
+
+    this.server.respond();
+
+    assert.equal(this.server.requests.length, 1);
+    assert.equal(callback.callCount, 1);
+    assert.deepEqual(callback.args[0][0], projects);
+  });
+
+  QUnit.test('testAccessibleProjectsShouldReturnCachedProjectsWhenCallbackIsNotGiven', function (assert) {
+    var projectDataStore = new ProjectDataStore(this.initialData);
+    var expectedProjects = [
+      {name: 'Project One', identifier: 'project1'},
+      {name: 'Project Two', identifier: 'project2'},
+      {name: 'Project Three', identifier: 'project3'}
+    ];
+    this.server.respondWith("GET", "/api/v2/projects.json?exclude_requestable=true",
+        [200, {"Content-Type": "application/json"}, JSON.stringify(expectedProjects)]);
+
+    projectDataStore.accessibleProjects(sinon.spy());
+    this.server.respond();
+
+    var projects = projectDataStore.accessibleProjects();
+
+    assert.equal(this.server.requests.length, 1);
+    assert.deepEqual(projects, expectedProjects);
+  });
+
+  QUnit.test('testAccessibleProjectsShouldTriggerCallbackWithCachedProjects', function (assert) {
+    var projectDataStore = new ProjectDataStore(this.initialData);
+    var expectedProjects = [
+      {name: 'Project One', identifier: 'project1'},
+      {name: 'Project Two', identifier: 'project2'},
+      {name: 'Project Three', identifier: 'project3'}
+    ];
+    this.server.respondWith("GET", "/api/v2/projects.json?exclude_requestable=true",
+        [200, {"Content-Type": "application/json"}, JSON.stringify(expectedProjects)]);
+
+    projectDataStore.accessibleProjects(function () {});
+    this.server.respond();
+
+    projectDataStore.accessibleProjects(function () {});
+
+    assert.equal(this.server.requests.length, 1);
+  });
+
+  QUnit.test('testAccessibleProjectsShouldNotTriggerCallbackOnFailure', function (assert) {
+    var callback = sinon.spy();
+    this.server.respondWith("GET", "/api/v2/projects.json?exclude_requestable=true",
+        [403, {"Content-Type": "application/json"}, 'error']);
+
+    var projectDataStore = new ProjectDataStore(this.initialData);
+
+    projectDataStore.accessibleProjects(callback);
+
+    this.server.respond();
+
+    assert.equal(this.server.requests.length, 1);
+    assert.equal(callback.callCount, 0);
+  });
+
+  QUnit.test('testShouldCallAjaxStopCallbackWhenAllRequestsComplete', function (assert) {
+    var ajaxStopCallback = sinon.spy(), projectDataStore = new ProjectDataStore(this.initialData);
+
+    ProjectDataStore.setAjaxStopCallback(ajaxStopCallback);
+    projectDataStore.dataFor('secondProject', function() {});
+    projectDataStore.accessibleProjects(function () {});
+    assert.equal(this.server.requests.length, 2);
+    this.server.processRequest(this.server.requests[0]);
+
+    assert.equal(ajaxStopCallback.callCount, 0);
+
+    this.server.processRequest(this.server.requests[1]);
+
+    assert.equal(ajaxStopCallback.callCount, 1);
+  });
+
+  QUnit.test('testDisableGlobalCallbacksShouldDisableAjaxStopCallback', function (assert) {
+    var ajaxStopCallback = sinon.spy(), projectDataStore = new ProjectDataStore(this.initialData);
+
+    ProjectDataStore.setAjaxStopCallback(ajaxStopCallback);
+    projectDataStore.dataFor('secondProject', function() {});
+    assert.equal(this.server.requests.length, 1);
+    this.server.processRequest(this.server.requests[0]);
+    assert.equal(ajaxStopCallback.callCount, 1);
+
+    projectDataStore.accessibleProjects(function () {});
+    assert.equal(this.server.requests.length, 2);
+    ProjectDataStore.disableGlobalCallbacks();
+
+    this.server.processRequest(this.server.requests[1]);
+
+    assert.equal(ajaxStopCallback.callCount, 1);
+  });
+
+  QUnit.module('Project Data', {
+    beforeEach: function () {
+      this.initialData = {
+        identifier: 'project_identifier',
+        name: 'Project Name',
+        dateFormat: 'some date format',
+        cardTypes: [
+          {name: 'Card', id: 1, propertyDefinitions: [{name: 'prop1', isNumeric: true}, {name: 'prop2'}, {name: 'prop3'}]},
+          {name: 'Story', id: 2, propertyDefinitions: [{name: 'prop1', isNumeric: true}, {name: 'prop3'}, {name: 'prop4'}]},
+          {name: 'Release', id: 3, propertyDefinitions: [{name: 'prop5', isNumeric: true}, {name: 'prop6'}, {name: 'prop7'}]}
+        ],
+        tags: [
+          {name: 'tag 1', color: '#FFF'},
+          {name: 'tag 2', color: '#111'}
+        ],
+        team: [
+          {name: "User1", login: "user1"},
+          {name: "User2", login: "user2"}
+        ],
+        colors:  ["#3D8F84", "#19A657", "#55EB7D"]
+      };
+      this.server = sinon.fakeServer.create();
+      this.projectData = new ProjectDataStore(this.initialData).dataFor('project_identifier');
+    },
+
+    afterEach: function () {
+      this.server.restore();
+    }
+  });
+
+  QUnit.test('testShouldReturnCardTypesAndTagsForProject', function (assert) {
+    var expectedCardTypes = {
+      Card: {
+        name: 'Card',
+        id: 1,
+        propertyDefinitions: {prop1: {name: 'prop1', isNumeric: true}, prop2: {name: 'prop2'}, prop3: {name: 'prop3'}}
+      },
+      Story: {
+        name: 'Story',
+        id: 2,
+        propertyDefinitions: {prop1: {name: 'prop1', isNumeric: true}, prop3: {name: 'prop3'}, prop4: {name: 'prop4'}}
+      },
+      Release: {
+        name: 'Release',
+        id: 3,
+        propertyDefinitions: {prop5: {name: 'prop5', isNumeric: true}, prop6: {name: 'prop6'}, prop7: {name: 'prop7'}}
+      }
+    };
+
+    assert.deepEqual(this.projectData.identifier, this.initialData.identifier);
+    assert.deepEqual(this.projectData.cardTypes, expectedCardTypes);
+    assert.deepEqual(this.projectData.cardTypeNames, ['Card','Story','Release']);
+    assert.deepEqual(this.projectData.tags, this.initialData.tags);
+  });
+
+  QUnit.test('testShouldReturnTeamDataForProject', function (assert) {
+    var expectedTeamData = {
+      user1: {name: 'User1', login: 'user1'},
+      user2: {name: 'User2', login: 'user2'}
+    };
+
+    assert.deepEqual(this.projectData.team, expectedTeamData);
+  });
+
+  QUnit.test('testShouldReturnColorsForProject', function (assert){
+    var expectedColors = ["#3D8F84", "#19A657", "#55EB7D"];
+
+    assert.deepEqual(this.projectData.colors, expectedColors)
+  });
+
+  QUnit.test('testFetchCommonPropertyDefinitionDetailsShouldFetchCommonPropDefForGivenCardTypesWhenCallbackIsNotGiven', function (assert) {
+    var expectedPropDefs = {prop1: {name: 'prop1', isNumeric: true}, prop3: {name: 'prop3'}};
+
+    assert.deepEqual(this.projectData.fetchCommonPropertyDefinitionDetails(['Card','Story']), expectedPropDefs);
+    assert.deepEqual(this.projectData.fetchCommonPropertyDefinitionDetails(['Card','Release']), {});
+  });
+
+  QUnit.test('testFetchCommonPropertyDefinitionDetailsShouldFetchPropDefDetailsAndInvokeCallbackWhenCallbackPassed', function (assert) {
+    var callbackSpy = sinon.spy();
+
+    var storyPropDefData = {
+      name: 'Story',
+      id: 2,
+      propertyDefinitions: [
+        {name: 'prop1', isNumeric: true, isManaged: true, operatorOptions: [['is not', 'is not']], propertyValueDetails: [{value: 'p1v1'}, {value: 'p1v2'}]},
+        {name: 'prop3', isManaged: false, operatorOptions: [['is', 'is']]},
+        {name: 'prop4', propertyValueDetails: [{value: 'p4v1'}, {value: 'p4v2'}]}
+      ]
+    }, cardPropDefData = {
+      name: 'Card',
+      id: 1,
+      propertyDefinitions: [
+        {name: 'prop1', isNumeric: true, isManaged: true, operatorOptions: [['is not', 'is not']], propertyValueDetails: [{value: 'p1v1'}, {value: 'p1v2'}]},
+        {name: 'prop2', propertyValueDetails: [{value: 'p2v1'}, {value: 'p2v2'}]},
+        {name: 'prop3', isManaged: false, operatorOptions: [['is', 'is']]}
+      ]
+    };
+
+    this.server.respondWith("GET", "/api/v2/projects/project_identifier/card_types/1.json?include_property_values=true",
+        [200, {"Content-Type": "application/json"}, JSON.stringify(cardPropDefData)]);
+    this.server.respondWith("GET", "/api/v2/projects/project_identifier/card_types/2.json?include_property_values=true",
+        [200, {"Content-Type": "application/json"}, JSON.stringify(storyPropDefData)]);
+
+
+    this.projectData.fetchCommonPropertyDefinitionDetails(['Story', 'Card'], callbackSpy);
+    this.server.respond();
+
+    assert.equal(this.server.requests.length, 2);
+    assert.equal(callbackSpy.callCount, 1);
+    assert.deepEqual(callbackSpy.args[0][0], {
+      prop1: {
+        name: 'prop1',
+        isNumeric: true,
+        isManaged: true,
+        operatorOptions: [['is not', 'is not']],
+        propertyValueDetails: [{value: 'p1v1'}, {value: 'p1v2'}]
+      },
+      prop3: {
+        name: 'prop3',
+        isManaged: false,
+        operatorOptions: [['is', 'is']]
+      }
+    });
+  });
+
+  QUnit.test('testFetchCommonPropertyDefinitionDetailsShouldNotFetchPropDefDetailsAgain', function (assert) {
+    var callbackSpy = sinon.spy();
+
+    var storyPropDefData = {
+      name: 'Story',
+      id: 2,
+      propertyDefinitions: [
+        {name: 'prop1', isNumeric: true, isManaged: true, operatorOptions: [['is not', 'is not']], propertyValueDetails: [{value: 'p1v1'}, {value: 'p1v2'}]},
+        {name: 'prop3', isManaged: false, operatorOptions: [['is', 'is']]},
+        {name: 'prop4', propertyValueDetails: [{value: 'p4v1'}, {value: 'p4v2'}]}
+      ]
+    }, cardPropDefData = {
+      name: 'Card',
+      id: 1,
+      propertyDefinitions: [
+        {name: 'prop1', isNumeric: true, isManaged: true, operatorOptions: [['is not', 'is not']], propertyValueDetails: [{value: 'p1v1'}, {value: 'p1v2'}]},
+        {name: 'prop2', propertyValueDetails: [{value: 'p2v1'}, {value: 'p2v2'}]},
+        {name: 'prop3', isManaged: false, operatorOptions: [['is', 'is']]},
+      ]
+    };
+
+    this.server.respondWith("GET", "/api/v2/projects/project_identifier/card_types/1.json?include_property_values=true",
+        [200, {"Content-Type": "application/json"}, JSON.stringify(cardPropDefData)]);
+    this.server.respondWith("GET", "/api/v2/projects/project_identifier/card_types/2.json?include_property_values=true",
+        [200, {"Content-Type": "application/json"}, JSON.stringify(storyPropDefData)]);
+
+    this.projectData.fetchCommonPropertyDefinitionDetails(['Card'], callbackSpy);
+    this.server.respond();
+
+    assert.equal(this.server.requests.length, 1);
+    assert.equal(callbackSpy.callCount, 1);
+    assert.deepEqual(Object.keys(callbackSpy.args[0][0]), ['prop1', 'prop2', 'prop3']);
+
+    this.projectData.fetchCommonPropertyDefinitionDetails(['Card', 'Story'], callbackSpy);
+    this.server.respond();
+
+    assert.equal(this.server.requests.length, 2);
+    assert.equal(callbackSpy.callCount, 2);
+    assert.deepEqual(Object.keys(callbackSpy.args[1][0]), ['prop1', 'prop3']);
+  });
+
+  QUnit.test('testShouldReturnName', function (assert) {
+    assert.equal(this.projectData.name, 'Project Name');
+  });
+
+  QUnit.test('testShouldReturnDateFormat', function (assert) {
+    assert.equal(this.projectData.dateFormat, 'some date format');
+  });
+
+  QUnit.test('testShouldFetchPropDefDetailsForAParticularProperty', function (assert) {
+    var callbackSpy = sinon.spy();
+    var storyCardTypeData = {
+      name: 'Story',
+      id: 2,
+      propertyDefinitions: [
+        {name: 'prop1', isNumeric: true, isManaged: true, operatorOptions: [['is not', 'is not']], propertyValueDetails: [{value: 'p1v1'}, {value: 'p1v2'}]},
+        {name: 'prop3', isManaged: false, operatorOptions: [['is', 'is']]},
+        {name: 'prop4', propertyValueDetails: [{value: 'p4v1'}, {value: 'p4v2'}]}
+      ]
+    }, cardCardTypeData = {
+      name: 'Card',
+      id: 1,
+      propertyDefinitions: [
+        {name: 'prop1', isNumeric: true, isManaged: true, operatorOptions: [['is not', 'is not']], propertyValueDetails: [{value: 'p1v1'}, {value: 'p1v2'}]},
+        {name: 'prop2', propertyValueDetails: [{value: 'p2v1'}, {value: 'p2v2'}]},
+        {name: 'prop3', isManaged: false, operatorOptions: [['is', 'is']]}
+      ]
+    };
+
+    this.server.respondWith("GET", "/api/v2/projects/project_identifier/card_types/1.json?include_property_values=true",
+        [200, {"Content-Type": "application/json"}, JSON.stringify(cardCardTypeData)]);
+    this.server.respondWith("GET", "/api/v2/projects/project_identifier/card_types/2.json?include_property_values=true",
+        [200, {"Content-Type": "application/json"}, JSON.stringify(storyCardTypeData)]);
+
+
+    this.projectData.fetchCommonPropertyDefinitionDetails(['Story', 'Card'], callbackSpy);
+    this.server.respond();
+
+    assert.equal(this.server.requests.length, 2);
+    assert.equal(callbackSpy.callCount, 1);
+    var propertyDefinition = this.projectData.fetchCommonPropertyDefinitionDetails(['Story', 'Card'], 'prop1');
+    assert.deepEqual(propertyDefinition, {
+      prop1: {
+        name: 'prop1',
+        isNumeric: true,
+        isManaged: true,
+        operatorOptions: [['is not', 'is not']],
+        propertyValueDetails: [{value: 'p1v1'}, {value: 'p1v2'}]
+      }
+    });
+  });
+
+  QUnit.test('testExecuteMqlShouldFetchDataForGivenMqlAndInvokeTheCallback', function (assert) {
+    var callbackSpy = sinon.spy();
+    var data= [
+      {Owner:'user1'},
+      {Owner:'user2'},
+      {Owner:'user3'},
+      {Owner:'user4'}
+    ];
+    this.server.respondWith("GET", "/api/v2/projects/project_identifier/cards/execute_mql.json?mql=SELECT+DISTINCT+OWNER",
+        [200, {"Content-Type": "application/json"}, JSON.stringify(data)]);
+
+    this.projectData.executeMql('SELECT DISTINCT OWNER', callbackSpy);
+    this.server.respond();
+
+    assert.equal(this.server.requests.length, 1);
+    assert.equal(callbackSpy.callCount, 1);
+    assert.deepEqual(callbackSpy.args[0][0], data);
+  });
+
+  QUnit.test('testExecuteMqlShouldCacheDataFetchedForMql', function (assert) {
+    var callbackSpy = sinon.spy();
+    var data= [
+      {Owner:'user1'},
+      {Owner:'user2'},
+      {Owner:'user3'},
+      {Owner:'user4'}
+    ];
+    this.server.respondWith("GET", "/api/v2/projects/project_identifier/cards/execute_mql.json?mql=SELECT+DISTINCT+OWNER",
+      [200, {"Content-Type": "application/json"}, JSON.stringify(data)]);
+
+    this.projectData.executeMql('SELECT DISTINCT OWNER', callbackSpy);
+    this.server.respond();
+    this.projectData.executeMql('SELECT DISTINCT OWNER', callbackSpy);
+    this.server.respond();
+    assert.equal(this.server.requestCount, 1);
+    assert.equal(callbackSpy.callCount, 2);
+    assert.deepEqual(callbackSpy.args[0][0], data);
+    assert.deepEqual(callbackSpy.args[1][0], data);
+  });
+
+  QUnit.test('testShouldReturnGivenUserDisplayName', function (assert) {
+    var expectUserDisplayName  = this.projectData.getDisplayNameFor('user1');
+    assert.equal(expectUserDisplayName, 'User1');
+  });
+
+  QUnit.test('testShouldReturnLoginNameAsDisplayNameIfNotPresent', function (assert) {
+    var expectUserDisplayName  = this.projectData.getDisplayNameFor('userDoesNotExist');
+    assert.equal(expectUserDisplayName, 'userDoesNotExist');
+  });
+
+  QUnit.test('testShouldReturnPropertiesOfGivenPropertyType', function (assert) {
+    var storyPropDefData = {
+      name: 'Story',
+      id: 2,
+      propertyDefinitions: [
+        {
+          name: 'prop1',
+          isNumeric: true,
+          isManaged: true,
+          operatorOptions: [['is not', 'is not']],
+          propertyValueDetails: [{value: 'p1v1'}, {value: 'p1v2'}]
+        },
+        {name: 'prop3', isManaged: false, dataType: 'card', operatorOptions: [['is', 'is']]},
+      ]
+    }, cardPropDefData = {
+      name: 'Card',
+      id: 1,
+      propertyDefinitions: [
+        {
+          name: 'prop1',
+          isNumeric: true,
+          isManaged: true,
+          operatorOptions: [['is not', 'is not']],
+          propertyValueDetails: [{value: 'p1v1'}, {value: 'p1v2'}]
+        },
+        {name: 'prop2', propertyValueDetails: [{value: 'p2v1'}, {value: 'p2v2'}]},
+        {name: 'prop3', isManaged: false, dataType: 'card', operatorOptions: [['is', 'is']]}
+      ]
+    };
+
+    this.server.respondWith("GET", "/api/v2/projects/project_identifier/card_types/1.json?include_property_values=true",
+        [200, {"Content-Type": "application/json"}, JSON.stringify(cardPropDefData)]);
+    this.server.respondWith("GET", "/api/v2/projects/project_identifier/card_types/2.json?include_property_values=true",
+        [200, {"Content-Type": "application/json"}, JSON.stringify(storyPropDefData)]);
+    var selectedCardTypeNames = ['Story', 'Card'];
+    var callBack = sinon.spy();
+
+    var expectedProperties = [{
+      dataType: "card",
+      isManaged: false,
+      name: "prop3",
+      operatorOptions: [["is", "is"]]
+    }];
+
+    this.projectData.getCommonHomogeneousProperties(selectedCardTypeNames, expectedProperties[0], callBack);
+    this.server.respond();
+
+    assert.deepEqual(callBack.args[0][0], expectedProperties);
+    assert.equal(callBack.callCount, 1);
+  });
+
+  QUnit.test('testShouldReturnPropertiesOfGivenPropertyType', function (assert) {
+    var storyPropDefData = {
+      name: 'Story',
+      id: 2,
+      propertyDefinitions: [
+        {
+          name: 'prop1',
+          isNumeric: true,
+          isManaged: true,
+          operatorOptions: [['is not', 'is not']],
+          propertyValueDetails: [{value: 'p1v1'}, {value: 'p1v2'}]
+        },
+        {name: 'prop3', isManaged: false, dataType: 'card', operatorOptions: [['is', 'is']]},
+      ]
+    }, cardPropDefData = {
+      name: 'Card',
+      id: 1,
+      propertyDefinitions: [
+        {
+          name: 'prop1',
+          isNumeric: true,
+          isManaged: true,
+          operatorOptions: [['is not', 'is not']],
+          propertyValueDetails: [{value: 'p1v1'}, {value: 'p1v2'}]
+        },
+        {name: 'prop2', propertyValueDetails: [{value: 'p2v1'}, {value: 'p2v2'}]},
+        {name: 'prop3', isManaged: false, dataType: 'card', operatorOptions: [['is', 'is']]}
+      ]
+    };
+
+    this.server.respondWith("GET", "/api/v2/projects/project_identifier/card_types/1.json?include_property_values=true",
+        [200, {"Content-Type": "application/json"}, JSON.stringify(cardPropDefData)]);
+    this.server.respondWith("GET", "/api/v2/projects/project_identifier/card_types/2.json?include_property_values=true",
+        [200, {"Content-Type": "application/json"}, JSON.stringify(storyPropDefData)]);
+    var selectedCardTypes = ['Story', 'Card'];
+    var callBack = sinon.spy();
+
+    var expectedProperties = [{
+      dataType: "card",
+      isManaged: false,
+      name: "prop3",
+      operatorOptions: [["is", "is"]]
+    }];
+
+    this.projectData.getCommonHomogeneousProperties(selectedCardTypes, expectedProperties[0], callBack);
+    this.server.respond();
+
+    assert.deepEqual(callBack.args[0][0], expectedProperties);
+    assert.equal(callBack.callCount, 1);
+  });
+
+  QUnit.test('testShouldInitialiseProjectDataStoreWithMultipleProjectsWithDeepCopy', function (assert) {
+    var pd1 = {
+      name: 'Story',
+      dataType: 'card',
+      isNumeric: false,
+      isManaged: false
+    }, pd2 = {
+      name: 'Points',
+      dataType: 'numeric',
+      isNumeric: true,
+      isManaged: false
+    }, firstProjectData = {
+      name: 'First Project',
+      dateFormat: '%d %b %Y',
+      identifier: 'firstProject',
+      cardTypes: [
+        {name: 'Work', id: 3, propertyDefinitions: [pd2]}
+      ],
+      tags: [],
+      team: []
+    }, secondProjectData = {
+      name: 'Second Project',
+      dateFormat: '%d %b %Y',
+      identifier: 'secondProject',
+      cardTypes: [
+        {name: 'Feature', id: 2, propertyDefinitions: [pd1, pd2]}
+      ],
+      tags: [],
+      team: []
+    };
+
+    var projectDataStore = new ProjectDataStore(firstProjectData, secondProjectData);
+    var actualData = projectDataStore.dataFor(firstProjectData.identifier);
+
+    var expectedData = firstProjectData.cardTypes[0];
+    assert.notEqual(actualData.cardTypes["Work"], expectedData);
+    expectedData.propertyDefinitions = {};
+    expectedData.propertyDefinitions[pd2.name] = pd2;
+    assert.deepEqual(actualData.cardTypes["Work"], expectedData);
+
+    actualData = projectDataStore.dataFor(secondProjectData.identifier);
+    expectedData = secondProjectData.cardTypes[0];
+    assert.notEqual(actualData.cardTypes["Feature"], expectedData);
+    expectedData.propertyDefinitions = {};
+    expectedData.propertyDefinitions[pd1.name] = pd1;
+    expectedData.propertyDefinitions[pd2.name] = pd2;
+    assert.deepEqual(actualData.cardTypes["Feature"], expectedData)
+  });
+
+  QUnit.test('testPropertyDefinitionValuesShouldFetchDataForGivenPropertyIdAndInvokeTheCallback', function (assert) {
+    var callbackSpy = sinon.spy();
+    var data= ['user1', 'user2', 'user3'];
+    this.server.respondWith("GET", "/api/v2/projects/project_identifier/property_definitions/values/1.json",
+        [200, {"Content-Type": "application/json"}, JSON.stringify({values:['user1','user2','user3']})]);
+
+    this.projectData.propertyDefinitionValues(1, callbackSpy);
+    this.server.respond();
+
+    assert.equal(this.server.requests.length, 1);
+    assert.equal(callbackSpy.callCount, 1);
+    assert.deepEqual(callbackSpy.args[0][0], data);
+  });
+
+  QUnit.test('testPropertyDefinitionValuesShouldCacheDataFetchedForPropId', function (assert) {
+    var callbackSpy = sinon.spy();
+    var owners = ['user1', 'user2', 'user3', 'user4' ];
+    var pairs = ['user13', 'user24', 'user35', 'user46' ];
+    this.server.respondWith("GET", "/api/v2/projects/project_identifier/property_definitions/values/1.json",
+        [200, {"Content-Type": "application/json"}, JSON.stringify({values:['user1','user2','user3','user4']})]);
+    this.server.respondWith("GET", "/api/v2/projects/project_identifier/property_definitions/values/2.json",
+        [200, {"Content-Type": "application/json"}, JSON.stringify({values:['user13','user24','user35','user46']})]);
+
+    this.projectData.propertyDefinitionValues(1, callbackSpy);
+    this.server.respond();
+    this.projectData.propertyDefinitionValues(2, callbackSpy);
+    this.server.respond();
+    this.projectData.propertyDefinitionValues(1, callbackSpy);
+    this.server.respond();
+    assert.equal(this.server.requestCount, 2);
+    assert.equal(callbackSpy.callCount, 3);
+    assert.deepEqual(callbackSpy.args[0][0], owners);
+    assert.deepEqual(callbackSpy.args[1][0], pairs);
+    assert.deepEqual(callbackSpy.args[2][0], owners);
+  });
+</script>
+</body>
+</html>

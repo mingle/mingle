@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Finding cards to work with">
+    <section title="Introduction...">
+    	<p>Whenever you're working within Mingle, you'll be working with cards relevant to your current task(s).</p>
+    	
+    	<hint>For a general overview of Mingle's navigation, see <cref topic="getting_around_in_mingle">Getting around in Mingle</cref>.</hint>
+    	
+    	<bullets title="Mingle gives you several options for locating relevant cards">    	
+	    	 <item>Mingle's card filters</item>
+	    	 <item>favorites</item>
+	    	 <item>tabs</item>
+	    	 <item>History tab</item>
+             <item>search</item>
+    	</bullets>    	
+    	<hint>You may also find relevant cards from links in wiki pages, revision notes and other cards.</hint>
+    </section>
+	<section title="Mingle card filters">
+    <p>Mingle's <cref topic="filter_list_by_component">card filters</cref> are located to the right of any list of cards and are the most common way to find the cards you need to work with. It is the starting place for <cref topic="favorites_and_tabs_page">creating favorites and tabs</cref>.</p>
+    <p>You can view the filtered cards in either as a Grid or a List (default). From here, you can save the card view so you and other team members can quickly access the list of cards (see Favorites below).</p>
+	</section>
+	<section title="Favorites">    	
+    	<p>If you or another team member has setup favorites, you can quickly display a list of relevant cards by selecting a favorite.</p> 
+    	<p>You can see a list of favorites by clicking the <sidebar-button>Favorites</sidebar-button> link to the right of a list of cards.</p>    	
+    	<p>You can also save card views that are relevant to you at any time, and turn these into tabs if other team members will find them useful.</p>
+	</section>
+	<section title="Tabs">    	
+    	<p>The <tab>All</tab> tab comes with Mingle by default, and is the only default tab which displays cards. 
+    		Other tabs (besides <tab>Overview</tab>, <tab>Source</tab>, <tab>History</tab> and <tab>Project admin</tab>) have been customized for your project from favorites. 
+    		These custom tabs group cards according to common project needs, and so are a good place to search for relevant cards.</p>
+    </section>
+	<section title="Search">    	
+    	<p>Mingle's <cref topic="mingle_search">free text search</cref> is comprehensive and lets you locate any project artifact, including cards. 
+    		If you remember the name of a card you were working with, or any part of the description, you can type it in Mingle's Search field at the top right of the page.</p>
+    </section>
+	<section title="History tab">    	
+    	<p>The <tab>History</tab> tab (in the top right of the Mingle screen) lets you view changes made to a project over a specific period of time (by default all changes made today). 
+    		It includes a complete audit log of all project changes which you can filter according to the information you want to see. 
+    		This lets you find cards that were updated during specific times, by specific people and for specific card properties/tags. 
+    		See <cref topic="viewing_project_changes">Viewing project changes</cref> (History tab) for details.</p>
+    </section>
+</topic>
+
+

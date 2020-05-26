@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+
+<topic title="Recommendations for running Mingle Plus on Oracle">
+    <p>
+    Before delving into the specifics of our recommendations towards the end of this document, it would help to clarify a few Oracle/database concepts and terms that might otherwise cause confusion. Following is a small glossary of immediately relevant terms. You can find a more complete one here: <exref url="http://download.oracle.com/docs/cd/B12037_01/server.101/b10743/glossary.htm">http://download.oracle.com/docs/cd/B12037_01/server.101/b10743/glossary.htm</exref>.
+    </p>
+    <subsection title="Server vs. Database vs. Instance">
+      <p>A server refers to the computer/cluster that Oracle is installed on. <exref url="http://download.oracle.com/docs/cd/B12037_01/server.101/b10743/glossary.htm#i432724">http://download.oracle.com/docs/cd/B12037_01/server.101/b10743/glossary.htm#i432724</exref>
+      </p>
+      <p>
+      A database, strictly speaking, refers to the set of physical structures stored on a storage device. These include data files, control files and redo logs. <exref url="http://download.oracle.com/docs/cd/B12037_01/server.101/b10743/glossary.htm#i432571">http://download.oracle.com/docs/cd/B12037_01/server.101/b10743/glossary.htm#i432571</exref>
+      </p>
+      <p>
+      An instance of Oracle is the combination of a System Global Area and background processes, identified by a service name (also known as SID) which load a single database. <exref url="http://download.oracle.com/docs/cd/B12037_01/server.101/b10743/glossary.htm#i432427">http://download.oracle.com/docs/cd/B12037_01/server.101/b10743/glossary.htm#i432427</exref>
+      </p>
+    </subsection>
+      
+    <subsection title="Dedicated Server vs. Shared Server">
+        <p>
+        Dedicated server is a server configuration in which every user process is handled by a separate server side process. <exref url="http://download.oracle.com/docs/cd/B12037_01/server.101/b10743/glossary.htm#i432364">http://download.oracle.com/docs/cd/B12037_01/server.101/b10743/glossary.htm#i432364</exref>
+        </p>
+        <p>
+        Shared server is a server configuration in which many user processes are handled by a small number of server processes, thereby conserving server resources. <exref url="http://download.oracle.com/docs/cd/B12037_01/server.101/b10743/glossary.htm#i433118">http://download.oracle.com/docs/cd/B12037_01/server.101/b10743/glossary.htm#i433118</exref>
+        </p>
+    </subsection>
+    <subsection title="Character semantics vs. Byte semantics">
+      <p>With character semantics, the length of strings in the database is measured in characters. <exref url="http://download.oracle.com/docs/cd/B12037_01/server.101/b10743/glossary.htm#i997675">http://download.oracle.com/docs/cd/B12037_01/server.101/b10743/glossary.htm#i997675</exref>
+      </p>
+      <p>With byte semantics, the length of strings in the database is measured in bytes. <exref url="http://download.oracle.com/docs/cd/B12037_01/server.101/b10743/glossary.htm#i432211">http://download.oracle.com/docs/cd/B12037_01/server.101/b10743/glossary.htm#i432211</exref>
+      </p>
+    </subsection>  
+    <subsection title="Application database vs. Integration database">
+        <p>Application database is a database that is controlled and accessed by a single application. Databases of this sort can be more concrete and simpler in design than alternatives. They can easily be evolved and refactored by the application they service. <exref url="http://martinfowler.com/bliki/ApplicationDatabase.html">http://martinfowler.com/bliki/ApplicationDatabase.html</exref>
+        </p>
+        <p>Integration databases, in contrast, store data across multiple applications. They need more centralized control and change management in order to minimize impact to all stakeholders. In return, they allow for easier synchronization of data between the various systems that share the data. <exref url="http://martinfowler.com/bliki/IntegrationDatabase.html">http://martinfowler.com/bliki/IntegrationDatabase.html</exref>
+        </p>
+        <p>Mingle Plus is designed to require an application database, as defined above. This gives our users the benefit of being able to use our latest features as soon as we release them, without having to worry too much about database upgrades.
+        </p>
+        <p>However, every Mingle Plus upgrade modifies the database schema; which means, it is not open for customizations and extensions at the database level. If you make changes to the schema, such as storing tables and indexes into separate tablespaces, there is great chance that your next upgrade may fail or undo your changes in unpredictable ways.
+        </p>
+        <p>Given the above caveats, we would like to provide some recommendations. We arrived at these through a combination of both performance testing/profiling as well as our experiences with our customers in the field. We strongly suggest starting with these recommendations.  After observing Mingle Plus and Oracle in your environment, your DBA may wish to them modify some of these settings or set new ones. 
+        </p>
+        <p>However, we would, once again, strongly warn against structurally modifying the stored data/schema in any way.</p>
+    </subsection>
+    <section title="Recommendations">
+	    <steps>
+	      <item>Mingle Plus requires your database charset to be AL32UTF8. While you may transparently convert most charsets to this by setting your NLS_LANG variable at the client level, some field length validations in Mingle Plus might fail if this is not ensured.</item>
+        <item>Set the SGA for the instance to be about 40-50% of available RAM, up to a maximum of 60%. A shared_pool_size of 400MB and a sort_area_size of 2MB will contribute additional, but smaller, improvements.</item>
+        <item>Due to limitations with underlying technology on which Mingle Plus is built, we are unable, at this point, to utilize Oracle's prepared statements. A limited workaround for this is to set the shared_cursor_mode to 'force'.</item>
+        <item>Prefer dedicated mode over shared mode as clients connecting to the server in dedicated mode offer better performance under heavy load.</item>
+        <item>We recommend character semantics over byte semantics.</item>
+        <item>Configure your redo log size so that they rotate about every 20 minutes. 6 logs of 100MB each is a good starting point.</item>
+        <item>Some/all of the above changes cannot be done at the schema level. Thus, you may have to setup a new Oracle instance (instance as described above) for Mingle Plus to use.</item>
+		<item>Running Oracle database migrations during upgrade may cause increased disk usage for your archive log space. If archive log space is a concern, please consider temporarily disabling your archive log while upgrading Mingle Plus.</item>
+      </steps>
+    </section>
+    <p>Please note that, in general, we may not be able to answer further questions about other specific tuning parameters; and rely on your discretion and caution in making such changes in your environment.
+    </p>
+</topic>

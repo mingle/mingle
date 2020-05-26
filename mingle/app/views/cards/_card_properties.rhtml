@@ -1,0 +1,34 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="card-properties" class="card-properties prevent-inline-edit view-mode-only" onclick="PropertyEditor.Init.ondemand(event);" data-url="<%= url_for(:controller => 'cards', :action => 'update_property_on_lightbox', :project_id => @project.identifier, :card => card.id) %>" data-properties-expanded="<%= properties_expanded %>">
+    <%= hidden_field_tag 'changed_property', '', :id => 'changed_property_name'%>
+
+    <% prop_defs = card.property_definitions %>
+
+    <% prop_defs.each_with_index do |prop_def, index| -%>
+      <%= render :partial => "cards/property", :locals => property_editor_locals(prop_def, card, CardsHelper::CARD_SHOW_MODE, :onchange => onchange_for_property_editor(prop_def, local_assigns[:onchange] || "$j(this).closest('.card-properties').savePropertyChange('changed_property_name');", "changed_property_name"), :expandable => index >= 4, :expanded => properties_expanded) %>
+      <% if (index + 1) % 4 == 0 %>
+        <%= clear_float %>
+      <% end %>
+    <% end %>
+
+    <%= clear_float %>
+
+    <% if prop_defs.size > 4 %>
+       <div class="show-more-card-properties fa fa-chevron-<%= properties_expanded ? 'up' : 'down'  %>"></div>
+    <% end %>
+</div>

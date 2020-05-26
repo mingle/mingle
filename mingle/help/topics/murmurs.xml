@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_help.dtd">
+<chapter title="Murmurs">
+
+<section title ="What are murmurs?">
+	<p>Murmurs are Mingle’s way for your team to communicate in your project, from team lunches to specific card commits and sign-off issues. Needless to say, they’re super important. Murmurs are also grouped when one or more people have replied making it easier to follow conversations. You can drill down into the specific conversation by clicking on the chat bubble icon. Just go to the murmurs tab to see what your team has been sharing and to murmur yourself!</p>
+     <p><screenshot alttext="Murmurs in use" src="resources/images/murmurs_new.png"/></p>
+</section>
+
+<section title="Murmuring @someone, @team, @groups and murmur email notifications">
+  <bullets>
+      <item><strong>Email notifications when you murmur @someone, @team, and @groups</strong>: Now you get an email when you’re murmured at so you don’t miss a beat. Just @ the team member you’re murmuring with and they’ll get an email. Whether outside the office or simply not in Mingle at the moment, these notifications help make sure you don’t miss what’s going on with your team.</item>
+      <item><strong>Autocomplete @teammate</strong>: To help you murmur with your team, Mingle will autocomplete the name of the team member you’re murmuring at, saving you time and making sure there are no typos :) Just select the name you’re looking for as soon as it appears and you’re set. They’ll receive an email as soon as you’ve murmured your message.</item>
+      <item><strong>@team and @group</strong>: Sometimes you need to talk with your entire team or specific <cref topic ="user_groups">groups</cref> in your project (devs or QAs, for example). So we’ve made team a default group you can murmur to. When you murmur @team, everyone on your team receives an email. And if you’ve defined groups in your project, Mingle will automatically know so you can murmur a specific message to a single group, let’s say @devs…and everyone in your dev group will know!</item>
+    </bullets>
+</section>
+
+<section file="murmurs_card_links"/>
+
+
+<section title="Also see...">
+<bullets>
+	<item><cref topic="using_murmurs">Using Murmurs</cref></item>
+	<item><cref topic="mingle_api_murmurs">Murmurs API</cref></item>
+	<item><cref topic="explore_mingle">Explore Mingle</cref></item>
+</bullets>
+</section>
+
+</chapter>

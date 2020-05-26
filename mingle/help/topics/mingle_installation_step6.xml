@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Step 6 - Setting up the first user account">
+	
+		<p>Complete all of your details on this page, ensuring that you follow each of the instructions next to the field names.</p>
+		<note>Unlike Mingle in the cloud, Mingle onsite does not require password formats by default. However, you can require a password format by setting the "password_format" parameter in Mingle's auth_config.yml file. This setting will enforce a requirement of at least 5 characters, including a number and a symbol character.</note>
+		<screenshot alttext="Set up the first user account" src="resources/images/installation/setup_user.png"/>
+		<p>	Click the <strong>Continue</strong> button. Then Mingle will display the <strong>Import project templates</strong> page.</p>
+</topic>

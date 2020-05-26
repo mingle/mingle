@@ -1,0 +1,51 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% lightbox = Lightbox.with_close_link(self, 'Close', '') %>
+<% lightbox.body do %>
+
+  <%= lightbox_close_button %>
+
+  <div class="invite-to-team-requires-upgrade failed">
+
+    <%= image_tag '../images/upgrade_glyph.png' %>
+
+    <h1>Just one more thing...</h1>
+
+    <p>You've already added</p>
+
+    <div class="user-count">
+      <%= user_count %>/<%= user_count %>
+    </div>
+
+    <p>To add another user, you'll have to upgrade your plan.</p>
+
+    <%= link_to 'Upgrade', ask_for_upgrade_path, 'data-remote' => true, 'data-method' => 'post',  :class => 'upgrade primary link_as_button' %>
+
+  </div>
+<% end %>
+<%= javascript_with_rescue <<-JS
+  var upgradeButton = $j('.invite-to-team-requires-upgrade .upgrade');
+  upgradeButton.withProgressBar({event: "click"});
+  upgradeButton.on('ajax:success', function(event, data, status, xhr) {
+                                     InputingContexts.update(data);
+                                   });
+  upgradeButton.on('ajax:error', function(event, data, status, xhr) {
+                                   upgradeButton.tipsyFlash("Unable to request upgrade. Please try again later.");
+                                 });
+
+JS
+%>

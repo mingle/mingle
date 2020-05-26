@@ -1,0 +1,35 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="<%= html_id_prefix %>">
+  <a id="<%= html_id_prefix %>_drop_link" style="display:inline;" class=<%= class_name %>></a>
+  <% if defined?(field_name) && field_name -%>
+    <input name="<%= h field_name %>" type="hidden"/>
+  <% end -%>
+</div>  
+<div id="<%= html_id_prefix %>_drop_down" style="display: none; z-index: 9999 !important;" class="widget-dropdown">
+  <ul />
+</div>
+<% 
+  @options = {
+    :container => html_id_prefix, 
+    :select_options => select_options, 
+    :html_id_prefix => html_id_prefix
+  }
+  @options[:onchange] = onchange if defined?(onchange) && onchange
+  @options[:initial_selected] = initial_selected if defined?(initial_selected) && initial_selected
+-%>
+  

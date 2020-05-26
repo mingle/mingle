@@ -1,0 +1,28 @@
+#  Copyright 2020 ThoughtWorks, Inc.
+#  
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Affero General Public License as
+#  published by the Free Software Foundation, either version 3 of the
+#  License, or (at your option) any later version.
+#  
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Affero General Public License for more details.
+#  
+#  You should have received a copy of the GNU Affero General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+test:
+  adapter: jdbc
+  driver: <%= (java.lang.System.getProperty('DB_URL') || java.lang.System.getenv('DB_URL')).to_s =~ /jdbc:postgresql:/ ? "org.postgresql.Driver" : "oracle.jdbc.driver.OracleDriver" %>
+  url: <%= java.lang.System.getProperty('DB_URL') || java.lang.System.getenv('DB_URL') %>
+  username: <%= ENV['CC_HOSTNAME'] ? "#{ ENV['MINGLE_TEST_DB'] || 'mng_test' }_#{ ENV['CC_HOSTNAME'] }" : (java.lang.System.getProperty('DB_ADMIN_USER') || java.lang.System.getenv('DB_ADMIN_USER')) %>
+  password: <%= ENV['CC_HOSTNAME'] ? "#{ ENV['MINGLE_TEST_DB'] || 'mng_test' }_#{ ENV['CC_HOSTNAME'] }" : (java.lang.System.getProperty('DB_ADMIN_PASSWORD') || ENV['DB_ADMIN_PASSWORD']) %>
+  pool: <%= java.lang.System.getProperty('jruby.max.runtimes') || java.lang.System.getenv('jruby.max.runtimes') %>
+production:
+  adapter: jdbc
+  driver: <%= (java.lang.System.getProperty('DB_URL') || java.lang.System.getenv('DB_URL')).to_s =~ /jdbc:postgresql:/ ? "org.postgresql.Driver" : "oracle.jdbc.driver.OracleDriver" %>
+  url: <%= java.lang.System.getProperty('DB_URL') || java.lang.System.getenv('DB_URL') %>
+  username: <%= java.lang.System.getProperty('DB_ADMIN_USER') || java.lang.System.getenv('DB_ADMIN_USER') %>
+  password: <%= java.lang.System.getProperty('DB_ADMIN_PASSWORD') || ENV['DB_ADMIN_PASSWORD'] %>
+  pool: <%= java.lang.System.getProperty('jruby.max.runtimes') || java.lang.System.getenv('jruby.max.runtimes') %>

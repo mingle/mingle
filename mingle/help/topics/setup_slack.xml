@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Set up Mingle with Slack"> 
+   <p>In order to use the integration, it will need to be configured in three steps.</p>
+   <p><strong>1. Integrate your Mingle instance with your Slack team</strong></p>
+   <p>A Mingle administrator will have to configure this from the home page.</p>
+
+   		<bullets>
+      		<item>From the Mingle home page, click on Admin > Integrations</item>
+     		<item>Click on Add to Slack</item>
+      		<item>You will be redirected to a Slack page. Log in with your Slack account, and select the team you’d like to integrate with</item>
+      		<item>You will be redirected back to the Mingle home page</item>
+  		</bullets>
+
+  <br/>
+
+  <p><strong>2. Integrate your project with a Slack channel</strong></p>
+  <p>Once a Mingle administrator has tied a Slack team to the instance, a  project administrator can set up the integration for their project.</p>
+  
+  		<bullets>
+      		<item>From within the project, click on the Project Admin, and select Slack under the Integrations section</item>
+      		<item>All open channels from your Slack team are listed here. Select the one you’d like to integrate with, and proceed</item>
+      		<item>To integrate with a private channel, complete Step 3 first (link your Mingle profile with your Slack account) and then click on Get private channels</item>
+      		<item>Click on Save</item>
+      		<item>A confirmation message is posted on the channel on Slack. This channel will receive all murmurs addressed to @team. All slash commands are executable from this channel.</item>
+          <item>You could integrate more channels to your project. Select from the dropdown, and save. You will now be able run slash commands from any of these channels. </item>
+  		</bullets>
+  
+  <br/>
+  
+  <p><strong>3. Integrate individual Mingle profiles with Slack accounts</strong></p>
+  <p>In order for us to know who you are on Slack, you will have to tie your Mingle profile to your Slack id.</p>
+
+		<bullets>
+  			<item>Each team member will have to navigate to their profile page from the profile icon on the top right corner</item>
+  			<item>Click on the Slack tab</item>
+  			<item>Complete the integration</item>
+  <p>You will now be able to use all the <cref topic="features_slack">features</cref> that the Slack integration offers.</p>
+		</bullets>
+
+</topic>
+
+

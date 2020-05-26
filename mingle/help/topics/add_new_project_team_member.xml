@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE subsection SYSTEM "mingle_help.dtd">
+<section title="Add new project team member">
+
+<subsection title="Invite by email">
+	<bullets title="">
+      <item>The easiest way to add members to your project is to invite them by email. Just click on the pink user + icon in the bottom tray and invite away! <exref url="/mingle/news/2014/03/18/Invite-Your-Team-By-Email.html">Read more here</exref>.</item>
+      <item>Invite button will only be visible to the Project administrator(s) and the Mingle administrator(s).</item>
+      <item>Invite button will not be visible for a Mingle instance that has SSO configured.</item>
+    </bullets>
+	  <p><screenshot src="resources/images/invite_by_emails.png"/></p>
+</subsection>	
+    
+<subsection title="Add from Project admin tab">
+	<p>You can also add members to your project from the Project admin tab by following these steps:</p>
+  <steps>
+    <item>
+      <p>Click on <link>Add team member</link> link on the team management page.</p>
+      <screenshot src="resources/images/add_team_member.png"/>
+    </item>
+    <item>
+      <p>You will be directed to a new page where you can make any existing users of the Mingle instance as team members of the current project. On this page, you can also search terms to find users you want to add.</p>
+      <screenshot src="resources/images/add_project_team_member2.png"/>
+    </item>
+    <item>
+      <p>Clicking on the <link>Full</link> link will add the selected user as a project member of the current project. </p>
+      <screenshot src="resources/images/add_project_team_member3.png"/>
+    </item>
+    <item>
+      <p>Clicking on the <link>Read only</link> link will add the selected user as a read only project member of the current project. </p>
+      <screenshot src="resources/images/add_project_team_member3_readonly.png"/>
+    </item>
+    <item>
+      <p>Now if you go back to project team member page you can verify that the selected users are listed as team members.</p>
+      <screenshot src="resources/images/add_project_team_member4.png"/>
+    </item>
+  </steps>
+</subsection>
+</section>

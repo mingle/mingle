@@ -1,0 +1,47 @@
+var $userDirPath = _userDataDir();
+
+function setUp(){
+	_navigateTo("/demo/php/fileUpload.htm");	
+}
+
+function tearDown(){
+	//_click(_link("Back to form"));
+}
+
+function testFileSingle(){
+	_setFile(_file("file"), "scripts/demo/uploadme.txt");
+	_click(_submit("Submit Single"));
+	_assertExists(_span("size"));
+	_assertContainsText("0.3046875 Kb", _span("size"));
+	_assertContainsText("Single", _span("type"));
+}
+
+function testWithTypeChange(){
+	_setFile(_file("file"), "scripts/demo/uploadme.txt");
+	if (_isIE()){
+		_call(_file("file").outerHTML = _file("file").outerHTML.replace(/type=file/, "type=text"));
+	}else{
+		_call(_file("file").type = "text");
+	}
+	_setValue(_textbox("file"), "scripts/demo/uploadme.txt");
+	_click(_submit("Submit Single"));
+	_assertExists(_span("size"));
+	_assertContainsText("0.3046875 Kb", _span("size"));
+	_assertContainsText("Single", _span("type"));
+}
+
+function testFileMulti(){
+	_setFile(_file("file[]"), "scripts/demo/uploadme.txt");
+	_setFile(_file("file[]"), "scripts/demo/uploadme2.txt");
+	_click(_submit("Submit Array"));
+	
+	_assertContainsText("Array", _span("type"));
+
+	_assertContainsText("uploadme.txt", _span("file"));
+	_assertContainsText("0.3046875 Kb", _span("size"));		
+	
+	_assertContainsText("uploadme2.txt", _span("file[1]"));
+	_assertContainsText("0.32421875 Kb", _span("size[1]"));	
+}
+
+_runUnitTests();

@@ -1,0 +1,24 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div class="card-title">
+  <h1><%= link_to "##{card.number}", card_show_path(:project_id => @project.identifier,
+                                                    :number => card.number), {:class => 'card-number'} %>
+  <span focus-target="input[name='card[name]']" class="card-name view-mode-only" data-reloadable-url="<%= url_for(:controller => 'cards', :action => 'card_name', :number => card.number) %>" data-reloadable-escape="true" ><%= card.name %></span>
+   <%= text_field_tag 'card[name]', card.name, { :class => 'edit-mode-only large', 'maxlength' => 255, :onkeydown => "MingleUI.cmd.saveOnKeyHandler(event)", :id => nil } %>
+   <%= card_name_clippy(card) %>
+  </h1>
+</div>

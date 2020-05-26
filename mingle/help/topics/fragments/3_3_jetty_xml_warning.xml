@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<item>
+  <p><strong>Similar to the web.xml file, jetty.xml also has undergone big changes</strong>. In the past, some users had to customize their jetty.xml to allow Mingle to serve https requests without Apache and mod_ssl. Starting with 3.3, this is natively supported in Mingle. Instructions on how to configure it can be found in <cref topic="advanced_mingle_configuration#configure_ssl">Configure SSL Access section</cref>. For any other custom changes to your jetty.xml, we advise you backup your jetty.xml file and start using the one that comes from the default Mingle 3.3.1 installation, and transfer these old jetty.xml changes back to the jetty.xml file. This file is located in the [mingle_installation]/config/ directory.</p>
+  <warning>Mingle 3.3+ will NOT start properly if you are using a jetty.xml file from older versions of Mingle.</warning>
+</item>

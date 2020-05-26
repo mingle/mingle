@@ -1,0 +1,39 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div class="dependency-subsection <%= dependency_type %> <%= "hide" if(dependencies.size == 0) %>" >
+  <h3>
+    <span class="dependency-icon">
+      <%-
+      raising_class = "fa-stack-1x mng #{dependency_type == "raising" ? "mng-dep-raised" : "mng-dep-raised-o"}"
+      resolving_class = "fa-stack-1x mng #{dependency_type == "resolving" ? "mng-dep-resolving" : "mng-dep-resolving-o"}"
+      -%>
+      <%= content_tag(:i, "", :class => raising_class) %>
+      <%= content_tag(:i, "", :class => resolving_class) %>
+    </span>
+    <span class="subsection-title"><%= dependency_type.capitalize %></span>
+  </h3>
+  <ul class="dependencies" data-dependency-popup-url="<%= url_for(:controller =>"dependencies", :action => "popup_show", :color_by => params[:color_by]) %>">
+    <% dependencies.each do |dependency| %>
+      <li data-dependency-number='<%= dependency.number %>'>
+        <%= link_to dependency.number_and_name, "#", :"data-dependency-number" => dependency.number %>
+        <% if dependency.resolving_project_id.blank? && dependency.status != Dependency::RESOLVED  %>
+          <i class="fa fa-exclamation-triangle" title="Dependency error: missing resolving project."></i>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</div>

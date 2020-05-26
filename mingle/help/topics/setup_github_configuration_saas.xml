@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE section SYSTEM "mingle_help.dtd">
+<section title="GitHub integration for Mingle in the Cloud" id="github_saas">
+  
+  <p>The following instructions outline how to integrate your GitHub repo with your Mingle in the cloud project. You can integrate multiple GitHub repos to a single project and connect a single GitHub repo to multiple projects.</p>
+  <note>
+    <bullets>
+      <item>This integration allows your GitHub commits to be pushed as <cref topic="murmurs">Murmurs</cref> to your Mingle project and, when you mention the card number in your commit message, the individual card as well.</item>
+      <item>The commit murmured to your Mingle project will contain a link back to your GitHub repo so you can see commit details and diffs.</item>      
+      <item><strong>TIP</strong>: If you <cref topic="murmurs">murmur</cref> at an existing team member (e.g. @user) in your Git commit message that person will also receive an email notification.</item>
+      <item>You can integrate multiple GitHub repos to a single project and connect a single GitHub repo to multiple projects, but you must integrate one repo to one project at a time.</item>
+      <item>If you’re connecting a single repo to multiple projects, make sure your commit message includes the project id along with the card number (e.g. project_A/#123 or project_B/#123), otherwise the commit will be murmured to the same card number in all of your projects. Use <exref url="/mingle/news/2014/04/18/Clippy.html">Clippy</exref> to help out with this.</item>
+    </bullets>
+  </note>    
+    <subsection title="Requirements">
+      <bullets>
+        <item>Only users who are both Mingle admins and <exref url="https://help.github.com/articles/what-are-the-different-access-permissions">owners of the GitHub repo</exref> can setup the integration with the Mingle project</item>
+      </bullets>  
+    </subsection>
+
+    <subsection title="Steps">
+      <steps>
+        <item>Open your Mingle project</item>
+        <item>Got to <strong>Project Admin</strong></item>      
+        <item>Under <strong>Code Integration</strong> select <strong>GitHub</strong></item> 
+        
+              <screenshot alttext="avatars_on_the_wall" src="resources/images/github_code_integration.png"/>
+             
+        <item><strong>Complete the form</strong> with your GitHub information</item> 
+        <item>Click<strong>"Connect to GitHub"</strong></item>
+        
+                <screenshot alttext="avatars_on_the_wall" src="resources/images/github_connect_form.png"/>
+           
+      </steps>
+      <note>If you create webhooks directly from your GitHub account, they will not be listed in Mingle. You must create the webhook from Mingle in order for it to be listed.</note>	
+    </subsection>
+
+    <subsection title="GitHub personal API token">
+      <steps>
+        <item>Learn more about GitHub personal API token <exref url="https://github.com/blog/1509-personal-api-tokens">here</exref></item>
+        <item>Sign in to GitHub</item>      
+        <item>Go to <strong>Edit Profile</strong></item>      
+        <item>Select <strong>Applications</strong></item> 
+        
+                <screenshot alttext="avatars_on_the_wall" src="resources/images/github_applications.png"/>
+        
+        <item>Click <strong>Generate New Token</strong></item>   
+        
+                <screenshot alttext="avatars_on_the_wall" src="resources/images/github_generate_new_token.png"/>
+                
+        <item><strong>Name token</strong></item>     
+        <item>Click <strong>Generate token</strong></item>   
+        
+                <screenshot alttext="avatars_on_the_wall" src="resources/images/github_generate_token.png"/>
+        
+        <item>Copy token to clipboard (<strong>Note:</strong> Once you’ve navigated away from this page you will no longer be able to view the token and will need to regenerate the token)</item>
+        
+              <screenshot alttext="avatars_on_the_wall" src="resources/images/github_copy_to_clipboard.png"/>
+             
+        <item>Paste this token in the corresponding Mingle field (see above)</item>   
+      </steps>
+    </subsection>
+
+    <subsection title="Test your Git Integration">
+      <steps>
+         <item>Push a commit to the GitHub repo you just added the webhook to</item>
+         <item>Go to the Murmurs tab in the Mingle project associated with the webhook</item>     
+         <item>You should see a recent Murmur, like this:</item>
+         
+          <screenshot alttext="avatars_on_the_wall" src="resources/images/github_murmur.png"/>
+         
+         <item>If you pushed a commit that referenced a specific card, you should also see the commit murmured on the individual card sidebar as well:</item>
+         
+         <screenshot alttext="avatars_on_the_wall" src="resources/images/github_card.png"/>
+        </steps>        
+    </subsection>
+	<subsection title="Deleting Webhooks">
+		<p>You currently cannot delete webhooks from Mingle. You must delete them from your GitHub account. (N.B. For the time being, even if you delete the webhook from your GitHub account, it will still be listed on the GitHub integration page in your Mingle project.)</p>
+	</subsection>	
+</section>

@@ -1,0 +1,52 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% if @projects.empty? -%>
+  <% info_box do %>
+    <% create_link_options = { :controller => 'projects', :action => 'new' } %>
+    <p id="info">
+      There are no projects from which to create a template. <%= link_to 'Create a new project...', create_link_options %>
+    </p>
+  <% end  %>
+<% else %>
+  <h1>Create template from...</h1>
+
+  <% @projects.each do |project| -%>
+    <% @project=project %>
+    <% styled_box :class => 'project' do %>
+      <div class="project-icon-holder">
+      <%= image_tag(icon_url_for_model(@project), :size => "32x32") if @project.icon %>
+      </div>
+
+      <div class="project-description">
+          <h2><%= link_to h(@project.name), :controller => 'projects', :action => 'show', :project_id => @project.identifier %><%= spinner(:id => "#{@project.identifier}_spinner") %></h2>
+          <p><%=h @project.description %></p>
+
+          <%= link_to_remote("Create template from this project",
+              {:before => "$('#{@project.identifier}_spinner').show()",
+              :complete => "$('#{@project.identifier}_spinner').hide()",
+              :url => { :controller => 'templates', :action => 'templatize', :project_id => @project.identifier }},
+              :class => 'template-light link-with-icon', :id => "create_template_#{@project.identifier}") %>
+      </div>
+
+      <%= clear_float %>
+    <% end %>
+    <% @project = nil %>
+  <% end -%>
+
+<% end -%>
+
+<%= render :partial => 'templates/new_actions' %>

@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Workflow">
+
+    <p>Mingle supports whatever software development methodology you choose (Scrum, XP, a hybrid approach, etc.).  As you set up your project you will need to identify a project "workflow".</p>  
+
+    <p>Workflow is the life cycle for each <cref topic="card_types">card type</cref> in your project.  A common way to create a workflow is to set up a "Status" <cref topic="card_properties#managed_list_properties">card property</cref> (with values) and <cref topic="card_transitions">card transitions</cref> that move your card between the statuses you define. Here is an example of a Scrum team's user story workflow.  The life cycle reads left to right where each user story starts in "Ready for Analysis", moves through each status and ends in "Accepted".</p>
+
+    <screenshot alttext="A Scrum team's user story workflow shown via the Mingle Grid view" src="resources/images/explore_mingle_workflow_story.png" />
+
+    <p>Here is an example of the same team's defect workflow.  It reads left to right as well but notice the different life cycle.</p>  
+
+    <screenshot alttext="A Scrum team's defect workflow shown via the Mingle Grid view" src="resources/images/explore_mingle_workflow_defect.png" />
+
+    <section title="Our Recommendation" id='explore_mingle_workflow_recommendation'>
+        <p>Answer the following questions before you define the workflow for your Mingle project.</p>
+
+        <p>
+        <table>
+            <header-row>
+                <col-header>Question</col-header>
+                <col-header>How will this help?</col-header>
+            </header-row>
+            <row>
+                <col>
+                    <p>Do your different card types need different life cycles?</p>
+                    <p>(e.g. "story" versus "defect" versus "task")</p>
+                </col>
+                <col>
+                    <bullets>
+                        <item>
+                            <p>If so, treat each one differently.</p>
+                            <bullets>
+                                <item>Set up different <cref topic="card_properties">card properties</cref> to track the status of each card type (e.g. "Story Status" and "Defect Status").  Create the values you need for each property.</item>
+                                <item>Set up different <cref topic="card_transitions">card transitions</cref> for each card type.</item>
+                            </bullets>
+                        </item>
+                        <item>
+                            If not, keep it simple and use the same statuses and card transitions.
+                        </item>
+                    </bullets>
+                </col>
+            </row>
+            <row>
+                <col>
+                    <p>How many times will a card need to be handed off to a different team member during its life cycle?</p>
+                    <p>(e.g. analyst -> developer(s) -> QA -> product owner)</p>
+                </col>
+                <col>Each handoff may warrant its own status since the handoffs are often areas where problems occur (constraints, inefficient communication, etc.).  </col>
+            </row>
+            <row>
+                <col>Which information in the life cycle are you most interested in reporting?</col>
+                <col>This can influence your workflow.  Some of your reports may require you to introduce extra card properties that get their values populated or updated by your card transitions (e.g. calculating "cycle time").</col>
+            </row>
+        </table>
+        </p>
+    </section>
+
+    <section title="Tips">
+        <bullets>
+            <item>Keep your Mingle project simple. Introduce more complexity and structure as you need it.  Ask yourself if you are getting value from each status or transition.</item>
+            <item>If you need to restrict a transition to specific team members, consider restricting the transition by <cref topic="user_groups">user groups</cref> rather than by individual team members. Using user groups makes the transitions much more flexible as team members responsibilities change and as team members are added or removed from your project.</item>
+            <item>Create a few  Mingle projects using Mingle's <cref topic="quick_project_setup#create_a_new_project_from_template">templates</cref> to see example workflows used in Scrum and XP projects.</item>
+            <item>Use <cref topic="card_transitions#hidden_reporting_properties">hidden reporting properties</cref> like 'Date completed on' or 'Analysis completed on' for reporting purposes.</item>
+			<item>Use Mingle's <cref topic="transition_workflow_page">transition generator</cref> to help create a workflow from your properties.</item>
+
+        </bullets>
+    </section>
+
+    <section title="Also see...">
+        <bullets>
+            <item><cref topic="quick_project_setup">Quick Project Setup</cref></item>
+            <item><cref topic="explore_mingle_topic_story_wall">Story Wall</cref></item>
+			<item><cref topic="explore_mingle">Explore Mingle</cref></item>
+		        </bullets>
+		    </section>
+
+
+</topic>

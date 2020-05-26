@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_help.dtd">
+<chapter title="Mingle Onsite">
+  <section title="Introduction">
+    <p>Mingle Onsite is for those companies that want to install, manage and maintain their Mingle installation behind their corporate firewall.</p>
+
+    <p>If you require company data to reside behind your corporate firewall or need to meet compliance guidelines on handling company data management Mingle Onsite should be considered.
+    </p>
+    <warning>Before you begin, check the <cref topic="system_requirements">system requirements</cref> for your operating system.</warning>
+
+    <p>
+      <warning>On a first-time installation of Mingle with program management, you may have trouble navigating to the Program Wall. Existing Mingle Plus users looking to upgrade to v18.1 will not experience this issue. We are working to fix this. In the meantime, rebooting the Mingle server should fix the error. If you still see issues after a reboot, please reach out to us at support@thoughtworks.com.</warning>
+    </p>
+
+
+    <p>There are three steps to install Mingle:</p>
+    <steps>
+      <item><cref topic="configuring_a_database_for_use_with_mingle">Configure a database</cref></item>
+      <item><strong>Download and Install Mingle (this topic).</strong></item>
+      <item><cref topic="completing_the_mingle_configuration_wizard">Configure Mingle</cref></item>
+    </steps>
+    <p>
+      <note>If you are using Apache, you may also want to check out <cref topic="apache">the Apache settings page</cref> for some setup recommendations.</note>
+    </p>
+  </section>
+  <section file="system_requirements" collapsed="true"/>
+  <section file="installing_mingle_on_windows" collapsed="true"/>
+  <section file="installing_mingle_on_unix" collapsed="true"/>
+  <section title="Also see...">
+    <bullets>
+      <item><exref url="http://support.thoughtworks.com/entries/23725582-Mingle-in-the-cloud-FAQ">Mingle vs. Mingle onsite FAQ</exref></item>
+      <item><cref topic="upgrading_from_previous_versions">Upgrading from previous versions</cref></item>
+      <item><cref topic="setup_source_repository_integration">Setup source repository integration</cref></item>
+      <item><cref topic="configure_smtp_connection">Configure SMTP connection</cref></item>
+      <item><cref topic="configuring_mingle_authentication">Configure Mingle authentication</cref></item>
+      <item><cref topic="advanced_mingle_configuration">Advanced Mingle configuration</cref></item>
+      <item><cref topic="configuring_oauth_enabled_gadgets">Configuring OAuth enabled gadgets</cref></item>
+      <item><cref topic="uninstalling_mingle">Uninstalling Mingle</cref></item>
+      <item><cref topic="troubleshooting_mingle_installation_and_upgrade">Installation and upgrade troubleshooting help</cref> </item>
+    </bullets>
+  </section>    
+</chapter>
+

@@ -1,0 +1,67 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="card-<%= event.number %>-<%= event.version %>" class="event card-event">
+  <div class="user-icon">
+    <span class="event-type"></span>
+    <%= image_tag_for_user_icon(event.modified_by, :size => '24x24') %>
+  </div>
+  <div class="event-content">
+    <h3>
+      <% if include_object_name -%>
+        <%= link_to(h(event.short_description), {:controller => 'cards', :action => 'show', :number => event.number, :version => event.version}) %>
+        <span class="notes"><%= h event_originator(event)%></span>
+      <% else -%>
+        <% if params[:version].to_i == event.version -%>
+          Version <%= event.version %>
+        <% else -%>
+          <% if event.latest_version? %>
+            Version <%= event.version %>
+          <% else %>
+            <% if !popup %>
+              <%= "Version #{event.version}" %>
+              (<%= link_to("View", {:controller => 'cards', :action => 'show', :number => event.number, :version => event.version}, { :id => "link-to-card-#{event.number}-#{event.version}" }) %>)
+            <% else %>
+                <%= link_to_function "Version #{event.version}", "$j(this).showCardPopup();", { :"data-number" => event.number, :"data-popup-url" => url_for(:controller =>"cards", :action => "popup_show"), :"data-version" => event.version } %>
+              <% end %>
+          <% end %>
+          <p class="notes"><%= h event_originator(event) %></p>
+        <% end -%>
+      <% end -%>
+    </h3>
+
+    <ul class="change">
+      <% if event.details_still_loading? && !popup -%>
+        <li>Details still loading... (<a onclick='CardHistory.reload()' class='history-refresh'>refresh</a>)</li>
+      <% else -%>
+        <% for change in event.changes.select(&:descriptive?) -%>
+          <li class="word_break"> <%= change_description(change) %> </li>
+        <% end -%>
+      <% end -%>
+    </ul>
+
+    <% if include_version_links -%>
+    <div class="version-links">
+      <% if event.latest_version? -%>
+        <%= link_to("View latest version (v#{event.version})", {:controller => 'cards', :action => 'show', :number => event.number, :version => event.version}, { :id => "link-to-card-#{event.number}-#{event.version}" }) %>
+      <% else -%>
+        <%= link_to("View this version (v#{event.version})", {:controller => 'cards', :action => 'show', :number => event.number, :version => event.version}, { :id => "link-to-card-#{event.number}-#{event.version}" }) %> |
+        <%= link_to("View latest version (v#{event.card.version})", {:controller => 'cards', :action => 'show', :number => event.number}) %>
+      <% end -%>
+    </div>
+    <% end -%>
+  </div>
+</div>

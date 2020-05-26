@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="What's new in Release 12.1">
+  <p>Please review the <cref topic="upgrading_from_previous_versions">upgrade instructions</cref> before moving to Mingle 12.1.</p>
+  <section title="A new release naming convention">
+    <p>Starting with this release, Mingle has jumped to a new release number. This change was made to follow ThoughtWorks Studios' new release naming convention. We will continue to use the major.minor.bugfix nomenclature, but the major version will now be the year of the release (e.g. 12) and the minor version will indicate the release in that year (e.g. 12.3 will be the third release in 2012).</p>
+  </section>
+  <section title="Daily history chart with forecasting">
+    <p>The daily history chart has been enhanced to allow teams to <cref topic="charts#forecasting_chart">forecast</cref> when they may be complete based on their current velocity and different scope change scenarios. It will now display a trend line that forecasts when the team may be done if their remaining scope remains constant, increases by 50% or increases by 150%.</p>
+	<screenshot src="resources/images/charts_forecasting_daily_history_chart_example.png"/>
+  </section>
+  <section title="Daily history chart with fixed date delivery">
+    <p>Conversations focused on forecasting are commonplace in software delivery. Equally common are conversations regarding <cref topic="charts#fixed_date_chart">fixed date</cref> and variable scope. To aid this scope management scenario, the daily history macro also provides the ability to show a chart that highlights the amount of scope that may need to be reduced in order to meet a target release date.</p>
+	<screenshot src="resources/images/charts_fixed_date_daily_history_chart_example.png"/>
+  </section>
+  <section title="Collaboration Improvements: See who's viewing the same card or page as you">
+    <p>Mingle will now tell you who else on your team is <cref topic="collaborating_with_wiki_pages">viewing or editing</cref> the card or page you are looking at. This feature has already provided us with many more opportunities to have a conversation just by telling us who else is viewing the cards we are working with.</p>
+    <screenshot src="resources/images/also_viewing.png"/>
+  </section>
+  <section title="TFS source repository integration">
+    <p>We strive to provide an open product suite that integrates with a variety of development ecosystems. The newest addition to our supported ecosystem will be <cref topic="setup_tfs_configuration">Team Foundation Server (TFS)</cref>. Mingle 12.1 will support TFS as a source repository. Take a look at our ThoughtWorks Studios blog for other ways our products integrate with the Microsoft Ecosystem.</p>
+  </section>
+  <section title="Search improvements">
+    <p>Mingle 12.1 includes a new <cref topic="mingle_search">search</cref> engine and introduces changes to the search results layout to help provide more relevant and clearer search results. You can now filter your search results by cards, wiki pages or murmurs. The new search engine allows us to deliver more frequent search enhancements in the future and we'll continue to tweak the engine and the results layout to make it easier for you to find what you're looking for.</p>
+  </section>
+</topic>

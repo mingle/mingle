@@ -1,0 +1,42 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<p>Hello,</p>
+
+<p>
+  This is an automated alert from Mingle SaaS to notify you that <%= @user.name %> has requested to buy
+</p>
+
+<ul>
+  <li>Site URL: <%= MingleConfiguration.site_url %></li>
+  <li>User tier requested: <%= @max_active_full_users %></li>
+  <li>Include planner? <%= @include_planner ? "YES" : "NO" %></li>
+</ul>
+
+<ul>
+  <li>Lead info: <%= User.first_admin.name %> (<%= User.first_admin.email %>)</li>
+  <li>Requested by user: <%= @user.name %> (<%= @user.email %>)</li>
+  <li>User confirmed contact email: <%= @contact_email %></li>
+  <li>User confirmed contact phone: <%= @contact_phone %></li>
+</ul>
+
+<p>
+  Please find the lead record in SFDC and follow up as soon as possible.
+</p>
+
+<p>
+  Thanks.
+</p>

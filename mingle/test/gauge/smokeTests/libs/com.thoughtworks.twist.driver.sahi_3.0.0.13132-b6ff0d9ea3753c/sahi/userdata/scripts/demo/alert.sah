@@ -1,0 +1,23 @@
+
+function testWith($s){
+    _setValue(_textbox("t1"), "Message "+$s);
+    _click(_button("Click For Alert"));
+    _navigateTo("/demo/alertTest.htm", true);
+    _wait(1000);
+    _assertEqual("Message "+$s, _lastAlert());
+    _clearLastAlert();
+    _assertEqual(null, _lastAlert());
+}
+testWith("One");
+testWith("Two");
+testWith("Three");
+
+_click(_button("Click For Multiline Alert"));
+_assertEqual("You must correct the following Errors:\nYou must select a messaging price plan.\nYou must select an international messaging price plan.\nYou must enter a value for the Network Lookup Charge", _lastAlert());
+
+_click(_button("Multiline Unicode"));
+_assertEqual("Verifique se todos os campos obrigatórios foram preenchidos.\n\nProduto:required.", _lastAlert());
+var $text = "Verifique se todos os campos obrigatórios foram preenchidos.\n\nProduto:required.";
+_assertEqual($text, _lastAlert());
+
+

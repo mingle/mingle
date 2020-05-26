@@ -1,0 +1,101 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+/**
+ * pagination.css
+ *
+ * Style for pagination links for will_paginate.  The partial is shared with mingle
+ */
+
+
+/**
+ * TABLE OF CONTENTS
+ *
+ * =BASE
+ */
+
+
+/**
+ * =BASE
+ */
+.pagination {
+  font-size: 11px;
+}
+
+.pages {
+  a, span {
+    display: inline-block;
+    margin: 0 3px;
+  }
+}
+
+.pagination {
+  span {
+    display: inline-block;
+    margin: 0 3px;
+  }
+  a {
+    display: inline-block;
+    margin: 0 3px;
+    padding: 3px 8px;
+  }
+  span {
+    padding: 3px 8px;
+  }
+}
+
+.page-num {
+  padding: 3px 8px;
+}
+
+.pages span.highlight-warning, .pagination .current {
+  color: #FFF;
+  font-weight: normal;
+  background-color: #999;
+}
+
+.page-num:hover, .pagination a:hover {
+  background-color: #EEE;
+}
+
+a {
+  &.prev_page, &.pagination-previous {
+    /*
+      background:url(../images/shared/icons/icon_prev_16.png) no-repeat scroll left 50% transparent;
+      padding-left: 20px;
+    */
+  }
+  &.next_page, &.pagination-next {
+    /*
+      background:url(../images/shared/icons/icon_next_16.png) no-repeat scroll right 50% transparent;
+      padding-right: 20px;
+    */
+  }
+}
+
+.pagination-info {
+  margin: 10px 0;
+  .pagination {
+    float: right;
+  }
+  .pagination-summary {
+    float: left;
+  }
+}
+
+.pagination .disabled {
+  color: black;
+}

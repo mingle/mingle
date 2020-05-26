@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+        "http://java.sun.com/j2ee/dtds/web-app_2_3.dtd">
+<web-app>
+    <context-param>
+        <param-name>rails.env</param-name>
+        <param-value>test</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>rails.root</param-name>
+        <param-value>/</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>public.root</param-name>
+        <param-value>/public</param-value>
+    </context-param>
+
+    <filter>
+        <filter-name>startupFilter</filter-name>
+        <filter-class>com.thoughtworks.mingle.StartupFilter</filter-class>
+        <init-param>
+            <param-name>forwardToWhileStarting</param-name>
+            <param-value>/startup.html</param-value>
+        </init-param>
+    </filter>
+
+    <filter>
+        <filter-name>RackFilter</filter-name>
+        <filter-class>com.thoughtworks.mingle.rack.MingleRackFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>startupFilter</filter-name>
+        <url-pattern>*</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>RackFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <listener>
+        <listener-class>com.thoughtworks.mingle.MingleServicesContextListener</listener-class>
+    </listener>
+
+    <listener>
+        <listener-class>com.thoughtworks.mingle.rack.MingleRackServletContextListener</listener-class>
+    </listener>
+
+    <listener>
+        <listener-class>com.thoughtworks.mingle.BootstrapListener</listener-class>
+    </listener>
+
+    <servlet>
+        <servlet-name>StaticContent</servlet-name>
+        <servlet-class>com.thoughtworks.mingle.StaticFilesServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>bootstrap_status</servlet-name>
+        <servlet-class>com.thoughtworks.mingle.BootstrapStatusServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>eval</servlet-name>
+        <servlet-class>com.thoughtworks.mingle.EvalServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>class_method_call</servlet-name>
+        <servlet-class>com.thoughtworks.mingle.ClassMethodServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>status</servlet-name>
+        <servlet-class>com.thoughtworks.mingle.RuntimeStatusServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>contextual_help</servlet-name>
+        <servlet-class>com.thoughtworks.mingle.ContextualHelpFileServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>mingleFiles</servlet-name>
+        <servlet-class>com.thoughtworks.mingle.DataDirPublicFileServlet</servlet-class>
+        <init-param>
+            <param-name>cacheControl</param-name>
+            <param-value>max-age=1</param-value>
+            <!-- 1 month -->
+        </init-param>
+        <init-param>
+            <param-name>dirAllowed</param-name>
+            <param-value>false</param-value>
+        </init-param>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>alsoViewing</servlet-name>
+        <servlet-class>com.thoughtworks.mingle.AlsoViewingServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>StaticContent</servlet-name>
+        <url-pattern>/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>alsoViewing</servlet-name>
+        <url-pattern>/also_viewing/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>contextual_help</servlet-name>
+        <url-pattern>/contextual_help/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>status</servlet-name>
+        <url-pattern>/status/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>bootstrap_status</servlet-name>
+        <url-pattern>/bootstrap_status/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>eval</servlet-name>
+        <url-pattern>/_eval/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>class_method_call</servlet-name>
+        <url-pattern>/_class_method_call/*</url-pattern>
+    </servlet-mapping>
+
+    <session-config>
+        <session-timeout>60</session-timeout>
+    </session-config>
+</web-app>

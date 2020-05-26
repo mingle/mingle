@@ -1,0 +1,36 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="hide_property">
+  <% lightbox = Lightbox.with_close_link_and_close_button(self, 'Cancel', "window.location='#{url_for(:action => 'index', :project_id => @project.identifier)}'", :id => 'cancel_hide', :class => 'remove-button popup-close')
+     lightbox.header 'Hide property'
+     lightbox.body do %>
+      <div id='info-box-confirm' class ='info-box' >
+        <p>We recommend that you review these following things that will be affected by hiding the property <%= @property_definition.name.bold %>:</p>
+        <ul>
+          <li>Used by <b><%= enumerate(@property_definition.card_count, 'card') %></b>. Property <%= @property_definition.name.bold%> will not appear in normal card properties section, nor in card or history filters. Transitions, history subscriptions, and card default settings using this property will continue to work.</li>
+
+          <%= the_following_will_be_deleted('team favorite', @project.favorites.of_team.of_card_list_views.using(@property_definition).collect(&:name).smart_sort) %>
+          <%= the_following_will_be_deleted('tabbed view', @project.tabs.of_card_list_views.using(@property_definition).collect(&:name).smart_sort) %>
+
+          <li>In addition, any personal favorites using this property will be deleted.</li>
+        </ul>
+      </div>
+      <% end
+         lightbox.complete_action do -%>
+           <%= safe_post_link_to 'Hide property', {:action => 'hide', :project_id => @project.identifier, :name => @property_definition.name }, {:id => "confirm_hide", :class => 'ok' } %>
+      <% end %>
+</div>

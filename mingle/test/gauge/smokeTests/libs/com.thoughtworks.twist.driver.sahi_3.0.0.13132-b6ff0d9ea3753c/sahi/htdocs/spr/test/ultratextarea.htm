@@ -1,0 +1,174 @@
+<!--
+/**
+ * Copyright  2006  V Narayan Raman
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<html>
+<head><title>Sahi Management Console</title></head>
+<body onload="scrollUp();colorMe()">
+<style>
+.pos{
+	position:absolute;
+	top:50px;
+	left:20px;
+	width:700px;
+	font-family:verdana;
+	font-size: 10pt;
+	line-height: 15pt;
+	padding:0px;
+	margin:0px;
+	border:1px solid black;
+}
+#ta{
+	color:gray;
+	z-index:2;
+	background-color:transparent;
+	opacity:0.3;
+	filter:alpha(opacity=30);
+	border: 1px solid white;
+}
+</style>
+<script>
+function $(id){
+	return document.getElementById(id);
+}
+function format(s){
+	var lines = s.split("");
+}
+function showContentAssist(e){
+	if (!e) e = window.event;
+	if (e){
+		if (getCharCode(e) == '_'.charCodeAt(0)){
+			var box = $("suggestionBox");
+			box.style.display = "block";
+			box.style.top = $("anchor").offsetTop - ta.scrollTop + 50 + 'px';
+			box.style.left = $("anchor").offsetLeft + 20 + 'px';
+		}
+	}
+}
+function getCaretPos(el) {
+	if (typeof el.selectionStart != 'undefined')
+		return el.selectionStart;
+	else if (document.selection)
+		return Math.abs(document.selection.createRange().moveStart('character', -1000000));
+}
+function colorMe(e){
+	var ta = $("ta");
+	var caretPos = getCaretPos(ta);
+	var content = ta.value.substring(0, caretPos) + "CARETPOS" + ta.value.substring(caretPos);
+	content = modify(content);
+	content = content.replace(/CARETPOS/, "<a href='#' onclick='return false;' id='anchor' style='width:0px;'></a>");
+	//alert(content);
+	content = content + "<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>";
+	$("coloredDiv").innerHTML = content;
+	matchScroll();
+}
+function modify(content){
+	content = content.replace(/^([ ])/g, "&nbsp;");
+	content = content.replace(/[\r]*\n/g, '<br/>').replace(/[ ][ ]/g, "&nbsp; ");
+	content = content.replace(/(\b_.*?\b)/g, "<span style='color:blue;'>$1</span>");
+	content = content.replace(/([()])/g, "<span style='color:red;'>$1</span>");
+	content = content.replace(/(".*?")/g, "<span style='color:green;'>$1</span>");
+	return content;
+}
+function scrollUp(){
+	$("ta").scrollTop = 0;
+	$("coloredDiv").scrollTop = 0;
+}
+function matchScroll(){
+	$("coloredDiv").scrollTop =  $("ta").scrollTop;
+}
+function isIE(){
+    var browser = navigator.appName;
+    return browser == "Microsoft Internet Explorer";
+}
+getCharCode = function(e){
+    return e.charCode ? e.charCode : e.keyCode;
+}
+getChar = function(e){
+    var c = this.getCharCode(e);
+    return String.fromCharCode(c);
+}
+_oldVal = "";
+
+</script>
+<textarea autocomplete="false" id="ta" style="height:300px;" class="pos" onkeydown="" onkeypress="showContentAssist(event)" onkeyup="colorMe(event)" onscroll="matchScroll()">
+var $linkText = "Link Test";
+_click(_link($linkText));
+
+_include("includes/sahi_demo_include.sah");
+//_include("http://localhost:9999/_s_/scripts/sahi_demo_include.sah");
+_click(_link("Form Test"));
+
+function getT1(){
+    return _textbox("t1");
+}
+
+function testAccessors(){
+    //_assertNotNull(getT1());
+    _assertEqual('', _textbox("t1").value);
+    _assertNotNull(_textbox(1));
+    _assertEqual('', _textbox(1).value);
+    _assertNotNull(_textarea("ta1"));
+    _assertEqual('', _textarea("ta1").value);
+    _assertNotNull(_textarea(1));
+    _assertEqual('', _textarea(1).value);
+    _assertNotNull(_checkbox("c1"));
+    _assertEqual('', _checkbox("c1").value);
+    _assertNotNull(_checkbox(1));
+    _assertEqual('', _checkbox(1).value);
+    _assertNotNull(_checkbox("c1[1]"));
+    _assertEqual('', _checkbox("c1[1]").value);
+    _assertNotNull(_checkbox(3));
+    _assertEqual('', _checkbox(3).value);
+    _assertNotNull(_radio("r1"));
+    _assertEqual('', _radio("r1").value);
+    _assertNotNull(_password("p1"));
+    _assertEqual('', _password("p1").value);
+    _assertNotNull(_password(1));
+    _assertEqual('', _password(1).value);
+    _assertNotNull(_select("s1"));
+    _assertEqual('o1', _getSelectedText(_select("s1")));
+    _assertNotNull(_select("s1Id[1]"));
+    _assertEqual('o1', _getSelectedText(_select("s1Id[1]")));
+    _assertNotNull(_select(2));
+    _assertEqual('o1', _getSelectedText(_select(2)));
+    _assertNotNull(_button("button value"));
+    _assertNotNull(_button("btnName[1]"));
+    _assertNotNull(_button("btnId[2]"));
+    _assertNotNull(_button(3));
+    _assertNotNull(_submit("Add"));
+    _assertNotNull(_submit("submitBtnName[1]"));
+    _assertNotNull(_submit("submitBtnId[2]"));
+    _assertNotNull(_submit(3));
+    _assertNotNull(_image("imageAlt1"));
+    _assertNotNull(_image("imageId1[1]"));
+    _assertNotNull(_image(2));
+    _assertNotNull(_link("Back"));
+}
+
+
+
+</textarea>
+<div class="pos" style="height:300px;background-color:white;">
+<div id="coloredDiv" style="margin-left:1px;_margin-left:0px;color:black;padding-right:31px;height:300px;overflow:hidden;">
+</div>
+</div>
+<div id="suggestionBox" style="display:none;width:200px;position:absolute;background-color:lightyellow;border:1px solid gray;">
+	aa<br>
+	bb<br/>
+</div>
+</body>
+</html>

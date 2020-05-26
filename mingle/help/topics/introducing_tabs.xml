@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE section SYSTEM "mingle_help.dtd">
+<section title="Introducing tabs">
+		When you create a new Mingle project from scratch, by default it has the following tabs already setup:
+		<bullets>
+			<item><strong>Overview</strong> - this is the home page or project dashboard. It's a <cref topic="working_with_pages">Mingle page</cref> and is the first tab you see after you sign in</item>
+			<item><strong>All</strong> - this lets you view all cards in Mingle. You can <cref topic="filter_list_by_component">filter</cref> and sort by card properties and create favorites based on the results</item>
+			<item><strong>History</strong> - this tab lets you see what's been happening in the project and lets you view changes for cards, pages and application source files</item>
+			<item><strong>Project admin</strong> - this lets you manage project settings, including team members, project properties and favorites</item>
+			<item><strong>Source</strong> - this lets you view the source repository, source versions and changes between source file versions 
+				(only visible if you have setup <cref topic="setup_source_repository_integration">integration between Mingle and your team's source repository</cref>).</item>
+			<item><strong>Dependencies</strong> - this lets you view the dependencies that your project has raised on others or dependencies that your project is resolving for others. (This is a Mingle Plus exlusive feature)</item>
+		</bullets>
+		<p>You can create additional tabs based on favorites or pages. 
+			If a favorite doesn't already exist you can <cref topic="creating_a_favorite_card_view">create it</cref> first. 
+			You can then create a tab from <tab>Project admin</tab>  <link>Favorites &amp; tabs</link>.</p>    	
+</section>
+
+

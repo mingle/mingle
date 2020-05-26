@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>Cards</title>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <%- MingleConfiguration.with_asset_host_overridden_to(local_assigns[:url_base]) do -%>
+    <%= stylesheet_link_tag("print", :media => "print") %>
+  <%- end -%>
+
+  <style type="text/css" media="print">
+    @page {
+      size: 8.5in 11in;
+      margin: 0.25in;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="doc" class="yui-t7">
+    <div id="double-print-view">
+    <% @cards.each_with_index do |card, index| -%>
+
+      <div class="card to-be-cropped <%= index.even? || (index == @cards.size - 1) ? '' : 'page-break-after' %>">
+        <div class="card-top">
+          <div class="card-index">
+            #<%= h card.number %>
+          </div>
+
+      	  <h1 class='card-short-description'>
+            <%= h card.name %>
+      	  </h1>
+
+      	  <p class="version-info"><%= render :partial => 'shared/version_info', :locals => { :versionable => card, :show_latest_url => card_show_url(:number => card.number) }%></p>
+        </div>
+
+        <div class="tags-container">
+          <% if not card.tags.blank? -%>
+            Tags: <%= card.tags.collect(&:name).join(', ') %>
+          <% end -%>
+        </div>
+
+      	<div class="content wiki">
+      	  <%= raw card.formatted_pdf_content(self) %>
+      	</div>
+
+        <div class="card-bottom-cover">
+          <div class="card-bottom">
+            <span class='property-in-popup'><%= @project.card_type_definition.name %>: <span class="emphasize"><%= card.card_type.name %></span></span>&nbsp;&nbsp;
+            <% for property in card.properties_with_value -%>
+              <span class='property-in-popup'><%= property.name %>: <span class="emphasize"><%= property.display_value %></span></span>&nbsp;&nbsp;
+            <% end -%>
+          </div>
+        </div>
+      </div>
+    <% end -%>
+    </div>
+  </div>
+</body>
+</html>

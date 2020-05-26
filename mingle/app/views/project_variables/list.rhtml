@@ -1,0 +1,64 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= render :partial => 'shared/admin_actions'%>
+<%= render :partial => 'shared/title_bar', :locals => { :action_partial_path => 'project_variables/action_bar', :title => 'Project variables', :help_link_name => 'Project Variables Page'} %>
+
+<div id="content" class="last_wrapper">
+  <table class="draggable-table-top highlightable-table">
+    <thead>
+      <tr class="table-top">
+        <th class="col-variable">Variable</th>
+        <th class="col-properties">Properties</th>
+        <th class="col-value">Value</th>
+        <th class="col-value">Where used</th>
+        <th class="col-actions last">&nbsp;</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if @project_variables.empty? -%>
+        <tr>
+          <td colspan="5" class="italic-light align-center last">There are currently no project variables to list. You can create a new project variable from the action bar.</td>
+        </tr>
+      <% else -%>
+        <% @project_variables.each do |project_variable| -%>
+        <tr class="<%= cycle('odd', 'even')%>">
+          <td class="col-variable">
+            <%= h project_variable.display_name %>
+            <div class="notes"><%= project_variable.describe_type %></div>
+          </td>
+          <td class="col-properties">
+            <%= project_variable.property_definitions.size -%>
+          </td>
+          <td class="col-value">
+            <%= h project_variable.display_value.truncate_with_ellipses(100) -%>
+          </td>
+        <td class="col-value">
+          <%= enumerate(project_variable.card_list_view_usage_count, 'favorite') -%>, <%= enumerate(project_variable.transition_usage_count, 'transition') -%>
+        </td>
+          <td class="align-right col-actions action-column standard-link-spacing last">
+            <%= link_to 'Edit', { :action => 'edit', :id => project_variable } %>
+            <%= link_to('Delete', { :action => 'confirm_delete', :id => project_variable }, {:method => :post, :id => "project_variable_#{project_variable.id}"} )%>
+            &nbsp;
+          </td>
+        </tr>
+        <% end -%>
+      <% end -%>
+    </tbody>
+  </table>
+</div>
+
+<%= render :partial => 'project_variables/action_bar', :locals => { :position => 'bottom' } %>

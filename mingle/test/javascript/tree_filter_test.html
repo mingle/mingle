@@ -1,0 +1,187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>JavaScript unit test file</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+  <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+  <script src="test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+
+  <script src="test_assets/unittest.js" type="text/javascript"></script>
+  <script src="test_assets/unittest_ext.js" type="text/javascript"></script>
+
+
+  <script src="../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/controls.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/builder.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+
+  <script src="../../public/javascripts/application.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/filter.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/calendar.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/calendar-setup.js" type="text/javascript"></script>
+
+  <link rel="stylesheet" href="test_assets/unittest.css" type="text/css" />
+</head>
+<body>
+  <div id="content" >
+    <div id="header">
+      <h1>JavaScript unit test file</h1>
+      <p>
+        This file tests <strong>Filters</strong> class in <strong>filter.js</strong>.
+      </p>
+    </div>
+    <!-- Log output -->
+    <div id="testlog"> </div>
+
+    <div style ='border:solid 1px' id='sandbox'>
+      <h3> sandbox: </h3>
+      <form onsubmit='Prototype.emptyFunction' id="test-form">
+        <div id="release-filter-widget"></div>
+        <div id="iteration-filter-widget"></div>
+        <div id="story-filter-widget"></div>
+      </form>
+    </div>
+
+    <div id='mock'></div>
+  </div>
+<script type="text/javascript">
+// <![CDATA[
+
+  SANDBOX = $('sandbox').innerHTML;
+
+  new Test.Unit.Runner({
+
+    setup: function() {
+      if (navigator.appVersion.match(/Konqueror|Safari|KHTML/) != null){
+        return;
+      }
+      $('sandbox').innerHTML = SANDBOX
+
+      var availableOperators = [['is','is'], ['is not','is not']];
+      this.statusPropertyDefinition = new PropertyDefinition('status', availableOperators, [['open', 'open'], ['closed', 'closed']]);
+      this.releasePropertyDefinition = new PropertyDefinition('planning release', availableOperators, [['any', ':ignore'], ['1', '1'], ['2', '2']]);
+      this.iterationPropertyDefinition = new PropertyDefinition('planning iteration', availableOperators, [['any', ':ignore'], ['10', '10'], ['20', '20']]);
+
+      this.releaseType = new CardType('release', [this.statusPropertyDefinition, this.releasePropertyDefinition]);
+      this.iterationType = new CardType('iteration', [this.statusPropertyDefinition, this.iterationPropertyDefinition]);
+      this.storyType = new CardType('task', [this.statusPropertyDefinition]);
+
+      this.releaseTypeDefinition = new CardTypeDefinition('Type', availableOperators, [this.releaseType]);
+      this.iterationTypeDefinition = new CardTypeDefinition('Type', availableOperators, [this.iterationType]);
+      this.storyTypeDefinition = new CardTypeDefinition('Type', availableOperators, [this.storyType]);
+
+      this.releaseFilters = new Filters(this.releaseTypeDefinition, 'test-form', 'release-filter-widget', '/images/icon-remove.gif', '/images/icon-calendar.png');
+      this.releaseFilters.hideCardTypeFilter = true;
+      this.iterationFilters = new Filters(this.iterationTypeDefinition, 'test-form', 'iteration-filter-widget', '/images/icon-remove.gif', '/images/icon-calendar.png');
+      this.iterationFilters.hideCardTypeFilter = true;
+      this.storyFilters = new Filters(this.storyTypeDefinition, 'test-form', 'story-filter-widget', '/images/icon-remove.gif', '/images/icon-calendar.png');
+      this.storyFilters.hideCardTypeFilter = true;
+      this.assertFilter = function(treeLevel, index, expectedProperty, expectedOperator, expectedValue) {
+        var htmlId = treeLevel + '-filter-widget_cards_filter_' + index;
+        if ($(htmlId + '_properties_drop_link') != null){
+          this.assertEqual(expectedProperty, $(htmlId + '_properties_drop_link').text);
+        } else {
+          this.assertEqual(expectedProperty, $(htmlId + '_properties_text').innerHTML);
+        }
+        this.assertEqual(expectedOperator, $(htmlId + '_operators_drop_link').text);
+        this.assertEqual(expectedValue, $(htmlId + '_values_drop_link').text);
+      };
+
+      this.selectFilter = function(treeLevel, index, propertyName, operator, value){
+        htmlId = treeLevel + '_cards_filter_' + index;
+        if ($(htmlId + '_properties_drop_link') != null){
+          Event.trigger(htmlId + '_properties_drop_link', 'click');
+          Event.trigger(htmlId + '_properties_option_' + propertyName, 'click');
+        }
+        Event.trigger(htmlId + '_operators_drop_link', 'click');
+        Event.trigger(htmlId + '_operators_option_' + operator, 'click');
+        Event.trigger(htmlId + '_values_drop_link', 'click');
+        Event.trigger(htmlId + '_values_option_' + value, 'click');
+      };
+    },
+
+    testShouldNoFilterPresentsWhenNoFiltersAdded: function() { with(this) {
+      if (navigator.appVersion.match(/Konqueror|Safari|KHTML/) != null){
+        return;
+      }
+      this.releaseFilters.addFilters([]);
+      this.releaseFilters.addNewFilter();
+      this.assertFilter('release', 0, '(select...)', 'is', '(any)');
+      assertNull($('release-filter-widget_cards_filter_1_properties_drop_link'));
+    }},
+
+    testFirstFilterShouldBeFirstFilterOfFiltersAdded: function() { with(this) {
+      if (navigator.appVersion.match(/Konqueror|Safari|KHTML/) != null){
+        return;
+      }
+      var statusFilter = {
+        property: 'status',
+        operator: 'is',
+        value: 'closed',
+        valueValue: ['closed', 'closed']
+      };
+      this.releaseFilters.addFilters([statusFilter]);
+      this.assertFilter('release', 0, 'status', 'is', 'closed');
+      assertVisible($('release-filter-widget_cards_filter_0_filter_container'));
+      assert($$('.filter-delete-link')[0]);
+    }},
+
+    testShouldNotAllowTypeToBeSelectedAsProperty: function() { with(this) {
+      if (navigator.appVersion.match(/Konqueror|Safari|KHTML/) != null){
+        return;
+      }
+      var statusFilter = {
+        property: 'Status',
+        operator: 'is',
+        value: 'new',
+        valueValue: ['new', 'closed']
+      };
+      this.releaseFilters.addFilters([statusFilter]);
+      this.releaseFilters.addNewFilter();
+
+      Event.trigger($('release-filter-widget_cards_filter_1_properties_drop_link'), 'click');
+      assertNotNull($('release-filter-widget_cards_filter_1_properties_option_status'));
+      assertNotNull($('release-filter-widget_cards_filter_1_properties_option_planning release'));
+      assertNull($('release-filter-widget_cards_filter_1_properties_option_Type'));
+    }},
+
+    testShouldIngoreTypeFilter: function() { with(this) {
+      if (navigator.appVersion.match(/Konqueror|Safari|KHTML/) != null){
+        return;
+      }
+      var typeIsPlanningRelease = {
+        property: 'Type',
+        operator: 'is',
+        value: 'release'
+      };
+      this.releaseFilters.addFilters([typeIsPlanningRelease]);
+
+      assertNull($('release-filter-widget_cards_filter_0_filter_container'));
+    }}
+}, { testLog: "testlog", test : ''}).run;
+// ]]>
+</script>
+</body>
+</html>

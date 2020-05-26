@@ -1,0 +1,424 @@
+==
+<style>
+table.api{width:740px;border: 1px solid #ccc;}
+td.label_col{width:60px;}
+</style>
+==
+
+h2. Overview
+
+Browser Accessor APIs help access elements on the browser. 
+They need to be executed on the browser and not in the proxy.
+They should be used as parameters to Browser Action APIs.  
+
+All accessor APIs take an *identifier* and an optional *domRelation*.
+* Identifiers can either be a numerical index or a property as specified in each case.
+* Identifiers which are not numerical, can either be a string or a javascript regular expression.
+* Identifiers which are strings can also have an index along with them in square brackets as part of the string. 
+
+*Simple case where links are uniquely identifiable*:
+
+For example, 
+<code>
+<a href="http://sahi.co.in" id="sahi_link">Link to Sahi website</a>
+</code>
+
+can be represented in the following ways:
+
+| _link(12)  | Using index in the page; assuming it is the 13th link on the page.|
+| _link("sahi_link")  | Using id as string|
+| _link(/.*_link/)  | Using id as regular expression|
+| _link("Link to Sahi website") | Using visible text as string|
+| _link(/Link to .* website/)   | Using visible text as regular expression|
+
+
+*Case where multiple elements with similar property are present*
+
+For example, 
+<code>
+<table>
+    <tr>
+        <td>User One</td> 
+        <td id="del1"><a href="/deleteUser?id=1">delete</a></td> 
+    </tr>
+    <tr> 
+        <td>User Two</td> 
+        <td id="del2"><a href="/deleteUser?id=2">delete</a></td> 
+    </tr>
+</table>
+</code>
+There are two delete links in this table and there may be more. 
+
+| _link("delete") | points to the first delete link. This is the same as ==_link("delete[0]")==.|
+| ==_link("delete[1]")==  | points to the second delete link; Note that indexing starts at 0. |
+
+Using indexes works fine as long as the page is static, but it is not recommended for dynamic applications, 
+as it makes scripts fail when changes are made to the web pages.
+
+*Use of DOM relations*
+
+When elements are not uniquely identifiable by themselves, we should try to identify them in relation to either some element near them or by the element in which they are contained.
+@_near@ is a DOM relation marker which specifies that the element should be searched *near* another element.
+@_in@ is a DOM relation marker which specifies that the element should be searched *within* another element.
+
+For example, in the above case, the second delete link is near User Two.
+
+| _link(0, _near(_cell("User Two"))) | points to the 0th link near cell with text "User Two".<br>Note that the index is 0 here since it is the nearest link.|
+| _link("delete", _near(_cell("User Two"))) | points to the nearest link with text "delete" near cell with text "User Two".<br>Note that we do not need to specify =="delete[1]"== since it is the delete link <br>nearest to User Two.|
+
+A similar DOM relation is _in
+
+| _link(0, _in(_cell("del2"))) | points to the 0th link in cell with id "del2" |
+| _link("delete", _in(_cell("del2"))) | points to the link with text "delete" within cell with id "del2" |
+
+<br/><br/><br/>
+
+h3. Accessors of HTML Elements
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_link(identifier[, domRelation])* </td></tr>
+<tr><td> HTML </td><td> <code><a href="http://u/r/l" id="id">visible text</a> </code> </td></tr>
+<tr><td> Identifier </td><td> index, visible text, id.  </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_image(identifier[, domRelation])* </td></tr>
+<tr><td> HTML </td><td> <code><img src="/path/to/images/add.gif" id="id" alt="alt" title="title"></code> </td></tr>
+<tr><td> Identifier </td><td> index, title or alt, id, file name from src  </td></tr>
+<tr><td> Notes </td><td> _image("add.gif") for an image with src "/path/to/images/add.gif" </td></tr>
+</table>
+
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_label(identifier[, domRelation])* </td></tr>
+<tr><td> HTML </td><td> <code><label id="id">text</label></code> </td></tr>
+<tr><td> Identifier </td><td> index, id, text </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_listItem(identifier[, domRelation])* </td></tr>
+<tr><td> HTML </td><td> <code><li id="id">text</li></code> </td></tr>
+<tr><td> Identifier </td><td> index, id, text </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_div(identifier[, domRelation])* </td></tr>
+<tr><td> HTML </td><td> <code><div id="id">text</div></code> </td></tr>
+<tr><td> Identifier </td><td> index, id, text </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_span(identifier[, domRelation])* </td></tr>
+<tr><td> HTML </td><td> <code><span id="id">text</span></code> </td></tr>
+<tr><td> Identifier </td><td> index, id, text </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_spandiv(identifier[, domRelation])* </td></tr>
+<tr><td> HTML </td><td> <code><span id="id">text</span> or <div id="id">text</div></code> </td></tr>
+<tr><td> Identifier </td><td> index, id, text </td></tr>
+<tr><td> Notes </td><td> Deprecated </td></tr>
+</table>
+
+
+h3. Accessors of Table related elements
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_cell(identifier[, domRelation])* </td></tr>
+<tr><td> HTML </td><td> <code><td id="id">text</td></code> </td></tr>
+<tr><td> Identifier </td><td> index, id, text </td></tr>
+</table>
+
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_cell(tableElement, rowText, colText)* </td></tr>
+<tr><td> HTML </td><td> <code><td id="id">text</td></code> </td></tr>
+<tr><td> Notes </td><td> <code><table id="tableId">
+<tr><td> header1 </td><td> header2 </td><td> header3 </td></tr>
+<tr><td> value11 </td><td> value12 </td><td> value13 </td></tr>
+<tr><td> value21 </td><td> value22 </td><td> value23 </td></tr>
+</table></code>
+<br>
+Eg.<br>
+@_cell(_table("tableId"), "header2", "value11")@ will point to cell with value "value12"<br>
+(Need to add support for regular expressions for rowText and colText) </td></tr>
+</table>
+
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_row(tableElement, identifier)* </td></tr>
+<tr><td> HTML </td><td> <code><tr><td>te</td><td>xt</td></tr></code> </td></tr>
+<tr><td> Identifier </td><td> index, text </td></tr>
+<tr><td> Notes </td><td> _parentRow(_cell(identifier)) is more useful than this API. <br> 
+_cell("text1", _near(_cell("id2"))) can be useful in places where we are looking for another cell in a _row. <br> 
+(Need to add support for regular expressions)</td></tr>
+</table>
+
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_table(identifier[, domRelation])* </td></tr>
+<tr><td> HTML </td><td> <code><table id="id">text</table></code> </td></tr>
+<tr><td> Identifier </td><td> index, id </td></tr>
+</table>
+
+
+h3. Accessors of Form elements
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_button(identifier[, domRelation])* </td></tr>
+<tr><td> HTML </td><td> <code><input type="button" name="name" id="id" value="value"></code> </td></tr>
+<tr><td> HTML </td><td> <code><button type="button" name="name" id="id">value</button></code> </td></tr>
+<tr><td> Identifier </td><td> index, value, name, id </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_checkbox(identifier[, domRelation])* </td></tr>
+<tr><td> HTML </td><td> <code><input type="checkbox" name="name" id="id" value="value"></code> </td></tr>
+<tr><td> Identifier </td><td> index, name, id </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_password(identifier[, domRelation])* </td></tr>
+<tr><td> HTML </td><td> <code><input type="password" name="name" id="id" value="value"></code> </td></tr>
+<tr><td> Identifier </td><td> index, name, id </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_radio(identifier[, domRelation])* </td></tr>
+<tr><td> HTML </td><td> <code><input type="radio" name="name" id="id" value="value"></code> </td></tr>
+<tr><td> Identifier </td><td> index, name, id </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_submit(identifier[, domRelation])* </td></tr>
+<tr><td> HTML </td><td> <code><input type="submit" name="name" id="id" value="value"></code> </td></tr>
+<tr><td> HTML </td><td> <code><button type="submit" name="name" id="id">value</button></code> </td></tr>
+<tr><td> Identifier </td><td> index, value, name, id </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_textbox(identifier[, domRelation])* </td></tr>
+<tr><td> HTML </td><td> <code><input type="textbox" name="name" id="id" value="value"></code> </td></tr>
+<tr><td> Identifier </td><td> index, name, id </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_reset(identifier[, domRelation])* </td></tr>
+<tr><td> HTML </td><td> <code><input type="reset" name="name" id="id" value="value"></code> </td></tr>
+<tr><td> Identifier </td><td> index, name, id </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_file(identifier[, domRelation])* </td></tr>
+<tr><td> HTML </td><td> <code><input type="file" name="name" id="id" value="value"></code> </td></tr>
+<tr><td> Identifier </td><td> index, name, id </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_imageSubmitButton(identifier[, domRelation])* </td></tr>
+<tr><td> HTML </td><td> <code><input type="image" name="name" id="id" value="value" alt="alt" title="title" src="/images/file.gif"></code> </td></tr>
+<tr><td> Identifier </td><td> index, tilte/alt, name, id </td></tr>
+<tr><td> Notes </td><td> (Add support to treat this like _image) </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_select(identifier[, domRelation])* </td></tr>
+<tr><td> HTML </td><td> <code><select name="name" id="id"></select></code> </td></tr>
+<tr><td> Identifier </td><td> index, name, id </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_option(selectElement, identifier)* </td></tr>
+<tr><td> HTML </td><td> <code><option value="value">text</option></code> </td></tr>
+<tr><td> Identifier </td><td> index, text </td></tr>
+<tr><td> Notes </td><td> eg. _option(_select("selectId"), "text") </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_textarea(identifier[, domRelation])* </td></tr>
+<tr><td> HTML </td><td> <code><textarea name="name" id="id">text</textarea></code> </td></tr>
+<tr><td> Identifier </td><td> index, name, id </td></tr>
+</table>
+
+
+h3. Accessors of parent DOM Nodes
+
+All parent node accessors can take two parameters:
+element: The element whose parent node needs to be found
+occurrence: The nth parent. 1 is the immediate parent. 
+
+Eg. 
+In @<div id="div2"><span><div id="div1"><a href="">aLink</a></div></span></div>@
+_parentNode(_link("aLink"), "DIV", 1) points to div1
+_parentNode(_link("aLink"), "DIV", 2) points to div2
+
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_parentNode(element, tagname[, occurrence])* </td></tr>
+<tr><td> HTML </td><td> <code><div id="id"><a href="">aElement</a></div></code> </td></tr>
+<tr><td> Notes </td><td> eg. _parentNode("DIV", _link("aElement")) </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_parentCell(element[, occurrence])* </td></tr>
+<tr><td> HTML </td><td> <code><td id="id"><a href="">aElement</a></td></code> </td></tr>
+<tr><td> Notes </td><td> eg. _parentCell(_link("aElement")) </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_parentRow(element[, occurrence])* </td></tr>
+<tr><td> HTML </td><td> <code><tr><td>aCell</td></tr></code> </td></tr>
+<tr><td> Notes </td><td> eg. _parentRow(_cell("aCell")) </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_parentTable(element[, occurrence])* </td></tr>
+<tr><td> HTML </td><td> <code><table class="api">
+<tr><td>aCell</td></tr></table></code> </td></tr>
+<tr><td> Notes </td><td> eg. _parentTable(_cell("aCell")) </td></tr>
+</table>
+
+
+
+h3. Accessors of IFrames and Rich Text Editors based on IFrames in editable mode.
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_rte(identifier)* </td></tr>
+<tr><td> HTML </td><td> <code><iframe src="" name="name" id="id" ></iframe></code> </td></tr>
+<tr><td> Identifier </td><td> index, id, name  </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_iframe(identifier)* </td></tr>
+<tr><td> HTML </td><td> <code><iframe src="" name="name" id="id" ></iframe></code> </td></tr>
+<tr><td> Identifier </td><td> index, id, name  </td></tr>
+</table>
+
+h3. Generic accessors
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_byId(id)* </td></tr>
+<tr><td> HTML </td><td> <code><anytag id="id" ></anytag></code> </td></tr>
+<tr><td> Identifier </td><td> id  </td></tr>
+<tr><td> Notes </td><td> This can be used for any tag with an id. This API does not accept regular expressions or indexes. </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_byText(identifier, tagName)* </td></tr>
+<tr><td> HTML </td><td> <code><anytag>text</anytag></code> </td></tr>
+<tr><td> Identifier </td><td> text </td></tr>
+<tr><td> Notes </td><td> Eg. @<div>text</div>@ </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_accessor(string)* </td></tr>
+<tr><td> Notes </td><td> This API just evaluates the string and returns a dom object. Eg. _accessor("document.formName.elementName").<br>This API is not too useful.</td></tr>
+</table>
+
+
+h3. Browser popups: Alerts, Confirms and Prompts
+
+_lastAlert, _lastConfirm and _lastPrompt are used in assertions.
+Eg. _assertEqual("Enter a valid username", _lastAlert()); 
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_lastAlert()* </td></tr>
+<tr><td> Notes </td><td> Returns the message displayed in the last javascript alert popup. </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_lastConfirm()* </td></tr>
+<tr><td> Notes </td><td> Returns the message displayed in the last javascript confirm popup. </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_lastPrompt()* </td></tr>
+<tr><td> Notes </td><td> Returns the message displayed in the last javascript prompt popup. </td></tr>
+</table>
+
+h3. Utility functions to access properties of elements
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_style(element, cssProperty)* </td></tr>
+<tr><td>cssProperty </td><td> any property declared via CSS. Eg. height, background-color etc. </td></tr>
+<tr><td> Notes </td><td> Returns the value of the style property for that element. 
+Eg. 
+For @<td style="background-color:red">cell text</td>@
+_style(_cell("cell text"), "background-color") returns "red"</td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_cookie(cookieName)* </td></tr>
+<tr><td> Notes </td><td> Returns the value of the cookie with cookieName. </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_position(element)* </td></tr>
+<tr><td> Notes </td><td> Returns the an array with the element's x, y coordinate in pixels. 
+Eg.
+_position(_div("id")) may return [100, 180]</td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_getText(element)* </td></tr>
+<tr><td> Notes </td><td> Returns the innerText or textContent of an element. 
+Eg. For @<div id="divId">This is some <b>bold</b> <a href="">link</a></div>@
+_getText(_div("divId")) will return "This is some bold link".  </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_getCellText(cellElement)* </td></tr>
+<tr><td> Notes </td><td> Deprecated. Same as _getText  </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_rteHTML(element)* </td></tr>
+<tr><td> Notes </td><td> Returns the html inside a rich text editor. 
+Eg. _rteHTML(_rte("rteId")) will return the rich text editor's contents. </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_rteText(element)* </td></tr>
+<tr><td> Notes </td><td> Returns the text inside a rich text editor. 
+Eg. _rteText(_rte("rteId")) will return the rich text editor's text content (without the html formatting). </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_isVisible(element)* </td></tr>
+<tr><td> Notes </td><td> Returns true if the element is visible on the user interface.  
+Can be used to assert if a mouse over menu has appeared or not.</td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_containsText(element, text)* </td></tr>
+<tr><td> Notes </td><td> Returns true if the element contains the given text 
+Eg.
+For @<div id="divId">some text</div>@
+_containsText(_div("divId"), "some") returns true </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_containsHTML(element, html)* </td></tr>
+<tr><td> Notes </td><td> Returns true if the element contains the given html 
+Eg.
+For @<div id="divId">some <b>text</b></div>@
+_containsHTML(_div("divId"), "<b>text</b>") returns true </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_contains(parentElement, childElement)* </td></tr>
+<tr><td> Notes </td><td> Returns true if childElement is a child of parentElement </td></tr>
+</table>
+
+h3. Marker functions to show DOM relation
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_in(element)* </td></tr>
+<tr><td> Notes </td><td> Refer to "DOM Relations" </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_near(element)* </td></tr>
+<tr><td> Notes </td><td> Refer to "DOM Relations" </td></tr>
+</table>
+

@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Easy chart for Data Series">
+    <p>Data series charts are useful to track progress of work. You can create burn-up charts to measure scope completed and scope planned. The chart can have multiple series to track different sets of data. Check out our <cref topic="ec_data_series_charts#ec_sample_dataseries">sample data series charts</cref>.</p>
+        <screenshot alttext="Example data series chart1" src="resources/images/ec_data_series_intro1.png" />
+        <screenshot alttext="Example data series chart2" src="resources/images/ec_data_series_intro2.png" />
+    <strong><p>CREATE A DATA SERIES CHART</p></strong>
+    <p>To create a data series chart on a page or a card, follow these steps:</p>
+    <bullets>
+        <item>In the editor, click on the Data Series chart button.</item>
+        <item>In the Easy Charts form, start by selecting the data that will go into your chart. This is similar to the filters you use to make various views in Mingle. </item>
+        <screenshot alttext="Data series section1" src="resources/images/ec_data_series_section1.gif"/>
+            <p>Click on <i>Proceed to Step 2</i> when you’re done with this step.</p>
+        <item>Next, build the chart. </item>
+        <p>Specify which property of the cards determines what labels you want to see on the X-axis. In example 1, each X-label is a sprint. You can filter the X-axis values using the next few fields. </p>
+        <screenshot alttext="Data series section2" src="resources/images/ec_data_series_section2.gif"/>
+        <item>The Data series chart requires that you specify atleast one series. Click on the Add a Series button to get started. Specify what you’d like to call this series. Then use the dropdowns to select the data that defines this series. You can customize how this series should look.</item>
+            <screenshot alttext="Data series section3" src="resources/images/ec_data_series_section3.gif"/>
+        <item>Customize how you want the chart to look. You can select a size, the angle of the X-axis labels, and a color for the series. Additionally, you can give the chart, the X-axis and the Y-axis titles of your choice.</item>
+        <screenshot alttext="Data series section4" src="resources/images/ec_data_series_section4.gif"/>
+        <p>Click on Insert to complete the chart and insert it into the page or card. </p>
+        <item>You can interact with the completed chart. Hovering over a datapoint will show you the last updated ten cards that correspond to that datapoint in the series. Clicking on a datapoint takes you to a full list of all cards for that point.</item>
+        <screenshot alttext="Data series section5" src="resources/images/ec_data_series_section5.gif"/>
+    </bullets>
+    <strong>Notes</strong>
+    <bullets>
+        <item>You can use project variables in your chart setup. For instance, if you’d like the data series chart to represent work for the current iteration at any point of time, you can do so without having to update the chart each iteration!</item>
+            <screenshot alttext="Data series section5" src="resources/images/ec_data_series_using_project_variable.gif"/>
+        <item>If you’re inserting a data series chart into a card description, you can refer to the card itself in your chart setup by selecting THIS CARD as a property value. For instance, if you want a data series chart in a Release card to represent the planned versus completed stories across features, use Release is THIS CARD in the filters.</item>
+        <screenshot alttext="Data series section5" src="resources/images/ec_data_series_using_this_card.gif"/>
+    </bullets>
+    <p>
+        <strong>CUSTOMIZE USING MQL:</strong>
+    </p>
+    <p>You can build or further customize a data series chart using Mingle Query Language. Here’s a sample MQL snippet:</p>
+    <markup>
+    data-series-chart 
+    conditions: 'Release' = (Current Release) AND 'Type' = 'Story' AND 'Iteration' IS NOT NULL
+    x-labels-conditions: Type = Iteration
+    x-title:  Iteration
+    y-title:  Total Scope
+    show-start-label: true
+    data-point-symbol: diamond
+    data-labels: true    
+    cumulative: true
+    chart-height: 500
+    chart-width: 800
+    plot-height: 375
+    plot-width: 500
+    series: 
+    - label: Scope
+      color: black   
+      data: SELECT 'Added to Scope in Iteration', SUM('Planning Estimate') 
+    - label: Analysis complete
+      color: orange
+      data: SELECT 'Analysis Completed in Iteration', SUM('Planning Estimate') WHERE 'Analysis Completed in Iteration' IS NOT NULL
+      trend: true
+    - label: Development complete
+      color: blue
+      data: SELECT 'Development Completed in Iteration', SUM('Planning Estimate') WHERE 'Development Completed in Iteration' IS NOT NULL
+      trend: true
+    - label: Accepted
+      color: green
+      data: SELECT 'Accepted in Iteration', SUM('Planning Estimate') WHERE  'Accepted in Iteration' IS NOT NULL 
+      trend: true
+    </markup>
+    <p>Some additional customizations you can set up in MQL are:</p>
+    <bullets>
+        <item>AS OF</item>
+        <item>FROM TREE </item>
+        <item>THIS CARD.Property</item>
+        <item>Use relationship operators on non-numeric properties (where ‘Due Date’ is greater than ‘Release Date’)</item>
+        <item>Custom chart width and height</item>
+        <item>Custom colours</item>
+    </bullets>
+    <section title="Sample data series charts:" id="ec_sample_dataseries">
+         <p><strong>Burn-up chart for completion of a plan:</strong></p>
+            <screenshot alttext="Burn-up chart for completion of a plan" src="resources/images/ec_data_series_burnup_completion.png" />
+        <p><strong>Status of features:</strong></p>
+            <screenshot alttext="Status of features" src="resources/images/ec_data_series_feature_vs_status.png" />
+        <p><strong>Mixed Chart features:</strong></p>
+            <screenshot alttext="Mixed Chart" src="resources/images/ec_data_series_mixed_chart.png" />
+        <p><strong>Project Status:</strong></p>
+        	<screenshot alttext="Mixed Chart" src="resources/images/ec_data_series_project_status.png" />
+    </section>
+</topic>

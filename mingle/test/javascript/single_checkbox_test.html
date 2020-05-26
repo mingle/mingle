@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Single checkbox Test</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js"
+          type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery.scrollintoview.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+  <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/application.js" type="text/javascript"></script>
+
+  <script src="test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../../app/assets/javascripts/ui_utils.js" type="text/javascript"></script>
+
+  <script src="../../app/assets/javascripts/single_checkbox.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="test_assets/qunit-1.21.0.css" type="text/css"/>
+  <script src="test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+  <script src="test_assets/qunit-phantom.js" type="text/javascript"></script>
+  <script src="test_assets/sinon-2.3.6.js" type="text/javascript"></script>
+
+</head>
+<body>
+<div id="qunit">
+</div>
+
+<div id="single_checkbox_container"></div>
+
+<script type="text/javascript">
+  QUnit.module("Single Checkbox", {
+    beforeEach: function () {
+      this.onValueChange = sinon.spy();
+      this.singleCheckBox = new MingleUI.SingleCheckbox('#single_checkbox_container',
+          {name: 'show_guide_lines', checked: 'true', onValueChange: this.onValueChange});
+    }
+  });
+
+  QUnit.test('testShouldCreateCheckboxInputElementInContainer', function (assert) {
+    assert.ok($j('#single_checkbox_container').find('input').hasClass('single-checkbox-input'));
+  });
+
+  QUnit.test('testShouldCreateCheckboxWithInitialValueAsTrue', function (assert) {
+    assert.ok(($j('#single_checkbox_container').find('input')).prop('checked'));
+  });
+
+  QUnit.test('testShouldInvokeCallbackWhenValueIsChanged', function (assert) {
+    $j('#single_checkbox_container').find('input').click();
+    assert.notOk(this.singleCheckBox.value());
+    assert.equal(this.onValueChange.callCount, 1)
+  });
+
+  QUnit.test('testDisableShouldDisableCheckbox', function (assert) {
+    this.singleCheckBox.disable();
+
+    assert.ok($j('#single_checkbox_container').find('input').attr('disabled'));
+  });
+
+  QUnit.test('testEnableShouldEnableCheckbox', function (assert) {
+    this.singleCheckBox.disable();
+    assert.ok($j('#single_checkbox_container').find('input').attr('disabled'));
+
+    this.singleCheckBox.enable();
+
+    assert.notOk($j('#single_checkbox_container').find('input').attr('disabled'));
+  });
+
+  QUnit.test('testUnselectShouldUnselectTheCheckbox', function (assert) {
+    var checkBox = $j('#single_checkbox_container').find('input');
+    checkBox.click();
+
+    assert.ok(this.singleCheckBox.value());
+
+    this.singleCheckBox.unselect();
+
+    assert.notOk(this.singleCheckBox.value());
+  });
+
+</script>
+</body>
+</html>
+

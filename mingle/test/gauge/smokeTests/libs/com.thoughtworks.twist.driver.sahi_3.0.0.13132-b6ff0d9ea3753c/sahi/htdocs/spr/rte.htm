@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!--
+/**
+ * Copyright  2006  V Narayan Raman
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+
+<html>
+<head>
+<meta name="generator" content="HTML Tidy, see www.w3.org">
+<title></title>
+</head>
+<body>
+<form><input type="checkbox" name="source" value="1" onclick=
+"SourceCode(source.checked)">Source <input type="checkbox" name=
+"bold" value="1" onclick="RichtText('Bold')"><b>B</b> <input type=
+"checkbox" name="under" value="1" onclick=
+"RichtText('underline')"><u>U</u> <input type="checkbox" name=
+"italic" value="1" onclick="RichtText('italic')"><i>I</i> <select
+name="align" onchange="RichAlign(this[this.selectedIndex].value)">
+<option value="justifyleft" selected>Left</option>
+<option value="justifycenter">Center</option>
+<option value="justifyright">Right</option>
+</select> <iframe class="mytext" width="100%" id="mytext" name=
+"mytext" height="200"></iframe> 
+
+<script type="text/javascript" langauge="JavaScript">
+        var mytext = window.frames["mytext"];
+        function RichtText(what) {
+            mytext.document.execCommand(what);
+            mytext.focus();
+        }
+
+        function RichAlign(what) {
+            mytext.document.execCommand(what);
+            mytext.focus();
+        }
+
+        function SourceCode(mode)
+        {
+            var htmtext;
+            if(mode) {
+                htmtext=mytext.document.body.innerHTML;
+                mytext.document.body.innerText=htmtext;
+            }
+            else {
+                htmtext=mytext.document.body.innerText;
+                mytext.document.body.innerHTML=htmtext;
+            }
+
+        }    
+
+        var bLoad=false
+        var pureText=true
+        var bodyTag="<body MONOSPACE STYLE=\"font:10pt arial,sans-serif\">"
+        var bTextMode=false
+        mytext.document.open();
+        mytext.document.write(bodyTag);
+        mytext.document.close();
+        mytext.document.designMode="On";
+    
+</script>
+</form>
+</body>
+</html>
+

@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Deleting cards">
+  <p>To delete a card, simply navigate to the card you want to delete and click the "Delete" button in the grey toolbar at the top and bottom of the card.</p>
+      <screenshot src="resources/images/delete_card.png"/>
+  <p>You can also delete cards in bulk by selecting the cards you want to delete in <cref topic="list_view">list view</cref> and clicking the "Delete" button in the grey toolbar at the top of the list view.</p>
+      <screenshot src="resources/images/delete_card_bulk.png"/>  
+    <note>
+      <bullets>
+          <item>Only project or Mingle admins can delete cards. Read more about <cref topic="user_roles">user roles</cref>.</item>
+          <item>Cards cannot be deleted in edit mode.</item>
+      </bullets>  
+    </note>
+</topic>

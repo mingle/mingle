@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Mingle + Slack features">
+   <p>There are a range of actions you can carry out on Mingle from Slack. </p>
+
+   <section title="View a card">
+    <code>/show #cardnumber</code>
+    <p>To view details of a card, use this command from within your Slack channel. A snippet of the Mingle card will be displayed on the channel, along with the relevant buttons. This will be visible to everyone on the channel.</p>
+    <p>Example usage: /show #2</p>
+  </section>
+
+  <section title="View a list of cards">
+    <code>/showcards cardtype property1=value1... propertyN=valueN</code>
+    <p>To see a list of cards of a certain type and with certain properties value, use this command from within your Slack channel.</p>
+      <bullets>
+      		<item><strong>cardtype</strong> parameter takes the name of any of the card types configured in your Mingle project. If the name of the card type is more than one word, enclose it in double quotes (e.g. “Feature request”).</item>
+      		<item><strong>property1</strong> is the name of a property that is available on that card type. Multi-word property names will have to be enclosed in double quotes. (e.g. “Story status”)</item>
+      		<item><strong>value1</strong> is one or many words that could be the value of the specified property. If it is many words, enclose it in double quotes (e.g. “In development”)</item>
+  		</bullets>
+  <p>The first property1-value1 pair will be mandatory. All additional pairs are optional. The parameters work as if with an invisible AND operator. The top 10 cards that fit the query are displayed, in order of the card ranking. To see more, click on the Show More button. </p>
+  <p>Example usage: </p>
+  <bullets>
+    <item>/showcards story status="Complete"</item>
+    <item>/showcards story status="Complete" estimate=2 </item>
+    </bullets>
+  <p>If cardtype is not specified, all cards for which the specified property exists will be displayed.</p>
+  </section>
+
+<section title="Assign team members to card">
+    <code>/assign #cardnumber @person1 @person2</code>
+    <p>To assign one or two team members to a card, use this command in the Slack channel. The team members are assigned to the first and second team member properties configured for that card type. For instance, for a card of type Story, you may have configured two properties called Story Owner and Pair. These two properties are set using this command. </p>
+      <bullets>
+      		<item><strong>cardnumber</strong> is the number of the card you’d like to assign team members to. This parameter is mandatory.</item>
+      		<item><strong>person1</strong> is the Slack handle of the team member you’d like to assign to the first team member property on that card. In the example above, person1 would be assigned as the Story Owner. This parameter is mandatory.</item>
+      		<item><strong>person2</strong> is the Slack handle of the team member you’d like to assign to the second team member property on that card. In the example above, person2 would be assigned as the Pair. This parameter is optional. </item>
+  		</bullets>
+  </section>
+
+  <section title="Sign up on a card">
+    <p>All card snippets on Slack come with buttons. If the card has a property that takes a team member’s name, you will see a button on every snippet that lets you assign yourself. </p>
+    <p>Clicking on this button sets you as the value for that property. The card snippet is posted back to the channel with the updated property.</p>
+  </section>
+
+  <section title="Create a card">
+    <code>/addcard cardtype “multi-word card title”</code>
+    <p>To create a card from Slack in your Mingle project, run this command from the channel. </p>
+    <bullets>
+          <item><strong>cardtype</strong> is the name of any of the card types configured in your Mingle project. If the name of the card type is more than one word, enclose it in double quotes. (e.g. “Feature request”)</item>
+          <item>Specify the title of the card within double quotes.</item>
+      </bullets>
+      <p>In response, a snippet of the card you’ve just created will be displayed on the Slack channel. </p>
+  </section>
+
+  <section title="Post murmur to card">
+    <code>/murmur #cardnumber “message that can include @channel or @teammember”</code>
+    <p>Send murmurs to your colleagues and the whole team from Slack with this command. The murmur is posted on a card. 
+ </p>
+    <bullets>
+          <item><strong>cardnumber</strong> is the number of the card you’d like to post the murmur on to. This parameter is mandatory.</item>
+          <item>Specify your message within double quotes. The message can include @channel. This is converted to @team when posted onto Mingle. The message may also include a team member’s Slack handle. This is converted to their Mingle names when posted to a card.</item>
+      </bullets>
+  </section>
+
+  <section title="Make transitions using buttons on snippet">
+    <p>You can now make status changes to cards from Slack. Click on the 'Move this card' button on the card snippet and you will see the list of available transitions for the card. </p>
+    <bullets>
+          <item>Card transitions that require a murmur cannot be executed from Slack. You will have to log in to Mingle in order to execute it.</item>
+          <item>You will not see Move this card button when there are no transitions available for the card.</item>
+      </bullets>
+  </section>
+
+  <section title="See a list of all commands">
+  <code>/mingle OR /minglehelp</code>
+    <p>If you’d like a list of commands we support, run either /mingle or /minglehelp from your integrated channel on Slack, or as a direct message. </p>
+  </section>
+
+  <section title="Give us feedback">
+  	<code>/minglefeedback</code>
+    <p>Have suggestions? Let us know! Write to support@thoughtworks.com </p>
+  </section>
+
+  <section title="Coming soon!">
+	<bullets>
+		<item>Receive notifications on transitions</item>
+    <item>Receive notifications on being assigned to a card</item>
+	</bullets>
+  </section>
+
+</topic>
+
+

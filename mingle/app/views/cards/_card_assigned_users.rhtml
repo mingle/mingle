@@ -1,0 +1,45 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%
+   html_attrs = {
+       :id => "card_assigned_users_#{card.number}",
+       :class => "full-team-list",
+       :'data-invites-enabled' => @enable_user_invites
+   }
+   content_tag :div, html_attrs do %>
+  <div class="avatars" data-slot-ids="<%= card.user_properties[0..2].map(&:name).to_json %>" >
+    <% card.user_properties[0..2].reverse.each_with_index do |user_property, index| %>
+      <% if index == 0 && !card.user_properties.any?(&:set?) %>
+        <div class="slot" data-slot-id="<%= card.user_properties.first.name %>" title="Assign a team member" ></div>
+      <% elsif user_property.set? %>
+        <div class="slot" data-slot-id="<%= user_property.name %>" >
+          <%= image_tag_for_user_icon(user_property.value,
+                                      :alt => "#{user_property.display_value}",
+                                      :title => "#{user_property.name}: #{user_property.display_value}",
+                                      :class => "avatar",
+                                      'data-name' => user_property.display_value,
+                                      'data-value-identifier' => user_property.db_identifier)
+          %>
+          <% if MingleConfiguration.show_holiday_fun?(user_preference(:i_hate_holidays)) && MingleConfiguration.latest_holiday == 'Movember 2016' %>
+            <img src="/images/moustache.png" class="moustache" alt="Moustache">
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+  <div class="content" hidden="hidden"></div>
+<% end %>

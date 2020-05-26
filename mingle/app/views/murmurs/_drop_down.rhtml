@@ -1,0 +1,37 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% content_tag 'div', :accessing => 'murmurs:index', :id => 'murmurs-drop-down' do %>
+  <div class="murmurs-chat"><a href="javascript:void(0)">Murmurs <span class="badge fb-badge"
+  data-fb-items-url="<%= FirebaseKeys.unread_murmurs_url(User.current, @project) %>"
+  data-fb-token="<%= FirebaseAuth.generate_token(User.current.id) %>"
+  data-card-popup-url="<%= url_for(:controller => 'cards', :action => 'popup_show') %>"></span></a></div>
+  <div class="murmurs-list content">
+    <%= render :partial => 'murmurs/murmur_input' %>
+    <%= render :partial => 'murmurs/conversation_header' %>
+    <div class="murmurs-loading">
+      <i class="fa fa-refresh fa-spin fa-2x"></i>
+    </div>
+    <ul class="murmurs-panel"
+         data-source-url="<%= murmurs_list_path(:format => :json) %>"
+         data-murmur-id="<%= params[:murmur_id] %>"
+         data-conversations-url="<%= conversations_path(:format => :json) %>"
+         data-unread-murmurs-fb-url="<%= FirebaseKeys.unread_murmurs_url(User.current, @project) %>">
+      <li class="murmurs-panel-footer">
+      </li>
+    </ul>
+  </div>
+<% end %>

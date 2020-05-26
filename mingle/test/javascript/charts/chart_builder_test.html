@@ -1,0 +1,874 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Chart Builder Test</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js"
+          type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery.tag-it.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/tinycolor.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+  <script src="../../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/yaml-0.3.0.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/application.js" type="text/javascript"></script>
+
+  <script src="../../../app/assets/javascripts/url_helper.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/drop_down.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/text_box.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/tags_filter.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/project_data_store.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/mingle_tag_storage.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/mingle_tageditor.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/parameter.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/pair_parameter.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/group_parameter.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/section_helpers.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/card_filters.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/card_type_filter.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/card_filter.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/mql_builder.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/dummy_series.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/card_filter_value_wrapper.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/pie_chart/macro_builder.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/ratio_bar_chart/macro_builder.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/stacked_bar_chart/macro_builder.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/sections/data_section.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/sections/build_chart_section.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/sections/customize_chart_section.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/sections/data_section.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/pie_chart/sections/build_chart_section.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/ratio_bar_chart/sections/build_chart_section.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/stacked_bar_chart/xLabelTranslator.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/ratio_bar_chart/sections/customize_chart_section.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/stacked_bar_chart/sections/build_chart_section.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/data_series_chart/sections/build_chart_section.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/stacked_bar_chart/sections/customize_chart_section.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/data_series_chart/sections/customize_chart_section.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/cumulative_flow_graph/sections/build_chart_section.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/cumulative_flow_graph/sections/customize_chart_section.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/daily_history_chart/sections/build_chart_section.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/pie_chart/sections/customize_chart_section.js" type="text/javascript"></script>
+  <script src="../test_assets/sinon-2.3.6.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    sinon.spy(MingleUI.EasyCharts.Sections, 'DataSection');
+    sinon.spy(MingleUI.EasyCharts.PieChart.Sections, 'BuildChartSection');
+    sinon.spy(MingleUI.EasyCharts.PieChart.Sections, 'CustomizeChartSection');
+    sinon.spy(MingleUI.EasyCharts.PieChart, 'MacroBuilder');
+    sinon.spy(MingleUI.EasyCharts.RatioBarChart.Sections, 'BuildChartSection');
+    sinon.spy(MingleUI.EasyCharts.RatioBarChart.Sections, 'CustomizeChartSection');
+    sinon.spy(MingleUI.EasyCharts.RatioBarChart, 'MacroBuilder');
+    sinon.spy(MingleUI.EasyCharts.StackedBarChart.Sections, 'BuildChartSection');
+    sinon.spy(MingleUI.EasyCharts.StackedBarChart.Sections, 'CustomizeChartSection');
+    sinon.spy(MingleUI.EasyCharts.StackedBarChart, 'MacroBuilder');
+  </script>
+  <script src="../../../app/assets/javascripts/easy_charts/chart_builder.js" type="text/javascript"></script>
+
+  <script src="../test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+  <script src="../test_assets/qunit-phantom.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="../test_assets/qunit-1.21.0.css" type="text/css"/>
+</head>
+<body>
+<div id="qunit"></div>
+<div id="chart_builder_container"></div>
+<script type="application/javascript">
+  var mingleProjectData = {
+    identifier: 'mingle',
+    name: 'Mingle',
+    dateFormat: '%d/%m/%Y',
+    cardTypes: [
+      {name: 'Release', id: 1, propertyDefinitions: [{name: 'mp1', isNumeric: true}, {name: 'mp2'},{name: 'mp5'}]},
+      {name: 'Work', id: 2, propertyDefinitions: [{name: 'mp2'}]},
+      {name: 'Bug', id: 3, propertyDefinitions: [{name: 'mp3', isNumeric: true}, {name: 'mp4'}]}
+    ],
+    team: [],
+    tags: [{name: 'tagMingle1', color: 'black'}, {name: 'tagMingle2', color: 'blue'}]
+  }, initialProject = 'mingle';
+
+  function dataSectionCallbacks() {
+    return MingleUI.EasyCharts.Sections.DataSection.args[0][3];
+  }
+
+  function buildChartSectionCallbacks() {
+    return MingleUI.EasyCharts.PieChart.Sections.BuildChartSection.args[0][1];
+  }
+
+  function triggerDataSectionUpdate(data, values) {
+    dataSectionCallbacks().onUpdate({
+      name: 'pieChartDataSection',
+      values: function () {
+        return values || {};
+      }
+    }, data);
+  }
+
+  function customizeChartSectionCallbacks() {
+    return MingleUI.EasyCharts.PieChart.Sections.CustomizeChartSection.args[0][1];
+  }
+
+  function FakeCardFilter(property, operator, value, isCardProperty) {
+    return {
+      property: { value: function () {return property; }},
+      operator: { value: function () {return operator; }},
+      value: { value: function () {return value; }},
+      isValid: function () { return property && operator && value; },
+      isForCardProperty: function() { return isCardProperty; }
+    };
+  }
+
+  var cardFilters = [
+    new FakeCardFilter('Type', 'eq', ['Story', 'Card']),
+    new FakeCardFilter('prop2', 'ne', ['valX', 'valY'])
+  ];
+
+  QUnit.module('Chart Builder', {
+    beforeEach: function () {
+      this.container = $j('#chart_builder_container');
+      this.server = sinon.fakeServer.create();
+      this.server.respondWith("GET", "/api/v2/projects/mingle/chart_data.json",
+          [200, {"Content-Type": "application/json"}, JSON.stringify(mingleProjectData)]);
+      this.previewCallback = sinon.spy();
+      this.errorCallback = sinon.spy();
+      sinon.spy(ProjectDataStore, 'setAjaxStopCallback');
+      sinon.spy(ProjectDataStore, 'enableGlobalCallbacks');
+      sinon.spy(ProjectDataStore, 'disableGlobalCallbacks');
+      this.updateCardCountCallback = sinon.spy();
+      this.resetPreviewCallback = sinon.spy();
+      this.initializedCallback = sinon.spy();
+    },
+    afterEach: function () {
+      MingleUI.EasyCharts.Sections.DataSection.reset();
+      MingleUI.EasyCharts.PieChart.Sections.BuildChartSection.reset();
+      MingleUI.EasyCharts.PieChart.Sections.CustomizeChartSection.reset();
+      MingleUI.EasyCharts.PieChart.MacroBuilder.reset();
+      ProjectDataStore.setAjaxStopCallback.restore();
+      ProjectDataStore.enableGlobalCallbacks.restore();
+      ProjectDataStore.disableGlobalCallbacks.restore();
+      this.server.restore();
+      this.container.empty();
+    }
+  }, function () {
+
+
+    QUnit.module('Pie Chart Chart Builder', {
+      beforeEach: function () {
+        this.chartBuilder = new MingleUI.EasyCharts.ChartBuilder('pie-chart', {project: initialProject}, {
+          preview: this.previewCallback,
+          onError: this.errorCallback,
+          updateCardCount: this.updateCardCountCallback,
+          resetPreview: this.resetPreviewCallback,
+          initialized: this.initializedCallback
+        });
+        this.server.respond();
+        this.stubbedDataSection = MingleUI.EasyCharts.Sections.DataSection.returnValues[0];
+        this.stubbedBuildChartSection = MingleUI.EasyCharts.PieChart.Sections.BuildChartSection.returnValues[0];
+        this.stubbedCustomizeChartSection = MingleUI.EasyCharts.PieChart.Sections.CustomizeChartSection.returnValues[0];
+        this.container.append(this.chartBuilder.htmlContainer);
+      },
+      afterEach: function () {
+        MingleUI.EasyCharts.PieChart.Sections.BuildChartSection.reset();
+        MingleUI.EasyCharts.PieChart.Sections.CustomizeChartSection.reset();
+      }
+    }, function () {
+      QUnit.test('testShouldUseProjectDataStoreToFetchInitialProjectData', function (assert) {
+        assert.equal(this.server.requests.length, 2);
+        assert.equal(this.server.requests[0].url, '/api/v2/projects/mingle/chart_data.json');
+        assert.equal(this.server.requests[1].url, '/api/v2/projects.json?exclude_requestable=true');
+      });
+
+      QUnit.test('testShouldInitializeDataSection', function (assert) {
+        var dataSectionArgs = MingleUI.EasyCharts.Sections.DataSection.args[0];
+        assert.ok(dataSectionArgs[1] instanceof ProjectDataStore);
+        assert.deepEqual(dataSectionArgs[2], {project: initialProject});
+        assert.equal(typeof dataSectionArgs[3].onComplete, 'function');
+        assert.equal(typeof dataSectionArgs[3].onUpdate, 'function');
+
+        assert.ok(this.chartBuilder.htmlContainer.find('#pie_chart_data_section')[0]);
+      });
+
+      QUnit.test('testShouldInitializeBuildChartSection', function (assert) {
+        var buildChartSectionArgs = MingleUI.EasyCharts.PieChart.Sections.BuildChartSection.args[0];
+
+        assert.equal(typeof buildChartSectionArgs[1].onComplete, 'function');
+        assert.equal(typeof buildChartSectionArgs[1].onUpdate, 'function');
+        assert.equal(typeof buildChartSectionArgs[1].onError, 'function');
+        assert.ok(this.chartBuilder.htmlContainer.find('#pie_chart_build_chart_section.disabled')[0]);
+        assert.ok(this.stubbedBuildChartSection);
+      });
+
+      QUnit.test('testShouldInitializeCustomizeChartSection', function (assert) {
+        var customizeChartSectionArgs = MingleUI.EasyCharts.PieChart.Sections.CustomizeChartSection.args[0];
+
+        assert.equal(typeof customizeChartSectionArgs[1].onUpdate, 'function');
+        assert.ok(this.chartBuilder.htmlContainer.find('#pie_chart_customize_chart_section.disabled')[0]);
+        assert.ok(this.stubbedCustomizeChartSection);
+      });
+
+      QUnit.test('testShouldEnableBuildChartSectionWhenDataSectionOnCompleteIsTriggered', function (assert) {
+        var projectData = {}, selectedCardTypes = ['Story', 'Feature'];
+        sinon.stub(this.stubbedBuildChartSection, 'enableWith');
+
+        dataSectionCallbacks().onComplete(projectData, selectedCardTypes);
+        var enableBuildChartSectionArgs = this.stubbedBuildChartSection.enableWith.args[0];
+
+        assert.equal(enableBuildChartSectionArgs[0], projectData);
+        assert.equal(enableBuildChartSectionArgs[1], selectedCardTypes);
+      });
+
+      QUnit.test('testShouldEnableCustomizeSectionWhenBuildChartSectionOnCompleteIsTriggered', function (assert) {
+        sinon.stub(this.stubbedCustomizeChartSection, 'enableWith');
+        buildChartSectionCallbacks().onComplete();
+        assert.deepEqual(typeof MingleUI.EasyCharts.PieChart.Sections.CustomizeChartSection.args[0][1].onUpdate, 'function');
+
+        assert.equal(this.stubbedCustomizeChartSection.enableWith.callCount, 1);
+      });
+
+      QUnit.test('testShouldDisableBuildChartAndCustomizeChartSectionWhenProjectChanges', function (assert) {
+        sinon.stub(this.stubbedBuildChartSection, 'isEnabled').returns(true);
+        sinon.stub(this.stubbedCustomizeChartSection, 'isEnabled').returns(true);
+        sinon.stub(this.stubbedBuildChartSection, 'disable');
+        sinon.stub(this.stubbedCustomizeChartSection, 'disable');
+
+        triggerDataSectionUpdate({targetType: 'project'});
+
+        assert.equal(this.stubbedBuildChartSection.disable.callCount, 1);
+        assert.equal(this.stubbedCustomizeChartSection.disable.callCount, 1);
+      });
+
+      QUnit.test('testShouldDisableBuildChartAndCustomizeChartSectionWhenCardTypeChanges', function (assert) {
+        sinon.stub(this.stubbedBuildChartSection, 'isEnabled').returns(true);
+        sinon.stub(this.stubbedCustomizeChartSection, 'isEnabled').returns(true);
+        sinon.stub(this.stubbedBuildChartSection, 'disable');
+        sinon.stub(this.stubbedCustomizeChartSection, 'disable');
+
+        triggerDataSectionUpdate({
+          targetType: 'cardFilters',
+          target: {
+            getCardTypes: function () {
+              return ['foo', 'bar'];
+            }
+          }
+        });
+
+        assert.equal(this.stubbedBuildChartSection.disable.callCount, 1);
+        assert.equal(this.stubbedCustomizeChartSection.disable.callCount, 1);
+      });
+
+      QUnit.test('testShouldNotRemoveChartAndCustomizeSectionWhenCardTypeIsNotChanged', function (assert) {
+        sinon.stub(this.stubbedBuildChartSection, 'isEnabled').returns(true);
+        sinon.stub(this.stubbedCustomizeChartSection, 'isEnabled').returns(true);
+        sinon.stub(this.stubbedBuildChartSection, 'disable');
+        sinon.stub(this.stubbedCustomizeChartSection, 'disable');
+
+        triggerDataSectionUpdate({
+          targetType: 'cardFilters',
+          target: {
+            getCardTypes: function () {
+              return ['foo', 'bar'];
+            }
+          }
+        });
+
+        assert.equal(this.stubbedBuildChartSection.disable.callCount, 1);
+        assert.equal(this.stubbedCustomizeChartSection.disable.callCount, 1);
+
+        triggerDataSectionUpdate({
+          targetType: 'cardFilters',
+          target: {
+            getCardTypes: function () {
+              return ['foo', 'bar'];
+            }
+          }
+        });
+
+        assert.equal(this.stubbedBuildChartSection.disable.callCount, 1);
+        assert.equal(this.stubbedCustomizeChartSection.disable.callCount, 1);
+      });
+
+      QUnit.test('testShouldTriggerPreviewCallbackWithMacroWhenDataAndBuildChartSectionsAreValid', function (assert) {
+        triggerDataSectionUpdate({}, {
+          cardFilters: cardFilters,
+          project: 'projectIdentifier',
+          tags: ['tag1', 'tag2']
+        });
+        sinon.stub(this.stubbedDataSection, 'isValid').returns(true);
+        buildChartSectionCallbacks().onUpdate({
+          values: function () {
+            return {
+              aggregate: 'count',
+              property: 'mp2'
+            };
+          }
+        });
+        sinon.stub(this.stubbedBuildChartSection, 'isValid').returns(true);
+        customizeChartSectionCallbacks().onUpdate({
+          values: function () {
+            return {
+              chartTitle: 'chart title',
+              legendPosition: 'right',
+              chartSize: 'large',
+              labelType: 'whole-number'
+            };
+          }
+        });
+        var expectedChartData = {
+          cardFilters: cardFilters,
+          project: 'projectIdentifier',
+          tags: ['tag1', 'tag2'],
+          property: 'mp2',
+          aggregate: 'count',
+          chartTitle: 'chart title',
+          legendPosition: 'right',
+          chartSize: 'large',
+          labelType: 'whole-number'
+        }, expectedMacro = {
+          'pie-chart': {
+            data: 'SELECT "mp2", COUNT(*) WHERE "Type" IN ("Story","Card") AND NOT ("prop2" IN ("valX","valY")) AND TAGGED WITH "tag1" AND TAGGED WITH "tag2"',
+            project: 'projectIdentifier',
+            title: 'chart title',
+            'chart-size': 'large',
+            'label-type': 'whole-number',
+            'legend-position': 'right'
+          }
+        };
+        assert.equal(MingleUI.EasyCharts.PieChart.MacroBuilder.callCount, 4);
+        assert.equal(this.previewCallback.callCount, 1);
+        assert.deepEqual(MingleUI.EasyCharts.PieChart.MacroBuilder.args[0][0], expectedChartData);
+        assert.deepEqual(this.previewCallback.args[0][0], expectedMacro);
+      });
+
+      QUnit.test('testShouldTriggerUpdateCardCountCallbackWithCardCountMqlAndProjectOnInitialize', function (assert) {
+        assert.equal(this.updateCardCountCallback.callCount, 1);
+        assert.deepEqual(this.updateCardCountCallback.args[0], [initialProject, 'Select count(*)']);
+      });
+
+      QUnit.test('testShouldTriggerUpdateCardCountCallbackWithCardCountMqlAndProjectWhenDataSectionIsValidAndBuildChartSectionIsInvalid', function (assert) {
+        var expectedCardCountMql = 'Select count(*) where "Type" IN ("Story","Card") AND NOT ("prop2" IN ("valX","valY"))';
+        sinon.stub(this.stubbedDataSection, 'isValid').returns(true);
+        sinon.stub(this.stubbedBuildChartSection, 'isValid').returns(false);
+        triggerDataSectionUpdate({}, {
+          cardFilters: cardFilters,
+          project: 'projectIdentifier',
+          tags: []
+        });
+
+        assert.equal(this.updateCardCountCallback.callCount, 2);
+        assert.deepEqual(this.updateCardCountCallback.args[1], ['projectIdentifier', expectedCardCountMql]);
+      });
+
+      QUnit.test('testGetMacroValueShouldBuildChartMacroFromSections', function (assert) {
+        var expectedMacro = {
+          'pie-chart': {
+            'chart-size': 'large',
+            data: 'SELECT "mp3", COUNT(*) WHERE "Type" IN ("Story","Card") AND NOT ("prop2" IN ("valX","valY")) AND TAGGED WITH \"tag1\" AND TAGGED WITH \"tag2\"',
+            project: 'projectIdentifier',
+            'label-type': 'whole-number',
+            'legend-position': 'bottom',
+            title: 'Chart Title'
+          }
+        };
+        sinon.stub(this.stubbedDataSection, 'values').returns({
+          cardFilters: cardFilters,
+          project: 'projectIdentifier',
+          tags: ['tag1', 'tag2']
+        });
+        sinon.stub(this.stubbedBuildChartSection, 'values').returns({
+          aggregate: 'count',
+          property: 'mp3'
+        });
+        sinon.stub(this.stubbedCustomizeChartSection, 'values').returns({
+          chartTitle: 'Chart Title',
+          chartSize: 'large',
+          legendPosition: 'bottom',
+          labelType: 'whole-number'
+        });
+        sinon.stub(this.stubbedBuildChartSection, 'isEnabled').returns(true);
+        sinon.stub(this.stubbedCustomizeChartSection, 'isEnabled').returns(true);
+
+        assert.deepEqual(this.chartBuilder.getMacroValue(), expectedMacro);
+      });
+
+      QUnit.test('testDisableShouldHideHtmlContainer', function (assert) {
+        this.chartBuilder.disable();
+
+        assert.notOk(this.chartBuilder.htmlContainer.is(':visible'));
+      });
+
+      QUnit.test('testDisableShouldTriggerResetPreviewWhenPreviewCanNotBeGenerated', function (assert) {
+        this.chartBuilder.disable();
+        assert.equal(this.resetPreviewCallback.callCount, 1);
+
+        sinon.stub(this.stubbedDataSection, 'isValid').returns(true);
+        var stubbedBuildChartSectionIsValid = sinon.stub(this.stubbedBuildChartSection, 'isValid');
+        stubbedBuildChartSectionIsValid.returns(false);
+
+        this.chartBuilder.disable();
+        assert.equal(this.resetPreviewCallback.callCount, 2);
+
+        stubbedBuildChartSectionIsValid.returns(true);
+
+        this.chartBuilder.disable();
+        assert.equal(this.resetPreviewCallback.callCount, 2);
+      });
+
+      QUnit.test('testEnableShouldShowHtmlContainerAndTriggerPreviewCallbackForValidData', function (assert) {
+        this.chartBuilder.disable();
+        assert.notOk(this.chartBuilder.htmlContainer.is(':visible'));
+
+        sinon.stub(this.stubbedDataSection, 'isValid').returns(true);
+        sinon.stub(this.stubbedBuildChartSection, 'isValid').returns(true);
+
+        this.chartBuilder.enable();
+
+        assert.ok(this.chartBuilder.htmlContainer.is(':visible'));
+        assert.equal(this.previewCallback.callCount, 1);
+        assert.deepEqual(this.previewCallback.args[0][0], {
+          'pie-chart': {
+            data: 'SELECT "property", aggregate WHERE condition',
+            project: initialProject
+          }
+        });
+      });
+
+      QUnit.test('testEnableShouldTriggerUpdateCardCountCallbackWithProjectIdentifierAndCardCountMqlWhenPreviewCanNotBeGenerated', function (assert) {
+        sinon.stub(this.stubbedDataSection, 'isValid').returns(true);
+        var stubbedBuildChartSectionIsValid = sinon.stub(this.stubbedBuildChartSection, 'isValid');
+        stubbedBuildChartSectionIsValid.returns(false);
+
+        this.chartBuilder.enable();
+        assert.equal(this.updateCardCountCallback.callCount, 2);
+
+        stubbedBuildChartSectionIsValid.returns(true);
+
+        this.chartBuilder.enable();
+        assert.equal(this.updateCardCountCallback.callCount, 2);
+      });
+
+      QUnit.test('testIsEnabledShouldReturnTrueWhenHtmlContainerIsVisible', function (assert) {
+        this.chartBuilder.disable();
+        assert.notOk(this.chartBuilder.isEnabled());
+
+        this.chartBuilder.enable();
+        assert.ok(this.chartBuilder.isEnabled());
+      });
+
+      QUnit.test('testShouldTriggerPreviewCallbackWithCorrectMacroWhenCardTypeChangedAndDataAndBuildChartSectionsAreValid', function (assert) {
+        triggerDataSectionUpdate({}, {
+          cardFilters: cardFilters,
+          project: 'projectIdentifier'
+        });
+        sinon.stub(this.stubbedDataSection, 'isValid').returns(true);
+        buildChartSectionCallbacks().onUpdate({
+          values: function () {
+            return { aggregate: 'count', property: 'mp2' };
+          }
+        });
+        sinon.stub(this.stubbedBuildChartSection, 'isValid').returns(true);
+        customizeChartSectionCallbacks().onUpdate({
+          values: function () {
+            return { chartTitle: 'chart title', legendPosition: 'right', chartSize: 'large', labelType: 'whole-number' };
+          }
+        });
+        var expectedMacro = {
+          'pie-chart': {
+            data: 'SELECT "mp2", COUNT(*) WHERE "Type" IN ("Story","Card") AND NOT ("prop2" IN ("valX","valY"))',
+            project: 'projectIdentifier',
+            title: 'chart title',
+            'chart-size': 'large',
+            'label-type': 'whole-number',
+            'legend-position': 'right'
+          }
+        };
+        assert.equal(MingleUI.EasyCharts.PieChart.MacroBuilder.callCount, 4);
+        assert.deepEqual(this.previewCallback.args[0][0], expectedMacro);
+
+        triggerDataSectionUpdate({
+          targetType: 'cardFilters',
+          target: {
+            getCardTypes: function () {
+              return ['Story'];
+            }
+          }
+        });
+        buildChartSectionCallbacks().onUpdate({
+          values: function () {
+            return { aggregate: 'count', property: 'mp3' };
+          }
+        });
+
+        var expectedUpdatedMacro = {
+          'pie-chart': {
+            data: 'SELECT "mp3", COUNT(*) WHERE condition'
+          }
+        };
+        assert.equal(this.previewCallback.callCount, 3);
+        assert.deepEqual(this.previewCallback.args[2][0], expectedUpdatedMacro);
+
+      });
+
+      QUnit.test('testShouldSetAjaxStopCallbackOnProjectDataStore', function (assert) {
+        assert.equal(ProjectDataStore.setAjaxStopCallback.callCount, 1);
+        assert.equal(typeof ProjectDataStore.setAjaxStopCallback.args[0][0], 'function');
+        assert.equal(ProjectDataStore.enableGlobalCallbacks.callCount, 1);
+      });
+
+      QUnit.test('testShouldUpdatePreviewWhenAjaxStopCallbackIsTriggered', function (assert) {
+        sinon.stub(this.stubbedDataSection, 'isValid').returns(true);
+        sinon.stub(this.stubbedBuildChartSection, 'isValid').returns(true);
+        assert.notOk(this.chartBuilder.htmlContainer.is(':visible'));
+
+        ProjectDataStore.setAjaxStopCallback.args[0][0]();
+
+        assert.equal(this.previewCallback.callCount, 1);
+        assert.equal(ProjectDataStore.disableGlobalCallbacks.callCount, 1);
+        assert.ok(this.chartBuilder.htmlContainer.is(':visible'));
+        assert.equal(this.initializedCallback.callCount, 1);
+      });
+
+      QUnit.test('testShouldCacheErrorMessageWhenBuildChartSectionTriggersOnError', function (assert) {
+        var errorMessage = 'Some Error generated by build chart section.';
+        buildChartSectionCallbacks().onError(errorMessage);
+
+        assert.equal(this.chartBuilder.buildChartSectionError, errorMessage);
+        assert.equal(this.errorCallback.callCount, 1);
+        assert.deepEqual(this.errorCallback.args[0], [errorMessage, true]);
+      });
+
+      QUnit.test('testShouldTriggerPreviewGenerationOnDataSectionUpdateWhenErrorMessageExist', function (assert) {
+        var errorMessage = 'Some Error generated by build chart section.';
+        buildChartSectionCallbacks().onError(errorMessage);
+        assert.equal(this.chartBuilder.buildChartSectionError, errorMessage);
+        assert.equal(this.previewCallback.callCount, 0);
+
+        sinon.stub(this.stubbedDataSection, 'isValid').returns(true);
+        sinon.stub(this.stubbedBuildChartSection, 'isValid').returns(true);
+        triggerDataSectionUpdate({}, {
+          cardFilters: cardFilters,
+          project: 'projectIdentifier',
+          tags: ['tag1', 'tag2']
+        });
+
+        assert.equal(this.chartBuilder.buildChartSectionError, '');
+        assert.equal(this.previewCallback.callCount, 1);
+      });
+
+      QUnit.test('testShouldTriggerPreviewGenerationOnBuildChartSectionUpdateWhenErrorMessageExist', function (assert) {
+        var errorMessage = 'Some Error generated by build chart section.';
+        buildChartSectionCallbacks().onError(errorMessage);
+        assert.equal(this.chartBuilder.buildChartSectionError, errorMessage);
+        assert.equal(this.previewCallback.callCount, 0);
+
+        sinon.stub(this.stubbedDataSection, 'isValid').returns(true);
+        sinon.stub(this.stubbedBuildChartSection, 'isValid').returns(true);
+        buildChartSectionCallbacks().onUpdate({
+          values: function () {
+            return {
+              aggregate: 'count',
+              property: 'mp2'
+            };
+          },
+          name: this.stubbedBuildChartSection.name
+        });
+
+        assert.equal(this.chartBuilder.buildChartSectionError, '');
+        assert.equal(this.previewCallback.callCount, 1);
+      });
+
+      QUnit.test('testShouldNotTriggerPreviewGenerationOnCustomizeChartSectionUpdateWhenErrorMessageExist', function (assert) {
+        var errorMessage = 'Some Error generated by build chart section.';
+        buildChartSectionCallbacks().onError(errorMessage);
+        assert.equal(this.chartBuilder.buildChartSectionError, errorMessage);
+        assert.equal(this.previewCallback.callCount, 0);
+
+        sinon.stub(this.stubbedDataSection, 'isValid').returns(true);
+        sinon.stub(this.stubbedBuildChartSection, 'isValid').returns(true);
+        customizeChartSectionCallbacks().onUpdate({
+          values: function () {
+            return {
+              chartTitle: 'chart title',
+              legendPosition: 'right',
+              chartSize: 'large',
+              labelType: 'whole-number'
+            };
+          }
+        });
+
+        assert.equal(this.chartBuilder.buildChartSectionError, errorMessage);
+        assert.equal(this.previewCallback.callCount, 0);
+      });
+    });
+
+    QUnit.module('Ratio Bar Chart Chart Builder', {
+      beforeEach: function () {
+        this.chartBuilder = new MingleUI.EasyCharts.ChartBuilder('ratio-bar-chart', {project: initialProject}, {
+          preview: this.previewCallback,
+          onError: this.errorCallback,
+          updateCardCount: this.updateCardCountCallback,
+          resetPreview: this.resetPreviewCallback
+        });
+        this.server.respond();
+        this.stubbedDataSection = MingleUI.EasyCharts.Sections.DataSection.returnValues[0];
+        this.stubbedBuildChartSection = MingleUI.EasyCharts.RatioBarChart.Sections.BuildChartSection.returnValues[0];
+        this.stubbedCustomizeChartSection = MingleUI.EasyCharts.RatioBarChart.Sections.CustomizeChartSection.returnValues[0];
+        this.container.append(this.chartBuilder.htmlContainer);
+      },
+      afterEach: function() {
+        MingleUI.EasyCharts.RatioBarChart.Sections.BuildChartSection.reset();
+        MingleUI.EasyCharts.RatioBarChart.Sections.CustomizeChartSection.reset();
+      }
+    }, function () {
+
+      QUnit.test('testShouldInitializeBuildChartSection', function (assert) {
+        var buildChartSectionArgs = MingleUI.EasyCharts.RatioBarChart.Sections.BuildChartSection.args[0];
+
+        assert.equal(typeof buildChartSectionArgs[1].onComplete, 'function');
+        assert.equal(typeof buildChartSectionArgs[1].onUpdate, 'function');
+        assert.equal(typeof buildChartSectionArgs[1].onError, 'function');
+        assert.ok(this.chartBuilder.htmlContainer.find('#ratio_bar_chart_build_chart_section.disabled')[0]);
+        assert.ok(this.stubbedBuildChartSection);
+      });
+
+      QUnit.test('testShouldCacheErrorMessageWhenBuildChartSectionTriggersOnError', function (assert) {
+        var errorMessage = 'Some Error generated by build chart section.';
+        MingleUI.EasyCharts.RatioBarChart.Sections.BuildChartSection.args[0][1].onError(errorMessage);
+
+        assert.equal(this.chartBuilder.buildChartSectionError, errorMessage);
+        assert.equal(this.errorCallback.callCount, 1);
+        assert.deepEqual(this.errorCallback.args[0], [errorMessage, true]);
+      });
+
+      QUnit.test('testShouldTriggerPreviewGenerationOnDataSectionUpdateWhenErrorMessageExist', function (assert) {
+        var errorMessage = 'Some Error generated by build chart section.';
+        MingleUI.EasyCharts.RatioBarChart.Sections.BuildChartSection.args[0][1].onError(errorMessage);
+        assert.equal(this.chartBuilder.buildChartSectionError, errorMessage);
+        assert.equal(this.previewCallback.callCount, 0);
+
+        sinon.stub(this.stubbedDataSection, 'isValid').returns(true);
+        sinon.stub(this.stubbedBuildChartSection, 'isValid').returns(true);
+        triggerDataSectionUpdate({}, {
+          cardFilters: cardFilters,
+          project: 'projectIdentifier',
+          tags: ['tag1', 'tag2']
+        });
+
+        assert.equal(this.chartBuilder.buildChartSectionError, '');
+        assert.equal(this.previewCallback.callCount, 1);
+      });
+
+      QUnit.test('testShouldTriggerPreviewGenerationOnBuildChartSectionUpdateWhenErrorMessageExist', function (assert) {
+        var errorMessage = 'Some Error generated by build chart section.',
+            buildChartSectionCallbacks = MingleUI.EasyCharts.RatioBarChart.Sections.BuildChartSection.args[0][1];
+        buildChartSectionCallbacks.onError(errorMessage);
+        assert.equal(this.chartBuilder.buildChartSectionError, errorMessage);
+        assert.equal(this.previewCallback.callCount, 0);
+
+        sinon.stub(this.stubbedDataSection, 'isValid').returns(true);
+        sinon.stub(this.stubbedBuildChartSection, 'isValid').returns(true);
+        buildChartSectionCallbacks.onUpdate({
+          values: function () {
+            return {
+              aggregate: 'count',
+              property: 'mp2'
+            };
+          },
+          name: this.stubbedBuildChartSection.name
+        });
+
+        assert.equal(this.chartBuilder.buildChartSectionError, '');
+        assert.equal(this.previewCallback.callCount, 1);
+      });
+
+      QUnit.test('testShouldNotTriggerPreviewGenerationOnCustomizeChartSectionUpdateWhenErrorMessageExist', function (assert) {
+        var errorMessage = 'Some Error generated by build chart section.';
+        MingleUI.EasyCharts.RatioBarChart.Sections.BuildChartSection.args[0][1].onError(errorMessage);
+        assert.equal(this.chartBuilder.buildChartSectionError, errorMessage);
+        assert.equal(this.previewCallback.callCount, 0);
+
+        sinon.stub(this.stubbedDataSection, 'isValid').returns(true);
+        sinon.stub(this.stubbedBuildChartSection, 'isValid').returns(true);
+        MingleUI.EasyCharts.RatioBarChart.Sections.CustomizeChartSection.args[0][1].onUpdate({
+          values: function () {
+            return {
+              chartTitle: 'chart title',
+              legendPosition: 'right',
+              chartSize: 'large',
+              labelType: 'whole-number'
+            };
+          }
+        });
+
+        assert.equal(this.chartBuilder.buildChartSectionError, errorMessage);
+        assert.equal(this.previewCallback.callCount, 0);
+      });
+    });
+
+    QUnit.module('Stacked Bar Chart Chart Builder', {
+      beforeEach: function () {
+        MingleUI.EasyCharts.chartType = 'stacked-bar-chart';
+        this.chartBuilder = new MingleUI.EasyCharts.ChartBuilder('stacked-bar-chart', {project: initialProject}, {
+          preview: this.previewCallback,
+          onError: this.errorCallback,
+          updateCardCount: this.updateCardCountCallback,
+          resetPreview: this.resetPreviewCallback
+        });
+        this.server.respond();
+        this.stubbedDataSection = MingleUI.EasyCharts.Sections.DataSection.returnValues[0];
+        this.stubbedBuildChartSection = MingleUI.EasyCharts.StackedBarChart.Sections.BuildChartSection.returnValues[0];
+        this.stubbedCustomizeChartSection = MingleUI.EasyCharts.StackedBarChart.Sections.CustomizeChartSection.returnValues[0];
+        this.container.append(this.chartBuilder.htmlContainer);
+        sinon.stub(this.stubbedCustomizeChartSection, 'isEnabled').returns(true);
+        sinon.stub(this.stubbedCustomizeChartSection, 'disable');
+        sinon.stub(this.stubbedBuildChartSection, 'isEnabled').returns(true);
+        sinon.stub(this.stubbedBuildChartSection, 'disable');
+        sinon.stub(this.stubbedBuildChartSection, 'updateSelectedFilters');
+        sinon.stub(this.stubbedBuildChartSection, 'updateSelectedTags');
+        this.buildChartSectionCallbacks = MingleUI.EasyCharts.StackedBarChart.Sections.BuildChartSection.args[0][1];
+      },
+
+      afterEach: function () {
+        MingleUI.EasyCharts.Sections.DataSection.reset();
+        MingleUI.EasyCharts.StackedBarChart.Sections.BuildChartSection.reset();
+        MingleUI.EasyCharts.StackedBarChart.Sections.CustomizeChartSection.reset();
+      }
+    }, function () {
+
+      QUnit.test('testShouldUpdateBuildChartSectionFiltersWhenCardFiltersChanges', function (assert) {
+        triggerDataSectionUpdate({
+          targetType: 'cardFilters',
+          target: {
+            getCardTypes: function () {
+              return [];
+            },
+
+            value: function () {
+            }
+          }
+        });
+
+        assert.equal(this.stubbedBuildChartSection.updateSelectedFilters.callCount, 1);
+        assert.notOk(this.stubbedBuildChartSection.updateSelectedFilters.args[0][0]);
+        assert.equal(this.stubbedBuildChartSection.updateSelectedFilters.args[0][1], 'filters');
+        assert.equal(this.stubbedBuildChartSection.disable.callCount, 0);
+      });
+
+      QUnit.test('testShouldUpdateBuildChartSectionTagsWhenTagsFiltersChanges', function (assert) {
+        triggerDataSectionUpdate({
+          targetType: 'tagsFilter',
+          target: {
+            getTags: function () {
+              return ['tag1'];
+            }
+          }
+        });
+
+        assert.equal(this.stubbedBuildChartSection.updateSelectedFilters.callCount, 1);
+        assert.deepEqual(this.stubbedBuildChartSection.updateSelectedFilters.args[0][0], ['tag1']);
+        assert.equal(this.stubbedBuildChartSection.updateSelectedFilters.args[0][1], 'tags');
+        assert.equal(this.stubbedBuildChartSection.disable.callCount, 0);
+      });
+
+      QUnit.test('testInsertEnabledShouldReturnTrueIfChartBuilderIsEnabledAndBuildChartSectionInsertEnabledIsTrue', function (assert) {
+        assert.ok(this.chartBuilder.enableInsert());
+
+        this.chartBuilder.enable();
+        sinon.stub(this.stubbedBuildChartSection, 'enableInsert').returns(true);
+
+        assert.ok(this.chartBuilder.enableInsert());
+      })
+
+      QUnit.test('testShouldCacheErrorMessageWhenBuildChartSectionTriggersOnError', function (assert) {
+        var errorMessage = 'Some Error generated by build chart section.';
+        this.buildChartSectionCallbacks.onError(errorMessage);
+
+        assert.equal(this.chartBuilder.buildChartSectionError, errorMessage);
+        assert.equal(this.errorCallback.callCount, 1);
+        assert.deepEqual(this.errorCallback.args[0], [errorMessage, true]);
+      });
+
+      QUnit.test('testShouldTriggerPreviewGenerationOnDataSectionUpdateWhenErrorMessageExist', function (assert) {
+        var errorMessage = 'Some Error generated by build chart section.';
+        this.buildChartSectionCallbacks.onError(errorMessage);
+        assert.equal(this.chartBuilder.buildChartSectionError, errorMessage);
+        assert.equal(this.previewCallback.callCount, 0);
+
+        sinon.stub(this.stubbedDataSection, 'isValid').returns(true);
+        sinon.stub(this.stubbedBuildChartSection, 'isValid').returns(true);
+        triggerDataSectionUpdate({}, {
+          cardFilters: cardFilters,
+          project: 'projectIdentifier',
+          tags: ['tag1', 'tag2']
+        });
+
+        assert.equal(this.chartBuilder.buildChartSectionError, '');
+        assert.equal(this.previewCallback.callCount, 1);
+      });
+
+      QUnit.test('testShouldTriggerPreviewGenerationOnBuildChartSectionUpdateWhenErrorMessageExist', function (assert) {
+        var errorMessage = 'Some Error generated by build chart section.';
+        this.buildChartSectionCallbacks.onError(errorMessage);
+        assert.equal(this.chartBuilder.buildChartSectionError, errorMessage);
+        assert.equal(this.previewCallback.callCount, 0);
+
+        sinon.stub(this.stubbedDataSection, 'isValid').returns(true);
+        sinon.stub(this.stubbedBuildChartSection, 'isValid').returns(true);
+        this.buildChartSectionCallbacks.onUpdate({
+          values: function () {
+            return {
+              aggregate: 'count',
+              property: 'mp2'
+            };
+          },
+          name: this.stubbedBuildChartSection.name
+        });
+
+        assert.equal(this.chartBuilder.buildChartSectionError, '');
+        assert.equal(this.previewCallback.callCount, 1);
+      });
+
+      QUnit.test('testShouldNotTriggerPreviewGenerationOnCustomizeChartSectionUpdateWhenErrorMessageExist', function (assert) {
+        var errorMessage = 'Some Error generated by build chart section.';
+        this.buildChartSectionCallbacks.onError(errorMessage);
+        assert.equal(this.chartBuilder.buildChartSectionError, errorMessage);
+        assert.equal(this.previewCallback.callCount, 0);
+
+        sinon.stub(this.stubbedDataSection, 'isValid').returns(true);
+        sinon.stub(this.stubbedBuildChartSection, 'isValid').returns(true);
+        MingleUI.EasyCharts.StackedBarChart.Sections.CustomizeChartSection.args[0][1].onUpdate({
+          values: function () {
+            return {
+              chartTitle: 'chart title',
+              legendPosition: 'right',
+              chartSize: 'large',
+              labelType: 'whole-number'
+            };
+          }
+        });
+
+        assert.equal(this.chartBuilder.buildChartSectionError, errorMessage);
+        assert.equal(this.previewCallback.callCount, 0);
+      });
+    });
+  });
+
+</script>
+</body>
+</html>

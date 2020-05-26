@@ -1,0 +1,31 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<p>This update will remove <%= 'property'.plural(@deleted_property_definitions.size) %> <%= @deleted_property_definitions.join(', ').bold %> from card type <%= @card_type.name.bold %>.</p> 
+
+<p>Any cards that are currently of type <%= @card_type.name.bold %> will no longer have values for these properties after this update. These changes will be reflected in each card's history.</p>
+
+<% unless @deleted_transitions.blank? %>
+  <p>This update will delete <%= 'transition'.plural(@deleted_transitions.size) %> <%= @deleted_transitions.join(', ').bold %>. This deletion is happening because <%= 'transition'.plural(@deleted_transitions.size) %> <%= @deleted_transitions.join(', ').bold %> <%= @deleted_transitions.size == 1 ? 'depends' : 'depend' %> upon card type <%= @card_type.name.bold %> having <%= @deleted_property_definitions.size > 1 ? 'one or more of' : '' %> <%= 'property'.plural(@deleted_property_definitions.size) %> <%= @deleted_property_definitions.join(', ').bold %></p>
+<% end %>
+
+<% unless @formula_property_definitions_that_will_be_removed_by_force.blank? %>
+  <% property_plural = 'property'.plural(@formula_property_definitions_that_will_be_removed_by_force.size) %>
+  <% it_plural = @formula_property_definitions_that_will_be_removed_by_force.size == 1 ? 'it' : 'they' %>
+  <% contains_plural = 'contains'.plural_verb(@formula_property_definitions_that_will_be_removed_by_force.size) %>
+  <p>This update will remove formula <%= property_plural %> <%= @formula_property_definitions_that_will_be_removed_by_force.map(&:name).join(', ').bold %> from card type <%= @card_type.name.bold %> because <%= it_plural %> <%= contains_plural %> component properties that have been selected for removal.</p>
+<% end %>
+

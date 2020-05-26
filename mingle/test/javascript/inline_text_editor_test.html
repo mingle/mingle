@@ -1,0 +1,187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>
+      JavaScript unit test file
+    </title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+    <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+    <script src="test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+
+    <script src="test_assets/unittest.js" type="text/javascript"></script>
+    <script src="test_assets/unittest_ext.js" type="text/javascript"></script>
+
+
+    <script src="../../public/javascripts/inline_text_editor.js" type="text/javascript"></script>
+
+    <link rel="stylesheet" href="assets/unittest.css" type="text/css" />
+    <link rel="stylesheet" href="test_assets/unittest.css" type="text/css" />
+  </head>
+  <body>
+    <div id="content">
+      <div id="header">
+        <h1>
+          JavaScript unit test file
+        </h1>
+        <p>
+          This file tests <strong>InlineTextEditor</strong> class in <strong>application.js</strong>.
+        </p>
+      </div><!-- Log output -->
+      <div id="testlog"></div>
+      <div style='border:solid 1px' id='sandbox'>
+        <h3>
+          sandbox:
+        </h3>
+<!--Test fixture -->
+        <div id="flash">
+          blah blah blah
+        </div>
+
+        <form id="group_3_form" action='javascript:void(0)'>
+          <input class="inline-editor group-inline-editor" id="group_3_name_editor" name="name" style="display:none;" type="text" value="group name" />
+          <span id="group_3_name" class="name" title="group name">group name</span>
+          <span id="group_3_update_message" class="update_message" style="display: none"></span>
+        </form>
+        <div id="inline-editor-actions-3">
+          <a href="javascript:void(0)" id="edit-group-3" class="inline-edit-link" onclick="; return false;">Edit</a>
+          <a href="javascript:void(0)" id="save-group-3" class="inline-save-link" onclick="; return false;" style="display: none;">Save</a>
+          <a href="javascript:void(0)" id="cancel-group-3" class="inline-cancel-link" onclick="; return false;" style="display: none;">Cancel</a>
+          <a href="javascript:void(0)" id="delete-group-3" class="inline-delete-link" onclick="; return false;" >Delete</a>
+        </div>
+
+        <form id="group_4_form" action='javascript:void(0)'>
+          <input class="inline-editor group-inline-editor" id="group_4_name_editor" name="name" style="display:none;" type="text" value="group name" />
+          <span id="group_4_name" class="name" title="group name">group name</span>
+          <span id="group_4_update_message" class="update_message" style="display: none"></span>
+        </form>
+        <div id="inline-editor-actions-4">
+          <a href="javascript:void(0)" id="edit-group-4" class="inline-edit-link" onclick="; return false;">Edit</a>
+          <a href="javascript:void(0)" id="save-group-4" class="inline-save-link" onclick="; return false;" style="display: none;">Save</a>
+          <a href="javascript:void(0)" id="cancel-group-4" class="inline-cancel-link" onclick="; return false;" style="display: none;">Cancel</a>
+          <a href="javascript:void(0)" id="delete-group-4" class="inline-delete-link" onclick="; return false;" >Delete</a>
+        </div>
+<!--End Test fixture -->
+      </div>
+    </div>
+    <p>
+      <script type="text/javascript">
+// <![CDATA[
+
+  SAND_BOX_CONTENT = $('sandbox').innerHTML;
+  new Test.Unit.Runner({
+
+    setup: function() {
+      $('sandbox').innerHTML = SAND_BOX_CONTENT;
+      this.number = 0;
+      $('group_3_form').onsubmit = function(){
+        this.number++;
+      }.bind(this);
+      this.inlineTextEditor = new InlineTextEditor("group_3_form", "inline-editor-actions-3");
+      this.anotherInlineTextEditor = new InlineTextEditor("group_4_form", "inline-editor-actions-4");
+    },
+
+    testClickOnEditShowsTheInlineEditor: function() { with(this) {
+      Event.trigger($('edit-group-3'), 'click');
+      assertVisible($('group_3_name_editor'));
+      assertVisible($('save-group-3'));
+      assertVisible($('cancel-group-3'));
+    }},
+
+    testEditTwoValuesWorks: function() { with(this) {
+      Event.trigger($('edit-group-4'), 'click');
+      assertVisible($('group_4_name_editor'));
+
+      Event.trigger($('edit-group-3'), 'click');
+      assertVisible($('group_3_name_editor'));
+    }},
+
+    testClickOnEditorOnlyOpensEditorForThatOne: function() { with(this) {
+      Event.trigger($('edit-group-3'), 'click');
+      assertNotVisible($('group_4_name_editor'));
+    }},
+
+    testClickOnCancelHidesTheInlineEditor: function() { with(this) {
+      Event.trigger($('edit-group-3'), 'click');
+      Event.trigger($('cancel-group-3'), 'click');
+      assertNotVisible($('group_3_name_editor'));
+    }},
+
+    testClickOnSaveHidesTheInlineEditor: function() { with(this) {
+      Event.trigger($('edit-group-3'), 'click');
+      Event.trigger($('save-group-3'), 'click');
+      assertVisible($('group_3_update_message'));
+      assertNotVisible($('group_3_name'));
+      assertNotVisible($('cancel-group-3'));
+      assertNotVisible($('save-group-3'));
+      assertEqual(1, this.number);
+    }},
+
+    testOnFailedUpdateShouldEnableAllOtherFields: function() { with(this) {
+      $('save-group-3', 'cancel-group-3', 'group_3_name_editor').invoke('hide');
+      $('edit-group-3', 'group_3_name', 'group_3_update_message').invoke('show');
+      this.inlineTextEditor.onFailedUpdate();
+      assertVisible($('save-group-3'));
+      assertVisible($('cancel-group-3'));
+      assertVisible($('group_3_name_editor'));
+      assertNotVisible($('edit-group-3'));
+      assertNotVisible($('group_3_name'));
+      assertNotVisible($('group_3_update_message'));
+    }},
+
+    testOnCancelShouldWipeCleanAnyFlashMessagesContent: function() { with(this) {
+      Event.trigger($('edit-group-3'), 'click');
+      Event.trigger($('cancel-group-3'), 'click');
+      assertEqual('', $('flash').innerHTML);
+    }},
+
+    testOnSaveShouldWipeCleanAnyFlashMessagesContent: function() { with(this) {
+      Event.trigger($('edit-group-3'), 'click');
+      Event.trigger($('save-group-3'), 'click');
+      assertEqual('', $('flash').innerHTML);
+    }},
+
+    testOnSuccessfulUpdateShouldDisableAllOtherFields: function() { with(this) {
+      $('save-group-3', 'cancel-group-3', 'group_3_name_editor', 'group_3_update_message').invoke('show');
+      $('edit-group-3', 'group_3_name').invoke('hide');
+      this.inlineTextEditor.onSuccessfulUpdate();
+      assertNotVisible($('save-group-3'));
+      assertNotVisible($('cancel-group-3'));
+      assertNotVisible($('group_3_name_editor'));
+      assertVisible($('edit-group-3'));
+      assertVisible($('group_3_name'));
+      assertEqual('group name', $('group_3_name').innerHTML);
+      assertNotVisible($('group_3_update_message'));
+    }},
+
+    testEditShouldUnescapeHtml: function() { with(this) {
+      $('group_3_name').innerHTML = "&lt;b&gt;group_3_name&lt;/b&gt;"
+       Event.trigger($('edit-group-3'), 'click');
+       assertEqual('<b>group_3_name</b>', $('group_3_name_editor').value);
+     }},
+
+  }, { testLog: "testlog", test : '' }).run;
+// ]]>
+</script>
+    </p>
+  </body>
+</html>

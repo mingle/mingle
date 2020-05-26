@@ -1,0 +1,342 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>Stacked Bar Chart Macro Builder Test</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <script src="../../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+    <script src="../../../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js"
+            type="text/javascript"></script>
+    <script src="../../../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+    <script src="../../../../app/assets/javascripts/thirdparty/prototype.js" type="application/javascript"></script>
+    <script src="../../../../public/javascripts/prototype_ext.js" type="application/javascript"></script>
+
+    <script src="../../../../app/assets/javascripts/easy_charts/dummy_series.js" type="text/javascript"></script>
+    <script src="../../../../app/assets/javascripts/easy_charts/mql_builder.js" type="application/javascript"></script>
+    <script src="../../../../app/assets/javascripts/easy_charts/stacked_bar_chart/macro_builder.js" type="application/javascript"></script>
+
+    <script src="../../test_assets/sinon-2.3.6.js" type="application/javascript"></script>
+    <script src="../../test_assets/qunit-1.21.0.js" type="application/javascript"></script>
+    <script src="../../test_assets/qunit-phantom.js" type="application/javascript"></script>
+    <link rel="stylesheet" href="../../test_assets/qunit-1.21.0.css" type="text/css"/>
+</head>
+<body>
+<div id="qunit"></div>
+<script type="application/javascript">
+  var expectedDataMql = '"Type" IN ("Story","Card") AND NOT ("prop2" IN ("valX","valY")) AND TAGGED WITH "tag1"';
+  function FakeCardFilter(property, operator, value, isCardProperty) {
+    return {
+      property: { value: function () {return property; }},
+      operator: { value: function () {return operator; }},
+      value: { value: function () {return value; }},
+      isValid: function () { return property && operator && value; },
+      isForCardProperty: function() { return isCardProperty; },
+      getMql: function() { return '"{prop}" {op} "{val}"'.supplant({prop: property, op: operator, val: value})},
+    };
+  }
+
+  QUnit.module('Stacked Bar Chart Macro Builder', {
+    beforeEach: function () {
+      this.originalMQLBuilder = MQLBuilder;
+      MQLBuilder = sinon.spy(MQLBuilder);
+    },
+    afterEach: function () {
+      MQLBuilder = this.originalMQLBuilder;
+    }
+  });
+
+  QUnit.test('testBuildShouldAddConditionAndLabelsFieldWithEmptySeries', function (assert) {
+    var chartData = {
+      project: 'project',
+      tags: ['tag1'],
+      cardFilters: [ new FakeCardFilter('Type', 'eq', ['Story', 'Card']), new FakeCardFilter('prop2', 'ne', ['valX', 'valY']) ],
+      xLabelProperty: 'prop2',
+      cumulative: true,
+      xLabelInterval:1,
+      showGuideLines: true
+    };
+    var builder = new MingleUI.EasyCharts.StackedBarChart.MacroBuilder(chartData);
+    var macro = builder.build();
+    assert.deepEqual(macro, {
+      'stacked-bar-chart': {
+        conditions: expectedDataMql,
+        labels: 'SELECT DISTINCT "prop2"',
+        project: 'project',
+        cumulative: true,
+        'x-label-step': 1,
+        'show-guide-lines': true
+      }
+    });
+  });
+
+  QUnit.test('testBuildShouldIncludeXLabelFiltersInLabels', function (assert) {
+    var chartData = {
+      project: 'project',
+      tags: ['tag1'],
+      cardFilters: [ new FakeCardFilter('Type', 'eq', ['Story', 'Card']), new FakeCardFilter('prop2', 'ne', ['valX', 'valY']) ],
+      xLabelFilters: [ new FakeCardFilter('Status', 'eq', 'done'), new FakeCardFilter('prop2', 'ne', 'valX')  ],
+      xLabelProperty: 'prop2',
+      cumulative: true,
+      xLabelInterval:1,
+      showGuideLines: true
+    };
+    var builder = new MingleUI.EasyCharts.StackedBarChart.MacroBuilder(chartData);
+    var macro = builder.build();
+    assert.deepEqual(macro, {
+      'stacked-bar-chart': {
+        conditions: expectedDataMql,
+        labels: 'SELECT DISTINCT "prop2" WHERE "Status" = "done" AND "prop2" != "valX"',
+        project: 'project',
+        cumulative: true,
+        'x-label-step': 1,
+        'show-guide-lines': true
+      }
+    });
+  });
+
+  QUnit.test('testBuildShouldAddFirstAndLastXLabelWithXLabelInterval', function (assert) {
+    var chartData = {
+      project: 'project',
+      tags: ['tag1'],
+      cardFilters: [ new FakeCardFilter('Type', 'eq', ['Story', 'Card']), new FakeCardFilter('prop2', 'ne', ['valX', 'valY']) ],
+      xLabelProperty: 'prop2',
+      firstXLabel: 'p2v1',
+      lastXLabel: 'p2v2',
+      xLabelInterval: 1,
+      cumulative: false,
+      showGuideLines: true
+    };
+    var builder = new MingleUI.EasyCharts.StackedBarChart.MacroBuilder(chartData);
+    var macro = builder.build();
+
+    assert.deepEqual(macro, {
+      'stacked-bar-chart': {
+        conditions: expectedDataMql,
+        labels: 'SELECT DISTINCT "prop2"',
+        project: 'project',
+        'x-label-start': 'p2v1',
+        'x-label-end': 'p2v2',
+        'x-label-step': 1,
+        cumulative: false,
+        'show-guide-lines': true
+      }
+    });
+  });
+
+  QUnit.test('testBuildShouldAddDefaultValuesWhenNotGiven', function (assert) {
+    var chartData = {};
+    var builder = new MingleUI.EasyCharts.StackedBarChart.MacroBuilder(chartData);
+    var macro = builder.build();
+
+    assert.deepEqual(macro, {
+      'stacked-bar-chart': {
+        conditions: '"Type" = "card_type"',
+        labels: 'SELECT DISTINCT "property"',
+        'x-label-step': '1',
+        cumulative: true,
+        'show-guide-lines': undefined
+      }
+    });
+  });
+
+  QUnit.test('testBuildShouldAddSeries', function (assert) {
+    var chartData = {
+      seriesParameter:{
+        Series1:{
+          label:'Series label',
+          combine:'overlay-bottom',
+          hidden: false,
+          color:'#ffffff',
+          property:'prop1',
+          project:'project',
+          series1Aggregate:'count',
+          seriesType:'Bar',
+          filters:[ new FakeCardFilter('Type', 'eq', ['Story', 'Card'])]
+        }
+      }
+    };
+    var builder = new MingleUI.EasyCharts.StackedBarChart.MacroBuilder(chartData);
+    var macro = builder.build();
+
+    assert.deepEqual(macro, {
+      'stacked-bar-chart': {
+        conditions: '"Type" = "card_type"',
+        labels: 'SELECT DISTINCT "property"',
+        'x-label-step': '1',
+        'show-guide-lines': undefined,
+        cumulative: true,
+        series: [
+          {
+            data:'SELECT "prop1", COUNT(*) WHERE "Type" IN ("Story","Card")',
+            label:'Series label',
+            combine:'overlay-bottom',
+            hidden: false,
+            project: 'project',
+            color:'#ffffff',
+            type:'Bar'
+          }
+        ]
+      }
+    });
+  });
+
+  QUnit.test('testBuildShouldAddLegendPosition', function (assert) {
+    var chartData = {
+      legendPosition: 'bottom'
+    };
+    var builder = new MingleUI.EasyCharts.StackedBarChart.MacroBuilder(chartData);
+    var macro = builder.build();
+
+    assert.deepEqual(macro, {
+      'stacked-bar-chart': {
+        conditions: '"Type" = "card_type"',
+        labels: 'SELECT DISTINCT "property"',
+        'x-label-step': '1',
+        'show-guide-lines': undefined,
+        cumulative: true,
+        'legend-position': 'bottom'
+      }
+    });
+  });
+
+  QUnit.test('testBuildShouldAddShowGuideLinesWhenTrue', function (assert) {
+    var chartData = {
+      legendPosition: 'bottom',
+      showGuideLines: true
+    };
+    var builder = new MingleUI.EasyCharts.StackedBarChart.MacroBuilder(chartData);
+    var macro = builder.build();
+
+    assert.deepEqual(macro, {
+      'stacked-bar-chart': {
+        conditions: '"Type" = "card_type"',
+        labels: 'SELECT DISTINCT "property"',
+        'x-label-step': '1',
+        cumulative: true,
+        'legend-position': 'bottom',
+        'show-guide-lines': true
+      }
+    });
+  });
+
+  QUnit.test('testBuildShouldAddDummySeriesWhenSeriesIsNotAddedForStackedBarChartButPropertyIsSelectedOnChartBuilder', function (assert) {
+    var chartData = {
+      project: 'project',
+      tags: ['tag1'],
+      cardFilters: [ new FakeCardFilter('Type', 'eq', ['Story', 'Card'])],
+      xLabelProperty: 'prop2',
+      cumulative: false,
+      showGuideLines: true
+    };
+    var builder = new MingleUI.EasyCharts.StackedBarChart.MacroBuilder(chartData, true);
+    var macro = builder.build();
+
+    assert.deepEqual(macro, {
+      'stacked-bar-chart': {
+        conditions: '"Type" IN ("Story","Card") AND TAGGED WITH "tag1"',
+        labels: 'SELECT DISTINCT "prop2"',
+        project: 'project',
+        cumulative: false,
+        series: [
+          {
+            data:'SELECT "prop2", COUNT(*) WHERE "Type" IN ("Story","Card")',
+            label:'Series 1',
+            combine: undefined,
+            hidden: true,
+            color: undefined,
+            type: undefined
+          }],
+        "x-label-step": "1",
+        'show-guide-lines': true
+      }
+    });
+  });
+
+  QUnit.test('testBuildShouldNotAddDummySeriesWhenSeriesIsNotAddedForStackedBarChartOnMacroEditor', function (assert) {
+    var chartData = {
+      project: 'project',
+      tags: ['tag1'],
+      cardFilters: [ new FakeCardFilter('Type', 'eq', ['Story', 'Card']), new FakeCardFilter('prop2', 'ne', ['valX', 'valY']) ],
+      xLabelProperty: 'prop2',
+      firstXLabel: 'p2v1',
+      lastXLabel: 'p2v2',
+      xLabelInterval: 1,
+      showGuideLines: false,
+      cumulative: false
+    };
+    var builder = new MingleUI.EasyCharts.StackedBarChart.MacroBuilder(chartData, false);
+    var macro = builder.build();
+
+    assert.deepEqual(macro, {
+      'stacked-bar-chart': {
+        conditions: expectedDataMql,
+        labels: 'SELECT DISTINCT "prop2"',
+        project: 'project',
+        'x-label-start': 'p2v1',
+        'x-label-end': 'p2v2',
+        'x-label-step': 1,
+        cumulative: false,
+        'show-guide-lines': false
+      }
+    });
+  });
+
+  QUnit.test('testBuildShouldNotAddDummySeriesWhenSeriesAreAddedForStackedBarChartOnChartBuilder', function (assert) {
+    var chartData = {
+      seriesParameter:{
+        Series1:{
+          label:'Series label',
+          combine:'overlay-bottom',
+          hidden: false,
+          color:'#ffffff',
+          property:'prop1',
+          project:'project',
+          series1Aggregate:'count',
+          seriesType:'Bar',
+          filters:[ new FakeCardFilter('Type', 'eq', ['Story', 'Card'])]
+        }
+      }
+    };
+    var builder = new MingleUI.EasyCharts.StackedBarChart.MacroBuilder(chartData, true);
+    var macro = builder.build();
+
+    assert.deepEqual(macro, {
+      'stacked-bar-chart': {
+        conditions: '"Type" = "card_type"',
+        labels: 'SELECT DISTINCT "property"',
+        'x-label-step': '1',
+        'show-guide-lines': undefined,
+        cumulative: true,
+        series: [
+          {
+            data:'SELECT "prop1", COUNT(*) WHERE "Type" IN ("Story","Card")',
+            label:'Series label',
+            combine:'overlay-bottom',
+            hidden: false,
+            project: "project",
+            color:'#ffffff',
+            type:'Bar'
+          }
+        ]
+      }
+    });
+  });
+</script>
+</body>
+</html>

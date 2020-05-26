@@ -1,0 +1,49 @@
+<% if RUBY_PLATFORM =~ /java/ %>
+production:
+  url: jdbc:postgresql://localhost:5432/mingle_development
+  adapter: jdbc
+  driver: org.postgresql.Driver
+  password: ''
+  username: luaupair
+  pool: 12
+development:
+  url: jdbc:postgresql://localhost:5432/mingle_development
+  adapter: jdbc
+  driver: org.postgresql.Driver
+  password: ''
+  username: luaupair
+  pool: 12
+test:
+  url: jdbc:postgresql://localhost:5432/mingle_test
+  adapter: jdbc
+  driver: org.postgresql.Driver
+  password: ''
+  username: xli
+  pool: 12
+test_upgrade_export:
+  url: jdbc:postgresql://localhost:5432/test_upgrade_export
+  adapter: jdbc
+  driver: org.postgresql.Driver
+  password: ''
+  username: luaupair
+  pool: 12
+<% else %>
+development:
+  database: mingle_development
+  adapter: postgresql
+  username: luaupair
+  password:
+  host: localhost
+  port: 5432
+  pool: 5
+  min_messages: ERROR
+test:
+  database: mingle_test
+  adapter: postgresql
+  username: luaupair
+  password:
+  host: localhost
+  port: 5432
+  pool: 5
+  min_messages: ERROR
+<% end %>

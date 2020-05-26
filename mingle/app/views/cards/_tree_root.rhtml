@@ -1,0 +1,30 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="<%=root.html_id %>" number="<%= root.number %>" title="<%= h root.name %>" class="vertical-tree-root vtree-card tree-root">
+  <div id="<%= root.html_id %>_inner_element">
+    <span class='card-name' title="<%= root.name %>"> <%=h truncate(root.name, :length => 28) %> </span>
+    <% if authorized?(:controller => :card_trees, :action => 'edit') -%>
+      <span class='card-configuration'>(<%= link_to 'configure', edit_card_tree_path(:id => tree_configuration.id, :from_url => url_for(view.to_params.merge(:escape => false))) %>)</span>
+    <%- end %>
+  
+    <%= render :partial => 'cards/node_toolbar', :locals => {:node => root, :tab_name => @tab_name} %>
+    <%= spinner :id => spinner_id_from(root), :style => 'display: none;', :class=> 'spinner'%>
+    <%- if tree_configuration && tree_configuration.cards_count == 0 && authorized?(:controller => controller_name, :action => 'add_children') %>
+      <div id="no-children-hint">Drop a card here</div>
+    <%- end %>
+  </div>
+</div>

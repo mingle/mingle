@@ -1,0 +1,69 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% cache_card_popup_data(card) do %>
+<div class='card-popup-outer' id="card_popup_outer_<%= card.number %>">
+  <div class="card-popup-content">
+    <p class="card_popup_header">
+      <a onclick="; return false;" href="javascript:void(0)" class="popup-close">Close</a>
+      <a onclick="; return false;" href="javascript:void(0)" class="popup-refresh">Refresh</a>
+      <span class="card-index"><%= link_to "##{card.number}", card_show_url(:number => card.number), :id => "card_show_link_on_popup_#{card.number}", :title => "Click to go directly to this card" %></span>
+    </p>
+    <div class="card-top">
+      <h2><%= h card.name %></h2>
+      <% if card.has_tag? %>
+        <p class="card-popup-meta">Tags: <%= card.tags.collect(&:name).join(', ') %></p>
+      <% end %>
+    </div>
+    <div id="card-popup-description"><%= popup_description(card).html_safe %></div>
+    <div class="card_inner_wrapper"><p class="card-bottom card-popup-meta">
+       <span class='property-in-popup'><%= @project.card_type_definition.name %>:<span class="emphasize"><%=h card.card_type.name %></span></span>&nbsp;
+       <% card.grouped_properties_with_value.each do |property_group| -%>
+         <% if property_group.name %>
+           <p class="card-bottom card-popup-meta"><span> <%=h property_group.name %></span>
+         <% end %>
+         <% for property in property_group.properties %>
+           <span class='property-in-popup'>
+             <%=h property.name %>:<span class='emphasize' title='<%= "This value may be out of date. Refresh this popup to view updated properties." if property.stale? %>'><%=h property.display_value_with_stale_state %></span>
+           </span>&nbsp;
+         <% end %>
+         <% if property_group.name %>
+           </p>
+         <% end %>
+
+       <% end -%>
+    </p></div>
+    <div class='action-bar-in-popup'>
+      <div class='popup-handler' unselectable='on'><%= image_tag 'drag_hand.gif', :style => 'width:15px', :unselectable => 'on', :alt => 'drag & drop' %></div>
+      <span class='action'>
+        <%= link_to 'Open', { :action => 'show', :number => card.number }, {:class => 'edit action-bar-separator-right-popup', :onclick => "if(!TreeView.isUsingTree()) return true; TreeView.tree.openCard(event, this); return false"} %>
+      </span>
+      <% unless card.transitions.blank? %>
+        <div class="action_bar_separator">
+        <% card.transitions.each_with_index do |transition, index| %>
+          <%
+            #notice: I know the following format is urgly, but if you put anything (include space or CR) inbetween
+            #<span> and <a>, it will trigger IE's bug which draws separators on both side of first transition span.
+          %>
+          <span class="action transitions_actions"><%= link_to_function(h(transition.name.truncate_with_ellipses(50)), execute_transition_js(transition, card), :class => 'transition link_as_button', :id => "transition_#{transition.id}", :accessing => ':transition', :title => h(transition.name)) -%></span>
+        <% end -%>
+        </div>
+      <% end -%>
+    </div>
+    <%= clear_float %>
+  </div>
+</div>
+<% end -%>

@@ -1,0 +1,12 @@
+<span id="contextual_help_identifier" style="display: none;">property_definitions_index</span>
+<span id="contextual_help_title" style="display: none;">What you can do with Card Properties</span>
+<span id="full_contextual_help_link" style="display: none;"><a class="full-contextual-help-link" href="{% helpPathDomain %}/card_properties_page.html"  target="_blank">Full help for Card Properties</a></span>
+
+<div>
+  <img src="{% contextPath %}/images/diagram-help-card-properties.gif" class="help-diagram" />
+
+  <p><img src="{% contextPath %}/images/icon-help-number-one.png" align="middle" alt='1'/> <a href="{% helpPathDomain %}/card_properties.html#show_hide" target="_blank"><b>Hide</b></a> - so they are not visible on cards</p>
+  <p><img src="{% contextPath %}/images/icon-help-number-two.png" align="middle" alt='2'/> <a href="{% helpPathDomain %}/card_properties.html#lock" target="_blank"><b>Lock</b></a> - so that only Administrators can add new values</p>
+  <p><img src="{% contextPath %}/images/icon-help-number-three.png" align="middle" alt='3'/> Make <a href="{% helpPathDomain %}/card_properties.html#transition_only" target="_blank"><b>transition only</b></a> - so that values have to be updated by transitions, adhering to your workflow</p>
+  <p><img src="{% contextPath %}/images/icon-help-number-four.png" align="middle" alt='4'/> <a href="{% helpPathDomain %}/modifying_or_deleting_card_properties.html#edit" target="_blank"><b>Edit</b></a> and <a href="{% helpPathDomain %}/modifying_or_deleting_card_properties.html#delete" target="_blank"><b>delete</b></a></p>
+</div>

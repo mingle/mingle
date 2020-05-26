@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE section SYSTEM "mingle_help.dtd">
+<chapter title="Avoiding macro syntax errors">
+	<p><cref topic="macro_reference">Macro markup</cref> is space sensitive and has to be valid YAML syntax. This means that if you include macros with incorrect spacing or invalid characters in cards or pages you may see macro syntax errors.</p>
+	<section title="Spacing errors">
+ <p> We advise that you either copy the macro examples that are used in <cref topic="macro_reference">macro reference</cref> or use the <cref topic="using_the_editing_toolbar">editing toolbar</cref> to help you create your macros. These will give you charts that should not have any spacing issues. </p>
+	</section>
+	<section title="Markup errors">
+  <p> If a property, project variable or type name or value has a colon (&#58;) included in its name then the macro may have problems with YAML parsing. For example, if a property value was called "Release 1: The Beginning" using this in macros may cause a YAML parsing error to be seen.</p> 
+    <p>In these scenarios, if you want to include a colon (&#58;) in a name then you will need to wrap the whole value of the macro parameter in single and double quotes.</p>
+    <markup>table query: "SELECT number, name WHERE Release = 'Release 1: The Beginning'"</markup>
+   
+   <p>When quoting project variables ensure the quotes are used around the project variable name.</p>
+    <markup>table query: "SELECT number, name WHERE Release = ('Release 2: Enhancements')"</markup>
+    	</section>
+	
+	<hint>For more help around YAML and what constitutes valid YAML markup you can refer to <exref url="http://yaml.org/spec/current.html"/>.</hint>	
+</chapter>

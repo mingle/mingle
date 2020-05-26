@@ -1,0 +1,543 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Parameter Test</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery.tag-it.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/tinycolor.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+  <script src="../../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/application.js" type="text/javascript"></script>
+
+  <script src="../../../app/assets/javascripts/drop_down.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/text_box.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/tags_filter.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/single_checkbox.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/color_selector.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/color_picker.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/mingle_tag_storage.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/mingle_tageditor.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/parameter.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/pair_parameter.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/group_parameter.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/trend_line_parameter.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/section_helpers.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/card_filters.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/card_type_filter.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/card_filter.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/card_filter_value_wrapper.js" type="text/javascript"></script>
+
+  <script src="../test_assets/sinon-2.3.6.js" type="text/javascript"></script>
+  <script src="../test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+  <script src="../test_assets/qunit-phantom.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="../test_assets/qunit-1.21.0.css" type="text/css"/>
+
+</head>
+  <body>
+    <div id="qunit">
+    </div>
+    <script type="application/javascript">
+      function assertDropDown(assert, container, selectedValue, values) {
+        assert.ok(container[0]);
+        assert.equal(container.find('.selected-value').text(), selectedValue);
+        values && assert.equal(container.find('.options-container').text(), values.join(''));
+      }
+
+      QUnit.module('Parameter', {});
+
+      QUnit.test('testShouldCamelizeTheName', function(assert) {
+        var parameter = new MingleUI.EasyCharts.Parameter('section', {name: 'foo_bar-baz'}, {});
+
+        assert.equal(parameter.name, 'fooBarBaz');
+      });
+
+      QUnit.test('testShouldInitializeDropDown', function (assert) {
+        var paramDef = {
+          name: 'dropdown-param',
+          initial_value: 'blah',
+          allowed_values: ['blah', 'bloo', 'blee', 'foo', 'bar'],
+          multiple_values_allowed: false,
+          label: 'param label',
+          input_type: 'dropdown'
+        }, options = {onUpdate: sinon.spy(), initialData: {dropdownParam: 'blah'}};
+
+        sinon.spy(MingleUI, 'DropDown');
+
+        var parameter = new MingleUI.EasyCharts.Parameter('section', paramDef, options);
+
+        var dropDown = parameter.param, dropDownHtmlContainer = parameter.htmlContainer.find('.parameter'),
+            dropDownParams = MingleUI.DropDown.args[0];
+
+        assert.ok(dropDown instanceof MingleUI.DropDown);
+        assert.equal(MingleUI.DropDown.callCount, 1);
+        assert.equal(dropDownParams[0], 'dropdownParam');
+        assert.equal(dropDownParams[1][0], dropDownHtmlContainer[0]);
+        assert.deepEqual(dropDownParams[2], paramDef.allowed_values);
+        assert.deepEqual(dropDownParams[3], {
+          initialValue: paramDef.initial_value,
+          multiSelect: paramDef.multiple_values_allowed,
+          onValueChange: options.onUpdate,
+          disabled: undefined
+        });
+
+        assert.ok(parameter.htmlContainer.is('div#section_dropdown_param_parameter'));
+        assert.equal(parameter.htmlContainer.find('.parameter-label').text(), paramDef.label);
+        assert.ok(dropDownHtmlContainer.is('.drop-down-container'));
+        assert.deepEqual(dropDownHtmlContainer[0], dropDown.htmlContainer[0]);
+        assertDropDown(assert, dropDownHtmlContainer, paramDef.initial_value, paramDef.allowed_values);
+        assert.notOk(dropDown.isMultiSelect);
+        assert.equal(dropDown._onValueChange, options.onUpdate);
+      });
+
+      QUnit.test('testShouldInitializeCardFilters', function (assert) {
+        var paramDef = {
+          name: 'card-filters-param',
+          input_type: 'card-filters',
+          label: 'card filters label',
+          disableProjectVariables: true
+        }, options = {
+          onUpdate: sinon.spy(),
+          projectData: {
+            cardTypeNames: [],
+            tags: []},
+          enableThisCardOption: false,
+          initialData: {
+            cardFiltersParam: [{values: [['Card', 'Card']], property: 'Type', operator: 'is'}]
+          }
+        };
+
+        sinon.spy(MingleUI.EasyCharts, 'CardFilters');
+
+        var parameter = new MingleUI.EasyCharts.Parameter('section', paramDef, options);
+
+        var cardFilters = parameter.param;
+        var cardFiltersHtmlContainer = parameter.htmlContainer.find('.parameter');
+        var cardFilterArgs = MingleUI.EasyCharts.CardFilters.args[0];
+
+        assert.ok(cardFilters instanceof MingleUI.EasyCharts.CardFilters);
+        assert.equal(MingleUI.EasyCharts.CardFilters.callCount, 1);
+        assert.equal(cardFilterArgs[0][0], cardFiltersHtmlContainer[0]);
+        assert.deepEqual(cardFilterArgs[1], options.projectData);
+        assert.deepEqual(cardFilterArgs[2], {
+          enableThisCardOption: options.enableThisCardOption,
+          onUpdate: options.onUpdate,
+          withoutCardTypeFilter: false,
+          selectedCardTypes: undefined,
+          initialData: [{values: [['Card', 'Card']], property: 'Type', operator: 'is'}],
+          disabled: undefined,
+          disableProjectVariables: true,
+          propertyDefinitionFilters: undefined,
+          allowedCardTypes:undefined,
+          name: 'cardFiltersParam'
+        });
+
+        assert.ok(parameter.htmlContainer.is('div#section_card_filters_param_parameter'));
+        assert.equal(parameter.htmlContainer.find('.parameter-label').text(), paramDef.label);
+        assert.deepEqual(cardFiltersHtmlContainer[0], cardFilters.htmlContainer[0]);
+        assert.equal(cardFiltersHtmlContainer.find('.card-filter-container').length, 1);
+        assertDropDown(assert, cardFiltersHtmlContainer.find('div#card_filter_1_property'), 'Type');
+        assertDropDown(assert, cardFiltersHtmlContainer.find('div#card_filter_1_operator'), 'is');
+        assertDropDown(assert, cardFiltersHtmlContainer.find('div#card_filter_1_value'), '(any)');
+        MingleUI.EasyCharts.CardFilters.restore();
+      });
+
+      QUnit.test('testShouldInitializeCardFiltersInDisabledModeWhenSpecified', function (assert) {
+        var paramDef = {
+          name: 'card-filters-param',
+          input_type: 'card-filters',
+          label: 'card filters label',
+          options: {disabled: true},
+        }, options = {
+          onUpdate: sinon.spy(),
+          projectData: {
+            cardTypeNames: [],
+            tags: []},
+          enableThisCardOption: false,
+          disableProjectVariables: true,
+          propertyDefinitionFilters: undefined,
+          initialData: {
+            cardFiltersParam: [{values: [['ACard', 'ACard']], property: 'Type', operator: 'is'}]
+          }
+        };
+        sinon.spy(MingleUI.EasyCharts, 'CardFilters');
+
+        new MingleUI.EasyCharts.Parameter('section', paramDef, options);
+
+        var cardFilterArgs = MingleUI.EasyCharts.CardFilters.args[0];
+
+        assert.deepEqual(cardFilterArgs[2], {
+          enableThisCardOption: options.enableThisCardOption,
+          onUpdate: options.onUpdate,
+          withoutCardTypeFilter: false,
+          selectedCardTypes: undefined,
+          initialData: [{values: [['ACard', 'ACard']], property: 'Type', operator: 'is'}],
+          disabled: true,
+          allowedCardTypes:undefined,
+          disableProjectVariables: true,
+          propertyDefinitionFilters: undefined,
+          name: 'cardFiltersParam'
+        });
+
+        MingleUI.EasyCharts.CardFilters.restore();
+      });
+
+      QUnit.test('testShouldInitializeTagsFilter', function (assert) {
+        var paramDef = {
+          name: 'tags-filter-param',
+          input_type: 'tags-filter',
+          label: 'tags filter label'
+        }, options = {onUpdate: sinon.spy(), projectData: {cardTypeNames: [], tags: [], identifier: 'projectIdentifier'}, initialData: {tagsFilterParam: ['tag1']}};
+
+        sinon.spy(MingleUI, 'TagsFilter');
+
+        var parameter = new MingleUI.EasyCharts.Parameter('section', paramDef, options);
+
+        var tagsFilter = parameter.param, tagsFilterHtmlContainer = parameter.htmlContainer.find('.parameter'),
+            tagsFilterArgs = MingleUI.TagsFilter.args[0];
+        assert.ok(tagsFilter instanceof MingleUI.TagsFilter);
+        assert.equal(MingleUI.TagsFilter.callCount, 1);
+        assert.equal(tagsFilterArgs[0],'tagsFilterParam')
+        assert.equal(tagsFilterArgs[1][0], tagsFilterHtmlContainer[0]);
+        assert.deepEqual(tagsFilterArgs[2], options.projectData);
+        assert.deepEqual(tagsFilterArgs[3], {
+          onUpdate: options.onUpdate,
+          initialTags: ['tag1']
+        });
+
+        assert.ok(parameter.htmlContainer.is('div#section_tags_filter_param_parameter'));
+        assert.equal(parameter.htmlContainer.find('.parameter-label').text(), paramDef.label);
+        assert.deepEqual(tagsFilterHtmlContainer[0], tagsFilter.htmlContainer[0]);
+        assert.ok(parameter.htmlContainer.find('.parameter ul.tags-filter')[0]);
+        MingleUI.TagsFilter.restore();
+      });
+
+      QUnit.test('testShouldInitializePairParameter', function (assert) {
+        var paramDef = {
+          name: 'pair-param',
+          label: 'pair-paramater-label',
+          input_type: 'pair-parameter',
+          connecting_text: 'connecting_text',
+          param_defs: [{
+            name: 'param1',
+            initial_value: 'foo',
+            allowed_values: ['foo', 'bar', 'blah'],
+            multiple_values_allowed: false,
+            input_type: 'dropdown'
+          }, {
+            name: 'param2',
+            initial_value: null,
+            allowed_values: ['1', '2', '3', '4'],
+            multiple_values_allowed: false,
+            input_type: 'dropdown'
+          }]
+        }, options = {onUpdate: sinon.spy(), initialData: {param1: 'bar', param2: '3'}};
+
+        sinon.spy(MingleUI.EasyCharts, 'PairParameter');
+
+        var parameter = new MingleUI.EasyCharts.Parameter('section', paramDef, options);
+
+        var pairParameter = parameter.param, pairParameterHtmlContainer = parameter.htmlContainer.find('.parameter'),
+            pairParameterArgs = MingleUI.EasyCharts.PairParameter.args[0];
+
+        assert.ok(pairParameter instanceof MingleUI.EasyCharts.PairParameter);
+        assert.equal(MingleUI.EasyCharts.PairParameter.callCount, 1);
+        assert.equal(pairParameterArgs[0][0], pairParameterHtmlContainer[0]);
+        assert.deepEqual(pairParameterArgs[1], paramDef);
+        assert.deepEqual(pairParameterArgs[2], options);
+
+        assert.ok(parameter.htmlContainer.is('div#section_pair_param_parameter'));
+        assert.equal(parameter.htmlContainer.find('.parameter-label').text(), paramDef.label);
+        assert.deepEqual(pairParameterHtmlContainer[0], pairParameter.htmlContainer[0]);
+
+        assert.ok(pairParameterHtmlContainer.find('#pair_param_param1_parameter')[0]);
+        assert.equal(pairParameterHtmlContainer.find('.pair-connector').text(), paramDef.connecting_text);
+        assert.ok(pairParameterHtmlContainer.find('#pair_param_param2_parameter')[0]);
+        MingleUI.EasyCharts.PairParameter.restore();
+      });
+
+      QUnit.test('testShouldInitializeTextBoxParameter', function (assert) {
+          var paramDef = {
+              name: 'text-box-param',
+              label: 'text-box-label',
+              input_type: 'textbox',
+              placeholder: 'text',
+              initial_value: 'blah'
+          }, options = {onUpdate: sinon.spy()};
+
+          sinon.spy(MingleUI, 'TextBox');
+
+          var parameter = new MingleUI.EasyCharts.Parameter('section', paramDef, options);
+
+          var textBox = parameter.param, textBoxHtmlContainer = parameter.htmlContainer.find('.parameter'),
+              textBoxArgs = MingleUI.TextBox.args[0];
+
+          assert.ok(textBox instanceof MingleUI.TextBox);
+          assert.equal(MingleUI.TextBox.callCount, 1);
+          assert.equal(textBoxArgs[0][0], textBoxHtmlContainer[0]);
+          assert.deepEqual(textBoxArgs[1], {name: 'textBoxParam', onValueChange: options.onUpdate, placeholder: 'text', initialValue:'blah', isDate:undefined, config:{}});
+
+          assert.ok(parameter.htmlContainer.is('div#section_text_box_param_parameter'));
+          assert.equal(parameter.htmlContainer.find('.parameter-label').text(), paramDef.label);
+          assert.deepEqual(textBoxHtmlContainer[0], textBox.htmlContainer[0]);
+          assert.ok(textBoxHtmlContainer.find('input')[0]);
+          MingleUI.TextBox.restore();
+
+      });
+
+      QUnit.test('testShouldInitializeTextBoxParameterWithChangedValue', function (assert) {
+        var paramDef = {
+          name: 'text-box-param',
+          label: 'text-box-label',
+          input_type: 'textbox',
+          placeholder: 'text',
+          initial_value: 'blah'
+        }, options = {onUpdate: sinon.spy(), initialData:{textBoxParam:'changed text'}};
+
+        sinon.spy(MingleUI, 'TextBox');
+
+        var parameter = new MingleUI.EasyCharts.Parameter('section', paramDef, options);
+
+        var textBox = parameter.param, textBoxHtmlContainer = parameter.htmlContainer.find('.parameter'),
+            textBoxArgs = MingleUI.TextBox.args[0];
+
+        assert.ok(textBox instanceof MingleUI.TextBox);
+        assert.equal(MingleUI.TextBox.callCount, 1);
+        assert.equal(textBoxArgs[0][0], textBoxHtmlContainer[0]);
+
+        assert.ok(parameter.htmlContainer.is('div#section_text_box_param_parameter'));
+        assert.equal(parameter.htmlContainer.find('.parameter-label').text(), paramDef.label);
+        assert.deepEqual(textBoxHtmlContainer[0], textBox.htmlContainer[0]);
+        assert.ok(textBoxHtmlContainer.find('input')[0]);
+      });
+
+      QUnit.test('testShouldInitializeGroupParameter', function (assert) {
+        var groupDef = {
+          name: 'group-param',
+          input_type: 'group-parameter',
+          param_defs: [
+            {
+              name: 'param1',
+              input_type: 'textbox',
+              label: 'Param 1 title',
+              initial_value : 'value1'
+            },
+            {
+              name: 'param2',
+              input_type: 'textbox',
+              label: 'Param 2 title',
+              initial_value : 'value2'
+            }
+          ]
+        }, options = {onUpdate: sinon.spy(), initialData: {param1:'changed value1', param2:'changed value 2'}};
+
+        sinon.spy(MingleUI.EasyCharts, 'GroupParameter');
+
+        var parameter = new MingleUI.EasyCharts.Parameter('section', groupDef, options);
+
+        var groupParam = parameter.param, groupHtmlContainer = parameter.htmlContainer.find('.parameter'),
+            groupParameterArgs = MingleUI.EasyCharts.GroupParameter.args[0];
+
+        assert.ok(groupParam instanceof MingleUI.EasyCharts.GroupParameter);
+        assert.equal(MingleUI.EasyCharts.GroupParameter.callCount, 1);
+        assert.equal(groupParameterArgs[0][0], groupHtmlContainer[0]);
+        assert.deepEqual(groupParameterArgs[1], groupDef);
+        assert.deepEqual(groupParameterArgs[2], {onUpdate: options.onUpdate, initialData: {param1:'changed value1', param2:'changed value 2'}, disabled: undefined});
+
+        assert.ok(parameter.htmlContainer.is('div#section_group_param_parameter'));
+        assert.notOk(parameter.htmlContainer.find('> .parameter-label')[0]);
+        assert.deepEqual(groupHtmlContainer[0], groupParam.htmlContainer[0]);
+        assert.ok(groupHtmlContainer.find('#group_param_param1_parameter input')[0]);
+        assert.ok(groupHtmlContainer.find('#group_param_param2_parameter input')[0]);
+        MingleUI.EasyCharts.GroupParameter.restore()
+      });
+
+      QUnit.test('testShouldInitializeGroupParameterWithDisabledOptionWhenSpecified', function (assert) {
+        var groupDef = {
+          name: 'group-param',
+          input_type: 'group-parameter',
+          options: {disabled: true},
+          param_defs: [
+            {
+              name: 'param1',
+              input_type: 'textbox',
+              label: 'Param 1 title',
+              initial_value : 'value1'
+            },
+            {
+              name: 'param2',
+              input_type: 'textbox',
+              label: 'Param 2 title',
+              initial_value : 'value2'
+            }
+          ]
+        }, options = {onUpdate: sinon.spy(), initialData: {param1:'changed value1', param2:'changed value 2'}};
+
+        sinon.spy(MingleUI.EasyCharts, 'GroupParameter');
+
+        var parameter = new MingleUI.EasyCharts.Parameter('section', groupDef, options);
+
+        var groupParam = parameter.param, groupHtmlContainer = parameter.htmlContainer.find('.parameter'),
+            groupParameterArgs = MingleUI.EasyCharts.GroupParameter.args[0];
+
+        assert.ok(groupParam instanceof MingleUI.EasyCharts.GroupParameter);
+        assert.equal(MingleUI.EasyCharts.GroupParameter.callCount, 1);
+        assert.equal(groupParameterArgs[0][0], groupHtmlContainer[0]);
+        assert.deepEqual(groupParameterArgs[1], groupDef);
+        assert.deepEqual(groupParameterArgs[2], {onUpdate: options.onUpdate, initialData: {param1:'changed value1', param2:'changed value 2'}, disabled: true});
+
+        assert.ok(parameter.htmlContainer.is('div#section_group_param_parameter'));
+        assert.notOk(parameter.htmlContainer.find('> .parameter-label')[0]);
+        assert.deepEqual(groupHtmlContainer[0], groupParam.htmlContainer[0]);
+        assert.ok(groupHtmlContainer.find('#group_param_param1_parameter input')[0]);
+        assert.ok(groupHtmlContainer.find('#group_param_param2_parameter input')[0]);
+        MingleUI.EasyCharts.GroupParameter.restore();
+      });
+
+      QUnit.test('testShouldInitializeSingleCheckboxParameterWithInitialData', function (assert) {
+          var paramDef = {
+              name: 'showGuideLines',
+              input_type: 'single-checkbox',
+              label: 'Show Guide Lines',
+              checked: false
+          }, options = {onUpdate: sinon.spy(), initialData: {showGuideLines: true}};
+
+          sinon.spy(MingleUI, 'SingleCheckbox');
+
+          var parameter = new MingleUI.EasyCharts.Parameter('section', paramDef, options);
+
+          var singleCheckbox = parameter.param, singleCheckboxHtmlContainer = parameter.htmlContainer.find('.parameter'),
+              singleCheckboxArgs = MingleUI.SingleCheckbox.args[0];
+
+          assert.ok(singleCheckbox instanceof MingleUI.SingleCheckbox);
+          assert.equal(MingleUI.SingleCheckbox.callCount, 1);
+          assert.equal(singleCheckboxArgs[0][0], singleCheckboxHtmlContainer[0]);
+          assert.deepEqual(singleCheckboxArgs[1], {name: 'showGuideLines', checked: true, onValueChange: options.onUpdate});
+          assert.ok(parameter.htmlContainer.is('div#section_show_guide_lines_parameter'));
+          assert.equal(parameter.htmlContainer.find('.parameter-label').text(), paramDef.label);
+          assert.deepEqual(singleCheckboxHtmlContainer[0], singleCheckbox.htmlContainer[0]);
+          assert.ok(singleCheckboxHtmlContainer.find('input')[0]);
+      });
+
+      QUnit.test('testShouldInitializeColorPickerParameterWithInitialDataInsteadOfDefaultColor', function (assert) {
+          var paramDef = {
+              name: 'color',
+              input_type: 'color-picker',
+              label: 'Color',
+              initialColor: 'azul'
+          }, options = {onUpdate: sinon.spy(), initialData: {color:'blah'}};
+
+          sinon.spy(MingleUI, 'ColorPicker');
+
+          var parameter = new MingleUI.EasyCharts.Parameter('section', paramDef, options);
+
+          var colorPicker = parameter.param, colorPickerHtmlContainer = parameter.htmlContainer.find('.parameter'),
+              colorPickerArgs = MingleUI.ColorPicker.args[0];
+
+          assert.ok(colorPicker instanceof MingleUI.ColorPicker);
+          assert.equal(MingleUI.ColorPicker.callCount, 1);
+          assert.equal(colorPickerArgs[0][0], colorPickerHtmlContainer[0]);
+          assert.deepEqual(colorPickerArgs[1], {name: 'color', onValueChange: options.onUpdate, initialColor: 'blah'});
+          assert.ok(parameter.htmlContainer.is('div#section_color_parameter'));
+          assert.equal(parameter.htmlContainer.find('.parameter-label').text(), paramDef.label);
+          assert.deepEqual(colorPickerHtmlContainer[0], colorPicker.htmlContainer[0]);
+          assert.ok(colorPickerHtmlContainer.find('div.color-picker-toggle')[0]);
+      });
+
+      QUnit.test('testShouldInitializeTrendLineParameter', function (assert) {
+        var trendLineDef = {
+          name: 'trend-line',
+          label: '',
+          input_type: 'trend-line-parameter',
+          param_defs: [
+            {
+              name: 'scope',
+              input_type: 'dropdown',
+              initial_value: 'All',
+              allowed_values: ['All',2,3,4,5,6,7,8,9,10],
+              label: 'Trend scope',
+              displayProperty: 'inline-parameter'
+            },
+            {
+              name: 'ignore',
+              input_type: 'dropdown',
+              initial_value: 'Zeroes at end and last value',
+              allowed_values: ['None', 'Zeroes at end', 'Zeroes at end and last value'],
+              label: 'Ignore',
+              displayProperty: 'inline-parameter'
+            },
+            {
+              name: 'style',
+              input_type: 'dropdown',
+              initial_value: 'Dash',
+              allowed_values: [['Solid','solid'],['Dashed','dash']],
+              label: 'Style',
+              displayProperty: 'inline-parameter'
+            },
+            {
+              name: 'color',
+              input_type: 'color-picker',
+              label: 'Color',
+              initialColor: '',
+              displayProperty: 'inline-parameter'
+            }
+          ]
+        }, options = {onUpdate: sinon.spy()};
+
+        sinon.spy(MingleUI.EasyCharts, 'TrendLineParameter');
+
+        var parameter = new MingleUI.EasyCharts.Parameter('section', trendLineDef, options);
+
+        var trendLineParam = parameter.param, trendLineHtmlContainer = parameter.htmlContainer.find('.parameter'),
+            trendLineParameterArgs = MingleUI.EasyCharts.TrendLineParameter.args[0];
+
+        assert.ok(trendLineParam instanceof MingleUI.EasyCharts.TrendLineParameter);
+        assert.equal(MingleUI.EasyCharts.TrendLineParameter.callCount, 1);
+        assert.equal(trendLineParameterArgs[0][0], trendLineHtmlContainer[0]);
+        assert.deepEqual(trendLineParameterArgs[1], trendLineDef);
+        assert.deepEqual(trendLineParameterArgs[2], {onUpdate: options.onUpdate});
+
+        assert.ok(parameter.htmlContainer.is('div#section_trend_line_parameter'));
+        assert.notOk(parameter.htmlContainer.find('> .parameter-label')[0]);
+        assert.deepEqual(trendLineHtmlContainer[0], trendLineParam.htmlContainer[0]);
+        assert.ok(trendLineHtmlContainer.find('.add-trend-line-param-container input')[0]);
+        assert.equal(trendLineHtmlContainer.find('.trend-line-customization-params-container').length,0);
+        MingleUI.EasyCharts.TrendLineParameter.restore()
+      });
+
+      QUnit.test('testShouldAddClassToParameterLabelWhenLabelDisplayPropertyIsGiven', function (assert) {
+        var trendLineDef = {
+          name: 'trend-line',
+          label: 'Some label',
+          labelDisplayProperty:'display-property',
+          input_type: 'trend-line-parameter',
+          param_defs: [ ]
+        }, options = {onUpdate: sinon.spy()};
+
+        var parameter = new MingleUI.EasyCharts.Parameter('section', trendLineDef, options);
+
+        assert.ok(parameter.htmlContainer.find('.parameter-label').hasClass('display-property'));
+
+      });
+    </script>
+  </body>
+</html>

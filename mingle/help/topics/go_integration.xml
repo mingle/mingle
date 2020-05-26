@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Go Integration">
+  <note>Go integration is available on <cref topic="mingle_onsite">Mingle onsite</cref> until v16.1.</note>
+  <p>Mingle integrates with <exref url="https://www.thoughtworks.com/products/go-continuous-delivery">Go, the Continuous Integration and Delivery tool</exref> from ThoughtWorks Studios. This allows the users of Go and Mingle to surround their data with additional context, increasing the value of the information therein.</p>
+  
+  <p>Mingle's <cref topic="markup_go_pipeline_status">Go pipeline status gadget</cref> allows the display of the current status of a Go pipeline in a Mingle page or card. This allows users to view current project status across the two products in a single view. To enable this integration, please follow the instructions for <cref topic="go_in_mingle"> configuring the display of Go gadgets within Mingle.</cref></p>
+  
+  <section title="Integration technologies" collapsed="false">
+    <subsection file="what_is_opensocial" collapsed="false" />
+    <subsection file="what_is_oauth" collapsed="false" />
+  </section>
+  
+  <section title="Also see" file="go_integration_related_topics" collapsed="false"/>
+  
+</topic>

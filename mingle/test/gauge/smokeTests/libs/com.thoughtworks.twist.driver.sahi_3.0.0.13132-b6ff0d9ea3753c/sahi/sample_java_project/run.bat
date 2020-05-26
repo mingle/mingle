@@ -1,0 +1,1 @@
+java -cp ../lib/sahi.jar;../extlib/test/junit.jar;../extlib/test/log4j.jar;classes; junit.textui.TestRunner in.co.sahi.JavaClientTest

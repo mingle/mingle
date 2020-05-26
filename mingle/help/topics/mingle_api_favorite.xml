@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Favorite API">
+  <note>Personal favorites cannot be accessed via Mingle API. Favorite API is for team favorites only.</note>
+  <section title="Team favorites">Team favorites are a shortcut for team members to quickly access card views or wiki pages that are used often in a project. The Favorites API allows users to access a list of all team favorites and tabs on a project. They can then use the <cref topic="mingle_api_card">Card API</cref> to get all cards for a specified team favorite. </section>
+
+  <section title="Structure of a favorite resource">
+	
+	
+	<note>Please note that all the API resources and examples refer to <strong>v2 of the API</strong>. Support for v1 of the API was deprecated in fall 2012. Please refer to this <exref url="http://support.thoughtworks.com/entries/22029412-End-of-life-for-Version-1-of-the-Mingle-API">announcement</exref> in our Mingle community for more information about this deprecation.</note>
+	
+   <p>The structure of the favorite's resource and its attributes are described below, along with their data type.</p>
+
+	<api_attributes title="favorite resource xml - attributes">
+		<api_attribute name="id" type="Integer" readonly="true">system assigned unique identifier for this favorite.</api_attribute>
+		<api_attribute name="name" type="String">user given name for this favorite.</api_attribute>
+		<api_attribute name="project" type="Resource"><strong>name</strong> and <strong>identifier</strong> of the project for this favorite; both String.</api_attribute>
+		<api_attribute name="favorited_type" type="String" readonly="true">type of favorite, 'CardListView' or 'Page'.</api_attribute>
+		<api_attribute name="tab_view" type="Boolean">the tab status indicator for this favorite.</api_attribute>
+	</api_attributes>
+  </section>  
+ 
+  <section title ="Get all team favorites for a project">
+		<api_reference>     
+	        <p><strong>Reference</strong></p>
+	        <code>
+    Request Method: GET
+    URL: /api/v2/projects/<subst>project_identifier</subst>/favorites.xml
+	        </code>
+
+	        <p><strong>Example</strong></p>
+	        <code>
+    GET
+
+    http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/favorites.xml
+	        </code>
+
+	        <p><strong>Explanation</strong></p>
+	        <p>The above is an example of a GET request to retrieve all team favorites from the project with the identifier "test_project". This will return all team favorites including saved card views, wiki pages and tabs for the project.</p>
+
+	        <p><strong>Result</strong></p>
+	        <p>If you were authorized to perform the operation, and the operation succeeded, you will be returned an array of favorites resources.</p>
+		
+
+			<code><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<favorites type="array">
+  <favorite>
+    <id type="integer">33</id>
+    <name>Story Wall</name>
+    <project url="http://localhost:8080/api/v2/projects/test_project.xml">
+      <name>test project</name>
+      <identifier>test_project</identifier>
+    </project>
+    <favorited_type>CardListView</favorited_type>
+    <tab_view type="boolean">true</tab_view>
+  </favorite>
+  ...
+  <favorite>
+    <id type="integer">76</id>
+    <name>Lo-fi prototype</name>
+    <project url="http://localhost:8080/api/v2/projects/test_project.xml">
+      <name>test project</name>
+      <identifier>test_project</identifier>
+    </project>
+    <favorited_type>Page</favorited_type>
+    <tab_view type="boolean">false</tab_view>
+  </favorite>
+</favorites>
+			]]></code>
+		
+		</api_reference>
+	</section>
+</topic>

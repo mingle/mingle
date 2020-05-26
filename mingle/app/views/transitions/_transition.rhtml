@@ -1,0 +1,75 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div class="transition-container <%= local_assigns[:div_class] %>" id="transition-<%= transition.new_record? ? transition_counter : transition.id %>">
+  <h3><%= h transition.name %></h3>
+  
+  <div class="transition-detail">
+    <table class="reset-table">
+      <thead>
+        <tr>
+          <th>If a card <b>has</b> these properties:</th>
+          <th>&nbsp;</th>
+          <th>Provide a transition to <b>set</b> these properties:</th>
+        </tr>
+      </thead>
+      
+      <tbody>
+        <tr>
+          <td class="transition-from">
+            <%= render :partial => 'transitions/card_type', :locals => { :card_type => transition.card_type } %>
+            <%= "Any value for any property" if transition.required_properties.empty? && transition.card_type == nil %>
+            <% for property in transition.display_required_properties -%>
+              <%= render :partial => 'transitions/property', :locals => { :display_name  => property.name,
+                                                                          :display_value => property.display_value,
+                                                                          :is_hidden     => property.hidden? } %>
+
+            <% end -%>
+          </td>
+
+          <td class="align-center"><%= image_tag('transition-arrow.png', :alt => 'Transition from this to this') %></td>
+
+          <td class="transition-to">
+            <% for action in transition.send(local_assigns[:actions_from]) -%>
+              <%= render :partial => 'transitions/property', :locals => { :display_name  => action.display_name,
+                                                                          :type          => action.property_definition.class.to_s.underscore,
+                                                                          :display_value => action.display_value,
+                                                                          :is_hidden     => action.property_definition.hidden? } %>
+
+            <% end -%>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <div class='transition-comments'>
+    <% if transition.require_comment %>
+      <p>This transition requires that team members add a comment when they use it.</p>
+    <% end %>
+    <p><%= transition_cannot_be_activated_using_bulk_message(transition) %></p>
+  </div>
+  <p><%= transition.describe_usability %>.</p>
+
+  <%= render :partial => 'transitions/transition_to_slack_channel_mapping', :locals => {:read_only => true, :transition => transition } %>
+
+  <%- if local_assigns[:show_action_links] -%>
+    <p>
+      <%= link_to_function 'Edit this transition', "Transition.navigateToUrl('#{url_for(:action => 'edit', :id => transition)}')", :class => 'edit-transition', :accessing => "transitions:edit" %>
+      <%= link_to_function 'Delete', "Transition.postToUrl('#{url_for(:action => 'destroy', :id => transition)}', this)", :class => 'delete-transition', :id => "delete_#{transition.id}", :accessing => "transitions:destroy" %>
+    </p>
+  <%- end -%>
+</div>

@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Manage templates page">
+	<section title="How to get to this page">
+		<p>You can manage all of your templates from 'Manage templates' page. Click on 'Project templates' from instance Admin menu.</p>
+		<screenshot alttext="Manage templates" src="resources/images/installation/template_option_on_admin_menu.png"/>		
+	</section>
+	
+	<section title="What you can do on this page">
+		<p>The Available templates page lets you -</p>
+			<subsection title="View and edit details of existing templates" collapsed="true" > 
+				<p>You can view and update any existing templates from this page. Click on each template you want to view or make changes of. All changes will be saved on the template.</p>
+				<screenshot alttext="Manage templates" src="resources/images/installation/manage_available_templates.png"/>
+			</subsection>	
+				
+			<subsection title="Create a new template from existing project" file="creating_new_template_from_existing_projects" collapsed="true" />
+			<subsection title="Import previously exported projects as templates" file="creating_new_template_from_importing_projects" collapsed="true" />
+				
+		
+		<p>Templates are a great way to create new projects quickly. Each template is structured with useful common concept - such as Agile, Scrum and XP. After learning quickly how to use Mingle and you can also apply new method of your own to new projects.</p>
+		
+		<bullets>
+			<item><cref topic="managing_mingle_templates">Managing Mingle templates</cref></item>
+		</bullets>
+		
+	</section>
+	
+	<section title="Also see...">
+		<bullets>
+			<item><cref topic="creating_mingle_projects">Creating Mingle projects</cref></item>
+			<item><cref topic="customizing_projects">Customizing Mingle</cref></item>
+		</bullets>
+	</section>	
+</topic>

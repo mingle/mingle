@@ -1,0 +1,221 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Card Type Filter Test</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js"
+          type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery.tag-it.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/tinycolor.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+  <script src="../../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+
+  <script src="../test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../../../app/assets/javascripts/ui_utils.js" type="text/javascript"></script>
+
+  <script src="../../../public/javascripts/application.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/drop_down.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/mql_builder.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/easy_charts/card_type_filter.js" type="text/javascript"></script>
+
+  <script src="../test_assets/sinon-2.3.6.js" type="text/javascript"></script>
+  <script src="../test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+  <script src="../test_assets/qunit-phantom.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="../test_assets/qunit-1.21.0.css" type="text/css"/>
+
+</head>
+<body>
+<div id="qunit">
+</div>
+<div id="card_type_filter_container"></div>
+
+<script type="text/javascript">
+  function selectValue(value) {
+    $j('#cardFilter1Value_' + value.toSnakeCase()).click();
+  }
+
+  QUnit.module("Card Type Filter", {
+    beforeEach: function () {
+      this.container = $j('#card_type_filter_container');
+      this.onUpdate = sinon.spy();
+      sinon.spy(MingleUI, 'DropDown');
+      this.data = {
+        cardTypes: ['Story', 'Feature', 'Release'],
+        onUpdate: this.onUpdate
+      };
+    },
+    afterEach: function () {
+      this.container.empty();
+      MingleUI.DropDown.restore();
+    }
+  }, function () {
+    QUnit.module('Without selected card types', {
+      beforeEach: function () {
+        this.filter = new MingleUI.EasyCharts.CardTypeFilter(1, 'card_filter', this.data);
+        this.container.append(this.filter.htmlContainer);
+      }
+    });
+    QUnit.test('testShouldAddPropertyDropDown', function (assert) {
+      var propertyArgs = MingleUI.DropDown.args[0];
+
+      assert.equal(propertyArgs[0], 'cardFilter1Property');
+      assert.deepEqual(propertyArgs[2], ['Type']);
+      assert.equal(propertyArgs[3].initialValue, 'Type');
+      assert.equal(typeof propertyArgs[3].onValueChange, 'function');
+      assert.equal(propertyArgs[3].defaultOption, '(select)');
+      assert.ok(propertyArgs[3].disabled);
+
+      assert.equal(this.filter.property.name, "cardFilter1Property");
+      assert.equal(this.filter.property._optionsContainer.text(), 'Type');
+      assert.equal(this.filter.property._valueContainer.text(), 'Type');
+      assert.equal(this.filter.property.htmlContainer[0], this.container.find('#card_filter_1_property')[0]);
+    });
+
+    QUnit.test('testShouldAddOperatorDropDown', function (assert) {
+      var operatorArgs = MingleUI.DropDown.args[1];
+
+      assert.equal(operatorArgs[0], 'cardFilter1Operator');
+      assert.deepEqual(operatorArgs[2], [['is', 'eq']]);
+      assert.equal(operatorArgs[3].initialValue, 'eq');
+      assert.equal(typeof operatorArgs[3].onValueChange, 'function');
+      assert.equal(operatorArgs[3].defaultOption, '(any)');
+      assert.ok(operatorArgs[3].disabled);
+
+      assert.equal(this.filter.operator.name, "cardFilter1Operator");
+      assert.equal(this.filter.operator._optionsContainer.text(), 'is');
+      assert.equal(this.filter.operator.value(), 'eq');
+      assert.equal(this.filter.operator.htmlContainer[0], this.container.find('#card_filter_1_operator')[0]);
+    });
+
+    QUnit.test('testShouldAddValueDropDown', function (assert) {
+      var valueArgs = MingleUI.DropDown.args[2];
+
+      assert.equal(valueArgs[0], 'cardFilter1Value');
+      assert.deepEqual(valueArgs[2], this.data.cardTypes);
+      assert.deepEqual(valueArgs[3].initialValue, []);
+      assert.equal(typeof valueArgs[3].onValueChange, 'function');
+      assert.equal(valueArgs[3].defaultOption, '(any)');
+      assert.notOk(valueArgs[3].disabled);
+
+      assert.equal(this.filter.value.name, "cardFilter1Value");
+      assert.equal(this.filter.value._optionsContainer.text(), 'StoryFeatureRelease');
+      assert.deepEqual(this.filter.value.value(), []);
+      assert.equal(this.filter.value.htmlContainer[0], this.container.find('#card_filter_1_value')[0]);
+    });
+
+    QUnit.test('testFilterShouldNotBeRemovable', function (assert) {
+      assert.notOk(this.filter.htmlContainer.find('.remove-filter')[0]);
+    });
+
+    QUnit.test('testShouldNotBeAbleToOpenPropertyDropDown', function (assert) {
+      this.filter.property._toggleHandle.click();
+
+      assert.notOk(this.filter.property._optionsContainer.is(':visible'));
+    });
+
+    QUnit.test('testShouldNotBeAbleToOpenPropertyDropDown', function (assert) {
+      this.filter.operator._toggleHandle.click();
+
+      assert.notOk(this.filter.operator._optionsContainer.is(':visible'));
+    });
+
+    QUnit.test('testIsValidShouldReturnFalseWhenValueIsNotSelected', function (assert) {
+      assert.notOk(this.filter.isValid());
+    });
+
+    QUnit.test('testIsValidShouldReturnTrueWhenPropertyAndValueAreSelected', function (assert) {
+      selectValue('Story');
+
+      assert.ok(this.filter.isValid());
+    });
+
+    QUnit.test('testGetMqlShouldReturnEmptyStringWhenInvalid', function (assert) {
+      assert.equal(this.filter.getMql(), '');
+    });
+
+    QUnit.test('testGetMqlShouldReturnConditionAsStringWhenValid', function (assert) {
+      selectValue('Release');
+
+      assert.equal(this.filter.getMql(), '"Type" = "Release"');
+    });
+
+    QUnit.test('testShouldTriggerOnUpdateCallbackWhenCardTypeValueChanges', function (assert) {
+      selectValue('Story');
+      assert.equal(this.onUpdate.callCount, 1);
+      assert.equal(this.onUpdate.args[0][0], this.filter);
+
+      selectValue('Release');
+      assert.equal(this.onUpdate.callCount, 2);
+      assert.equal(this.onUpdate.args[1][0], this.filter);
+
+      selectValue('Release');
+      assert.equal(this.onUpdate.callCount, 3);
+      assert.equal(this.onUpdate.args[1][0], this.filter);
+
+      selectValue('Story');
+      assert.equal(this.onUpdate.callCount, 4);
+      assert.equal(this.onUpdate.args[0][0], this.filter);
+    });
+
+    QUnit.test('testShouldAllowMultipleValuesCardTypes', function (assert) {
+      selectValue('Story');
+      selectValue('Release');
+
+      assert.deepEqual(this.filter.value.value(), ['Story', 'Release']);
+    });
+
+    QUnit.test('testIsForCardPropertyShouldReturnFalse', function (assert) {
+      assert.notOk(this.filter.isForCardProperty());
+    });
+
+    QUnit.module('With selected card types', {
+      beforeEach: function () {
+        this.data.selectedCardTypes = [['Story','Story'], ['Feature', 'Feature']];
+        this.filter = new MingleUI.EasyCharts.CardTypeFilter(1, 'card_filter', this.data);
+        this.container.append(this.filter.htmlContainer);
+      }
+    });
+
+    QUnit.test('testShouldPreselectTheSelectedCardTypes', function (assert) {
+      var valueArgs = MingleUI.DropDown.args[2];
+
+      assert.equal(valueArgs[0], 'cardFilter1Value');
+      assert.deepEqual(valueArgs[2], this.data.cardTypes);
+      assert.deepEqual(valueArgs[3].initialValue, this.data.selectedCardTypes);
+      assert.equal(typeof valueArgs[3].onValueChange, 'function');
+      assert.equal(valueArgs[3].defaultOption, '(any)');
+      assert.notOk(valueArgs[3].disabled);
+
+      assert.equal(this.filter.value.name, "cardFilter1Value");
+      assert.equal(this.filter.value._optionsContainer.text(), 'StoryFeatureRelease');
+      assert.deepEqual(this.filter.value.value(), ['Story', 'Feature']);
+      assert.equal(this.filter.value.htmlContainer[0], this.container.find('#card_filter_1_value')[0]);
+      assert.equal(this.container.find('#card_filter_1_value .selected-value').text(), 'Story, Feature');
+    });
+
+    QUnit.test('testIsValidShouldReturnTrue', function (assert) {
+      assert.ok(this.filter.isValid());
+    });
+  });
+</script>
+</body>
+</html>

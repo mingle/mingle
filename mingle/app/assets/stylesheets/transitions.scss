@@ -1,0 +1,409 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+.transition-container {
+  border: 1px solid #CCC;
+  padding: 10px;
+  margin: 15px 0 0 0;
+}
+
+.transition-actions {
+  margin-bottom: 10px;
+}
+
+.transition-workflow-container {
+  background: #EEE  url(../images/preview.png) repeat scroll top left;
+  padding: 10px;
+  border: 1px solid #CCC;
+}
+
+
+.transition-container h3 {
+  padding: 0 0 10px 0;
+  margin: 0 0 10px 0;
+  border-bottom: 1px dotted #CCC;
+
+}
+
+
+.transition-container p {
+  margin: 10px 0 0 0;
+}
+
+.transition-container p span {
+  color: inherit !important;
+  font-weight: bold;
+}
+
+.transition-container p span.property-name {
+  font-weight: normal;
+}
+
+
+.transition-container .transition-detail p {
+  padding: 5px;
+  margin: 1px 0;
+  border-bottom: 1px solid #CCC;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+div.transition-arrow
+{
+  background: url(../images/transition-arrow.png);
+  width: 64px;
+  height: 57px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.card-type{
+  font-weight: bold;
+}
+
+table.reset-table th
+{
+  font-weight: normal;
+  padding-top: 0em;
+  padding-left: 0em;
+}
+
+table.reset-table td.transition-to, table.reset-table td.transition-from {
+  padding: 10px;
+  border: 1px solid #CCC;
+  border: 1px solid rgba(0,0,0,0.1);
+  font-size: 11px;
+  vertical-align: top;
+  width: 45%;
+}
+
+#transition-form td.align-center img,
+.transition-detail td.align-center img {
+  display: none;
+}
+
+#transition-form td.align-center,
+.transition-detail td.align-center {
+  background: url(../images/mingle/icons/icon_transition_arrow.png) center center no-repeat;
+}
+
+#transition-form #content-simple {
+  margin-bottom: 20px;
+}
+
+#transition-form .properties_widget .drop-list-panel {
+  margin-right: 10px;
+}
+
+input#transition_name {
+  width: 45%;
+}
+
+
+
+.transition_card_type {
+  border-bottom: 1px dotted #CCC;
+  font-size: 12px;
+  overflow: hidden;
+  height: 24px;
+  margin-bottom: 10px;
+}
+
+.transition_card_type span span
+{
+  color: #000;
+  font-weight: bold;
+}
+.transition_card_type span a
+{
+  color: #000;
+  font-weight: bold;
+  padding-top: 1px;
+  width: auto;
+}
+
+
+
+.properties_widget .tree_belonging_property_definition {
+  border-top: 1px solid #CCC;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  width: auto;
+  float: none;
+  clear: left;
+  margin: 0;
+  padding: 10px;
+  height: 25px !important;
+  zoom: 1;
+}
+.properties_widget span.tree_belonging_property_definition .widget-dropdown {
+  font-weight: normal;
+}
+#sets-properties-widget {
+  float: none;
+}
+.properties_widget span.tree_belonging_property_definition span,
+.properties_widget span.tree_belonging_property_definition a
+{
+  display: inline;
+  float: none;
+  width: auto;
+}
+
+.properties_widget span.tree_belonging_property_definition span b
+{
+  color: #666;
+  font-weight: normal;
+}
+
+.properties_widget span.tree_belonging_property_definition span.colon
+{
+  font-weight: normal;
+}
+
+.properties_widget span.tree_belonging_property_definition a
+{
+  font-weight: normal;
+}
+
+.transition-container .transition-detail p.tree_belonging_property_definition
+{
+  border-top: 1px dotted #DDDDDD;
+  border-bottom: 1px dotted #DDDDDD;
+  background-color: #FFF9F0;
+  padding: 0.25em 0.75em;
+  margin-left: -0.5em;
+  margin-right: -0.5em;
+}
+.transition-container .transition-detail p.tree_belonging_property_definition .property-name
+{
+  font-weight: bold;
+}
+.transition-container .transition-detail p.tree_belonging_property_definition .property-name .suffix
+{
+  font-weight: normal;
+}
+.transition-actions
+{
+  margin-left: 0;
+  margin-right: 0;
+}
+.card-type-selection, .property-definition-selection
+{
+  width: 15em;
+}
+.no-transition-message
+{
+  text-align: center;
+  font-style: italic;
+  margin: 1.5em 1em;
+  color: #888;
+  border-top: 1px dotted #CCC;
+  border-bottom: 1px dotted #CCC;
+  padding: 0.5em 0;
+}
+
+.toggle label {
+  display: inline;
+}
+.transition-container {
+  border: 1px solid #CCC;
+  padding: 10px;
+  margin: 15px 0 0 0;
+}
+
+.transition-actions {
+  margin-bottom: 10px;
+}
+
+.transition-workflow-container {
+  background: #eeeeee url(../images/preview.png) repeat scroll top left;
+  padding: 10px;
+  border: 1px solid #CCC;
+}
+
+.transition-container {
+  h3 {
+    padding: 0 0 10px 0;
+    margin: 0 0 10px 0;
+    border-bottom: 1px dotted #CCC;
+  }
+  p {
+    margin: 10px 0 0 0;
+    span {
+      color: inherit !important;
+      font-weight: bold;
+      &.property-name {
+        font-weight: normal;
+      }
+    }
+  }
+  .transition-detail p {
+    padding: 5px;
+    margin: 1px 0;
+    border-bottom: 1px solid #CCC;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+}
+
+div.transition-arrow {
+  background: url(../images/transition-arrow.png);
+  width: 64px;
+  height: 57px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.card-type {
+  font-weight: bold;
+}
+
+table.reset-table {
+  th {
+    font-weight: normal;
+    padding-top: 0em;
+    padding-left: 0em;
+  }
+  td {
+    &.transition-to, &.transition-from {
+      padding: 10px;
+      border: 1px solid #CCC;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      font-size: 11px;
+      vertical-align: top;
+      width: 45%;
+    }
+  }
+}
+
+#transition-form td.align-center img, .transition-detail td.align-center img {
+  display: none;
+}
+
+#transition-form td.align-center, .transition-detail td.align-center {
+  background: url(../images/mingle/icons/icon_transition_arrow.png) center center no-repeat;
+}
+
+#transition-form {
+  #content-simple {
+    margin-bottom: 20px;
+  }
+  .properties_widget .drop-list-panel {
+    margin-right: 10px;
+  }
+}
+
+input#transition_name {
+  width: 45%;
+}
+
+.transition_card_type {
+  border-bottom: 1px dotted #CCC;
+  font-size: 12px;
+  overflow: hidden;
+  height: 24px;
+  margin-bottom: 10px;
+  span {
+    span {
+      color: #000;
+      font-weight: bold;
+    }
+    a {
+      color: #000;
+      font-weight: bold;
+      padding-top: 1px;
+      width: auto;
+    }
+  }
+}
+
+.properties_widget {
+  .tree_belonging_property_definition {
+    border-top: 1px solid #CCC;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    width: auto;
+    float: none;
+    clear: left;
+    margin: 0;
+    padding: 10px;
+    height: 25px !important;
+    zoom: 1;
+  }
+  span.tree_belonging_property_definition .widget-dropdown {
+    font-weight: normal;
+  }
+}
+
+#sets-properties-widget {
+  float: none;
+}
+
+.properties_widget span.tree_belonging_property_definition {
+  span, a {
+    display: inline;
+    float: none;
+    width: auto;
+  }
+  span {
+    b {
+      color: #666;
+      font-weight: normal;
+    }
+    &.colon {
+      font-weight: normal;
+    }
+  }
+  a {
+    font-weight: normal;
+  }
+}
+
+.transition-container .transition-detail p.tree_belonging_property_definition {
+  border-top: 1px dotted #DDDDDD;
+  border-bottom: 1px dotted #DDDDDD;
+  background-color: #FFF9F0;
+  padding: 0.25em 0.75em;
+  margin-left: -0.5em;
+  margin-right: -0.5em;
+  .property-name {
+    font-weight: bold;
+    .suffix {
+      font-weight: normal;
+    }
+  }
+}
+
+.transition-actions {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.card-type-selection, .property-definition-selection {
+  width: 15em;
+}
+
+.no-transition-message {
+  text-align: center;
+  font-style: italic;
+  margin: 1.5em 1em;
+  color: #888;
+  border-top: 1px dotted #CCC;
+  border-bottom: 1px dotted #CCC;
+  padding: 0.5em 0;
+}
+
+.toggle label {
+  display: inline;
+}
+

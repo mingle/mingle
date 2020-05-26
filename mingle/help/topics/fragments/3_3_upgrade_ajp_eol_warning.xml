@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE subsection SYSTEM "../mingle_help.dtd">
+<item>
+  <p><strong>AJP support end-of-life:</strong> Starting with Mingle 3.3, Mingle will no longer support the AJP connector. If you have previously configured Mingle to use the AJP connector in the mingle.properties file, you will have to remove it there. Also, in your Apache configuration, instead of mod_jk and mod_proxy_ajp, you will have to set up a different reverse proxy such as mod_proxy. Please go to <cref topic="apache">the Mingle Apache page</cref> to see some recommendations on how to set up mod_proxy on Apache.</p>
+</item>

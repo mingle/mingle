@@ -1,0 +1,34 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% cache_to Keys::PropertyEditor.new, @project, options do %>
+  <span id="<%=options[:html_id_prefix]%>_span" style="<% if options[:hidden_property] %>display:none<% end %>"class="drop-list-panel <%= 'hidden-property' if prop_def.respond_to?(:hidden) && prop_def.hidden?  %>  <% if options[:hidden_highlight] %>hidden<% end %> <%=prop_def.class.to_s.underscore%> ">
+    <% if options[:hidden_highlight] -%><span class="hidden-property-wrapper"><% end -%>
+    <span id="<%= options[:html_id_prefix] %>_label" title="<%= h(property_definition_tooltip(prop_def)) %>" class="property-name">
+      <% if options[:input_required] %><span class="required">*</span><% end %>
+      <%=h truncate_words(prop_def.name, 14) %>
+      <%- if prop_def.is_a? TreeBelongingPropertyDefinition%>
+      <b>tree</b>
+      <%- end %>
+    </span>
+
+    <span class="colon">:</span>
+    <span class="drop_link_wrapper">
+    <%= render :partial => options[:input_partial] || prop_input_partial(prop_def), :locals => {:prop_def => prop_def, :options => options} %>
+    <% if options[:hidden_highlight] -%></span><% end -%>
+    </span>
+  </span>
+<% end %>

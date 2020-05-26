@@ -1,0 +1,28 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="header-pills">
+  <ul class="clear_float">
+    <li class="<%= header_pill_class('program_wall', selected_tab) %>"><%= link_to 'Program Wall', program_backlog_objectives_path(@program) %></li>
+    <li class="<%= header_pill_class('timeline', selected_tab) %>"><%= link_to 'Plan', program_plan_path(@program) %></li>
+    <li class="<%= header_pill_class('program_project', selected_tab) %>"><%= link_to 'Projects', program_program_projects_path(@program) %></li>
+    <li class="<%= header_pill_class('team', selected_tab) %>"><%= link_to 'Team', program_program_memberships_path(@program) %></li>
+    <li class="<%= header_pill_class('dependencies', selected_tab) %>"><%= link_to 'Dependencies', program_dependencies_path(@program), :class => 'multiple-dependencies-icon'%></li>
+    <%- if MingleConfiguration.program_settings_enabled? && @program.admin?(User.current) -%>
+      <li class="<%= header_pill_class('program_settings', selected_tab) %>"><%= link_to 'Program Settings', "/programs/#{@program.identifier}/settings" %></li>
+    <% end %>
+  </ul>
+</div>

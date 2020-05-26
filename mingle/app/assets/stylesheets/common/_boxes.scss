@@ -1,0 +1,61 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+.info-box h2,
+.warning-box h2 {
+  margin: 5px 0;
+  padding: 0;
+}
+
+.warning-box,
+.info-box {
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  color: #333;
+  border: 1px solid #CCC;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+
+.info-box {
+  background-color: $INFO_LEVEL_BACKGROUND;
+  .flash-content{
+    &:before {
+      @include fa_icon($fa-var-info-circle);
+    }
+  }
+}
+
+.info-box p,
+.warning-box p {
+  margin-top: 10px;
+  padding: 0;
+}
+
+.info-box p:first-child,
+.warning-box p:first-child {
+    margin-top: 0;
+}
+
+.warning-box {
+  background-color: $WARNING_LEVEL_BACKGROUND;
+  &:before {
+    @include fa_icon($fa-var-exclamation-triangle);
+  }
+}
+
+#flash .warning-box div {
+   margin: 0;
+}

@@ -1,0 +1,31 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= render :partial => 'shared/admin_actions'%>
+
+<%= title_with_help_link 'Team favorites', 'Favorites Page' %>
+
+<div id="content">
+  <%= render :partial => "summary_table", :locals => {:id => 'favorites', :views => @favorites, :section => 'team favorite', :move_to => 'tab'} %>
+</div>
+
+<p>
+  <h1>Tabs</h1>
+</p>
+
+<div id="tab_content" class="content">
+  <%= render :partial => "summary_table", :locals => {:id => 'tab_views', :views => @tab_views, :section => 'tab', :move_to => 'team favorite'} %>
+</div>

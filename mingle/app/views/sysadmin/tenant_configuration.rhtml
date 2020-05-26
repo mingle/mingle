@@ -1,0 +1,57 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= render :partial => 'shared/top_level_header_pills', :locals => { :selected_tab => 'admin' } %>
+<% if Multitenancy.active_tenant %>
+<h1>Tenant configuration</h1>
+<ul>
+  <li>Tenant name: <%= Multitenancy.active_tenant.name %></li>
+  <li>DB schema name: <%= Multitenancy.active_tenant.schema_name %></li>
+  <li>AB test group: <%= Multitenancy.active_tenant.a_b_test_group_info.inspect %></li>
+  <li>DB config: <%= Multitenancy.active_tenant.db_config.inspect %></li>
+</ul>
+
+<% if Multitenancy.active_tenant.mingle_configurations.any? %>
+<h2>Overrode Mingle configurations on this site</h2>
+<ul>
+<% Multitenancy.active_tenant.mingle_configurations.each do |key, value| %>
+<li>
+<%= key %>: <%= value.inspect %>
+<%= link_to(raw("<span class='x fa fa-times'></span>"), {:action => 'delete_mingle_configuration', :name => key}, {:method => :post}) %>
+</li>
+<% end %>
+</ul>
+<% end %>
+<% end %>
+<% form_tag({:action => 'update_mingle_configuration'}) do %>
+<fieldset style="border: dashed red; padding: 7px 9px; margin: 0px 3px;">
+<legend style="font-weight: bold; color: red">Danger Zone: Override Mingle
+  configuration</legend>
+<div class="form_item">
+<label for="name">Name:</label>
+<%= select_tag('name', options_for_select(mingle_configuration_keys)) %>
+</div>
+<div class="form_item">
+<label for="name">Value:</label>
+<%= text_field_tag('value', '', :style => "width: 300px") %>
+</div>
+<%= submit_tag("Save") %>
+</fieldset>
+<% end %>
+
+<%= link_to("Delete current notification", {:action => "delete_tenant_user_notification"}, :class => "link_as_button delete-notification", :method => "post") -%>
+
+<%= render :partial => "sysadmin/user_notification_form", :locals => {:action => "update_tenant_user_notification"} %>

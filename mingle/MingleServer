@@ -1,0 +1,160 @@
+#!/bin/bash
+set -e
+
+die() {
+  echo "$*"; exit 1
+}
+
+usage() {
+  cat <<HELP
+
+MingleServer - Controls a Mingle instance
+
+  Usage:
+
+      MingleServer {start|stop|status|start-launchd|force-reload|restart} --mingle.dataDir=<path to data dir> [ options ]
+
+  Required:
+
+      --mingle.dataDir=    a unique location where Mingle will store files necessary for operation.
+
+  Options:
+
+      --mingle.configDir=  the location of the Mingle configuration directory. This will
+                           override the setting in Mingle.vmoptions, if set. Defaults to \${mingle.dataDir}/config.
+
+      --mingle.logDir=     Allows one to specify the location of the Mingle log directory. This will
+                           override the setting in mingle.properties, if set.  Defaults to ./log
+
+      --help               Display this help message.
+
+HELP
+}
+
+resolve_symlink() {
+  local link=$1
+
+  # use GNU readlink if available
+  if readlink --version > /dev/null 2>&1; then
+    readlink -f $link
+  else
+    # Unfortunately, Mac OS X only comes with BSD readlink
+    perl -e "use Cwd 'realpath'; print realpath('$link') . \"\n\""
+  fi
+}
+
+# only safe to execute after all environment variables and args are validated
+is_running() {
+  ./Mingle status 2>&1 > /dev/null
+}
+
+# quick check for args
+[[ $# -eq 0 ]] && usage && die "No arguments specified!"
+
+# process extra command line options supported by Mingle
+for arg in "$@"; do
+  case $arg in
+    --mingle.dataDir=*)
+      export mingleDataDir=$(echo $arg | sed -e 's;^--mingle\.dataDir=;;')
+      shift
+      ;;
+    --mingle.configDir=*)
+      export mingleConfigDir=$(echo $arg | sed -e 's;^--mingle\.configDir=;;')
+      shift
+      ;;
+    --mingle.logDir=*)
+      export mingleLogDir=$(echo $arg | sed -e 's;^--mingle\.logDir=;;')
+      shift
+      ;;
+    --mingle.port=*)
+      export minglePort=$(echo $arg | sed -e 's;^--mingle\.port=;;')
+      shift
+      ;;
+    --instance=*)
+      echo "Providing an instance name is no longer necessary.  Mingle will use the value provided by mingle.dataDir instead."
+      shift
+      ;;
+    --help)
+      usage
+      exit 0
+      ;;
+    start|status|stop|start-launchd|force-reload|restart)
+      action=$arg
+      shift
+      ;;
+    *)
+      usage
+      die "Unknown argument '$arg'!"
+      ;;
+  esac
+done
+
+install_dir=$(dirname `resolve_symlink $0`)
+
+[[ -n "${mingleDataDir:+is var set?}" ]] || die "You must specify a data directory. Use --mingle.dataDir=/path/to/dataDir to specify one."
+
+if [[ -e "MingleServer.vmoptions" ]]; then
+  die "You have a MingleServer.vmoptions in this directory.  This file will not be used.  Please rename it to Mingle.vmoptions or delete this file."
+fi
+
+# if configDir was not specified, default to ${mingleDataDir}/config
+if [[ -z "${mingleConfigDir:+is var set?}" ]]; then
+  export mingleConfigDir="${mingleDataDir%/}/config"
+fi
+
+# if logDir was not specified, try to read from mingle.properties, then fail to INSTALL_DIR/log
+if [[ -z "${mingleLogDir:+is var set?}" ]]; then
+  if [[ -r "${mingleConfigDir}/mingle.properties" ]]; then
+    # echo is a cheap way to strip whitespace, easier to read than ${var%"${var##*[![:space:]]}"} or sed....
+    mingleLogDir=$(echo $(grep '^-Dmingle\.logDir=' "${mingleConfigDir}/mingle.properties" | sed -e 's;^-Dmingle\.logDir=;;'))
+  fi
+
+  # default to "log" if not specified in mingle.properties
+  [[ -z "$mingleLogDir" ]] && mingleLogDir="$install_dir/log"
+fi
+
+# ensure dataDir exists
+mkdir -p $mingleDataDir
+
+# ensure configDir exists
+mkdir -p $mingleConfigDir
+
+# ensure logDir exists so that logs can be written and that path expansion works
+mkdir -p $mingleLogDir
+
+# expand paths relative to current directory
+if !(echo $mingleLogDir | grep '^/.*' >/dev/null); then
+  mingleLogDir="$(pwd)/$mingleLogDir"
+fi
+
+# expose the final logDir value to child processes
+export mingleLogDir
+
+# ensure that we are in the true physical directory of the MingleServer script
+cd $install_dir
+
+export mingleSslPort=$(grep '^-Dmingle\.ssl.port=' "${mingleConfigDir}/mingle.properties" | sed -e 's;^-Dmingle\.ssl.port=;;')
+if [[ -n "$mingleSslPort" && "$action" = start ]]; then
+    mingleKeyStore=$(grep '^-Dmingle\.ssl.keystore=' "${mingleConfigDir}/mingle.properties" | sed -e 's;^-Dmingle\.ssl.keystore=;;')
+    mingleKeyStorePass=$(grep '^-Dmingle\.keystorePassword=' "${mingleConfigDir}/mingle.properties" | sed -e 's;^-Dmingle\.keystorePassword=;;')
+    mingleKeyPass=$(grep '^-Dmingle\.keyPassword=' "${mingleConfigDir}/mingle.properties" | sed -e 's;^-Dmingle\.keyPassword=;;')
+
+    INSTALL4J_ADD_VM_PARAMS="${INSTALL4J_ADD_VM_PARAMS} -Dmingle.ssl.port=$mingleSslPort -Dmingle.ssl.keystore=$mingleKeyStore -Dmingle.ssl.keypassword=$mingleKeyPass -Dmingle.ssl.keystorePassword=$mingleKeyStorePass"
+fi
+
+minglePort=$(grep '^-Dmingle\.port=' "${mingleConfigDir}/mingle.properties" | sed -e 's;^-Dmingle\.port=;;')
+if [ -z "$minglePort" ]; then
+     export minglePort=8080
+fi
+
+
+INSTALL4J_ADD_VM_PARAMS="${INSTALL4J_ADD_VM_PARAMS} -Dmingle.dataDir=${mingleDataDir} -Dmingle.configDir=${mingleConfigDir} -Dmingle.logDir=${mingleLogDir}"
+INSTALL4J_ADD_VM_PARAMS="$INSTALL4J_ADD_VM_PARAMS -Dmingle.port=$minglePort -Dmingle.multiAppRoutingConfig=$install_dir/webapps/ROOT/WEB-INF/config/routes.yml -Dmingle.multiAppRoutingEnabled=true"
+export INSTALL4J_ADD_VM_PARAMS
+export INSTALL4J_NO_DB
+
+# we don't want to hide real failures with stop() (e.g. timeout while stopping server)
+# return true if server is not running
+[[ "$action" = "stop" ]] && ! is_running && echo "The daemon is not running." && exit 0
+
+./Mingle $action

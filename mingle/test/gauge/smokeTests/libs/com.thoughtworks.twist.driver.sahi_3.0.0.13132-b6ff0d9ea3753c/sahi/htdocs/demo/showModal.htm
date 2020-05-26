@@ -1,0 +1,53 @@
+<html>
+<head>
+    <title>
+        File Upload Test
+    </title>
+</head>
+
+<body>
+<script>
+function show1(){
+	window.setTimeout(function(){
+	window.showModalDialog("showModal_Modal.htm");
+	alert(123);}, 100);
+}
+function show(){
+	window.showModalDialog("showModal_Modal.htm");
+	alert(123);
+}
+function show3(){
+	window.showModalDialog("framesTest.htm");
+	alert(123);
+}
+function openComments()
+{   
+	var val="";
+	// it does not allow to close the window until comment is entered
+	var i=0;
+	while((i++<3) && (val==""  || val==null))
+	{
+		if (window.showModalDialog){
+			val=showModalDialog("showModal_Modal.htm",window,"dialogHeight: 230px; dialogWidth: 370px; dialogTop: 200px; dialogLeft: 304px; edge: Sunken; center: Yes; help: No; resizable: Yes; status: No;");
+		}else{
+			val= "Due to browser restriction we can not take the comment."
+		}
+	}
+	document.forms[0].txtComment.value=val;
+}
+</script>
+
+
+Show Modal Dialog Tests
+<br>
+<form name="form1" method="POST">
+    <input type="button" value="Set 1" onclick="show()" name="setname1" id="setid1"><br>
+    <input type="button" value="Set 2" onclick="show()" name="setname2"><br>
+    <input type="button" value="Set 2" onclick="show()" name="setname2_1"><br>
+    <input type="button" value="openComments" onclick="openComments()"><br>
+    <input type="button" value="Set 3" onclick="show3()"><br>
+</form>
+</body>
+
+
+</html>

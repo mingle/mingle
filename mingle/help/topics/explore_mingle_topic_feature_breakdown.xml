@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Feature Breakdown">
+
+    <p>Mingle allows you to break down features in a way that makes sense to your team.</p>
+
+    <p>We recommend you answer the following questions before you begin breaking down features into Mingle <cref topic="explore_mingle_topic_whats_a_card">cards</cref>.</p>
+
+    <table>
+        <header-row>
+            <col-header>Question</col-header>
+            <col-header>How will this help?</col-header>
+        </header-row>
+        <row>
+            <col>
+                <p>Will setting up relationships between your card types help you break down your feature?</p>
+                <p>(e.g. epic -> features -> stories)</p> 
+            </col>
+            <col>
+                <bullets>
+                    <item>If so, consider using <cref topic="card_trees">card trees</cref>.</item>
+                    <item>A lighter weight method to create a relationship between your cards is the <cref topic="relationship_properties">relationship property</cref>.</item>
+                    <item>Sometimes, no relationship between your cards is needed and that's okay!</item>
+                </bullets>
+            </col>
+        </row>
+        <row>
+            <col>
+                <p>What type of work is required to complete the feature and do I want to track all of it together or separately?</p>
+                <p>(e.g. stories, tasks, defects, etc.)</p> 
+            </col>
+            <col>Determining the types of work that is required to complete the feature will also help you figure out if a <cref topic="card_trees">card tree</cref> makes sense. </col>
+        </row>
+        <row>
+            <col>
+                <p>Which card views will help your team be more effective? How will they want to filter these views?</p>
+                <p>(e.g. grid, list, tree and hierarchy)</p>
+            </col>
+            <col>Mingle allows you to quickly slice and dice your card views. Your team members may want to see cards in different ways. Your QA may be interested in all bugs that have been reported for a feature, your developers may want to see how much work is left for a feature (bugs and stories), etc. You will not be able to predict every view your team will eventually need but it's worth thinking about as you decide what relationships you want to put in place (<cref topic="card_trees">card tree</cref>, <cref topic="relationship_properties">relationship property</cref> or none at all).</col>
+        </row>
+        <row>
+            <col>What type of reporting do I want?</col>
+            <col>Similar to identifying which card views will help your team, think about what other team members (e.g. project management and stakeholders) will want to see in your reports.  If you use a <cref topic="card_trees">card tree</cref> you will be able to use <cref topic="aggregate_properties">aggregate properties</cref> for your reporting.</col>
+        </row>
+    </table>
+
+    <section title="Tips">
+        <bullets>
+            <item>Keep your Mingle project simple. Introduce more complexity and structure as you need it.</item>
+        </bullets>
+    </section>
+
+    <section title="Also see...">
+        <bullets>
+            <item><cref topic="explore_mingle_topic_story_list">Story List</cref></item>
+			<item><cref topic="explore_mingle">Explore Mingle</cref></item>
+		        </bullets>
+		    </section>
+
+
+</topic>

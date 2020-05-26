@@ -1,0 +1,55 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+/*
+ * program_projects.css
+ * 
+ * Styles for program_project views
+ */
+
+/**
+ * TABLE OF CONTENTS
+ *
+ * =EDIT
+ * =INDEX
+ */
+
+
+/**
+ * =EDIT
+ */
+
+
+/**
+ * =INDEX
+ */
+.add_project_to_program {
+  border-bottom: 1px solid #CCC;
+  padding-bottom: 10px;
+}
+.add_project_to_program label {
+  display:inline;
+  margin-right: 5px;
+}
+.add_project_to_program .form_item {
+  float: left;
+  padding-right: 10px;
+  vertical-align: bottom;
+}
+.card_type_associations {
+ padding-top: 20px; 
+ padding-bottom:20px; 
+}

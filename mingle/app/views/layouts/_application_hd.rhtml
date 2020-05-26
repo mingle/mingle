@@ -1,0 +1,71 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="header">
+  <div id="header_wrapper">
+    <div id='title' class="clear_float">
+      <% if @content_for_mingle_logo %>
+        <%= yield :mingle_logo %>
+      <% else %>
+        <% if MingleConfiguration.show_holiday_fun?(user_preference(:i_hate_holidays)) && MingleConfiguration.latest_holiday_name.present? %>
+          <% img_tag = image_tag(MingleConfiguration.holiday_logo, {:"data-hover-src" => MingleConfiguration.holiday_logo_hover,
+                                                                    :"data-src" => MingleConfiguration.holiday_logo, :class => MingleConfiguration.latest_holiday_name,
+                                                                    :title => MingleConfiguration.show_holiday_fun?(user_preference(:i_hate_holidays)) ? MingleConfiguration.holiday_logo_tooltip : ''})%>
+          <%= link_to "#{img_tag}".html_safe, landing_page, :id => 'logo_link', :class => "logo holiday #{MingleConfiguration.latest_holiday_name}" %>
+        <% else %>
+          <%= link_to "#{image_tag('/images/logo.png')}".html_safe, landing_page, :id => 'logo_link', :class => "logo" %>
+            <%= yield :program_name %>
+        <% end %>
+      <% end %>
+      <% if show_buy_button? && !CurrentLicense.status.free_tier? && !MingleConfiguration.display_export_banner? %>
+        <% content_tag "div", :accessing => "account:edit", :id => "trial_count_down", :class => "clearfix" do %>
+          <span class="cc">
+          Days left:
+          </span>
+          <div class="days-left">
+            <span><%= CurrentLicense.status.days_left.to_s.rjust(2, "0") %></span>
+          </div>
+          <div class="buy-button">
+          <%= link_to_remote "Buy", {:url => {:action => "edit",
+          :controller => "account"}}, {:id => "buy"} %>
+          </div>
+        <% end %>
+      <% end %>
+
+      <div class="header-actions clear_float">
+        <ul class="actions_list">
+          <li class="action_item">
+            <%= yield :after_logo %>
+          </li>
+          <li class="action_item">
+            <%= render :partial => 'shared/profile_utilities' unless defined?(hide_login) && hide_login %>
+          </li>
+        </ul>
+      </div>
+      <%= clear_float %>
+    </div>
+    <div>
+      <% if @content_for_special_header %>
+        <%= yield :special_header%>
+      <% end %>
+    </div>
+    <%= yield :header_pills %>
+
+  </div>
+</div>
+<% if @downgrade_view %>
+  <%= javascript_with_rescue show_downgrade_lightbox %>
+<% end %>

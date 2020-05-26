@@ -1,0 +1,203 @@
+#  Copyright 2020 ThoughtWorks, Inc.
+#  
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Affero General Public License as
+#  published by the Free Software Foundation, either version 3 of the
+#  License, or (at your option) any later version.
+#  
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Affero General Public License for more details.
+#  
+#  You should have received a copy of the GNU Affero General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+card_types:
+   - name: Release
+     color: '#ffffff'
+   - name: Iteration
+     color: '#33ff4e'
+   - name: Story
+     color: '#2000f2'
+property_definitions:
+  - name: Estimate
+    data_type: numeric
+    is_managed: "true"
+    card_types:
+      - name: Story
+    property_value_details:
+      - value: 1
+      - value: 2
+      - value: 4
+      - value: 8
+  - name: Status
+    data_type: string
+    is_managed: "true"
+    card_types:
+      - name: Story
+      - name: Iteration
+      - name: Release
+    property_value_details:
+      - value: New
+        position: 1
+        color: '#fffab3'
+      - value: 'In Dev'
+        position: 2
+        color: '#9aff4d'
+      - value: Testing
+        position: 3
+        color: '#00cc3d'
+      - value: Done
+        position: 4
+        color: '#004d29'
+  - name: Owner
+    data_type: user
+    card_types:
+      - name: Story
+  - name: Pair
+    data_type: user
+    card_types:
+      - name: Story
+trees:
+  - name: Release Tree
+    configuration:
+      - card_type_name: Release
+        position: 0
+        relationship_name: Release
+      - card_type_name: Iteration
+        position: 1
+        relationship_name: Iteration
+      - card_type_name: Story
+        position: 2
+    aggregate_properties:
+      - name: Velocity
+        type: SUM
+        target_property_name: Estimate
+        card_type_name: Iteration
+        scope: CONDITION
+        condition: 'Type = story and status = done'
+cards:
+  - name: "Release 1"
+    card_type_name: Release
+    number: 1
+  - name: "Release 2"
+    card_type_name: Release
+    number: 2
+  - name: "Iteration 1"
+    card_type_name: Iteration
+    number: 3
+    card_relationships:
+      release: 1
+  - name: "Iteration 2"
+    card_type_name: Iteration
+    number: 4
+    card_relationships:
+      release: 1
+  - name: "Backlog"
+    card_type_name: Iteration
+    number: 5
+    card_relationships:
+      release: 1
+  - name: "Story 1"
+    card_type_name: Story
+    number: 6
+    properties:
+      status: New
+      estimate: 1
+    card_relationships:
+      iteration: 3
+  - name: "Story 2"
+    card_type_name: Story
+    number: 7
+    properties:
+      status: New
+      estimate: 2
+    card_relationships:
+      iteration: 3
+  - name: "Story 3"
+    card_type_name: Story
+    number: 8
+    properties:
+      status: Done
+      estimate: 4
+    card_relationships:
+      iteration: 3
+  - name: "Story 4"
+    card_type_name: Story
+    number: 9
+    properties:
+      status: New
+    card_relationships:
+      iteration: 5
+plvs:
+  - name: Current Iteration
+    data_type: CARD_DATA_TYPE
+    value: 3
+    property_definitions: ['Iteration']
+    card_type: Iteration
+  - name: Current Release
+    data_type: CARD_DATA_TYPE
+    value: 1
+    property_definitions: ['Release']
+    card_type: Release
+card_defaults:
+  - card_type_name: Story
+    properties:
+      status: New
+      Iteration: (Current Iteration)
+      Owner: (current user)
+  - card_type_name: Iteration
+    properties:
+      Release: (Current Release)
+pages:
+  - name: 'Overview Page'
+    content: >-
+      <div class="dashboard-panel">
+      <h2>Burn-up Chart</h2>
+
+      <div class="dashboard-content">
+      {{
+        daily-history-chart
+            aggregate: count(*)
+            start-date: <%= (Time.now - 3.days).utc.strftime('%d %B, %Y') %>
+            end-date: <%= (Time.now + 14.days).utc.strftime('%d %B, %Y') %>
+            chart-conditions: type = story and Iteration = "iteration 1"
+            chart-width: 900
+            chart-height: 400
+            plot-width: 700
+            plot-height: 300
+            plot-x-offset: 80
+            scope-series: All Planned
+            completion-series: Done
+            target-release-date: <%= (Time.now + 2.days).utc.strftime('%d %B, %Y') %>
+            series:
+            - conditions: type = story and iteration = "iteration 1"
+              label: All Planned
+              color: black
+              line-width: 2
+            - conditions: type = story and status = "done"
+              color: green
+              label: Done
+              line-width: 2
+      }}
+      </div>
+      </div>
+tabs:
+  - name: Card Wall
+    style: grid
+    filters:
+      - '[Type][is][Story]'
+      - '[Iteration][is][(Current Iteration)]'
+    color_by: Type
+    group_by:
+      lane: Status
+    lanes: 'New,In Dev,Testing,Done'
+  - name: Iteration Planning
+    style: grid
+    filters:
+      - '[Type][is][Story]'
+      - '[Release][is][(Current Release)]'
+    color_by: Status
+    group_by:
+      lane: Iteration
+    lanes: '5,3,4'

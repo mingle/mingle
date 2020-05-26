@@ -1,0 +1,172 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+#checklist-container , #card-defaults-checklist-container {
+  cursor: default;
+
+  padding-bottom: 5px;
+
+  input[type="text"] {
+     font-family: Helvetica, Arial, 'Lucida Grande', sans-serif;
+     font-size: 14px;
+     color: rgb(51, 51, 51);
+     font-weight: 300;
+  }
+
+  .fa-plus {
+    margin-top: 2px;
+    float: left;
+    color: #666;
+    padding-right:5px;
+    vertical-align: middle;
+  }
+
+  .checklist-input {
+    @extend .inline-add;
+    display: inline-block;
+    margin-left: 5px;
+    vertical-align: middle;
+    font-size: 12px;
+
+    input[type="text"] {
+      width: 500px;
+    }
+  }
+
+  .fa-check {
+    vertical-align: middle;
+  }
+
+
+  .checklist-items {
+    .toggle-completed-container {
+      margin: 10px 0px;
+      display: none;
+      .toggle-completed {
+        text-decoration: underline;
+        cursor: pointer;
+      }
+    }
+
+    .items {
+      overflow: auto;
+
+      ul.items-list {
+        li .anchor-container {
+          display: inline;
+          float: left;
+          min-height: 1px;
+          width: 25px;
+          text-align: center;
+
+          span.item-dragging-anchor {
+            display: none;
+            font-size: 11px;
+            cursor: move;
+            &:before {
+              @include fa_icon($fa-var-bars);
+              line-height: 15px;
+            }
+          }
+        }
+      }
+
+      ul {
+        margin:0;
+        list-style-type: none;
+
+        li {
+          -ms-touch-action: none;
+          list-style: none;
+        }
+
+        .item-checkbox-container {
+          display: inline;
+          float: left;
+
+          .checkbox {
+            font-size:14px;
+          }
+
+          .bullet {
+            font-size:11px;
+          }
+
+          i.checkbox:before {
+            @include fa_icon($fa-var-square-o);
+          }
+
+          i.bullet:before {
+            @include fa_icon($fa-var-square);
+            color: rgb(102, 102, 102);
+          }
+        }
+
+        .item-name-container {
+          padding-left: 23px;
+          line-height: 12px;
+          margin-bottom: 7px;
+        }
+
+        .complete-item {
+          .item-name {
+            text-decoration: line-through;
+          }
+
+          i.checkbox:before {
+            @include fa_icon($fa-var-check-square-o);
+          }
+        }
+
+        .delete-item, .checkbox {
+          cursor: pointer;
+          color: rgb(102, 102, 102);
+        }
+
+        .item-name {
+          display: inline;
+          font-size: 14px;
+          padding: 0 5px 0 0;
+        }
+
+        .view-mode {
+          .edit-mode-only {
+            display: none;
+          }
+          .view-mode-only {
+            display: inline;
+          }
+        }
+
+        .edit-mode {
+           @extend .inline-add;
+          .edit-mode-only {
+            display: inline;
+          }
+
+          .view-mode-only {
+            display: none;
+          }
+
+          input[type="text"] {
+            width: 96%;
+          }
+        }
+      }
+    }
+  }
+
+}

@@ -1,0 +1,14 @@
+<span id="contextual_help_identifier" style="display: none;">cards_grid_with_tree</span>
+<span id="contextual_help_title" style="display: none;">Using Trees with the Card Grid view</span>
+<span id="full_contextual_help_link" style="display: none;"><a class="full-contextual-help-link" href="{% helpPathDomain %}/card_grid_page.html"  target="_blank">Full help for the Grid view</a></span>
+
+<div>
+  <img src="{% contextPath %}/images/diagram-help-using-tree-card-grid.gif" class="help-diagram" />
+
+  <div><p><img src="{% contextPath %}/images/icon-help-number-one.png" align="middle" alt='1'/>  Add cards to your project by using the <a href="{% helpPathDomain %}/grid_view.html#create_cards_using_quick_add" target="_blank"><b>quick add</b></a></p></div>
+  <div><p><img src="{% contextPath %}/images/icon-help-number-two.png" align="middle" alt='2'/>  Set relative priorities by <a href="{% helpPathDomain %}/grid_view.html#card_ranking" target="_blank"> <b>ranking your cards</b></a></p></div>
+  <div><p><img src="{% contextPath %}/images/icon-help-number-three.png" align="middle" alt='3'/>  Move cards through your workflow by <a href="{% helpPathDomain %}/grid_view.html#update_cards" target="_blank"> <b>dragging cards from lane to lane</b></a></p></div>
+  <div><p><img src="{% contextPath %}/images/icon-help-number-four.png" align="middle" alt='4'/>  Change the way you see your cards in the grid view by <a href="{% helpPathDomain %}/grid_view.html#group_cards" target="_blank"><b>grouping</b></a>, <a href="{% helpPathDomain %}/grid_view.html#sort_cards" target="_blank"><b>sorting</b></a> and <a href="{% helpPathDomain %}/grid_view.html#color_cards" target="_blank"><b>coloring</b></a> your cards </p></div>
+  <div><p><img src="{% contextPath %}/images/icon-help-number-five.png" align="middle" alt='5'/>  <a href="{% helpPathDomain %}/grid_view.html#maximizing_card_views"target="_blank"> <b>Maximize</b></a> the view for full visibility into your cards during stand-ups and planning meetings</p></div>
+  <div><p><img src="{% contextPath %}/images/icon-help-number-six.png" align="middle" alt='6'/>  Change what cards you see and how you see them by using the <a href="{% helpPathDomain %}/grid_view.html#filter" target="_blank"><b>filter</b></a> and <a href="{% helpPathDomain %}/grid_view.html#color_cards" target="_blank"><b>color legend</b></a></p></div>
+</div>

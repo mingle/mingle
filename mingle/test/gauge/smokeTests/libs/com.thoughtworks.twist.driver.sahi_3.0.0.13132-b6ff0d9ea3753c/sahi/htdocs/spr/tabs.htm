@@ -1,0 +1,99 @@
+<!--
+/**
+ * Copyright  2006  V Narayan Raman
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+
+<html>
+<head>
+    <meta name="generator" content="HTML Tidy, see www.w3.org">
+    <title>Sahi Controller</title>
+    <script type="text/javascript" src="/_s_/spr/domainfix.js">
+    </script>
+    <script type="text/javascript" src="/_s_/spr/controller2.js">
+    </script>
+
+    <script type="text/javascript" src="/_s_/spr/util.js">
+    </script>
+
+    <style type="text/css">
+    body{
+    	font-family:verdana;
+    	font-size: 8pt;
+    }
+        .hiTab {
+            border-left: solid white 1px;
+            border-right: solid gray 1px;
+            border-top: solid white 1px;
+            color: black;
+            cursor: pointer;
+            font-size: 10pt;
+            padding: 3pt;
+            padding-bottom: 2px;
+        }
+
+        .dimTab {
+            border-left: solid white 1px;
+            border-right: solid gray 1px;
+            border-top: solid white 1px;
+            border-bottom: solid white 1px;
+            color: darkgray;
+            cursor: pointer;
+            font-size: 9pt;
+            padding: 2pt;
+            padding-bottom: 2px;
+        }
+
+        .noTab {
+            border-bottom: solid white 1px;
+        }
+
+        .recPane {
+            display: block;
+            background-color: white;
+            border-left: solid white 2px;
+            border-right: solid gray 2px;
+            border-top: solid white 2px;
+            border-bottom: solid gray 2px;
+            margin: 2px;
+        }
+
+        .playbackPane {
+            display: none;
+            background-color: white;
+            border-left: solid white 2px;
+            border-right: solid gray 2px;
+            border-top: solid white 2px;
+            border-bottom: solid gray 2px;
+            margin: 2px;
+        }
+        .build {
+            margin: 0px;
+            margin-left: 12px;
+            background-color: #D3D3D3;
+            text-align:right;
+            font-family:verdana;
+            }
+    </style>
+</head>
+
+<body bgcolor="lightgrey" onload="doOnTabsLoad()" onbeforeunload="doOnTabsUnLoad()" style="margin-top:10px;">
+<span onclick="showTab('recorder')" id="recorderTab" class="dimTab">&nbsp;Record&nbsp;</span><span onclick="showTab('playback')" id="playbackTab" class="hiTab">&nbsp;Playback&nbsp;</span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<span class="build"><a href="http://sahi.co.in" target="_blank">Sahi</a> (Build: @build@) &nbsp; <a href="http://sahi.co.in/w/paid-support" target="_blank">Support</a></span>
+<!--<span onclick="showTab('settings')" id="settingsTab" class="dimTab">&nbsp;Settings&nbsp;</span>-->
+</body>
+</html>
+

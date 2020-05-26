@@ -1,0 +1,48 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="transition_executor_forms" >
+  <% form_remote_tag(:html => {:id => 'transition_popup_form'},  :method => 'get', :url => "/cards/require_popup_for_transition_in_popup",
+        :before => within_popups_holder('popups.keep()')) do %>
+      <%= render :partial => 'cards/transition_popup_hidden_fields', :locals => { :view => @view, :transition => Null.new, :card => Null.new, :project => (@project || Null.new), :current_project_id => nil } %>
+  <% end  %>
+
+  <% if !@view.requires_tree? %>
+    <% form_tag('', :id => 'transition_execute_form',
+      :onsubmit => "$j.ajax({
+        url: '/cards/transition_in_popup',
+        type: 'POST',
+        data: $j(this).serialize()
+       })") do %>
+       <%= render :partial => 'cards/transition_popup_hidden_fields', :locals => { :view => @view, :transition => Null.new, :card => Null.new, :project => (@project || Null.new), :current_project_id => nil } %>
+    <% end  %>
+  <% else %>
+    <% form_remote_tag(:html => {:id => 'transition_execute_form'}, :url => { :action => 'transition_in_old_popup', :controller => "cards"}, :method => 'post', :complete => 'InputingContexts.clear()') do %>
+      <%= render :partial => 'cards/transition_popup_hidden_fields', :locals => { :view => @view, :transition => Null.new, :card => Null.new, :project => (@project || Null.new), :current_project_id => nil } %>
+    <% end  %>
+  <% end %>
+
+  <% javascript_with_rescue do %>
+    TransitionExecutor.popupForm = $('transition_popup_form');
+    TransitionExecutor.executeForm = $('transition_execute_form');
+    <% if @view.style %>
+    TransitionExecutor.popupsHolder = function() {
+      return <%= @view.style.popups_holder %>;
+    }
+    <% end %>
+
+<% end %>
+</div>

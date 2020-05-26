@@ -1,0 +1,30 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div class="dependency-icon" onclick="$j(this).showDependencyPopup();" data-dependency-number="<%= dependency.number %>">
+  <div class="dependency-inner-wrapper">
+    <span class="dependency-summary-number">
+      <span id="dependency-number-<%= dependency.number %>" >#D<%= dependency.number %></span>
+      <% if dependency.resolving_project_id.blank?  && dependency.status != Dependency::RESOLVED %>
+        <i class="fa fa-exclamation-triangle" title='Dependency error: missing resolving project.'></i>
+      <% end %>
+    </span>
+    <div class="dependency-name">
+      <%= dependency.name %>
+    </div>
+    <div class="desired-date" title="Desired Completion Date"><%= @plan.format_date(dependency.desired_end_date) %></div>
+  </div>
+</div>

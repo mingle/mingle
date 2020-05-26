@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE section SYSTEM "mingle_help.dtd">
+<section title="Charts">
+<p>To create a chart or graph with data from a Mingle project(s), you can use a <cref topic="macro_reference">Mingle macro</cref>. You can either 1) hand-type the macro by clicking the orange Mingle icon on the editing toolbar or 2) insert a template macro using the <cref topic="mingle_macro_builder">Macro Builder</cref>.</p>
+<hint>See <cref topic="mingle_tips_and_tricks">Mingle tips and tricks</cref> for hints on macro syntax, chart layout and chart sizing, and using project variables in charts.</hint> 
+<subsection title="Data series chart" file="markup_data_series_chart" collapsed="true" />
+<subsection title="Daily history chart" file="markup_daily_history_chart" collapsed="true" />
+<subsection title="Forecasting chart" file="markup_forecasting_chart" collapsed="true" id="forecasting_chart"/>
+<subsection title="Fixed date chart" file="markup_fixed_date_chart" collapsed="true" id="fixed_date_chart"/>
+<subsection title="Stack bar chart" file="markup_stacked_bar_chart" collapsed="true" />
+<subsection title="Ratio bar chart" file="markup_ratio_bar_chart" collapsed="true" />
+<subsection title="Pie chart" file="markup_pie_chart" collapsed="true" />
+<subsection title="Cumulative flow graph" file="markup_cumulative_flow_diagram" collapsed="true" />
+</section>
+

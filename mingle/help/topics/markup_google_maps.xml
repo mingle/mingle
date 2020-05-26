@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<subsection title="Google map macro" collapsed="true" id="google_map">
+	<p>Mingle 3.2 introduced the macro to create a google map.</p>
+	<p>The markup below will display a Google map for San Francisco.</p>
+	<markup>
+  google-maps
+    src: "http://maps.google.com/maps?ie=UTF8&amp;hq=&amp;hnear=San+Francisco,+California&amp;ll=37.782655,-122.419281&amp;spn=0.329408,0.711365&amp;z=11"
+    width: 900
+    height: 750
+    </markup>
+
+<hint>This macro is not available in the wiki toolbar on any cards or wiki pages. Therefore you should manually enter the markup as stated above (or copy and paste) and replace the location of your google map as a value of the src parameter.</hint>
+
+</subsection>
+

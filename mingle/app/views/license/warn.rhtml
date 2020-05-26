@@ -1,0 +1,82 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<html>
+  <head>
+    <title>Mingle - Warning </title>
+    <%= stylesheet_link_tag("sprockets_app") %>
+    <style>
+      body {
+        background: #505050;
+      }
+
+      .special {
+        text-align: left;
+        margin: 144px auto;
+        width: 450px;
+        background: #f5ecc9;
+        padding: 10px 10px 15px 10px;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+      }
+
+      .more-info {
+        margin-top: 15px;
+      }
+
+      .primary {
+        background-color: #ff8400;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        color: #FFF;
+        padding: 5px 13px;
+        margin-right: 5px;
+        text-align: center;
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+        font-size: 11px;
+        font-family: Arial, Helvetica, sans-serif;
+        text-transform: uppercase;
+        background-image: url(../images/shared/backgrounds/bg_glass_gradient.png);
+        background-repeat: repeat-x;
+        background-position: center center;
+    }
+
+      form {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="warning-box special">
+
+      <h2>Your Mingle instance will go into read only mode in <%= pluralize(CurrentLicense.status.days_remaining_before_expiration, 'day') %>.</h2>
+
+      <p><%= CurrentLicense.please_obtain_a_valid_licence_from_support_page.html_safe
+      %></p>
+
+      <p class="more-info">To understand more, see <%= render_help_link('Mingle
+      Licenses', :class=> 'help-link', :content => "help") %>.</p>
+      <p>
+        <% form_tag({:controller => 'license', :action => 'dismiss_expiration_warning'}) do -%>
+          <%= submit_tag 'Remind Me Later', :class => 'primary' %>
+        <% end -%>
+      </p>
+    </div>
+  </body>
+</html>

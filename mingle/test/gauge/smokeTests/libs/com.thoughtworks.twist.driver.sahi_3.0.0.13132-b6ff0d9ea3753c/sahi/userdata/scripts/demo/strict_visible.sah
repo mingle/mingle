@@ -1,0 +1,41 @@
+_navigateTo("/demo/strict_visible.htm");
+
+function testFormElement(){
+	_assertExists(_textbox("q"));
+	_assertExists(_textbox("q[1]"));
+	_assert(!_isVisible(_textbox("q[1]")));
+	_assertExists(_textbox("q[2]"));
+	
+	_setStrictVisibilityCheck(true);
+	_assertExists(_textbox("q"));
+	_assertExists(_textbox("q[1]"));
+	_assertNotExists(_textbox("q[2]"));
+	
+	_setStrictVisibilityCheck(false);
+	_assertExists(_textbox("q"));
+	_assertExists(_textbox("q[1]"));
+	_assert(!_isVisible(_textbox("q[1]")));
+	_assertExists(_textbox("q[2]"));
+}
+
+function testDiv(){
+	_assertExists(_div("blue"));
+	_assertExists(_div("blue[1]"));
+	_assert(!_isVisible(_div("blue[1]")));
+	_assertExists(_div("blue[2]"));
+	
+	_setStrictVisibilityCheck(true);
+	_assertExists(_div("blue"));
+	_assertExists(_div("blue[1]"));
+	_assertNotExists(_div("blue[2]"));
+	
+	_setStrictVisibilityCheck(false);
+	_assertExists(_div("blue"));
+	_assertExists(_div("blue[1]"));
+	_assert(!_isVisible(_div("blue[1]")));
+	_assertExists(_div("blue[2]"));	
+}
+
+_runUnitTests();
+
+

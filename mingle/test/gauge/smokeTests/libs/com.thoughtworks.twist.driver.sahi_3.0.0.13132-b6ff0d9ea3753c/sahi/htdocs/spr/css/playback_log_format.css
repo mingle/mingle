@@ -1,0 +1,33 @@
+/**
+ * Copyright  2006  V Narayan Raman
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+div{border:1px solid white;border-bottom:1px solid gray;padding:1px}
+a{text-decoration:none;color:white;}
+a.INFO{color:black}
+a.START,a.STOP{color:black;font-weight:bold;}
+div.INFO{background-color:white}
+div.SUCCESS{background-color:green;color:white}
+div.FAILURE,div.ERROR{background-color:red;color:white}
+a.CUSTOM, a.CUSTOM2, a.CUSTOM4{color:black}
+div.CUSTOM{background-color:yellow;}
+div.CUSTOM1{background-color:orange;}
+div.CUSTOM2{background-color:#EFEFEF;}
+div.CUSTOM3{background-color:green;}
+div.CUSTOM4{background-color:violet;}
+div.CUSTOM5{background-color:indigo;}
+a.SCRIPT{text-decoration:underline;}
+span.extra{color:#CCC;}
+div.SKIPPED{background-color:#eed;}
+a.SKIPPED{color:gray;}

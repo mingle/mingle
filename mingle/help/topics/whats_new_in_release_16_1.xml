@@ -1,0 +1,93 @@
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+  <?xml version="1.0"?>
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="What's new in Release 16.1">
+	<p>For <cref topic="mingle_onsite">Mingle onsite</cref> customers, please review the <cref topic="upgrading_from_previous_versions">upgrade instructions</cref> before moving to Mingle 16.1</p>
+	<note>
+	  <item>All of the features below are already available for our Mingle in the cloud customers.</item>
+  </note>
+
+ <section title="Dependency history">
+   	  <p>Dependency events are now recorded in your project history as well as on the dependency pop up providing you and your team a record of all your dependencies.</p>
+      <p><screenshot alttext="dep - project history tab" src="resources/images/dep_project_history_tab.png"/></p>
+      <p><screenshot alttext="dep - project history panel" src="resources/images/dep_project_history_panel.png"/></p>
+      </section>
+
+  <section title="Attachments in dependency pop up">
+      <p>Easily send and manage assets with dependencies. Files can now be uploaded to a dependency via drag and drop or click to upload.</p>
+      <p><screenshot alttext="attachments in dependency" src="resources/images/attachments_in_dep.gif"/></p>
+      </section>
+
+  <section title="Lazy load dependency tabs">
+      <p>To keep your dependency tab clean and allow you to focus on new and on going dependencies, we've hidden resolved dependencies. Under the resolved section, you will see the 5 most recently updated resolved dependencies. Anything after that will be hidden but can be shown by clicking on the 'Load More' button.</p>
+      <p><screenshot alttext="lazy load dep tab" src="resources/images/lazy_load_dep_tab.gif"/></p>
+      </section>      
+
+  <section title="Dependency error notifications">
+      <p>Mingle will now alert you when a dependency has changed outside of your projects control. For instance, if you've raised a dependency on a project but that project gets deleted, Mingle will notify you that you will need to reassign the dependency to a new project.</p>
+      <p><screenshot alttext="Dep error notification - dep tab" src="resources/images/dep_error_notification_dep_tab.png"/></p>
+      <p><screenshot alttext="Dep error notification - dep card" src="resources/images/dep_error_notifications_dep_card.png"/></p>
+      </section>
+
+  <section title="Export/import dependencies">
+      <p>Provides you the ability to backup or transfer your dependencies from one Mingle site to another.</p>
+      <p><screenshot alttext="export/import dependencies" src="resources/images/export-import_dependencies.png"/></p>
+      </section>
+
+  <section title="Attachments in card pop up">
+      <p>You can now upload, download, view, and delete attachments directly on the card pop up. We've added the attachments panel underneath card murmurs. This gives you the same attachment functionality in the card full view.</p>
+      <p><screenshot alttext="attachments in card" src="resources/images/attachments_in_card.png"/></p>
+      </section>
+
+  <section title="History in card pop up">
+      <p>History events will now be accessible in the card pop up. You'll be able to recall past events and view them directly from the card pop up and see them recorded as you make changes on the go.</p>
+      <p><screenshot alttext="history in card pop up" src="resources/images/history_card_pop_up.png"/></p>
+      </section>
+
+  <section title="Tab scroll">
+      <p>We've added a tab scroll for your project views; cleaning up your view and giving you a bit more extra space for your boards.</p>
+      <p><screenshot alttext="scroll through tabs" src="resources/images/scrolling_tabs.gif"/></p>
+      </section>
+ 
+  <section title="Sidebar text">
+      <p>We've made some changes to the sidebar text to provide more clarity on what options are available based on your view.</p>
+      <p><screenshot alttext="sidebar text" src="resources/images/sidebar_text.gif"/></p>
+      </section>
+
+	<section title="Bug fixes">
+	  <p>The following bugs have been fixed with 16.1:</p>
+	    <bullets>
+			<item>Fixed issue where duplicate dependency versions were being recorded in history when uploading multiple attachments.</item>
+			<item>Fixed issue where light users were not able to view dependency pop ups.</item>
+			<item>Fixed issue where dependency pop ups didn't trigger from search results.</item>
+      <item>Fixed issue where sorting by Raising User in dependency tab would throw an error.</item>
+			<item>Fixed tag styling issues.</item>
+      <item>Fixed issue where tags were being removed when users cancelled out of card edit mode.</item>
+			<item>Fixed issue where users couldn't assign a color to new tags in edit mode.</item>
+			<item>Fixed styling issue with "Select Tree" dropdown.</item>
+			<item>Fixed issue where downloading an attachment would also open attachment in new page.</item>
+			<item>Fixed issue where avatars on card face were not updating.</item>
+			<item>Fixed issue where card icon loading did not provide visual feedback.</item>
+			<item>Fixed issue where Special Headers page would throw an error.</item>
+      <item>Fixed issue where project templates did not maintain tab order when creating a new project.</item>
+      <item>Fixed issue where card wall would jump to the top after changing a property or dragging a card to a new column.</item>
+      <item>Fixed issue where macros would throw a syntax error when a property with a semi colon was used.</item>
+  	  </bullets>
+	</section>
+
+</topic>

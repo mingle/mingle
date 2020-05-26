@@ -1,0 +1,299 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <meta name="generator" content="HTML Tidy, see www.w3.org">
+    <title>Sahi - Technical Aspects</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="sahi.css">
+</head>
+
+<body>
+<table width="100%">
+<tr>
+<td width="150px" valign="top">
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+
+    <div class="menu">
+        <ul>
+            <li><a href="index.html">Introduction</a></li>
+            <!--<li><a href="index.html#features">Features</a></li>-->
+
+        </ul>
+        <ul>
+            <li><a href="sahi_tutorial.html" target="_blank">Flash Tutorial</a></li>
+            <li><a href="screenshots.html">Screen Shots</a></li>
+        </ul>
+
+        <ul>
+            <li><a href="install.html">Downloading Sahi</a></li>
+
+            <li><a href="install.html#prereq">Prerequisites</a></li>
+
+            <li><a href="install.html#install">Installing Sahi</a></li>
+        </ul>
+
+        <ul>
+            <li><a href="using.html">Getting started</a></li>
+
+            <li><a href="using.html#record">Recording through Sahi</a></li>
+
+            <li><a href="using.html#playback">Playing back</a></li>
+
+            <li><a href="using.html#suites">Suites</a></li>
+
+            <li><a href="using.html#logging">Logging</a></li>
+        </ul>
+
+        <ul>
+            <li>Documentation:
+
+                <ul>
+                    <li><a href="http://sahi.co.in/w/apis">APIs</a></li>
+                    <li><a href="http://sahi.co.in/w/sahi-script">Scripting</a></li>
+                </ul>
+            </li>
+        </ul>
+
+        <ul>
+            <li><a href="http://sahi.co.in/w/Running+multiple+tests+in+batch+mode">Running in batch mode</a></li>
+        </ul>
+
+        <ul>
+            <li><a href="ide.html">Editor Support</a></li>
+        </ul>
+
+        <ul>
+            <li><a href="problems.html#problems">Problems</a></li>
+
+            <li><a href="problems.html#notyet">Not yet supported, but coming
+                in</a></li>
+        </ul>
+
+        <hr>
+
+        <ul>
+            <li><a href="http://sourceforge.net/projects/sahi" target="_blank">On Sourceforge</a></li>
+            <li><a href="http://sahi.co.in/forums/" target="_blank">Forums</a></li>
+            <li><a href="http://sourceforge.net/tracker/?group_id=151639&atid=781586" target="_blank">Report/View Bugs</a></li>
+            </li>
+        </ul>
+
+
+    </div>
+</td>
+<td valign="top">
+    <div class="content">
+        <div style="float:right;" width="100%" border="0">
+                <a href="http://sourceforge.net"><img src=
+                        "http://sourceforge.net/sflogo.php?group_id=151639&amp;type=3"
+                                                                        width="125" height="37" border="0"
+                                                                        alt="SourceForge.net Logo"></a>
+                    <br>
+            </div>
+        <h2>Sahi - Web Automation and Test Tool</h2><br/>
+        <div style="background-color:red;color:white;font-size:12pt;text-align:center;">
+		Documentation in this directory is not current.
+		Please visit <a style="color:white;font-size:12pt;" href="http://sahi.co.in/">http://sahi.co.in/</a> for the latest documentation.
+		</div>
+
+        <!--<h2> Sahi - Web Automation and Test Tool</h2>-->
+        <!--<br>-->
+        <!--<table width="100%">-->
+        <!--<tr>-->
+        <!--<td valign="top" align="left">-->
+        <!--<a class="top_menu" href="docs">Home</a>-->
+        <!--<a class="top_menu" href="docs">Why Sahi</a>-->
+        <!--<a class="top_menu" href="docs">Docs</a>-->
+        <!--<a class="top_menu" href="docs">Support</a>-->
+        <!--<a class="top_menu" href="docs">License</a>-->
+        <!--</td>-->
+        <!--</tr>-->
+        <!--</table>-->
+        <hr/>
+        <br/>
+
+        <h2 class="pageTitle">Technical Aspects</h2>
+        <!--Technical Aspects-->
+<a href="#basics">How does Sahi work?</a><br>
+ <a href="#delayed">How does the script in sah files
+execute?</a><br>
+ <a href="#variable">Why do variables need to be prefixed with a
+dollar($) sign?</a><br>
+<a href="#underscore">Why do all Sahi APIs start with an
+underscore?</a><br>
+ 
+
+<h4><a name="basics">How does Sahi work?</a></h4>
+
+Sahi's core parts include the <span class="code">Sahi proxy
+server</span> and the <span class="code">javascript
+engine</span><br>
+ <img src="sahi_architecture.gif"><br>
+Html responses which pass through the proxy are modified such that
+javascript is injected at the start and end of the response.<br>
+This will allow the browser to record and playback scripts and talk
+back to the proxy when needed.<br>
+<br>
+ Apart from handling requests for pages that the browser requests,
+<br>
+Sahi also handles custom commands related to recording, playback
+etc. which the browser sends.<br>
+ <br>
+<br>
+<hr>
+<br>
+ 
+
+<h4><a name="delayed">How does the script in sah files
+execute?</a></h4>
+
+The Sahi script, even though looking like javascript, is not
+executed as regular javascript on the browser.<br>
+The reasons for this are: 
+
+<ul>
+<li>The script refers to objects spread over multiple pages and
+will result in errors if executed directly on any page</li>
+
+<li>The script needs to be executed step by step with a slight
+delay between execution of each step.<br>
+This cannot be accomplished directly since javascript has no way of
+pausing execution.</li>
+</ul>
+
+Sahi handles this by parsing and modifying the script in the
+proxy.<br>
+<br>
+Thus, a line which looked like this:<br>
+<pre class="code">
+_click(_link("Link Test"));
+</pre>
+
+<br>
+gets translated to:<br>
+<pre class="code">
+sahiAdd("sahi_click(sahi_link(\"Link Test\"));", "sahi_demo.sah : 3")
+</pre>
+
+<br>
+<br>
+ The method sahiAdd(cmd, debugInfo) takes two parameters.<br>
+The first is the line of script, which has been converted into a
+string.<br>
+The second is debug information which the proxy adds.<br>
+<pre>
+function sahiAdd(cmd, debugInfo){
+    var i = _sahiCmds.length;
+  _sahiCmds[i] = cmd;
+  _sahiCmdDebugInfo[i] = debugInfo;
+}
+</pre>
+
+During page load, <a href="apis.html#scheduler">Scheduler
+Functions</a> add steps in the script to an array.<br>
+A counter is maintained on the server which marks the index in the
+array of the step that is to be run next.<br>
+This counter is updated with each successful execution of a
+step.<br>
+<br>
+ <br>
+<hr>
+<br>
+ 
+
+<h4><a name="variable">Why do variables need to be prefixed with a
+dollar($) sign?</a></h4>
+
+When variables are used, the transformation of script is as
+follows:<br>
+<pre class="code">
+var $linkText = "Link Test";
+_click(_link($linkText));
+</pre>
+
+<br>
+becomes<br>
+<pre class="code">
+var $linkText = "Link Test";
+sahiAdd("sahi_click(sahi_link("+s_v($linkText)+"));", "sahi_demo.sah : 4");
+</pre>
+
+<br>
+ 
+
+<pre>
+function s_v(v){
+    var type = typeof v;
+    if (type == "number") return v;
+    else if (type == "string") return "\""+v+"\"";
+    else return v;
+}
+</pre>
+
+Thus, what will eventually execute, will be:<br>
+<pre class="code">
+sahi_click(sahi_link("Link Test"));
+</pre>
+
+<br>
+For easy identifcation of variables while parsing, it is needed
+that there is some way of tagging variables. <br>
+The dollar($) sign serves that purpose.<br>
+ <br>
+<br>
+<hr>
+<br>
+ 
+
+<h4><a name="underscore">Why do all Sahi APIs start with an
+underscore?</a></h4>
+
+Sahi scripts are loaded with each page that appears on the
+browser.<br>
+Since it is all javascript, the API function names need to be
+unique.<br>
+If the application under test has a function with the same name, it
+can cause problems. <br>
+For this, all API functions start with "sahi_".<br>
+ When Sahi's proxy serves the script to the browser, it parses and
+does a lot of modifications to the script.<br>
+One of these is to correctly replace the API methods starting with
+"_" with "sahi_". <br>
+<br>
+Thus, 
+
+<pre class="code">
+_click(_link("Create Login"));
+</pre>
+
+<br>
+actually becomes <br>
+ 
+
+<pre class="code">
+sahi_click(sahi_link("Create Login"));
+</pre>
+
+<br>
+Starting the APIs with "_" helps in easy substitution with "sahi_"
+with less scope for ambiguity.<br>
+<br>
+<br>
+<br>
+<br>
+</body>
+</html>
+
+
+    </div>
+</td>
+</tr>
+</table>
+Please send your feedback to <a href="http://sourceforge.net/users/narayanraman/">V Narayan Raman</a>.
+</body>
+</html>
+

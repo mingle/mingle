@@ -1,0 +1,30 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%- content_for :content_header do -%>
+  <h1>Delete Program</h1>
+<%- end -%>
+
+<%= render :partial => 'shared/irrecoverable_warning' %>
+
+<% info_box :layout => 'shared/irrecoverable_warning' do -%>
+  <p>This program currently has a plan with <b><%= enumerate(@program.objectives.planned.size, 'planned features') %></b> and a backlog with <b><%= enumerate(@program.objectives.backlog.size, 'unplanned features') %></b>. <b><%= enumerate(@program.program_projects.size, 'projects').split(' ').first.capitalize %> <%= enumerate(@program.program_projects.size, 'projects').split(' ').last %></b> <%= @program.program_projects.size == 1 ? 'is' : 'are' %> associated with this program.</p>
+  <p>Deleting the program will delete the plan and backlog and sever all associations between the program and the projects that are part of the program. The projects themselves will remain intact.</p>
+<%- end -%>
+
+<% form_for(@program, :html => {:id => 'delete-form', :method => :delete}) do -%>
+  <%= render :partial => "shared/planner/action_bar", :locals => {:action_name  => "Delete", :cancel_url => programs_path } %>
+<% end -%>

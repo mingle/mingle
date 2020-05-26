@@ -1,0 +1,94 @@
+function run(){
+	_assertEqual(_link("Go back"), _link("Go back", _in(_parentRow(_cell("a1")))));
+	_assertEqual(_link("Go back"), _link(0, _in(_parentRow(_cell("a1")))));
+	_assertEqual(_link("Go back[1]"), _link("Go back", _in(_parentRow(_cell("a2")))));
+	_assertEqual(_link("Go back[1]"), _link(0, _in(_parentRow(_cell("a2")))));
+
+	_assertEqual(_checkbox("cb"), _checkbox("cb", _in(_parentRow(_cell("a1")))));
+	_assertEqual(_checkbox("cb"), _checkbox(0, _in(_parentRow(_cell("a1")))));
+	_assertEqual(_checkbox("cb[1]"), _checkbox("cb", _in(_parentRow(_cell("a2")))));
+	_assertEqual(_checkbox("cb[1]"), _checkbox(0, _in(_parentRow(_cell("a2")))));
+
+	_assertEqual(_textbox("tb"), _textbox("tb", _in(_parentRow(_cell("a1")))));
+	_assertEqual(_textbox("tb"), _textbox(0, _in(_parentRow(_cell("a1")))));
+	_assertEqual(_textbox("tb[1]"), _textbox("tb", _in(_parentRow(_cell("a2")))));
+	_assertEqual(_textbox("tb[1]"), _textbox(0, _in(_parentRow(_cell("a2")))));
+
+	_assertEqual(_password("pwd"), _password("pwd", _in(_parentRow(_cell("a1")))));
+	_assertEqual(_password("pwd"), _password(0, _in(_parentRow(_cell("a1")))));
+	_assertEqual(_password("pwd[1]"), _password("pwd", _in(_parentRow(_cell("a2")))));
+	_assertEqual(_password("pwd[1]"), _password(0, _in(_parentRow(_cell("a2")))));
+
+	_assertEqual(_submit("sbmt"), _submit("sbmt", _in(_parentRow(_cell("a1")))));
+	_assertEqual(_submit("sbmt"), _submit(0, _in(_parentRow(_cell("a1")))));
+	_assertEqual(_submit("sbmt[1]"), _submit("sbmt", _in(_parentRow(_cell("a2")))));
+	_assertEqual(_submit("sbmt[1]"), _submit(0, _in(_parentRow(_cell("a2")))));
+
+	_assertEqual(_radio("rad"), _radio("rad", _in(_parentRow(_cell("a1")))));
+	_assertEqual(_radio("rad"), _radio(0, _in(_parentRow(_cell("a1")))));
+	_assertEqual(_radio("rad[1]"), _radio("rad", _in(_parentRow(_cell("a2")))));
+	_assertEqual(_radio("rad[1]"), _radio(0, _in(_parentRow(_cell("a2")))));
+
+	_assertEqual(_button("btn"), _button("btn", _in(_parentRow(_cell("a1")))));
+	_assertEqual(_button("btn"), _button(0, _in(_parentRow(_cell("a1")))));
+	_assertEqual(_button("btn[1]"), _button("btn", _in(_parentRow(_cell("a2")))));
+	_assertEqual(_button("btn[1]"), _button(0, _in(_parentRow(_cell("a2")))));
+
+	_assertEqual(_select("sel"), _select("sel", _in(_parentRow(_cell("a1")))));
+	_assertEqual(_select("sel"), _select(0, _in(_parentRow(_cell("a1")))));
+	_assertEqual(_select("sel[1]"), _select("sel", _in(_parentRow(_cell("a2")))));
+	_assertEqual(_select("sel[1]"), _select(0, _in(_parentRow(_cell("a2")))));
+
+    _assertEqual(_image("add.gif"), _image("add.gif", _in(_parentRow(_cell("a1")))));
+    _assertEqual(_image("add.gif"), _image(0, _in(_parentRow(_cell("a1")))));
+    _assertEqual(_image("add.gif[1]"), _image("add.gif", _in(_parentRow(_cell("a2")))));
+    _assertEqual(_image("add.gif[1]"), _image(0, _in(_parentRow(_cell("a2")))));
+
+	_assertEqual(_imageSubmitButton("img_sbmt"), _imageSubmitButton("img_sbmt", _in(_parentRow(_cell("a1")))));
+	_assertEqual(_imageSubmitButton("img_sbmt"), _imageSubmitButton(0, _in(_parentRow(_cell("a1")))));
+	_assertEqual(_imageSubmitButton("img_sbmt[1]"), _imageSubmitButton("img_sbmt", _in(_parentRow(_cell("a2")))));
+	_assertEqual(_imageSubmitButton("img_sbmt[1]"), _imageSubmitButton(0, _in(_parentRow(_cell("a2")))));
+
+    _assertEqual(_textarea("ta"), _textarea("ta", _in(_parentRow(_cell("a1")))));
+    _assertEqual(_textarea("ta"), _textarea(0, _in(_parentRow(_cell("a1")))));
+    _assertEqual(_textarea("ta[1]"), _textarea("ta", _in(_parentRow(_cell("a2")))));
+    _assertEqual(_textarea("ta[1]"), _textarea(0, _in(_parentRow(_cell("a2")))));
+
+    _assertEqual(_spandiv("in a span"), _spandiv("in a span", _in(_parentRow(_cell("a1")))));
+    _assertEqual(_spandiv("in a span"), _spandiv(/span/, _in(_parentRow(_cell("a1")))));
+    _assertEqual(_spandiv("in a span[1]"), _spandiv("in a span", _in(_parentRow(_cell("a2")))));
+    _assertEqual(_spandiv("in a span[1]"), _spandiv(/span/, _in(_parentRow(_cell("a2")))));
+
+    _assertEqual(_span("in a span"), _span("in a span", _in(_parentRow(_cell("a1")))));
+    _assertEqual(_span("in a span"), _span(/span/, _in(_parentRow(_cell("a1")))));
+    _assertEqual(_span("in a span[1]"), _span("in a span", _in(_parentRow(_cell("a2")))));
+    _assertEqual(_span("in a span[1]"), _span(/span/, _in(_parentRow(_cell("a2")))));
+
+    _assertEqual(_spandiv("in a div"), _spandiv("in a div", _in(_parentRow(_cell("a1")))));
+    _assertEqual(_spandiv("in a div"), _spandiv(/div/, _in(_parentRow(_cell("a1")))));
+    _assertEqual(_spandiv("in a div[1]"), _spandiv("in a div", _in(_parentRow(_cell("a2")))));
+    _assertEqual(_spandiv("in a div[1]"), _spandiv(/div/, _in(_parentRow(_cell("a2")))));
+
+    _assertEqual(_div("in a div"), _div("in a div", _in(_parentRow(_cell("a1")))));
+    _assertEqual(_div("in a div"), _div(/div/, _in(_parentRow(_cell("a1")))));
+    _assertEqual(_div("in a div[1]"), _div("in a div", _in(_parentRow(_cell("a2")))));
+    _assertEqual(_div("in a div[1]"), _div(/div/, _in(_parentRow(_cell("a2")))));
+
+    _assertEqual(_cell("cell text"), _cell("cell text", _in(_parentRow(_cell("a1")))));
+    _assertEqual(_cell("cell text"), _cell(/cell/, _in(_parentRow(_cell("a1")))));
+    _assertEqual(_cell("cell text[1]"), _cell("cell text", _in(_parentRow(_cell("a2")))));
+    _assertEqual(_cell("cell text[1]"), _cell(/cell/, _in(_parentRow(_cell("a2")))));
+
+}
+_click(_link("Frames Test"));
+_click(_link("Table Test"));
+run();
+_navigateTo("index.htm");
+_wait(4000);
+_click(_link("Table Test"));
+run();
+_navigateTo("index.htm");
+_wait(1000);
+_click(_link("Frames Test"));
+_click(_link("Table Test[1]"));
+run();

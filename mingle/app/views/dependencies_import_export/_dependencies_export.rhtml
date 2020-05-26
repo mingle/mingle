@@ -1,0 +1,39 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<td class="export-section">
+  <h4>Select project dependencies to export:</h4>
+  <label class='selectable-project select-all-projects'>
+    <%= check_box_tag 'projects[]', nil %>
+    <span class='project-name'>
+      All projects (Date of last project export)
+    </span>
+  </label>
+
+  <%- form_remote_tag :url => { :controller => 'dependencies_import_export', :action => 'create' }, :method => :get, :html => { :class => 'dependencies-export-form' } do %>
+
+    <% @projects.each do |project| %>
+      <div class='selectable-project'>
+        <%= check_box_tag 'projects[]', project.id %>
+        <span class='project-name'>
+          <%= link_to project.name, { :controller => 'project_exports', :action => 'confirm_as_project', :project_id => project.identifier }, :target => '_blank' %>
+        </span>
+        <%= project.last_export_date ? project.last_export_date.strftime('(%b. %e, %Y)') : '' %>
+      </div>
+    <% end %>
+    <%= submit_tag('Export Dependencies', :class => 'primary export-dependencies', :disabled => true) %>
+  <% end %>
+</td>

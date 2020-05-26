@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Creating a team favorite card view">	
+	
+	<section title="Introduction" file="introduction_to_team_favorites"/>
+    
+	<section title="How to create a team favorite card view">
+		
+			<hint>If you want to create a <cref topic="managing_my_favorites">My favorite</cref> you can follow the same steps below. </hint>
+		<steps>
+			<item><cref topic="signing_in_and_out_of_mingle">Sign in</cref> to Mingle and open the project for which to create team favorites (if you're not currently working in the project).</item>
+			<item><p>Click the <tab>All</tab> tab.</p>
+				<screenshot alttext="All tab" src="resources/images/create_favorite_filtered_all_tab.png" />
+			</item>
+			<item>Filter the card list to isolate the cards you want to work with. If you have existing similar tabs or saved views setup, you can open one of these as a starting point and then change the filters.</item>
+			<item>Select whether you want to view these cards as a <cref topic="grid_view">grid</cref> or <cref topic="list_view">list</cref>.</item>			
+			<item>
+				<bullets title="If viewing in a List"> 
+					<item>To add or remove columns, click the Add / remove columns link and select from the list of properties displayed.</item>
+					<item>Properties with an orange tick are already present in the view - select these to remove them.</item>
+				</bullets>
+			</item>
+			<item>
+				<bullets title="If viewing in a Grid">
+					<item>Select the group by and color by options. For example, you may group by Priority and color by Status.</item>
+					<item>Choose an aggregate to display in the column headings. For example Sum of Estimate</item>
+					<item>Add or remove columns as needed by clicking the Add / remove columns link and selecting an option from the menu.
+						This lets you view a card property that is not currently attached to any card so you can drag cards to another property value.</item>
+				</bullets>
+				<screenshot alttext="Grid view" src="resources/images/create_favorite_grid_view.png" />
+			</item>
+			<item><p>Open the <sidebar-button>Team Favorites</sidebar-button> sidebar control.</p>
+				<screenshot alttext="Team Favorites sidebar control - add current view to team favorites link" src="resources/images/make_current_view_favorites_link.png" />
+				<hint>In 3.1, Mingle highlights the name of the favorite the user is currently looking at from the favorites sidebar.</hint>
+			</item>
+			<item><p>Click the <link>"Add current view to team favorites..."</link> link. Mingle opens up a dialog to let you enter a name for the saved view.</p>
+		
+		 <hint>If you want to create a <cref topic="managing_my_favorites">My favorite</cref> click the <link>"Add current view to my favorites..."</link> link.</hint>
+		
+			</item>
+			<item>Type a name for the team favorite.</item>			
+			<screenshot alttext="Create favorite - name dialog" src="resources/images/create_favorite_name_dialog.png" />
+			<item>Click the <button>Save</button> button.
+				Mingle creates the team favorite. All team members can now access this view by clicking the <link>Team Favorites</link> link. 
+				You can manage this team favorite via <tab>Project admin</tab> tab <link>Team Favorites &amp; tabs</link> link.</item>
+			<screenshot alttext="View a created favorite in the list" src="resources/images/newly_created_team_favorites.png" />
+		</steps>
+	</section>
+	
+	<section title="Also see...">
+		<bullets>
+						<item><cref topic="managing_favorites_and_tabs">Managing team favorites and tabs</cref></item>
+			<item><cref topic="managing_my_favorites">Managing My favorites</cref></item>
+		</bullets>
+	</section>
+	
+</topic>

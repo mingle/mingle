@@ -1,0 +1,13 @@
+_navigateTo("map.htm");
+_assertExists(_area("Record"));
+_assertExists(_area("Playback"));
+_assertExists(_area("Info"));
+_assertExists(_area("Circular"));
+_mouseOver(_area("Record"));
+_assertEqual("Record", _getText(_div("output")));
+_mouseOver(_button("Clear"))
+_assertEqual("", _getText(_div("output")));
+_click(_area("Record"));
+_assertExists(_link("linkByContent"));
+_navigateTo("map.htm");
+

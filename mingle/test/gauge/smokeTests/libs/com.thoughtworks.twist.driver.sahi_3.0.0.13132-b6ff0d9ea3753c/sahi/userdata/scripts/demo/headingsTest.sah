@@ -1,0 +1,22 @@
+_click(_link("Headings Test"));
+_assertExists(_heading1("Heading A"));
+_assertEqual("Heading A", _getText(_heading1("Heading A")));
+_assertContainsText("Heading A", _heading1("Heading A"))
+_assertExists(_heading2("Heading A"));
+_assertEqual("Heading A", _getText(_heading2("Heading A")));
+_assertContainsText("Heading A", _heading2("Heading A"))
+_assertExists(_heading3("Heading A"));
+_assertEqual("Heading A", _getText(_heading3("Heading A")));
+_assertContainsText("Heading A", _heading3("Heading A"))
+_assertExists(_heading1("Heading B"));
+_assertEqual("Heading B", _getText(_heading1("Heading B")));
+_assertContainsText("Heading B", _heading1("Heading B"))
+_assertExists(_heading2("Heading C"));
+_assertEqual("Heading C", _getText(_heading2("Heading C")));
+_assertContainsText("Heading C", _heading2("Heading C"));
+_assertExists(_heading3("Heading D"));
+_assertEqual("Heading D", _getText(_heading3("Heading D")));
+_assertContainsText("Heading D", _heading3("Heading D"));
+_assertExists(_heading3("Heading D[1]"));
+_assertEqual("Heading D", _getText(_heading3("Heading D[1]")));
+_assertContainsText("Heading D", _heading3("Heading D[1]"));

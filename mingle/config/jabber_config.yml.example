@@ -1,0 +1,5 @@
+host: example.org
+port: 5222
+conference_service: conference.example.org
+mingle_server_bot_login: mingle.robot
+mingle_server_bot_password: password

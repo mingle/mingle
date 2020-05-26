@@ -1,0 +1,32 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% if deliverables.empty? %>
+  <% info_box :id => "no-#{model}s" do %>
+    <div class='clear_float'>
+      <% if User.current.admin? && CurrentLicense.status.valid? %>
+        <div id="no-<%= model %>s-in-instance-warning">
+          There are no <%= model %>s in your Mingle instance – <%= link_to("Create the first #{model} now", { :action => 'new' })%> or click <%= render_help_link("Creating Mingle #{model.capitalize}s", :class => '',:content => 'here')%> for more information.
+        </div>
+      <% else %>
+        <div id='no-<%= model %>s-available-warning'>
+          You are currently not a member of any <%= model %>.
+        </div>
+      <% end %>
+      <%= clear_float %>
+    </div>
+  <% end %>
+<% end -%>

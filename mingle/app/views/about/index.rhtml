@@ -1,0 +1,51 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+
+<%= title_with_help_link @page_title = 'About', 'About Page' %>
+
+<div class="acknowledgements">
+
+  <p>Mingle was made <a class="traditional" href="http://getmingle.io/team.html">by hand</a> in San Francisco, but previously in Sydney and 北京市 (Beijing).</p>
+
+  <p>Along the way, we used lots and lots of awesome
+    <%= link_to 'third-party software', action: "thirdparty" %>
+  </p>
+
+</div>
+
+<div class="nitty-gritty">
+
+  <h3>Application Details</h3>
+  <dl>
+    <dd>Version</dd>
+    <dt><%= MINGLE_VERSION %></dt>
+    <dd>Revision</dd>
+    <dt><%= MINGLE_REVISION %></dt>
+    <dd>Ruby version</dd>
+    <dt>jruby <%= JRUBY_VERSION %> (<%= "ruby-#{RUBY_VERSION}p#{RUBY_PATCHLEVEL}" %>) <%= JRUBY_REVISION %></dt>
+    <dd>Java version</dd>
+    <dt><%= java.lang.System.getProperty('java.runtime.version') %></dt>
+    <dd>Operating system</dd>
+    <dt><%= Config::CONFIG['host_os'] %></dt>
+  </dl>
+</div>
+
+<div id="copyright">
+  <%= copyright_text %>
+  <% if MingleConfiguration.terms_of_service_url %> | <a href="<%= MingleConfiguration.terms_of_service_url %>" target='blank'>Terms of Service</a><% end %>
+  <% if MingleConfiguration.privacy_policy_url %> | <a href="<%= MingleConfiguration.privacy_policy_url %>" target='blank'>Privacy Policy</a><% end %>
+</div>

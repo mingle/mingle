@@ -1,0 +1,50 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div class="buy-popup" id="downgrade_lightbox">
+  <% lightbox = Lightbox.with_close_link(self, "", "", :style =>
+     "display: none")
+     lightbox.header "Hi there."
+     lightbox.body do %>
+  <div class="buy-message">
+    <p>It looks like your 30 day trial has ended.</p>
+    <p>You can buy below or continue</p>
+    <p>using Mingle with 5 users.</p>
+    <div class="action-bar">
+      <% form_tag({:controller => "account", :action => "edit"},
+      'data-remote' => true, :method => :get) do %>
+        <%= button_to_function "Buy", {:id => "downgrade_buy", :class =>
+      'ok'} %>
+      <% end %>
+    </div>
+      <% form_tag({:controller => "account", :action => "downgrade"},
+      'data-remote' => true, :id => "downgrade_form") do %>
+        <%= link_to_function "Continue with 5 users", "", {:id => "downgrade_link"} %>
+      <% end %>
+  </div>
+  <div class="bottom-progress-bar clearfix" style="display: none">
+    <span class="progress-bar" role="progressbar">
+    </span>
+  </div>
+  <% end -%>
+<%= javascript_with_rescue <<-JAVASCRIPT
+$j("#downgrade_buy").initBuyButton();
+$j("#downgrade_link").initDowngradeLink();
+JAVASCRIPT
+-%>
+</div>
+
+</div>

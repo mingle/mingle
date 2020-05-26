@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Modifying or deleting aggregate properties">
+	<section title="Navigate to the Aggregate properties page" collapsed="true" file="navigate_to_aggregate_properties_page" />	
+	<screenshot alttext="Aggregate properties page" src="resources/images/aggregate_properties_page.png" caption="Aggregate properties page"/>
+    <section title="Modify an aggregate property">
+        <subsection title="Open the aggregate property control...">
+            <p>Click on the <link>Edit aggregates</link> link on the card type where the aggregate property is defined. Mingle will display the Aggregate properties control, with existing aggregate properties for this level of the tree listed at the bottom.</p>
+            <screenshot alttext="Aggregate properties control" src="resources/images/aggregate_properties_control.png" />        
+            <p>click on the <link>edit</link> link next to the aggregate property you want to modify. Mingle will populate the control with the current settings for that  aggregate property.</p>
+            <screenshot alttext="Aggregate properties control in edit mode" src="resources/images/aggregate_properties_control_edit_mode.png" />
+        </subsection>
+    	<subsection title="Configure the aggregate property...">     
+    		<bullets>
+                <item>
+	                <p>Enter a new <strong>name</strong> for the  aggregate property</p>
+	                <bullets title="Effects of renaming an aggregate property">
+	                	<item>The name will be changed in any card types using the property</item>
+	                	<item>Any MQL which referenced the original property name will display an error, this may affect charts and tables</item>
+	                </bullets>
+                </item>
+                <item>
+                	<p>Select a different aggregation type you want to apply (<strong>Sum, Average, Minimum, Maximum, Count</strong>).</p>
+                	<note>Aggregate properties <strong>ignore values of (not set)</strong>, so the Average of [1, 3, 6, (not set)] is 3; and the Min of [1, 3, 7, (not set)] is 1;</note>
+                </item>
+                <item><p>Select a different <strong>scope</strong> for the aggregation. You can choose between <strong>a specific card type</strong> or <strong>All descendants</strong>.</p> 
+					<bullets>
+						<item><strong>A specific card type</strong> will apply the aggregation to only descendants of the currently selected level in the tree which are of the specified type.</item> 
+						<item><strong>All descendants</strong> will aggregate the selected property for all descendants regardless of type.</item>
+						<item><strong>Define condition...</strong> will aggregate the children cards that meet the <cref topic="mql_reference">specified MQL condition</cref>. For example, if you want to aggregate stories and bugs but not tasks you can use "Type = Story or Type = Bug and Type != Task" or if you want to aggregate only the Must stories then use a query such as "Type = Story and Priority = Must"</item>
+	            		</bullets>
+                </item>
+                <item>Select a different property which you want to aggregate from the list of available child properties.
+                    <note>For <strong>All descendants</strong> - if the property is not present in all descendant card types, the aggregation ignores types which do not declare the property.</note>
+                </item>
+            </bullets>
+        </subsection>
+    </section>
+    <section title="Or - Delete an aggregate property...">
+        <p>click on the <link>delete</link> link next to the aggregate property you want to delete. </p>
+        <bullets title="Consequences of deleting an aggregate property">
+	         <item>The property will be removed from any cards which were using it, and the values will be deleted.</item>
+	         <item><cref topic="creating_a_favorite_card_view">Favorites</cref> that include the deleted property as a display column will be deleted</item>
+	         <item>Any <cref topic="creating_tabs_from_favorites">tabs</cref> based on those favorites will also be deleted</item>
+	         <item><cref topic="working_with_pages">Pages</cref> and <cref topic="creating_charts_and_tables_in_pages">tables/charts</cref> that reference the deleted property will no longer work. 
+	         The MQL syntax will not be changed, so you will need to manually alter any affected pages to remove references to the deleted property.</item>
+        </bullets>
+    	<hint>
+    		<p>A fast way to find all of the pages which use the aggregate property in MQL is to use the <cref topic="mingle_search">Mingle search</cref>.</p> 
+    		<p>Simply type in the name of the aggregate property e.g. "some aggregate property" and hit the <button>Search</button></p>
+    		<p>Mingle will show all pages referencing the aggregate property - you can then open each of these pages for editing and make the appropriate changes.</p>
+    		<p>Note that if your aggregate property name is a common word or phrase - you may get some additional pages that contain that word outside of MQL statements.</p>
+    	</hint>
+    </section>
+    <section title="Save your work...">
+        <p>Click on the <strong><todo>link name</todo></strong> to save your changes to the aggregate property</p>
+		<p>Mingle will display the modified aggregate property in the list at the bottom of the Aggregate property control, or if you deleted the property - it will no longer be displayed there.</p>
+		<hint>
+			<p>To check that the aggregate property is working as you expect, open a card of the appropriate type which is a member of the tree in which you created the aggregate property, and take a look at the value.</p>
+			<p>Aggregate values are re-computed in the background, so it may take a few moments before your changes are visible.</p>
+		</hint>
+    </section>
+	<section title="Also see...">
+		<bullets>
+			<item><cref topic="creating_a_new_aggregate_property">Create an aggregate property</cref></item>
+			<item>
+				<cref topic="card_trees">Card trees</cref>
+			</item>
+		</bullets>
+	</section>
+</topic>

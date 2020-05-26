@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="All Projects page">
+  
+  <section title="What you can do on this page">
+    <bullets>
+      <item><cref topic="creating_mingle_projects">Creating new project in various ways</cref></item>
+      <item><cref topic="deleting_project_or_template">Deleting projects or templates</cref></item>
+    </bullets>
+    
+    <warning>Only delete a project if you're absolutely certain that it will no longer be used. Always <strong>create a backup</strong> before deleting. Mingle gives you this option before you delete.</warning>
+    
+    <p>The All projects page lets you view all projects for which you are a team member. If there are any projects that you can request membership to or view as a non-project member these will also be shown. Any anonymously accessible projects will be shown here as well. Projects can be set to allow anon access or allow non-project members to view them from <cref topic="project_settings_page">the project settings page</cref>. </p>
+    
+    <screenshot alttext="All project page for users" src="resources/images/user_projects_page.png"/>
+      
+    <p>Mingle Administrators can see all projects, create new projects, delete projects, and import projects.</p>
+    
+    <screenshot alttext="All projects for admins" src="resources/images/admin_projects_page.png"/>
+  </section>
+  
+  <section title="Also see...">
+  <bullets>
+     <item><cref topic="customizing_projects">Customizing projects</cref></item>
+  </bullets>
+  </section>
+</topic>

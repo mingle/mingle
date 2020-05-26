@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>JavaScript unit test file</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+  <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+
+  <script src="test_assets/unittest.js" type="text/javascript"></script>
+  <script src="test_assets/unittest_ext.js" type="text/javascript"></script>
+
+
+  <script src="../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/controls.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/builder.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+
+  <script src="../../public/javascripts/application.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/filter.js" type="text/javascript"></script>
+
+  <link rel="stylesheet" href="test_assets/unittest.css" type="text/css" />
+</head>
+<body>
+  <div id="content" >
+    <div id="header">
+      <h1>JavaScript unit test file</h1>
+      <p>
+        This file tests <strong>Filters Form</strong> class in <strong>filter.js</strong>.
+      </p>
+    </div>
+    <!-- Log output -->
+    <div id="testlog"> </div>
+
+    <div style ='border:solid 1px' id='sandbox'>
+      <h3> sandbox: </h3>
+      <form id="test-form" >
+        <div class='inputs-group'>
+          <input name='param1' />
+        </div>
+
+        <div style='display:none' class='inputs-group'>
+          <input name='param2' />
+        </div>
+
+        <input name='param3' />
+        <input name='filters[]' value='filters_value' />
+      </form>
+    </div>
+  </div>
+<script type="text/javascript">
+// <![CDATA[
+
+  new Test.Unit.Runner({
+
+    setup: function() {
+      window.docLinkHandler = {
+        enableLinks: function() {},
+        disableLinks: function() {},
+      };
+
+      var requests = [];
+
+      window.$j.show = function() {
+        console.log($j.context);
+      };
+
+      window.$j.ajax = function(request) {
+        requests.push(request)
+      };
+
+      window.ajaxRequests = function() {
+        return requests;
+      };
+    },
+
+    testShouldNotIncludeInputIfItsInInvisibleInputsGroupWhenSerialize: function() { with(this) {
+      // $j("#test-form").data("filtersForm", );
+      new FiltersForm('test-form').submit();
+      assertEqual(1, ajaxRequests().length);
+      assertEqual("param1=&param3=&filters%5B%5D=filters_value", $j.param(ajaxRequests()[0].data));
+    }},
+
+    testSubmitOnlyFiltersParam: function() { with(this) {
+      new FiltersForm('test-form').submitOnlyFiltersParam();
+      assertEqual(1, ajaxRequests().length);
+      assertEqual("filters%5B%5D=filters_value", ajaxRequests()[0].data);
+    }}
+
+}, { testLog: "testlog", test: null }).run;
+// ]]>
+</script>
+</body>
+</html>

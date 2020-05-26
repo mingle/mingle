@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>
+      JavaScript unit test file
+    </title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+    <script src="test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+
+    <script src="test_assets/unittest.js" type="text/javascript"></script>
+    <script src="test_assets/unittest_ext.js" type="text/javascript"></script>
+
+
+    <script src="../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/controls.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/builder.js" type="text/javascript"></script>
+    <script src="../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+
+    <script src="../../public/javascripts/radio_panel.js" type="text/javascript"></script>
+
+
+    <link rel="stylesheet" href="assets/unittest.css" type="text/css" />
+    <link rel="stylesheet" href="test_assets/unittest.css" type="text/css" />
+  </head>
+  <body>
+    <div id="content">
+      <div id="header">
+        <h1>
+          JavaScript unit test file
+        </h1>
+        <p>
+          This file tests classes in <strong>transition.js</strong>.
+        </p>
+      </div><!-- Log output -->
+      <div id="testlog"></div>
+      <div style='border:solid 1px' id='sandbox'>
+        <h3> sandbox: </h3>
+
+        <ul class='toggle'>
+          <li>
+            <input type='radio' id='all_team_members' name='used_by'/>
+            <label for='all_team_members'>All team members</label>
+          </li>
+          <li>
+            <input type='radio' id='member_list' name='used_by'/>
+            <label for='member_list'>Only selected team members</label>
+          </li>
+          <li>
+            <input type='radio' id='group_list' name='used_by'/>
+            <label for='group_list'>Only selected groups</label>
+          </li>
+        </ul>
+        <div id='all_team_members_div' class='toggle-section'>
+          nothing
+        </div>
+        <div id='member_list_div' class='toggle-section'>
+          <input type="checkbox" name="member1" value="1" id="member1" />Member1
+        </div>
+        <div id='group_list_div' class='toggle-section'>
+          <input type="checkbox" name="group1" value="1" id="group1" />Group1
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+// <![CDATA[
+
+  SAND_BOX_CONTENT = $('sandbox').innerHTML;
+
+  new Test.Unit.Runner({
+
+    setup: function() {
+      $('sandbox').innerHTML = SAND_BOX_CONTENT;
+
+      this.selectGroups = function(){
+        $('group_list').checked = true;
+        Event.trigger('group_list', 'click');
+      };
+
+      this.selectMembers = function(){
+        $('member_list').checked = true;
+        Event.trigger('member_list', 'click');
+      };
+
+    },
+
+    testShouldSelectFirstRadioAsDefault: function() { with(this) {
+      this.radioPanel = new RadioPanel('.toggle', '.toggle-section');
+      assert($('all_team_members').checked);
+      assert(!$('member_list').checked);
+      assert(!$('group_list').checked);
+      assert(Element.visible('all_team_members_div'));
+      assert(!Element.visible('member_list_div'));
+      assert(!Element.visible('group_list_div'));
+    }},
+
+    testOnlyShouldShowRelatedDivWhenClickRadio: function() { with(this) {
+      this.radioPanel = new RadioPanel('.toggle', '.toggle-section');
+      Event.trigger('member_list', 'click');
+      assert(Element.visible('member_list_div'));
+      assert(!Element.visible('all_team_members_div'));
+      assert(!Element.visible('group_list_div'));
+    }},
+
+    testShouldShowPanelWhenInitializeWithRadioChecked: function() { with(this) {
+      $('group_list').checked = true;
+      this.radioPanel = new RadioPanel('.toggle', '.toggle-section');
+      assert(Element.visible('group_list_div'));
+      assert(!Element.visible('all_team_members_div'));
+      assert(!Element.visible('member_list_div'));
+    }},
+
+    testShouldClearAllSelectionsInAToggleSectionWhenSwitchingRadioButtonsAndSelectingSomethingDifferentFromWhatWasOriginallyChosen: function() { with(this) {
+      this.radioPanel = new RadioPanel('.toggle', '.toggle-section');
+      this.selectGroups();
+      $('group1').checked = true;
+      assertEqual(true, $('group1').checked);
+
+      this.selectMembers();
+      assertNotVisible('group_list_div');
+      assertNotVisible('group1');
+      assertEqual(true, $('group1').checked);
+      assertEqual(false, $('member1').checked);
+
+      $('member1').checked = true;
+      Event.trigger('member1', 'click');
+      assertEqual(true, $('member1').checked);
+      assertEqual(false, $('group1').checked);
+    }}
+
+  }, { testLog: "testlog", test: null }).run;
+// ]]>
+</script>
+  </body>
+</html>

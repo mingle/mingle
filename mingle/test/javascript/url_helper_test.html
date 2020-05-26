@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Url Helper Test</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+
+  <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+
+  <script src="test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../../app/assets/javascripts/ui_utils.js" type="text/javascript"></script>
+
+  <script src="../../app/assets/javascripts/url_helper.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="test_assets/qunit-1.21.0.css" type="text/css"/>
+
+  <script src="test_assets/sinon-2.3.6.js" type="text/javascript"></script>
+  <script src="test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+  <script src="test_assets/qunit-phantom.js" type="text/javascript"></script>
+</head>
+<body>
+  <div id="qunit"></div>
+  <script type="text/javascript">
+    QUnit.module('Url Helper',{
+      beforeEach: function () {
+        this.projectIdentifier = 'my_project';
+      }
+    });
+
+    QUnit.test('testProjectUrlShouldReturnProjectUrl', function (assert) {
+      assert.equal(UrlHelper.projectUrl(this.projectIdentifier), '/projects/my_project');
+    });
+
+    QUnit.test('testMacroPreviewUrlShouldReturnUrlForMacroPreview', function (assert) {
+      assert.equal(UrlHelper.macroPreviewUrl(this.projectIdentifier), '/projects/my_project/macro_editor/preview');
+    });
+
+    QUnit.test('testCardTypesUrlShouldReturnUrlForCardTypes', function (assert) {
+      assert.equal(UrlHelper.cardTypesUrl(this.projectIdentifier), '/projects/my_project/card_types');
+    });
+
+    QUnit.test('testCardTypesJsonUrlShouldReturnAPIUrlForCardTypes', function (assert) {
+      assert.equal(UrlHelper.cardTypesJsonUrl(this.projectIdentifier), '/api/v2/projects/my_project/card_types.json');
+    });
+
+    QUnit.test('testCardTypeJsonUrlShouldReturnAPIUrlForSpecifiedCardType', function (assert) {
+      assert.equal(UrlHelper.cardTypeJsonUrl(this.projectIdentifier, 3), '/api/v2/projects/my_project/card_types/3.json');
+    });
+
+    QUnit.test('testShowUserSelectorUrlShouldReturnUrlForShowingUserSelector', function (assert) {
+      assert.equal(UrlHelper.showUserSelectorUrl(this.projectIdentifier), '/projects/my_project/team/show_user_selector');
+    });
+
+    QUnit.test('testShowCardSelectorUrlShouldReturnUrlForShowingCardSelector', function (assert) {
+      assert.equal(UrlHelper.showCardSelectorUrl(this.projectIdentifier), '/projects/my_project/card_explorer/show_card_selector');
+    });
+
+    QUnit.test('testTagsJsonUrlShouldReturnUrlForFetchingTagsJSON', function (assert) {
+      assert.equal(UrlHelper.tagsJsonUrl(this.projectIdentifier), '/api/v2/projects/my_project/tags.json');
+    });
+
+    QUnit.test('testProjectsUrlShouldReturnUrlForProjects', function (assert) {
+      assert.equal(UrlHelper.projectsUrl(), '/projects');
+    });
+
+    QUnit.test('testProjectsJsonUrlShouldReturnUrlForProjectsJSON', function (assert) {
+      assert.equal(UrlHelper.projectsJsonUrl(), '/api/v2/projects.json');
+    });
+
+    QUnit.test('testShouldGenerateCardsUrlForAGivenProject', function (assert) {
+      assert.equal(UrlHelper.cardsUrl('mingle'), '/projects/mingle/cards');
+    });
+
+    QUnit.test('testShouldGenerateExecuteMqlUrlForAGivenProject', function (assert) {
+      assert.equal(UrlHelper.executeMqlJsonUrl('mingle'), '/api/v2/projects/mingle/cards/execute_mql.json');
+    });
+
+    QUnit.module('Absolute Url Helper', {
+      beforeEach: function () {
+        window.getOrigin = sinon.stub().returns(getOrigin());
+        this.projectIdentifier = 'my_project';
+      }
+    });
+
+    QUnit.test('testSectorUrlShouldReturnUrlWithWindowLocationAndEscapedMql', function (assert) {
+      var sectorMql = "Type = Work AND Dependent_card = '#19 %A% ^&amp;(Card)!!'",
+          expectedEscapedMql = "Type%20%3D%20Work%20AND%20Dependent_card%20%3D%20'%2319%20%25A%25%20%5E%26amp%3B(Card)!!'";
+
+      assert.equal(AbsoluteUrlHelper.sectorUrl(this.projectIdentifier, sectorMql), window.location.origin + '/projects/my_project/cards/list?filters[mql]=' + expectedEscapedMql);
+      assert.equal(window.getOrigin.callCount, 1);
+    });
+
+    QUnit.test('testShouldGeneratePropertyDefinitionValuesUrlForAGivenProjectAndPropDefId', function (assert) {
+      assert.equal(UrlHelper.propertyDefinitionsValuesUrl('mingle',2), '/api/v2/projects/mingle/property_definitions/values/2.json');
+    });
+  </script>
+</body>
+</html>

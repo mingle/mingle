@@ -1,0 +1,22 @@
+
+run - runs a tool
+
+  Usage:
+
+      tools\run tools\<path_to_tool> --mingle.dataDir=<path to data dir> [ options ]
+
+  Required:
+
+      --mingle.dataDir=    a unique location where Mingle will store files necessary for operation.
+
+  Options:
+
+      --mingle.configDir=  the location of the Mingle configuration directory. This will
+                           override the setting in Mingle.vmoptions, if set. Defaults to ${mingle.dataDir}\config.
+
+      --mingle.logDir=     Allows one to specify the location of the Mingle log directory. This will
+                           override the setting in mingle.properties, if set.  Defaults to .\log
+
+      --filename=          a file parameter to pass to a tool
+
+      --help               Display this help message.

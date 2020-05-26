@@ -1,0 +1,43 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<table id="program-dependencies" class="dependencies" data-dependency-popup-url="<%= url_for(:controller => "program_dependencies", :action => "popup_show") -%>">
+  <thead>
+    <tr>
+      <th class="dummy-cell"></th>
+      <th><%= Dependency::NEW.capitalize %></th>
+      <th><%= Dependency::ACCEPTED.capitalize %></th>
+      <th><%= Dependency::RESOLVED.capitalize %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @view.projects.each do |proj| %>
+      <tr>
+        <th class="row-header"><%= proj.name %></th>
+        <% [Dependency::NEW, Dependency::ACCEPTED, Dependency::RESOLVED].each do |status| %>
+          <td class="<%= status.downcase %>-dependencies">
+            <% dependencies = @view.dependencies_for(proj, status) %>
+            <% dependencies.each do |dependency| %>
+              <%= render :partial => 'dependency', :locals => { :dependency => dependency } %>
+            <% end %>
+          </td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= render :partial => "cards/transition_executor_forms" %>

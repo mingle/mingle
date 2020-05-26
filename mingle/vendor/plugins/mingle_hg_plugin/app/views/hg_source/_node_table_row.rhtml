@@ -1,0 +1,40 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<tr class="<%= cycle('even', 'odd')%>" id="source_list_<%= node.name %>">
+	<td> <% if node.dir? -%>
+		<%= link_to node.name, {:path => node.path_components, :rev => view_revision}, {:class => 'folder node-link'} %>
+		<% else -%>
+		<%= link_to node.name, {:path => node.path_components, :rev => view_revision}, { :class => 'file node-link'} %>
+		<% end -%>
+	</td>
+	<% if node.most_recent_commit_time -%>
+	  <td><%= time_ago_in_words(node.most_recent_commit_time) %></td>
+	<% else -%>
+	  <td>Still caching...</td>
+	<% end -%>
+	<% if node.most_recent_committer -%>
+	  <td><%= node.most_recent_committer %></td>
+	<% else -%>
+	  <td>Still caching...</td>
+	<% end -%>
+	<td><%= link_to "#{HgChangeset.short_identifier(node.most_recent_changeset_identifier)}...", changeset_url(:rev => node.most_recent_changeset_identifier) %></td>
+	<% if node.most_recent_commit_desc -%>
+	  <td><%= replace_card_links(h(truncate(node.most_recent_commit_desc, :length => 255))) %></td>
+	<% else -%>
+	  <td>Still caching...</td>
+	<% end -%>
+</tr>

@@ -1,0 +1,19 @@
+<html>
+<head><title></title></head>
+<body>
+<script>
+function onclick1(s){
+	document.getElementById("t1").value = "onclick_" + s;
+}
+function onchange1(s){    
+	window.setTimeout('document.getElementById("t1").value = "onchange_'+s+'";', 100);
+}
+</script>
+<form name="f1">
+<input type="text" name="t1" id="t1"><br/>
+<input type="checkbox" value="Click me" onclick="onclick1('c1')" onchange="onchange1('c1')">
+<input type="radio" name="r1" value="Click me" onclick="onclick1('r1')" onchange="onchange1('r1')">
+<input type="radio" name="r1" value="Click me" onclick="onclick1('r11')" onchange="onchange1('r11')">
+</form>
+</body>
+</html>

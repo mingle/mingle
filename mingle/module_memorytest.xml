@@ -1,0 +1,255 @@
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<project default="memorytest" basedir=".">
+
+    <property name="mingle_install_root" value="/var/lib/go-agent/mingle"/>
+    <property name="INSTALLER_PATH" value="/var/lib/go-agent/installers"/>
+    <property name="HTTPREF_LOG_ROOT" value="/var/lib/go-agent/performance-httperf" />
+    <property name="HTTPLOG_DIR" value="/var/lib/go-agent/performance-httperf/log"/>
+    <property name="max_request" value="4" />
+    <property name="allowed_errors" value="500"/>
+    <property name="hlog_files" value="card_add_comment, card_list,card_show,update_property"/>
+    <property name="run_hours" value="48"/>
+    <property name="mingle_host" value="localhost"/>
+    <property name="mingle_port" value="8080"/>
+    <property name="jmx_port" value="1198"/>
+    <property name="mingle_user" value="mingleadmin"/>
+    <property name="mingle_password" value="password"/>
+    <property name="log4j.configuration" value="development/build_java/com/thoughtworks/mingle/test/memory/log4j.properties" />
+    <property name="mingle_siteurl" value="fmtstdmngmny01.thoughtworks.com" />
+
+    <target name="memory_test_generate_mingle_configuration">
+      <echo message="MemoryTest Generate Server Configuration"/>
+      <delete dir="${mingle_install_root}" quiet="true" />
+      <mkdir dir="${mingle_install_root}/data/config"/>
+      <echo file="${mingle_install_root}/data/mingle.properties">
+#Refer to the mingle.properties.example file in your Mingle installation folder to see other properties that can be set to configure Mingle
+-Dmingle.swapDir=${mingle_install_root}/data/tmp
+-Dmingle.appContext=/
+-Dmingle.memcachedPort=11211
+-Dmingle.port=8080
+-Dmingle.logDir=${mingle_install_root}/data/log
+-Dmingle.memcachedHost=127.0.0.1
+-Dcom.sun.management.jmxremote.port=1198
+-Dcom.sun.management.jmxremote.authenticate=false
+-Dcom.sun.management.jmxremote.ssl=false
+-Xmx1536m
+-Dmingle.siteURL=http://${mingle_siteurl}:${mingle_port}
+      </echo>
+      <echo file="${mingle_install_root}/data/config/auth_config.yml">
+password_format:
+basic_authentication_enabled: true
+basic_authentication:
+authentication:
+ldap_settings:
+  #ldapserver:
+  #ldapport:
+  #ldapbinduser:
+  #ldapbindpasswd:
+  #ldapbasedn:
+  #ldapfilter:
+  #ldapobjectclass:
+  #ldap_map_fullname:
+  #ldap_map_mail:
+  #ldapgroupobjectclass:
+  #ldapgroupdn:
+  #ldapgroupattribute:
+cas_settings:
+  #cas_port:
+  #cas_host:
+  #cas_uri:
+      </echo>
+      <echo file="${mingle_install_root}/data/config/broker.yml">
+username: mingle
+password: password
+uri: vm://localhost?create=false
+      </echo>
+      <echo file="${mingle_install_root}/data/config/database.yml">
+---
+production:
+  driver: org.postgresql.Driver
+  password: ""
+  username: mingle
+  adapter: jdbc
+  url: jdbc:postgresql://localhost:5432/mingle_memory_test
+      </echo>
+      <echo file="${mingle_install_root}/data/config/smtp_config.yml">
+smtp_settings:
+  #authentication:
+  #user_name:
+  #password:
+  address: localhost
+  port: 25
+  domain: thoughtworks.com
+  tls: false
+sender:
+  address: mingle-memory-test@thoughtworks.com
+  name: Mingle Administrator
+      </echo>
+    </target>
+
+
+    <target name="memory_test_install_mingle">
+      <echo message="MemoryTest Install Server"/>
+      <exec executable="/usr/bin/git" outputproperty="gitrevision" >
+        <arg line="log -n1 --pretty=format:\%h"/>
+      </exec>
+      <exec executable="/bin/tar">
+              <arg line="-zxvf ${INSTALLER_PATH}/${INSTALLER_VERSION}/mingle_unix_${INSTALLER_VERSION}_${gitrevision}.tar.gz -C ${mingle_install_root}"/>
+      </exec>
+      <copy file="config/web.xml.cruise_memory_test" tofile="${mingle_install_root}/mingle_${INSTALLER_VERSION}/config/web.xml"  overwrite="yes"/>
+      <exec executable="/usr/bin/dropdb">
+      <arg value="mingle_memory_test"/>
+      </exec>
+      <exec executable="/usr/bin/createdb">
+        <arg value="-O"/>
+        <arg value="mingle"/>
+        <arg value="-E"/>
+        <arg value="UTF-8"/>
+        <arg value="mingle_memory_test"/>
+      </exec>
+      <echo message="DB Dump : ${HTTPREF_LOG_ROOT}/db/mingle_performance.sql.gz" />
+      <gunzip src="${HTTPREF_LOG_ROOT}/db/mingle_performance.sql.gz" dest="/tmp"/>
+      <exec executable="/usr/bin/psql">
+        <arg value="-f"/>
+        <arg value="/tmp/mingle_performance.sql"/>
+        <arg value="mingle_memory_test"/>
+      </exec>
+      <delete file="/tmp/mingle_performance.sql" quiet="true" />
+    </target>
+
+    <target name="memory_test_stop_mingle">
+      <echo message="MemoryTest Stop Server"/>
+      <exec executable="${mingle_install_root}/mingle_${INSTALLER_VERSION}/MingleServer">
+        <arg value="stop"/>
+        <arg value="--mingle.dataDir=${mingle_install_root}/data"/>
+      </exec>
+    </target>
+
+    <target name="memory_test_start_mingle">
+      <echo message="MemoryTest Start Server"/>
+      <exec executable="${mingle_install_root}/mingle_${INSTALLER_VERSION}/MingleServer" spawn="true">
+        <arg value="start"/>
+        <arg value="--mingle.dataDir=${mingle_install_root}/data"/>
+      </exec>
+      <echo message="MemoryTest Start Server is done"/>
+      <sleep seconds="300"/>
+    </target>
+
+    <target name="memory_test_server_warmup">
+      <echo message="MemoryTest Server Warm Up"/>
+      <sleep seconds="60"/>
+      <echo message="MemoryTest Hit Server the First time"/>
+      <exec executable="/usr/bin/curl">
+        <arg value="-m"/>
+        <arg value="60"/>
+        <arg value="http://localhost:8080"/>
+        <arg value="-d"/>
+        <arg value="&quot;value=foo$quot;"/>
+      </exec>
+      <sleep seconds="300"/>
+      <echo message="MemoryTest Update EULA"/>
+      <exec executable="/usr/bin/psql">
+        <arg line="mingle_memory_test -c &quot;update licenses set eula_accepted='t'&quot;"/>
+      </exec>
+      <sleep seconds="60"/>
+      <echo message="MemoryTest Hit Server the Second time"/>
+      <exec executable="/usr/bin/curl">
+        <arg value="-m"/>
+        <arg value="60"/>
+        <arg value="http://localhost:8080"/>
+        <arg value="-d"/>
+        <arg value="&quot;value=foo$quot;"/>
+      </exec>
+      <sleep seconds="30"/>
+      <echo message="MemoryTest Hit Server the Third time"/>
+      <exec executable="/usr/bin/curl">
+        <arg value="-m"/>
+        <arg value="60"/>
+        <arg value="http://localhost:8080"/>
+        <arg value="-d"/>
+        <arg value="&quot;value=foo$quot;"/>
+      </exec>
+      <sleep seconds="300"/>
+    </target>
+
+    <target name="memory_test_force_stop_mingle">
+      <echo message="MemoryTest Force Server Shutdown"/>
+      <exec executable="/bin/sh">
+        <arg line="-c &quot;/bin/ps auxwww | /bin/grep MingleServer | /bin/grep -v grep | /bin/cut -c10-14 | /usr/bin/xargs kill -9&quot;"/>
+      </exec>
+    </target>
+
+    <target name="memory_test_run">
+      <echo message="MemoryTest Start Test Run"/>
+      <delete dir="tmp" quiet="true" />
+      <mkdir dir="tmp"/>
+      <mkdir dir="tmp/classes"/>
+      <javac destdir="tmp/classes">
+        <src path="development/build_java"/>
+        <classpath>
+          <fileset dir="development/build_java">
+            <include name="**/*.jar"/>
+          </fileset>
+        </classpath>
+      </javac>
+      <copy file="development/build_java/com/thoughtworks/mingle/test/memory/log4j.properties" todir="tmp/classes" />
+      <junit printsummary="on" haltonerror="true" fork="false" tempdir="tmp" showoutput="true">
+        <sysproperty key="HTTPLOG_DIR" value="${HTTPLOG_DIR}"/>
+        <sysproperty key="max_request" value="${max_request}"/>
+        <sysproperty key="allowed_errors" value="${allowed_errors}"/>
+        <sysproperty key="hlog_files" value="${hlog_files}"/>
+        <sysproperty key="run_hours" value="${run_hours}"/>
+        <sysproperty key="mingle_host" value="${mingle_host}"/>
+        <sysproperty key="mingle_port" value="${mingle_port}"/>
+        <sysproperty key="jmx_port" value="${jmx_port}"/>
+        <sysproperty key="mingle_user" value="${mingle_user}"/>
+        <sysproperty key="mingle_password" value="${mingle_password}"/>
+        <sysproperty key="log4j.configuration" value="${log4j.configuration}"/>
+        <classpath>
+          <fileset dir="development/build_java">
+            <include name="**/*.jar"/>
+          </fileset>
+          <path location="tmp/classes"/>
+        </classpath>
+        <batchtest fork="true" todir="tmp">
+          <fileset dir="tmp/classes">
+            <include name="**/MemoryTests.class"/>
+          </fileset>
+        </batchtest>
+      </junit>
+      <delete dir="tmp/classes" quiet="true" />
+    </target>
+
+    <target name="memorytest_stop_mingle_only" depends="memory_test_stop_mingle,memory_test_force_stop_mingle">
+    </target>
+
+    <target name="capture_heap_dump">
+        <tstamp>
+            <format property="dumptime" pattern="MMddyyyyhhmm" unit="hour"/>
+        </tstamp>
+
+        <echo message="Taking a heap dump at ${dumptime}"/>
+        <exec executable="/bin/sh">
+            <arg line="-c &quot;/bin/ps auxwww | /bin/grep MingleServer | /bin/grep -v grep | /bin/cut -c10-14 | /usr/bin/xargs /usr/java/default/bin/jmap -dump:format=b,file=../dump_at_${dumptime}.heap &quot;"/>
+        </exec>
+    </target>
+
+    <target name="memorytest" depends="memory_test_stop_mingle,memory_test_force_stop_mingle,memory_test_generate_mingle_configuration,memory_test_install_mingle,memory_test_start_mingle,memory_test_server_warmup,memory_test_run,capture_heap_dump,memory_test_stop_mingle,memory_test_force_stop_mingle">
+    </target>
+
+</project>

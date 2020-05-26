@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>JavaScript unit test file</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+  <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/module.js" type="text/javascript"></script>
+  <script src="test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+
+  <script src="test_assets/unittest.js" type="text/javascript"></script>
+  <script src="test_assets/unittest_ext.js" type="text/javascript"></script>
+
+
+  <script src="../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/controls.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/builder.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+
+  <script src="../../public/javascripts/application.js" type="text/javascript"></script>
+
+  <link rel="stylesheet" href="assets/unittest.css" type="text/css" />
+  <link rel="stylesheet" href="test_assets/unittest.css" type="text/css" />
+
+  <style type="text/css">
+  </style>
+
+</head>
+<body>
+
+<div id="content" >
+  <div id="header">
+    <h1>JavaScript unit test file</h1>
+    <p>
+      This file tests <strong>Hotkey event observer</strong> classes in <strong>application.js</strong>.
+    </p>
+  </div>
+
+  <div id='sandbox'>
+    <h3> sandbox: </h3>
+  </div>
+
+
+  <!-- Log output -->
+  <div id="testlog"> </div>
+</div>
+
+
+<script type="text/javascript">
+// <![CDATA[
+  new Test.Unit.Runner({
+
+    setup: function() {
+      this.triggeredTimes = 0;
+      this.defaultKeyAction = function() { this.triggeredTimes ++ }.bind(this);
+    },
+
+    tearDown: function() {
+      HotKey.clear()
+    },
+
+    testRegisterWithSingleCharString: function() {with(this) {
+      HotKey.register('~', defaultKeyAction);
+      assertEqual(0, this.triggeredTimes);
+      Event.triggerKeypressEvent(document, '~'.charCodeAt(0));
+      assertEqual(1, this.triggeredTimes);
+      Event.triggerKeypressEvent(document, 'd'.charCodeAt(0));
+      assertEqual(1, this.triggeredTimes);
+      Event.triggerKeypressEvent(document, '~'.charCodeAt(0));
+      assertEqual(2, this.triggeredTimes);
+    }},
+
+    testRegisterWithMultipleCharString: function(){ with(this){
+      HotKey.register('123', defaultKeyAction);
+      assertEqual(0, this.triggeredTimes);
+      Event.triggerKeypressEvent(document, '1'.charCodeAt(0));
+      assertEqual(1, this.triggeredTimes);
+      Event.triggerKeypressEvent(document, '2'.charCodeAt(0));
+      assertEqual(2, this.triggeredTimes);
+      Event.triggerKeypressEvent(document, '3'.charCodeAt(0));
+      assertEqual(3, this.triggeredTimes);
+    }},
+
+    testRegisterWithCharCode: function() {with(this) {
+      HotKey.register(126, defaultKeyAction);
+      Event.triggerKeypressEvent(document, '~'.charCodeAt(0));
+      assertEqual(1, this.triggeredTimes);
+    }},
+
+    testObservingMultipleKeyEvent: function() { with(this) {
+      HotKey.register(Event.KEY_UP, defaultKeyAction)
+      HotKey.register(Event.KEY_DOWN, defaultKeyAction)
+      Event.triggerKeypressEvent(document, Event.KEY_UP);
+      Event.triggerKeypressEvent(document, Event.KEY_DOWN);
+      assertEqual(2, this.triggeredTimes);
+    }},
+
+    testShouldBeAbleToBeDisabledAndEnabled: function() { with(this) {
+      HotKey.register(Event.KEY_UP, defaultKeyAction);
+      HotKey.disable();
+      Event.triggerKeypressEvent(document, Event.KEY_UP);
+      assertEqual(0, this.triggeredTimes);
+      HotKey.enable();
+      Event.triggerKeypressEvent(document, Event.KEY_UP);
+      assertEqual(1, this.triggeredTimes);
+    }},
+  }, { testLog: "testlog", test: null}).run;
+// ]]>
+</script>
+</body>
+</html>

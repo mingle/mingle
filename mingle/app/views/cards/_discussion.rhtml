@@ -1,0 +1,43 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="discussion" style="position: relative">
+
+  <div id="pseudo-card-comment-container" style="<%= allow_direct_comments ? 'display: none;' : ''%>">
+    <%= text_area_tag 'comment[content]', comment_in_params, :rows => 5, :id => 'pseudo-card-comment', 'data-users-url' => at_user_suggestion_path, 'data-at-login-autocomplete' => true %>
+    <div class="comment-controls">
+      <div class="notes">(<%= comment_added_upon_save %>)</div>
+    </div>
+  </div>
+
+  <div id="card-murmurs">
+    <%= render :partial => 'discussions', :locals => {:card => card, :discussion => card.discussion} if defined?(eager_load_comments) && eager_load_comments %>
+  </div>
+
+  <% unless defined?(eager_load_comments) && eager_load_comments %>
+    <%= javascript_with_rescue(attach_to_card_discussion_loader(card)) %>
+
+    <%= javascript_with_rescue <<-JAVASCRIPT
+      addLoadEvent(function() {
+        ['history-container', 'current-history', 'discussion-tab'].each(Element.hide);
+        ['discussion-container', 'current-discussion', 'history-tab'].each(Element.show);
+        CardDiscussion.loadIfNotLoadedOnce();
+        return false;
+      });
+        JAVASCRIPT
+    -%>
+  <% end %>
+</div>

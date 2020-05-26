@@ -1,0 +1,493 @@
+<!--
+/**
+ * Copyright  2006  V Narayan Raman
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<html>
+<head><title>Sahi Controller</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<script>__sahiDebugStr__="";__sahiDebug__=function(s){__sahiDebugStr__+=(s+"\n");};</script>
+<script type="text/javascript" src="/_s_/dyn/SessionState_domainfix/domainfix.js"></script>
+<script>
+function informOpen(){
+	//alert("here");
+    var ishttps = location.href.indexOf("https") == 0;
+    var commonDomain = "sahi.example.com";
+    try{
+    	commonDomain = window.top.opener._sahi.commonDomain;
+    }catch(e){}
+    var href = (ishttps? "https" : "http")  +"://" + commonDomain + "/_s_/dyn/ControllerUI_opened";
+    new Image(0,0).src = href;
+    window.isWinOpen = true;
+};
+informOpen();
+</script>
+<script type="text/javascript" src="/_s_/spr/exception.js"></script>
+<script type="text/javascript" src="/_s_/spr/controller7.js"></script>
+<script type="text/javascript" src="/_s_/spr/util.js"></script>
+<script type="text/javascript" src="/_s_/spr/cookie.js"></script>
+<script type="text/javascript" src="/_s_/spr/suggest.js"></script>
+<style>
+body *{
+    font-size: 8pt;
+    font-family: verdana;
+}
+body {
+    margin: 8px;
+    background-color: lightgrey;
+}
+div.content{
+	background-color: white;
+    border-left: solid white 2px;
+    border-right: solid gray 2px;
+    border-top: solid white 2px;
+    border-bottom: solid gray 2px;
+    margin: 2px;
+}
+.hiTab {
+	border-left: solid white 1px;
+	border-right: solid gray 1px;
+	border-top: solid white 1px;
+	color: black;
+	cursor: pointer;
+	font-size: 10pt;
+	padding: 3pt;
+	padding-bottom: 2px;
+	padding-right: 0px;
+	margin-left: -2px;
+	margin-right: -2px;
+}
+
+.dimTab {
+	border-left: solid white 1px;
+	border-right: solid gray 1px;
+	border-top: solid white 1px;
+	border-bottom: solid white 1px;
+	color: darkgray;
+	cursor: pointer;
+	font-size: 9pt;
+	padding: 2pt;
+	padding-bottom: 2px;
+	padding-right: 0px;
+	margin-left: -2px;
+	margin-right: -2px;
+}
+.comment {
+    color: darkred;
+    font-weight: bolder;
+    font-size: 10px;
+}
+.comment0 {
+    color: darkred;
+    font-weight: bolder;
+    font-size: 11px;
+}
+.centpc{
+	width:100%;
+}
+.comment1 {
+    color: darkred;
+    font-weight: bolder;
+    font-size: 14px;
+}
+.button {
+	width: 50px;
+}
+a{
+    xtext-decoration:none;
+    color: blue;
+}
+form{
+	margin:0px;
+}
+hr{
+	line-height:2px;
+}
+.suggestDD{display:none;border:1px solid grey;}
+</style>
+</head>
+<body onload="pageOnLoad();" onresize="resizeTAs()" onclick="Suggest.hideAll()" onbeforeunload="pageUnLoad()">
+<div style="float:right;padding-right:10px;">
+<a href="http://sahi.co.in" target="_blank">Sahi</a> (Build: <script>document.write(getVersion());</script>) &nbsp; 
+<!--<a href="http://sahi.co.in/w/paid-support" target="_blank">Support</a>-->
+</div>
+<div style="margin:5px 0px 10px 5px;">
+<span  id="trecorder" class="hiTab" onclick="resizeTAs();recOnClick();">&nbsp;Record&nbsp;</span>
+<span  id="tplay" class="dimTab" onclick="resizeTAs();playbackOnClick();">&nbsp;Playback&nbsp;</span>
+<span  id="tinfo" class="dimTab" onclick="resizeTAs();infoOnClick();">&nbsp;Info&nbsp;</span>
+<span  id="tpromo" class="dimTab" onclick="resizeTAs();infoOnClick();">&nbsp;New!&nbsp;</span>
+</div>
+<div class="content" id="trecorderbox" style="display:none;padding:5px;">
+<div class="comment0 centpc" style="margin-bottom: 5px;">
+Enter a script name and click "Record" to start recording.<br>
+Script will be generated in sahi/userdata/scripts directory.
+</div>
+<form name="recordstartform" style="margin:0px;">  
+    <table>
+        <tr>
+            <td>Script Directory:</td>
+            <td>
+                <select id="recdir" name="dir" style="width:300px" onchange="setSelectedScriptDir(this.options[this.selectedIndex].value)">
+                    <option value="../scripts">../scripts</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Script Name:</td>
+            <td>
+                <input type="text" id="recfile" name="file" value="" style="width:190px">
+                <input type="button" id="record" name="record" value="Record" onclick="onRecordStartFormSubmit(this)">
+                <input type="button" value="Stop" onclick="stopRec()">
+            </td>
+        </tr>
+    </table>
+</form>
+
+<hr>
+
+<div class="comment0 centpc">
+Press CTRL key and hover mouse over any HTML element. 
+</div>
+
+<form name="currentForm">
+<table>
+    <tr>
+        <td colspan="3" class="comment0"><br>
+        </td>
+    </tr>
+
+    <tr>
+        <td width="85px">Accessor:</td>
+        <td>
+            <input id="accessor" name="accessor" value="" style="width:265px"  autocomplete="off">
+            <select id="accessorDD" class="suggestDD"></select>
+        </td>
+        <td><input type="button" class="button" value=" Click " onclick=
+                "demoClick()"></td>
+    </tr>
+
+    <script>
+        var accessorSuggest = new Suggest($("accessor"), $("accessorDD"), "accessor");
+        accessorSuggest.getOptions = getAccessorProps;
+        accessorSuggest.onchange = resetValue;
+    </script>
+
+    <tr>
+        <td>Alternatives:</td>
+        <td><select name="alternative" onchange="$('accessor').value=this.value;" style="width:265px"></select></td>
+        <td><input type="button" class="button" value="Hilight" onclick=
+                "demoHighlight()"></td>
+    </tr>
+
+    <tr>
+        <td>Value:</td>
+        <td><input id="elValue" name="elValue" value="" style="width:265px"></td>
+        <td><input type="button" class="button" value=" Set " onclick=
+                "demoSetValue()"></td>
+    </tr>
+    <tr>
+        <td>Prefix:</td>
+        <td><input name="winName" value="" style="width:265px"></td>
+		<td><input type="button" class="button" value="Hover" onclick=
+		                "demoHover()"></td>        
+    </tr>
+    
+    <tr>
+
+</table>  
+<div style="padding-right:20px;">
+<div style="float:left">
+<input type="button" class="button" value="Assert" onclick="sahi().doAssert($('accessor').value, $('elValue').value)"/> 
+<input type="button" style="width:100px;" value=" List Properties " onclick="showProperties()">
+</div>
+<div style="float:right">
+Other Actions:        
+<select style="background-color:#F3F3EF; padding:1px; border:1px solid #003C74;" onchange="demoAction(this)">
+	<option>-- Choose --</option>
+	<option value="_doubleClick">Double Click</option>
+	<option value="_rightClick">Right Click</option>
+	<option value="_wait">Wait</option>
+	<option value="comment1">Comment (//)</option>
+	<option value="comment2">Comment (/**/)</option>
+	<option value="svon">Strict Visibility On</option>
+	<option value="svoff">Strict Visibility Off</option>
+</select>&nbsp;
+<a class='comment0' href='sahi_recorder_help.htm' target='_blank' title="Help">?</a>
+</div>
+<div style="clear:both"></div>
+</div>
+<br/>
+<!-- 
+<input type="button" class="button" value="Wait" onclick="addWait()"/> 
+<input type="text" id="waitTime" name="waitTime" value="3000" size="6"> ms 
+<input type="button" value="Comment" onclick="mark()"/> 
+<input type="text" id="comment" name="comment" value="" style="width:150px;"/>
+-->
+<script>
+var commands = [];
+commands[commands.length] = "_mouseOver(<accessor>)";
+commands[commands.length] = "_doubleClick(<accessor>)";
+commands[commands.length] = "_rightClick(<accessor>)";
+
+</script>
+
+<hr>
+<div style="float:left;padding-top:3px">APIs List:</div>
+<div style="float:right;padding-right:2px;"> 
+<input type="text" id="apiTextbox" autocomplete="off" style="width:350px;">
+<select id="apiSelect" class="suggestDD" style="width:350px;"></select>
+
+<script>
+    var apiSuggest = new Suggest($("apiTextbox"), $("apiSelect"), "api", true);
+    apiSuggest.getOptions = getAPIs;
+    apiSuggest.onchange = setAPI;
+    apiSuggest.suggestOnClick();
+</script>
+</div>
+<br style="clear:both"/>
+<hr/>
+Evaluate expression: <a href="javascript:showHistory()">History</a>
+<br/>
+<input type="hidden" id="history" name="history">
+<textarea name="debug" id="taDebug" style="white-space:normal;height:52px;width:99%" spellcheck="false"></textarea><br/>
+<input type="button" onclick="evaluateExpr(true)" value="Test --&gt; ">
+<input type="button" onclick="append()" value="Append to Script">
+<input type="button" onmousedown="demoHighlight2()" value="Highlight">
+<input type="button" onmousedown="demoClick2()" value="Click"><br/>
+<textarea name="result" id="taResult" spellcheck="false" style="white-space:normal;background:url(/_s_/spr/images/sahi_os_logo2.png) no-repeat bottom right silver;height:52px;width:99%" readonly="readonly"></textarea>
+</form>
+
+</div>
+
+<!-- END Record Tab -->
+
+<div class="content" id="tplaybox" style="display:none">
+<table>
+  <tr>
+    <td>
+      <div id="setfile">
+       <form name="scriptfileform" style="margin:0px;">
+          <table>
+            <tr>
+              <td colspan="2"><span class="comment0">Set script from file</span>: [<a href="javascript:byFile(false)">from url</a>]</td>
+            </tr>
+            <tr>
+              <td>Script Directory: </td>
+              <td>
+                <select id="pbdir" name="dir" onchange="populateScripts(this.options[this.selectedIndex].value)" style="width:300px">
+                  <option value="../scripts">../scripts</option>
+                </select>
+              </td>
+            </tr>
+
+            <tr>
+              <td bgcolor="">File:</td>
+              <td><!--<select name="file" style="width:300px" 
+              	  onchange="setSelectedScript(this.options[this.selectedIndex].value)"></select>-->
+              	  <input id="filebox" name="filebox" style="width:300px" autocomplete="off">
+            	  <select id="fileboxDD" name="suggestScriptFile" class="suggestDD" style="width:300px"></select>
+            	  <script>
+            	  	var fileboxSuggest = new Suggest($("filebox"), $("fileboxDD"), "filebox", true);
+        			fileboxSuggest.getOptions = getScriptFiles;
+        			fileboxSuggest.onchange = function(){
+        				$("filebox").value = $("fileboxDD").value;
+        				setSelectedScript($("fileboxDD").value);
+        			}	
+        			fileboxSuggest.suggestOnClick();
+            	  </script>
+              </td>  
+            </tr>
+            <tr>
+              <td>Start URL:</td>
+              <td><input type="text" id="script_starturl" name="starturl" value="" style="width:250pt"></td>
+            </tr>
+
+            <tr>
+              <td><input type="button" value="Set" onclick="onScriptFormSubmit(this)"></td>
+              <td class="comment">Click 'Set', wait till page refreshes, then
+                click 'Play'.</td>
+            </tr>
+          </table>
+          <input type="hidden" name="manual" value="1">
+        </form>
+      </div>
+    </td>
+    <td>
+      <div id="seturl" style="display:none">
+        <form name="scripturlform"> 
+          <table>
+            <tr>
+              <td colspan="2"><span class="comment0">Set script from url</span>: [<a href="javascript:byFile(true)">from file</a>]</td>
+            </tr>
+			<tr><td></td></tr>
+            <tr>
+              <td bgcolor="">Script:</td>
+              <td><input type="text" id="url" name="url" size="50"></td>
+            </tr>
+			<tr><td></td></tr>
+            <tr>
+              <td>Start URL:</td>
+              <td><input type="text" id="url_starturl" name="starturl" value="" size="50"></td>
+            </tr>
+			<tr><td></td></tr>
+            <tr>
+              <td><input type="button" value="Set" onclick="onScriptFormSubmit(this)"></td>
+              <td class="comment">Click 'Set', wait till page refreshes, then
+                click 'Play'.</td>
+            </tr>
+          </table>
+          <input type="hidden" name="manual" value="1">
+        </form>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<hr>
+<table width="99%">
+  <tr>
+    <td>Replay:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class=
+        "comment">Set script above, before clicking on 'Play'.</span></td>
+  </tr>
+
+  <tr>
+    <td bgcolor="">
+      <form name="playform" action="/_s_/dyn/Player_start" onsubmit="play()" target="channel">
+        <table width="99%" border="0">
+          <tr>
+            <td width="70%">
+              <table border="0">
+                <tr>
+                  <td>Current Step:<span id="currentStep">0</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  Next Step: <input type="text" size="3" id="nextStep" name="nextStep" value="1">
+                     <!-- [<a href="#" onclick="resetStep()">Reset</a>]
+        To: <input type="text" size="2" name="stepend" value="0">
+        -->
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                  <input class="button" type="button" value="Play" onclick="play()">
+                  <input class="button" type="button" value="Pause" onclick="pause()">
+                  <input class="button" type="button" value="Step" onclick="stepWisePlay()">
+                  <input class="button" type="button" value="Stop" onclick="stopPlay()">
+                  <input class="button" type="button" value="Reset" onclick="replay()">
+                  </td>
+                </tr>
+              </table>
+            </td>
+            <td valign="top"></td>
+          </tr>
+        </table>
+      </form>
+    </td>
+  </tr>
+</table>
+
+<hr>
+<table>
+  <tr>
+    <td bgcolor="">
+      <form name="logForm">Statements:<br>
+        <textarea spellcheck="false" id="talogs" name="logs" style="width:99%;height:230px;background:url(/_s_/spr/images/sahi_os_logo2.png) no-repeat bottom right silver;"></textarea></form>
+  		&nbsp;
+		<a href="/_s_/dyn/Player_currentScript/" target="_blank">View Script</a>&nbsp;&nbsp;&nbsp;
+		<a href="/_s_/dyn/Player_currentParsedScript" target="_blank">View Parsed Script</a>&nbsp;&nbsp;&nbsp;
+		<a href="/_s_/dyn/Player_currentBrowserScript" target="_blank">View Browser Script</a>&nbsp;&nbsp;&nbsp;
+		<a href="/_s_/dyn/Log_viewLogs" target="_blank">View Logs</a>
+  	</td>
+  </tr>
+</table>
+</div>
+<div class="content" id="tinfobox" style="display:none;overflow-y:auto;height:90%;"> 
+<a href="http://sahi.co.in/" target="_blank"><img src="/_s_/spr/images/sahi_os_logo2.png" style="border:0px;float:right;margin:5px 10px;"/></a>
+<table>
+	<tr><td class="comment1" colspan="3"><u>Sahi</u><br></td></tr>
+	<tr><td><b>Version</b></td><td>:&nbsp;</td><td><div id="sahiVersion">V3.5</div></td></tr>
+	<tr><td><b>Build</b></td><td>:&nbsp;</td><td><div id="sahiBuild"><script>document.write(getVersion());</script> (<a href="/_s_/dyn/ControllerUI_getChangeLog" target="_blank">change log</a>) </div></td></tr>
+	<tr><td class="comment" colspan="3">
+	<a href="#" id="updatesahi" target="_blank" onclick="updateVersion();return false;">Check for updates</a>
+	</td></tr>
+</table>
+<hr/>
+<table>
+	<tr><td class="comment1" colspan="3"><u>Browser</u><br></td></tr>
+	<tr><td><b>UserAgent</b></td><td>:&nbsp;</td><td><div id="userAgent"></div></td></tr>
+	<tr><td><b>Name</b></td><td>:&nbsp;</td><td><div id="browserName"></div></td></tr>
+	<tr><td><b>Version</b></td><td>:&nbsp;</td><td><div id="browserVersion"></div></td></tr>
+	<tr><td><b>Native XmlHTTPRequest</b></td><td>:&nbsp;</td><td><div id="xmlHttpRequest"></div></td></tr>
+	<tr><td><b>Is Java enabled</b></td><td>:&nbsp;</td><td><div id="javaEnabled"></div></td></tr>
+	<tr><td><b>Is cookie enabled</b></td><td>:&nbsp;</td><td><div id="cookieEnabled"></div>
+	</td></tr>
+</table>
+<br><hr>
+<table>
+	<tr><td class="comment1" colspan="3"><u>Operating System</u><br></td></tr>
+	<tr><td><b>Name</b></td><td>:&nbsp;</td><td><div id="osName"></div></td></tr>
+	<tr><td><b>Version</b></td><td>:&nbsp;</td><td><div id="osVersion"></div></td></tr>
+	<tr><td><b>Architecture</b></td><td>:&nbsp;</td><td><div id="osArchitecture"></div></td></tr>
+	<tr><td><b>Is process list available</b></td><td>:&nbsp;</td><td><div id="isTasklistAvailable"></div>
+	</td></tr>
+</table>
+<br><hr> 
+<table>
+	<tr><td class="comment1" colspan="3"><u>Java</u><br></td></tr>
+	<tr><td><b>Java Installed Directory</b></td><td>:&nbsp;</td><td><div id="javaDirectory"></div></td></tr>
+	<tr><td><b>JRE Version</b></td><td>:&nbsp;</td><td><div id="javaVersion"></div></td></tr>
+	<tr><td><b>Is keytool available</b></td><td>:&nbsp;</td><td><div id="isKeytoolAvailable"></div>
+	</td></tr>
+</table>
+<br><hr>
+</div>
+<div class="content" id="tpromobox" style="display:none;overflow-y:auto;height:90%;"> 
+<a href="http://sahi.co.in/" target="_blank"><img src="/_s_/spr/images/sahi_pro_logo2.png" style="border:0px;float:right;margin:5px 10px;"/></a>
+<div style="margin:10px;">
+<h3>Sahi Pro - Released!</h3>
+More productivity with Sahi Pro!
+<br/><br/>
+Sahi Pro adds the following features:
+<ol class="newOne">
+<li>DSahi - Distribute tests across machines, on the cloud</li>
+<li>Automatically accept SSL certificates</li>
+<li>Easily record _near and _in based accessors from the Controller</li>
+<li>Automatically build a repository of elements</li>
+<li>Easily parametrize recorded script into functions</li>
+<li>Log results to database</li>
+<li>Use the in-built Excel Framework</li>
+</ol>
+<a href="http://sahi.co.in/w/sahi_pro" target="_blank" style="margin-left:250px">Read more on Sahi Pro</a> 
+<style>
+.newOne li{margin:8px 5px;}
+</style>
+<h3>Useful Links</h3>
+<ul class="newOne">
+<li><a href="http://sahi.co.in/w/" target="_blank">Go to the Sahi Website</a></li>
+<li><a href="http://sahi.co.in/w/sahi" target="_blank">Read the Sahi documentation</a></li>
+<li><a href="http://sahi.co.in/forums/" target="_blank">Get free support on Sahi Forums</a></li>
+<li><a href="http://www.linkedin.com/groups?home=&gid=989367" target="_blank">Join the Sahi LinkedIn Group</a></li>
+<li><a href="http://twitter.com/_sahi" target="_blank">Follow Sahi on twitter: _sahi</a></li>
+<li><a href="http://www.facebook.com/pages/Sahi/132288696813329" target="_blank">Like Sahi on Facebook</a></li>
+<li><a href="http://blog.sahi.co.in/" target="_blank">Follow our views on the Sahi Blog</a></li>
+<li><a href="http://groups.google.com/group/sahi/" target="_blank">Join the Sahi Google Group</a></li>
+<li><a href="http://sahi.co.in/forums/viewforum.php?id=5" target="_blank">See and leave a testimonial</a>
+</ul>
+</div>
+</div>
+<script>
+var tabGroup = new TabGroup("tabGroup", ["tplay", "trecorder","tinfo", "tpromo"], "trecorder");
+</script>
+</body>
+</html>

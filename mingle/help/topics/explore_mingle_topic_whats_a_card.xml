@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="What's a card?">
+
+    <p>A Mingle Card is a unit of work in your project that you want to track and manage.  Let's say your project needs to track Stories and Defects.  Then in Mingle, every Story and Defect is a Card.  Mingle allows you to structure your project any way you want so you could use Cards to track features, requirements, technical tasks, or any other kind of work you can think of.</p>
+
+    <p>For Story Cards, you might be interested in attributes like owner, status and estimate.  For Defect Cards, you might be interested in owner and status, but not in estimate.  You may also be interested in additional attributes.  You differentiate a Story Card from a Defect Card by setting up two different <cref topic="quick_project_setup#quick_project_setup_card_types">card types</cref>.</p>
+
+    <p>So what's a Card?</p>
+
+    <bullets>
+        <item>
+            A representation of all the work you want to manage and track in your project.
+        </item>
+        <item>
+            Each Card has a card type which defines the structure for the card.
+        </item>
+    </bullets>
+
+    <p>Here are a few example projects and their card types.</p>
+
+    <table>
+        <header-row>
+            <col-header>Type of Project</col-header>
+            <col-header>Card Types</col-header>
+        </header-row>
+        <row>
+            <col>Scrum Project</col>
+            <col>Release, Sprint, Epic Story, Feature, Story, Defect, Task</col>
+        </row>
+        <row>
+            <col>Extreme Programming (XP) Project</col>
+            <col>Epic, Feature, Iteration, Story, Defect, Task, Issue</col>
+        </row>
+        <row>
+            <col>Project in maintenance mode</col>
+            <col>Bug, Issue, Enhancement, Feature Request </col>
+        </row>
+    </table>
+
+    <p>Here is a user story on a physical card wall.</p>
+    <screenshot alttext="A Mingle story wall" src="resources/images/explore_mingle_whats_a_card_physical.jpg" />
+
+    <p>Here is the same card in Mingle.</p>
+    <screenshot alttext="A Mingle story wall" src="resources/images/explore_mingle_whats_a_card_mingle.png" />
+
+    <section title="Tips">
+        <bullets>
+            <item>Create a few Mingle projects using <cref topic="quick_project_setup#create_a_new_project_from_template">Mingle's templates</cref> to see example card types in Scrum and XP projects.</item>
+        </bullets>
+    </section>
+
+	<section title="Video">
+			<p> A 3:33 demonstration of <video url="https://thoughtworks.wistia.com/medias/k04xquzh0k">Mingle Cards.</video> </p>	
+	</section>
+    <section title="Also see...">
+        <bullets>
+            <item><cref topic="quick_project_setup">Quick Project Setup</cref></item>
+            <item><cref topic="creating_a_card">Creating new cards</cref></item>
+            <item><cref topic="viewing_cards">Viewing cards</cref></item>
+            <item><cref topic="explore_mingle_topic_workflow">How do I manage workflow?</cref></item>
+			<item><cref topic="explore_mingle">Explore Mingle</cref></item>
+		        </bullets>
+		    </section>
+
+
+</topic>

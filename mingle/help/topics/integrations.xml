@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_help.dtd">
+<chapter title="Integrations">
+ <section title="Introduction">
+ 	<p>Mingle allows you to integrate with Github and Slack.</p>
+ 	<p>Please find them below:</p>
+    <bullets>
+      <item><cref topic="setup_source_repository_integration_saas">Code Integration</cref></item>
+      <item><cref topic="slack_integration">Slack Integration [Beta]</cref></item>
+  </bullets>
+ </section>
+</chapter>

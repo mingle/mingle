@@ -1,0 +1,175 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Mingle LDAP Authentication">
+  <p>This authentication plugin only supports LDAP, LDAPS and LDAP/TLS.</p>
+
+  <section title="Installation">
+   <note>
+	<bullets>
+	<item>Mingle supports connecting to a single LDAP server configuration. We do not support configuration with multiple LDAP servers. If you would like to use Mingle with a multiple LDAP server configuration please contact our <exref url="@tw_studios_mingle_support_url@">support team</exref>.</item>
+	<item>Mingle supports anonymous binding if your directory is given anonymous read access. To enable it, leave ldapbinduser and ldapbindpasswd entries empty.</item>
+	<item>Before you can use Mingle LDAP authentication, you must first complete 
+	the standard Mingle installation and configuration. Make sure that you setup a 
+	user with both full Mingle administrative privileges and a login that is also 
+	contained in your LDAP directory.</item>
+	</bullets>
+	
+	  </note>
+
+    <steps>
+	
+		<item>
+		  Stop Mingle server.
+		</item>
+		
+		<item>
+		  Edit <i>mingle_data_directory</i>/config/auth_config.yml to contain your configuration:
+		</item>
+		
+	  <warning>auth_config.yml is space sensitive and you must stick to the indentation scheme specified in these examples.</warning>
+	  <warning>Special characters in the auth_config.yml will affect certain Mingle features. If your LDAP password begin with a special charactor, plese quote it. </warning>
+	  <strong>For Active Directory:</strong>
+		<markup>
+  authentication: ldap
+  ldap_settings:
+    ldapserver: <i>hostname</i>
+    ldapport: <i>port</i>
+    ldapbinduser: <i>user</i>
+    ldapbindpasswd: <i>password</i>
+    ldapbasedn: ou=Users,dc=MyCompany,dc=COM
+    ldapfilter: sAMAccountName
+    ldapobjectclass: organizationalPerson
+    ldap_map_fullname: cn
+    ldap_map_mail: mail
+    ldapgroupdn : cn=MingleUsers,ou=Groups,dc=MyCompany,dc=COM
+    ldapgroupobjectclass : group
+    ldapgroupattribute : member
+		</markup>
+		<p></p>
+		
+		<p></p>
+		<strong>For OpenLDAP:</strong>
+		<markup>
+  authentication: ldap
+  ldap_settings:
+    ldapserver: <i>hostname</i>
+    ldapport: <i>port</i>
+    ldapbinduser: <i>user</i>
+    ldapbindpasswd: <i>password</i>
+    ldapbasedn: ou=People,dc=MyCompany,dc=COM
+    ldapfilter: uid
+    ldapobjectclass: posixAccount
+    ldap_map_fullname: cn
+    ldap_map_mail: mail
+    ldapgroupdn : cn=MingleUsers,ou=Groups,dc=MyCompany,dc=COM
+    ldapgroupobjectclass : posixGroup
+    ldapgroupattribute : memberUid
+    </markup>
+    	
+    <item>
+      <p>
+        Notice the first line of each configuration above, as of 2.0.1 it is now necessary 
+        to explicitly state an authentication of type 'ldap' in order to use the LDAP authentication plugin.  
+      </p>
+      
+      <p>  
+        If you have enabled basic authentication, it will also be necessary to state 
+        that basic_authentication is of type 'ldap:'
+      </p>
+    </item> 
+    
+      <p></p>
+  		<markup>
+  basic_authentication_enabled: true
+  basic_authentication: ldap
+  authentication: ldap 
+  ldap_settings: 
+    ldapserver: ...
+    ...
+  		</markup>
+  		<p></p>
+  	 
+		<item>
+		  Start Mingle server.
+		</item>
+		
+		<item>
+		  Login as the user you configured in Step 1, but this time using the LDAP
+      password rather than the Mingle password. This user will still have full Mingle admin
+      privileges.  This user can make future Mingle users Mingle admins if you wish to grant others
+      that privilege.
+    </item>
+		
+		<item>
+		  <p>
+		    Any users enrolled in your LDAP directory can now login to Mingle. When they login to Mingle, 
+        a Mingle account will be automatically created if it does not already exist. 
+        Once a user has logged in for the first time s/he can be granted access to projects.
+      </p>
+
+       <note>If the maximum number of Mingle users has been added to the Mingle instance, Mingle will not create accounts for new users logging in via LDAP. These users will be informed that the instance has reached the maximum number of users. When the maximum number of users is increased or existing users are deleted or deactivated, Mingle will automatically create accounts for new users again. </note>   
+                </item>
+ 		<item>ldapgroupdn, ldapgroupobjectclass and ldapgroupattribute are for group authentication.  
+      If the user is not in the group specific in ldapgroupdn, user will not be able to login to Mingle even
+      if user has valid username/password.  In order to disable this group feature, comment out or
+      remove these three attributes.
+    </item>
+    
+    <item>
+      Should you ever wish to turn off LDAP authentication, simply change the values of 'authentication'
+      and 'basic_authentication' in the config/auth_config.yml file to the type of authentication you wish
+      to switch to, either 'cas' or 'mingle' (Note: cas will not work for basic_authentication). After 
+      restarting the Mingle server, users will then be able to use the Mingle password recovery feature 
+      in order to set a Mingle password.
+    </item>  
+
+    <item>To enable SSL support, add "ldapusessl: true"</item>
+
+    <item>To enable TLS support, add "ldapusetls: true".  If the system use self-signed certificate, add "ldaptruststore: &lt;path to your jdk/jre truststore&gt;"; otherwise, mingle will use default JDK/JRE truststore</item>
+
+    <item>Either ldapusessl or ldapusetls can be set to true.  All authentication will fail if both options are enable and set to true</item>
+    
+    <item>Since Mingle ships with a bundled JRE in the Windows version, if LDAP/SSL is enabled and self-signed certificate is used, please
+    run keytool to install self-signed certificate to &lt;mingle_installed_directory&gt;/jre/lib/security/cacert.  Install
+    self-security to this keystore on every upgrade.</item>
+    
+	</steps>
+	
+
+</section>
+
+<section title="Uninstall">
+  
+  <p>
+    Should you ever wish to turn off LDAP authentication, simply change the values of 'authentication'
+    and 'basic_authentication' in the config/auth_config.yml file to the type of authentication you wish
+    to switch to, either 'cas' or 'mingle' (Note: cas will not work for basic_authentication). After 
+    restarting the Mingle server, users will then be able to use the Mingle password recovery feature 
+    in order to set a Mingle password. 
+  </p>
+  
+  <warning>
+    If you are going to turn off LDAP authentication, be absolutely sure that you configure 
+    Mingle SMTP successfully before turning off LDAP authentication. This will ensure that the password 
+    recovery feature is available, allowing users to continue to use Mingle with Mingle's built-in 
+    authentication mechanism.
+  </warning>
+   
+</section>
+</topic>

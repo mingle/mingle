@@ -1,0 +1,276 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="User API">
+	<section title="Users">
+		<p>User resources are located by issuing a GET request to the server with the user's id as a parameter. You can get an individual user's id by looking up a project's team list which returns a list of project member resources, including the id for each user. All updates of a user use the id. If you would like to update the value of a <cref topic="card_properties">user property</cref>, you would use the id, as with updating an individual user's attribute.</p>
+		<p>Before you manipulate user using the API, we recommend that familiarize yourself with some key concepts dealing with users and user property definitions.</p>
+		<p>More information about Mingle users can be found in other help topics:</p>
+			<bullets>
+        		<item><cref topic="managing_your_user_profile">Managing user profiles</cref></item>
+        		<item><cref topic="user_roles">User roles</cref></item>
+      		</bullets>
+			<note><p>Please note:</p>
+				<bullets>
+					<item>All the API resources and examples refer to <strong>v2 of the API</strong>. Support for v1 of the API was deprecated in fall 2012. Please refer to this <exref url="http://support.thoughtworks.com/entries/22029412-End-of-life-for-Version-1-of-the-Mingle-API">announcement</exref> in our Mingle community for more information about this deprecation.</item>
+					<item>Please note that all POST and PUT requests must be in XML format by default. This is not illustrated in the examples here. To specify parameters as shown in the examples you will have to set the request header for Content-Type to "application/x-www-form-urlencoded".</item>
+				</bullets>
+			</note>		
+	</section>
+
+	<section title="Structure of a user resource">
+			<p>The structure of a user resource, and its attributes are described below, along with their data type. Also included with each attribute is whether you are allowed to update the value. System generated fields like <strong>id</strong> are provided only as information about the card and cannot be updated through the API.</p>
+		<api_attributes title="user resource xml - attributes">
+			<api_attribute name="id" type="Integer" readonly="true">system assigned unique identifier for a user. Use this to get a identifier uniquely.</api_attribute>
+			<api_attribute name="name" type="String" />
+			<api_attribute name="login" type="String">the Mingle sign-in name for the user.</api_attribute>
+			<api_attribute name="email" type="String" />
+			<api_attribute name="light" type="Boolean">determines if the user is a Light user or not, default is false.</api_attribute>
+			<api_attribute name="icon_path" type="String">may be blank if the user has no icon, may not be specified when creating or updating a user via the api.</api_attribute>
+			<api_attribute name="activated" type="Boolean">determines if a user is activated in Mingle or not, default is true.</api_attribute>
+			<api_attribute name="admin" type="Boolean">determines if a user is a Mingle Administrator or not, default is false.</api_attribute>
+			<api_attribute name="version_control_user_name" type="String" />
+			<api_attribute name="password" type="String" writeonly="true">this field is not provided on a GET of a user resource.</api_attribute>
+			<api_attribute name="password_confirmation" type="String" writeonly="true">must be identical to password on an update, this field is not provided on a GET of a user resource.</api_attribute>
+		</api_attributes>
+	</section>
+	<section title="Get all users">
+		<api_reference><p><strong>Reference</strong></p><code>
+    Request Method: GET
+    URL: /api/v2/users.xml
+    Parameters: NA
+      </code><p><strong>Example</strong></p><code>
+    GET
+
+    http://yourname:password@your.mingle.server:8080/api/v2/users.xml
+      </code>
+      <p><strong>Explanation</strong></p>
+      <p>The above is an example of a GET request to a Mingle server running at your.mingle.server, port 8080. The request is made with the authorization credentials of yourname/password. The URL is the location of all user resources for the project with identifier "test_project". You have to have "Mingle administrator" permissions to make this call.</p>
+      <p><strong>Result</strong></p>
+      <p>If you have sufficient permissions to perform the action and the action was successful, you should get an xml document that looks something like the following.</p>
+      <code><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<users type="array">
+  <user>
+    <id type="integer">5</id>
+    <name>Jackson</name>
+    <login>jackson</login>
+    <email>Jackson@youremail.com</email>
+    <light type="boolean">false</light>
+    <icon_path nil="true"></icon_path>
+    <activated type="boolean">true</activated>
+    <admin type="boolean">false</admin>
+    <version_control_user_name nil="true">jackson</version_control_user_name>
+  </user>
+  ...
+  <user>
+    <id type="integer">7</id>
+    <name>Tracy</name>
+    <login>tracy</login>
+    <email>Tracy@youremail.com</email>
+    <light type="boolean">false</light>
+    <icon_path nil="true">/user/icon/7/tracy.png</icon_path>
+    <activated type="boolean">true</activated>
+    <admin type="boolean">false</admin>
+    <version_control_user_name nil="true">tracy</version_control_user_name>
+  </user>
+</users>
+]]>
+      </code>
+    </api_reference>
+	</section>
+	<section title="Get a user by id">
+		<api_reference>
+		<p><strong>Reference</strong></p>
+		<code>
+    Request Method: GET
+    URL: /api/v2/users/id.xml
+    Parameters: NA
+    </code>
+
+		<p><strong>Example</strong></p>
+		<code>
+    GET
+
+    http://yourname:password@your.mingle.server:8080/api/v2/users/42.xml
+		</code>
+		
+		<p><strong>Explanation</strong></p>
+		<p>The above is an example of a GET request to a Mingle server running at your.mingle.server, port 8080. The request is made with the authorization credentials of yourname/password. The URL is the location of the user resource corresponding to the user with id 42 that is a member of the project with identifier "test_project".</p>
+		
+		<p><strong>Result</strong></p>
+      	<p>Upon execution, if you have appropriate permissions, you will be returned an array of users resources.</p>
+      <code><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<user>
+  <id type="integer">7</id>
+  <name>Tracy</name>
+  <login>tracy</login>
+  <email>Tracy@youremail.com</email>
+  <light type="boolean">false</light>
+  <icon_path nil="true">/user/icon/7/tracy.png</icon_path>
+  <activated type="boolean">true</activated>
+  <admin type="boolean">false</admin>
+  <version_control_user_name nil="true">tracy</version_control_user_name>
+</user>
+]]>
+    </code>
+      <info>
+        You must have <strong>Mingle administrator</strong> privileges to make this call to the API.
+      </info>
+    </api_reference>
+	</section>
+	<section title="Create a user">
+		<api_reference>
+			<p><strong>Reference</strong></p>
+			<code>
+    Request Method: POST
+    URL: /api/v2/users.xml
+    Parameters: 
+    user[name]
+    user[login]
+    user[email]
+    user[password]
+    user[password_confirmation]
+    user[version_control_user_name]
+    user[admin]
+    user[light]
+      </code>
+
+		<p><strong>Example</strong></p>
+		<code>
+    POST
+
+    http://yourname:password@your.mingle.server:8080/api/v2/users.xml
+
+
+    user[name]=John Smith
+    user[login]=john
+    user[email]=jsmith@example.com
+    user[password]=t0ps3cr3t.
+    user[password_confirmation]=t0ps3cr3t.
+    user[version_control_user_name]=jsmith
+    user[admin]=false
+    user[light]=false
+    </code>
+			<p><strong>Explanation</strong></p>
+			<p>The above is an example of a POST request to a Mingle server running at your.mingle.server, port 8080. The request is made with the authorization credentials of yourname/password. The URL is the location of all user resources for the project with identifier "test_project". Posting the parameters creates a user with the specified values on the Mingle instance.</p>
+			<p><strong>Result</strong></p>
+			<p>If you have sufficient permissions to perform the action and the action was successful, you will be returned a location attribute in the header of the response, which is a url from which you can get the user resource that was created.</p>
+			<info>
+        You must have <strong>Mingle administrator</strong> privileges to make this call to the API.
+      </info>
+		</api_reference>
+	</section>
+	<section title="Update a user by id">
+		<api_reference>
+			<p><strong>Reference</strong></p>
+			<code>
+    Request Method: PUT
+    URL: /api/v2/users/id.xml
+    Parameters: 
+    user[name]
+    user[login]
+    user[email]
+    user[password]
+    user[password_confirmation]
+    user[version_control_user_name]
+    user[admin]
+    user[light]
+      </code>
+			<p><strong>Example</strong></p>
+			<code>
+    PUT
+
+    http://yourname:password@your.mingle.server:8080/api/v2/users/42.xml
+
+    user[name]=John Smythe
+    user[password]=t0ps53cr3t.
+    user[password_confirmation]=t0p53cr3t.
+      </code>
+			<p><strong>Explanation</strong></p>
+			<p>The above is an example of a PUT request to a Mingle server running at your.mingle.server, port 8080. The request is made with the authorization credentials of yourname/password. The URL is the location the user resource for the user with <strong>id</strong> 42 in that Mingle instance.</p>
+			<p><strong>Result</strong></p>
+			<p>If you have sufficient permissions to perform the action and the action was successful, then user with <strong>id</strong> will be updated to have a name of "John Smythe" and their password be "t0p53cr3t.". You will be returned a location attribute in the header of the response, which is a url from which you can get the user resource that was updated.</p>
+			<info>
+        You must have <strong>Mingle administrator</strong> privileges to make this call to the API.
+      </info>
+		</api_reference>
+	</section>
+  <section title="Structure of a project member resource" file="mingle_api_project_member_resource"/>
+	<section title="Get all team members for a project">
+		<api_reference><p><strong>Reference</strong></p><code>
+    Request Method: GET
+    URL: /api/v2/projects/project_identifier/users.xml
+    Parameters: NA
+      </code><p><strong>Example</strong></p><code>
+    GET
+
+    http://yourname:password@your.mingle.server:8080/api/v2/projects/test_project/users.xml
+      </code><p><strong>Explanation</strong></p><p>The above is an example of a GET request to a Mingle server running at your.mingle.server, port 8080. The request is made with the authorization credentials of yourname/password. The URL is the location of all user resources for the project with identifier "test_project".</p><p><strong>Result</strong></p>
+      Upon execution, you should get an xml document that looks something like the following.
+      <code><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<projects_members type="array">
+  <projects_member>
+    <id type="integer">28</id>
+    <admin type="boolean">false</admin>
+    <readonly_member type="boolean">true</readonly_member>
+    <user url="http://localhost:8080/api/v2/users/5.xml">
+      <id type="integer">5</id>
+      <name>Jackson</name>
+      <login>jackson</login>
+      <email>Jackson@us.com</email>
+      <light type="boolean">false</light>
+      <icon_path nil="true"></icon_path>
+      <activated type="boolean">true</activated>
+      <admin type="boolean">false</admin>
+      <version_control_user_name nil="true">jackson</version_control_user_name>
+    </user>
+    <project url="http://localhost:8080/api/v2/projects/test_project.xml">
+      <name>test project</name>
+      <identifier>test_project</identifier>
+    </project>
+  </projects_member>
+  <projects_member>
+    <id type="integer">29</id>
+    <admin type="boolean">false</admin>
+    <readonly_member type="boolean">false</readonly_member>
+    <user url="http://localhost:8080/api/v2/users/7.xml">
+      <id type="integer">7</id>
+      <name>Tracy</name>
+      <login>tracy</login>
+      <email>Tracy@us.com</email>
+      <light type="boolean">false</light>
+      <icon_path nil="true">/user/icon/7/tracy.png</icon_path>
+      <activated type="boolean">true</activated>
+      <admin type="boolean">false</admin>
+      <version_control_user_name nil="true">tracy</version_control_user_name>
+    </user>
+    <project url="http://localhost:8080/api/v2/projects/test_project.xml">
+      <name>test project</name>
+      <identifier>test_project</identifier>
+    </project>
+  </projects_member>
+</projects_member>	
+]]>
+    </code>  
+      <note>The attributes <strong>activated</strong>, <strong>admin</strong>, and <strong>version_control_user_name</strong> will not be returned when the user attempting to obtain the team members is not a project or Mingle administrator.</note>
+    </api_reference>
+	</section>
+</topic>

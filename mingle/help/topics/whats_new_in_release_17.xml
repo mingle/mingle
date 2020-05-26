@@ -1,0 +1,50 @@
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+  <?xml version="1.0"?>
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="What's new in Release 17">
+	<p>For <cref topic="mingle_onsite">Mingle onsite</cref> customers, please review the <cref topic="upgrading_from_previous_versions">upgrade instructions</cref> before moving to Mingle 17.</p>
+	<note>
+	  <item>All of the features below are already available for our Mingle in the cloud customers.</item>
+  </note>
+
+ <section title="Kanban WIP Limits">
+   	  <p>Limit work in progress by setting limits on swimlanes in the grid view.</p>
+      <p>This feature comes out of the box with the Kanban template, but can be configured on any other sort of project too! </p>
+      <p>Read how to <cref topic="what_you_can_do_on_the_grid_view#set_wip_limits">configure WIP limits</cref>.  Also, check out our <exref url="/mingle/news/2017/04/06/introducing-wip-limits.html">blogpost on WIP limits</exref>.</p>
+ </section>
+
+ <section title="Easy Charts">
+ 		<p>Setting up charts to track and report progress has never been easier!</p>
+      <p>Reporting is one of Mingle’s most powerful features - you can create hundreds of customized charts and reports. Easy Charts introduces a wizard to make customization easier than ever. Just a few clicks, and you’ll be all set up.</p>
+      <p>Further, you can now get more information from the charts simply by hovering and clicking on the sections you’re interested in. </p>
+      <bullets>
+      <item>Use Easy Charts to <cref topic="ec_pie_charts">create customized interactive pie charts</cref>.</item>
+      <item>Use Easy Charts to <cref topic="ec_ratiobar_chart">create customized interactive ratio bar charts</cref>.</item>
+      <item>Use Easy Charts to <cref topic="ec_stacked_bar_charts">create customized interactive stacked bar charts</cref>.</item>
+      <item>Use Easy Charts to <cref topic="ec_data_series_charts">create customized interactive data series bar charts</cref>.</item>
+      </bullets>
+ </section>
+
+ <section title="Bug Fixes">
+ 	<bullets>
+ 		<item>Fixed the issue where accented non-ASCII characters were not being decoded correctly.</item>
+ 		<item>Performance improvements when cards are updated in the grid view.</item>
+ 		<item>Fixed issue of wrapping of lane header names that was hiding the count of cards in the lane.</item>
+ 	</bullets>
+</section>
+</topic>

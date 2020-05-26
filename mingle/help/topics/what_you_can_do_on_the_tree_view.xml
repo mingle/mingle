@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<section title="What can you do on the Tree view?">
+  <subsection title="Expand and collapse tree nodes" collapsed="true">
+    <p>Tree nodes can be expanded and collapsed. This can be very useful when viewing large trees with many branches as it allows you to view in detail one specific part of the tree without the need to view all cards in the tree. By default all nodes will be collapsed but they can easily be expanded by clicking the expand/collapse control on the node. Each node also shows the count of children cards in the subtrees below that node.</p>
+    <screenshot alttext="Card tree - expand, collapse" src="resources/images/tree_view_expand_collapse.png"/>
+    <note>Cards that are removed from the view by filtering are not shown in the visible card counts shown at the node.</note>
+  </subsection>
+  <subsection title="Repositioning the tree view" collapsed="true">
+    <p>You can reposition the tree inside the display window to view the portion of the tree that interests you. There are various ways to do this:</p>
+    <bullets>
+      <item>Using the mouse. Click on any white space in the tree view window and drag with the mouse.</item>
+      <item>
+        <p>Using the center tree control. Click on the center tree icon to move the root of the tree to center of the screen:</p>
+        <screenshot src="resources/images/centralization_button.png"/>
+      </item>
+      <item>
+        <p>Using hot keys. Use the arrow keys on your keyword to move trees, or click on any of the arrow icons:</p>
+        <screenshot src="resources/images/hot_keys.png"/>
+      </item>
+      <item>Using the card locator as explained in below section.</item>
+    </bullets>
+  </subsection>
+  <subsection title="Using the card locator" collapsed="true">
+    <p>Type in part of the card name or it's number into the <strong>card locator</strong>.</p>
+    <screenshot alttext="card tree - card locator control" src="resources/images/card_trees_tree_view_card_locator.png"/>
+    <bullets>
+      <item>If there is only one card in the tree which matches the criteria, Mingle will center the tree on that card.</item>
+      <item>If there is more than one card which matches the criteria, you can use the <button>next</button> and <button>previous</button> buttons 
+        next to the card locator to jump from card to card until you find the one you are looking for.</item>
+      <item>You can reset the view to the default at any time by clicking on the <button>reset</button> button next to the card locator.</item>
+    </bullets>
+  </subsection>
+  <subsection title="Viewing a card summary" collapsed="true">
+    <p>You can view summary details for any card in the tree by left-clicking in the card. A popup summary will be displayed showing card property values.</p>
+    <bullets title="Card summary popup controls">
+      <item><strong>Refresh</strong> - You can refresh the property values for the card by clicking on the <link>refresh</link> link in the top right corner of the popup. 
+      This will re-retrieve the property values from the database in case changes have occurred since you opened the tree.</item>
+      <item><strong>Open</strong> - You can <cref topic="updating_cards">open a card for editing</cref> by clicking on the <link>Open</link> link.</item>
+      <item><strong>Transitions</strong> - Any transitions which are applicable will appear as links in the summary popup, click on one to apply it to the current card.</item>
+      <item><strong>Close</strong> - Click on the <link>Close</link>link in the top right corner to close the popup.</item>
+      <item><strong>Move</strong> - Click and drag on the hand icon in the bottom right corner to move the popup to a more convenient place on the screen.</item>
+    </bullets>
+  </subsection>
+  <subsection title="Using the tree filter" file="tree_filter" collapsed="true"/>
+  <subsection title="Using the card explorer" file="card_explorer" collapsed="true"/>
+  <subsection title="Using the zoom control" collapsed="true">
+    <p>On the left hand side, in the tree display box, you can find the <strong>zoom control</strong>. 
+      By moving the slider up and down you can zoom the tree display in and out.</p>
+  </subsection>
+  <subsection title="Using the tree configuration control" collapsed="true">
+    <p>Below the zoom control is the <strong>configuration control</strong>, which displays the configuration of the current tree when selected. 
+      From this control you can <cref topic="modifying_an_existing_card_tree">configure the tree</cref> if you have the appropriate permissions.</p>
+  </subsection>
+  <subsection title="Using the center tree control" collapsed="true">
+    <p>Below the configuration control is the <strong>center tree control</strong>, 
+      which will scroll the display so that the root node of the tree is in the center at the top of the page. 
+      This is a quick way to get to the root node if you want to drop top level cards onto the tree.</p>
+  </subsection>
+</section>

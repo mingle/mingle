@@ -1,0 +1,232 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>Ratio Bar Chart Macro Builder Test</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <script src="../../../../app/assets/javascripts/thirdparty/prototype.js" type="application/javascript"></script>
+    <script src="../../../../public/javascripts/prototype_ext.js" type="application/javascript"></script>
+
+    <script src="../../../../app/assets/javascripts/easy_charts/mql_builder.js" type="application/javascript"></script>
+    <script src="../../../../app/assets/javascripts/easy_charts/ratio_bar_chart/macro_builder.js" type="application/javascript"></script>
+
+    <script src="../../test_assets/sinon-2.3.6.js" type="application/javascript"></script>
+    <script src="../../test_assets/qunit-1.21.0.js" type="application/javascript"></script>
+    <script src="../../test_assets/qunit-phantom.js" type="application/javascript"></script>
+    <link rel="stylesheet" href="../../test_assets/qunit-1.21.0.css" type="text/css"/>
+</head>
+<body>
+<div id="qunit"></div>
+<script type="application/javascript">
+  var expectedDataMql = 'SELECT "prop1", COUNT(*) WHERE "Type" IN ("Story","Card") AND NOT ("prop2" IN ("valX","valY")) AND TAGGED WITH "tag1"';
+  var expectedRestrictionsMql = 'WHERE "Status" = "done" AND "prop2" != "valX"';
+  function FakeCardFilter(property, operator, value, isCardProperty) {
+    return {
+      property: { value: function () {return property; }},
+      operator: { value: function () {return operator; }},
+      value: { value: function () {return value; }},
+      isValid: function () { return property && operator && value; },
+      isForCardProperty: function() { return isCardProperty; },
+      getMql: function() { return '"{prop}" {op} "{val}"'.supplant({prop: property, op: operator, val: value})}
+    };
+  }
+
+  QUnit.module('Ratio Bar Chart Macro Builder', {
+    beforeEach: function () {
+      this.originalMQLBuilder = MQLBuilder;
+      MQLBuilder = sinon.spy(MQLBuilder);
+      var cardFilters = [
+        new FakeCardFilter('Type', 'eq', ['Story', 'Card']),
+        new FakeCardFilter('prop2', 'ne', ['valX', 'valY'])
+      ];
+      var restrictRatioWithFilters = [
+        new FakeCardFilter('Status', '=', 'done'),
+        new FakeCardFilter('prop2', '!=', 'valX')
+      ];
+      this.chartData = {
+        project: 'project',
+        tags: ['tag1'],
+        property: 'prop1',
+        aggregate: 'count',
+        cardFilters: cardFilters,
+        restrictRatioWith: restrictRatioWithFilters,
+        showGuideLines: true
+      };
+    },
+    afterEach: function () {
+      MQLBuilder = this.originalMQLBuilder;
+    }
+  });
+
+  QUnit.test('testBuildShouldAddTotalsAndRestrictRatioWithFieldsToMacroParams', function (assert) {
+    var builder = new MingleUI.EasyCharts.RatioBarChart.MacroBuilder(this.chartData);
+    var macro = builder.build();
+
+    assert.deepEqual(macro, {
+      'ratio-bar-chart': {
+        totals: expectedDataMql,
+        'restrict-ratio-with': expectedRestrictionsMql,
+        project: this.chartData.project,
+        'show-guide-lines': true
+      }
+    });
+  });
+
+  QUnit.test('testBuildShouldAddEmptyWhereClauseRestrictRatioWithFieldsToMacroParamsWhenItIsNotGiven', function (assert) {
+    delete this.chartData.restrictRatioWith;
+    var builder = new MingleUI.EasyCharts.RatioBarChart.MacroBuilder(this.chartData);
+    var macro = builder.build();
+
+    assert.deepEqual(macro, {
+      'ratio-bar-chart': {
+        totals: expectedDataMql,
+        'restrict-ratio-with': 'WHERE ',
+        project: this.chartData.project,
+        'show-guide-lines': true
+      }
+    });
+  });
+
+  QUnit.test('testBuildShouldCallMqlBuilderToGenerateDataField', function (assert) {
+    var builder = new MingleUI.EasyCharts.RatioBarChart.MacroBuilder(this.chartData);
+    builder.build();
+
+    var builderOptions = MQLBuilder.args[0][0];
+
+    assert.equal(MQLBuilder.callCount, 1);
+    assert.deepEqual(builderOptions, {
+      property: this.chartData.property,
+      aggregateType: this.chartData.aggregate,
+      aggregateProp: undefined,
+      cardTypes: [],
+      project: this.chartData.project,
+      additionalConditions: this.chartData.cardFilters,
+      tags: this.chartData.tags
+    })
+  });
+
+  QUnit.test('testBuildShouldAddTitleWhenGiven', function (assert) {
+    this.chartData.chartTitle = 'chart title';
+    var builder = new MingleUI.EasyCharts.RatioBarChart.MacroBuilder(this.chartData);
+
+    var macroParams  = builder.build()['ratio-bar-chart'];
+
+    assert.deepEqual(macroParams, {
+      totals: expectedDataMql,
+      'restrict-ratio-with': expectedRestrictionsMql,
+      project: this.chartData.project,
+      title: 'chart title',
+      'show-guide-lines': true
+    });
+  });
+
+  QUnit.test('testBuildShouldAddChartSizeWhenGiven', function (assert) {
+    this.chartData.chartSize = 'medium';
+    var builder = new MingleUI.EasyCharts.RatioBarChart.MacroBuilder(this.chartData);
+
+    var macroParams  = builder.build()['ratio-bar-chart'];
+
+    assert.deepEqual(macroParams, {
+      totals: expectedDataMql,
+      'restrict-ratio-with': expectedRestrictionsMql,
+      project: this.chartData.project,
+      'chart-size': 'medium',
+      'show-guide-lines': true
+    });
+  });
+
+  QUnit.test('testBuildShouldAddLabelFontAngleWhenGiven', function (assert) {
+    this.chartData.labelFontAngle = 45;
+    var builder = new MingleUI.EasyCharts.RatioBarChart.MacroBuilder(this.chartData);
+
+    var macroParams  = builder.build()['ratio-bar-chart'];
+
+    assert.deepEqual(macroParams, {
+      totals: expectedDataMql,
+      'restrict-ratio-with': expectedRestrictionsMql,
+      project: this.chartData.project,
+      'label-font-angle': 45,
+      'show-guide-lines': true
+    });
+  });
+
+  QUnit.test('testBuildShouldAddColorWhenGiven', function (assert) {
+    this.chartData.color = 'golden-yellow';
+    var builder = new MingleUI.EasyCharts.RatioBarChart.MacroBuilder(this.chartData);
+
+    var macroParams  = builder.build()['ratio-bar-chart'];
+
+    assert.deepEqual(macroParams, {
+      totals: expectedDataMql,
+      'restrict-ratio-with': expectedRestrictionsMql,
+      project: this.chartData.project,
+      color: 'golden-yellow',
+      'show-guide-lines': true
+    });
+  });
+
+  QUnit.test('testBuildShouldBuildMacro', function (assert) {
+    this.chartData.chartTitle = 'chart title';
+    this.chartData.chartSize = 'medium';
+    this.chartData.labelFontAngle = 45;
+    var builder = new MingleUI.EasyCharts.RatioBarChart.MacroBuilder(this.chartData);
+
+    var macroParams  = builder.build()['ratio-bar-chart'];
+
+    assert.deepEqual(macroParams, {
+      totals: expectedDataMql,
+      'restrict-ratio-with': expectedRestrictionsMql,
+      project: this.chartData.project,
+      title: 'chart title',
+      'chart-size': 'medium',
+      'label-font-angle': 45,
+      'show-guide-lines': true
+    });
+  });
+
+  QUnit.test('testBuildCardCountMqlShouldReturnOnlySelectClauseWhenChartDataIsEmpty', function (assert) {
+    var builder = new MingleUI.EasyCharts.RatioBarChart.MacroBuilder({});
+
+    var macroParams  = builder.buildCardCountMql();
+
+    assert.equal(macroParams,'Select count(*)');
+  });
+
+  QUnit.test('testBuildCardCountMqlShouldReturnOnlySelectClauseWithConditionWhenChartDataIsNotEmpty', function (assert) {
+    var builder = new MingleUI.EasyCharts.RatioBarChart.MacroBuilder(this.chartData);
+
+    var macroParams  = builder.buildCardCountMql();
+
+    assert.equal(macroParams,'Select count(*) where "Type" IN ("Story","Card") AND NOT ("prop2" IN ("valX","valY")) AND TAGGED WITH "tag1"');
+  });
+
+  QUnit.test('testBuildShouldNotAddProjectParameterWhenNotPresentInTheChartData', function (assert) {
+    delete this.chartData.project;
+    var builder = new MingleUI.EasyCharts.RatioBarChart.MacroBuilder(this.chartData);
+    var macroParams  = builder.build()['ratio-bar-chart'];
+
+    assert.deepEqual(macroParams, {
+      totals: expectedDataMql,
+      'restrict-ratio-with': expectedRestrictionsMql,
+      'show-guide-lines': true
+    });
+  });
+</script>
+</body>
+</html>

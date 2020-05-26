@@ -1,0 +1,284 @@
+<!--Scripting-->
+<a href="#about">About Sahi script</a><br>
+<a href="#variables">Variables</a><br>
+<a href="apis.html">Sahi APIs</a><br>
+ <a href="#functions">Functions</a><br>
+ <br>
+<h4><a name="about">About Sahi script</a></h4>
+
+<br>
+ While Sahi scripts can easily be recorded, as a project grows in
+size, the scripts may have to be more logically organized into
+functions and split into multiple files. The following section
+gives more details on the Sahi Script and the rules to follow. Sahi
+script is based on Javascript. The constructs of javascript, like
+functions, variables, loops, conditional statements etc. are all
+available in Sahi script<br>
+But the script is parsed and transformed slightly in the Sahi proxy
+server before it reaches the browser.<br>
+Details of how Sahi script executes is available <a href=
+"devnotes.html#delayed">here</a>.<br>
+<br>
+All calls to <a href="apis.html#scheduler">Scheduler Functions</a>
+(like _click, _setValue etc.),<br>
+are transformed into strings and added to an array.<br>
+They are executed later, sequentially, but with a slight delay
+between each call.<br>
+<br>
+Example:<br>
+<br>
+<pre class="code">
+_setValue(_textbox("name"), "Kamlesh");
+</pre>
+
+<br>
+<br>
+will be parsed and scheduled for execution later,<br>
+But<br>
+<br>
+<pre class="code">
+var $x = 10;
+</pre>
+
+<br>
+<br>
+will be executed immediately on <b>every</b> page load.<br>
+<br>
+ <br>
+<hr>
+<br>
+<h4><a name="variables">Rules for variable usage.</a></h4>
+
+<ul>
+<li><a href="#dollar">Variables which are used as parameters to
+Sahi APIs should start with a $ (dollar) sign.</a></li>
+
+<li><a href="#string">$ Variables passed to Sahi APIs can only
+represent string and numeric values.</a></li>
+
+<li><a href="#operation">Operations like $i++ or $i-- should not be
+performed inside the API call.</a></li>
+
+<li><a href="apis.html#global">For storing and retrieving
+properties of accessors, functions _getGlobal() and _setGlobal()
+should be used.</a></li>
+</ul>
+
+<br>
+<hr>
+<br>
+ 
+
+<h4><a name="dollar">Variables which are used as parameters to Sahi
+APIs should start with a $ (dollar) sign.</a></h4>
+
+<br>
+ eg.<br>
+<br>
+<pre class="code">
+var $name = "Kamlesh";                // Right way
+_setValue(_textbox("name1"), $name);  // Right way
+$name = "Raman";                      // Right way
+_setValue(_textbox("name2"), $name);  // Right way
+</pre>
+
+<br>
+is the right way to use variables.<br>
+<br>
+When done the wrong way, i.e., without $ prefix, <br>
+<br>
+<pre class="code">
+var nameWithoutDollar = "Kamlesh";                // Wrong way
+_setValue(_textbox("name1"), nameWithoutDollar);  // Wrong way
+nameWithoutDollar = "Raman";                      // Wrong way
+_setValue(_textbox("name2"), nameWithoutDollar);  // Wrong way
+</pre>
+
+<br>
+This is wrong, and will not work correctly. <br>
+While execution with nameWithoutDollar, both the _setValue calls
+will set the value to "Raman"!<br>
+This happens because the code gets converted to:<br>
+<br>
+ 
+
+<pre class="code">
+var nameWithoutDollar = "Kamlesh";
+sahiAdd("sahi_setValue(sahi_textbox(\"name1\"), nameWithoutDollar)", "aaTest.sah : 2")
+nameWithoutDollar = "Raman";
+sahiAdd("sahi_setValue(sahi_textbox(\"name2\"), nameWithoutDollar)", "aaTest.sah : 4")
+</pre>
+
+<br>
+ Notice that the 2nd and 4th lines actually schedule the strings
+for later execution using sahiAdd().<br>
+So the execution order is rather like:<br>
+<br>
+<pre class="code">
+var nameWithoutDollar = "Kamlesh";
+nameWithoutDollar = "Raman";
+// Some delay later
+sahi_setValue(sahi_textbox("name1"), nameWithoutDollar);
+// Some delay later
+sahi_setValue(sahi_textbox("name2"), nameWithoutDollar);
+</pre>
+
+<br>
+So when these eventually execute, the variable
+<b>nameWithoutDollar</b>, if available will contain the reassigned
+value of "Raman". <br>
+<br>
+ Also read <a href="devnotes.html#variable">Why do variables need
+to be prefixed with a dollar($) sign?</a> and <a href=
+"apis.html#scheduler">Scheduler Functions</a><br>
+<br>
+Variables which are not used as parameters in Sahi APIs need not
+start with a dollar.<br>
+ <br>
+<hr>
+<br>
+ <!--
+<h4><a name="assign">Returned values of accessor functions, or properties of elements returned by accessors, should not be assigned to variables.</a></h4>
+<br/>
+
+Example:<br/>
+<br/>
+    <pre class="code">
+    var $nameField = _textbox("name");
+    _setValue($nameField, "Kamlesh");
+    </pre>
+<br/>
+can cause problems on pages which do not have a textbox by id "name".<br/>
+<br/>
+It is advisable to use accessor functions in the same call as the action functions.<br/>
+Example<br/>
+<span class="code">_setValue(_textbox("name"), "Kamlesh");</span><br/>
+<br/>
+</div>
+
+<br/>
+<hr/>
+<br/>
+-->
+ 
+
+<h4><a name="string">$ Variables passed to Sahi APIs can only
+represent string and numeric values.</a></h4>
+
+<br>
+ As mentioned earlier, when variables are used, the transformation
+of script is as follows:<br>
+<pre class="code">
+var $linkText = "Link Test";
+_click(_link($linkText));
+</pre>
+
+<br>
+becomes<br>
+<pre class="code">
+var $linkText = "Link Test";
+sahiAdd("sahi_click(sahi_link("+s_v($linkText)+"));", "sahi_demo.sah : 4")
+</pre>
+
+<br>
+Since the statement is transformed into a string, only variables
+which are strings or numbers are possible.<br>
+<br>
+ <br>
+<hr>
+<br>
+ 
+
+<h4><a name="operation">Operations like $i++ or $i-- should be not
+be performed inside the API call.</a></h4>
+
+<br>
+Example<br>
+<br>
+<pre class="code">
+_setValue(_textbox("name"), "Kamlesh"+(++$i));
+</pre>
+
+is not valid;<br>
+<br>
+It should be broken into 2 steps, as follows<br>
+<br>
+<pre class="code">
+$i++;
+_setValue(_textbox("name"), "Kamlesh"+$i);
+</pre>
+
+<br>
+<br>
+will work correctly<br>
+<br>
+ <br>
+<hr>
+<br>
+<br>
+ 
+
+<h4><a name="functions">Function calls.</a></h4>
+
+<br>
+<h4><a name="variables">Rules for function usage.</a></h4>
+
+While the rules are the same as in javascript, a couple of points
+to note are:<br>
+<ul>
+<li><a href="#call">Functions can be scheduled for later execution
+by using "_call()"</a></li>
+
+<li><a href="#nocall">if a function calls Scheduler Functions from
+inside it, that function should not itself be scheduled using
+"_call()"</a></li>
+</ul>
+
+<h4><a name="call">Functions can be scheduled for later execution
+by using "_call()"</a></h4>
+
+<br>
+eg.<br>
+<br>
+<pre class="code">
+function createCustomer(){
+    __setValue(_text("name"), "cust1");     // double underscores. Not a Scheduler Action Function
+    __setValue(_Password("pwd"), "pwd1");   // double underscores. Not a Scheduler Action Function
+    __click(_submit());                     // double underscores. Not a Scheduler Action Function
+}
+_call(createCustomer());
+</pre>
+
+<br>
+This will schedule execution of createCustomer() till later. Note
+that all the Action Functions in <br>
+createCustomer() use __ (double underscores). This means that even
+though createCustomer() will be<br>
+called at its scheduled turn, all these functions inside will be
+executed immediately when <br>
+createCustomer() is executed.<br>
+<br>
+<h4><a name="nocall">if a function calls Scheduler Functions from
+inside it, that function should not itself be scheduled using
+"_call()".</a></h4>
+
+<br>
+Thus, if the same function existed like this:<br>
+<br>
+<pre class="code">
+function createCustomer(){
+    _setValue(_text("name"), "cust1");      //Scheduler Action Function
+    _setValue(_Password("pwd"), "pwd1");    //Scheduler Action Function
+    _click(_submit());                      //Scheduler Action Function
+}
+createCustomer(); // is Right
+//_call(createCustomer()); // is Wrong
+</pre>
+
+<br>
+<br>
+Read more about <a href="apis.html#scheduler">Scheduler
+Functions</a> <br>
+<hr>
+<br>
+

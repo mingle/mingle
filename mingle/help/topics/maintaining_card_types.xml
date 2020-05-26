@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE section SYSTEM "mingle_help.dtd">
+<section title="Maintaining card types">	
+	<subsection title="Navigate to the Card types page" collapsed="true">
+		<steps>
+			<item><cref topic="signing_in_and_out_of_mingle">Sign in</cref> to Mingle as a project administrator and open the project (if you're not already working in the project).</item>
+			<item>
+				<p>Click the <tab>Project admin</tab> tab.</p> 
+				<screenshot alttext="Project admin tab" src="resources/images/project_admin_tab.png" />
+				<p>Mingle displays the <strong>Project settings</strong> page.</p>
+				<note>if you are logged in as a project team member, Mingle displays the <strong>Team</strong> page.</note>
+				<screenshot alttext="Project admin menu - Card types link" src="resources/images/card_types_link.png" />
+			</item>
+			<item>
+				<p>Click the <link>Card types</link> link.</p>
+				<p>Mingle displays the <strong>Card types</strong> page with all card types setup for this project.</p>				
+			</item>
+		</steps>
+		
+		<screenshot alttext="Card types page - new card type" src="resources/images/card_types_page.png" />
+	</subsection>
+	<screenshot alttext="Card types page - new card type" src="resources/images/card_types_page.png" />
+	
+	<subsection title="Color card types" id="color">
+	
+	Card types can be colored. Color will be used to differentiate cards in the <cref topic="grid_view">grid</cref> and <cref topic="tree_view">tree</cref> views.
+		
+	</subsection>
+	<subsection title="Reorder card types" id="reorder">
+		
+	<p>You can change the order in which card types are displayed in the filters and quick add.</p>
+	<p>Click on the <link>Drag</link> links next to the types you want to re-order and drag them into the correct order.</p>
+		
+	</subsection>
+	
+	<subsection title="Editing and deleting card types" id="edit_and_delete">
+		<p>The card type page looks and works similarly to the <cref topic="card_properties">card property</cref> page. 
+			Use the <link>edit</link> and <link>delete</link> links to edit existing card types.</p>
+		<note>You can only delete a card type if it is not used by any card, including old versions of a card, in your project.</note>			
+	</subsection>
+	<subsection title="Add or remove properties">
+		<p>You can add or remove properties from a card type, click the <link>Edit</link> link and add or remove properties using the checkboxes next to the property names</p>
+		<warning>If you remove properties from a card type, then any data that was held in those properties is lost.</warning>
+	</subsection>
+	<subsection title="Reorder card properties" file="reorder_card_display_properties" id="reorder"/>
+	<subsection title="Maintain card defaults" id="card_defaults">
+		<p>Click on the <link>Edit defaults</link> link to <cref topic="card_defaults">specify default property values</cref> for the card type.</p>
+	</subsection>
+	<subsection title="Reorder card properties" file="reorder_card_display_properties" id="reorder"/>
+	<subsection title="Creating a new card type">
+		<steps>
+			<item>
+				<p>Click the <link>Create new card type</link> link.</p>
+				<p>Mingle displays the <strong>New card type</strong> page.</p>
+				<screenshot alttext="Create card type page" src="resources/images/create_new_card_type.png" />
+			</item>
+			<item>
+				<bullets>
+					<item>Enter a name for the new card type</item>
+					<item>Choose a reporting color for the new card type. This color will be used to differentiate cards in the <cref topic="grid_view">grid</cref> and <cref topic="tree_view">tree</cref> views</item>
+				</bullets>
+			</item>
+			<item>
+				<p>Select which <cref topic="card_properties">card properties</cref> should apply to the new card type</p>
+			</item>
+			<item><p>Click on the <link>Create type</link> link to save your work.</p></item>
+		</steps>		
+	</subsection>	
+</section>
+

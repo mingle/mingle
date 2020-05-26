@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE subsection SYSTEM "../mingle_help.dtd">
+<item>
+  <p><strong>Custom macros (advanced):</strong> If you have <cref topic="building_your_own_macro">custom macros</cref>, you may be interested in the following changes. Due to some changes to Mingle's infrastructure, we recommend the following changes for custom macros:
+<bullets>
+  <item>Explicitly require all files (aka classes) that the macro needs in init.rb.</item>
+  <item>Be careful about class instance variables. Storing instance variables in the class object may yield unexpected thread-safe results. You may want to use the Thread local space instead.</item>
+</bullets>
+</p>
+</item>

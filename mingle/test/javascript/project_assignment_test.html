@@ -1,0 +1,245 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>JavaScript unit test file</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+  <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+  <script src="test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+
+  <script src="test_assets/unittest.js" type="text/javascript"></script>
+  <script src="test_assets/unittest_ext.js" type="text/javascript"></script>
+
+
+  <script src="../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/controls.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/builder.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+
+  <script src="../../app/assets/javascripts/alignment.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/application.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/base.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/view/base.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/view/drop_down.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/view/drop_link.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/view/field.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/view/filter.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/view/inline_editor.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/view/layout.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/callback_action.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/basic_controller.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/filter_action.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/inline_edit_action.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/model.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/option.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list.js" type="text/javascript"></script>
+
+  <script src="../../public/javascripts/membership.js" type="text/javascript"></script>
+
+  <link rel="stylesheet" href="assets/unittest.css" type="text/css" />
+  <link rel="stylesheet" href="test_assets/unittest.css" type="text/css" />
+</head>
+<body>
+
+<div id="content">
+  <div id="header">
+    <h1>JavaScript unit test file</h1>
+    <p>
+      This file tests the ProjectAssignment class in <strong>membership.js</strong>.
+    </p>
+  </div>
+
+  <!-- Log output -->
+  <div id="testlog"> </div>
+
+  <div style='border:solid 1px' id='sandbox'>
+
+    <table id="project_assignment_table">
+      <thead>
+        <tr>
+          <th>Project</th>
+          <th>Permission</th>
+          <th>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+
+    <input id="add_new_project_assignment" type="button" value="Add Another" />
+
+    <a id="submit_button" class="link_as_button primary disabled">Save</a>
+  </div>
+</div>
+
+<script type="text/javascript">
+// <![CDATA[
+
+  SAND_BOX_CONTENT = $('sandbox').innerHTML;
+
+  new Test.Unit.Runner({
+
+    setup: function() {
+      $('sandbox').update(SAND_BOX_CONTENT);
+      this.defaultDropListOptions = {
+        projects: [ ['Project One', 'project_one'], ['Project Two', 'project_two'] ],
+        permissions: [ ['Team member', 'member'], ['Read only team member', 'readonly_member'], ['Project administrator', 'project_admin'] ],
+      };
+      ProjectAssignment.ROWS_TO_SHOW = 1;
+    },
+
+    testShouldMarkAsInitializedAfterCreatedAnyProjectAssignmentObject: function() { with(this) {
+      assert(!ProjectAssignment.initialized)
+      ProjectAssignment.create('project_assignment_table', 'add_new_project_assignment', 'submit_button', this.defaultDropListOptions);
+      assert(ProjectAssignment.initialized)
+    }},
+
+    testRemoveAssignmentShouldEnableAddNewProjectAssignmentButton: function() { with(this) {
+      this.projectAssignment = ProjectAssignment.create('project_assignment_table', 'add_new_project_assignment', 'submit_button', this.defaultDropListOptions);
+      this.projectAssignment.onNewAssignment();
+      this.projectAssignment.onRemoveAssignment(0);
+      assertEnabled('add_new_project_assignment');
+    }},
+
+    testRemoveRowShouldMakeRowDisappear: function() { with(this) {
+      this.projectAssignment = ProjectAssignment.create('project_assignment_table', 'add_new_project_assignment', 'submit_button', this.defaultDropListOptions);
+      this.projectAssignment.onRemoveAssignment(0);
+      assertNull($('project_assignment_row_0'));
+    }},
+
+    testInitializeShouldSetProjectAndPermissionDropDowns: function() { with(this) {
+      this.projectAssignment = ProjectAssignment.create('project_assignment_table', 'add_new_project_assignment', 'submit_button', this.defaultDropListOptions);
+      assertEqual(1, $$('#project_assignment_table tbody tr').size());
+      assertEqual('Select project...', $('select_project_0_drop_link').innerHTML);
+      assertEqual('', $('select_project_0_field').value);
+      assertEqual('Team member', $('select_permission_0_drop_link').innerHTML);
+      assertEqual('member', $('select_permission_0_field').value);
+    }},
+
+    testAddNewRowShouldRenderCorrectly: function() { with(this) {
+      this.projectAssignment = ProjectAssignment.create('project_assignment_table', 'add_new_project_assignment', 'submit_button', this.defaultDropListOptions);
+      var original = $$('#project_assignment_table tbody tr').size();
+      Event.trigger('add_new_project_assignment', 'click');
+      assertEqual(original + 1, $$('#project_assignment_table tbody tr').size());
+      assertEqual('Select project...', $('select_project_1_drop_link').innerHTML);
+      assertEqual('Team member', $('select_permission_1_drop_link').innerHTML);
+    }},
+
+    testShouldDisableAddProjectButtonWhenThereAreEnoughRowsForAvailableProjects: function() { with(this) {
+      this.projectAssignment = ProjectAssignment.create('project_assignment_table', 'add_new_project_assignment', 'submit_button', this.defaultDropListOptions);
+      this.projectAssignment.onNewAssignment();
+      assertDisabled($('add_new_project_assignment'));
+    }},
+
+    testOnInitializeShouldDisableAddProjectButtonWhenThereAreEnoughRowsForAvailableProjects: function() { with(this) {
+      ProjectAssignment.ROWS_TO_SHOW = 2;
+      ProjectAssignment.create('project_assignment_table', 'add_new_project_assignment', 'submit_button', this.defaultDropListOptions);
+      assertDisabled('add_new_project_assignment');
+    }},
+
+    testOnInitializeShouldEnableAddProjectButtonWhenMoreProjectRowsAreAvailableToBeAdded: function() { with(this) {
+      ProjectAssignment.create('project_assignment_table', 'add_new_project_assignment', 'submit_button', this.defaultDropListOptions);
+      assertEnabled('add_new_project_assignment');
+    }},
+
+    testOnInitializeSaveButtonShouldBeDisabledSinceNoProjectSelectionIsMade: function() { with(this) {
+      ProjectAssignment.create('project_assignment_table', 'add_new_project_assignment', 'submit_button', this.defaultDropListOptions);
+      assertEqual(1, $$('#submit_button.disabled').size());
+    }},
+
+    testOnProjectSelectionShouldEnableSubmitButton: function() { with(this) {
+      this.projectAssignment = ProjectAssignment.create('project_assignment_table', 'add_new_project_assignment', 'submit_button', this.defaultDropListOptions);
+      Event.trigger('select_project_0_drop_link', 'click');
+      Event.trigger('select_project_0_option_Project One', 'click');
+      assert($$('#submit_button').first());
+      assertEqual(0, $$('#submit_button.disabled').size());
+    }},
+
+    testChangeProjectSelectionShouldAddBackThePreviousSelectionToOtherRows: function() { with(this) {
+      this.projectAssignment = ProjectAssignment.create('project_assignment_table', 'add_new_project_assignment', 'submit_button', this.defaultDropListOptions);
+      Event.trigger('add_new_project_assignment', 'click');
+      Event.trigger('select_project_0_drop_link', 'click');
+      Event.trigger('select_project_0_option_Project One', 'click');
+      Event.trigger('select_project_1_drop_link', 'click');
+      assertNull($('select_project_1_option_Project One'));
+      Event.trigger('select_project_0_drop_link', 'click');
+      Event.trigger('select_project_0_option_Project Two', 'click');
+      Event.trigger('select_project_1_drop_link', 'click');
+      assertNotNull($('select_project_1_option_Project One'));
+    }},
+
+    testOnProjectSelectionShouldHideAlreadySelectedProjectsInOtherRows: function() { with(this) {
+      this.projectAssignment = ProjectAssignment.create('project_assignment_table', 'add_new_project_assignment', 'submit_button', this.defaultDropListOptions);
+      Event.trigger('add_new_project_assignment', 'click');
+      Event.trigger('select_project_0_drop_link', 'click');
+      Event.trigger('select_project_0_option_Project One', 'click');
+      Event.trigger('select_project_1_drop_link', 'click');
+      assertNull($('select_project_1_option_Project One'));
+    }},
+
+    testOnRemovingProjectAssignmentRowShouldAddItsSelectionBackToOtherRows: function() { with(this) {
+      this.projectAssignment = ProjectAssignment.create('project_assignment_table', 'add_new_project_assignment', 'submit_button', this.defaultDropListOptions);
+      Event.trigger('add_new_project_assignment', 'click');
+      Event.trigger('select_project_0_drop_link', 'click');
+      Event.trigger('select_project_0_option_Project One', 'click');
+      assertNull($('select_project_1_option_Project One'));
+      this.projectAssignment.onRemoveAssignment(0);
+      Event.trigger('select_project_1_drop_link', 'click');
+      assertVisible($('select_project_1_option_Project One'));
+      assertArrayEqual($('select_project_1_option_Project One', 'select_project_1_option_Project Two'), $('select_project_1_option_Project One').up('ul').childElements());
+    }},
+
+    testNewlyAddedAssignmentRowShouldNotShowOptionsThatAreSelectedByExistingRows: function() { with(this) {
+      this.projectAssignment = ProjectAssignment.create('project_assignment_table', 'add_new_project_assignment', 'submit_button', this.defaultDropListOptions);
+      Event.trigger('select_project_0_drop_link', 'click');
+      Event.trigger('select_project_0_option_Project One', 'click');
+      Event.trigger('add_new_project_assignment', 'click');
+      Event.trigger('select_project_1_drop_link', 'click');
+      assertNull($('select_project_1_option_Project One'));
+    }},
+
+    testSaveButtonShouldBeDisabledWhenNoProjectSelected: function() { with(this) {
+      this.projectAssignment = ProjectAssignment.create('project_assignment_table', 'add_new_project_assignment', 'submit_button', this.defaultDropListOptions);
+      Event.trigger('select_project_0_drop_link', 'click');
+      Event.trigger('select_project_0_option_Project One', 'click');
+      this.projectAssignment.onRemoveAssignment(0);
+      assert($$('#submit_button.disabled').first());
+    }},
+
+    testSaveButtonShouldBeDisabledWhenRevmoingMultipleProjectsInTwoSteps: function() { with(this) {
+      this.projectAssignment = ProjectAssignment.create('project_assignment_table', 'add_new_project_assignment', 'submit_button', this.defaultDropListOptions);
+      this.projectAssignment.onNewAssignment();
+      this.projectAssignment.onRemoveAssignment(1);
+      this.projectAssignment.onNewAssignment();
+      Event.trigger('select_project_2_drop_link', 'click');
+      Event.trigger('select_project_2_option_Project One', 'click');
+      this.projectAssignment.onRemoveAssignment(2);
+      assert($$('#submit_button.disabled').first());
+    }}
+  }, { testLog: "testlog", test : '' }).run;
+// ]]>
+</script>
+</body>
+</html>

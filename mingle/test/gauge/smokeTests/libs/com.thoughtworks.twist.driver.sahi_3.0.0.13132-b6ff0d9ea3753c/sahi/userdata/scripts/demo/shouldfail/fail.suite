@@ -1,0 +1,7 @@
+stop_on_error.sah
+log_browser_exception_as_failure.sah
+log_exception_as_failure.sah
+click_null.sah
+continue_on_error.sah
+set_recovery.sah
+syntax_error_line_number.sah

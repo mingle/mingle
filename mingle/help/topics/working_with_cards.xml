@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Working with cards">
+	<section title="This section describes how to create and update cards.">
+		<todo>Not completed</todo>
+        <bullets>
+        	<item><cref topic="creating_a_card">Creating new cards</cref></item>
+        	<item><cref topic="attaching_and_inserting_objects_and_links">Attaching objects and links to cards</cref></item>
+        	<item><cref topic="murmurs">Posting Murmurs</cref></item>
+        	<item><cref topic="updating_cards">Updating cards</cref></item>
+        	<item><cref topic="updating_cards_in_bulk">Updating cards in bulk</cref></item>
+        </bullets>        
+	</section>
+	<section title="Also see...">
+		<bullets>
+			<item><cref topic="viewing_cards">Viewing cards</cref></item>
+			<item><cref topic="card_transitions">Using card transitions</cref></item>
+	        <item><cref topic="import_export_component">Importing and exporting cards</cref></item>
+			<item><cref topic="copying_a_card">Copying cards between projects</cref></item>
+			<item>
+				<cref topic="explore_mingle_topic_whats_a_card">What's a card?</cref>
+			</item>
+		</bullets>
+	</section>
+</topic>

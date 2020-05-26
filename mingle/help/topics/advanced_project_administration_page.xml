@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Advanced project administration page">
+  <section title="What you can do on this page">
+    <p>The Advanced project administration page allows you to perform maintenance actions on your Mingle project. As these actions are often long-running and may cause temporary disruptions in the Mingle user experience, these actions should not be performed without a specific reason. Information about the actions that can be performed on this page are listed below.</p>
+    <note>
+      <p>If you see a message that the operation is in progress, somebody has already started the action and there is no reason to run the action again.</p>
+      <screenshot alttext="Operation in progress" src="resources/images/advanced_project_admin_operation_in_progress.png" />
+    </note>
+    <subsection title="Aggregate card properties" collapsed="true">
+      <p><strong>When to run?</strong> Run this action when aggregate card properties display incorrect values.</p>
+      <p><strong>What does this do?</strong> This action recalculates aggregate card property values across the project.</p>
+      <p><strong>How long does this take?</strong> This action can take some time, but will take place in the background allowing project work to continue.</p>
+      <p><strong>How does this affect user experience while the action is running?</strong> Project work should not be affected.</p>
+    </subsection>
+    <subsection title="Atom feed" collapsed="true">
+      <p>In order to work with the most common news readers, Mingle's Atom feeds do not require authentication. The feeds are protected by encrypted URLs that are only available to members of the project team via the History tab.</p>
+      <p><strong>When to run?</strong> Run this action when the team's history feeds have been compromised in any way. For example, you may want to regenerate the project's secret key anytime a team member leaves the project.</p>
+      <p><strong>What does this do?</strong> This action will regenerate the project's secret key. This will invalidate all team member's existing project feed URLs, and they will need to resubscribe to the feeds.</p>
+      <p><strong>How long does this take?</strong> This action will be performed immediately.</p>
+    </subsection>
+    <subsection title="History" collapsed="true">
+      <p><strong>When to run?</strong> Run this action when Mingle's history is not displaying expected events, either on the project history tab or on card or page history tabs.</p>
+      <p><strong>What does this do?</strong> This action rebuilds the project's history index.</p>
+      <p><strong>How long does this take?</strong> This action can take some time, but will take place in the background allowing project work to continue.</p>
+      <p><strong>How does this affect user experience while the action is running?</strong> While the history index is rebuilding, events will not be shown again until they are rebuilt. All other project work should not be affected.</p>
+    </subsection>
+    <subsection title="Murmurs and card linking" collapsed="true">
+      <p><strong>When to run?</strong> Run this action when project cards are not displaying expected associated Murmurs. For example, if you murmur "Fixed bug #123" you should see that Murmur on bug #123 as well as on the Murmurs tab.</p>
+      <p><strong>What does this do?</strong> This action rebuilds the Murmurs card links.</p>
+      <p><strong>How long does this take?</strong> This action can take some time, but will take place in the background allowing project work to continue.</p>
+      <p><strong>How does this affect user experience while the action is running?</strong> While the Murmurs card links are being rebuilt, Murmurs will not be displayed on their associated cards until the link to the card is rebuilt. All other project work should not be affected.</p>
+    </subsection>
+    <subsection title="Page and card content cache" collapsed="true">
+      <p><strong>When to run?</strong> Run this action when any card or page is displaying out-of-date content.</p>
+      <p><strong>What does this do?</strong> This action invalidates the page and card content cache. This cache is used to quickly display cards and pages. There may be rare occasions when this cache gets out of sync.</p>
+      <p><strong>How long does this take?</strong> This action will be performed immediately.</p>
+      <p><strong>How does this affect user experience while the action is running?</strong> Because the cache is intended to improve performance, as team members open cards or pages that have not been recached, performance will be the same as it would be for an uncached card or page. Once team members open cards and pages they will be recached.</p>
+    </subsection>
+    <subsection title="Project health check" collapsed="true">
+      <p><strong>When to run?</strong> Mingle will inform you when this action needs to be performed.</p>
+      <p><strong>What does this do?</strong> This action diagnoses any issues with the project data or structure.</p>
+      <p><strong>How long does this take?</strong> This action will perform the diagnosis immediately, and should be fairly quick.</p>
+    </subsection>
+    <subsection title="Search" collapsed="true">
+      <p><strong>When to run?</strong> Run this action when search is not returning the expected results.</p>
+      <p><strong>What does this do?</strong> This action rebuilds the project's internal search index.</p>
+      <p><strong>How long does this take?</strong> This action can take some time, but will take place in the background allowing project work to continue.</p>
+      <p><strong>How does this affect user experience while the action is running?</strong> While the search index is being rebuilt, search results may return fewer results than normal. All other project work should not be affected.</p>
+    </subsection>
+  </section>
+</topic>

@@ -1,0 +1,696 @@
+
+
+-------- Grammar --------
+
+rule 1 xclass: XCLASS class params XRULE rules opt_end
+rule 2 class: rubyconst
+rule 3 class: rubyconst "<" rubyconst
+rule 4 rubyconst: XSYMBOL
+rule 5 rubyconst: rubyconst ":" ":" XSYMBOL
+rule 6 params: 
+rule 7 params: params param_seg
+rule 8 param_seg: XCONV convdefs XEND
+rule 9 param_seg: xprec
+rule 10 param_seg: XSTART symbol
+rule 11 param_seg: XTOKEN symbol_list
+rule 12 param_seg: XOPTION bare_symlist
+rule 13 param_seg: XEXPECT DIGIT
+rule 14 convdefs: symbol STRING
+rule 15 convdefs: convdefs symbol STRING
+rule 16 xprec: XPRECHIGH preclines XPRECLOW
+rule 17 xprec: XPRECLOW preclines XPRECHIGH
+rule 18 preclines: precline
+rule 19 preclines: preclines precline
+rule 20 precline: XLEFT symbol_list
+rule 21 precline: XRIGHT symbol_list
+rule 22 precline: XNONASSOC symbol_list
+rule 23 symbol_list: symbol
+rule 24 symbol_list: symbol_list symbol
+rule 25 symbol_list: symbol_list "|"
+rule 26 symbol: XSYMBOL
+rule 27 symbol: STRING
+rule 28 rules: rules_core
+rule 29 rules: 
+rule 30 rules_core: symbol
+rule 31 rules_core: rules_core rule_item
+rule 32 rules_core: rules_core ";"
+rule 33 rules_core: rules_core ":"
+rule 34 rule_item: symbol
+rule 35 rule_item: "|"
+rule 36 rule_item: "=" symbol
+rule 37 rule_item: ACTION
+rule 38 bare_symlist: XSYMBOL
+rule 39 bare_symlist: bare_symlist XSYMBOL
+rule 40 opt_end: XEND
+rule 41 opt_end: 
+
+------- Symbols -------
+
+**Nonterminals, with rules where they appear
+
+  $start (24)
+    on right: 
+    on left : 
+  xclass (25)
+    on right: 
+    on left : 1
+  class (26)
+    on right: 1
+    on left : 2 3
+  params (27)
+    on right: 1 7
+    on left : 6 7
+  rules (28)
+    on right: 1
+    on left : 28 29
+  opt_end (29)
+    on right: 1
+    on left : 40 41
+  rubyconst (30)
+    on right: 2 3 5
+    on left : 4 5
+  param_seg (31)
+    on right: 7
+    on left : 8 9 10 11 12 13
+  convdefs (32)
+    on right: 8 15
+    on left : 14 15
+  xprec (33)
+    on right: 9
+    on left : 16 17
+  symbol (34)
+    on right: 10 14 15 23 24 30 34 36
+    on left : 26 27
+  symbol_list (35)
+    on right: 11 20 21 22 24 25
+    on left : 23 24 25
+  bare_symlist (36)
+    on right: 12 39
+    on left : 38 39
+  preclines (37)
+    on right: 16 17 19
+    on left : 18 19
+  precline (38)
+    on right: 18 19
+    on left : 20 21 22
+  rules_core (39)
+    on right: 28 31 32 33
+    on left : 30 31 32 33
+  rule_item (40)
+    on right: 31
+    on left : 34 35 36 37
+
+**Terminals, with rules where they appear
+
+  $end (0) 
+  error (1) 
+  XCLASS (2) 1
+  XRULE (3) 1
+  "<" (4) 3
+  XSYMBOL (5) 4 5 26 38 39
+  ":" (6) 5 33
+  XCONV (7) 8
+  XEND (8) 8 40
+  XSTART (9) 10
+  XTOKEN (10) 11
+  XOPTION (11) 12
+  XEXPECT (12) 13
+  DIGIT (13) 13
+  STRING (14) 14 15 27
+  XPRECHIGH (15) 16 17
+  XPRECLOW (16) 16 17
+  XLEFT (17) 20
+  XRIGHT (18) 21
+  XNONASSOC (19) 22
+  "|" (20) 25 35
+  ";" (21) 32
+  "=" (22) 36
+  ACTION (23) 37
+
+--------- State ---------
+
+state 0
+
+
+  XCLASS        shift, and go to state 1
+
+  xclass        go to state 2
+
+state 1
+
+   1) xclass : XCLASS _ class params XRULE rules opt_end
+
+  XSYMBOL       shift, and go to state 4
+
+  class         go to state 3
+  rubyconst     go to state 5
+
+state 2
+
+
+  $end          shift, and go to state 6
+
+
+state 3
+
+   1) xclass : XCLASS class _ params XRULE rules opt_end
+
+  $default      reduce using rule 6 (params)
+
+  params        go to state 7
+
+state 4
+
+   4) rubyconst : XSYMBOL _
+
+  $default      reduce using rule 4 (rubyconst)
+
+
+state 5
+
+   2) class : rubyconst _
+   3) class : rubyconst _ "<" rubyconst
+   5) rubyconst : rubyconst _ ":" ":" XSYMBOL
+
+  "<"           shift, and go to state 8
+  ":"           shift, and go to state 9
+  $default      reduce using rule 2 (class)
+
+
+state 6
+
+
+  $end          shift, and go to state 10
+
+
+state 7
+
+   1) xclass : XCLASS class params _ XRULE rules opt_end
+   7) params : params _ param_seg
+
+  XRULE         shift, and go to state 14
+  XCONV         shift, and go to state 17
+  XSTART        shift, and go to state 18
+  XTOKEN        shift, and go to state 20
+  XOPTION       shift, and go to state 11
+  XEXPECT       shift, and go to state 13
+  XPRECHIGH     shift, and go to state 15
+  XPRECLOW      shift, and go to state 16
+
+  xprec         go to state 12
+  param_seg     go to state 19
+
+state 8
+
+   3) class : rubyconst "<" _ rubyconst
+
+  XSYMBOL       shift, and go to state 4
+
+  rubyconst     go to state 21
+
+state 9
+
+   5) rubyconst : rubyconst ":" _ ":" XSYMBOL
+
+  ":"           shift, and go to state 22
+
+
+state 10
+
+
+  $default      accept
+
+
+state 11
+
+  12) param_seg : XOPTION _ bare_symlist
+
+  XSYMBOL       shift, and go to state 24
+
+  bare_symlist  go to state 23
+
+state 12
+
+   9) param_seg : xprec _
+
+  $default      reduce using rule 9 (param_seg)
+
+
+state 13
+
+  13) param_seg : XEXPECT _ DIGIT
+
+  DIGIT         shift, and go to state 25
+
+
+state 14
+
+   1) xclass : XCLASS class params XRULE _ rules opt_end
+
+  XSYMBOL       shift, and go to state 28
+  STRING        shift, and go to state 27
+  $default      reduce using rule 29 (rules)
+
+  symbol        go to state 26
+  rules         go to state 30
+  rules_core    go to state 29
+
+state 15
+
+  16) xprec : XPRECHIGH _ preclines XPRECLOW
+
+  XLEFT         shift, and go to state 33
+  XRIGHT        shift, and go to state 34
+  XNONASSOC     shift, and go to state 35
+
+  preclines     go to state 31
+  precline      go to state 32
+
+state 16
+
+  17) xprec : XPRECLOW _ preclines XPRECHIGH
+
+  XLEFT         shift, and go to state 33
+  XRIGHT        shift, and go to state 34
+  XNONASSOC     shift, and go to state 35
+
+  preclines     go to state 36
+  precline      go to state 32
+
+state 17
+
+   8) param_seg : XCONV _ convdefs XEND
+
+  XSYMBOL       shift, and go to state 28
+  STRING        shift, and go to state 27
+
+  symbol        go to state 37
+  convdefs      go to state 38
+
+state 18
+
+  10) param_seg : XSTART _ symbol
+
+  XSYMBOL       shift, and go to state 28
+  STRING        shift, and go to state 27
+
+  symbol        go to state 39
+
+state 19
+
+   7) params : params param_seg _
+
+  $default      reduce using rule 7 (params)
+
+
+state 20
+
+  11) param_seg : XTOKEN _ symbol_list
+
+  XSYMBOL       shift, and go to state 28
+  STRING        shift, and go to state 27
+
+  symbol        go to state 40
+  symbol_list   go to state 41
+
+state 21
+
+   3) class : rubyconst "<" rubyconst _
+   5) rubyconst : rubyconst _ ":" ":" XSYMBOL
+
+  ":"           shift, and go to state 9
+  $default      reduce using rule 3 (class)
+
+
+state 22
+
+   5) rubyconst : rubyconst ":" ":" _ XSYMBOL
+
+  XSYMBOL       shift, and go to state 42
+
+
+state 23
+
+  12) param_seg : XOPTION bare_symlist _
+  39) bare_symlist : bare_symlist _ XSYMBOL
+
+  XSYMBOL       shift, and go to state 43
+  $default      reduce using rule 12 (param_seg)
+
+
+state 24
+
+  38) bare_symlist : XSYMBOL _
+
+  $default      reduce using rule 38 (bare_symlist)
+
+
+state 25
+
+  13) param_seg : XEXPECT DIGIT _
+
+  $default      reduce using rule 13 (param_seg)
+
+
+state 26
+
+  30) rules_core : symbol _
+
+  $default      reduce using rule 30 (rules_core)
+
+
+state 27
+
+  27) symbol : STRING _
+
+  $default      reduce using rule 27 (symbol)
+
+
+state 28
+
+  26) symbol : XSYMBOL _
+
+  $default      reduce using rule 26 (symbol)
+
+
+state 29
+
+  28) rules : rules_core _
+  31) rules_core : rules_core _ rule_item
+  32) rules_core : rules_core _ ";"
+  33) rules_core : rules_core _ ":"
+
+  XSYMBOL       shift, and go to state 28
+  ":"           shift, and go to state 47
+  STRING        shift, and go to state 27
+  "|"           shift, and go to state 49
+  ";"           shift, and go to state 50
+  "="           shift, and go to state 44
+  ACTION        shift, and go to state 45
+  $default      reduce using rule 28 (rules)
+
+  symbol        go to state 46
+  rule_item     go to state 48
+
+state 30
+
+   1) xclass : XCLASS class params XRULE rules _ opt_end
+
+  XEND          shift, and go to state 52
+  $default      reduce using rule 41 (opt_end)
+
+  opt_end       go to state 51
+
+state 31
+
+  16) xprec : XPRECHIGH preclines _ XPRECLOW
+  19) preclines : preclines _ precline
+
+  XPRECLOW      shift, and go to state 54
+  XLEFT         shift, and go to state 33
+  XRIGHT        shift, and go to state 34
+  XNONASSOC     shift, and go to state 35
+
+  precline      go to state 53
+
+state 32
+
+  18) preclines : precline _
+
+  $default      reduce using rule 18 (preclines)
+
+
+state 33
+
+  20) precline : XLEFT _ symbol_list
+
+  XSYMBOL       shift, and go to state 28
+  STRING        shift, and go to state 27
+
+  symbol        go to state 40
+  symbol_list   go to state 55
+
+state 34
+
+  21) precline : XRIGHT _ symbol_list
+
+  XSYMBOL       shift, and go to state 28
+  STRING        shift, and go to state 27
+
+  symbol        go to state 40
+  symbol_list   go to state 56
+
+state 35
+
+  22) precline : XNONASSOC _ symbol_list
+
+  XSYMBOL       shift, and go to state 28
+  STRING        shift, and go to state 27
+
+  symbol        go to state 40
+  symbol_list   go to state 57
+
+state 36
+
+  17) xprec : XPRECLOW preclines _ XPRECHIGH
+  19) preclines : preclines _ precline
+
+  XPRECHIGH     shift, and go to state 58
+  XLEFT         shift, and go to state 33
+  XRIGHT        shift, and go to state 34
+  XNONASSOC     shift, and go to state 35
+
+  precline      go to state 53
+
+state 37
+
+  14) convdefs : symbol _ STRING
+
+  STRING        shift, and go to state 59
+
+
+state 38
+
+   8) param_seg : XCONV convdefs _ XEND
+  15) convdefs : convdefs _ symbol STRING
+
+  XSYMBOL       shift, and go to state 28
+  XEND          shift, and go to state 61
+  STRING        shift, and go to state 27
+
+  symbol        go to state 60
+
+state 39
+
+  10) param_seg : XSTART symbol _
+
+  $default      reduce using rule 10 (param_seg)
+
+
+state 40
+
+  23) symbol_list : symbol _
+
+  $default      reduce using rule 23 (symbol_list)
+
+
+state 41
+
+  11) param_seg : XTOKEN symbol_list _
+  24) symbol_list : symbol_list _ symbol
+  25) symbol_list : symbol_list _ "|"
+
+  XSYMBOL       shift, and go to state 28
+  STRING        shift, and go to state 27
+  "|"           shift, and go to state 63
+  $default      reduce using rule 11 (param_seg)
+
+  symbol        go to state 62
+
+state 42
+
+   5) rubyconst : rubyconst ":" ":" XSYMBOL _
+
+  $default      reduce using rule 5 (rubyconst)
+
+
+state 43
+
+  39) bare_symlist : bare_symlist XSYMBOL _
+
+  $default      reduce using rule 39 (bare_symlist)
+
+
+state 44
+
+  36) rule_item : "=" _ symbol
+
+  XSYMBOL       shift, and go to state 28
+  STRING        shift, and go to state 27
+
+  symbol        go to state 64
+
+state 45
+
+  37) rule_item : ACTION _
+
+  $default      reduce using rule 37 (rule_item)
+
+
+state 46
+
+  34) rule_item : symbol _
+
+  $default      reduce using rule 34 (rule_item)
+
+
+state 47
+
+  33) rules_core : rules_core ":" _
+
+  $default      reduce using rule 33 (rules_core)
+
+
+state 48
+
+  31) rules_core : rules_core rule_item _
+
+  $default      reduce using rule 31 (rules_core)
+
+
+state 49
+
+  35) rule_item : "|" _
+
+  $default      reduce using rule 35 (rule_item)
+
+
+state 50
+
+  32) rules_core : rules_core ";" _
+
+  $default      reduce using rule 32 (rules_core)
+
+
+state 51
+
+   1) xclass : XCLASS class params XRULE rules opt_end _
+
+  $default      reduce using rule 1 (xclass)
+
+
+state 52
+
+  40) opt_end : XEND _
+
+  $default      reduce using rule 40 (opt_end)
+
+
+state 53
+
+  19) preclines : preclines precline _
+
+  $default      reduce using rule 19 (preclines)
+
+
+state 54
+
+  16) xprec : XPRECHIGH preclines XPRECLOW _
+
+  $default      reduce using rule 16 (xprec)
+
+
+state 55
+
+  20) precline : XLEFT symbol_list _
+  24) symbol_list : symbol_list _ symbol
+  25) symbol_list : symbol_list _ "|"
+
+  XSYMBOL       shift, and go to state 28
+  STRING        shift, and go to state 27
+  "|"           shift, and go to state 63
+  $default      reduce using rule 20 (precline)
+
+  symbol        go to state 62
+
+state 56
+
+  21) precline : XRIGHT symbol_list _
+  24) symbol_list : symbol_list _ symbol
+  25) symbol_list : symbol_list _ "|"
+
+  XSYMBOL       shift, and go to state 28
+  STRING        shift, and go to state 27
+  "|"           shift, and go to state 63
+  $default      reduce using rule 21 (precline)
+
+  symbol        go to state 62
+
+state 57
+
+  22) precline : XNONASSOC symbol_list _
+  24) symbol_list : symbol_list _ symbol
+  25) symbol_list : symbol_list _ "|"
+
+  XSYMBOL       shift, and go to state 28
+  STRING        shift, and go to state 27
+  "|"           shift, and go to state 63
+  $default      reduce using rule 22 (precline)
+
+  symbol        go to state 62
+
+state 58
+
+  17) xprec : XPRECLOW preclines XPRECHIGH _
+
+  $default      reduce using rule 17 (xprec)
+
+
+state 59
+
+  14) convdefs : symbol STRING _
+
+  $default      reduce using rule 14 (convdefs)
+
+
+state 60
+
+  15) convdefs : convdefs symbol _ STRING
+
+  STRING        shift, and go to state 65
+
+
+state 61
+
+   8) param_seg : XCONV convdefs XEND _
+
+  $default      reduce using rule 8 (param_seg)
+
+
+state 62
+
+  24) symbol_list : symbol_list symbol _
+
+  $default      reduce using rule 24 (symbol_list)
+
+
+state 63
+
+  25) symbol_list : symbol_list "|" _
+
+  $default      reduce using rule 25 (symbol_list)
+
+
+state 64
+
+  36) rule_item : "=" symbol _
+
+  $default      reduce using rule 36 (rule_item)
+
+
+state 65
+
+  15) convdefs : convdefs symbol STRING _
+
+  $default      reduce using rule 15 (convdefs)
+

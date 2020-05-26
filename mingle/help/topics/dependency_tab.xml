@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_plus.dtd">
+<chapter title="Dependency Tab" id="mingle_plus">
+		<p>The Dependency Tab is the project's central location to manage dependencies. The counter next to the Dependency Tab indicates the number of NEW dependencies that have been raised against the project. The counter will remain next to the tab until there are no NEW dependencies to resolve.</p>
+
+		<screenshot alttext="dependency tab" src="resources/images/dependency_tab.png" />
+
+		<p>You can view dependencies that your projects have raised on other projects as well as dependencies that have been raised on your own projects by switching the toggle highlighted below.</p>
+
+		<screenshot alttext="dependency tab in project" src="resources/images/dependency_tab_in_project.png" />
+
+		<p>Beside the filtering of raising or resolving dependencies, you can also customize this tab with more information. By clicking on the "Add/Remove Columns" dropdown, you can select other dependency properties to display in the tab. Each column can also be sorted by ascending or descending order by clicking on the column header.</p>
+
+		<screenshot alttext="add/remove columns in dependency tab" src="resources/images/addremove_columns_in_dependency_tab.png" />
+
+		<p>Lastly, to view hidden resolved dependencies, click on 'Load More'. The Dependency Tab will always show the 5 most recently updated dependencies. Clicking on 'Load More' will load the next 25 most recently updated dependencies and so forth.</p>
+
+		<screenshot alttext="load more dependency tab" src="resources/images/load_more_dep_tab.png" />
+</chapter>

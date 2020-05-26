@@ -1,0 +1,30 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<br>
+<% if team_mapped %>
+    <div class="primary-channel-mapped-massage">
+      <h4>Primary channel</h4>
+      <p class="primary-channel"><strong><% if selected_slack_channel.nil? || selected_slack_channel.private %><i class="fa fa-lock"></i><% else %>#<% end %>&nbsp;<%= selected_slack_channel.nil? ? 'Private channel' : selected_slack_channel.name  %></strong>&nbsp;<span class="notes">(This channel will receive your @team notifications. You will be able to run the Mingle + Slack commands.)</span></p>
+    </div>
+    <% if !has_access_to_select_channel? && mapped_non_primary_channels(@slack_channels, Project.current).size > 0 %>
+        <% private_channels, public_channels = mapped_non_primary_channels(@slack_channels, Project.current).partition(&:private) %>
+        <h4>Other mapped channels</h4>
+        <%= render :partial => 'channels_list', :locals => {:public_channels => public_channels, :private_channels => private_channels, :readonly => true }%>
+    <% end %>
+<% elsif !has_access_to_select_channel? %>
+    <p class="mapped_message">This Project has not been linked to any Slack Channel, Please contact a Project admin to create this link.</p>
+<% end %>

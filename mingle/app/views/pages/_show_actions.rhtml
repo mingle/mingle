@@ -1,0 +1,33 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% action_bar do %>
+  <%= render_help_link('Show page', :class => 'page-help-at-action-bar') %>
+  
+  <span class="wiki-favorite-and-tab-control-wrapper">
+    <%= spinner(:id => "#{location}_spinner") if authorized?(:controller => 'favorites', :action => 'remove_team_favorite') %>
+    <%= render :partial => "favorite_and_tab_control", :locals => {:location => location} %>
+  </span>
+  
+  <%= render :partial => 'shared/page_edit_link', :locals => { :page => @page, :location => location } %>
+  <%= link_to_with_user_access 'Delete', { :action => 'destroy', :page_identifier => @page.identifier }, {:confirm => 'Are you sure?', :class => 'delete', :method => 'post'} %>
+<% end %>
+<% if !authorized?(:controller => 'pages', :action => 'edit') && location == 'top' -%>
+  <div  class="single-help-action-bar">
+    <%= render_help_link('Show page', :class => 'page-help') %>
+    <%= clear_float %>
+  </div>
+<% end -%>

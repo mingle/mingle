@@ -1,0 +1,195 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+.basic-profile-information label {
+	display: inline;
+	margin-right: 5px;
+	font-weight: bold;
+}
+
+.basic-profile-information p {
+	margin: 10px 0 10px 0;
+}
+
+.basic-profile-information p span {
+	color: #555555;
+}
+
+.deactivation-notice {
+	color: #888888;
+	margin-left: 10px;
+}
+
+.project-assignment {
+  overflow: auto;
+  height: 421px;
+  margin-bottom: 10px;
+}
+
+.projects-membership-actions {
+  margin-bottom: 10px;
+}
+
+/*User icon*/
+
+.user-icon-preview {
+  float: left;
+  margin: 0.5em 0;
+  margin-right:1em;
+}
+.upload-user-icon {
+  float: left;
+  margin-top: 5px;
+  margin-left: 5px;
+}
+.paragraph .upload-user-icon .field_error {
+  margin-left: 0;
+  margin-top: 0;
+}
+
+#user_icon,
+#reset_icon {
+  float: left;
+}
+
+#reset_icon {
+  margin-left: 1em;
+  margin-top: 0.15em;
+  font-size: 100%;
+}
+
+.upload-user-icon .fieldWithErrors {
+  margin: 0;
+  clear: left;
+}
+
+.fieldWithErrors #user_icon {
+  background-color: #FAE6E7;
+}
+
+.processing-error td {
+  background-color: #FAE6E7 !important;
+  color: #900;
+}
+
+p.very_loud {
+  font-size: 14px;
+}
+
+/* login form */
+
+/* Graphical dialog */
+
+body#page-identifier-profile-login {
+  background: #eeeeee url("/images/bg-rainbow.png");
+  background-repeat: repeat-x;
+
+  .yui-t7 #bd {
+    background-color: transparent;
+  }
+
+  .main_inner {
+    background-color: transparent;
+    border: 0;
+  }
+}
+
+#set_password_form {
+  p {
+    padding-bottom: 5px;
+    padding-top: 7px;
+  }
+
+  #saas_tos_accepted_section {
+    padding-top: 10px;
+    padding-bottom: 15px;
+  }
+
+  #saas_tos_accepted_label a {
+    color: $MINGLE_PRIMARY_COLOR;
+  }
+}
+
+.profile-box {
+  margin: 80px auto;
+  width: 410px;
+  min-height: 350px;
+  border: 1px solid $TRACE_COLOR;
+  background-color: #fff;
+  text-align: center;
+
+  .login-branding {
+    background-color: $MINGLE_PRIMARY_COLOR;
+    padding: 10px 0px;
+    text-align: center;
+  }
+
+  .login-form {
+    margin: 10px auto;
+    padding: 20px;
+    width: 300px;
+  }
+
+  .forgot-password {
+    padding-top: 20px;
+    a, a:visited {
+      color: $DEEMPHASIZED_COLOR;
+    }
+    a:hover {
+      color: $EMPHASIZED_COLOR;
+    }
+  }
+
+  .submit-login {
+    margin-top: 15px;
+
+    input {
+      margin: 0 auto;
+      display: block;
+    }
+  }
+
+  input {
+    margin: 15px 0;
+  }
+
+  a {
+    text-decoration: underline;
+  }
+
+  .login-logo {
+    display: block;
+    margin: 10px auto;
+    width: 200px;
+  }
+}
+
+#user_icon_paragraph {
+    padding: 10px;
+    background-color: #F1F1F1;
+    border: 1px dashed #ccc;
+    width: 50%;
+    margin: 0px 0px 20px 10px;
+}
+
+#graphic-dialog-input {
+  padding: 15px;
+
+  div {
+    width: 300px;
+    margin: 0 auto;
+  }
+}

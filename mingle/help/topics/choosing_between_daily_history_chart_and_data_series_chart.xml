@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE subsection SYSTEM "mingle_help.dtd">
+<topic title="Choosing between daily history chart and data series chart">
+  <p>Both the <cref topic="macro_reference#daily_history_chart">daily history chart</cref> and the <cref topic="macro_reference#data_series">data series chart</cref> can be used to create burnup and burndown charts. This guide is meant to help you decide which chart to use.</p>
+  <p>In general, prefer the daily history chart unless there is limitation that requires you to use the data series chart.</p>
+  
+  <table>
+    <header-row>
+      <col-header></col-header>
+      <col-header>Data series chart</col-header>
+      <col-header>Daily history chart</col-header>
+    </header-row>
+    <row>
+      <col>Data</col>
+      <col>Retrieved from current card data. For example, if a card has a "closed on" property that says it was closed 30 days ago, then that is what the data series chart plots. In practice this isn't an issue since the "closed on" property is usually hidden and can only be changed with a transition. In summary, the data series chart re-creates history based on the values currently set on cards.</col>
+      <col>Shows the data as it was on the date that is plotted. If the status of a card was marked as closed 15 days ago, it doesn't matter that the card's "closed on" property says it was closed 30 days ago. The daily history chart shows real historical data.</col>
+    </row>
+    <row>
+      <col>Data generation</col>
+      <col>Only one query is needed for each series in the chart. This means the data can be generated relatively fast.</col>
+      <col>One query is needed for each series for each day on the chart. The number of series and days can significantly affect how long it takes to generate data for this chart. E.g., a chart that plots 2 series over 20 days needs to ask Mingle for 20 pieces of data. A chart that plots 6 series over 180 days needs to ask Mingle for 1080 pieces of data. Because of this variability, the data for this chart is calculated in the background.</col>
+    </row>
+    <row>
+      <col>Trend lines</col>
+      <col>Can have series with trend lines.</col>
+      <col><cref topic="markup_forecasting_chart">Forecasting chart</cref> and <cref topic="markup_fixed_date_chart">Fixed date chart</cref> have series with trend lines.</col>
+    </row>
+    <row>
+      <col>X-axis</col>
+      <col>The x-axis is based on property values, so it can can contain dates, sprints, iteration, etc.</col>
+      <col>The x-axis is based on values on a specific date. Therefore, the x-axis con only be date-based.</col>
+    </row>
+    <row>
+      <col><cref topic="mql_reference#aggregation">Aggregates</cref></col>
+      <col>The aggregate is specified at the series level. This means that each series could potentially have a different aggregate. For example, the aggregate of one series might be SUM("bug estimate"), and another series could be, SUM("story estimate"). It is up to you to determine if the aggregates are actually comparable.</col>
+      <col>The aggregate is specified at the chart level. Therefore, all series use the same aggregation.</col>
+    </row>
+    <row>
+      <col><cref topic="cross_project_reporting">Cross-project reporting</cref></col>
+      <col>Can use for cross-project reporting. A data series chart can be used in one project to report on data from another project.</col>
+      <col>Cannot use for cross-project reporting. A daily history chart can only be used in the project that for which data it is reporting on.</col>
+    </row>
+    <row>
+      <col>Reporting properties</col>
+      <col>The data series chart often requires reporting properties to store data about when "interesting" things occurred. For example, "moved to new on", "moved to in progress on", "moved to closed on" properties could track when a card moved from one status to another. These three properties make it so that you can plot series to show cards that are new, in progress and closed. These extra reporting properties are generally <cref topic="card_properties#show_hide">hidden</cref> and <cref topic="transition_only_properties">transition-only</cref>.</col>
+      <col>No extra reporting properties required.</col>
+    </row>
+    <row>
+      <col>Markup</col>
+      <col>General. The data series chart is meant to be flexible.</col>
+      <col>Specific. Because the chart is meant for a specific purpose, the markup is more simple and focused than the data series chart.</col>
+    </row>
+    <row>
+      <col>Deleted cards</col>
+      <col>Do not show on the chart.</col>
+      <col>Do not show on the chart.</col>
+    </row>
+  </table>
+</topic>

@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Easy chart for Cumulative Flow graph">
+    <p>Cumulative flow graphs are useful to track and forecast completion of work. It represents how work is moving in the project, highlights bottlenecks, and helps keep scope in check. Check out our <cref topic="ec_cfg#ec_sample_cfg">sample cumulative flow graphs.</cref></p>
+        <screenshot alttext="Example CFG" src="resources/images/ec_cfg_intro.png" />
+    <strong><p>CREATE A CUMULATIVE FLOW GRAPH</p></strong>
+    <p>To create a cumulative flow graph on a page or a card, follow these steps:</p>
+    <bullets>
+        <item>In the editor, click on the Cumulative Flow Graph button.</item>
+        <item>In the Easy Charts form, start by selecting the data that will go into your chart. This is similar to the filters you use to make various views in Mingle.</item>
+            <screenshot alttext="Step 1" src="resources/images/ec_cfg_section1.gif" />
+        <p>Click on <i>Proceed to Step 2</i> when you’re done with this step.</p>
+        <item>Next, build the chart.</item>
+        <p>Specify which property of the cards determines what labels you want to see on the X-axis. You can filter the X-axis values as you need using the next few fields.</p>
+            <screenshot alttext="Step 1" src="resources/images/ec_cfg_section2.gif" />
+        <item>The cumulative flow graph requires that you specify atleast one series. Click on the Add a Series button to get started. </item>
+        <p>Specify what you’d like to call this series. Then use the dropdowns to select the data that defines this series. You can customize how this series should look.</p>
+            <screenshot alttext="Step 1" src="resources/images/ec_cfg_section3.gif" />
+        <p>When you’re done, you could either Add Another Series, or Proceed to Step 3.</p>
+        <item>Customize how you want the chart to look. You can select a size, the angle of the X-axis labels, and a color for the bars. Additionally, you can give the chart, the X-axis and the Y-axis titles of your choice.</item>
+            <screenshot alttext="Step 1" src="resources/images/ec_cfg_section4.gif" />
+        <item>Click on Insert to complete the chart and insert it into the page or card.</item>
+        <item>You can interact with the completed chart. Hovering over a datapoint in an area will show you the last updated ten cards that correspond to that point. Clicking on an area takes you to a full list of all cards for that area.</item>
+            <screenshot alttext="Step 1" src="resources/images/ec_cfg_section5.gif" />
+    </bullets>
+    <strong>Notes</strong>
+    <bullets>
+        <item>You can use project variables in your chart setup. For instance, if you’d like the cumulative flow graph to represent work for the current sprint at any point of time, you can do so without having to update the chart for each sprint!</item>
+            <screenshot alttext="Cumulative graph using project variable" src="resources/images/ec_cfg_using_project_variable.gif" />
+        <item>If you’re inserting a cumulative flow graph into a card description, you can refer to the card itself in your chart setup by selecting THIS CARD as a property value. For instance, if you want a cumulative flow graph in a Release card to represent the status of all features that belong to that release, use Release is THIS CARD in the filters. </item>
+            <screenshot alttext="Cumulative graph using this card" src="resources/images/ec_cfg_using_this_card.gif" />
+    </bullets>
+    <p>
+        <strong>CUSTOMIZE USING MQL:</strong>
+    </p>
+    <p>You can build or further customize a cumulative flow graph using Mingle Query Language. Here’s a sample MQL snippet:</p>
+    <markup>
+        cumulative-flow-graph
+          conditions: type = story AND 'Release' = (Current Release) AND 'Added On' IS NOT NULL
+          cumulative: true
+          x-label-start: 15-Dec-2007
+          x-label-end: 31-Mar-2008
+          x-label-step: 7
+          x-title: Time
+          y-title: Scope
+          chart-width: 500
+          chart-height: 400
+          plot-width: 300
+          plot-height: 250
+          three-d: false
+          series:
+          - label: Qualified Scope
+            color: LightGreen
+            type: area
+            data: SELECT 'Request Qualified On', SUM('Estimate')
+            combine: total
+          - label: Accepted
+            color: LemonChiffon
+            type: area
+            data: SELECT 'Accepted On', SUM('Estimate') WHERE 'Accepted On' IS NOT NULL
+            combine: overlay-bottom
+          - label: Testing Complete
+            color: MistyRose
+            type: area
+            data: SELECT 'Testing Completed On', SUM('Estimate') WHERE 'Testing Completed On' IS NOT NULL and 'Accepted On' IS NULL
+            combine: overlay-bottom
+          - label: Development Complete
+            color: PaleVioletRed
+            type: area
+            data: SELECT 'Development Completed On', SUM('Estimate') WHERE 'Development Completed On' IS NOT NULL and 'Testing Completed On' IS NULL and 'Accepted On' IS NULL
+            combine: overlay-bottom
+          - label: Analysis Complete
+            color: Lavender
+            type: area
+            data: SELECT 'Analysis Completed On', SUM('Estimate') WHERE 'Analysis Completed On' IS NOT NULL and 'Development Completed On' IS NULL and 'Testing Completed On' IS NULL and 'Accepted On' IS NULL
+            combine: overlay-bottom
+    </markup>
+    <p>Some additional customizations you can set up in MQL are:</p>
+    <bullets>
+        <item>AS OF</item>
+        <item>FROM TREE </item>
+        <item>THIS CARD.Property</item>
+        <item>Use relationship operators on non-numeric properties (where ‘Due Date’ is greater than ‘Release Date’)</item>
+        <item>Custom chart width and height</item>
+        <item>Custom colours</item>
+    </bullets>
+    <topic id="ec_sample_cfg" title="Sample Cumulative Flow graph">
+    	<p><strong>Mixed chart:</strong></p>
+    		<screenshot alttext="workload" src="resources/images/ec_cfg_mixed_chart.png" />
+    </topic>
+</topic>

@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Maintain card property values">
+	<p>You can specify a set of values for <strong>Managed list</strong> properties. If the managed list property is <strong>locked</strong>, then the only way to add or remove allowable values is via the <tab>Project admin</tab> tab.</p>
+    <section title="Navigate to the Property values page" collapsed="true">
+    	<steps>
+    		<item><cref topic="signing_in_and_out_of_mingle">Sign in</cref> to Mingle as a project administrator and open the project you want to change (if you're not already working in the project).</item>
+    		<item>
+    			<p>Click the <tab>Project admin</tab> tab.</p> 
+    			<screenshot alttext="Project admin tab" src="resources/images/project_admin_tab.png" />
+    			<p>Mingle displays the <strong>Project settings</strong> page.</p>
+    			<note>if you are logged in as a project team member, Mingle displays the <strong>Team</strong> page.</note>
+    			<screenshot alttext="Project admin menu - Properties link" src="resources/images/card_properties_link.png" />
+    		</item>
+    		<item>
+    			<p>Click the <link>Card properties</link> link.</p>
+    			<p>Mingle displays the <strong>Card properties</strong> page with all properties setup for this project.</p>
+    			<screenshot alttext="Card properties page - new property" src="resources/images/card_properties_page.png" />
+    		</item>
+    		<item>
+    			<bullets title="Now you can either...">
+    				<item>Click on the <link>X values</link> link in the <strong>Property values column</strong> for the property you want to work with.</item>
+    				<item>or, Click on the <link>Edit</link> link for the property you want to work with, and then choose the <link>Edit values</link> once the Edit property page opens.</item>
+    			</bullets>
+    		</item>
+    	</steps>
+    </section>
+	<screenshot alttext="Card property values page" src="resources/images/card_property_values_page.png"></screenshot>
+	<section title="Add a property value...">
+		<p>To add a new card property value you can type the new value into the edit box and click on the <button>Add</button></p>
+		<screenshot alttext="Card property values page - add new value" src="resources/images/card_property_values_page_add_new.png"></screenshot>
+		<p>The new value will appear in the list, and you can subsequently assign it a reporting color or move it in the display order as described below</p>
+	</section>
+	<section title="Alter a property value...">
+		<p>To alter a property value, click on the <link>Edit</link> link to the right of the property value you want to work with. The row will change into edit mode and you are able to change the value.</p>		
+		<screenshot alttext="Card property values page - edit value" src="resources/images/card_property_values_page_edit.png"></screenshot>
+		<bullets title="Effects of altering a property value">
+			<item>The value will be changed in any cards where the property had the original value</item>
+			<item>Any MQL which referenced the original value will display an error, this may affect charts and tables</item>
+			<item>Any Favorite which used the original value in a filter condition will be changed to use the new value</item>
+			<item>Any Transition which used the original value in its 'has' or 'set' clause will be changed to use the new value</item>
+			<item>Any Card default which used the original value will be changed to use the new value</item>
+		</bullets>		
+	</section>
+	<section title="Delete a property value...">
+		<p>To delete a property value, click on the <link>Delete</link> link to the right of the property you want to work with. This link will not be present if the property value is used by any cards or transitions.</p>
+		<p>If you want to delete a property value which is used by cards or transitions, you will need to first edit the cards or transitions to remove references to the value.</p>
+		<bullets title="Effects of deleting a property value">
+			<item>Any MQL which referenced the original value will display an error, this may affect charts and tables</item>
+			<item>Any Favorite which used the original value in a filter condition will be deleted</item>
+			<item>Any Tab based on a favorite which used the original value in a filter condition will also be deleted</item>
+			<item>Any Project variable which was using the original value will no longer be associated with the card property</item>
+			<item>Any Card default which used the original value will be changed to (not set)</item>
+		</bullets>		
+	</section>
+	<section title="Assign a reporting color...">
+		<p>To assign a reporting color to a property value, click on the box in the <strong>Reporting color</strong> column for the property value. 
+		Mingle will display a color picker, drag the selection box over the color you want to assign, or just type in the color value if you know it.</p>
+		<screenshot alttext="Card property values page - reporting color" src="resources/images/card_property_values_page_color_picker.png"></screenshot>
+	</section>
+	<section title="Change the display order...">
+		<p>To change the display order of the property values, you can click on the <strong>Drag</strong> handle on the row you want to move, drag and drop to reposition it in the list. 
+			You can only change the display order for <strong>Manage text list</strong> properties, the display order for Managed Number list properties is always smallest to largest.</p>
+		<bullets title="Effects of changing the display order">
+			<item>Any filter criteria which uses the comparison operators 'greater than' or 'less than' will now evaluate the relative precedence of that value differently. (see note below)</item>
+			<item>Any sort condition that ordered the property values will now sort them in the new order</item>
+		</bullets>
+		<note>The display order is used to resolve precedence when the 'greater than' and 'less than' filter operators are used with managed text list properties. A value that is higher in the display order is considered to be <strong>less than</strong> a value which is below it. 
+			In practice this means that if you want a value of 'High' to be 'greater than' a value of 'Medium', then you should order the values such that 'High' is below 'Medium' in the list. This corresponds to the display order for managed number list values.</note>
+	</section>		
+</topic>
+
+

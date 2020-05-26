@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>MingleUI.grid.AggregateMixin Test</title>
+
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/grid/aggregate_calculation.js" type="text/javascript"></script>
+
+  <link rel="stylesheet" href="../test_assets/qunit-1.21.0.css" type="text/css"/>
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture">
+  <table id="grid-3x3" data-column-aggregate-property="size" data-column-aggregate-type="SUM" data-row-aggregate-property="value" data-row-aggregate-type="AVG">
+    <thead>
+      <tr>
+        <th><!-- unused --></th>
+        <th class="lane_header" data-lane-value="">(not set) <span class="aggregate">*</span></th>
+        <th class="lane_header" data-lane-value="New">New <span class="aggregate">*</span></th>
+        <th class="lane_header" data-lane-value="In Progress">In Progress <span class="aggregate">*</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="grid-row" row_value="">
+        <th class="row_header" data-lane-value="">(not set) <span class="aggregate">*</span></th>
+        <td lane_value=""></td>
+        <td lane_value="New"></td>
+        <td lane_value="In Progress"></td>
+      </tr>
+      <tr class="grid-row" row_value="Low">
+        <th class="row_header" data-lane-value="">Low <span class="aggregate">*</span></th>
+        <td lane_value=""></td>
+        <td lane_value="New"></td>
+        <td lane_value="In Progress"></td>
+      </tr>
+      <tr class="grid-row" row_value="High">
+        <th class="row_header" data-lane-value="High">High <span class="aggregate">*</span></th>
+        <td lane_value=""></td>
+        <td lane_value="New"></td>
+        <td lane_value="In Progress"></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<script src="../test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+<script src="../test_assets/qunit-phantom.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+  QUnit.test("AggregateCalculator math functions", function (assert) {
+
+    var container = $("<div/>");
+    var values =  [9, 5.25, 10, 8.3, 2, -1.3];
+
+    for (var i = 0, len = values.length; i < len; i++) {
+      container.append(
+        $("<div class=\"card-icon\"/>").append(
+          $("<div class=\"card-inner-wrapper\"/>").attr("data-card-properties", JSON.stringify({size: values[i]}))
+        )
+      );
+    }
+
+    var cards = container.find(".card-icon");
+
+    assert.equal((new MingleUI.grid.AggregateCalculator("COUNT", "size")).calculate(cards), cards.length, "COUNT() reports number of cards");
+    assert.equal((new MingleUI.grid.AggregateCalculator("SUM", "size")).calculate(cards), 33.25, "SUM() accumulates values");
+    assert.equal((new MingleUI.grid.AggregateCalculator("MIN", "size")).calculate(cards), -1.3, "MIN() finds the lowest value");
+    assert.equal((new MingleUI.grid.AggregateCalculator("MAX", "size")).calculate(cards), 10, "MAX() finds the highest value");
+    assert.equal((new MingleUI.grid.AggregateCalculator("AVG", "size")).calculate(cards), 5.5, "AVG() finds the average rounded to 1 decimal point");
+  });
+
+  QUnit.test("DimensionHeader card gathering and basic aggregation", function (assert) {
+    function basicAggregate() {
+      return new MingleUI.grid.AggregateCalculator("COUNT", "whatever");
+    }
+
+    function columnHeader(wall, value) {
+      var header = new MingleUI.grid.DimensionHeader(wall, "column", wall.grid.find("thead .lane_header[data-lane-value=" + JSON.stringify(value) + "]"));
+      header.updateAggregate();
+      return header;
+    }
+
+    function rowHeader(wall, value) {
+      var header = new MingleUI.grid.DimensionHeader(wall, "row", wall.grid.find("tbody tr[row_value=" + JSON.stringify(value) + "] .row_header"));
+      header.updateAggregate();
+      return header;
+    }
+
+    var wall = {
+      grid: $("#grid-3x3"),
+      rowAggregate: basicAggregate,
+      columnAggregate: basicAggregate
+    };
+
+    cardAt("Low", "", {});
+    cardAt("Low", "New", {});
+    cardAt("Low", "New", {});
+    cardAt("", "New", {});
+
+    assert.equal(columnHeader(wall, "").aggregateValue(), "(1)", "aggregates columns in (not set)");
+    assert.equal(columnHeader(wall, "New").aggregateValue(), "(3)", "aggregates columns with values");
+    assert.equal(columnHeader(wall, "In Progress").aggregateValue(), "(0)", "aggregates empty columns");
+
+    cardAt("Low", "", {});
+
+    assert.equal(rowHeader(wall, "").aggregateValue(), "(1)", "aggregates row in (not set)");
+    assert.equal(rowHeader(wall, "Low").aggregateValue(), "(4)", "aggregates row in (not set)");
+    assert.equal(rowHeader(wall, "High").aggregateValue(), "(0)", "aggregates empty rows");
+  });
+
+  QUnit.test("AggregateMixin", function (assert) {
+    var wall = $.extend({grid: $("#grid-3x3")}, MingleUI.grid.AggregateMixin);
+
+
+    function columnHeaderTexts(grid) {
+      return $.map(grid.find("thead .lane_header").get(), function (el, i) {
+        return $(el).text();
+      });
+    }
+
+    function rowHeaderTexts(grid) {
+      return $.map(grid.find("tbody .row_header").get(), function (el, i) {
+        return $(el).text();
+      });
+    }
+
+    // initial cards
+    cardAt("Low", "", {value: 3, size: 1});
+    changeAggregates({row: "COUNT", "column": "COUNT"})
+    wall.setupHeaderAggregates();
+
+    assert.deepEqual(columnHeaderTexts(wall.grid), ["(not set) (1)", "New (0)", "In Progress (0)"], "updates empty and non empty columns on initialization");
+    assert.deepEqual(rowHeaderTexts(wall.grid), ["(not set) (0)", "Low (1)", "High (0)"], "updates empty and non empty rows on initialization");
+
+    changeAggregates({row: "AVG", "column": "SUM"})
+
+    cardAt("Low", "New", {value: 8.5, size: 5})
+    cardAt("Low", "New", {value: 0.5, size: 3.25})
+    cardAt("High", "In Progress", {value: 6.75, size: null})
+    cardAt("High", "In Progress", {value: 3.3, size: 2})
+    cardAt("High", "In Progress", {value: 8.2, size: 3.35})
+
+    wall.updateAggregates();
+
+    assert.deepEqual(columnHeaderTexts(wall.grid), ["(not set) (1)", "New (8.25)", "In Progress (5.35)"], "calculates column values based on properties and grid config");
+    assert.deepEqual(rowHeaderTexts(wall.grid), ["(not set) (0)", "Low (4)", "High (6.1)"], "calculates column values based on properties and grid config");
+  });
+
+  /* test helper functions */
+
+  function changeAggregates(options) {
+    var grid = $("#grid-3x3");
+    if ("string" === typeof options.row) grid.attr("data-row-aggregate-type", options.row.toUpperCase()).removeData("row-aggregate-type");
+    if ("string" === typeof options.column) grid.attr("data-column-aggregate-type", options.column.toUpperCase()).removeData("column-aggregate-type");
+  }
+
+  function normalizeBlankToEmptyString(value) {
+    if ("string" === typeof value) {
+      return $.trim(value);
+    }
+
+    if (null === value || "undefined" === typeof value) {
+      return "";
+    }
+
+    return value;
+  }
+
+  function cardAt(row, col, properties) {
+    row = normalizeBlankToEmptyString(row);
+    col = normalizeBlankToEmptyString(col);
+
+    var grid = $("#grid-3x3");
+    var card = $("<div class=\"card-icon\"/>").append(
+      $("<div class=\"card-inner-wrapper\"/>").attr("data-card-properties", JSON.stringify(properties))
+    );
+
+    grid.find("tr[row_value=" + JSON.stringify(row.toString()) + "]").find("td[lane_value=" + JSON.stringify(col) + "]").append(card);
+  }
+
+</script>
+</body>
+</html>

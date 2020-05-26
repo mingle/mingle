@@ -1,0 +1,47 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div class="projects-membership-actions">
+ <%= add_to_projects_link(@user) %>
+</div>
+
+<div class="content">
+  <table class="highlightable-table" id="project-permissions-table">
+    <thead>
+      <tr>
+        <th>Project</th>
+        <th>Permissions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render :partial => 'shared/no_records', :locals => { :colspan => 2, :css_hidden => @user.projects_visible_to(User.current).any?, :model => 'project assignments' } %>
+      <% @user.projects_visible_to(User.current).smart_sort_by(&:name).each do |project| %>
+      <tr>
+        <td>
+          <% if User.current == @user %>
+          <%= link_to project.name.escape_html, project_show_url(project.identifier) %>
+          <% else %>
+          <%= link_to project.name.escape_html, :controller => 'team', :action => 'list', :project_id => project.identifier %>
+          <% end %>
+        </td>
+        <td>
+          <%= @user.membership_role_for(project) %>
+        </td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

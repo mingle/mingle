@@ -1,0 +1,15 @@
+<html>
+<head>
+<title>Test PUT</title>
+</head>
+<body>
+This page puts data.
+<script>
+var xhr = new XMLHttpRequest();
+xhr.open("PUT", "/demo/hewhohasbeenput.html", false);
+xhr.send("Some random data");
+alert(xhr.responseText);
+</script>
+
+</body>
+</html>

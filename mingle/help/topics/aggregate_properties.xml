@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Aggregate properties">
+  <p>You can create aggregate properties to display the <strong>Sum, Average, Min or Max</strong> of properties of descendant cards,  or <strong>Count</strong> of descendant cards in a <cref topic="card_trees">card tree</cref>.
+    Aggregate properties can be selected in <cref topic="mql_reference">MQL</cref> just like any other card property.</p>
+  <p>You can choose to apply an aggregate property to all of a card's descendants in the tree (All descendants), only descendants of a specific <cref topic="card_types">card type</cref> or a specific set of children based on <cref topic="mql_reference">conditional MQL query</cref>.</p>
+  <p>Aggregate properties use the <cref topic="project_numeric_precision">project numeric precision</cref> to set how many decimal places are stored.</p>
+  <bullets>
+    <item>The <strong>Sum and Average</strong> aggregates take a <strong>numeric</strong> card property name as an argument, and perform the aggregation on the values of that property for descendant cards in the tree.</item>
+    <item>The <strong>Min and Max</strong> aggregates take a <strong>numeric</strong> card property name as an argument, and perform the aggregation on the values of that property for descendant cards in the tree.</item>
+    <item>The <strong>Count</strong> aggregate does not take a card property as an argument. Instead it counts the number of descendants that the card has in the tree.</item>
+  </bullets>
+    <note>
+      <p>Aggregate properties <strong>ignore values of (not set)</strong>, so the Average of [1, 3, 6, (not set)] is 3; and the Min of [1, 3, 7, (not set)] is 1;</p>
+      <p>Likewise, when an aggregation scope of <strong>All descendants</strong> is chosen, aggregate properties which take a property as an argument will ignore card types which do not possess the specified card property.</p>
+    </note>
+   <note>
+      <p>Aggregate property values are calculated by background jobs. An asterisk appears next to an aggregate property when the property is stale and the background job is till doing recalculation.</p>
+    </note>
+    <section title="How to...">
+        <bullets>
+            <item><cref topic="creating_a_new_aggregate_property">Create an aggregate property</cref></item>
+            <item><cref topic="modifying_or_deleting_aggregate_properties">Modify  or Delete an aggregate property</cref></item>
+        </bullets>
+    </section>
+</topic>

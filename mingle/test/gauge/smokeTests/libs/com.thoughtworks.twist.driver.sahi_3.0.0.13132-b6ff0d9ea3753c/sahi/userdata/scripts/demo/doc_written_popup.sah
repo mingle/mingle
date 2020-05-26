@@ -1,0 +1,20 @@
+_navigateTo("/demo/doc_written_popup.htm");
+_setValue(_textbox("textbox"), "aaa");
+_click(_button("Open Write"));
+//_wait(4000);
+_assertContainsText('Credit Check is not done for this SSN! Do you want to skip the Credit Check ?', ModalDialogWindow.document.body);
+//_click(ModalDialogWindow.document.getElementsByTagName("INPUT")[0]);
+try{
+	_click(_button('Yes', ModalDialogWindow));
+}catch(e){
+	_logException(e);
+	/*
+	 * This happens because 
+	 * The step is executed from the base window
+	 * The window close happens on the modalDialog
+	 * There are still events like blur which are attempted on the element after the click
+	 * These would throw exception if the window has closed by then
+	 */
+}
+_assert(ModalDialogWindow.closed);
+_assertEqual("Yes", _textbox("textbox").value);

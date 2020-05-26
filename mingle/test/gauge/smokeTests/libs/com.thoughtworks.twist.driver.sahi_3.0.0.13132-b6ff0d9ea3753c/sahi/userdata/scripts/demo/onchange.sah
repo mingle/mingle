@@ -1,0 +1,6 @@
+_setValue(_textbox("t1"), "aaa");
+_click(document.body);
+_assertEqual("[FIRED]", _textarea("t2").value);
+_setValue(_textbox("t1"), "aaad");
+_click(document.body);
+_assertEqual("[FIRED][FIRED]", _textarea("t2").value);

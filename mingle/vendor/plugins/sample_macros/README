@@ -1,0 +1,1 @@
+The macros in this folder are for demonstration purposes only. They have not been registered with Mingle, and cannot be used in your wiki pages and card descriptions. Use the mingle-macro-development-toolkit gem that ships with Mingle under the tools directory, and follow the instructions there to create your own macros.

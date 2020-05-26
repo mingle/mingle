@@ -1,0 +1,68 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%
+
+  murmurs_enabled = renderable.is_a?(Card)
+
+  default_panel = "attachments"
+
+  display_pref = :"#{renderable.class.name.downcase}_flyout_display"
+  allowed_panels = ["attachments", "history", ""]
+
+  if murmurs_enabled
+    allowed_panels << "murmurs"
+    default_panel = "murmurs"
+  end
+
+  current_panel = if (current_value = user_preference(display_pref)).nil? || !allowed_panels.include?(current_value)
+    default_panel.tap do |value|
+      set_user_preference(display_pref, value) unless value.blank?
+    end
+  else
+    current_value
+  end
+
+  if current_panel == 'murmurs'
+    current_panel = "attachments" unless murmurs_enabled
+  elsif current_panel.blank?
+    current_panel = ''
+  end
+
+-%>
+<% content_tag(:div, :class => "flyout", :"data-current-panel" => current_panel, :"data-preference-key" => display_pref) do -%>
+
+  <ul class="panel-toggle">
+
+    <% if renderable.is_a?(Card) -%>
+      <li data-for-panel="murmurs" data-tooltip="Murmurs" class="cooltips-left"><i class="fa fa-comments"></i></li>
+    <% end -%>
+
+    <li data-for-panel="attachments" data-tooltip="Attachments" class="cooltips-left"><i class="fa fa-paperclip"></i></li>
+
+    <li data-for-panel="history" data-tooltip="History" class="cooltips-left"><i class="fa fa-history"></i></li>
+
+  </ul>
+
+  <% if renderable.is_a?(Card) -%>
+    <%= render :partial => "shared/murmurs_panel", :locals => {:renderable => renderable} -%>
+  <% end -%>
+
+  <%= render :partial => "shared/attachments", :locals => {:attachable => renderable, :mode => "show", :delete_controller => delete_controller, :"authorized_to_delete" => authorized_to_delete_attachments} -%>
+
+  <%= render :partial => "shared/history_panel", :locals => {:renderable => renderable } -%>
+
+<% end -%>

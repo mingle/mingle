@@ -1,0 +1,958 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>JavaScript unit test file</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/alignment.js" type="text/javascript"></script>
+
+  <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/prototype_ext.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/module.js" type="text/javascript"></script>
+  <script src="test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+
+  <script src="test_assets/unittest.js" type="text/javascript"></script>
+  <script src="test_assets/unittest_ext.js" type="text/javascript"></script>
+
+  <script src="../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/controls.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/builder.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+
+  <script src="../../public/javascripts/application.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/lightbox.js" type="text/javascript"></script>
+
+  <script src="../../public/javascripts/drop_list/base.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/view/base.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/view/drop_down.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/view/drop_link.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/view/field.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/view/filter.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/view/inline_editor.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/view/layout.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/callback_action.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/basic_controller.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/filter_action.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/inline_edit_action.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/model.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list/option.js" type="text/javascript"></script>
+  <script src="../../public/javascripts/drop_list.js" type="text/javascript"></script>
+
+  <link rel="stylesheet" href="test_assets/unittest.css" type="text/css" />
+
+  <style type="text/css">
+    /* This is the containing block */
+
+    .widget-dropdown {
+      position:absolute;
+      border: 1px solid;
+      background-color: #fff;
+      z-index: 10100 !important;
+      z-index: 10100;
+    }
+
+    .widget-dropdown ul {
+      margin: 0;
+      padding: 0;
+    }
+
+    .widget-dropdown li,
+    .widget-dropdown .select-option {
+      text-align: left;
+      white-space: nowrap;
+      cursor: pointer;
+      display: block;
+      float: none;
+      color: black;
+      list-style: none outside none;
+      padding: 0.5em 1em !important;/* Make sure it has higher priority than sidebar styles, that means sidebar styles need refactory */
+      margin: 0;
+      zoom: 1;
+    }
+
+    .widget-dropdown li.inline-add-new-value {
+      *white-space: normal;
+    }
+
+    .widget-dropdown li.selected,
+    .widget-dropdown div:hover.select-option {
+      background-color: #ffb;
+    }
+
+
+  </style>
+
+</head>
+<body>
+
+<div id="content" >
+  <div id="header">
+    <h1>JavaScript unit test file</h1>
+    <p>
+      This file tests <strong>DropList</strong> class in <strong>drop_list.js</strong>.
+    </p>
+  </div>
+  <!-- Log output -->
+  <div id="testlog"> </div>
+
+  <div style ='border:solid 1px' id='sandbox'>
+    <h3> sandbox: </h3>
+    <div id="show_default_property_definitions_container" class="properties_widget">
+      <div class='drop_list_container'>
+        <span class="drop-list-panel">
+          <span id="prefix_status_label">status: </span>
+          <a id="prefix_status_drop_link">(not set)</a>
+          <input name="property[status]" style="border: medium none ; margin: 0pt; padding: 0pt; width: 0px; height: 0px;">
+        </span>
+      </div>
+    </div>
+
+    <div id='mock'></div>
+  </div>
+
+<script type="text/javascript">
+// <![CDATA[
+
+  var SAND_BOX_CONTENT = $('sandbox').innerHTML;
+
+  DropListTestHelper = function(droplist, testRunner) {
+      return {
+          openDropList: function() {
+              testRunner.assertNotNull($('prefix_status_drop_link'));
+              Event.trigger('prefix_status_drop_link', 'click');
+          },
+
+          typeInFilter: function(text) {
+              var filterInput = droplist.controller.dropdown.panel.select('.dropdown-options-filter').first();
+              filterInput.value = text;
+              Event.triggerKeydownEvent(filterInput, 80);
+          },
+
+          clickOnAddNewValue: function() {
+              Event.trigger('prefix_status_action_adding_value', 'click');
+          },
+
+          assertAddNewTextBoxContains: function(text) {
+              var inlineEditorField = $j('#prefix_status_inline_editor')
+              testRunner.assertEqual(text, inlineEditorField.val());
+          },
+
+          saveNewValue: function() {
+              var inlineEditorField = $j('#prefix_status_inline_editor')
+              var keypressEvent = jQuery.Event('keypress');
+              keypressEvent.which = keypressEvent.keyCode = $j.ui.keyCode.ENTER;
+              inlineEditorField.trigger(keypressEvent);
+          },
+
+          hideAddNewTextBox: function() {
+              Event.trigger('prefix_status_inline_editor', 'blur');
+          },
+
+          closeDropList: function() {
+              Event.triggerKeydownEvent('.dropdown-options-filter', Event.KEY_ESC);
+              Event.trigger(document, 'click');
+          }
+      }
+  };
+
+  new Test.Unit.Runner({
+
+    setup: function() {
+      this.container = $('sandbox').down('.drop_list_container');
+      document.body.style.overflow = 'auto';
+      this.defaultOptionsHash = $H({
+        dropLink: 'prefix_status_drop_link',
+        htmlIdPrefix: 'prefix_status',
+        numeric: false,
+        selectOptions: [['(not set)', ''], ['open', 'open'], ['closed', 'closed']],
+        supportInlineEdit: true});
+
+      this.numericOptionsHash =   $H({
+          dropLink: 'prefix_status_drop_link',
+          htmlIdPrefix: 'prefix_status',
+          numeric: true,
+          selectOptions: [['(not set)', ''], ['(any)', ':ignore'], ['1.0', '1.0'], ['2.0', '2.0']],
+          supportInlineEdit: true});
+
+      this.filterOptionsHash = this.defaultOptionsHash.clone()
+      this.filterOptionsHash.set('supportFilter', true);
+
+      this.defaultOptions = this.defaultOptionsHash.toObject();
+      this.numericOptions = this.numericOptionsHash.toObject();
+      this.filterOptions = this.filterOptionsHash.toObject();
+   },
+
+   teardown: function() {
+    // dropdown panels are moved out of sandbox during test runs, so need to explicitly
+    // wipe them out.
+    $$('.widget-dropdown').invoke("remove");
+    $('sandbox').innerHTML = SAND_BOX_CONTENT;
+   },
+
+    // DropList
+
+    testFieldName: function() { with(this) {
+      var droplist = new DropList(this.defaultOptions);
+      assertEqual('property[status]', droplist.getField().name);
+    }},
+
+    testRenderCreatesDropdownListElements: function() { with(this) {
+       var droplist = new DropList(this.defaultOptions);
+       var dropdownElement = $('prefix_status_drop_down');
+       assert(dropdownElement);
+       assertNotVisible(dropdownElement);
+       assert(dropdownElement.panelElement);
+       assertEqual('widget-dropdown', dropdownElement.className)
+    }},
+
+    testRenderShowsScrollBarWhenDropDownListIsTooLong: function() { with(this) {
+      DropList.View.DropDown.MAX_HEIGHT = 10;
+      var droplist = new DropList(this.defaultOptions);
+      Event.trigger('prefix_status_drop_link', 'click');
+      assertEqual(10, $('prefix_status_drop_down').down('.options-only-container').getHeight());
+    }},
+
+    testDropDownRedrawShouldHideTheHiddenOptions: function() { with(this) {
+      var droplist = new DropList(filterOptions);
+      Event.trigger('prefix_status_drop_link', 'click');
+      var optionsContainer = $$('.dropdown-panel .options-only-container').first();
+      assertEqual(3, optionsContainer.select('li').findAll(function(option){
+        return option.visible();
+      }).size());
+      droplist.model.options[1].hidden = true;
+      droplist.controller.dropdown.redraw(droplist.model);
+      assertEqual(2, optionsContainer.select('li').findAll(function(option){
+        return option.visible();
+      }).size());
+    }},
+
+    // DropList.View.DropLink
+
+    testShouldUsePromptAsLinkToOpenDropListWhenSpecified: function() { with(this) {
+        optionsHash = $H({
+            prompt: 'select...',
+            dropLink: 'prefix_status_drop_link',
+            htmlIdPrefix: 'prefix_status',
+            numeric: false,
+            selectOptions: [['(not set)', ''], ['open', 'open'], ['closed', 'closed']],
+            supportInlineEdit: true});
+
+        new DropList(optionsHash.toObject());
+
+        assertEqual('select...', $('prefix_status_drop_link').innerHTML);
+    }},
+
+    testShouldExecuteBeforeCallbackWhenSpecified: function() { with(this) {
+        optionsHash = $H({
+            before: '$("mock").innerHTML = "shouldBeSet"',
+            dropLink: 'prefix_status_drop_link',
+            htmlIdPrefix: 'prefix_status',
+            numeric: false,
+            selectOptions: [['(not set)', ''], ['open', 'open'], ['closed', 'closed']],
+            supportInlineEdit: true});
+
+        new DropList(optionsHash.toObject());
+        Event.trigger('prefix_status_drop_link', 'click');
+        assertEqual('shouldBeSet', $('mock').innerHTML);
+    }},
+
+    testShouldExecuteBlurCallbackWhenDropListCloses: function() { with(this) {
+
+        $("mock").innerHTML = "0"
+
+        optionsHash = $H({
+            onblur: '$("mock").innerHTML = parseInt($("mock").innerHTML) + 1;',
+            dropLink: 'prefix_status_drop_link',
+            htmlIdPrefix: 'prefix_status',
+            numeric: false,
+            selectOptions: [['(not set)', ''], ['open', 'open'], ['closed', 'closed']],
+            supportInlineEdit: true});
+
+        dl = new DropList(optionsHash.toObject());
+
+        // click document
+        Event.trigger('prefix_status_drop_link', 'click');
+        Event.trigger(document, 'click');
+        assertEqual('1', $('mock').innerHTML);
+
+        // select an option
+        Event.trigger('prefix_status_drop_link', 'click');
+        Event.trigger('prefix_status_option_open', 'click');
+        assertEqual('2', $('mock').innerHTML);
+
+        Event.trigger('prefix_status_drop_link', 'click');
+        Event.trigger('prefix_status_action_adding_value', 'click');
+
+        inlineEditorField = $j('#prefix_status_inline_editor')
+        assertEqual('', inlineEditorField.val());
+        inlineEditorField.val('1&2');
+
+        var keypressEvent = jQuery.Event('keypress');
+        keypressEvent.which = keypressEvent.keyCode = $j.ui.keyCode.ENTER;
+        inlineEditorField.trigger(keypressEvent);
+        assertEqual('3', $('mock').innerHTML);
+
+    }},
+
+    testRenderShouldShowLabelAndFirstItemWhenNoInitalItemSpecified: function() { with(this) {
+      new DropList(this.defaultOptions);
+      assert(this.container.innerHTML.isInclude('status', '(not set)'));
+      assertEqual('(not set)', $('prefix_status_drop_link').innerHTML);
+    }},
+
+    testRenderShouldShowInitalSelectedItemWhenSpecified: function() { with(this) {
+      this.defaultOptions.initialSelected =  ['open', 'open'];
+      var droplist = new DropList(this.defaultOptions);
+      assertEqual('open', $('prefix_status_drop_link').innerHTML);
+      assertEqual('open', droplist.getSelectedValue());
+    }},
+
+    testOnChangeShouldBeTriggeredWhenItemSelected: function() { with(this) {
+      var observedItems = $A([]);
+      this.defaultOptions.initialSelected = ['open', 'open'];
+      this.defaultOptions.onchange = function(selection){ observedItems.push(selection.value); };
+
+      var droplist = new DropList(this.defaultOptions);
+      assertEqual(0, observedItems.size());
+      Event.trigger('prefix_status_drop_link', 'click');
+      Event.trigger('prefix_status_option_closed', 'click');
+      assertEqual('closed', droplist.getSelectedValue());
+
+      Event.trigger('prefix_status_option_(not set)', 'click');
+      assertEqual('', droplist.getSelectedValue());
+      assertEqual(2, observedItems.size());
+      assertEqual('closed', observedItems[0])
+      assertEqual('', observedItems[1]);
+    }},
+
+    testOnChangeShouldNotBeTriggeredWhenCurrentlySelectedItemIsClicked: function() { with(this) {
+      var observedItems = $A([]);
+      this.defaultOptions.initialSelected = ['open', 'open'];
+      this.defaultOptions.onchange = function(selection){ observedItems.push(selection.value); };
+
+      var droplist = new DropList(this.defaultOptions);
+      Event.trigger('prefix_status_drop_link', 'click');
+      Event.trigger('prefix_status_option_open', 'click');
+      assertEqual(0, observedItems.size());
+      assertEqual('open', droplist.getSelectedValue());
+    }},
+
+    testDropLinkOnClickTriggersCallbackActionsToShowTitleOnBottomOfOptionList: function() { with(this) {
+      this.defaultOptions.appendedActions = [ new DropList.CallbackAction("click here...") ]
+      var droplist = new DropList(this.defaultOptions);
+      Event.trigger('prefix_status_drop_link', 'click');
+      assertEqual("click here...", $$('#prefix_status_drop_down li').last().innerHTML);
+    }},
+
+    testDropLinkOnClickTriggersCallbackActionToInvokeCallbackIfTitleGetClicked: function() { with(this) {
+      this.callbackCalled = false;
+      this.defaultOptions.appendedActions = [
+            new DropList.CallbackAction("click here...", function(){
+              this.callbackCalled = true
+            }.bind(this))
+      ]
+      var droplist = new DropList(this.defaultOptions);
+      Event.trigger('prefix_status_drop_link', 'click');
+      Event.trigger($$('#prefix_status_drop_down li').last(), "click");
+      assert(this.callbackCalled);
+    }},
+
+    testDropLinkOnClickAllOptionsShouldBeDisplayed: function(){ with(this) {
+      new DropList(this.defaultOptions);
+      Event.trigger('prefix_status_drop_link', 'click');
+      assert($('prefix_status_drop_down'));
+      assert($('prefix_status_drop_down').innerHTML.isInclude('(not set)', 'open', 'closed'));
+    }},
+
+    testDropDownOnFocusLostShouldDisappear: function() { with(this) {
+      var droplist = new DropList(this.defaultOptions);
+      Event.trigger('prefix_status_drop_link', 'click');
+      Event.trigger(document, 'click')
+      wait(20, function() {
+        assertNotVisible('prefix_status_drop_down');
+      });
+    }},
+
+    testDropDownSelectedValueShouldRemoveDropDownIfClickEventTriggeredBeforeBlurEvent: function() { with(this) {
+      var droplist = new DropList(this.defaultOptions);
+      Event.trigger('prefix_status_drop_link', 'click');
+      Event.trigger('prefix_status_option_open', 'click');
+      Event.trigger(document, 'click')
+      wait(20, function() {
+        assertNotVisible('prefix_status_drop_down');
+      });
+    }},
+
+    testDropDownSelectedValueShouldRemoveDropDownIfClickEventTriggeredAfterBlurEvent: function() { with(this) {
+      var droplist = new DropList(this.defaultOptions);
+      Event.trigger('prefix_status_drop_link', 'click');
+      Event.trigger(document, 'click')
+      Event.trigger('prefix_status_option_open', 'click');
+      wait(20, function() {
+        assertNotVisible('prefix_status_drop_down');
+      });
+    }},
+
+    testDropDownOptionOnClickShouldSetDropLinkTextToSelectedOption: function() { with(this) {
+      var droplist = new DropList(this.defaultOptions);
+      Event.trigger('prefix_status_drop_link', 'click');
+      Event.trigger('prefix_status_option_open', 'click');
+      assertEqual('open', $('prefix_status_drop_link').innerHTML);
+      assertEqual('open', droplist.getSelectedValue());
+    }},
+
+    testDropDownOptionOnHoverShouldHighlight: function() { with(this) {
+      // Not using CSS probably due to IE6 does not support li:hover
+      new DropList(this.defaultOptions);
+      Event.trigger('prefix_status_drop_link', 'click');
+      wait(100, function() {
+        Event.trigger('prefix_status_option_open', 'mouseover');
+        assert($('prefix_status_option_open').hasClassName('selected'));
+        wait(100, function() {
+          Event.trigger('prefix_status_option_closed', 'mouseover');
+          assert(!$('prefix_status_option_open').hasClassName('selected'));
+        })
+      });
+    }},
+
+    testDropDownOptionShouldHighlightCurrentValueOnDisplayed: function() { with(this) {
+      var droplist = new DropList(this.defaultOptions);
+      Event.trigger('prefix_status_drop_link', 'click');
+      assert($('prefix_status_option_(not set)').hasClassName('selected'));
+      assert(!$('prefix_status_option_open').hasClassName('selected'));
+      assert(!$('prefix_status_option_closed').hasClassName('selected'));
+
+      Event.trigger('prefix_status_option_open', 'click');
+      Event.trigger(document, 'click');
+
+      assertEqual('open', droplist.getSelectedValue());
+
+      wait(20, function() {
+        Event.trigger('prefix_status_drop_link', 'click');
+        assert(!$('prefix_status_option_(not set)').hasClassName('selected'));
+        assert($('prefix_status_option_open').hasClassName('selected'));
+        assert(!$('prefix_status_option_closed').hasClassName('selected'));
+      });
+    }},
+
+    // bug 8418
+    testDropDownOptionShouldHighlightCurrentNonNumericValueEvenWhenDroplistIsNumeric: function() { with(this) {
+      var numericOptionsWithAnySelected = $H(this.numericOptionsHash).merge({ "initialSelected": ["(any)", ":ignore"] }).toObject();
+      var droplist = new DropList(numericOptionsWithAnySelected);
+      Event.trigger('prefix_status_drop_link', 'click');
+      assert(!$('prefix_status_option_(not set)').hasClassName('selected'));
+      assert($('prefix_status_option_(any)').hasClassName('selected'));
+      assert(!$('prefix_status_option_1.0').hasClassName('selected'));
+      assert(!$('prefix_status_option_2.0').hasClassName('selected'));
+    }},
+
+    // DropList.InlineEditAction
+
+    testShouldRenderInlineEditingRequiredElementsIfSupportInlineEditing: function() { with(this) {
+      this.defaultOptions['inlineCreating'] = true;
+      this.defaultOptions['inlineAddOptionActionTitle'] = 'Enter new value...';
+      var droplist = new DropList(this.defaultOptions);
+      var addValueOption = $('prefix_status_action_adding_value');
+      assert(addValueOption);
+      assertEqual('inline-add-new-value', addValueOption.className);
+      assertEqual('Enter new value...', addValueOption.innerHTML);
+      assertEqual(addValueOption, $$('#prefix_status_drop_down ul').first().firstChild)
+    }},
+
+    testOnEnterKeyPressShouldAddHtmlEscapedNewValueIntoDropListViewField: function() { with(this) {
+      var observedItems = $A([]);
+      var optionsHash = defaultOptionsHash.clone();
+      optionsHash.set('inlineCreating', true);
+      optionsHash.set('onchange', function(selection){
+        observedItems.push(selection.value);
+      });
+      var droplist = new DropList(optionsHash.toObject());
+
+      Event.trigger('prefix_status_drop_link', 'click');
+      Event.trigger('prefix_status_action_adding_value', 'click');
+
+      inlineEditorField = $j('#prefix_status_inline_editor')
+      assertEqual('', inlineEditorField.val());
+      inlineEditorField.val('1&2');
+
+      var keypressEvent = jQuery.Event('keypress');
+      keypressEvent.which = keypressEvent.keyCode = $j.ui.keyCode.ENTER;
+      inlineEditorField.trigger(keypressEvent);
+
+      assertEqual('1&amp;2', $('prefix_status_drop_link').innerHTML);
+      assertEqual('1&2', droplist.getField().value);
+    }},
+
+    testNewlyEnteredValueInInlineEditingShouldBecomeNewDropDownOptionAndSelectable: function() { with(this) {
+      var observedItems = $A([]);
+      this.defaultOptions['inlineCreating'] = true;
+      this.defaultOptions['onchange'] = function(selection){ observedItems.push(selection.value); };
+
+      var droplist = new DropList(this.defaultOptions);
+
+      Event.trigger('prefix_status_drop_link', 'click');
+      Event.trigger('prefix_status_action_adding_value', 'click');
+
+      var inlineEditorField = $j('#prefix_status_inline_editor')
+      assertEqual('', inlineEditorField.val());
+      inlineEditorField.val('new_value');
+      var keypressEvent = jQuery.Event('keypress');
+      keypressEvent.which = keypressEvent.keyCode = $j.ui.keyCode.ENTER;
+      inlineEditorField.trigger(keypressEvent);
+
+      assertEqual('new_value', $('prefix_status_drop_link').innerHTML);
+      assertEqual('new_value', droplist.getSelectedValue());
+      assertEqual('new_value', observedItems[0]);
+
+      Event.trigger('prefix_status_drop_link', 'click');
+      Event.trigger('prefix_status_option_open', 'click');
+
+      assertEqual('open', $('prefix_status_drop_link').innerHTML);
+      assertEqual('open', droplist.getSelectedValue());
+      // remove drop down
+      Event.trigger(document, 'click');
+      wait(20, function() {
+        Event.trigger('prefix_status_drop_link', 'click');
+        Event.trigger('prefix_status_option_new_value', 'click');
+        assertEqual('new_value', $('prefix_status_drop_link').innerHTML);
+        assertEqual('new_value', droplist.getSelectedValue());
+      });
+    }},
+
+    testNewlyEnteredValueOnBlurShouldRollbackValue: function() {with(this) {
+      var observedItems = $A([]);
+      this.defaultOptions['inlineCreating'] = true;
+      this.defaultOptions['onchange'] = function(selection){ observedItems.push(selection.value); };
+
+      var droplist = new DropList(this.defaultOptions);
+      var currentSelectedName = $('prefix_status_drop_link').innerHTML
+      var currentSelectedValue = droplist.getSelectedValue();
+      Event.trigger('prefix_status_drop_link', 'click');
+      Event.trigger('prefix_status_action_adding_value', 'click');
+      inlineEditorField = $('prefix_status_inline_editor')
+      inlineEditorField.value = 'new_value';
+
+      Event.trigger(inlineEditorField, 'blur');
+
+      assertEqual(currentSelectedName, $('prefix_status_drop_link').innerHTML);
+      assertEqual(currentSelectedValue, droplist.getSelectedValue());
+      assertEqual(0, observedItems.length);
+      assertEqual("", inlineEditorField.value);
+    }},
+
+    testNewlyEnteredValueAsEmptyStringSetsDropLinkTextToNotSetAndDropLinkFieldToEmpty: function() { with(this) {
+      var observedItems = $A([]);
+      this.defaultOptions['inlineCreating'] = true
+      this.defaultOptions['onchange'] = function(selection){ observedItems.push(selection.value);};
+
+      var droplist = new DropList(this.defaultOptions);
+
+      Event.trigger('prefix_status_drop_link', 'click');
+      Event.trigger('prefix_status_action_adding_value', 'click');
+
+      var inlineEditorField = $j('#prefix_status_inline_editor')
+      inlineEditorField.val('');
+
+      var keypressEvent = jQuery.Event('keypress');
+      keypressEvent.which = keypressEvent.keyCode = $j.ui.keyCode.ENTER;
+      inlineEditorField.trigger(keypressEvent);
+
+      assertEqual('(not set)', $('prefix_status_drop_link').innerHTML);
+      assertEqual('', droplist.getSelectedValue());
+      assertEqual(0, observedItems.length);
+    }},
+
+    testNewlyEnteredValueShouldNotCreateNewValueWhenThereExistsValueDiffersOnlyByCasing: function() { with(this) {
+      this.defaultOptions['inlineCreating'] = true;
+      this.defaultOptions['inlineAddOptionActionTitle'] = 'Enter new value...';
+      var droplist = new DropList(this.defaultOptions);
+      Event.trigger('prefix_status_drop_link', 'click');
+
+      var addValueOption = $('prefix_status_action_adding_value');
+      Event.trigger(addValueOption, 'click');
+      var inlineEditorField = $j('#prefix_status_inline_editor');
+      inlineEditorField.val('oPEn');
+
+      var keypressEvent = jQuery.Event('keypress');
+      keypressEvent.which = keypressEvent.keyCode = $j.ui.keyCode.ENTER;
+      inlineEditorField.trigger(keypressEvent);
+
+
+      assertEqual('open', $('prefix_status_drop_link').text);
+
+      Event.trigger('prefix_status_drop_link', 'click');
+      assertNotNull($('prefix_status_option_open'));
+      assertNull($('prefix_status_option_oPEn'));
+    }},
+
+    testNewlyEnteredValueShouldMatchExistingOptionsByNumericEqualityWhenNumericComparisonIsUsed: function() { with(this) {
+      this.numericOptions['inlineCreating'] = true;
+      this.numericOptions['inlineAddOptionActionTitle'] = 'Enter new value...'
+      var droplist = new DropList(this.numericOptions);
+      Event.trigger('prefix_status_drop_link', 'click');
+
+      var addValueOption = $('prefix_status_action_adding_value');
+      Event.trigger(addValueOption, 'click');
+
+      var inlineEditorField = $j('#prefix_status_inline_editor');
+      inlineEditorField.val('1');
+
+      var keypressEvent = jQuery.Event('keypress');
+      keypressEvent.which = keypressEvent.keyCode = $j.ui.keyCode.ENTER;
+      inlineEditorField.trigger(keypressEvent);
+
+
+      assertEqual('1.0', $('prefix_status_drop_link').text);
+
+      Event.trigger('prefix_status_drop_link', 'click');
+      assertNotNull($('prefix_status_option_1.0'));
+      assertNull($('prefix_status_option_1'));
+    }},
+
+    testDropDownOptionShouldTruncateTextWhenSpecifiedLengthIsReached: function() { with(this) {
+      optionsWithTruncate = {
+        dropLink: 'prefix_status_drop_link',
+        htmlIdPrefix: 'prefix_status',
+        numeric: false,
+        selectOptions: [['123456789', '123456789']],
+        supportInlineEdit: true,
+        truncateLink: 8
+      };
+
+      var droplist = new DropList(optionsWithTruncate);
+
+      assertEqual('12345...', $('prefix_status_drop_link').innerHTML);
+      assertEqual('123456789', droplist.getSelectedValue());
+      assertEqual('123456789', droplist.getSelectedName());
+    }},
+
+    // DropList.View.Filter
+
+    testRenderAddsFilterTextBoxBeforeAllExistingOptions: function() { with(this) {
+      new DropList(filterOptions);
+      Event.trigger('prefix_status_drop_link', 'click');
+      var dropdownPanel = $$('.dropdown-panel').first();
+      assertArrayEqual(["inline-add-new-value-container", "dropdown-filter-container ignore-width", "options-only-container"], dropdownPanel.childElements().pluck('className'));
+    }},
+
+    testRenderDoesNotAddFilterTextBoxWhenFilterOptionIsNotSet: function() { with(this) {
+      new DropList(defaultOptionsHash.toObject());
+      Event.trigger('prefix_status_drop_link', 'click');
+      var dropdownPanel = $$('.dropdown-panel').first();
+      assertNotInclude('dropdown-options-filter', dropdownPanel.childElements().pluck('className'));
+    }},
+
+     testRenderShouldHideUnmatchedOptionsWhenFilterValueChanged: function() { with(this) {
+      var droplist = new DropList(filterOptions);
+      Event.trigger('prefix_status_drop_link', 'click');
+      var filterInput = droplist.controller.dropdown.panel.select('.dropdown-options-filter').first();
+      filterInput.value = "op";//should only match 'open', not 'close', 'not-set'
+      Event.triggerKeydownEvent(filterInput, 80);
+
+      wait(20, function(){
+        var visibleOptions = droplist.controller.dropdown.panel.select('.options-only-container li').findAll(function(option){
+          return option.visible();
+        });
+        assertEqual(1, visibleOptions.size());
+      });
+    }},
+
+    testFilteredOptionShouldUpdateDropLinkTextAndValueWhenClick: function() { with(this) {
+      var droplist = new DropList(filterOptions);
+      Event.trigger('prefix_status_drop_link', 'click');
+      var filterInput = droplist.controller.dropdown.panel.select('.dropdown-options-filter').first();
+      filterInput.value = "op";//should only match 'open', not 'close', 'not-set'
+      Event.triggerKeydownEvent(filterInput, 80);
+      wait(20, function(){
+        var visibleOptions = droplist.controller.dropdown.panel.select('.options-only-container li').findAll(function(option){
+          return option.visible();
+        });
+        Event.trigger(visibleOptions.first(), 'click');
+        assertEqual('open', $('prefix_status_drop_link').innerHTML);
+        assertEqual('open', droplist.getSelectedValue());
+      });
+    }},
+
+    testFilteredOptionShouldBeHighlightedWhenFilterValueChanged: function() { with(this) {
+      var droplist = new DropList(filterOptions);
+      Event.trigger('prefix_status_drop_link', 'click');
+      var filterInput = droplist.controller.dropdown.panel.select('.dropdown-options-filter').first();
+      filterInput.value = "op";//should only match 'open', not 'close', 'not-set'
+      Event.triggerKeydownEvent(filterInput, 80);
+
+      wait(20, function(){
+        var visibleOptions = droplist.controller.dropdown.panel.select('.options-only-container li').findAll(function(option){
+          return option.visible();
+        });
+        assertEqual('<text><strong>op</strong>en</text>', visibleOptions.first().innerHTML.strip());
+      });
+    }},
+
+    // DropList.Dropdown
+
+    testDropdownPanelShouldBeHideWhenEscKeyIsPressed: function() { with(this) {
+      var droplist = new DropList(defaultOptions);
+      Event.trigger('prefix_status_drop_link', 'click');
+      var dropdownPanel = droplist.controller.dropdown.panel;
+      assertVisible(dropdownPanel, "The drop down should be visible after droplink is clicked");
+      if(Prototype.Browser.Gecko) {
+        Event.triggerKeypressEvent(document, Event.KEY_ESC);
+      } else {
+        Event.triggerKeydownEvent(document, Event.KEY_ESC);
+      }
+      wait(20, function(){
+        assertNotVisible(dropdownPanel, "The drop down should be hidden after user clicked ESC key");
+      });
+    }},
+
+    testDropdownPanelShouldTakeOverAllHotKeys: function() { with(this) {
+      var globalHotKeyTriggered = false;
+      HotKey.register(Event.KEY_RETURN, function(e) {
+        globalHotKeyTriggered = true
+      })
+      var droplist = new DropList(defaultOptions);
+      Event.trigger('prefix_status_drop_link', 'click');
+      if(Prototype.Browser.Gecko) {
+        Event.triggerKeypressEvent(document, Event.KEY_RETURN);
+      } else {
+        Event.triggerKeydownEvent(document, Event.KEY_RETURN);
+      }
+      wait(20, function(){
+        assertEqual(false, globalHotKeyTriggered)
+      });
+    }},
+
+    testDropdownPanelShouldEnableGlobalHotKeysAfterDropdownHidden: function() { with(this) {
+      var globalHotKeyTriggered = false;
+      HotKey.register(Event.KEY_RETURN, function(e) {
+        globalHotKeyTriggered = true
+      })
+      var droplist = new DropList(defaultOptions);
+      Event.trigger('prefix_status_drop_link', 'click');
+      if(Prototype.Browser.Gecko) {
+        Event.triggerKeypressEvent(document, Event.KEY_ESC);
+      } else {
+        Event.triggerKeydownEvent(document, Event.KEY_ESC);
+      }
+      //after dropdown closed, the global hotkeys should work now
+      if(Prototype.Browser.Gecko) {
+        Event.triggerKeypressEvent(document, Event.KEY_RETURN);
+      } else {
+        Event.triggerKeydownEvent(document, Event.KEY_RETURN);
+      }
+      wait(20, function(){
+        assert(globalHotKeyTriggered)
+      });
+    }},
+
+    // DropList.Option
+
+    testToggleShouldHideDomElementWhenOptionIsHidden: function() { with(this) {
+      var option = new DropList.Option('name', 'value');
+      option.hidden = true;
+      option.element = new Element('li');
+      $('sandbox').appendChild(option.element);
+      option.toggle();
+      assertNotVisible(option.element);
+    }},
+
+    testToggleShouldShowDomElementWhenOptionIsNotHidden: function() { with(this) {
+      var option = new DropList.Option('name', 'value');
+      option.hidden = false;
+      option.element = new Element('li');
+      $('sandbox').appendChild(option.element);
+      option.toggle();
+      assertVisible(option.element);
+    }},
+
+    testOptionsShouldHighlightMatchedCharacters: function() { with(this) {
+      var option = new DropList.Option('name', 'value');
+      option.hidden = false;
+      option.element = new Element('li');
+      option.appendTo(option.element);
+      $('sandbox').appendChild(option.element);
+      option._highlight('na');
+      assertEqual('<text><strong>na</strong>me</text>', option.element.innerHTML.strip());
+    }},
+
+    testOptionsShouldHighlightMatchedCharactersWithEscape: function() { with(this) {
+      var option = new DropList.Option('n<a>me', 'value');
+      option.hidden = false;
+      option.element = new Element('li');
+      option.appendTo(option.element);
+      $('sandbox').appendChild(option.element);
+      option._highlight('n<a');
+      assertEqual('<text><strong>n&lt;a</strong>&gt;me</text>', option.element.innerHTML.strip());
+    }},
+
+    testOptionsShouldHighlightMatchedCharactersWhenWholeTextMatched: function() { with(this) {
+      var option = new DropList.Option('name', 'value');
+      option.hidden = false;
+      option.element = new Element('li');
+      option.appendTo(option.element);
+      $('sandbox').appendChild(option.element);
+      option._highlight('name');
+      assertEqual('<text><strong>name</strong></text>', option.element.innerHTML.strip());
+    }},
+
+    testHiddenOptionShouldNotBeRenderedOnShow: function() { with(this) {
+      var dropList = new DropList(defaultOptions);
+      dropList.model.options.last().hide();
+      Event.trigger('prefix_status_drop_link', 'click');
+      assertNull(dropList.model.options.last().element);
+    }},
+
+    testFilterShouldBeResetWhenShowDrowdownForTheSecondTime: function() { with(this) {
+      var droplist = new DropList(filterOptions);
+      Event.trigger('prefix_status_drop_link', 'click');
+      var filterInput = droplist.controller.dropdown.panel.select('.dropdown-options-filter').first();
+      filterInput.value = "op";
+      Event.triggerKeydownEvent(filterInput, 80);
+      // All these nested waits are ugly but necessary due to the delay in the hide dropdown callback
+      wait(20, function(){
+        var visibleOptions = droplist.controller.dropdown.panel.select('.options-only-container li').findAll(function(option){
+          return option.visible();
+        });
+        assertEqual(1, visibleOptions.size());
+        Event.trigger(document, 'click');
+        wait(20, function(){
+          Event.trigger('prefix_status_drop_link', 'click');
+          var visibleOptions = droplist.controller.dropdown.panel.select('.options-only-container li').findAll(function(option){
+            return option.visible();
+          });
+          assertEqual('', filterInput.value.strip());
+          assertEqual(3, visibleOptions.size());
+        });
+      });
+    }},
+
+    testFilterValueShouldBeAbleTrimBlankSpace: function() { with(this) {
+      var droplist = new DropList(filterOptions);
+      Event.trigger('prefix_status_drop_link', 'click');
+      var filterInput = droplist.controller.dropdown.panel.select('.dropdown-options-filter').first();
+      filterInput.value = " op";//should only match 'open', not 'close', 'not-set'
+      Event.triggerKeydownEvent(filterInput, 80);
+
+      wait(20, function(){
+        var visibleOptions = droplist.controller.dropdown.panel.select('.options-only-container li').findAll(function(option){
+          return option.visible();
+        });
+        assertEqual(1, visibleOptions.size());
+      });
+    }},
+
+    testFixSingleDivSetsPaneLWithEnoughHeight: function() { with(this) {
+      var widget = $('show_default_property_definitions_container');
+      var originalPanelHeight = widget.down('.drop-list-panel').getHeight();
+      DropList.View.Layout.fixSingleDiv(widget);
+      assertEqual(originalPanelHeight + 5 + 'px', widget.down('.drop-list-panel').style.height);
+    }},
+
+    testFilterWithNoMatchCanBeAddedByEnterKeypress: function() { with(this) {
+      var onChangeCalled = false;
+      var droplist = new DropList(filterOptionsHash.merge({onchange: function() { onChangeCalled = true; }}).toObject());
+
+      Event.trigger('prefix_status_drop_link', 'click');
+      var filterInput = droplist.controller.dropdown.panel.select('.dropdown-options-filter').first();
+      filterInput.value = "xyz";
+      Event.triggerKeydownEvent(filterInput, 80);
+
+      wait(20, function(){
+        Event.triggerKeydownEvent(document, Event.KEY_RETURN);
+        assert(onChangeCalled);
+      });
+    }},
+
+    testShouldCopyCurrentFilterValueIntoInlineEditor: function() { with(this) {
+        var droplist = new DropList(this.filterOptionsHash.toObject());
+
+        Event.trigger('prefix_status_drop_link', 'click');
+
+        var filterInput = droplist.controller.dropdown.panel.select('.dropdown-options-filter').first();
+        filterInput.value = "xyz";
+        Event.triggerKeydownEvent(filterInput, 80);
+
+        wait(20, function() {
+          Event.trigger('prefix_status_action_adding_value', 'click');
+          inlineEditorField = $j('#prefix_status_inline_editor')
+          assertEqual('xyz', inlineEditorField.val());
+        });
+    }},
+
+    testShouldClearCurrentFilterValueWhenDropListCloses: function() { with(this) {
+        var droplist = new DropList(this.filterOptionsHash.toObject());
+        var helper = DropListTestHelper(droplist, this);
+
+        helper.openDropList();
+        helper.typeInFilter('xyz');
+
+        wait(20, function() {
+          helper.clickOnAddNewValue();
+          helper.assertAddNewTextBoxContains('xyz');
+          helper.saveNewValue();
+
+          helper.openDropList();
+          helper.clickOnAddNewValue();
+          helper.assertAddNewTextBoxContains('');
+        });
+    }},
+
+    testShouldClearCurrentFilterValueWhenInlineEditorBlursOut: function() { with(this) {
+        var droplist = new DropList(this.filterOptionsHash.toObject());
+        var helper = DropListTestHelper(droplist, this);
+
+        helper.openDropList();
+        helper.typeInFilter('xyz');
+
+        wait(20, function() {
+          helper.clickOnAddNewValue();
+          helper.assertAddNewTextBoxContains('xyz');
+          helper.hideAddNewTextBox();
+
+          helper.openDropList();
+          helper.clickOnAddNewValue();
+          helper.assertAddNewTextBoxContains('');
+        });
+    }},
+
+    testShouldClearCurrentFilterValueWhenDropListBlursOut: function() { with(this) {
+        var droplist = new DropList(this.filterOptionsHash.toObject());
+        var helper = DropListTestHelper(droplist, this);
+
+        helper.openDropList();
+        helper.typeInFilter('xyz');
+
+        wait(20, function() {
+          helper.closeDropList();
+
+          helper.openDropList();
+          helper.clickOnAddNewValue();
+          helper.assertAddNewTextBoxContains('');
+        });
+    }}
+
+  }, { testLog: "testlog", test : '' }).run;
+// ]]>
+</script>
+</body>
+</html>

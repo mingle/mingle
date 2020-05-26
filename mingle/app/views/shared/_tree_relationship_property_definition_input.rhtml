@@ -1,0 +1,29 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% if options[:render_card_relationship_property_links] %>
+  <% render(:layout => 'shared/enumerated_property_definition_input_layout', :locals => { :options => options, :prop_def => prop_def }) do %>
+    <% card_link_style = @initial_selection.last.blank? ? "display: none;" : "" %>
+    <span class='property-value tree-drop-link-holder'>
+      <%= link_to_function(h(@initial_selection.first), nil, :id => "#{options[:html_id_prefix]}_drop_link", :without_href => true, :class => "card-relationship-property #{@link_class}") %>
+      <%= link_to image_tag('icon-link-to-card.gif', :title => 'Click to go to this card'), { :controller => "cards", :action => "show", :number => options[:property_value].url_identifier }, :class => 'card-relationship-link', :title => 'Click to go to this card', :style => card_link_style %>
+    </span>
+  <% end %>
+<% else %>
+  <%= render :partial => 'shared/enumerated_property_definition_input', :locals => { :options => options, :prop_def => prop_def } %>
+<% end %>
+
+

@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Mingle Version Info API">
+  <section title="Mingle Version Info API">		
+    <p>The Mingle Version Info API allows you to get the version number and the revision number for the Mingle instance you are currently using via the API. </p>
+
+</section>  
+<section title="Structure of a mingle version info resource">
+    <p>The structure of a mingle version info resource, and its attributes are described below, along with their data type. Also included with each attribute is whether you are allowed to update the value.</p>
+
+    <api_attributes title="Mingle version info resource xml - attributes">
+      <api_attribute name="version" type="String" readonly="true">version of Mingle.</api_attribute>
+	    <api_attribute name="revision" type="String" readonly="true">revision number of Mingle.</api_attribute>
+    </api_attributes>
+  </section>
+ <section title="Find Mingle version and revision numbers">
+    <api_reference title="Find Mingle version and revision numbers">
+      <p><strong>Reference</strong></p>
+      <code>
+    Request Method: GET
+    URL: /api/v2/info.xml
+    Parameters: NA
+      </code>
+
+      <p><strong>Example</strong></p>
+      <code>
+    GET
+
+    http://yourname:password@your.mingle.server:8080/api/v2/info.xml
+      </code>
+
+      <p><strong>Explanation</strong></p>
+      <p>The above is an example of a GET request to a Mingle server running at your.mingle.server, port 8080. The request locates the version number and the revision number for the Mingle instance you are currently using. All Mingle user types can get this information via API.</p>
+
+      <p><strong>Result</strong></p>
+      Upon execution, you should get an xml document that looks something like the following:
+      <code>
+          <![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<info>
+  <version>version_number</version>
+  <revision>revision_number</revision>
+</info>
+]]>
+      </code>  
+    </api_reference>
+  </section>
+</topic>

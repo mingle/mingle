@@ -1,0 +1,121 @@
+#  Copyright 2020 ThoughtWorks, Inc.
+#  
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Affero General Public License as
+#  published by the Free Software Foundation, either version 3 of the
+#  License, or (at your option) any later version.
+#  
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Affero General Public License for more details.
+#  
+#  You should have received a copy of the GNU Affero General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+card_types:
+  - name: Work
+property_definitions:
+  - name: Status
+    data_type: string
+    is_managed: "true"
+    card_types:
+      - name: Work
+    property_value_details:
+      - value: Backlog
+        color: '#eeefff'
+        position: 1
+      - value: To do
+        color: '#f28900'
+        position: 2
+      - value: Doing
+        color: '#30f200'
+        position: 3
+      - value: Done
+        color: '#087300'
+        position: 4
+      - value: Archive
+        color: '#0600bf'
+        position: 5
+  - name: Owner
+    data_type: user
+    card_types:
+      - name: Work
+  - name: Pair
+    data_type: user
+    card_types:
+      - name: Work
+cards:
+  - name: "Work 1"
+    card_type_name: Work
+    number: 1
+    properties:
+      status: Doing
+  - name: "Work 2"
+    card_type_name: Work
+    properties:
+      status: Doing
+    number: 2
+  - name: "Work 3"
+    card_type_name: Work
+    number: 3
+    properties:
+      status: To Do
+  - name: "Work 4"
+    card_type_name: Work
+    properties:
+      status: To Do
+    number: 4
+card_defaults:
+  - card_type_name: Work
+    properties:
+      status: To do
+      Owner: (current user)
+tabs:
+  - name: Kanban Board
+    style: grid
+    filters:
+      - '[Type][is][Work]'
+    color_by: Status
+    group_by:
+      lane: Status
+    wip_limits:
+      To do:
+        type: "Count"
+        limit: 2
+      Doing:
+        type: "Count"
+        limit: 2
+    lanes: 'To Do,Doing,Done'
+pages:
+  - name: 'Overview Page'
+    content: >-
+      <div class="dashboard-panel">
+      <h2>Cumulative Flow</h2>
+
+      <div class="dashboard-content">
+      {{ daily-history-chart
+          aggregate: count(*)
+          start-date: <%= (Time.now - 2.days).utc.strftime('%d %B, %Y') %>
+          end-date: <%= (Time.now + 14.days).utc.strftime('%d %B, %Y') %>
+          chart-conditions: type = work
+          chart-width: 900
+          chart-height: 400
+          plot-width: 700
+          plot-height: 300
+          plot-x-offset: 80
+          series:
+            - conditions: type = work and status >= "to do"
+              color: '#f28900'
+              label: To Do
+              line-width: 2
+            - conditions: type = work and status >= "doing"
+              color: '#30f200'
+              label: Doing
+              line-width: 2
+            - conditions: type = work and status >= "done"
+              color: '#087300'
+              label: Done
+              line-width: 2
+      }}
+      </div>
+      </div>

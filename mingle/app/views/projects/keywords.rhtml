@@ -1,0 +1,52 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= render :partial => 'shared/admin_actions'%>
+
+<%= render :partial => 'projects/keywords_action_bar' %>
+
+<h1><%= @title = 'Card keywords' %></h1>
+
+<% info_box do %>
+  <p><b>Mingle can automatically generate links to cards in your project.</b></p>
+  <p>This can be tremendously useful if you want to link from one card to another (e.g. a story to a bug) or from a page to a card. Mingle uses keywords to recognize a reference to card. You can set those keywords here.</p>
+<% end %>
+
+<h2>Setting your keywords</h2>
+<% form_tag({:action => 'update_keywords'}, {:id => 'keywords', :onsubmit =>  is_authorized_for('projects', 'update_keywords') ? '' : 'return false;'}) do -%>
+  <p>
+    <label>List of keywords that will be used to recognize card references (separated by commas):</label>
+    <% if is_authorized_for('projects', 'update_keywords') -%>
+      <%= text_field_tag 'project[card_keywords]', @project.card_keywords, :class => 'width-full' %>
+    <% else -%>
+      <%= text_field_tag 'project[card_keywords]', @project.card_keywords, :class => 'width-full readonly', :readonly => true, :onfocus => 'this.blur()' %>
+    <% end -%>
+  </p>
+
+  <% if @project.has_source_repository? -%>
+    <h3>Testing your keywords (against the <%= "#{@project.repository_configuration.display_name} #{repository_vocabulary['repository']}" %>)</h3>
+  
+    <p>
+      <label for="card_number">Enter a card number that you know has <%= repository_vocabulary['revision'].pluralize %> <%= repository_vocabulary['committed'] %> against it:</label>
+      <%= text_field_tag 'card_number', 1, :name => 'card_number', :class => 'width-very-small' %>
+      <%= submit_to_remote 'show-matched', "Test", :url => { :action => 'test_keywords_for_revisions' } %>
+    </p>
+      
+    <p> <div id='matched-revisions'></div> </p>
+  <% end -%>
+<% end -%>
+
+<%= render :partial => 'projects/keywords_action_bar' %>

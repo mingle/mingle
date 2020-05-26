@@ -1,0 +1,1786 @@
+#  Copyright 2020 ThoughtWorks, Inc.
+#  
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Affero General Public License as
+#  published by the Free Software Foundation, either version 3 of the
+#  License, or (at your option) any later version.
+#  
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Affero General Public License for more details.
+#  
+#  You should have received a copy of the GNU Affero General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+---
+ordered_tab_identifiers:
+  - Overview
+  - Story Map
+  - Product Backlog
+  - Release Planning
+  - Estimation
+  - Sprint Board
+  - Retrospectives
+  - All
+  - History
+card_types:
+  - name: Goal
+    position: 1
+    color: "#EBC855"
+    property_definitions: []
+
+  - name: Feature
+    position: 2
+    color: "#EAEB55"
+    property_definitions:
+      - name: Release - Release
+  - name: Release
+    position: 3
+    color: "#EE5AA2"
+    property_definitions:
+      - name: Release Date
+  - name: Sprint
+    position: 4
+    color: "#EB9955"
+    property_definitions:
+      - name: Sprint Start Date
+      - name: Sprint End Date
+      - name: Velocity
+  - name: Story
+    position: 5
+    color: "#3D8F84"
+    property_definitions:
+      - name: Status
+      - name: Priority
+      - name: Points
+      - name: Owner
+      - name: Pair
+      - name: Release - Release
+      - name: Release - Feature
+      - name: Goal Tree - Goal
+      - name: Sprint - Sprint
+  - name: Task
+    position: 6
+    color: "#24C2CC"
+    property_definitions:
+      - name: Status
+      - name: Priority
+      - name: Owner
+      - name: Pair
+      - name: Sprint - Sprint
+      - name: Sprint - Story
+  - name: Defect
+    position: 7
+    color: "#EE675A"
+    property_definitions:
+      - name: Status
+      - name: Priority
+      - name: Owner
+      - name: Pair
+      - name: Sprint - Sprint
+      - name: Sprint - Story
+      - name: Sprints - Task
+  - name: Retrospective
+    position: 8
+    color: "#55EB7D"
+    property_definitions:
+      - name: Retrospective Date
+  - name: Retro Action
+    position: 9
+    color: "#FFA5D1"
+    property_definitions:
+      - name: Retro Action Status
+      - name: Priority
+      - name: Owner
+      - name: Pair
+      - name: Retrospective - Action
+property_definitions:
+  - name: Points
+    data_type: numeric
+    is_managed: "true"
+    property_value_details:
+      - value: "1"
+        position: 1
+        color: "#EE5AA2"
+      - value: "2"
+        position: 2
+        color: "#24C2CC"
+      - value: "3"
+        position: 3
+        color: "#712468"
+      - value: "5"
+        position: 4
+        color: "#3D8F84"
+      - value: "8"
+        position: 5
+        color: "#EBC855"
+  - name: Priority
+    data_type: string
+    is_managed: "true"
+    property_value_details:
+      - value: Must
+        position: 1
+        color: "#D4292B"
+      - value: Should
+        position: 2
+        color: "#EAEB55"
+      - value: Could
+        position: 3
+        color: "#24C2CC"
+  - name: Retro Action Status
+    data_type: string
+    is_managed: "true"
+    property_value_details:
+      - value: To Do
+        position: 1
+        color: "#3D8F84"
+      - value: Doing
+        position: 2
+        color: "#19A657"
+      - value: Done
+        position: 3
+        color: "#EE5AA2"
+  - name: Status
+    data_type: string
+    is_managed: "true"
+    property_value_details:
+      - value: To Do
+        position: 1
+        color: "#55EB7D"
+      - value: In Dev
+        position: 2
+        color: "#24C2CC"
+      - value: Testing
+        position: 3
+        color: "#712468"
+      - value: Done
+        position: 4
+        color: "#EE5AA2"
+  - name: Owner
+    data_type: user
+  - name: Pair
+    data_type: user
+  - name: Release Date
+    data_type: date
+  - name: Retrospective Date
+    data_type: date
+  - name: Sprint End Date
+    data_type: date
+  - name: Sprint Start Date
+    data_type: date
+card_defaults:
+  - description: |-
+      <h3>Description:</h3>
+
+      <ul>
+      	<li>&nbsp;</li>
+      </ul>
+
+      <h3>&nbsp;</h3>
+
+      <h3>Why does our user want to achieve this goal?</h3>
+
+      <ul>
+      	<li>&nbsp;</li>
+      </ul>
+
+      <h3>&nbsp;</h3>
+
+      <h3>Related Stories:</h3>
+
+      <p>{{
+        table
+          query: SELECT number, name, status WHERE 'Goal Tree - Goal' is THIS CARD
+      }}<br />
+      &nbsp;</p>
+    card_type_name: Goal
+    properties: {}
+
+  - description: |-
+      <h3>Description:</h3>
+
+      <ul>
+      	<li>&nbsp;</li>
+      </ul>
+
+      <p>&nbsp;</p>
+
+      <h3>Related Stories:</h3>
+
+      <p>{{
+        table
+          query: SELECT number, name, status WHERE 'Release - Feature' is THIS CARD
+      }}<br />
+      &nbsp;</p>
+    card_type_name: Feature
+    properties:
+      Release - Release:
+  - description: |-
+      <h3>Description:</h3>
+
+      <ul>
+      	<li>&nbsp;</li>
+      </ul>
+
+      <h3>&nbsp;</h3>
+
+      <h3>Stories completed in this release:</h3>
+
+      <p>{{
+      	table
+          query: SELECT number, name, status WHERE 'Release - Release' is THIS CARD
+      }}<br />
+      &nbsp;</p>
+    card_type_name: Release
+    properties:
+      Release Date:
+  - description: |-
+      <h3>Stories completed in this sprint:</h3>
+
+      <p>{{
+      	table
+          query: SELECT number, name, status WHERE 'Sprint - Sprint' is THIS CARD and type is story and status is done
+      }}</p>
+
+      <p>&nbsp;</p>
+
+      <p>&nbsp;</p>
+
+      <h3>Tasks completed in this sprint:</h3>
+
+      <p>{{
+      	table
+          query: SELECT number, name, status WHERE 'Sprint - Sprint' is THIS CARD and type is task and status is done
+      }}</p>
+
+      <p>&nbsp;</p>
+
+      <p>&nbsp;</p>
+
+      <h3>Defects fixed in this sprint:</h3>
+
+      <p>{{
+      	table
+          query: SELECT number, name, status WHERE 'Sprint - Sprint' is THIS CARD and type is defect and status is done
+      }}</p>
+
+      <p><br />
+      &nbsp;</p>
+
+      <p>&nbsp;</p>
+    card_type_name: Sprint
+    properties:
+      Sprint Start Date:
+      Sprint End Date:
+  - description: |-
+      <h3>Description:</h3>
+
+      <ul>
+      	<li>&nbsp;</li>
+      </ul>
+
+      <p>&nbsp;</p>
+
+      <h3>Acceptance Criteria:</h3>
+
+      <ol>
+      	<li>&nbsp;</li>
+      	<li>&nbsp;</li>
+      	<li>&nbsp;</li>
+      </ol>
+
+      <p>&nbsp;</p>
+
+      <h3>Related Tasks:</h3>
+
+      <p>{{
+      	table
+          query: SELECT number, name, status WHERE 'Sprint - Story' is THIS CARD and type is task
+      }}</p>
+
+      <p>&nbsp;</p>
+
+      <h3>&nbsp;</h3>
+
+      <h3>Related Defects:</h3>
+
+      <p>{{
+      	table
+          query: SELECT number, name, status WHERE 'Sprint - Story' is THIS CARD and type is defect
+      }}<br />
+      &nbsp;</p>
+
+      <p>&nbsp;</p>
+    card_type_name: Story
+    properties:
+      Owner:
+      Status:
+      Points:
+      Pair:
+      Priority:
+      Goal Tree - Goal:
+      Release - Release:
+      Sprint - Sprint:
+      Release - Feature:
+  - description: |-
+      <h3 style="font-family: 'Helvetica Neue', Arial, Helvetica;">Description:</h3>
+
+      <ul style="line-height: 19.600000381469727px; color: rgb(0, 0, 0); font-family: 'Helvetica Neue', Arial, Helvetica; font-size: 14px;">
+      	<li>&nbsp;</li>
+      </ul>
+
+      <h3 style="font-family: 'Helvetica Neue', Arial, Helvetica;">&nbsp;</h3>
+
+      <h3 style="font-family: 'Helvetica Neue', Arial, Helvetica;">&nbsp;</h3>
+
+      <ul style="line-height: 19.600000381469727px; color: rgb(0, 0, 0); font-family: 'Helvetica Neue', Arial, Helvetica; font-size: 14px;">
+      </ul>
+    card_type_name: Task
+    properties:
+      Status: To Do
+      Owner:
+      Pair:
+      Priority:
+      Sprint - Sprint:
+      Sprint - Story:
+  - description: |-
+      <h3>Description:</h3>
+
+      <ul>
+      	<li>&nbsp;</li>
+      </ul>
+
+      <h3>&nbsp;</h3>
+
+      <h3>Steps to Reproduce:</h3>
+
+      <ol>
+      	<li>&nbsp;</li>
+      	<li>&nbsp;</li>
+      	<li>&nbsp;</li>
+      </ol>
+
+      <h3>&nbsp;</h3>
+
+      <h3>Result:</h3>
+
+      <ul>
+      	<li>&nbsp;</li>
+      </ul>
+
+      <h3>&nbsp;</h3>
+
+      <h3>Expected Result:&nbsp;</h3>
+
+      <ul>
+      	<li>&nbsp;</li>
+      </ul>
+    card_type_name: Defect
+    properties:
+      Owner:
+      Pair:
+      Status:
+      Priority:
+      Sprint - Sprint:
+      Sprint - Story:
+      Sprints - Task:
+  - description: |-
+      <h3>Retro actions:</h3>
+
+      <p>{{
+        table
+          query: SELECT number, name, owner, 'retro action status' WHERE 'Retrospective - Action' is THIS CARD
+      }}<br />
+      &nbsp;</p>
+    card_type_name: Retrospective
+    properties:
+      Retrospective Date:
+  - description: |-
+      <h3>Description:</h3>
+
+      <ul>
+      	<li>&nbsp;</li>
+      </ul>
+
+      <p>&nbsp;</p>
+
+      <p>&nbsp;</p>
+    card_type_name: Retro Action
+    properties:
+      Owner:
+      Pair:
+      Status:
+      Retro Action Status:
+      Priority:
+      Retrospective - Action:
+plvs:
+  - name: Current Sprint
+    property_definitions: []
+
+    data_type: CARD_DATA_TYPE
+    card_type: Sprint
+    value:
+trees:
+  - name: Goal Tree
+    description: To assist story mapping
+    configuration:
+      - card_type_name: Goal
+        position: 0
+        relationship_name: Goal Tree - Goal
+      - card_type_name: Story
+        position: 1
+    aggregate_properties: []
+
+  - name: Release Tree
+    description: To plan stories and features across releases
+    configuration:
+      - card_type_name: Release
+        position: 0
+        relationship_name: Release - Release
+      - card_type_name: Feature
+        position: 1
+        relationship_name: Release - Feature
+      - card_type_name: Story
+        position: 2
+    aggregate_properties: []
+
+  - name: Retrospective Tree
+    description: To capture team retro action items for continuous improvement
+    configuration:
+      - card_type_name: Retrospective
+        position: 0
+        relationship_name: Retrospective - Action
+      - card_type_name: Retro Action
+        position: 1
+    aggregate_properties: []
+
+  - name: Sprint Tree
+    description: To track work planned for team sprints
+    configuration:
+      - card_type_name: Sprint
+        position: 0
+        relationship_name: Sprint - Sprint
+      - card_type_name: Story
+        position: 1
+        relationship_name: Sprint - Story
+      - card_type_name: Task
+        position: 2
+        relationship_name: Sprints - Task
+      - card_type_name: Defect
+        position: 3
+    aggregate_properties:
+      - name: Velocity
+        scope_card_type_name: Story
+        type: SUM
+        card_type_name: Sprint
+        target_property_name: Points
+        condition: ""
+cards:
+  - name: Sprint 1
+    card_type_name: Sprint
+    number: 1
+    description: |-
+      <h3>Stories completed in this sprint:</h3>
+
+      <p>{{
+       table
+          query: SELECT number, name, status WHERE 'Sprint - Sprint' is THIS CARD and type is story and status is done
+      }}</p>
+
+      <p>&nbsp;</p>
+
+      <p>&nbsp;</p>
+
+      <h3>Tasks completed in this sprint:</h3>
+
+      <p>{{
+       table
+          query: SELECT number, name, status WHERE 'Sprint - Sprint' is THIS CARD and type is task and status is done
+      }}</p>
+
+      <p>&nbsp;</p>
+
+      <p>&nbsp;</p>
+
+      <h3>Defects fixed in this sprint:</h3>
+
+      <p>{{
+       table
+          query: SELECT number, name, status WHERE 'Sprint - Sprint' is THIS CARD and type is defect and status is done
+      }}</p>
+
+      <p><br />
+      &nbsp;</p>
+
+      <p>&nbsp;</p>
+    properties:
+      Sprint Start Date: "2014-06-30"
+      Sprint End Date: "2014-07-11"
+      Velocity: "12.00"
+  - name: Sprint 2
+    card_type_name: Sprint
+    number: 2
+    description: |-
+      <h3>Stories completed in this sprint:</h3>
+
+      <p>{{
+       table
+          query: SELECT number, name, status WHERE 'Sprint - Sprint' is THIS CARD and type is story and status is done
+      }}</p>
+
+      <p>&nbsp;</p>
+
+      <p>&nbsp;</p>
+
+      <h3>Tasks completed in this sprint:</h3>
+
+      <p>{{
+       table
+          query: SELECT number, name, status WHERE 'Sprint - Sprint' is THIS CARD and type is task and status is done
+      }}</p>
+
+      <p>&nbsp;</p>
+
+      <p>&nbsp;</p>
+
+      <h3>Defects fixed in this sprint:</h3>
+
+      <p>{{
+       table
+          query: SELECT number, name, status WHERE 'Sprint - Sprint' is THIS CARD and type is defect and status is done
+      }}</p>
+
+      <p><br />
+      &nbsp;</p>
+
+      <p>&nbsp;</p>
+    properties:
+      Sprint Start Date: "2014-07-14"
+      Sprint End Date: "2014-07-25"
+      Velocity: "1.00"
+  - name: Sprint 3
+    card_type_name: Sprint
+    number: 3
+    description: |-
+      <h3>Stories completed in this sprint:</h3>
+
+      <p>{{
+       table
+          query: SELECT number, name, status WHERE 'Sprint - Sprint' is THIS CARD and type is story and status is done
+      }}</p>
+
+      <p>&nbsp;</p>
+
+      <p>&nbsp;</p>
+
+      <h3>Tasks completed in this sprint:</h3>
+
+      <p>{{
+       table
+          query: SELECT number, name, status WHERE 'Sprint - Sprint' is THIS CARD and type is task and status is done
+      }}</p>
+
+      <p>&nbsp;</p>
+
+      <p>&nbsp;</p>
+
+      <h3>Defects fixed in this sprint:</h3>
+
+      <p>{{
+       table
+          query: SELECT number, name, status WHERE 'Sprint - Sprint' is THIS CARD and type is defect and status is done
+      }}</p>
+
+      <p><br />
+      &nbsp;</p>
+
+      <p>&nbsp;</p>
+    properties:
+      Sprint Start Date: "2014-07-28"
+      Sprint End Date: "2014-08-08"
+  - name: Retrospective 1
+    card_type_name: Retrospective
+    number: 29
+    description: |-
+      <h3>Retro actions:</h3>
+
+      <p>{{
+        table
+          query: SELECT number, name, owner, 'retro action status' WHERE 'Retrospective - Action' is THIS CARD
+      }}<br />
+      &nbsp;</p>
+  - name: Retrospective 2
+    card_type_name: Retrospective
+    number: 30
+    description: |-
+      <h3>Retro actions:</h3>
+
+      <p>{{
+        table
+          query: SELECT number, name, owner, 'retro action status' WHERE 'Retrospective - Action' is THIS CARD
+      }}<br />
+      &nbsp;</p>
+  - name: Retrospective 3
+    card_type_name: Retrospective
+    number: 31
+    description: |-
+      <h3>Retro actions:</h3>
+
+      <p>{{
+        table
+          query: SELECT number, name, owner, 'retro action status' WHERE 'Retrospective - Action' is THIS CARD
+      }}<br />
+      &nbsp;</p>
+  - name: Product Backlog
+    card_type_name: Sprint
+    number: 37
+    description: |-
+      <h3>Backlog Stories:</h3>
+
+      <p>&nbsp;</p>
+
+      {{
+       table
+          query: SELECT number, name, status WHERE 'Sprint - Sprint' is THIS CARD and type is story
+      }}
+
+      <p>&nbsp;</p>
+    properties:
+      Velocity: "3.00"
+  - name: Release 1
+    card_type_name: Release
+    number: 47
+    description: |-
+      <h3>Description:</h3>
+
+      <ul>
+       <li>&nbsp;</li>
+      </ul>
+
+      <h3>&nbsp;</h3>
+
+      <h3>Stories completed in this release:</h3>
+
+      <p>{{
+       table
+          query: SELECT number, name, status WHERE 'Release - Release' is THIS CARD
+      }}<br />
+      &nbsp;</p>
+  - name: Feature 1
+    card_type_name: Feature
+    number: 43
+    description: |-
+      <h3>Description:</h3>
+
+      <ul>
+       <li>&nbsp;</li>
+      </ul>
+
+      <p>&nbsp;</p>
+
+      <h3>Related Stories:</h3>
+
+      <p>{{
+        table
+          query: SELECT number, name, status WHERE 'Release - Feature' is THIS CARD
+      }}<br />
+      &nbsp;</p>
+    card_relationships:
+      release - release: 47
+  - name: Feature 2
+    card_type_name: Feature
+    number: 44
+    description: |-
+      <h3>Description:</h3>
+
+      <ul>
+       <li>&nbsp;</li>
+      </ul>
+
+      <p>&nbsp;</p>
+
+      <h3>Related Stories:</h3>
+
+      <p>{{
+        table
+          query: SELECT number, name, status WHERE 'Release - Feature' is THIS CARD
+      }}<br />
+      &nbsp;</p>
+    card_relationships:
+      release - release: 47
+  - name: Release 2
+    card_type_name: Release
+    number: 48
+    description: |-
+      <h3>Description:</h3>
+
+      <ul>
+       <li>&nbsp;</li>
+      </ul>
+
+      <h3>&nbsp;</h3>
+
+      <h3>Stories completed in this release:</h3>
+
+      <p>{{
+       table
+          query: SELECT number, name, status WHERE 'Release - Release' is THIS CARD
+      }}<br />
+      &nbsp;</p>
+  - name: Feature 3
+    card_type_name: Feature
+    number: 45
+    description: |-
+      <h3>Description:</h3>
+
+      <ul>
+       <li>&nbsp;</li>
+      </ul>
+
+      <p>&nbsp;</p>
+
+      <h3>Related Stories:</h3>
+
+      <p>{{
+        table
+          query: SELECT number, name, status WHERE 'Release - Feature' is THIS CARD
+      }}<br />
+      &nbsp;</p>
+    card_relationships:
+      release - release: 48
+  - name: Release 3
+    card_type_name: Release
+    number: 49
+    description: |-
+      <h3>Description:</h3>
+
+      <ul>
+       <li>&nbsp;</li>
+      </ul>
+
+      <h3>&nbsp;</h3>
+
+      <h3>Stories completed in this release:</h3>
+
+      <p>{{
+       table
+          query: SELECT number, name, status WHERE 'Release - Release' is THIS CARD
+      }}<br />
+      &nbsp;</p>
+  - name: Goal 1
+    card_type_name: Goal
+    number: 50
+    description: |-
+      <h3>Description:</h3>
+
+      <ul>
+       <li>&nbsp;</li>
+      </ul>
+
+      <h3>&nbsp;</h3>
+
+      <h3>Why does our user want to achieve this goal?</h3>
+
+      <ul>
+       <li>&nbsp;</li>
+      </ul>
+
+      <h3>&nbsp;</h3>
+
+      <h3>Related Stories:</h3>
+
+      <p>{{
+        table
+          query: SELECT number, name, status WHERE 'Goal Tree - Goal' is THIS CARD
+      }}<br />
+      &nbsp;</p>
+  - name: Goal 2
+    card_type_name: Goal
+    number: 51
+    description: |-
+      <h3>Description:</h3>
+
+      <ul>
+       <li>&nbsp;</li>
+      </ul>
+
+      <h3>&nbsp;</h3>
+
+      <h3>Why does our user want to achieve this goal?</h3>
+
+      <ul>
+       <li>&nbsp;</li>
+      </ul>
+
+      <h3>&nbsp;</h3>
+
+      <h3>Related Stories:</h3>
+
+      <p>{{
+        table
+          query: SELECT number, name, status WHERE 'Goal Tree - Goal' is THIS CARD
+      }}<br />
+      &nbsp;</p>
+  - name: Goal 3
+    card_type_name: Goal
+    number: 52
+    description: |-
+      <h3>Description:</h3>
+
+      <ul>
+       <li>&nbsp;</li>
+      </ul>
+
+      <h3>&nbsp;</h3>
+
+      <h3>Why does our user want to achieve this goal?</h3>
+
+      <ul>
+       <li>&nbsp;</li>
+      </ul>
+
+      <h3>&nbsp;</h3>
+
+      <h3>Related Stories:</h3>
+
+      <p>{{
+        table
+          query: SELECT number, name, status WHERE 'Goal Tree - Goal' is THIS CARD
+      }}<br />
+      &nbsp;</p>
+  - name: Sample Story 1
+    card_type_name: Story
+    number: 58
+    description: |-
+      <h3>Description:</h3>
+
+      <ul>
+       <li>&nbsp;</li>
+      </ul>
+
+      <p>&nbsp;</p>
+
+      <h3>Acceptance Criteria:</h3>
+
+      <ol>
+       <li>&nbsp;</li>
+       <li>&nbsp;</li>
+       <li>&nbsp;</li>
+      </ol>
+
+      <p>&nbsp;</p>
+
+      <h3>Related Tasks:</h3>
+
+      <p>{{
+       table
+          query: SELECT number, name, status WHERE 'Sprint - Story' is THIS CARD and type is task
+      }}</p>
+
+      <p>&nbsp;</p>
+
+      <h3>&nbsp;</h3>
+
+      <h3>Related Defects:</h3>
+
+      <p>{{
+       table
+          query: SELECT number, name, status WHERE 'Sprint - Story' is THIS CARD and type is defect
+      }}<br />
+      &nbsp;</p>
+
+      <p>&nbsp;</p>
+    properties:
+      Status: Done
+      Priority: Must
+      Points: "1"
+    card_relationships:
+      release - release: 47
+      goal tree - goal: 50
+      sprint - sprint: 1
+      release - feature: 43
+  - name: Sample Story 2
+    card_type_name: Story
+    number: 59
+    description: |-
+      <h3>Description:</h3>
+
+      <ul>
+       <li>&nbsp;</li>
+      </ul>
+
+      <p>&nbsp;</p>
+
+      <h3>Acceptance Criteria:</h3>
+
+      <ol>
+       <li>&nbsp;</li>
+       <li>&nbsp;</li>
+       <li>&nbsp;</li>
+      </ol>
+
+      <p>&nbsp;</p>
+
+      <h3>Related Tasks:</h3>
+
+      <p>{{
+       table
+          query: SELECT number, name, status WHERE 'Sprint - Story' is THIS CARD and type is task
+      }}</p>
+
+      <p>&nbsp;</p>
+
+      <h3>&nbsp;</h3>
+
+      <h3>Related Defects:</h3>
+
+      <p>{{
+       table
+          query: SELECT number, name, status WHERE 'Sprint - Story' is THIS CARD and type is defect
+      }}<br />
+      &nbsp;</p>
+
+      <p>&nbsp;</p>
+    properties:
+      Status: In Dev
+      Priority: Should
+      Points: "1"
+    card_relationships:
+      release - release: 47
+      goal tree - goal: 50
+      sprint - sprint: 1
+      release - feature: 43
+  - name: Sample Story 5
+    card_type_name: Story
+    number: 60
+    description: |-
+      <h3>Description:</h3>
+
+      <ul>
+       <li>&nbsp;</li>
+      </ul>
+
+      <p>&nbsp;</p>
+
+      <h3>Acceptance Criteria:</h3>
+
+      <ol>
+       <li>&nbsp;</li>
+       <li>&nbsp;</li>
+       <li>&nbsp;</li>
+      </ol>
+
+      <p>&nbsp;</p>
+
+      <h3>Related Tasks:</h3>
+
+      <p>{{
+       table
+          query: SELECT number, name, status WHERE 'Sprint - Story' is THIS CARD and type is task
+      }}</p>
+
+      <p>&nbsp;</p>
+
+      <h3>&nbsp;</h3>
+
+      <h3>Related Defects:</h3>
+
+      <p>{{
+       table
+          query: SELECT number, name, status WHERE 'Sprint - Story' is THIS CARD and type is defect
+      }}<br />
+      &nbsp;</p>
+
+      <p>&nbsp;</p>
+    properties:
+      Status: To Do
+      Priority: Could
+      Points: "8"
+    card_relationships:
+      release - release: 47
+      sprint - sprint: 1
+      release - feature: 43
+  - name: Sample Story 10
+    card_type_name: Story
+    number: 61
+    description: |-
+      <h3>Description:</h3>
+
+      <ul>
+       <li>&nbsp;</li>
+      </ul>
+
+      <p>&nbsp;</p>
+
+      <h3>Acceptance Criteria:</h3>
+
+      <ol>
+       <li>&nbsp;</li>
+       <li>&nbsp;</li>
+       <li>&nbsp;</li>
+      </ol>
+
+      <p>&nbsp;</p>
+
+      <h3>Related Tasks:</h3>
+
+      <p>{{
+       table
+          query: SELECT number, name, status WHERE 'Sprint - Story' is THIS CARD and type is task
+      }}</p>
+
+      <p>&nbsp;</p>
+
+      <h3>&nbsp;</h3>
+
+      <h3>Related Defects:</h3>
+
+      <p>{{
+       table
+          query: SELECT number, name, status WHERE 'Sprint - Story' is THIS CARD and type is defect
+      }}<br />
+      &nbsp;</p>
+
+      <p>&nbsp;</p>
+    properties:
+      Priority: Could
+      Points: "1"
+    card_relationships:
+      release - release: 48
+      sprint - sprint: 2
+      release - feature: 45
+  - name: Sample Story 4
+    card_type_name: Story
+    number: 62
+    description: |-
+      <h3>Description:</h3>
+
+      <ul>
+       <li>&nbsp;</li>
+      </ul>
+
+      <p>&nbsp;</p>
+
+      <h3>Acceptance Criteria:</h3>
+
+      <ol>
+       <li>&nbsp;</li>
+       <li>&nbsp;</li>
+       <li>&nbsp;</li>
+      </ol>
+
+      <p>&nbsp;</p>
+
+      <h3>Related Tasks:</h3>
+
+      <p>{{
+       table
+          query: SELECT number, name, status WHERE 'Sprint - Story' is THIS CARD and type is task
+      }}</p>
+
+      <p>&nbsp;</p>
+
+      <h3>&nbsp;</h3>
+
+      <h3>Related Defects:</h3>
+
+      <p>{{
+       table
+          query: SELECT number, name, status WHERE 'Sprint - Story' is THIS CARD and type is defect
+      }}<br />
+      &nbsp;</p>
+
+      <p>&nbsp;</p>
+    properties:
+      Status: To Do
+      Priority: Should
+      Points: "2"
+    card_relationships:
+      release - release: 47
+      goal tree - goal: 51
+      sprint - sprint: 1
+      release - feature: 43
+  - name: Sample Story 8
+    card_type_name: Story
+    number: 64
+    description: |-
+      <h3>Description:</h3>
+
+      <ul>
+       <li>&nbsp;</li>
+      </ul>
+
+      <p>&nbsp;</p>
+
+      <h3>Acceptance Criteria:</h3>
+
+      <ol>
+       <li>&nbsp;</li>
+       <li>&nbsp;</li>
+       <li>&nbsp;</li>
+      </ol>
+
+      <p>&nbsp;</p>
+
+      <h3>Related Tasks:</h3>
+
+      <p>{{
+       table
+          query: SELECT number, name, status WHERE 'Sprint - Story' is THIS CARD and type is task
+      }}</p>
+
+      <p>&nbsp;</p>
+
+      <h3>&nbsp;</h3>
+
+      <h3>Related Defects:</h3>
+
+      <p>{{
+       table
+          query: SELECT number, name, status WHERE 'Sprint - Story' is THIS CARD and type is defect
+      }}<br />
+      &nbsp;</p>
+
+      <p>&nbsp;</p>
+    properties:
+      Priority: Could
+      Points: "3"
+    card_relationships:
+      release - release: 47
+      sprint - sprint: 37
+      release - feature: 44
+  - name: Sample Story 3
+    card_type_name: Story
+    number: 65
+    description: |-
+      <h3>Description:</h3>
+
+      <ul>
+       <li>&nbsp;</li>
+      </ul>
+
+      <p>&nbsp;</p>
+
+      <h3>Acceptance Criteria:</h3>
+
+      <ol>
+       <li>&nbsp;</li>
+       <li>&nbsp;</li>
+       <li>&nbsp;</li>
+      </ol>
+
+      <p>&nbsp;</p>
+
+      <h3>Related Tasks:</h3>
+
+      <p>{{
+       table
+          query: SELECT number, name, status WHERE 'Sprint - Story' is THIS CARD and type is task
+      }}</p>
+
+      <p>&nbsp;</p>
+
+      <h3>&nbsp;</h3>
+
+      <h3>Related Defects:</h3>
+
+      <p>{{
+       table
+          query: SELECT number, name, status WHERE 'Sprint - Story' is THIS CARD and type is defect
+      }}<br />
+      &nbsp;</p>
+
+      <p>&nbsp;</p>
+    properties:
+      Status: To Do
+      Priority: Could
+    card_relationships:
+      release - release: 48
+      sprint - sprint: 1
+      release - feature: 45
+  - name: Sample Defect 2
+    card_type_name: Defect
+    number: 66
+    description: |-
+      <h3>Description:</h3>
+
+      <ul>
+       <li>&nbsp;</li>
+      </ul>
+
+      <h3>&nbsp;</h3>
+
+      <h3>Steps to Reproduce:</h3>
+
+      <ol>
+       <li>&nbsp;</li>
+       <li>&nbsp;</li>
+       <li>&nbsp;</li>
+      </ol>
+
+      <h3>&nbsp;</h3>
+
+      <h3>Result:</h3>
+
+      <ul>
+       <li>&nbsp;</li>
+      </ul>
+
+      <h3>&nbsp;</h3>
+
+      <h3>Expected Result:&nbsp;</h3>
+
+      <ul>
+       <li>&nbsp;</li>
+      </ul>
+    properties:
+      Status: To Do
+      Priority: Should
+    card_relationships:
+      sprint - sprint: 1
+      sprint - story: 65
+  - name: Sample Task 2
+    card_type_name: Task
+    number: 67
+    description: |-
+      <h3 style="font-family: 'Helvetica Neue', Arial, Helvetica;">Description:</h3>
+
+      <ul style="line-height: 19.600000381469727px; color: rgb(0, 0, 0); font-family: 'Helvetica Neue', Arial, Helvetica; font-size: 14px;">
+       <li>&nbsp;</li>
+      </ul>
+
+      <h3 style="font-family: 'Helvetica Neue', Arial, Helvetica;">&nbsp;</h3>
+
+      <h3 style="font-family: 'Helvetica Neue', Arial, Helvetica;">&nbsp;</h3>
+
+      <ul style="line-height: 19.600000381469727px; color: rgb(0, 0, 0); font-family: 'Helvetica Neue', Arial, Helvetica; font-size: 14px;">
+      </ul>
+    properties:
+      Status: In Dev
+      Priority: Must
+    card_relationships:
+      sprint - sprint: 1
+  - name: Sample Defect 1
+    card_type_name: Defect
+    number: 68
+    description: |-
+      <h3>Description:</h3>
+
+      <ul>
+       <li>&nbsp;</li>
+      </ul>
+
+      <h3>&nbsp;</h3>
+
+      <h3>Steps to Reproduce:</h3>
+
+      <ol>
+       <li>&nbsp;</li>
+       <li>&nbsp;</li>
+       <li>&nbsp;</li>
+      </ol>
+
+      <h3>&nbsp;</h3>
+
+      <h3>Result:</h3>
+
+      <ul>
+       <li>&nbsp;</li>
+      </ul>
+
+      <h3>&nbsp;</h3>
+
+      <h3>Expected Result:&nbsp;</h3>
+
+      <ul>
+       <li>&nbsp;</li>
+      </ul>
+    properties:
+      Status: Testing
+      Priority: Must
+    card_relationships:
+      sprint - sprint: 1
+      sprint - story: 58
+  - name: Sample Task 1
+    card_type_name: Task
+    number: 69
+    description: |-
+      <h3 style="font-family: 'Helvetica Neue', Arial, Helvetica;">Description:</h3>
+
+      <ul style="line-height: 19.600000381469727px; color: rgb(0, 0, 0); font-family: 'Helvetica Neue', Arial, Helvetica; font-size: 14px;">
+       <li>&nbsp;</li>
+      </ul>
+
+      <h3 style="font-family: 'Helvetica Neue', Arial, Helvetica;">&nbsp;</h3>
+
+      <h3 style="font-family: 'Helvetica Neue', Arial, Helvetica;">&nbsp;</h3>
+
+      <ul style="line-height: 19.600000381469727px; color: rgb(0, 0, 0); font-family: 'Helvetica Neue', Arial, Helvetica; font-size: 14px;">
+      </ul>
+    properties:
+      Status: Done
+      Priority: Must
+    card_relationships:
+      sprint - sprint: 1
+      sprint - story: 62
+  - name: Sample Retro Action 3
+    card_type_name: Retro Action
+    number: 70
+    description: |-
+      <h3>Description:</h3>
+
+      <ul>
+       <li>&nbsp;</li>
+      </ul>
+
+      <p>&nbsp;</p>
+
+      <p>&nbsp;</p>
+    properties:
+      Priority: Must
+      Owner: (current user)
+    card_relationships:
+      retrospective - action: 30
+  - name: Sample Retro Action 2
+    card_type_name: Retro Action
+    number: 71
+    description: |-
+      <h3>Description:</h3>
+
+      <ul>
+       <li>&nbsp;</li>
+      </ul>
+
+      <p>&nbsp;</p>
+
+      <p>&nbsp;</p>
+    properties:
+      Retro Action Status: To Do
+      Priority: Should
+    card_relationships:
+      retrospective - action: 29
+  - name: Sample Retro Action 1
+    card_type_name: Retro Action
+    number: 72
+    description: |-
+      <h3>Description:</h3>
+
+      <ul>
+       <li>&nbsp;</li>
+      </ul>
+
+      <p>&nbsp;</p>
+
+      <p>&nbsp;</p>
+    properties:
+      Retro Action Status: Done
+      Priority: Must
+      Owner: (current user)
+    card_relationships:
+      retrospective - action: 29
+  - name: Sample Task 4
+    card_type_name: Task
+    number: 73
+    description: |-
+      <h3 style="font-family: 'Helvetica Neue', Arial, Helvetica;">Description:</h3>
+
+      <ul style="line-height: 19.600000381469727px; color: rgb(0, 0, 0); font-family: 'Helvetica Neue', Arial, Helvetica; font-size: 14px;">
+       <li>&nbsp;</li>
+      </ul>
+
+      <h3 style="font-family: 'Helvetica Neue', Arial, Helvetica;">&nbsp;</h3>
+
+      <h3 style="font-family: 'Helvetica Neue', Arial, Helvetica;">&nbsp;</h3>
+
+      <ul style="line-height: 19.600000381469727px; color: rgb(0, 0, 0); font-family: 'Helvetica Neue', Arial, Helvetica; font-size: 14px;">
+      </ul>
+    properties:
+      Status: To Do
+      Priority: Should
+    card_relationships:
+      sprint - sprint: 1
+      sprint - story: 65
+  - name: Sample Task 3
+    card_type_name: Task
+    number: 74
+    description: |-
+      <h3 style="font-family: 'Helvetica Neue', Arial, Helvetica;">Description:</h3>
+
+      <ul style="line-height: 19.600000381469727px; color: rgb(0, 0, 0); font-family: 'Helvetica Neue', Arial, Helvetica; font-size: 14px;">
+       <li>&nbsp;</li>
+      </ul>
+
+      <h3 style="font-family: 'Helvetica Neue', Arial, Helvetica;">&nbsp;</h3>
+
+      <h3 style="font-family: 'Helvetica Neue', Arial, Helvetica;">&nbsp;</h3>
+
+      <ul style="line-height: 19.600000381469727px; color: rgb(0, 0, 0); font-family: 'Helvetica Neue', Arial, Helvetica; font-size: 14px;">
+      </ul>
+    properties:
+      Status: To Do
+      Priority: Could
+    card_relationships:
+      sprint - sprint: 1
+      sprint - story: 58
+  - name: Sample Story 9
+    card_type_name: Story
+    number: 75
+    description: |-
+      <h3>Description:</h3>
+
+      <ul>
+       <li>&nbsp;</li>
+      </ul>
+
+      <p>&nbsp;</p>
+
+      <h3>Acceptance Criteria:</h3>
+
+      <ol>
+       <li>&nbsp;</li>
+       <li>&nbsp;</li>
+       <li>&nbsp;</li>
+      </ol>
+
+      <p>&nbsp;</p>
+
+      <h3>Related Tasks:</h3>
+
+      <p>{{
+       table
+          query: SELECT number, name, status WHERE 'Sprint - Story' is THIS CARD and type is task
+      }}</p>
+
+      <p>&nbsp;</p>
+
+      <h3>&nbsp;</h3>
+
+      <h3>Related Defects:</h3>
+
+      <p>{{
+       table
+          query: SELECT number, name, status WHERE 'Sprint - Story' is THIS CARD and type is defect
+      }}<br />
+      &nbsp;</p>
+
+      <p>&nbsp;</p>
+    properties:
+      Priority: Should
+    card_relationships:
+      release - release: 48
+      sprint - sprint: 37
+      release - feature: 45
+  - name: Sample Story 7
+    card_type_name: Story
+    number: 77
+    description: |-
+      <h3>Description:</h3>
+
+      <ul>
+       <li>&nbsp;</li>
+      </ul>
+
+      <p>&nbsp;</p>
+
+      <h3>Acceptance Criteria:</h3>
+
+      <ol>
+       <li>&nbsp;</li>
+       <li>&nbsp;</li>
+       <li>&nbsp;</li>
+      </ol>
+
+      <p>&nbsp;</p>
+
+      <h3>Related Tasks:</h3>
+
+      <p>{{
+       table
+          query: SELECT number, name, status WHERE 'Sprint - Story' is THIS CARD and type is task
+      }}</p>
+
+      <p>&nbsp;</p>
+
+      <h3>&nbsp;</h3>
+
+      <h3>Related Defects:</h3>
+
+      <p>{{
+       table
+          query: SELECT number, name, status WHERE 'Sprint - Story' is THIS CARD and type is defect
+      }}<br />
+      &nbsp;</p>
+
+      <p>&nbsp;</p>
+    properties:
+      Priority: Must
+    card_relationships:
+      release - release: 47
+      sprint - sprint: 37
+      release - feature: 44
+  - name: Sample Story 6
+    card_type_name: Story
+    number: 78
+    description: |-
+      <h3>Description:</h3>
+
+      <ul>
+       <li>&nbsp;</li>
+      </ul>
+
+      <p>&nbsp;</p>
+
+      <h3>Acceptance Criteria:</h3>
+
+      <ol>
+       <li>&nbsp;</li>
+       <li>&nbsp;</li>
+       <li>&nbsp;</li>
+      </ol>
+
+      <p>&nbsp;</p>
+
+      <h3>Related Tasks:</h3>
+
+      <p>{{
+       table
+          query: SELECT number, name, status WHERE 'Sprint - Story' is THIS CARD and type is task
+      }}</p>
+
+      <p>&nbsp;</p>
+
+      <h3>&nbsp;</h3>
+
+      <h3>Related Defects:</h3>
+
+      <p>{{
+       table
+          query: SELECT number, name, status WHERE 'Sprint - Story' is THIS CARD and type is defect
+      }}<br />
+      &nbsp;</p>
+
+      <p>&nbsp;</p>
+    properties:
+      Priority: Must
+    card_relationships:
+      release - release: 47
+      sprint - sprint: 37
+      release - feature: 44
+pages:
+  - name: Overview Page
+    content: |-
+      <div class="dashboard-panel">
+      <h2>Burnup for Sprint 1 (Story Points)</h2>
+
+      <div class="dashboard-content">
+      {{
+      	daily-history-chart
+           aggregate: SUM(points)
+           start-date: <%= (Time.now - 2.days).utc.strftime('%d %B, %Y') %>
+           end-date: <%= (Time.now + 16.days).utc.strftime('%d %B, %Y') %>
+           chart-conditions: type = story and 'sprint - sprint' = "sprint 1"
+           chart-width: 900
+           chart-height: 400
+           plot-width: 700
+           plot-height: 300
+           plot-x-offset: 80
+           x-labels-step: 2
+           y-title: Points
+           scope-series: Planned
+           completion-series: Completed
+           target-release-date: <%= (Time.now + 14.days).utc.strftime('%d %B, %Y') %>
+           series:
+             - conditions: type = story and 'sprint - sprint' = "sprint 1"
+               label: Planned
+               color: black
+               line-width: 2
+             - conditions: type = story and status = "done"
+               color: #19A657
+               label: Completed
+               line-width: 2
+      }}
+
+      <p>&nbsp;</p>
+      </div>
+      </div>
+
+      <div class="dashboard-panel">
+      <h2>Burndown for Release 1 (Story Count)</h2>
+
+      <div class="dashboard-content">
+      {{
+      	daily-history-chart
+            aggregate: count(*)
+            chart-conditions: Type = Story and 'release - release' is 'release 1'
+            start-date: <%= (Time.now - 2.days).utc.strftime('%d %B, %Y') %>
+            end-date: <%= (Time.now + 58.days).utc.strftime('%d %B, %Y') %>
+            chart-height: 400
+            chart-width: 1000
+            plot-height: 315
+            plot-width: 600
+            x-labels-step: 7
+            y-title: Count
+            series:
+            - label: Remaining Scope
+              color: black
+              line-width: 1
+              conditions: 'Status' IS NOT 'Done'
+      }}
+
+      <p>&nbsp;</p>
+      </div>
+      </div>
+
+      <p>&nbsp;</p>
+
+      <div class="dashboard-panel">
+      <h2>Velocity vs. Scope - How our velocity compares to planned scope over time</h2>
+
+      <div class="dashboard-content">{{
+      	data-series-chart
+          chart-width: 900
+          plot-width: 700
+          chart-height: 300
+          plot-height: 200
+          data-point-symbol: diamond
+          x-title: Sprint
+          y-title: Velocity (total points)
+          cumulative: false
+          series:
+          - label: Velocity
+            color: grey
+            type: line
+            data: SELECT 'Sprint - Sprint', SUM(Points) WHERE Type = Story and status = done
+          - label: Planned scope
+            color: red
+            type: line
+            line-style: dash
+            data: SELECT 'Sprint - Sprint', SUM(Points) WHERE Type = Story and status IS NOT done
+      }}<br />
+      &nbsp;</div>
+      </div>
+
+      <p>&nbsp;</p>
+
+      <div class="dashboard-panel">
+      <h2>Work breakdown by sprint - how many stories, defects, and tasks are we completing each sprint?</h2>
+
+      <div class="dashboard-content">{{
+      	stack-bar-chart
+          condition: type = sprint and 'sprint start date' is NOT null
+          cumulative: false
+          x-title: Sprint
+          y-title: Count
+          series:
+          - label: Stories
+            color: #3D8F84
+            type: bar
+            data: SELECT 'sprint - sprint', count(*) where type is story
+            combine: overlay-top
+          - label: Tasks
+            color: #24C2CC
+            type: bar
+            data: SELECT 'sprint - sprint', count(*) where type is task
+            combine: overlay-top
+          - label: Defect
+            color: #EE675A
+            type: bar
+            data: SELECT 'sprint - sprint', count(*) where type is defect
+            combine: overlay-top
+      }}<br />
+      &nbsp;</div>
+      </div>
+
+      <p>&nbsp;</p>
+tabs:
+  - name: Retrospectives
+    action: list
+    filters:
+      - "[Type][is][Retro Action]"
+    style: grid
+    group_by:
+      lane: retro action status
+      row: retrospective - action
+    color_by: priority
+    aggregate_type:
+      row: count
+    aggregate_property:
+      row: ""
+    lanes: " ,To Do,Doing,Done"
+    tab: Retrospectives
+    controller: cards
+  - name: Story Map
+    action: list
+    filters:
+      - "[Type][is][Story]"
+    style: grid
+    group_by:
+      lane: goal tree - goal
+      row: release - feature
+    color_by: priority
+    lanes: " ,50,51,52"
+    tab: Story Map
+    controller: cards
+  - name: Product Backlog
+    action: list
+    filters:
+      - "[Type][is][Story]"
+      - "[Sprint - Sprint][is][37]"
+    style: list
+    columns: Release - Release,Release - Feature,Priority,Sprint - Sprint
+    sort: name
+    order: asc
+    tab: Product Backlog
+    controller: cards
+  - name: Release Planning
+    action: list
+    filters:
+      - "[Type][is][Story]"
+    style: grid
+    group_by:
+      lane: sprint - sprint
+      row: release - feature
+    color_by: priority
+    aggregate_type:
+      column: sum
+    aggregate_property:
+      column: points
+    lanes: "37,1,2,3"
+    tab: Release Planning
+    controller: cards
+  - name: Estimation
+    action: list
+    filters:
+      - "[Type][is][Story]"
+      - "[Sprint - Sprint][is][1]"
+    style: grid
+    group_by:
+      lane: points
+      row: release - feature
+    color_by: priority
+    aggregate_type:
+      column: sum
+    aggregate_property:
+      column: points
+    lanes: " ,1,2,3,5,8"
+    tab: Estimation
+    controller: cards
+  - name: Sprint Board
+    action: list
+    filters:
+      - "[Type][is][Story]"
+      - "[Type][is][Task]"
+      - "[Type][is][Defect]"
+      - "[Sprint - Sprint][is][1]"
+    style: grid
+    group_by:
+      lane: status
+    color_by: type
+    aggregate_type:
+      column: sum
+    aggregate_property:
+      column: points
+    lanes: To Do,In Dev,Testing,Done
+    tab: Sprint Board
+    controller: cards
+favorites: []

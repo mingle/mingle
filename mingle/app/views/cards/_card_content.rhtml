@@ -1,0 +1,35 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="card-description">
+  <div class="card-content-heading view-mode-only">
+    <i class="fa fa-file-text-o icon"></i>
+    Description
+  </div>
+
+  <div class="card-description-content view-mode-only wiki" data-reloadable-url="<%= url_for(:controller => 'cards', :action => :rendered_description, :number => card.number) %>">
+    <% if card.description.blank? %>
+      <%= empty_description_text %>
+    <% end %>
+    <%= render :partial => 'cards/content', :locals => {:card => card} %>
+  </div>
+
+  <% if popup %>
+    <% image_upload_url = project_attachments_path(@project.identifier, :attachable => { :type => "card", :id => card.id }, :authenticity_token => form_authenticity_token) %>
+
+    <%= ckeditor_text_area_tag card, "card[description]", card.formatted_content_editor(self), :class => "edit-mode-only ckeditor-inline-editable", :"data-image-upload-url" => image_upload_url, :"data-card-number" => card.number -%>
+  <% end %>
+</div>

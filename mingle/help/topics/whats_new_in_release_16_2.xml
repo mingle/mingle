@@ -1,0 +1,77 @@
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+  <?xml version="1.0"?>
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="What's new in Release 16.2">
+	<p>For <cref topic="mingle_onsite">Mingle onsite</cref> customers, please review the <cref topic="upgrading_from_previous_versions">upgrade instructions</cref> before moving to Mingle 16.2.</p>
+	<note>
+	  <item>All of the features below are already available for our Mingle in the cloud customers.</item>
+  </note>
+
+ <section title="Touch-screen drag and drop">
+   	  <p>Mingle is now touchscreen-friendly. Drag and drop cards across the wall, tabs across the header, and reorder swimlanes from your tablet, phone, or touchscreen TV. <exref url="/mingle/news/2016/04/25/touchscreen-compatibility.html">Read more here</exref>.</p>
+ </section>
+
+ <section title="Edit names of favorites">
+      <p>Rename team favourites and your own favorites at will. Anyone on the team can edit the names of team favorites. You can rename your own favorites whenever you like. <exref url="/mingle/news/2016/07/04/checklists-carddefault-favorites.html">Read more here</exref>.</p>
+      <p>We’ve also got a new Save icon for each favorite.</p>
+      <p><screenshot alttext="rename fav" src="resources/images/rename_favorites.gif"/></p>
+ </section>
+
+ <section title="Drag and reorder tags on a card">
+      <p>Reorder tags on a card by dragging them. The first tag is displayed on the card in the grid view. <exref url="/mingle/news/2016/04/25/touchscreen-compatibility.html">Read more here</exref>.</p>
+ </section>
+
+ <section title="Export and import checklists">
+      <p>When cards in a project are exported, the checklists on those cards are also exported and are available in the .csv. When whole projects are exported, checklists are exported with every card as well. <exref url="/mingle/news/2016/06/02/checklists-import-export.html">Read more here</exref>.</p>
+      <p>Similarly, when a .csv is imported with checklists, cards are created with the checklists automatically attached. </p>
+      <p><screenshot alttext="rename fav" src="resources/images/import_checklist.png"/></p>
+      <p><screenshot alttext="rename fav" src="resources/images/checklist_card.png"/></p>
+</section>
+
+<section title="Checklists in card defaults">
+      <p>Set up a checklist for any card type. Each time you create a card of that type, the card will automatically have the checklist attached. <exref url="/mingle/news/2016/07/04/checklists-carddefault-favorites.html">Read more here</exref>.</p>
+      <p><screenshot alttext="rename fav" src="resources/images/checklist_card_defaults.png"/></p>
+</section>
+
+<section title="Add checklist items to the bottom of the list">
+      <p>Every new item you add to the checklist goes to the bottom of the list instead of on the top.</p>
+</section>
+
+<section title="Upgrade to Ruby 1.9">
+      <p>We’ve upgraded the version of Ruby we were using. <exref url="/mingle/news/2016/09/13/Ruby-1.9-the-way-forward.html">Read more here</exref>.</p>
+</section>
+
+<section title="End of life">
+      <p>Mingle will no longer support <cref topic="go_integration">Go integration</cref>.</p>
+</section>
+
+<section title="Bug fixes">
+	  <p>The following bugs have been fixed with 16.2:</p>
+	    <bullets>
+			<item>Fixed issue where email addresses are case sensitive on sign-in.</item>
+      <item>Fixed issue where auto-saved filtering on dependency tab for a user breaks when a project is exported and re-imported.</item>
+      <item>Fixed issue where project Admin Pages section - “Overview Page” link always directs to the first tab.</item>
+      <item>Fixed issue where card transitions fail if the card popup is opened from anywhere other than a grid view.</item>
+      <item>Fixed issue where escape characters in the names of trees causing errors.</item>
+      <item>Fixed issue where text editor in cards and pages does not wrap long links or blocks of text.</item>
+      <item>Fixed issue where returning to a list view retains the checkboxes selected in the column dropdown.</item>
+      <item>Fixed issue where styling on the edit tree aggregate popup.</item>
+  	  </bullets>
+	</section>
+
+</topic>

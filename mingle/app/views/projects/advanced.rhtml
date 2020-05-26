@@ -1,0 +1,86 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= render :partial => 'shared/admin_actions'%>
+
+<div>
+  <h1><%= @title = 'Advanced project administration' %></h1>
+</div>
+
+
+<%= image_tag 'progress-bar-blue.gif', :id => 'progress_bar_blue', :style => 'display:none' -%>
+
+<% project_admin_item_box :id => 'recompute_aggregates', :style => 'position: relative;' do %>
+  <h3>Aggregate card properties</h3>
+  <p>If any <strong>aggregate card properties</strong> display incorrect values, <strong>recalculating aggregates</strong> across the entire project should correct those values.
+    This can take some time, but will take place in the background, allowing project work to continue.</p>
+  <p><%= raw(button_to('Recalculate', {:action => 'recompute_aggregates'}, {:method => 'post', :disabled => @project.recomputing_aggregates?, :onclick => "AdminJob.adminJobButtonOnclick(this)" }))%></p>
+<% end %>
+<% if @project.recomputing_aggregates? %>
+  <%= javascript_with_rescue 'AdminJob.disable("recompute_aggregates")' %>
+<% end %>
+
+<% project_admin_item_box do %>
+  <h3>Atom feed</h3>
+  <p>
+    In order to work with the most common news readers, Mingle's Atom feeds do not require authentication.
+    The feeds are protected by encrypted URLs that are only available to members of the project team via the History tab.
+    If the team's history feeds have been compromised in any way, <strong>reset your project's secret key</strong> in order to immediately invalidate all existing Atom feeds.
+  </p>
+  <p><%= raw(button_to('Regenerate', {:action => 'regenerate_secret_key'}, {:method => 'post', :onclick => "AdminJob.adminJobButtonOnclick(this)"}))%></p>
+<% end %>
+
+<% project_admin_item_box :id => 'regenerate_changes', :style => 'position: relative;' do %>
+  <h3>History</h3>
+  <p>If Mingle's <strong>History</strong> feature is not displaying the expected events, <strong>rebuilding the history index</strong> might help.
+    This can take some time, but will take place in the background, allowing project work to continue.</p>
+  <p><%= raw(button_to('Rebuild', { :action => 'regenerate_changes' }, { :method => 'post', :disabled => @project.generating_changes?, :onclick => "AdminJob.adminJobButtonOnclick(this)" }) )%></p>
+<% end %>
+<% if @project.generating_changes? %>
+  <%= javascript_with_rescue 'AdminJob.disable("regenerate_changes")' %>
+<% end %>
+
+<% project_admin_item_box :style => 'position: relative', :id => 'rebuild_murmur_card_links' do %>
+<h3>Murmurs and card linking</h3>
+<p>If Mingle's <strong>cards</strong> are not displaying the expected associated Murmurs, <strong>rebuilding the Murmurs card links</strong> should help. This can take some time, but will take place in the background, allowing project work to continue.</p>
+<p><%= raw(button_to('Rebuild', { :action => 'rebuild_card_murmur_linking' }, { :id => "rebuild_murmurs_card_links_button", :method => 'post', :disabled => @project.rebuilding_card_murmur_links?, :onclick => "AdminJob.adminJobButtonOnclick(this)" }))%></p>
+<% end %>
+<% if @project.rebuilding_card_murmur_links? %>
+<%= javascript_with_rescue 'AdminJob.disable("rebuild_murmur_card_links")' %>
+<% end %>
+
+<% project_admin_item_box do %>
+  <h3>Page and card content cache</h3>
+  <p>If any <strong>Card</strong> or <strong>Page</strong> is displaying out-of-date content, <strong>invalidating the page and card content cache</strong> should help.</p>
+  <p><%= raw(button_to('Invalidate', {:action => 'invalidate_content_cache'}, {:method => 'post', :onclick => "AdminJob.adminJobButtonOnclick(this)"}))%></p>
+<% end %>
+
+<% project_admin_item_box do %>
+  <h3>Project health check</h3>
+  <p>If you suspect you may have problems with your <strong>project data or structure</strong> use the project health check to help <strong> diagnose </strong> any issues.</p>
+  <p><%= raw(button_to('Check', {:action => 'health_check'}, {:id => 'check_project_health_state_button', :method => 'post', :onclick => "AdminJob.adminJobButtonOnclick(this)"}))%></p>
+<% end %>
+
+<% if @project.has_source_repository? -%>
+  <% project_admin_item_box do %>
+    <h3>Source</h3>
+    <p>
+      If Mingle's <strong><%= @project.repository_configuration.display_name %> Integration</strong> feature is not displaying the expected <%= repository_vocabulary['revision'].pluralize %>, <strong>rebuilding the <%= repository_vocabulary['revision'] %> cache</strong> should help.
+      This can take some time, but will take place in the background, allowing project work to continue.
+    </p>
+    <p><%= raw(button_to("Rebuild", {:action => 'recache_revisions'}, {:method => 'post', :onclick => "AdminJob.adminJobButtonOnclick(this)"}))%></p>
+  <% end %>
+<% end %>

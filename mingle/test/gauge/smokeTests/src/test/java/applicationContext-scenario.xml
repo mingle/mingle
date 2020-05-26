@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans org/springframework/beans/factory/xml/spring-beans-2.5.xsd">
+
+	<bean autowire="constructor" class="com.thoughtworks.mingle.planner.smokeTest.contexts.SetupTestEnvironment" id="setup" init-method="start" lazy-init="false"/>
+	<bean class="com.thoughtworks.mingle.planner.smokeTest.contexts.CleanupPrograms" destroy-method="tearDown" id="planCleanup">
+		<constructor-arg ref="jRubyScriptRunner"/>
+	</bean>
+<bean class="com.thoughtworks.twist.core.execution.TwistDataStoreFactory" id="twistDataStoreFactory"/>
+   <bean factory-bean="twistDataStoreFactory" factory-method="getScenarioStore" id="twistScenarioStore" scope="singleton"/>
+<bean class="ScenarioExecutionHooks" id="twistScenarioHooks">
+      <constructor-arg>
+         <ref bean="browser"/>
+      </constructor-arg>
+   </bean>
+</beans>

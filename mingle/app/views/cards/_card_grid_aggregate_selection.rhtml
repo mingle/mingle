@@ -1,0 +1,63 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% form_id = "aggregate_type_#{target}_form"%>
+
+<% aggregate_type_id = "aggregate_type[#{target}]" %>
+<% aggregate_property_id = "aggregate_property[#{target}]" %>
+
+<% select_aggregate_property = "select_aggregate_property_#{target}_field"%>
+<% select_aggregate_type = "select_aggregate_type_#{target}_field"%>
+<% type_drop_link_id = "select_aggregate_type_#{target}_drop_link"%>
+<% property_drop_link_id = "select_aggregate_property_#{target}_drop_link"%>
+<% column_selector_function_name = "#{target}-aggregate-function-selector" %>
+<% column_selector_property_name = "#{target}-aggregate-property-selector" %>
+
+<% form_tag({:action => 'grid', :controller => "cards"}, {:id => form_id, :method => 'get', :class => 'dropdown_form'}) do -%>
+  <%= hidden_view_tags(@view, :except => [aggregate_type_id.to_sym, aggregate_property_id.to_sym]) %>
+
+  <span class='inline_action_label'><%= target.camelize %> Aggregate:</span>
+
+  <span class='drop-list-panel <%=column_selector_function_name%>'>
+    <%= link_to_function '', nil, :id => type_drop_link_id, :class => 'dropdown-arrow' %>
+    <%= hidden_field_tag(aggregate_type_id, aggregate_by.aggregate_type.identifier.downcase, :id => select_aggregate_type) %>
+  </span>
+
+  <%= render :partial => "cards/card_grid_drop_list", :locals => { :form_id => form_id,
+                                                              :html_id_prefix => select_aggregate_type,
+                                                              :select_options => options_for_aggregate_type,
+                                                              :selected => [aggregate_by.aggregate_type.display_name,  aggregate_by.aggregate_type.identifier.downcase],
+                                                              :drop_link_id => type_drop_link_id,
+                                                              :on_change_action => "#{target}Dropdowns.onTypeDropdownChange();"} %>
+
+  <span class='drop-list-panel <%=column_selector_property_name%>'>
+    <%= link_to_function '', nil, :id => property_drop_link_id, :class => 'dropdown-arrow' %>
+    <%= hidden_field_tag(aggregate_property_id, initially_selected_option_for_aggregate_property(aggregate_by.property_definition).last, :id =>select_aggregate_property) %>
+  </span>
+
+  <%= render :partial => "cards/card_grid_drop_list", :locals => { :form_id => form_id,
+                                                             :html_id_prefix => select_aggregate_property,
+                                                             :select_options => options_for_aggregate_property,
+                                                             :selected => initially_selected_option_for_aggregate_property(aggregate_by.property_definition),
+                                                             :drop_link_id => property_drop_link_id,
+                                                             :on_change_action => "#{target}Dropdowns.onPropertyDropdownChange();" } %>
+<% end -%>
+<%= javascript_with_rescue <<-JAVASCRIPT
+  #{target}Dropdowns = new AggregateGridDropdowns("#{form_id}", "#{select_aggregate_type}",
+                                           "#{select_aggregate_property}", "#{property_drop_link_id}");
+  #{target}Dropdowns.initUI();
+JAVASCRIPT
+-%>

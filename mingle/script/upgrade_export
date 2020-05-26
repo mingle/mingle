@@ -1,0 +1,131 @@
+#  Copyright 2020 ThoughtWorks, Inc.
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Affero General Public License as
+#  published by the Free Software Foundation, either version 3 of the
+#  License, or (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Affero General Public License for more details.
+#
+#  You should have received a copy of the GNU Affero General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+
+require "simple_bench"
+
+begin
+  deliverable_import = ModelFreeImport.new
+  deliverable_import.unzip(input)
+
+  migrations_path = File.join(RAILS_ROOT, 'db', 'migrate')
+  migrations = []
+  SimpleBench.bench "collecting migrations already in export file" do
+    versions = deliverable_import.migrations
+
+    files = Dir["#{migrations_path}/[0-9]*_*.rb"]
+
+    migrations = files.collect do |file|
+      v, name = file.scan(/([0-9]+)_([_a-z0-9]*).rb/).first
+      next unless versions.include?(v.to_i) # bring temporary migration schema up to the version of import file
+      migration = ActiveRecord::MigrationProxy.new
+      migration.version = v.to_i
+      migration.name = name.camelize
+      migration.filename = file
+      migration
+    end.compact.sort {|a,b| a.version <=> b.version}
+  end
+
+
+  SimpleBench.bench "populate migrations table with existing migrations in export file" do
+    ActiveRecord::Base.connection.initialize_schema_migrations_table
+    if migrations.size == 1
+      # for old export files, we only supplied a target migration version, so migrate
+      # everything up to that point
+      ActiveRecord::Migrator.migrate(migrations_path, migrations.first.version)
+    else
+      migrations.each do |m|
+        m.migrate(:up)
+        sm_table = ActiveRecord::Migrator.schema_migrations_table_name
+        ActiveRecord::Base.connection.insert("INSERT INTO #{sm_table} (version) VALUES ('#{m.version}')")
+      end
+    end
+
+    # temporary -- later we need to migrate plugins up to their appropriate schema versions here
+    Install::PluginMigrations.new.do_migration
+  end
+
+  SimpleBench.bench "inserting data from export file to temporary schema" do
+    # raw insertion of data into the db; no foreign key rejiggering
+    deliverable_import.insert_data
+  end
+
+  SimpleBench.bench "migrating temporary schema to current" do
+    # run the migrations on the isolated area to upgrade the import
+    ActiveRecord::Migrator.migrate(migrations_path)
+    Install::PluginMigrations.new.do_migration
+  end
+
+  SimpleBench.bench "workaround to avoid attachments and files" do
+    # update root path, so that we don't need to import attachments/files
+    # this is a hack way to do it, we need file_column to provide a better way
+    # to do it later
+    User.new.icon_options[:root_path] = deliverable_import.directory
+    Project.new.icon_options[:root_path] = deliverable_import.directory
+    Attachment.new.file_options[:root_path] = deliverable_import.directory
+  end
+
+  SimpleBench.bench "exporting temporary schema out to new exported file" do
+    upgraded_export = if deliverable_import.project?
+      Project.reset_column_information
+      export_dir = nil
+      imported_project = Project.find_by_identifier(deliverable_import.project_identifier)
+      imported_project.with_active_project do |project| # activate so that project export can access cards
+        export_dir = DeliverableImportExport::ProjectExporter.export_after_upgrade(project, deliverable_import.directory) # export the upgraded import
+      end
+      export_dir
+    elsif deliverable_import.dependencies?
+      projects = deliverable_import.table("deliverables").map do |record|
+        ModelFreeImport::StubbedProject.new(record["id"].to_s)
+      end
+      DependenciesImportingPreview.export_after_upgrade("dependencies-#{File.basename(input)}", projects, deliverable_import.directory)
+    elsif deliverable_import.program?
+      ProgramExporter.export_after_upgrade(deliverable_import.program_identifier)
+    else
+      raise "Unknown export type"
+    end
+
+    if output
+      FileUtils.mv(upgraded_export, output)
+      puts "=> #{output} #{"directory" if File.directory?(output)}"
+    else
+      puts "=> #{upgraded_export}"
+    end
+  end
+
+
+  if RUBY_PLATFORM =~ /java/
+    return 0  # in java, running in script container, we need a return value
+  end
+rescue Exception => e
+  #todo put in mingle.log
+  $stderr.puts($!)
+  $stderr.puts($!.backtrace.join("\n\t"))
+  if RUBY_PLATFORM =~ /java/
+    return -1
+  else
+    exit(-1)
+  end
+ensure
+  SimpleBench.bench "cleaning up tempary schema" do
+    # delete the temporary tables
+    ActiveRecord::Base.connection.tables.each do |table|
+      if table =~ /^#{ActiveRecord::Base.table_name_prefix}/
+        ActiveRecord::Base.connection.drop_table(table)
+      end
+    end
+    ActiveRecord::Base.clear_active_connections!
+    CACHE.shutdown
+  end
+end

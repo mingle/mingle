@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Completing the Mingle configuration wizard">
+	<p>After you've <cref topic="configuring_a_database_for_use_with_mingle">setup a database</cref>, downloaded and <cref topic="mingle_onsite">installed Mingle</cref>, you're ready to open a web browser and complete the Mingle configuration wizard.</p>
+	<note>
+		If you want Mingle to be able to send email, you will need to know the details of an existing SMTP (outbound email) server. 
+		If you don't have these details, please contact your organization's email server administrator.
+	</note>
+	<section title="Getting started...">
+		
+		<hint>Please be aware that the <cref topic="configuring_a_database_for_use_with_mingle">database needs to be setup</cref> prior to install Mingle.</hint>
+		<p>The <strong>Welcome to Mingle</strong> page should open in your browser automatically at this stage.</p>
+		
+	
+		
+		<p>If you have the database ready, select the checkbox. Then the <strong>Continue</strong> button will be enabled to allow you to proceed with the installation. </p>
+		<screenshot alttext="Welcome to Mingle" src="resources/images/installation/setup_wizard.png"/>
+	</section>
+	<section title="Step 1 - Connecting to a database" file="mingle_installation_step1" collapsed="true"/>		
+	<section title="Step 2 - Setting up the database" file="mingle_installation_step2" collapsed="true" />
+	<todo>Update these steps for the site URL step. Help task #10862</todo>
+	<section title="Step 3 - Configuring the URL" file="mingle_installation_step3" collapsed="true"/>
+	<section title="Step 4 - Configuring the SMTP connection" file="mingle_installation_step4" collapsed="true"/>
+	<section title="Step 5 - Accepting the ThoughtWorks End User License Agreement" file="mingle_installation_step5" collapsed="true"/>		
+	<section title="Step 6 - Setting up the first user account" file="mingle_installation_step6" collapsed="true"/>
+	<section title="Step 7 - Importing project templates" file="mingle_installation_step7" collapsed="true"/>
+	<section title="Step 8 - Managing your Mingle license" file="mingle_installation_step8" collapsed="true"/>
+</topic>

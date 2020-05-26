@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Card murmurs and history sections">
+	<section title="What you can do on this section of a card">
+		<p>The card Murmurs section, in the expanded right panel, shows any murmurs made by project team members directly related to or mentioning that card.</p>
+			
+			<p>The card History section, also in the expanded right panel, shows a summary of all changes made to the selected card, including who made the change and how long ago the change was made. 
+				Click the View link next to a version number to display this card version. When you're viewing an older card version, 
+				Mingle shows the version number and how long ago the version was updated. From here you can click to return to the latest version.</p>
+			
+			<hint>If your team has <cref topic="setup_source_repository_integration_saas">integrated Mingle with your source repository</cref>, any changes to the source where this <cref topic="card_keywords">card's number was referenced</cref> in the commit messages will display here on the History component. 
+				You can setup Mingle to view any changes made to this card by any project team member by subscribing to <cref topic="subscribing_via_feeds">feeds</cref> or <cref topic="subscribing_via_email">email</cref> on Mingle's <tab>History</tab> tab.</hint>
+		<bullets>
+			<item><cref topic="viewing_card_history_and_murmurs">Viewing card history and murmurs</cref></item>
+		</bullets>
+	</section>
+	<section title="Also see...">
+		<bullets>
+			<item><cref topic="linking_source_files_to_cards">Linking source files to bugs and requirements</cref></item>
+			<item><cref topic="history_tab">Using the History tab</cref></item>
+			<item><cref topic="viewing_cards">Viewing cards</cref></item>
+			<item><cref topic="working_with_cards">Working with cards</cref></item>
+			<item><cref topic="working_with_pages">Working with pages</cref></item>
+			<item><cref topic="murmurs">Murmurs</cref></item>
+		</bullets>
+	</section>
+</topic>

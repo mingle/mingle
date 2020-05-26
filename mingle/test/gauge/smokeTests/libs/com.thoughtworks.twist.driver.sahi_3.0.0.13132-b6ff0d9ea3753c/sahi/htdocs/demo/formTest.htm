@@ -1,0 +1,342 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta name="generator" content="HTML Tidy, see www.w3.org">
+<title>Form Test</title>
+<script type="text/javascript">
+function abc(){
+}
+function dummy(){
+}
+function testFormName(){
+    alert(typeof document.f1.name);
+}
+_done = [];
+_attrs = [];
+function getAllAttributes(){
+	_done = [];
+	_attrs = ['elements'];
+	var nodes = [document, window];
+	var els = document.f1.elements;
+	var doneTypes = [];
+	for (var i=0; i<els.length; i++){
+		var el = els[i];
+		if (!doneTypes[el.type]){
+			nodes[nodes.length] = el;
+			doneTypes[el.type] = true;
+		}
+	}	    
+	nodes[nodes.length] = document.links[0];
+	for (var i=0; i<nodes.length; i++){
+		getAttributes(nodes[i]);
+	}
+	var s = "";		
+	_attrs = _attrs.sort();
+	for (var i=0; i< _attrs.length; i++){
+		 if (i % 5 == 0) s += "\n";
+		 s += "'" + _attrs[i] + "', ";
+	}
+	document.getElementById("output").value = s;
+}
+function getAttributes(el){
+    if (typeof el == "object") {
+        for (var i in el) {
+            try{
+		        if (("" + el[i]).indexOf("function") == -1 && !_done[i]) {
+		            _attrs[_attrs.length] = i;
+		            _done[i] = i;
+		        }
+            }catch(e){}
+        }
+    }
+}
+</script>
+<style>
+.bordercheck{border: 2px solid blue;}
+</style>
+</head>
+<body onload="testFormName()">
+<h2>Form Test</h2>
+<form name="f1">
+<table>
+<tr>
+<td>Text:</td>
+<td></td>
+</tr>
+
+<tr>
+<td>&lt;input type="text" value="" name="t1"&gt;</td>
+<td><input type="text" value="" name="t1" class="bordercheck"></td>
+</tr>
+
+<tr>
+<td>&lt;input type="text" value="" &gt;</td>
+<td><input type="text" value=""> </td>
+</tr>
+
+<tr>
+<td>&lt;input type="text" value="" name="name"&gt;</td>
+<td><input type="text" value="" name="name"> </td>
+</tr>
+
+<tr>
+<td>&lt;input type="text" value="" name="$a_dollar"&gt;</td>
+<td><input type="text" value="" name="$a_dollar"> </td>
+</tr>
+
+<tr>
+<td>&lt;input type="text" value="" disabled="true" name="textdisabled"&gt;</td>
+<td><input type="text" value="" disabled="true" name="textdisabled"></td>
+</tr>
+
+<tr>
+<td>&lt;input type="text" value="" readonly name="textreadonly"&gt;</td>
+<td><input type="text" value="" readonly name="textreadonly"></td>
+</tr>
+
+</table>
+
+<hr>
+TextArea:<br>
+&lt;textarea value="" name="ta1"&gt;&lt;/textarea&gt;<br>
+<textarea value="" name="ta1"></textarea><br>
+<br>
+ &lt;textarea value=""&gt;&lt;/textarea&gt;<br>
+<textarea value=""></textarea><br>
+<br>
+
+
+<hr>
+Checkbox :<br>
+<pre>
+&lt;input type="checkbox" value="cv1" name="c1"&gt;
+&lt;input type="checkbox" value="cv2"&gt;
+&lt;input type="checkbox" value="cv3" name="c1"&gt;
+&lt;input type="checkbox" value="cv4"&gt;
+</pre>
+
+<br>
+<input type="checkbox" value="cv1" name="c1"> 
+<input type="checkbox" value="cv2"> 
+<input type="checkbox" value="cv3" name="c1"> 
+<input type="checkbox" value=""><br>
+<br>
+
+
+<hr>
+Radio :<br>
+&lt;input type="radio" value="rv1" name="r1"&gt;&lt;input type="radio"
+value="rv2" name="r1"&gt;<br>
+<input type="radio" value="rv1" name="r1"><input type="radio" value="rv2"
+name="r1"><br>
+<br>
+
+
+<hr>
+Password:<br>
+&lt;input type="password" value="" name="p1"&gt;<br>
+<input type="password" value="" name="p1"><br>
+<br>
+ &lt;input type="password" value="" &gt;<br>
+<input type="password" value=""><br>
+<br>
+
+
+<hr>
+Select:<br>
+<pre>
+&lt;select name="s1" id="s1Id" onchange="a(event)"&gt;
+&lt;option value="o1"&gt;o1
+&lt;option value="o2"&gt;o2
+&lt;option value="o3"&gt;o3
+&lt;/select&gt;
+</pre>
+<script>
+function a(e){
+    if (!e)  e = window.event;
+    alert(e.type);
+}
+</script>
+
+<br>
+<select name="s1" id="s1Id" onchange="a(event)">
+<option value="o1">o1</option>
+<option value="o2">o2</option>
+<option value="o3">o3</option>
+</select><br>
+<br>
+<br>
+
+
+<pre>
+&lt;select id="s1Id"&gt;
+&lt;option value="o1"&gt;o1
+&lt;option value="o2"&gt;o2
+&lt;option value="o3"&gt;o3
+&lt;/select&gt;
+</pre>
+
+<br>
+<select id="s1Id">
+<option value="o1">o1</option>
+<option value="o2">o2</option>
+<option value="o3">o3</option>
+</select><br>
+<br>
+
+
+<pre>
+&lt;select&gt;
+&lt;option value="o1"&gt;o1
+&lt;option value="o2"&gt;o2
+&lt;option value="o3"&gt;o3
+&lt;/select&gt;
+</pre>
+
+<br>
+<select>
+<option value="o1">o1</option>
+<option value="o2">o2</option>
+<option value="o3">o3</option>
+</select><br>
+<br>
+
+<pre>
+&lt;select multiple="multiple" onchange="a(event)"&gt;
+&lt;option value="o1"&gt;o1
+&lt;option value="o2"&gt;o2
+&lt;option value="o3"&gt;o3
+&lt;/select&gt;
+</pre>
+
+<br>
+<select multiple="multiple" onchange="a(event)">
+<option value="o1">o1</option>
+<option value="o2">o2</option>
+<option value="o3">o3</option>
+</select><br>
+<br>
+
+
+<hr>
+Button:<br>
+&lt;input type="button" name="btnName" value="button value"
+id="btnId"&gt;<br>
+<input type="button" name="btnName" value="button value" id=
+"btnId"><br>
+<br>
+ &lt;input type="button" name="btnName" id="btnId"&gt;<br>
+<input type="button" name="btnName" id="btnId"><br>
+<br>
+ &lt;input type="button" id="btnId"&gt;<br>
+<input type="button" id="btnId"><br>
+<br>
+ &lt;input type="button"&gt;<br>
+<input type="button"><br>
+<br>
+
+<hr>
+Reset Button:<br>
+Test: <input type="text" value="" name="resetTest"><br>
+&lt;input type="reset" name="resetName" id="resetId" value="Reset Me"&gt;<br>
+&lt;input type="reset" name="resetName"&gt;<br>
+&lt;input type="reset" id="resetId1"&gt;<br>
+&lt;input type="reset"&gt;<br>
+<input type="reset" name="resetName" id="resetId" value="Reset Me"><br>
+<input type="reset" name="resetName"><br>
+<input type="reset" id="resetId1"><br>
+<input type="reset"><br>
+<br>
+
+<hr>
+Button:<br>
+&lt;button type="button" name="buttonName" id="buttonId"&gt;Button One&lt;/button&gt;<br>
+&lt;button type="submit" name="buttonName"&gt;Button Two&lt;/button&gt;<br>
+&lt;button type="reset" id="buttonId"&gt;Button Three&lt;/button&gt;<br>
+<button type="button" name="buttonName" id="buttonId">Button One</button><br>
+<button type="submit" name="buttonName">Button Two</button><br>
+<button type="reset" id="buttonId">Button Three</button><br>
+<br>
+
+<hr>
+Submit:<br>
+&lt;input type="submit" value="Add" id="submitBtnId"
+name="submitBtnName"&gt;<br>
+<input type="submit" value="Add" id="submitBtnId" name=
+"submitBtnName"><br>
+<br>
+ &lt;input type="submit" id="submitBtnId"
+name="submitBtnName"&gt;<br>
+<input type="submit" id="submitBtnId" name="submitBtnName"><br>
+<br>
+ &lt;input type="submit" id="submitBtnId"&gt;<br>
+<input type="submit" id="submitBtnId"><br>
+<br>
+ &lt;input type="submit"&gt;<br>
+<input type="submit"><br>
+<br>
+
+
+<hr>
+Image:<br>
+&lt;img src="add.gif" alt="imageAlt1" id="imageId1"
+onclick="dummy()"&gt;&lt;/img&gt;<br>
+<img src="add.gif" alt="imageAlt1" id="imageId1" onclick=
+"dummy()"><br>
+<br>
+ &lt;img src="add.gif" id="imageId1"
+onclick="dummy()"&gt;&lt;/img&gt;<br>
+<img src="add.gif" id="imageId1" onclick="dummy()"><br>
+<br>
+ &lt;img src="add.gif" onclick="dummy()"&gt;&lt;/img&gt;<br>
+<img src="add.gif" onclick="dummy()"><br>
+<br>
+
+
+<hr>
+Search:<br>
+<br>
+&lt;input style="width: 210px;" name="q" type="text" id="q"
+value="" maxlength="255" /&gt;<br>
+<br>
+<input style="width: 210px;" name="q" type="text" id="q" value=""
+maxlength="255"><br>
+<br>
+&lt;input class="button" type="image" src="add.gif" name="qs"
+border="0" value="Search" alt="Search"
+/&gt;<br>
+<br>
+<input class="button" type="image" src="add.gif" name="qs" border=
+"0" value="Search" alt="Search"  ><br>
+<br>
+&lt;input class="button" type="image" src="add.gif" name="qs"
+border="0" value="Search"   /&gt;<br>
+<br>
+<input class="button" type="image" src="add.gif" name="qs" border=
+"0" value="Search"  ><br>
+<br>
+&lt;img src="add.gif" alt="imgaa" border="0" value="Search"
+  onclick="alert('111')"/&gt;<br>
+<br>
+<img src="add.gif" alt="imgaa" border="0" value="Search"
+ onclick="alert('111')"><br>
+<br>
+
+<br/><br/><br/>
+<input type="image" src="add.gif" alt="Search" id="isb1"> |
+<input type="image" src="add.gif" alt="Search" id="isb2"> |
+<input type="image" src="add.gif" title="Search" id="isb3"> |
+<input type="image" src="add.gif" alt="Search" id="isb4">
+<br>
+
+<input type="button" onclick="getAllAttributes()" value="Get All Attributes"><br/>
+<textarea id="output"></textarea>
+
+<input type="hidden" name="hiddenone" value="abc"/>
+</form>
+<br>
+<br>
+ <a href="index.htm">Back</a>
+</body>
+</html>
+

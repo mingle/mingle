@@ -1,0 +1,39 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= render :partial => "confirm_update_actions", :locals => {:location  => "top", :cancel_url => url_for(:action => 'index')} %>
+
+<h1>Update card type</h1>
+
+<% form_tag({:action => 'update', :id => @card_type.id}, {:id => 'update-form'}) do -%>
+  <%= hidden_field_tag('property_definitions_order', @property_definitions_order.join) %>
+  <% params[:card_type].each do |name, value| -%>
+    <%= hidden_field_tag("card_type[#{name}]", value) %>
+  <% end -%>
+  <% @property_definitions.each_with_index do |prop_def, index| -%>
+    <%= hidden_field_tag("property_definitions[#{index}]", prop_def.id) %>
+  <% end -%>
+<% end -%>
+
+<% warning_box do %>
+  <h2>CAUTION! This action has consequences that are final and irrecoverable.</h2>	
+<% end %>
+
+<% info_box do %>
+  <%= render :partial => "update_card_type_warnings" %>
+<% end -%>
+
+<%= render :partial => "confirm_update_actions", :locals => {:location  => "bottom", :cancel_url => url_for(:action => 'index')} %>

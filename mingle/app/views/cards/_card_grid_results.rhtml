@@ -1,0 +1,91 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%
+  # makes a request to profile server, so do it once here and cache it, rather than from card_div
+  @enable_user_invites = invites_enabled?
+
+  html_attrs = {
+    :id => "content-simple",
+    :class => 'grid-results',
+    :"data-view-reset-url" => link_to_current_tab_with_filter_reset(@view),
+    :"data-last-event" => @project.last_event_id,
+    :"data-view-params" => @view.to_js_params.to_json,
+    :"data-filters" => MingleConfiguration.live_wall? && @view.tree_name.blank? && @view.to_transformed_filters.to_json,
+    :"data-card-dependencies-statuses-url" => url_for(:controller => "cards", :action => "dependencies_statuses"),
+    :"data-invites-enabled" => @enable_user_invites
+  }
+
+  content_tag :div, html_attrs do
+%>
+
+    <div class="grid-actions">
+      <%= render(:partial => 'cards/cta_frame', :locals => { :view => @view }) %>
+      <div class='rank_wrapper'>
+        <%= render :partial => 'cards/ranking_mode_control' %>
+        <%= spinner(:id => 'rank_loading_spinner', :style => 'float:left; display:none') %>
+      </div>
+      <div class="grid_links">
+        <%= links_to_remove_screen_furniture(@view) %>
+        <%= render :partial => 'cards/tree_configuration_overview' if @view.tree_name %>
+        <%= link_to_this_page %>
+      </div>
+      <%= clear_float %>
+
+    </div>
+
+    <%- if !@view.too_many_results? -%>
+      <%= render :partial => 'cards/group_lanes' %>
+    <%- else -%>
+      <div class='too_many_cards_on_grid'><%= @view.card_count %> cards requested (<%= CardViewLimits::MAX_GRID_VIEW_SIZE %> maximum). Try refining your filter or switching to <%= link_to "List View", @view.link_params.merge(:style => CardView::Style::LIST.to_s) %>.</div>
+    <%- end -%>
+
+    <%= render :partial => 'cards/transition_executor_forms' %>
+
+  <% if authorized?(:controller => :cards, :action => :create) %>
+    <%= javascript_with_rescue <<-JAVASCRIPT
+      if (!MagicCard.instance) {
+        MagicCard.instance = new MagicCard('magic_card_thumbnail');
+      }
+      MagicCard.instance.rowName = #{@view.group_lanes.row_property_definition.try(:name).to_json};
+      MagicCard.instance.laneName = #{@view.group_lanes.lane_property_definition.try(:name).to_json};
+      MagicCard.instance.initDroppables('swimming-pool');
+      MagicCard.instance.getDroppingCardDimensions = function() {
+        var firstCell = jQuery(".swimming-pool").find("tbody").find(".cell:first");
+        var goldenRatio = 1.61803398875;
+        var width = Math.min(200, Math.max(75, firstCell.width()));
+        var height = width / goldenRatio;
+        return {width: width, height: height};
+      };
+
+  JAVASCRIPT
+  %>
+  <%- end -%>
+
+  <%= javascript_with_rescue <<-JAVASCRIPT
+    window.onmessage = function(e) {
+      if (e.origin == '#{MingleConfiguration.cycle_time_server_url}') {
+        data = JSON.parse(e.data);
+        if(data.name == 'mingle.cta_link.tooltip') {
+          Tooltip($j('.cta_frame'), data.message, {gravity: 's'});
+        }
+     }
+   };
+  JAVASCRIPT
+  %>
+  <%= render :partial => 'cards/magic_card_request' %>
+
+<% end %>

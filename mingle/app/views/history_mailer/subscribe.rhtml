@@ -1,0 +1,61 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% with_standard_font do -%>
+
+  <p>
+  <% if @filter_params.has_global_criteria? %>
+    
+    You will be notified at this email address of events in project <%= @subscription.project.name %> related to items matching the following criteria:
+    <br>  
+    <% if @filter_params.include_filter_types? -%>
+      <br>Updates to:
+      <ul>
+      <% @filter_params.friendly_filter_types(@subscription.project).each do |filter_type| -%>
+        <li><%= filter_type -%>
+      <% end -%>
+      </ul>
+    <% end -%>
+
+    <% if @filter_params.include_involved_filter? -%>
+      <br>Matching:
+      <%= render :partial => 'history_mailer/properties_and_tags', 
+        :locals => {:project => @subscription.project, :properties => @filter_params.involved_filter_properties,:tags => @filter_params.involved_filter_tags} -%>      
+    <% end -%>
+
+    <% if @filter_params.include_acquired_filter? -%>
+      <br>Becoming:
+      <%= render :partial => 'history_mailer/properties_and_tags', 
+        :locals => {:project => @subscription.project, :properties => @filter_params.acquired_filter_properties,:tags => @filter_params.acquired_filter_tags} -%>      
+    <% end -%>    
+        
+    <% if @filter_params.filter_user -%>
+      <br>Changed by: <%= @subscription.project.users.find(@filter_params.filter_user).name -%>
+    <% end -%>        
+   
+  <% elsif @filter_params.local? %>
+    You have requested to subscribe to <%= @filter_params.description(@subscription.project) %>. You will be notified of all events related to this <%= @filter_params.event_source(@subscription.project) %> at this email address.
+  <% else %>
+    You will be notified at this email address of all events in project <%= @subscription.project.name %>
+    <% if @filter_params.filter_user -%>
+      related to items that were changed by: <%= @subscription.project.users.find(@filter_params.filter_user).name -%>
+    <% end -%>
+  <% end %>
+  </p>
+
+  <%= render :partial => 'history_mailer/unsubscribe' %>
+
+<% end -%>

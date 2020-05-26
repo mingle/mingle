@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE section SYSTEM "mingle_help.dtd">
+<chapter title ="Using Murmurs">
+
+<section title="Viewing murmurs in Mingle">
+
+<p>All project murmurs (either entered on the Murmurs dropdown or on a card) can be viewed via the Murmurs dropdown. Murmurs are shown with the latest murmur first. Older murmurs can be seen by using the "page"Load More" button at the bottom of the Murmurs dropdown.</p>
+
+</section>
+
+<section title="Posting murmurs in Mingle">
+
+<subsection title="How and where to post a murmur in Mingle">
+<p>There are various ways you can post murmurs in Mingle. Any user can view all the murmurs, but only full team members or Mingle/project administrators can post murmurs.</p>
+
+<steps>
+<item><strong>From the Murmurs dropdown in your project header</strong>, you can simply enter the murmur content in the text box and click the 'Send' button.
+	<p><screenshot alttext="Murmurs tab" src="resources/images/murmurs_dropdown_new.png"/></p>
+</item>
+
+<item><strong>On the 'Murmurs' section on cards</strong>, which you can find when you expand the right side panel, you can also post a murmur directly related to a specific card. This card-specific murmur will always appear next to the card, giving the murmur specific card context; it will also appear in the general murmurs stream in the murmurs dropdown with a link to the card from which it was murmured.
+	<p><screenshot alttext="create a murmur from the card" src="resources/images/murmurs_new_card.png"/></p>
+</item>
+
+<item><strong>On the transition light box</strong>, if a murmur is required to complete the transition, it will appear on the Murmurs dropdown and on any cards associated with it. When the murmur is displayed on the murmurs dropdown, Mingle will indicate where the murmur was made from by displaying the card number of the originating card.
+	<p><screenshot alttext="create a murmur during a transition" src="resources/images/murmur_transition_new.png"/></p>
+</item>
+</steps>
+</subsection>
+</section>
+
+<section title="Reply to murmurs from email">
+	<p> 
+You can now participate in conversations on Mingle right from your email inbox. You'll be notified via an email when you've been mentioned on a murumur.  
+ </p>
+<p>The email sent now has more context of the conversation. Please see below:</p>
+<p><screenshot alttext="murmur email" src="resources/images/murmur_email.png"/></p>
+<p>In the email you will not only see the murmur you’ve most recently been mentioned in, but also the conversation before it. It will highlight to you all the times you’ve been mentioned before as well. </p>
+<p><strong>How to reply to a murmur via an email?</strong></p>
+<p>You don’t have to log in to Mingle and open up the card to post a reply to the murmur. Replying to the email posts your response onto the conversation on Mingle.</p>
+<p>So an email like this -</p>
+<p><screenshot alttext="murmur email" src="resources/images/murmur_reply.png"/></p>
+<p>Becomes a murmur like this!</p>
+<p><screenshot alttext="murmur email" src="resources/images/murmur_email_output.png"/></p>
+<p>Get in on the conversation just by hitting Reply on your email client! </p>
+<p><strong>Things you should know</strong></p>
+<bullets>
+	<item>You can reply to murmur emails for cards as well as general Mingle murmurs.
+An email like this --
+<p><screenshot alttext="murmur email" src="resources/images/murmur_email_reply_cards.png"/></p>
+<p>Gets posted in the Murmurs section on the header, like this --</p>
+<p><screenshot alttext="murmur email" src="resources/images/murmur_email_reply_cards_output.png"/></p></item>
+    <item>If you use a standard email signature, it will most likely not appear on your murmur.
+    <p><screenshot alttext="murmur email" src="resources/images/murmur_email_reply_signature.png"/></p></item>
+    <item>If you’re out on vacation and have an Out of Office email set up, it will not be posted as a murmur.</item>
+    <item>You can mention names of your team mates, or can address user groups like @team. </item>
+</bullets>
+</section>
+
+<section title="Using murmurs from an external chatroom">
+  <p>Mingle deprecated support of Jabber, a requirement for integrations with external chatrooms, with its 14.2 release. We will be considering integrations with new external chat applications, such as HipChat, in the near future. Please look out for related news on our <exref url="http://www.thoughtworks.com/mingle/blog/">blog</exref>.</p>
+</section>
+
+<section title="Suggested ways to start using Murmurs">
+	<bullets>
+	  <item>If you team posts announcements to each other via email, try using Murmurs to make these announcements. Alternatively, since Murmurs @user, @group, @team are emailed to the respective individual and group and you can reply to murmurs from your email, try using a mix of whatever works best for you. However, to keep all project related information in your project, we suggest you communicate via murmurs either directly in your project or through your email.</item>
+	  <item>If you need to tell your team when you will be back in the office, why not murmur @team so everyone on the team sees it.</item>
+	  <item>If you created a great new wiki page, murmur the name and the tab will automatically link to the page so that everyone can go directly to the information they want.</item>
+	  <item>If you have finished a story and want to tell the team, murmur a card number with your update and the team will easily be able to see your update and the information about the story.</item>
+	</bullets>
+</section>
+
+<section title="Also see...">
+<bullets>
+	<item><cref topic="murmurs">Murmurs overview</cref></item>
+	<item><cref topic="mingle_api_murmurs">Murmurs API</cref></item>
+</bullets>
+</section>
+</chapter>

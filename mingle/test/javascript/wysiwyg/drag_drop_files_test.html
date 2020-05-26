@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>File drag and drop test</title>
+
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    var MingleUI = {}, Fixture = {}, Mock = {}, mixpanelTrack = jQuery.noop;
+  </script>
+
+  <script src="../../../app/assets/javascripts/thirdparty/dropzone.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/dropzone-uploads.js" type="text/javascript"></script>
+  <script src="../test_assets/sinon-2.3.6.js" type="text/javascript"></script>
+  <script src="../../../public/javascripts/ckeditor-4.4.8-cache07/ckeditor.js" type="text/javascript"></script>
+  <script src="../../../app/assets/javascripts/ckeditor-config.js" type="text/javascript"></script>
+
+  <link rel="stylesheet" href="../test_assets/qunit-1.21.0.css" type="text/css" />
+
+  <style type="text/css">
+    /* hide this to prevent accidental mouse interactions */
+    #editor-container {
+      position: relative;
+    }
+
+    .prevent-interaction:before {
+      content: "blocking user interaction during test run";
+      color: white;
+      padding: 70px 30%;
+      position: absolute;
+      top:0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      background: #339;
+      opacity: 0.5;
+      z-index: 10;
+    }
+
+    .upload-error {
+      position: absolute;
+      top:0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      background: black;
+      opacity: 0.8;
+    }
+
+    .upload-error .error-entry {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translateX(-50%) translateY(-50%);
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="qunit"></div>
+  <div id="qunit-fixture"></div>
+
+  <div id="editor-container" rel="to-display-upload-errors" class="prevent-interaction">
+    <!-- don't put this in qunit-fixture because CKEditor doesn't like it when QUnit tears it down -->
+    <textarea id="card_description" name="card[description]" data-attachments-upload-url="attachments/upload" data-attachments-upload-external-url="attachments/external"></textarea>
+  </div>
+  <a href="#" onclick="$('#editor-container').toggleClass('prevent-interaction'); return false;">Toggle CKEditor interaction</a>
+  <script src="../test_assets/qunit-1.21.0.js" type="text/javascript"></script>
+  <script src="../test_assets/qunit-phantom.js" type="text/javascript"></script>
+  <script type="text/javascript">
+
+  QUnit.config.autostart = false;
+
+  function testSuite() {
+    var API = CKEDITOR.mingle.ddf;
+    QUnit.module("drag and drop", {
+      beforeEach: function() {
+        Mock.server = sinon.fakeServer.create();
+        Fixture.editor.setData("");
+        $(".upload-error").remove();
+      },
+      afterEach: function() {
+        Mock.server.restore();
+        Fixture.editor.setData("");
+      }
+    });
+
+    QUnit.test("dropHandler handles dropped image", function(assert) {
+      var done = assert.async();
+      var e = mockDropFile({
+        file: createImageFile("dropped-image01.png")
+      });
+
+      API.dropHandler(e, Fixture.editor);
+      Mock.server.respondWith("POST", "attachments/upload", resp(200, {path: "../test_assets/picture.png", filename: "dropped-image01.png"}));
+
+      setTimeout(function() {
+        Mock.respond();
+
+        var image = ckdom().find(".mingle-image");
+        assert.strictEqual(image.attr("alt"), "dropped-image01.png");
+        assert.strictEqual(image.attr("src"), "../test_assets/picture.png");
+        done();
+      }, 0);
+    });
+
+    QUnit.test("dropHandler handles dropped file", function(assert) {
+      var done = assert.async();
+      var e = mockDropFile({
+        file: createTextFile("dropped-doc.txt")
+      });
+
+      API.dropHandler(e, Fixture.editor);
+      Mock.server.respondWith("POST", "attachments/upload", resp(200, {path: "anything", filename: "dropped-doc.txt"}));
+
+      setTimeout(function() {
+        Mock.respond();
+        assert.strictEqual(ckdom().find("span").text(), "[[dropped-doc.txt]]");
+        done();
+      }, 0);
+    });
+
+    QUnit.test("dropHandler handles file dragged as markup", function(assert) {
+      var e = mockDropMarkup({
+        markup: "<div class='foo'><a href='#'><img src='http://some.domain/image.png'/></a></div>"
+      });
+
+      API.dropHandler(e, Fixture.editor);
+      Mock.server.respondWith("POST", "attachments/external", resp(200, {path: "../test_assets/picture.png", filename: "dropped-markup.png", contentType: "image/png"}));
+
+      var req = Mock.server.requests[0];
+      assert.strictEqual(req.url, "attachments/external");
+
+      Mock.server.respond();
+      var image = ckdom().find(".mingle-image");
+      assert.strictEqual(image.attr("alt"), "dropped-markup.png");
+      assert.strictEqual(image.attr("src"), "../test_assets/picture.png");
+    });
+
+    QUnit.test("dropHandler handles server error", function(assert) {
+      var done = assert.async();
+      var e = mockDropFile({
+        file: createTextFile("dropped-doc.txt")
+      });
+
+      API.dropHandler(e, Fixture.editor);
+      Mock.server.respondWith("POST", "attachments/upload", resp(422, "faking a server error"));
+
+      setTimeout(function() {
+        Mock.respond();
+        assert.strictEqual($(".error-entry").text(), "faking a server error");
+        assert.strictEqual($.trim(ckdom().text()), "");
+        done();
+      }, 0);
+    });
+
+    QUnit.test("imageDataPasteHandler handles raw image data", function(assert) {
+      var done = assert.async();
+      var e = mockClipboardImageData({
+        file: createImageFile()
+      });
+
+      API.rangeAt(0, 0, Fixture.editor.document.$);
+      API.imageDataPasteHandler(e, Fixture.editor);
+      Mock.server.respondWith("POST", "attachments/upload", resp(200, {path: "../test_assets/picture.png", filename: "clipped-image-1.png"}));
+
+      setTimeout(function() {
+        Mock.respond();
+
+        var image = ckdom().find(".mingle-image");
+        assert.strictEqual(image.attr("alt"), "clipped-image-1.png");
+        assert.strictEqual(image.attr("src"), "../test_assets/picture.png");
+        done();
+      }, 0);
+    });
+
+    QUnit.test("uploadFromSrc handles server-side fetch", function(assert) {
+      var url = "http://some.domain/image.png";
+      ckdom().append("<span data-file-uid='1234'>placeholder</span>");
+
+      API.uploadFromSrc(url, {uid: "1234", generatedName: "generated-name.png", editor: Fixture.editor});
+
+      var req = Mock.server.requests[0];
+      assert.strictEqual(req.url, "attachments/external");
+
+      // pull out the url from the params
+      var actual = decodeURIComponent(req.requestBody.split("&").filter(function(q) { return q.match(/^external=/); })[0].split("=")[1]);
+      assert.strictEqual(actual, url);
+
+      Mock.server.respondWith("POST", "attachments/external", resp(200, {path: "../test_assets/picture.png", filename: "external-image.png", contentType: "image/png"}))
+      Mock.server.respond();
+
+      var image = ckdom().find(".mingle-image");
+      assert.strictEqual(image.attr("alt"), "external-image.png");
+      assert.strictEqual(image.attr("src"), "../test_assets/picture.png");
+    });
+
+    QUnit.test("we do not leave placeholders behind", function(assert) {
+      var done = assert.async();
+      var e = mockDropFile({
+        file: createTextFile("dropped-doc.txt")
+      });
+
+      API.dropHandler(e, Fixture.editor);
+      Mock.server.respondWith("POST", "attachments/upload", resp(200, {path: "anything", filename: "dropped-doc.txt"}));
+
+      setTimeout(function() {
+        Mock.respond();
+        assert.strictEqual(ckdom().find(".with-progress-bar").length, 0);
+        done();
+      }, 0);
+    });
+
+    QUnit.test("makeInlineElement() image type", function(assert) {
+      var response = {path: "/attachments/1", filename: "foo.png"};
+      var element = $(API.makeInlineElement("image/png", response));
+
+      assert.ok(element.is("img"));
+      assert.ok(element.hasClass("mingle-image"));
+      assert.strictEqual(element.attr("src"), response.path);
+      assert.strictEqual(element.attr("alt"), response.filename);
+    });
+
+    QUnit.test("makeInlineElement() other type", function(assert) {
+      var response = {path: "/attachments/2", filename: "bar.txt"};
+      var element = $(API.makeInlineElement("text/plain", response));
+
+      assert.ok(element.is("span"));
+      assert.strictEqual(element.text(), "[[" + response.filename + "]]");
+    });
+    QUnit.done(function(result) {
+      console.log(result);
+    });
+  }
+
+  function bootstrap() {
+    CKEDITOR.config.contentsCss = ["../../../app/assets/stylesheets/editable_content.scss", "../../../app/assets/stylesheets/progress_bars.scss"];
+
+    // don't need autosave pluging
+    CKEDITOR.config.removePlugins = "autosave";
+
+    var FONT_AWESOME = '\
+      @font-face {\
+        font-family: "FontAwesome";\
+        src: url("../../../public/fonts/fontawesome-webfont.eot?v=4.2.0");\
+        src: url("../../../public/fonts/fontawesome-webfont.eot?#iefix&v=4.2.0") format("embedded-opentype"), url("../../../public/fonts/fontawesome-webfont.woff?v=4.2.0") format("woff"), url("../../../public/fonts/fontawesome-webfont.ttf?v=4.2.0") format("truetype"), url("../../../public/fonts/fontawesome-webfont.svg?v=4.2.0#fontawesomeregular") format("svg");\
+        font-weight: normal;\
+        font-style: normal;\
+      }\
+      \
+      .fa {\
+        display: inline-block;\
+        font: normal normal normal 14px/1 FontAwesome;\
+        font-size: inherit;\
+        text-rendering: auto;\
+        -webkit-font-smoothing: antialiased;\
+        -moz-osx-font-smoothing: grayscale;\
+      }\
+      \
+      .fa-close:before, .fa-times:before { content: "\\f00d"; }\
+    ';
+
+    CKEDITOR.replace('card_description', {
+      on: {
+        loaded: function (event) {
+          CKEDITOR.addCss(FONT_AWESOME);
+        },
+        instanceReady: function (event) {
+          // convenience
+          Fixture.editor = event.editor;
+
+          // enableCKEventDebug(event.editor)
+          event.editor.setData("");
+          testSuite();
+          QUnit.start();
+        }
+      }
+    });
+  }
+
+  function resp(code, body) {
+    var json = JSON.stringify(body);
+    var headers = {"Content-Type": "application/json", "Content-Length": json.length};
+    return [code, headers, json];
+  }
+
+  function doResp(request, code, body) {
+    var json = JSON.stringify(body);
+    var headers = {"Content-Type": "application/json", "Content-Length": json.length};
+    request.respond(code, headers, json);
+  }
+
+  Mock.respond = function() {
+    // hack to force Dropzone's onload to fire; onreadystatechange must be a function
+    $.each(Mock.server.requests, function(i, xhr) {xhr.onreadystatechange = $.noop;});
+    Mock.server.respond();
+  };
+
+  function ckdom() {
+    return $(Fixture.editor.document.$.body);
+  }
+
+  function mockDropFile(options) {
+    return {
+      type: "drop",
+      dataTransfer: {files: [options.file]},
+      target: options.target || Fixture.editor.document.$.body,
+      x: options.x || 0,
+      y: options.y || 0,
+      preventDefault: $.noop,
+      stopPropagation: $.noop
+    };
+  }
+
+  function mockDropMarkup(options) {
+    return {
+      type: "drop",
+      dataTransfer: {
+        files: [],
+        types: ["text/uri-list", "text/html"],
+        getData: function(mime) {
+          // don't need to mock text/uri-list return value, only text/html
+          return options.markup;
+        }
+      },
+      target: options.target || Fixture.editor.document.$.body,
+      x: options.x || 0,
+      y: options.y || 0,
+      preventDefault: $.noop,
+      stopPropagation: $.noop
+    };
+  }
+
+  function mockClipboardImageData(options) {
+    return {
+      type: "drop",
+      clipboardData: {items: [options.file]},
+      target: options.target || Fixture.editor.document.$.body,
+      x: options.x || 0,
+      y: options.y || 0,
+      preventDefault: $.noop,
+      stopPropagation: $.noop
+    };
+  }
+
+  function createTextFile(name) {
+    var blob = new Blob(["hello, this is an attachment fixture"], {type: "text/plain"});
+    blob.name = name;
+    return blob;
+  }
+
+  function createImageFile(name){
+    var blob = new Blob([Fixture.imageData()], {type: "image/png"});
+    blob.name = name;
+    return blob;
+  }
+
+  Fixture.imageData = (function() {
+    var data;
+    return function() {
+      if (!data) {
+        var base64 = "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAHwSURBVDjLpZM9a1RBFIafM/fevfcmC7uQjWEjUZKAYBHEVEb/gIWFjVVSWEj6gI0/wt8gprPQykIsTP5BQLAIhBVBzRf52Gw22bk7c8YiZslugggZppuZ55z3nfdICIHrrBhg+ePaa1WZPyk0s+6KWwM1khiyhDcvns4uxQAaZOHJo4nRLMtEJPpnxY6Cd10+fNl4DpwBTqymaZrJ8uoBHfZoyTqTYzvkSRMXlP2jnG8bFYbCXWJGePlsEq8iPQmFA2MijEBhtpis7ZCWftC0LZx3xGnK1ESd741hqqUaqgMeAChgjGDDLqXkgMPTJtZ3KJzDhTZpmtK2OSO5IRB6xvQDRAhOsb5Lx1lOu5ZCHV4B6RLUExvh4s+ZntHhDJAxSqs9TCDBqsc6j0iJdqtMuTROFBkIcllCCGcSytFNfm1tU8k2GRo2pOI43h9ie6tOvTJFbORyDsJFQHKD8fw+P9dWqJZ/I96TdEa5Nb1AOavjVfti0dfB+t4iXhWvyh27y9zEbRRobG7z6fgVeqSoKvB5oIMQEODx7FLvIJo55KS9R7b5ldrDReajpC+Z5z7GAHJFXn1exedVbG36ijwOmJgl0kS7lXtjD0DkLyqc70uPnSuIIwk9QCmWd+9XGnOFDzP/M5xxBInhLYBcd5z/AAZv2pOvFcS/AAAAAElFTkSuQmCC";
+        var chars = window.atob(base64);
+        var integers = new Array(chars.length), len = chars.length;
+        for (var i = 0; i < len; i++) {
+          integers[i] = chars.charCodeAt(i);
+        }
+        data = new Uint8Array(integers);
+      }
+      return data;
+    };
+  })();
+
+  bootstrap();
+  </script>
+</body>
+</html>

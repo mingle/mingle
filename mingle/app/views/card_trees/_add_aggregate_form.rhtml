@@ -1,0 +1,40 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div class="aggregate-popup-outer">
+  <% lightbox = Lightbox.with_close_link_and_close_button(self, 'Close', "aggregatePopupHandler.removePopup()", :id => 'close-aggregate-popup-button', :class => 'remove-button popup-close')
+     lightbox.header 'Aggregate Properties' 
+     lightbox.body do %>
+       <% form_remote_tag(:url => {:action => 'create_aggregate_property_definition'},
+                       :before => "linkHandler.disableLinks(); #{show_spinner("add-aggregate-property")}",
+                       :complete => "linkHandler.enableLinks(); aggregatePopupHandler.popup($('node-#{@aggregate_property_definition.aggregate_card_type.id}'), $('edit-aggregate-popup')); #{hide_spinner("add-aggregate-property")}",
+                       :html => {:id => 'add_aggregate_form'}) do %>
+        <%= render :partial => 'aggregate_form', :locals => {:child_type => child_type, :descendant_types => descendant_types, :fire_onchanges => false} %>
+        <div id="add_agg_button">
+          <%= submit_tag 'Add', :class => "submit primary" %>
+          <%= spinner(:id => "add-aggregate-property") %>
+        </div>
+      <% end %>
+      <div id="aggregate_list">
+        <h3>Current aggregate properties</h3>
+        <%= render :partial => "aggregate_list", :locals => {:aggregates => aggregates} %>
+      </div>
+      <%# background colour of overlay cannot be transparent, otherwise this will not disable links on IE6 %>
+      <div id="add_agg_button_overlay" style='background-color: white; opacity: 0.1; display:none; position:absolute'></div>
+      <%= javascript_with_rescue "linkHandler = new LinkHandler(['add_agg_button']);" %>
+  <% end 
+     lightbox.complete_action %>
+</div>

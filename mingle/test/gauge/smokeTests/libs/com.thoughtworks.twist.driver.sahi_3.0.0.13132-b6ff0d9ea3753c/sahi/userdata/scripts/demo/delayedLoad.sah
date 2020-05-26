@@ -1,0 +1,10 @@
+_sahi.maxCycles(100);
+<browser>
+_sahi.waitForLoad = 100;
+</browser>
+_navigateTo("/demo/php/delayedLoad.php");
+_set($t, parseInt(_div("clock").innerHTML));
+_log($t);
+_assert($t > 8 && $t < 12);
+_click(_link("Go home"));
+_assertExists(_link("Form Test"));

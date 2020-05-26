@@ -1,0 +1,820 @@
+<!--
+// This file is part of TagSoup.
+// 
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.  You may also distribute
+// and/or modify it under version 3.0 of the Academic Free License.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+-->
+
+<schema xmlns='http://www.ccil.org/~cowan/XML/tagsoup/tssl'
+		ns='http://www.w3.org/1999/xhtml' name='html'
+		prefix='html' version='1.0'>
+  <entity name='AElig' codepoint='00C6'/>
+  <entity name='Aacute' codepoint='00C1'/>
+  <entity name='Acirc' codepoint='00C2'/>
+  <entity name='Agrave' codepoint='00C0'/>
+  <entity name='Alpha' codepoint='0391'/>
+  <entity name='Aring' codepoint='00C5'/>
+  <entity name='Atilde' codepoint='00C3'/>
+  <entity name='Auml' codepoint='00C4'/>
+  <entity name='Beta' codepoint='0392'/>
+  <entity name='Ccedil' codepoint='00C7'/>
+  <entity name='Chi' codepoint='03A7'/>
+  <entity name='Dagger' codepoint='2021'/>
+  <entity name='Delta' codepoint='0394'/>
+  <entity name='ETH' codepoint='00D0'/>
+  <entity name='Eacute' codepoint='00C9'/>
+  <entity name='Ecirc' codepoint='00CA'/>
+  <entity name='Egrave' codepoint='00C8'/>
+  <entity name='Epsilon' codepoint='0395'/>
+  <entity name='Eta' codepoint='0397'/>
+  <entity name='Euml' codepoint='00CB'/>
+  <entity name='Gamma' codepoint='0393'/>
+  <entity name='Iacute' codepoint='00CD'/>
+  <entity name='Icirc' codepoint='00CE'/>
+  <entity name='Igrave' codepoint='00CC'/>
+  <entity name='Iota' codepoint='0399'/>
+  <entity name='Iuml' codepoint='00CF'/>
+  <entity name='Kappa' codepoint='039A'/>
+  <entity name='Lambda' codepoint='039B'/>
+  <entity name='Mu' codepoint='039C'/>
+  <entity name='Ntilde' codepoint='00D1'/>
+  <entity name='Nu' codepoint='039D'/>
+  <entity name='OElig' codepoint='0152'/>
+  <entity name='Oacute' codepoint='00D3'/>
+  <entity name='Ocirc' codepoint='00D4'/>
+  <entity name='Ograve' codepoint='00D2'/>
+  <entity name='Omega' codepoint='03A9'/>
+  <entity name='Omicron' codepoint='039F'/>
+  <entity name='Oslash' codepoint='00D8'/>
+  <entity name='Otilde' codepoint='00D5'/>
+  <entity name='Ouml' codepoint='00D6'/>
+  <entity name='Phi' codepoint='03A6'/>
+  <entity name='Pi' codepoint='03A0'/>
+  <entity name='Prime' codepoint='2033'/>
+  <entity name='Psi' codepoint='03A8'/>
+  <entity name='Rho' codepoint='03A1'/>
+  <entity name='Scaron' codepoint='0160'/>
+  <entity name='Sigma' codepoint='03A3'/>
+  <entity name='THORN' codepoint='00DE'/>
+  <entity name='Tau' codepoint='03A4'/>
+  <entity name='Theta' codepoint='0398'/>
+  <entity name='Uacute' codepoint='00DA'/>
+  <entity name='Ucirc' codepoint='00DB'/>
+  <entity name='Ugrave' codepoint='00D9'/>
+  <entity name='Upsilon' codepoint='03A5'/>
+  <entity name='Uuml' codepoint='00DC'/>
+  <entity name='Xi' codepoint='039E'/>
+  <entity name='Yacute' codepoint='00DD'/>
+  <entity name='Yuml' codepoint='0178'/>
+  <entity name='Zeta' codepoint='0396'/>
+  <entity name='aacute' codepoint='00E1'/>
+  <entity name='acirc' codepoint='00E2'/>
+  <entity name='acute' codepoint='00B4'/>
+  <entity name='aelig' codepoint='00E6'/>
+  <entity name='agrave' codepoint='00E0'/>
+  <entity name='alefsym' codepoint='2135'/>
+  <entity name='alpha' codepoint='03B1'/>
+  <entity name='amp' codepoint='0026'/>
+  <entity name='and' codepoint='2227'/>
+  <entity name='ang' codepoint='2220'/>
+  <entity name='apos' codepoint='0027'/>
+  <entity name='aring' codepoint='00E5'/>
+  <entity name='asymp' codepoint='2248'/>
+  <entity name='atilde' codepoint='00E3'/>
+  <entity name='auml' codepoint='00E4'/>
+  <entity name='bdquo' codepoint='201E'/>
+  <entity name='beta' codepoint='03B2'/>
+  <entity name='brvbar' codepoint='00A6'/>
+  <entity name='bull' codepoint='2022'/>
+  <entity name='cap' codepoint='2229'/>
+  <entity name='ccedil' codepoint='00E7'/>
+  <entity name='cedil' codepoint='00B8'/>
+  <entity name='cent' codepoint='00A2'/>
+  <entity name='chi' codepoint='03C7'/>
+  <entity name='circ' codepoint='02C6'/>
+  <entity name='clubs' codepoint='2663'/>
+  <entity name='cong' codepoint='2245'/>
+  <entity name='copy' codepoint='00A9'/>
+  <entity name='crarr' codepoint='21B5'/>
+  <entity name='cup' codepoint='222A'/>
+  <entity name='curren' codepoint='00A4'/>
+  <entity name='dArr' codepoint='21D3'/>
+  <entity name='dagger' codepoint='2020'/>
+  <entity name='darr' codepoint='2193'/>
+  <entity name='deg' codepoint='00B0'/>
+  <entity name='delta' codepoint='03B4'/>
+  <entity name='diams' codepoint='2666'/>
+  <entity name='divide' codepoint='00F7'/>
+  <entity name='eacute' codepoint='00E9'/>
+  <entity name='ecirc' codepoint='00EA'/>
+  <entity name='egrave' codepoint='00E8'/>
+  <entity name='empty' codepoint='2205'/>
+  <entity name='emsp' codepoint='2003'/>
+  <entity name='ensp' codepoint='2002'/>
+  <entity name='epsilon' codepoint='03B5'/>
+  <entity name='equiv' codepoint='2261'/>
+  <entity name='eta' codepoint='03B7'/>
+  <entity name='eth' codepoint='00F0'/>
+  <entity name='euml' codepoint='00EB'/>
+  <entity name='euro' codepoint='20AC'/>
+  <entity name='exist' codepoint='2203'/>
+  <entity name='fnof' codepoint='0192'/>
+  <entity name='forall' codepoint='2200'/>
+  <entity name='frac12' codepoint='00BD'/>
+  <entity name='frac14' codepoint='00BC'/>
+  <entity name='frac34' codepoint='00BE'/>
+  <entity name='frasl' codepoint='2044'/>
+  <entity name='gamma' codepoint='03B3'/>
+  <entity name='ge' codepoint='2265'/>
+  <entity name='gt' codepoint='003E'/>
+  <entity name='hArr' codepoint='21D4'/>
+  <entity name='harr' codepoint='2194'/>
+  <entity name='hearts' codepoint='2665'/>
+  <entity name='hellip' codepoint='2026'/>
+  <entity name='iacute' codepoint='00ED'/>
+  <entity name='icirc' codepoint='00EE'/>
+  <entity name='iexcl' codepoint='00A1'/>
+  <entity name='igrave' codepoint='00EC'/>
+  <entity name='image' codepoint='2111'/>
+  <entity name='infin' codepoint='221E'/>
+  <entity name='int' codepoint='222B'/>
+  <entity name='iota' codepoint='03B9'/>
+  <entity name='iquest' codepoint='00BF'/>
+  <entity name='isin' codepoint='2208'/>
+  <entity name='iuml' codepoint='00EF'/>
+  <entity name='kappa' codepoint='03BA'/>
+  <entity name='lArr' codepoint='21D0'/>
+  <entity name='lambda' codepoint='03BB'/>
+  <entity name='lang' codepoint='2329'/>
+  <entity name='laquo' codepoint='00AB'/>
+  <entity name='larr' codepoint='2190'/>
+  <entity name='lceil' codepoint='2308'/>
+  <entity name='ldquo' codepoint='201C'/>
+  <entity name='le' codepoint='2264'/>
+  <entity name='lfloor' codepoint='230A'/>
+  <entity name='lowast' codepoint='2217'/>
+  <entity name='loz' codepoint='25CA'/>
+  <entity name='lrm' codepoint='200E'/>
+  <entity name='lsaquo' codepoint='2039'/>
+  <entity name='lsquo' codepoint='2018'/>
+  <entity name='lt' codepoint='003C'/>
+  <entity name='macr' codepoint='00AF'/>
+  <entity name='mdash' codepoint='2014'/>
+  <entity name='micro' codepoint='00B5'/>
+  <entity name='middot' codepoint='00B7'/>
+  <entity name='minus' codepoint='2212'/>
+  <entity name='mu' codepoint='03BC'/>
+  <entity name='nabla' codepoint='2207'/>
+  <entity name='nbsp' codepoint='00A0'/>
+  <entity name='ndash' codepoint='2013'/>
+  <entity name='ne' codepoint='2260'/>
+  <entity name='ni' codepoint='220B'/>
+  <entity name='not' codepoint='00AC'/>
+  <entity name='notin' codepoint='2209'/>
+  <entity name='nsub' codepoint='2284'/>
+  <entity name='ntilde' codepoint='00F1'/>
+  <entity name='nu' codepoint='03BD'/>
+  <entity name='oacute' codepoint='00F3'/>
+  <entity name='ocirc' codepoint='00F4'/>
+  <entity name='oelig' codepoint='0153'/>
+  <entity name='ograve' codepoint='00F2'/>
+  <entity name='oline' codepoint='203E'/>
+  <entity name='omega' codepoint='03C9'/>
+  <entity name='omicron' codepoint='03BF'/>
+  <entity name='oplus' codepoint='2295'/>
+  <entity name='or' codepoint='2228'/>
+  <entity name='ordf' codepoint='00AA'/>
+  <entity name='ordm' codepoint='00BA'/>
+  <entity name='oslash' codepoint='00F8'/>
+  <entity name='otilde' codepoint='00F5'/>
+  <entity name='otimes' codepoint='2297'/>
+  <entity name='ouml' codepoint='00F6'/>
+  <entity name='para' codepoint='00B6'/>
+  <entity name='part' codepoint='2202'/>
+  <entity name='permil' codepoint='2030'/>
+  <entity name='perp' codepoint='22A5'/>
+  <entity name='phi' codepoint='03C6'/>
+  <entity name='pi' codepoint='03C0'/>
+  <entity name='piv' codepoint='03D6'/>
+  <entity name='plusmn' codepoint='00B1'/>
+  <entity name='pound' codepoint='00A3'/>
+  <entity name='prime' codepoint='2032'/>
+  <entity name='prod' codepoint='220F'/>
+  <entity name='prop' codepoint='221D'/>
+  <entity name='psi' codepoint='03C8'/>
+  <entity name='quot' codepoint='0022'/>
+  <entity name='rArr' codepoint='21D2'/>
+  <entity name='radic' codepoint='221A'/>
+  <entity name='rang' codepoint='232A'/>
+  <entity name='raquo' codepoint='00BB'/>
+  <entity name='rarr' codepoint='2192'/>
+  <entity name='rceil' codepoint='2309'/>
+  <entity name='rdquo' codepoint='201D'/>
+  <entity name='real' codepoint='211C'/>
+  <entity name='reg' codepoint='00AE'/>
+  <entity name='rfloor' codepoint='230B'/>
+  <entity name='rho' codepoint='03C1'/>
+  <entity name='rlm' codepoint='200F'/>
+  <entity name='rsaquo' codepoint='203A'/>
+  <entity name='rsquo' codepoint='2019'/>
+  <entity name='sbquo' codepoint='201A'/>
+  <entity name='scaron' codepoint='0161'/>
+  <entity name='sdot' codepoint='22C5'/>
+  <entity name='sect' codepoint='00A7'/>
+  <entity name='shy' codepoint='00AD'/>
+  <entity name='sigma' codepoint='03C3'/>
+  <entity name='sigmaf' codepoint='03C2'/>
+  <entity name='sim' codepoint='223C'/>
+  <entity name='spades' codepoint='2660'/>
+  <entity name='sub' codepoint='2282'/>
+  <entity name='sube' codepoint='2286'/>
+  <entity name='sum' codepoint='2211'/>
+  <entity name='sup' codepoint='2283'/>
+  <entity name='sup1' codepoint='00B9'/>
+  <entity name='sup2' codepoint='00B2'/>
+  <entity name='sup3' codepoint='00B3'/>
+  <entity name='supe' codepoint='2287'/>
+  <entity name='szlig' codepoint='00DF'/>
+  <entity name='tau' codepoint='03C4'/>
+  <entity name='there4' codepoint='2234'/>
+  <entity name='theta' codepoint='03B8'/>
+  <entity name='thetasym' codepoint='03D1'/>
+  <entity name='thinsp' codepoint='2009'/>
+  <entity name='thorn' codepoint='00FE'/>
+  <entity name='tilde' codepoint='02DC'/>
+  <entity name='times' codepoint='00D7'/>
+  <entity name='trade' codepoint='2122'/>
+  <entity name='uArr' codepoint='21D1'/>
+  <entity name='uacute' codepoint='00FA'/>
+  <entity name='uarr' codepoint='2191'/>
+  <entity name='ucirc' codepoint='00FB'/>
+  <entity name='ugrave' codepoint='00F9'/>
+  <entity name='uml' codepoint='00A8'/>
+  <entity name='upsih' codepoint='03D2'/>
+  <entity name='upsilon' codepoint='03C5'/>
+  <entity name='uuml' codepoint='00FC'/>
+  <entity name='weierp' codepoint='2118'/>
+  <entity name='xi' codepoint='03BE'/>
+  <entity name='yacute' codepoint='00FD'/>
+  <entity name='yen' codepoint='00A5'/>
+  <entity name='yuml' codepoint='00FF'/>
+  <entity name='zeta' codepoint='03B6'/>
+  <entity name='zwj' codepoint='200D'/>
+  <entity name='zwnj' codepoint='200C'/>
+  <group id='M_AREA'/>
+  <group id='M_BLOCK'/>
+  <group id='M_BLOCKINLINE'/>
+  <group id='M_BODY'/>
+  <group id='M_CELL'/>
+  <group id='M_COL'/>
+  <group id='M_DEF'/>
+  <group id='M_FORM'/>
+  <group id='M_FRAME'/>
+  <group id='M_HEAD'/>
+  <group id='M_HTML'/>
+  <group id='M_INLINE'/>
+  <group id='M_LEGEND'/>
+  <group id='M_LI'/>
+  <group id='M_NOLINK'/>
+  <group id='M_OPTION'/>
+  <group id='M_OPTIONS'/>
+  <group id='M_P'/>
+  <group id='M_PARAM'/>
+  <group id='M_TABLE'/>
+  <group id='M_TR'/>
+  <element name='html' type='element'>
+    <isRoot/>
+    <contains group='M_HTML'/>
+    <element name='body' type='mixed' text-parent='true'>
+      <memberOf group='M_HTML'/>
+      <memberOf group='M_BODY'/>
+      <contains group='M_INLINE'/>
+      <contains group='M_BLOCK'/>
+      <element name='a' type='mixed'>
+        <memberOf group='M_INLINE'/>
+        <contains group='M_NOLINK'/>
+        <attribute name='hreflang' type='NMTOKEN' />
+        <attribute name='shape' default='rect'/>
+        <attribute name='tabindex' type='NMTOKEN' />
+      </element>
+      <element name='abbr' closeMode='restartable' type='mixed'>
+        <memberOf group='M_INLINE'/>
+        <memberOf group='M_NOLINK'/>
+        <contains group='M_INLINE'/>
+      </element>
+      <element name='acronym' closeMode='restartable' type='mixed'>
+        <memberOf group='M_INLINE'/>
+        <memberOf group='M_NOLINK'/>
+        <contains group='M_INLINE'/>
+      </element>
+      <element name='address' type='mixed'>
+        <memberOf group='M_BLOCK'/>
+        <contains group='M_INLINE'/>
+        <contains group='M_P'/>
+      </element>
+      <element name='applet' type='mixed'>
+        <memberOf group='M_INLINE'/>
+        <memberOf group='M_NOLINK'/>
+        <contains group='M_PARAM'/>
+        <contains group='M_INLINE'/>
+        <contains group='M_BLOCK'/>
+        <attribute name='align' type='NMTOKEN' />
+      </element>
+      <element name='b' closeMode='restartable' type='mixed'>
+        <memberOf group='M_INLINE'/>
+        <memberOf group='M_NOLINK'/>
+        <contains group='M_INLINE'/>
+      </element>
+      <element name='basefont' type='empty'>
+        <memberOf group='M_INLINE'/>
+        <memberOf group='M_NOLINK'/>
+      </element>
+      <element name='bdo' closeMode='restartable' type='mixed'>
+        <memberOf group='M_INLINE'/>
+        <memberOf group='M_NOLINK'/>
+        <contains group='M_INLINE'/>
+      </element>
+      <element name='big' closeMode='restartable' type='mixed'>
+        <memberOf group='M_INLINE'/>
+        <memberOf group='M_NOLINK'/>
+        <contains group='M_INLINE'/>
+      </element>
+      <element name='blockquote' type='mixed'>
+        <memberOf group='M_BLOCK'/>
+        <contains group='M_INLINE'/>
+        <contains group='M_BLOCK'/>
+      </element>
+      <element name='br' type='empty'>
+        <memberOf group='M_INLINE'/>
+        <memberOf group='M_NOLINK'/>
+        <attribute name='clear' default='none'/>
+      </element>
+      <element name='center' type='mixed'>
+        <memberOf group='M_BLOCK'/>
+        <contains group='M_INLINE'/>
+        <contains group='M_BLOCK'/>
+      </element>
+      <element name='cite' closeMode='restartable' type='mixed'>
+        <memberOf group='M_INLINE'/>
+        <memberOf group='M_NOLINK'/>
+        <contains group='M_INLINE'/>
+      </element>
+      <element name='code' closeMode='restartable' type='mixed'>
+        <memberOf group='M_INLINE'/>
+        <memberOf group='M_NOLINK'/>
+        <contains group='M_INLINE'/>
+      </element>
+      <element name='del' closeMode='restartable' type='mixed'>
+        <memberOf group='M_INLINE'/>
+        <memberOf group='M_BLOCKINLINE'/>
+        <memberOf group='M_BLOCK'/>
+        <contains group='M_INLINE'/>
+        <contains group='M_BLOCK'/>
+      </element>
+      <element name='dfn' closeMode='restartable' type='mixed'>
+        <memberOf group='M_INLINE'/>
+        <memberOf group='M_NOLINK'/>
+        <contains group='M_INLINE'/>
+      </element>
+      <element name='dir' type='element'>
+        <memberOf group='M_BLOCK'/>
+        <contains group='M_LI'/>
+        <attribute name='compact' type='BOOLEAN' />
+      </element>
+      <element name='div' type='mixed'>
+        <memberOf group='M_BLOCK'/>
+        <contains group='M_INLINE'/>
+        <contains group='M_BLOCK'/>
+        <attribute name='align' type='NMTOKEN' />
+      </element>
+      <element name='dl' type='element'>
+        <memberOf group='M_BLOCK'/>
+        <contains group='M_DEF'/>
+        <attribute name='compact' type='BOOLEAN' />
+        <element name='dd' type='mixed'>
+          <memberOf group='M_DEF'/>
+          <contains group='M_INLINE'/>
+          <contains group='M_BLOCK'/>
+        </element>
+        <element name='dt' type='mixed'>
+          <memberOf group='M_DEF'/>
+          <contains group='M_INLINE'/>
+        </element>
+      </element>
+      <element name='em' closeMode='restartable' type='mixed'>
+        <memberOf group='M_INLINE'/>
+        <memberOf group='M_NOLINK'/>
+        <contains group='M_INLINE'/>
+      </element>
+      <element name='font' type='mixed'>
+        <memberOf group='M_INLINE'/>
+        <memberOf group='M_NOLINK'/>
+        <contains group='M_INLINE'/>
+      </element>
+      <element name='form' closeMode='unclosable' type='mixed'>
+        <memberOf group='M_BLOCK'/>
+        <memberOf group='M_FORM'/>
+        <contains group='M_INLINE'/>
+        <contains group='M_NOLINK'/>
+        <contains group='M_BLOCK'/>
+        <contains group='M_TR'/>
+        <contains group='M_CELL'/>
+        <attribute name='enctype' default='application/x-www-form-urlencoded'/>
+        <attribute name='method' default='get'/>
+        <element name='button' type='mixed'>
+          <memberOf group='M_INLINE'/>
+          <memberOf group='M_NOLINK'/>
+          <contains group='M_INLINE'/>
+          <contains group='M_BLOCK'/>
+          <attribute name='disabled' type='BOOLEAN' />
+          <attribute name='tabindex' type='NMTOKEN' />
+          <attribute name='type' default='submit'/>
+        </element>
+        <element name='fieldset' type='mixed'>
+          <memberOf group='M_BLOCK'/>
+          <contains group='M_LEGEND'/>
+          <contains group='M_INLINE'/>
+          <contains group='M_BLOCK'/>
+          <element name='legend' type='mixed'>
+            <memberOf group='M_LEGEND'/>
+            <contains group='M_INLINE'/>
+            <attribute name='align' type='NMTOKEN' />
+          </element>
+        </element>
+        <element name='input' type='empty'>
+          <memberOf group='M_INLINE'/>
+          <memberOf group='M_NOLINK'/>
+          <attribute name='align' type='NMTOKEN' />
+          <attribute name='checked' type='BOOLEAN' />
+          <attribute name='disabled' type='BOOLEAN' />
+          <attribute name='ismap' type='BOOLEAN' />
+          <attribute name='maxlength' type='NMTOKEN' />
+          <attribute name='readonly' type='BOOLEAN' />
+          <attribute name='tabindex' type='NMTOKEN' />
+          <attribute name='type' default='text'/>
+        </element>
+        <element name='label' type='mixed'>
+          <memberOf group='M_INLINE'/>
+          <memberOf group='M_NOLINK'/>
+          <contains group='M_INLINE'/>
+          <attribute name='for' type='IDREF' />
+        </element>
+        <element name='select' type='element'>
+          <memberOf group='M_INLINE'/>
+          <contains group='M_OPTIONS'/>
+          <attribute name='disabled' type='BOOLEAN' />
+          <attribute name='multiple' type='BOOLEAN' />
+          <attribute name='size' type='NMTOKEN' />
+          <attribute name='tabindex' type='NMTOKEN' />
+          <element name='optgroup' type='element'>
+            <memberOf group='M_OPTIONS'/>
+            <contains group='M_OPTIONS'/>
+            <attribute name='disabled' type='BOOLEAN' />
+          </element>
+          <element name='option' type='string'>
+            <memberOf group='M_OPTION'/>
+            <memberOf group='M_OPTIONS'/>
+            <attribute name='disabled' type='BOOLEAN' />
+            <attribute name='selected' type='BOOLEAN' />
+          </element>
+        </element>
+        <element name='textarea' type='string'>
+          <memberOf group='M_INLINE'/>
+          <attribute name='cols' type='NMTOKEN' />
+          <attribute name='disabled' type='BOOLEAN' />
+          <attribute name='readonly' type='BOOLEAN' />
+          <attribute name='rows' type='NMTOKEN' />
+          <attribute name='tabindex' type='NMTOKEN' />
+        </element>
+      </element>
+      <element name='h1' type='mixed'>
+        <memberOf group='M_BLOCK'/>
+        <contains group='M_INLINE'/>
+        <attribute name='align' type='NMTOKEN' />
+      </element>
+      <element name='h2' type='mixed'>
+        <memberOf group='M_BLOCK'/>
+        <contains group='M_INLINE'/>
+        <attribute name='align' type='NMTOKEN' />
+      </element>
+      <element name='h3' type='mixed'>
+        <memberOf group='M_BLOCK'/>
+        <contains group='M_INLINE'/>
+        <attribute name='align' type='NMTOKEN' />
+      </element>
+      <element name='h4' type='mixed'>
+        <memberOf group='M_BLOCK'/>
+        <contains group='M_INLINE'/>
+        <attribute name='align' type='NMTOKEN' />
+      </element>
+      <element name='h5' type='mixed'>
+        <memberOf group='M_BLOCK'/>
+        <contains group='M_INLINE'/>
+        <attribute name='align' type='NMTOKEN' />
+      </element>
+      <element name='h6' type='mixed'>
+        <memberOf group='M_BLOCK'/>
+        <contains group='M_INLINE'/>
+        <attribute name='align' type='NMTOKEN' />
+      </element>
+      <element name='hr' type='empty'>
+        <memberOf group='M_BLOCK'/>
+        <attribute name='align' type='NMTOKEN' />
+        <attribute name='noshade' type='BOOLEAN' />
+      </element>
+      <element name='i' closeMode='restartable' type='mixed'>
+        <memberOf group='M_INLINE'/>
+        <memberOf group='M_NOLINK'/>
+        <contains group='M_INLINE'/>
+      </element>
+      <element name='iframe' type='mixed'>
+        <memberOf group='M_INLINE'/>
+        <memberOf group='M_NOLINK'/>
+        <contains group='M_INLINE'/>
+        <contains group='M_BLOCK'/>
+        <attribute name='align' type='NMTOKEN' />
+        <attribute name='frameborder' default='1'/>
+        <attribute name='scrolling' default='auto'/>
+      </element>
+      <element name='img' type='empty'>
+        <memberOf group='M_INLINE'/>
+        <memberOf group='M_NOLINK'/>
+        <attribute name='align' type='NMTOKEN' />
+        <attribute name='ismap' type='BOOLEAN' />
+      </element>
+      <element name='ins' closeMode='restartable' type='mixed'>
+        <memberOf group='M_INLINE'/>
+        <memberOf group='M_BLOCK'/>
+        <contains group='M_INLINE'/>
+        <contains group='M_BLOCK'/>
+      </element>
+      <element name='kbd' closeMode='restartable' type='mixed'>
+        <memberOf group='M_INLINE'/>
+        <memberOf group='M_NOLINK'/>
+        <contains group='M_INLINE'/>
+      </element>
+      <element name='map' type='element'>
+        <memberOf group='M_INLINE'/>
+        <contains group='M_BLOCK'/>
+        <contains group='M_AREA'/>
+        <element name='area' type='empty'>
+          <memberOf group='M_AREA'/>
+          <attribute name='nohref' type='BOOLEAN' />
+          <attribute name='shape' default='rect'/>
+          <attribute name='tabindex' type='NMTOKEN' />
+        </element>
+      </element>
+      <element name='menu' type='element'>
+        <memberOf group='M_BLOCK'/>
+        <contains group='M_LI'/>
+        <attribute name='compact' type='BOOLEAN' />
+      </element>
+      <element name='noscript' type='mixed'>
+        <memberOf group='M_BLOCK'/>
+        <contains group='M_INLINE'/>
+        <contains group='M_BLOCK'/>
+      </element>
+      <element name='object' type='mixed'>
+        <memberOf group='M_HEAD'/>
+        <memberOf group='M_INLINE'/>
+        <memberOf group='M_NOLINK'/>
+        <contains group='M_PARAM'/>
+        <contains group='M_INLINE'/>
+        <contains group='M_BLOCK'/>
+        <attribute name='align' type='NMTOKEN' />
+        <attribute name='declare' type='BOOLEAN' />
+        <attribute name='tabindex' type='NMTOKEN' />
+        <element name='param' type='empty'>
+          <memberOf group='M_PARAM'/>
+          <attribute name='valuetype' default='data'/>
+        </element>
+      </element>
+      <element name='ol' type='element'>
+        <memberOf group='M_BLOCK'/>
+        <contains group='M_LI'/>
+        <attribute name='compact' type='BOOLEAN' />
+        <attribute name='start' type='NMTOKEN' />
+      </element>
+      <element name='p' type='mixed'>
+        <memberOf group='M_BLOCK'/>
+        <memberOf group='M_P'/>
+        <contains group='M_INLINE'/>
+        <attribute name='align' type='NMTOKEN' />
+      </element>
+      <element name='pre' type='mixed'>
+        <memberOf group='M_BLOCK'/>
+        <contains group='M_INLINE'/>
+        <attribute name='width' type='NMTOKEN' />
+      </element>
+      <element name='q' closeMode='restartable' type='mixed'>
+        <memberOf group='M_INLINE'/>
+        <memberOf group='M_NOLINK'/>
+        <contains group='M_INLINE'/>
+      </element>
+      <element name='s' closeMode='restartable' type='mixed'>
+        <memberOf group='M_INLINE'/>
+        <memberOf group='M_NOLINK'/>
+        <contains group='M_INLINE'/>
+      </element>
+      <element name='samp' closeMode='restartable' type='mixed'>
+        <memberOf group='M_INLINE'/>
+        <memberOf group='M_NOLINK'/>
+        <contains group='M_INLINE'/>
+      </element>
+      <element name='small' closeMode='restartable' type='mixed'>
+        <memberOf group='M_INLINE'/>
+        <memberOf group='M_NOLINK'/>
+        <contains group='M_INLINE'/>
+      </element>
+      <element name='span' closeMode='restartable' type='mixed'>
+        <memberOf group='M_INLINE'/>
+        <memberOf group='M_NOLINK'/>
+        <contains group='M_INLINE'/>
+      </element>
+      <element name='strike' closeMode='restartable' type='mixed'>
+        <memberOf group='M_INLINE'/>
+        <memberOf group='M_NOLINK'/>
+        <contains group='M_INLINE'/>
+      </element>
+      <element name='strong' closeMode='restartable' type='mixed'>
+        <memberOf group='M_INLINE'/>
+        <memberOf group='M_NOLINK'/>
+        <contains group='M_INLINE'/>
+      </element>
+      <element name='sub' closeMode='restartable' type='mixed'>
+        <memberOf group='M_INLINE'/>
+        <memberOf group='M_NOLINK'/>
+        <contains group='M_INLINE'/>
+      </element>
+      <element name='sup' closeMode='restartable' type='mixed'>
+        <memberOf group='M_INLINE'/>
+        <memberOf group='M_NOLINK'/>
+        <contains group='M_INLINE'/>
+      </element>
+      <element name='table' closeMode='unclosable' type='element'>
+        <memberOf group='M_BLOCK'/>
+        <contains group='M_FORM'/>
+        <contains group='M_TABLE'/>
+        <attribute name='align' type='NMTOKEN' />
+        <attribute name='frame' type='NMTOKEN' />
+        <attribute name='rules' type='NMTOKEN' />
+        <element name='caption' type='mixed'>
+          <memberOf group='M_TABLE'/>
+          <contains group='M_INLINE'/>
+          <attribute name='align' type='NMTOKEN' />
+        </element>
+        <element name='col' type='empty'>
+          <memberOf group='M_COL'/>
+          <memberOf group='M_TABLE'/>
+          <attribute name='align' type='NMTOKEN' />
+          <attribute name='span' default='1'/>
+          <attribute name='valign' type='NMTOKEN' />
+        </element>
+        <element name='colgroup' type='element'>
+          <memberOf group='M_TABLE'/>
+          <contains group='M_COL'/>
+          <attribute name='align' type='NMTOKEN' />
+          <attribute name='span' default='1'/>
+          <attribute name='valign' type='NMTOKEN' />
+        </element>
+        <element name='tbody' type='element'>
+          <memberOf group='M_TABLE'/>
+          <contains group='M_TR'/>
+          <attribute name='align' type='NMTOKEN' />
+          <attribute name='valign' type='NMTOKEN' />
+          <element name='tr' type='element'>
+            <memberOf group='M_TR'/>
+            <memberOf group='M_TABLE'/>
+            <contains group='M_FORM'/>
+            <contains group='M_CELL'/>
+            <attribute name='align' type='NMTOKEN' />
+            <attribute name='valign' type='NMTOKEN' />
+            <element name='td' type='mixed'>
+              <memberOf group='M_CELL'/>
+              <contains group='M_INLINE'/>
+              <contains group='M_BLOCK'/>
+              <attribute name='align' type='NMTOKEN' />
+              <attribute name='colspan' default='1'/>
+              <attribute name='headers' type='IDREFS' />
+              <attribute name='nowrap' type='BOOLEAN' />
+              <attribute name='rowspan' default='1'/>
+              <attribute name='scope' type='NMTOKEN' />
+              <attribute name='valign' type='NMTOKEN' />
+            </element>
+            <element name='th' type='mixed'>
+              <memberOf group='M_CELL'/>
+              <contains group='M_INLINE'/>
+              <contains group='M_BLOCK'/>
+              <attribute name='align' type='NMTOKEN' />
+              <attribute name='colspan' default='1'/>
+              <attribute name='headers' type='IDREFS' />
+              <attribute name='nowrap' type='BOOLEAN' />
+              <attribute name='rowspan' default='1'/>
+              <attribute name='scope' type='NMTOKEN' />
+              <attribute name='valign' type='NMTOKEN' />
+            </element>
+          </element>
+        </element>
+        <element name='tfoot' type='element'>
+          <memberOf group='M_TABLE'/>
+          <contains group='M_TR'/>
+          <attribute name='align' type='NMTOKEN' />
+          <attribute name='valign' type='NMTOKEN' />
+        </element>
+        <element name='thead' type='element'>
+          <memberOf group='M_TABLE'/>
+          <contains group='M_TR'/>
+          <attribute name='align' type='NMTOKEN' />
+          <attribute name='valign' type='NMTOKEN' />
+        </element>
+      </element>
+      <element name='tt' closeMode='restartable' type='mixed'>
+        <memberOf group='M_INLINE'/>
+        <memberOf group='M_NOLINK'/>
+        <contains group='M_INLINE'/>
+      </element>
+      <element name='u' closeMode='restartable' type='mixed'>
+        <memberOf group='M_INLINE'/>
+        <memberOf group='M_NOLINK'/>
+        <contains group='M_INLINE'/>
+      </element>
+      <element name='ul' type='element'>
+        <memberOf group='M_BLOCK'/>
+        <contains group='M_LI'/>
+        <attribute name='compact' type='BOOLEAN' />
+        <attribute name='type' type='NMTOKEN' />
+        <element name='li' type='mixed'>
+          <memberOf group='M_LI'/>
+          <contains group='M_INLINE'/>
+          <contains group='M_BLOCK'/>
+          <attribute name='value' type='NMTOKEN' />
+        </element>
+      </element>
+      <element name='var' type='mixed'>
+        <memberOf group='M_INLINE'/>
+        <memberOf group='M_NOLINK'/>
+        <contains group='M_INLINE'/>
+      </element>
+    </element>
+    <element name='frameset' type='element'>
+      <memberOf group='M_FRAME'/>
+      <memberOf group='M_HTML'/>
+      <contains group='M_FRAME'/>
+      <element name='frame' type='empty'>
+        <memberOf group='M_FRAME'/>
+        <attribute name='frameborder' default='1'/>
+        <attribute name='noresize' type='BOOLEAN' />
+        <attribute name='scrolling' default='auto'/>
+      </element>
+    </element>
+    <element name='head' type='element'>
+      <memberOf group='M_HTML'/>
+      <contains group='M_HEAD'/>
+      <element name='base' type='empty'>
+        <memberOf group='M_HEAD'/>
+      </element>
+      <element name='isindex' type='empty'>
+        <memberOf group='M_HEAD'/>
+      </element>
+      <element name='link' type='empty'>
+        <memberOf group='M_HEAD'/>
+        <attribute name='hreflang' type='NMTOKEN' />
+      </element>
+      <element name='meta' type='empty'>
+        <memberOf group='M_HEAD'/>
+        <attribute name='http-equiv' type='NMTOKEN' />
+        <attribute name='name' type='NMTOKEN' />
+      </element>
+      <element name='style' type='cdata'>
+        <memberOf group='M_HEAD'/>
+        <memberOf group='M_INLINE'/>
+      </element>
+      <element name='title' type='string'>
+        <memberOf group='M_HEAD'/>
+      </element>
+    </element>
+    <element name='noframes' type='element'>
+      <memberOf group='M_BLOCK'/>
+      <memberOf group='M_HTML'/>
+      <memberOf group='M_FRAME'/>
+      <contains group='M_BODY'/>
+      <contains group='M_BLOCK'/>
+      <contains group='M_INLINE'/>
+    </element>
+    <element name='script' type='cdata'>
+      <memberOfAny/>
+      <attribute name='defer' type='BOOLEAN' />
+    </element>
+  </element>
+  <attribute name='class' type='NMTOKEN' />
+  <attribute name='dir' type='NMTOKEN' />
+  <attribute name='id' type='ID' />
+  <attribute name='lang' type='NMTOKEN' />
+</schema>

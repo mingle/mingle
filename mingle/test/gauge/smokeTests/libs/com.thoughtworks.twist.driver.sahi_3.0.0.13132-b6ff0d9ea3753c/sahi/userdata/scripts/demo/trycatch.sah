@@ -1,0 +1,11 @@
+_click(_link("Link Test"));
+try{
+  _click(_link("does not exist"));
+}catch(e){
+  _logException(e);
+  _click(_link("linkByHtml"));
+}
+_click(_link("Back"));
+_click(_link("Back"));
+_assertExists(_link("Link Test"));
+

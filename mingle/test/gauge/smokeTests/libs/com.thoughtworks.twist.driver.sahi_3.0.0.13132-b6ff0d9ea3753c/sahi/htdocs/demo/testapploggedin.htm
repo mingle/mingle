@@ -1,0 +1,54 @@
+<html>
+<head><title></title></head>
+<body>
+<style>
+.grid td{
+	width: 100px;
+	border: 1px solid gray;
+}
+</style>
+<script>
+var users = [];
+function add1(){
+	var f = document.userForm.first;
+	var l = document.userForm.last;
+    users[users.length] = [f.value, l.value];
+    f.value = "";
+    l.value = "";
+    reWrite();
+}
+function delete1(i){
+	delete users[i];
+	reWrite();
+}
+function reWrite(){
+	var s = "<table class='grid'>";
+	for (var i=0; i<users.length; i++){
+		var u = users[i];
+		if (u){
+			s += "<tr><td>" + u[0] + "</td><td>" + u[1] + "</td><td><a href='javascript:delete1("+i+");'>delete</a></td></tr> ";
+		}
+	}
+	s += "</table>"
+	document.getElementById("grid").innerHTML = s;
+}
+function logout(){
+	location.href = "testapp.htm";
+}
+</script>
+<div style="float:right"><a href="javascript:logout()">logout</a></div>
+<div id="message">s1 successfully logged in</div><br/><br/>
+Create users:
+<form name="userForm">
+<table>
+<tr>
+<td>First name: </td><td><input type="text" name="first"></td>
+<td>Last name:</td><td> <input type="text" name="last"> </td>
+</tr>
+</table>
+<input type="button" value="Add" onclick="add1()">
+</form>
+<br><br>
+<div id="grid"></div>
+</body>
+</html>

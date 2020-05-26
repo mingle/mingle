@@ -1,0 +1,183 @@
+= RSCM - Ruby Source Control Management (0.2.0)
+
+RSCM is to SCM what DBI/JDBC/ODBC are to databases - an SCM-independent API for accessing a wide variety of SCMs. The features are roughly:
+
+* Check out a working copy (with possibility to specify branch/date/label)
+* Get changesets (changesets are emulated for non-transactional SCMs like CVS and StarTeam)
+* Get diffs
+* Add and commit files
+* Manipluate triggers
+
+== Download
+
+RSCM is available as a RubyGem, and can be installed like this:
+
+  gem install rscm
+
+If you want the latest and greatest, you can get the sources, which live alongside DamageControl's sources:
+
+  http://damagecontrol.codehaus.org/Installing
+
+== Supported SCMs
+
+* CVS - http://www.cvshome.org (stable)
+* Perforce - http://www.perforce.com (not thoroughly tested)
+* StarTeam - http://www.borland.com/starteam (not thoroughly tested)
+* Subversion - http://subversion.tigris.org (stable)
+
+In progress:
+
+* ClearCase -http://www-306.ibm.com/software/awdtools/clearcase (half way there)
+* Darcs - http://www.abridgegame.org/darcs (very incomplete)
+* Monotone - http://www.venge.net/monotone (half way there)
+
+Planned:
+
+Loads! All of them! How to add support for a new one is described further down in this file.
+
+== Related projects
+
+* DamageControl - http://damagecontrol.codehaus.org. DamageControl adds a web interface to RSCM and tons of other features for continuous integration.
+
+== Sample usage
+
+Here is an example of how to use RSCM to get a list of changesets from a CVS repository:
+
+  require 'rscm'
+  
+  scm = RSCM::Subversion.new("svn://some.server/some/path/trunk", "trunk")
+
+  scm.checkout("mycheckout")
+  changesets = scm.changesets("mycheckout", Time.utc(2004, 11, 10, 12, 34, 22))
+  changesets.each do |changeset|
+    puts changeset
+  end
+
+=== Using visitors
+
+Although ChangeSets and ChangeSet support external iteration (as in the example above), the preferred way 
+to operate on them is to let a ChangeSets object +accept+ a visitor. A visitor
+must respond to the following methods:
+
+  def visit_changesets(changesets); end
+  def visit_changeset(changeset); end
+  def visit_change(change); end
+
+=== Getting diffs
+
+RSCM allows you to get diffs for changesets. This is done in the following way:
+
+See the DamageControl sources for more detailed examples (DamageControl persists diffs to disk
+and presents them as colourised diffs in its user interface).
+
+== Future plans
+
+=== Cross-SCM synchronisation
+
+RSCM could be used as a tool to migrate files from one SCM to another (of a different type)
+while keeping the history. -Similar to cvs2svn.
+
+RSCM could also be used as a continuous synchronisation service between SCMs. This can be very useful
+when you have to work with an SCM and you'd rather use a different one. RSCM could synchronise between
+the central SCM and one that you set up on your local machine.
+
+= Implementing support for a new SCM
+
+We'd be happy to receive contributions for more SCMs. You can always
+file a JIRA issue and hope for someone to implement it for you, or
+you can do it yourself. The rest of this file should get you started.
+
+N.B. IF YOU START IMPLEMENTING A NEW RSCM PLUGIN, PLEASE SUBMIT YOUR CODE
+TO JIRA AT AN EARLY STAGE (BEFORE IT'S COMPLETE). THIS WAY IT'S EASIER
+FOR EXISTING DEVELOPERS TO PROVIDE TIPS AND HELP UNDERWAY.
+
+Let's write an RSCM implementation for the imaginary SCM called Mooky.
+You should be able to use the same recipe for most SCMs.
+
+== Writing the API
+
+Start by writing a test:
+
+  test/rscm/mooky/mooky_test.rb
+
+By including GenericSCMTests your test will automatically include the
+acceptance test suite for RSCM. By doing this you'll actually follow a TDD
+approach for your new Mooky class - except that the tests are already written
+for you!
+
+IMPORTANT NOTE: If your SCM doesn't provide an easy way to create new local repositories 
+(such as with StarTeam) you're probably better off writing the tests from scratch and not
+include GenericSCMTests. Instead, just make sure you have an SCM repository set up somewhere
+and write tests to work against that repository. This way you won't be able to pass the
+generic acceptance test suite, and other people (like the RSCM dev team) will probably
+not be able to run the tests for it. -But it's better than nothing. We'll happily accept
+contributions that don't use the generic tests, although it would be best if they did.
+
+OK, back to mooky. As you will see in a minute, the generic test suite will be of great
+help when developing the Mooky class. The tests will attempt to check in some sample files
+and call various methods on the mooky object to verify that it behaves correctly according
+to the RSCM API. (The sample files consist of some java sources, but you don't need Java installed.
+They're just files).
+
+Let's implement the Mooky class. Take a look at.
+
+  lib/rscm/scm/mooky.rb
+
+Try running Mooky's test:
+
+  rake test TEST=test/rscm/scm/mooky_test.rb
+  
+Whoops - we got some failures! It failed because our checkout method returned 
+nothing (nil). Let'see if we can get the a little further by implementing this
+method.
+
+The Mooky SCM happens to have a command line utility to perform a checkout.
+From the command line a checkout with mooky would be done like this:
+
+  cd somewhere
+  mooky checkout --repo mooky://some/where/else
+
+Running this command will print the following to standard out:
+
+  checkout build.xml
+  checkout project.xml
+  checkout src/java/com/thoughtworks/damagecontrolled/Thingy.java
+  checkout src/test/com/thoughtworks/damagecontrolled/ThingyTestCase.java
+  
+What we need to do is to execute these commands from Ruby. We also need to 
+parse the output from the mooky command to determine the files that were checked out,
+so that we can return an array with the file names of the checked out files (the method 
+should also yield each file name as the execution proceeds).
+
+Once your checkout command works okay, the test will get you a little further. Just keep
+on going until all tests pass.
+
+NOTE: If the SCM doesn't have a command line utility (unlikely) or a 3rd party Ruby API, but instead
+provides libraries (perhaps in C), then you should consider writing a Ruby C extension
+instead.
+
+If the SCM has a Java interface, you can take the same approach as for StarTeam. There are
+Java classes for ChangeSets that allow easy interaction between Ruby and Java over YAML. 
+You can reuse these classes for other Java based SCMs (if there are any, I don't know).
+
+== Web interface (DamageControl only)
+
+DamageControl automatically detects new SCM classes in RSCM and generates a default web interface.
+
+= Building RSCM
+This section is for developers who are new to ruby development and do not already know how to build and install Ruby gems.
+
+You need to install rubygems from http://rubyforge.org/projects/rubygems
+Afterwards you need to install rake and rails
+
+  gem install rake
+
+Now change to the RSCM root directory and type
+
+  rake gem
+
+This will create a gem for RSCM. To install this gem, you have to change to the pgk directory and type
+
+  sudo gem install pkg/rscm-0.1.0.gem
+  
+Now you can use RSCM in other Ruby apps.

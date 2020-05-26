@@ -1,0 +1,117 @@
+/*
+*  Copyright 2020 ThoughtWorks, Inc.
+*  
+*  This program is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU Affero General Public License as
+*  published by the Free Software Foundation, either version 3 of the
+*  License, or (at your option) any later version.
+*  
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Affero General Public License for more details.
+*  
+*  You should have received a copy of the GNU Affero General Public License
+*  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*/
+.contextual-help {
+  position: relative;
+  a {
+    font-weight: 300 !important;
+  }
+}
+
+.watermark {
+  background-image: url('../images/watermark.png');
+}
+
+#contextual_help {
+  h3 {
+    margin-top: 6px;
+    color: #010131;
+  }
+  p, ul {
+    color: #333 !important;
+  }
+  p {
+    margin: 0 0 10px 0;
+    b {
+      font-weight: 300;
+    }
+  }
+  .action-bar a {
+    margin-right: 0;
+  }
+  .align-right {
+    float: right;
+    margin: 0 0 15px 15px;
+  }
+  .align-left {
+    float: left;
+    margin: 0 15px 15px 0;
+  }
+  img.align-center {
+    padding: 6px;
+    display: block;
+  }
+}
+
+.contextual-help-connector-top {
+  margin-bottom: 0;
+}
+
+#full_contextual_help_link_placeholder {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding-top: 10px;
+  margin: 10px;
+}
+
+.contextual_help_title {
+  font-family: "Helvetica Neue", Arial, Helvetica;
+  font-size: 16px;
+  font-weight: 300;
+  margin: 0 0 10px 0;
+  padding: 0 0 10px 0;
+  border-bottom: 1px solid #c5d9ef;
+}
+
+.full-contextual-help-link {
+  background: url(../images/shared/icons/icon_next_16.png) no-repeat right;
+  padding-right: 24px;
+}
+
+.explore_box {
+    background-color: #dfedfe;
+    border: 1px solid #c5d9ef;
+    font-size: 14px !important;
+    line-height: 130%;
+    padding: 10px;
+    clear: both;
+    overflow: hidden;
+}
+
+a.hide-contextual-help {
+  display: block;
+  float: right;
+  height: 16px;
+  width: 16px;
+  background: url(../images/shared/icons/icon_close_16.png);
+  text-indent: -300px;
+  overflow: hidden;
+  line-height: 0px;
+  font-size: 0px;
+  margin: 0;
+  &:hover {
+    background: url(../images/shared/icons/icon_close_hover_16.png);
+  }
+}
+
+.help-diagram {
+  border-style: solid;
+  border-width: 2px;
+  float: right;
+  border-color: #B8CAEF;
+  margin-left: 30px;
+}

@@ -1,0 +1,42 @@
+--- !ruby/object:RSCM::ChangeSets 
+changesets: 
+  - !ruby/object:RSCM::ChangeSet 
+    changes: 
+      - !ruby/object:RSCM::Change 
+        developer: rinkrank
+        message: "En to
+
+          tre buksa 
+
+          ned
+
+          "
+        path: server/damagecontrol/web/AbstractAdminServlet.rb
+        previous_revision: "1.42"
+        revision: "1.43"
+        status: MODIFIED
+        time: 2004-11-30 04:52:24 Z
+      - !ruby/object:RSCM::Change 
+        developer: rinkrank
+        message: "En to
+
+          tre buksa 
+
+          ned
+
+          "
+        path: server/damagecontrol/web/ProjectServlet.rb
+        previous_revision: "1.71"
+        revision: "1.72"
+        status: MODIFIED
+        time: 2004-11-30 04:53:23 Z
+    developer: rinkrank
+    message: "En to
+
+      tre buksa 
+
+      ned
+
+      "
+    revision: MAIN:rinkrank:20041130045224
+    time: 2004-11-30 04:52:24 Z

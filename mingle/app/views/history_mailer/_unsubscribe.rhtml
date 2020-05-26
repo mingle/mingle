@@ -1,0 +1,30 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% with_footer_font do -%>
+  <p>
+  <% @subscriptions = [@subscription] unless @subscriptions -%>
+  
+
+  <% @subscriptions.each do |subscription| -%>
+    <% unsubscribe_link = url_for(:controller => 'history', :action => 'unsubscribe', :project_id => subscription.project.identifier, :id => subscription.id) %>
+    <% profile_page_link = url_for(:controller => 'profile', :action => 'show', :id => subscription.user, :tab => 'subscriptions') %>
+    <% history_filter_params = subscription.to_history_filter_params %>
+    <p>You have received this email because you subscribed to the '<%= subscription.description %><%= " (#{CGI.unescape(history_filter_params.serialize)})" if history_filter_params.has_global_criteria? %>' Mingle history feed. Please click <a href="<%= unsubscribe_link %>">here</a> to stop receiving notifications for this subscription &lt;<a href="<%= unsubscribe_link %>"><%= unsubscribe_link %></a>&gt;. Please click <a href="<%= profile_page_link %>">here</a> to manage your subscriptions &lt;<a href="<%= profile_page_link %>"><%= profile_page_link %></a>&gt;.
+    </p>
+  <% end -%>
+  </p>
+<% end -%>

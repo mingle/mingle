@@ -1,0 +1,1376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<install4j version="5.1.15" transformSequenceNumber="4">
+  <directoryPresets config="../MingleServer" />
+  <application name="Mingle_${compiler:VERSION}" distributionSourceDir="" applicationId="1232-2977-2601-8763" mediaDir="../dist" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}.${compiler:REVISION}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" commonExternalFiles="false" createMd5Sums="true" shrinkRuntime="true" shortName="mingle" publisher="ThoughtWorks Studios" publisherWeb="http://www.thoughtworks.com/products" version="${compiler:VERSION}" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" installerName="" javaMinVersion="1.7" javaMaxVersion="1.8" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
+    <languages skipLanguageSelection="false" languageSelectionInPrincipalLanguage="false">
+      <principalLanguage id="en" customLocalizationFile="" />
+      <additionalLanguages />
+    </languages>
+    <searchSequence>
+      <registry />
+      <envVar name="JAVA_HOME" />
+      <envVar name="JDK_HOME" />
+    </searchSequence>
+    <variables>
+      <variable name="VERSION" value="developer-build" description="" category="" />
+      <variable name="REVISION" value="unsupported" description="" category="" />
+      <variable name="INSTALL_HELP_URL" value="unsupported" description="" category="" />
+    </variables>
+    <mergedProjects />
+    <codeSigning macEnabled="false" macPkcs12File="" windowsEnabled="false" windowsKeySource="pkcs12" windowsPvkFile="" windowsSpcFile="" windowsPkcs12File="" />
+  </application>
+  <files keepModificationTimes="false" missingFilesStrategy="warn" globalExcludeSuffixes="" defaultOverwriteMode="4" defaultUninstallMode="0" launcherOverwriteMode="3" defaultFileMode="644" defaultDirMode="755">
+    <filesets />
+    <roots />
+    <mountPoints>
+      <mountPoint id="64" root="" location="lib" mode="755" />
+      <mountPoint id="12246" root="" location="app" mode="755" />
+      <mountPoint id="12362" root="" location="tmp" mode="755" />
+      <mountPoint id="12695" root="" location="config" mode="755" />
+      <mountPoint id="12919" root="" location="script" mode="755" />
+      <mountPoint id="17" root="" location="" mode="755" />
+    </mountPoints>
+    <entries>
+      <dirEntry mountPoint="64" file="../tmp/encrypted/lib" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="true" overrideOverwriteMode="true" overrideUninstallMode="true" entryMode="direct" subDirectory="" excludeSuffixes=".svn, .DS_Store" dirMode="755" overrideDirMode="true">
+        <exclude>
+          <entry location="build" fileType="regular" />
+          <entry location="tasks" fileType="regular" />
+        </exclude>
+      </dirEntry>
+      <dirEntry mountPoint="12246" file="../tmp/encrypted/app/" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="true" overrideOverwriteMode="true" overrideUninstallMode="true" entryMode="direct" subDirectory="" excludeSuffixes=".svn, .DS_Store" dirMode="755" overrideDirMode="true">
+        <exclude />
+      </dirEntry>
+      <fileEntry mountPoint="12695" file="../config/web.xml" overwriteMode="5" shared="false" fileMode="644" uninstallMode="1" overrideFileMode="true" overrideOverwriteMode="true" overrideUninstallMode="true" />
+      <fileEntry mountPoint="12919" file="../script/configure_jvm.bat" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="true" overrideOverwriteMode="false" overrideUninstallMode="false" />
+      <fileEntry mountPoint="12919" file="../script/set_classpath.sh" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="true" overrideOverwriteMode="false" overrideUninstallMode="false" />
+      <fileEntry mountPoint="12919" file="../script/set_classpath.bat" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="true" overrideOverwriteMode="false" overrideUninstallMode="false" />
+      <fileEntry mountPoint="12919" file="../script/configure_jvm.sh" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="true" overrideOverwriteMode="false" overrideUninstallMode="false" />
+      <fileEntry mountPoint="12919" file="../script/send_test_mail" overwriteMode="4" shared="false" fileMode="755" uninstallMode="0" overrideFileMode="true" overrideOverwriteMode="false" overrideUninstallMode="false" />
+      <fileEntry mountPoint="12919" file="../script/upgrade_export" overwriteMode="4" shared="false" fileMode="755" uninstallMode="0" overrideFileMode="true" overrideOverwriteMode="false" overrideUninstallMode="false" />
+      <dirEntry mountPoint="17" file=".." overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="true" overrideOverwriteMode="true" overrideUninstallMode="true" entryMode="direct" subDirectory="" excludeSuffixes=".svn, .DS_Store, *.log, *.iml, *.iws, *.ipr, .idea,  *.derby, *.db, *.tmproj, *.patch, .hg, .hgignore, tmtags, .git, .gitignore, gituser, .rvmrc, cruise-output" dirMode="755" overrideDirMode="true">
+        <exclude>
+          <entry location=".dtr_env_pstore" fileType="regular" />
+          <entry location=".emacs_rc.el" fileType="regular" />
+          <entry location=".ebextensions" fileType="regular" />
+          <entry location=".er" fileType="regular" />
+          <entry location=".git" fileType="regular" />
+          <entry location=".gitignore" fileType="regular" />
+          <entry location=".idea" fileType="regular" />
+          <entry location=".rvmrc" fileType="regular" />
+          <entry location=".ruby-env" fileType="regular" />
+          <entry location=".ruby-gemset" fileType="regular" />
+          <entry location=".ruby-version" fileType="regular" />
+          <entry location=".sass-cache" fileType="regular" />
+          <entry location="app/controllers" fileType="regular" />
+          <entry location="app/helpers" fileType="regular" />
+          <entry location="app/jobs" fileType="regular" />
+          <entry location="app/models" fileType="regular" />
+          <entry location="app/processors" fileType="regular" />
+          <entry location="app/publishers" fileType="regular" />
+          <entry location="build.properties" fileType="regular" />
+          <entry location="build.properties.cruise" fileType="regular" />
+          <entry location="build.properties.unix" fileType="regular" />
+          <entry location="build.properties.windows" fileType="regular" />
+          <entry location="build.xml" fileType="regular" />
+          <entry location="config/activemq.xml.cruise_memory_test" fileType="regular" />
+          <entry location="config/activemq.xml.example-distributed-static-discovery" fileType="regular" />
+          <entry location="config/activemq.xml.example-slave_node-puremasterslave" fileType="regular" />
+          <entry location="config/auth_config.yml" fileType="regular" />
+          <entry location="config/benchmarks.rb" fileType="regular" />
+          <entry location="config/benchmarks.yml" fileType="regular" />
+          <entry location="config/broker.yml" fileType="regular" />
+          <entry location="config/database.yml" fileType="regular" />
+          <entry location="config/database.yml.cruise-oracle" fileType="regular" />
+          <entry location="config/database.yml.cruise-pgsql" fileType="regular" />
+          <entry location="config/database.yml.dtr" fileType="regular" />
+          <entry location="config/database.yml.example" fileType="regular" />
+          <entry location="config/environments/development.rb" fileType="regular" />
+          <entry location="config/environments/macro_toolkit_test.rb" fileType="regular" />
+          <entry location="config/environments/test.rb" fileType="regular" />
+          <entry location="config/environments/test_upgrade_export.rb" fileType="regular" />
+          <entry location="config/initializers/mocking.rb" fileType="regular" />
+          <entry location="config/java_util_logging.properties" fileType="regular" />
+          <entry location="config/keys" fileType="regular" />
+          <entry location="config/log4j.properties.development" fileType="regular" />
+          <entry location="config/log4j.properties.test" fileType="regular" />
+          <entry location="config/mingle.properties" fileType="regular" />
+          <entry location="config/mingle.properties.cruise-https" fileType="regular" />
+          <entry location="config/selenium_web.xml" fileType="regular" />
+          <entry location="config/smtp_config.yml" fileType="regular" />
+          <entry location="config/war" fileType="regular" />
+          <entry location="config/warble.rb" fileType="regular" />
+          <entry location="config/web.xml" fileType="regular" />
+          <entry location="config/web.xml.erb" fileType="regular" />
+          <entry location="db/update_postgres_sequences.rb" fileType="regular" />
+          <entry location="development" fileType="regular" />
+          <entry location="dist" fileType="regular" />
+          <entry location="doc" fileType="regular" />
+          <entry location="elastic_search_data" fileType="regular" />
+          <entry location="help" fileType="regular" />
+          <entry location="installer" fileType="regular" />
+          <entry location="lib" fileType="regular" />
+          <entry location="mingle.war" fileType="regular" />
+          <entry location="mingle.xml" fileType="regular" />
+          <entry location="module_deploy_installer.xml" fileType="regular" />
+          <entry location="module_installer_migration_test.xml" fileType="regular" />
+          <entry location="module_memorytest.xml" fileType="regular" />
+          <entry location="module_mingle.xml" fileType="regular" />
+          <entry location="module_vmware_image.xml" fileType="regular" />
+          <entry location="NOTICE/NOTICE.xls" fileType="regular" />
+          <entry location="overrides" fileType="regular" />
+          <entry location="plugin_data" fileType="regular" />
+          <entry location="project" fileType="regular" />
+          <entry location="public/.htaccess" fileType="regular" />
+          <entry location="public/dispatch.cgi" fileType="regular" />
+          <entry location="public/dispatch.fcgi" fileType="regular" />
+          <entry location="public/dispatch.rb" fileType="regular" />
+          <entry location="public/javascripts/application.js" fileType="regular" />
+          <entry location="app/assets/javascripts/thirdparty/builder.js" fileType="regular" />
+          <entry location="app/assets/javascripts/thirdparty/calendar-en.js" fileType="regular" />
+          <entry location="app/assets/javascripts/thirdparty/calendar-setup.js" fileType="regular" />
+          <entry location="app/assets/javascripts/thirdparty/calendar.js" fileType="regular" />
+          <entry location="public/javascripts/canvas.js" fileType="regular" />
+          <entry location="public/javascripts/card_popup.js" fileType="regular" />
+          <entry location="public/javascripts/card_tree" fileType="regular" />
+          <entry location="public/javascripts/color_selector.js" fileType="regular" />
+          <entry location="public/javascripts/color_transforms.js" fileType="regular" />
+          <entry location="public/javascripts/column_selector.js" fileType="regular" />
+          <entry location="app/assets/javascripts/thirdparty/controls.js" fileType="regular" />
+          <entry location="app/assets/javascripts/thirdparty/dragdrop.js" fileType="regular" />
+          <entry location="public/javascripts/dragdrop_ext.js" fileType="regular" />
+          <entry location="public/javascripts/draggable_map.js" fileType="regular" />
+          <entry location="public/javascripts/drop_list.js" fileType="regular" />
+          <entry location="app/assets/javascripts/thirdparty/effects.js" fileType="regular" />
+          <entry location="public/javascripts/filter.js" fileType="regular" />
+          <entry location="public/javascripts/firebug" fileType="regular" />
+          <entry location="public/javascripts/jsloader.js" fileType="regular" />
+          <entry location="public/javascripts/lightbox.js" fileType="regular" />
+          <entry location="public/javascripts/module.js" fileType="regular" />
+          <entry location="public/javascripts/new_lightbox.js" fileType="regular" />
+          <entry location="public/javascripts/planner" fileType="regular" />
+          <entry location="app/assets/javascripts/thirdparty/prototype.js" fileType="regular" />
+          <entry location="public/javascripts/scrolling_widget.js" fileType="regular" />
+          <entry location="app/assets/javascripts/thirdparty/slider.js" fileType="regular" />
+          <entry location="public/javascripts/smart_sort.js" fileType="regular" />
+          <entry location="public/javascripts/swimming_pool.js" fileType="regular" />
+          <entry location="public/javascripts/tabs_flow.js" fileType="regular" />
+          <entry location="public/javascripts/textile-editor-config.js" fileType="regular" />
+          <entry location="public/javascripts/textile-editor.js" fileType="regular" />
+          <entry location="public/javascripts/transition_workflow_generator.js" fileType="regular" />
+          <entry location="public/javascripts/tree_config.js" fileType="regular" />
+          <entry location="public/stylesheets/action_bar.css" fileType="regular" />
+          <entry location="public/stylesheets/also_viewing.css" fileType="regular" />
+          <entry location="public/stylesheets/base.css" fileType="regular" />
+          <entry location="public/stylesheets/calendar-blue.css" fileType="regular" />
+          <entry location="public/stylesheets/code.css" fileType="regular" />
+          <entry location="public/stylesheets/contextual_help.css" fileType="regular" />
+          <entry location="public/stylesheets/explore-mingle.css" fileType="regular" />
+          <entry location="public/stylesheets/fonts.css" fileType="regular" />
+          <entry location="public/stylesheets/grids.css" fileType="regular" />
+          <entry location="public/stylesheets/hierarchy_table.css" fileType="regular" />
+          <entry location="public/stylesheets/lightbox.css" fileType="regular" />
+          <entry location="public/stylesheets/luau_config.css" fileType="regular" />
+          <entry location="public/stylesheets/macro_editor.css" fileType="regular" />
+          <entry location="public/stylesheets/override.css" fileType="regular" />
+          <entry location="public/stylesheets/profile.css" fileType="regular" />
+          <entry location="public/stylesheets/quick_add.css" fileType="regular" />
+          <entry location="public/stylesheets/reset-fonts-grids.css" fileType="regular" />
+          <entry location="public/stylesheets/reset.css" fileType="regular" />
+          <entry location="public/stylesheets/rounded-corner.css" fileType="regular" />
+          <entry location="public/stylesheets/sidebar.css" fileType="regular" />
+          <entry location="public/stylesheets/startup.css" fileType="regular" />
+          <entry location="public/stylesheets/system_admin.css" fileType="regular" />
+          <entry location="public/stylesheets/tabs.css" fileType="regular" />
+          <entry location="public/stylesheets/textile-editor.css" fileType="regular" />
+          <entry location="public/stylesheets/wiki.css" fileType="regular" />
+          <entry location="public/project" fileType="regular" />
+          <entry location="Rakefile" fileType="regular" />
+          <entry location="README.textile" fileType="regular" />
+          <entry location="README.adoc" fileType="regular" />
+          <entry location=".rbenv-vars" fileType="regular" />
+          <entry location="script" fileType="regular" />
+          <entry location="script/configure_jvm.sh.template" fileType="regular" />
+          <entry location="script/configure_jvm.bat.template" fileType="regular" />
+          <entry location="set_env.sh.example" fileType="regular" />
+          <entry location="test" fileType="regular" />
+          <entry location="tmp" fileType="regular" />
+          <entry location="tools/create_project.rb" fileType="regular" />
+          <entry location="tools/delete_orphan_users.rb" fileType="regular" />
+          <entry location="tools/export_wiki.rb" fileType="regular" />
+          <entry location="tools/manage_users.rb" fileType="regular" />
+          <entry location="tools/run.template" fileType="regular" />
+          <entry location="tools/run.bat.template" fileType="regular" />
+          <entry location="vendor/cache" fileType="regular" />
+          <entry location="vendor/licenses" fileType="regular" />
+          <entry location="vendor/plugins/arts" fileType="regular" />
+          <entry location="vendor/plugins/inbrowsertest" fileType="regular" />
+          <entry location="vendor/plugins/tagged_tests" fileType="regular" />
+          <entry location="vendor/vmware" fileType="regular" />
+          <entry location="work" fileType="regular" />
+        </exclude>
+      </dirEntry>
+      <fileEntry mountPoint="17" file="./mingle.properties.example" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="true" overrideOverwriteMode="true" overrideUninstallMode="true" />
+      <fileEntry mountPoint="17" file="../UPGRADE" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="true" overrideOverwriteMode="true" overrideUninstallMode="true" />
+      <fileEntry mountPoint="17" file="../MingleServer" overwriteMode="4" shared="false" fileMode="755" uninstallMode="0" overrideFileMode="true" overrideOverwriteMode="false" overrideUninstallMode="false" />
+    </entries>
+    <components />
+  </files>
+  <launchers>
+    <launcher name="MingleServer_${compiler:VERSION}" id="11764" customizedId="" external="false" excludeFromMenu="true" unixMode="755" menuName="" icnsFile="" customMacBundleIdentifier="false" macBundleIdentifier="" swtApp="false" fileset="" macBundleBinary="JavaApplicationStub" addMacEntitlements="false" macEntitlementsFile="">
+      <executable name="Mingle" type="1" iconSet="true" iconFile="" executableDir="." redirectStderr="true" stderrFile="log/stderr.log" stderrMode="overwrite" redirectStdout="true" stdoutFile="log/stdout.log" stdoutMode="overwrite" failOnStderrOutput="true" executableMode="3" changeWorkingDirectory="true" workingDirectory="." singleInstance="true" serviceStartType="2" serviceDependencies="" serviceDescription="" jreLocation="" executionLevel="requireAdministrator" checkConsoleParameter="false" globalSingleInstance="false" singleInstanceActivate="true">
+        <versionInfo include="false" fileVersion="" fileDescription="" legalCopyright="" internalName="" productName="" />
+      </executable>
+      <splashScreen show="false" autoOff="true" alwaysOnTop="true" width="0" height="0" bitmapFile="" java6SplashScreen="false">
+        <text>
+          <statusLine x="20" y="20" text="" font="Arial" fontSize="8" fontColor="0,0,0" fontWeight="500" />
+          <versionLine x="20" y="40" text="version ${compiler:sys.version}" font="Arial" fontSize="8" fontColor="0,0,0" fontWeight="500" />
+        </text>
+      </splashScreen>
+      <java mainClass="com.thoughtworks.mingle.Server" vmParameters="-XX:+TieredCompilation -XX:TieredStopAtLevel=1 -noverify -Dfile.encoding=UTF-8 -Djruby.compat.version=1.9 -Djruby.compile.invokedynamic=false -Djruby.jit.threshold=1000 -Xms512m -Xmx1024m -XX:MaxPermSize=256m -XX:PermSize=128m -XX:NewSize=384m -XX:+UseConcMarkSweepGC -XX:+HeapDumpOnOutOfMemoryError -Djava.awt.headless=true -Dlog4j.ignoreTCL=true" arguments="" allowVMPassthroughParameters="true" preferredVM="server" bundleRuntime="true">
+        <classPath>
+          <directory location="config" failOnError="true" />
+          <scanDirectory location="vendor/java" failOnError="false" />
+          <archive location="lib/version.jar" failOnError="true" />
+          <scanDirectory location="lib" failOnError="false" />
+          <scanDirectory location="vendor/java/tomcat-8" failOnError="false" />
+          <scanDirectory location="vendor/java/elastic_search" failOnError="false" />
+        </classPath>
+        <nativeLibraryDirectories />
+      </java>
+      <includedFiles />
+      <unextractableFiles />
+      <vmOptionsFile mode="none" overwriteMode="0" fileMode="644">
+        <content />
+      </vmOptionsFile>
+      <customScript mode="3" file="./start_script_injection.sh">
+        <content>progname="$progname-$mingleDataDir"</content>
+      </customScript>
+      <iconImageFiles>
+        <file path="./images/mingle32.png" />
+      </iconImageFiles>
+    </launcher>
+  </launchers>
+  <installerGui installerType="1" addOnAppId="" suggestPreviousLocations="true" autoUpdateDescriptorUrl="" useAutoUpdateBaseUrl="false" autoUpdateBaseUrl="">
+    <customCode />
+    <autoUpdate useMinUpdatableVersion="false" minUpdatableVersion="" useMaxUpdatableVersion="false" maxUpdatableVersion="">
+      <commentFiles />
+      <customAttributes />
+    </autoUpdate>
+    <applications>
+      <application name="" id="installer" customizedId="" beanClass="com.install4j.runtime.beans.applications.InstallerApplication" enabled="true" commentSet="false" comment="" actionElevationType="none" fileset="" customIcnsFile="" customIcoFile="" macEntitlementsFile="" automaticLauncherIntegration="false" launchMode="startupFirstWindow" launchInNewProcess="false" launchSchedule="updateSchedule" allLaunchers="true">
+        <serializedBean>
+          <java class="java.beans.XMLDecoder">
+            <object class="com.install4j.runtime.beans.applications.InstallerApplication">
+              <void property="customIconImageFiles">
+                <void method="add">
+                  <object class="com.install4j.api.beans.ExternalFile">
+                    <string>./images/mingle32.png</string>
+                  </object>
+                </void>
+              </void>
+              <void property="frameSizeClientArea">
+                <boolean>false</boolean>
+              </void>
+              <void property="resizable">
+                <boolean>false</boolean>
+              </void>
+              <void property="useCustomIcon">
+                <boolean>true</boolean>
+              </void>
+            </object>
+          </java>
+        </serializedBean>
+        <launcherIds />
+        <variables />
+        <startup>
+          <screen name="" id="15" customizedId="" beanClass="com.install4j.runtime.beans.screens.StartupScreen" enabled="true" commentSet="false" comment="" actionElevationType="inherit" rollbackBarrier="false" backButton="2" finishScreen="false" wizardIndexChangeType="unchanged" wizardIndexKey="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.screens.StartupScreen" />
+              </java>
+            </serializedBean>
+            <condition />
+            <validation />
+            <preActivation />
+            <postActivation />
+            <actions>
+              <action name="" id="12778" customizedId="" beanClass="com.install4j.runtime.beans.actions.misc.RequestPrivilegesAction" enabled="true" commentSet="false" comment="" actionElevationType="none" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.misc.RequestPrivilegesAction">
+                      <void property="failIfNotRootUnix">
+                        <boolean>true</boolean>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+            </actions>
+            <formComponents />
+          </screen>
+        </startup>
+        <screens>
+          <screen name="" id="1" customizedId="" beanClass="com.install4j.runtime.beans.screens.WelcomeScreen" enabled="true" commentSet="false" comment="" actionElevationType="inherit" rollbackBarrier="false" backButton="2" finishScreen="false" wizardIndexChangeType="unchanged" wizardIndexKey="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.screens.WelcomeScreen" />
+              </java>
+            </serializedBean>
+            <condition />
+            <validation />
+            <preActivation />
+            <postActivation />
+            <actions>
+              <action name="" id="12779" customizedId="" beanClass="com.install4j.runtime.beans.actions.misc.LoadResponseFileAction" enabled="true" commentSet="false" comment="" actionElevationType="inherit" rollbackBarrier="false" multiExec="true" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.misc.LoadResponseFileAction" />
+                  </java>
+                </serializedBean>
+                <condition>context.getBooleanVariable("sys.confirmedUpdateInstallation")</condition>
+              </action>
+            </actions>
+            <formComponents />
+          </screen>
+          <screen name="" id="2" customizedId="" beanClass="com.install4j.runtime.beans.screens.InstallationDirectoryScreen" enabled="true" commentSet="false" comment="" actionElevationType="inherit" rollbackBarrier="false" backButton="2" finishScreen="false" wizardIndexChangeType="unchanged" wizardIndexKey="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.screens.InstallationDirectoryScreen">
+                  <void property="allowNewFolderCreation">
+                    <boolean>true</boolean>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>!context.getBooleanVariable("sys.confirmedUpdateInstallation")</condition>
+            <validation />
+            <preActivation />
+            <postActivation />
+            <actions />
+            <formComponents />
+          </screen>
+          <screen name="" id="3" customizedId="" beanClass="com.install4j.runtime.beans.screens.ComponentsScreen" enabled="true" commentSet="false" comment="" actionElevationType="inherit" rollbackBarrier="false" backButton="2" finishScreen="false" wizardIndexChangeType="unchanged" wizardIndexKey="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.screens.ComponentsScreen" />
+              </java>
+            </serializedBean>
+            <condition />
+            <validation />
+            <preActivation />
+            <postActivation />
+            <actions />
+            <formComponents />
+          </screen>
+          <screen name="" id="4" customizedId="" beanClass="com.install4j.runtime.beans.screens.StandardProgramGroupScreen" enabled="true" commentSet="false" comment="" actionElevationType="inherit" rollbackBarrier="false" backButton="2" finishScreen="false" wizardIndexChangeType="unchanged" wizardIndexKey="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.screens.StandardProgramGroupScreen">
+                  <void property="programGroupName">
+                    <string>${compiler:sys.fullName}</string>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>!context.getBooleanVariable("sys.confirmedUpdateInstallation")</condition>
+            <validation />
+            <preActivation />
+            <postActivation />
+            <actions />
+            <formComponents />
+          </screen>
+          <screen name="Data and Swap directories" id="11772" customizedId="" beanClass="com.install4j.runtime.beans.screens.FormScreen" enabled="true" commentSet="false" comment="" actionElevationType="inherit" rollbackBarrier="false" backButton="2" finishScreen="false" wizardIndexChangeType="unchanged" wizardIndexKey="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.screens.FormScreen">
+                  <void property="subTitle">
+                    <string>Select the directories where Mingle will store data. Mingle will use the data directory to store some files associated with your projects (e.g., attachments). This is not the database directory. Mingle will use the swap directory to store temporary files (e.g., project export downloads).  The config directory is used to store configuration files (e.g., database settings).</string>
+                  </void>
+                  <void property="title">
+                    <string>Mingle directories</string>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition />
+            <validation />
+            <preActivation />
+            <postActivation />
+            <actions />
+            <formComponents>
+              <formComponent name="" id="11773" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.DirectoryChooserComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.DirectoryChooserComponent">
+                      <void property="allowNewFolderCreation">
+                        <boolean>true</boolean>
+                      </void>
+                      <void property="initialFile">
+                        <string>${installer:sys.userHome}/Mingle</string>
+                      </void>
+                      <void property="labelText">
+                        <string>Data directory</string>
+                      </void>
+                      <void property="variableName">
+                        <string>MINGLE_DATA_DIR</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+              <formComponent name="" id="12430" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.DirectoryChooserComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.DirectoryChooserComponent">
+                      <void property="allowNewFolderCreation">
+                        <boolean>true</boolean>
+                      </void>
+                      <void property="initialFile">
+                        <string>${installer:sys.userHome}/Mingle/tmp</string>
+                      </void>
+                      <void property="labelText">
+                        <string>Swap directory</string>
+                      </void>
+                      <void property="variableName">
+                        <string>MINGLE_SWAP_DIR</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+              <formComponent name="" id="12632" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.DirectoryChooserComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.DirectoryChooserComponent">
+                      <void property="allowNewFolderCreation">
+                        <boolean>true</boolean>
+                      </void>
+                      <void property="initialFile">
+                        <string>${installer:sys.userHome}/Mingle/config</string>
+                      </void>
+                      <void property="labelText">
+                        <string>Config directory</string>
+                      </void>
+                      <void property="variableName">
+                        <string>MINGLE_CONFIG_DIR</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+            </formComponents>
+          </screen>
+          <screen name="Port" id="11770" customizedId="" beanClass="com.install4j.runtime.beans.screens.FormScreen" enabled="true" commentSet="false" comment="" actionElevationType="inherit" rollbackBarrier="false" backButton="2" finishScreen="false" wizardIndexChangeType="unchanged" wizardIndexKey="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.screens.FormScreen">
+                  <void property="subTitle">
+                    <string>Select which port Mingle should listen to. This can be changed afterwards by modifying the mingle.properties file in the installation directory. (Recommended: 8080 if IIS is installed, otherwise 80.)</string>
+                  </void>
+                  <void property="title">
+                    <string>Port</string>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition />
+            <validation />
+            <preActivation />
+            <postActivation />
+            <actions />
+            <formComponents>
+              <formComponent name="" id="11771" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.IntegerTextfieldComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.IntegerTextfieldComponent">
+                      <void property="initialText">
+                        <string>8080</string>
+                      </void>
+                      <void property="labelText">
+                        <string>Port</string>
+                      </void>
+                      <void property="maximumDigits">
+                        <int>5</int>
+                      </void>
+                      <void property="minimumDigits">
+                        <int>2</int>
+                      </void>
+                      <void property="variableName">
+                        <string>MINGLE_PORT</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+            </formComponents>
+          </screen>
+          <screen name="" id="12357" customizedId="" beanClass="com.install4j.runtime.beans.screens.FormScreen" enabled="true" commentSet="false" comment="" actionElevationType="inherit" rollbackBarrier="false" backButton="2" finishScreen="false" wizardIndexChangeType="unchanged" wizardIndexKey="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.screens.FormScreen">
+                  <void property="title">
+                    <string>Uninstall existing Mingle.</string>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>return ApplicationRegistry.getApplicationInfoByDir(context.getInstallationDirectory()) != null;</condition>
+            <validation />
+            <preActivation />
+            <postActivation />
+            <actions />
+            <formComponents>
+              <formComponent name="" id="12359" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent">
+                      <void property="labelHtml">
+                        <string>We found that you have already installed Mingle in this directory. Existing Mingle files will be deleted in order to install a new version of Mingle successfully.
+For more details go to &lt;a href="${compiler:INSTALL_HELP_URL}"&gt;Help&lt;/a&gt;.
+&lt;p&gt;Press ‘Next’ to continue.</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+            </formComponents>
+          </screen>
+          <screen name="" id="5" customizedId="" beanClass="com.install4j.runtime.beans.screens.InstallationScreen" enabled="true" commentSet="false" comment="" actionElevationType="inherit" rollbackBarrier="true" backButton="2" finishScreen="false" wizardIndexChangeType="unchanged" wizardIndexKey="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.screens.InstallationScreen" />
+              </java>
+            </serializedBean>
+            <condition />
+            <validation />
+            <preActivation />
+            <postActivation />
+            <actions>
+              <action name="" id="12018" customizedId="" beanClass="com.install4j.runtime.beans.actions.UninstallPreviousAction" enabled="true" commentSet="false" comment="" actionElevationType="none" rollbackBarrier="false" multiExec="false" failureStrategy="3" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.UninstallPreviousAction" />
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+              <action name="" id="6" customizedId="" beanClass="com.install4j.runtime.beans.actions.InstallFilesAction" enabled="true" commentSet="false" comment="" actionElevationType="elevated" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="${i18n:FileCorrupted}">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.InstallFilesAction" />
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+              <action name="" id="12485" customizedId="" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" actionElevationType="elevated" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
+                      <void property="destinationFile">
+                        <object class="java.io.File">
+                          <string>${installer:MINGLE_CONFIG_DIR}/mingle.properties</string>
+                        </object>
+                      </void>
+                      <void property="files">
+                        <array class="java.io.File" length="1">
+                          <void index="0">
+                            <object class="java.io.File">
+                              <string>mingle.properties.example</string>
+                            </object>
+                          </void>
+                        </array>
+                      </void>
+                      <void property="overwriteMode">
+                        <object class="com.install4j.api.context.OverwriteMode" field="NEVER" />
+                      </void>
+                      <void property="triggerReboot">
+                        <boolean>false</boolean>
+                      </void>
+                      <void property="uninstallMode">
+                        <object class="com.install4j.api.context.UninstallMode" field="NEVER" />
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+              <action name="" id="12859" customizedId="" beanClass="com.install4j.runtime.beans.actions.misc.AddVmOptionsAction" enabled="true" commentSet="false" comment="" actionElevationType="elevated" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.misc.AddVmOptionsAction">
+                      <void property="launcherId">
+                        <string>11764</string>
+                      </void>
+                      <void property="vmOptions">
+                        <array class="java.lang.String" length="4">
+                          <void index="0">
+                            <string>-Dmingle.dataDir=${installer:MINGLE_DATA_DIR}</string>
+                          </void>
+                          <void index="1">
+                            <string>-Dmingle.configDir=${installer:MINGLE_CONFIG_DIR}</string>
+                          </void>
+                          <void index="2">
+                            <string>-Dmingle.swapDir=${installer:MINGLE_SWAP_DIR}</string>
+                          </void>
+                          <void index="3">
+                            <string>-include-options ${installer:MINGLE_CONFIG_DIR}/mingle.properties</string>
+                          </void>
+                        </array>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+              <action name="Uncomment -Dmingle.port" id="12579" customizedId="" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" actionElevationType="elevated" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                      <void property="files">
+                        <array class="java.io.File" length="1">
+                          <void index="0">
+                            <object class="java.io.File">
+                              <string>${installer:MINGLE_CONFIG_DIR}/mingle.properties</string>
+                            </object>
+                          </void>
+                        </array>
+                      </void>
+                      <void property="replaceValue">
+                        <string>-Dmingle.port</string>
+                      </void>
+                      <void property="searchValue">
+                        <string># -Dmingle.port</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+              <action name="Uncomment -Dmingle.logDir" id="12585" customizedId="" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" actionElevationType="elevated" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                      <void property="files">
+                        <array class="java.io.File" length="1">
+                          <void index="0">
+                            <object class="java.io.File">
+                              <string>${installer:MINGLE_CONFIG_DIR}/mingle.properties</string>
+                            </object>
+                          </void>
+                        </array>
+                      </void>
+                      <void property="replaceValue">
+                        <string>-Dmingle.logDir</string>
+                      </void>
+                      <void property="searchValue">
+                        <string># -Dmingle.logDir</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+              <action name="Uncomment -Dmingle.swapDir" id="12580" customizedId="" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" actionElevationType="elevated" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                      <void property="files">
+                        <array class="java.io.File" length="1">
+                          <void index="0">
+                            <object class="java.io.File">
+                              <string>${installer:MINGLE_CONFIG_DIR}/mingle.properties</string>
+                            </object>
+                          </void>
+                        </array>
+                      </void>
+                      <void property="replaceValue">
+                        <string>-Dmingle.swapDir</string>
+                      </void>
+                      <void property="searchValue">
+                        <string># -Dmingle.swapDir</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+              <action name="Delete commented memcached host section" id="12582" customizedId="" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" actionElevationType="elevated" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                      <void property="files">
+                        <array class="java.io.File" length="1">
+                          <void index="0">
+                            <object class="java.io.File">
+                              <string>${installer:MINGLE_CONFIG_DIR}/mingle.properties</string>
+                            </object>
+                          </void>
+                        </array>
+                      </void>
+                      <void property="searchValue">
+                        <string># -Dmingle.memcachedHost=MEMCACHED_HOST</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+              <action name="Delete commented memcached port seciotn" id="12583" customizedId="" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" actionElevationType="elevated" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                      <void property="files">
+                        <array class="java.io.File" length="1">
+                          <void index="0">
+                            <object class="java.io.File">
+                              <string>${installer:MINGLE_CONFIG_DIR}/mingle.properties</string>
+                            </object>
+                          </void>
+                        </array>
+                      </void>
+                      <void property="searchValue">
+                        <string># -Dmingle.memcachedPort=MEMCACHED_PORT</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+              <action name="Delete commented app context section" id="12584" customizedId="" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" actionElevationType="elevated" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                      <void property="files">
+                        <array class="java.io.File" length="1">
+                          <void index="0">
+                            <object class="java.io.File">
+                              <string>${installer:MINGLE_CONFIG_DIR}/mingle.properties</string>
+                            </object>
+                          </void>
+                        </array>
+                      </void>
+                      <void property="searchValue">
+                        <string># -Dmingle.appContext=ALTERNATE_APP_CONTEXT_PATH</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+              <action name="Delete commented ssl port section" id="12771" customizedId="" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" actionElevationType="elevated" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                      <void property="files">
+                        <array class="java.io.File" length="1">
+                          <void index="0">
+                            <object class="java.io.File">
+                              <string>${installer:MINGLE_CONFIG_DIR}/mingle.properties</string>
+                            </object>
+                          </void>
+                        </array>
+                      </void>
+                      <void property="searchValue">
+                        <string># -Dmingle.ssl.port=8443</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+              <action name="Delete commented ssl keystore section" id="12772" customizedId="" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" actionElevationType="elevated" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                      <void property="files">
+                        <array class="java.io.File" length="1">
+                          <void index="0">
+                            <object class="java.io.File">
+                              <string>${installer:MINGLE_CONFIG_DIR}/mingle.properties</string>
+                            </object>
+                          </void>
+                        </array>
+                      </void>
+                      <void property="searchValue">
+                        <string># -Dmingle.ssl.keystore=/PATH/TO/KEYSTORE</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+              <action name="Delete commented ssl keystore password section" id="12773" customizedId="" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" actionElevationType="elevated" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                      <void property="files">
+                        <array class="java.io.File" length="1">
+                          <void index="0">
+                            <object class="java.io.File">
+                              <string>${installer:MINGLE_CONFIG_DIR}/mingle.properties</string>
+                            </object>
+                          </void>
+                        </array>
+                      </void>
+                      <void property="searchValue">
+                        <string># -Dmingle.ssl.keystorePassword=PASSWORD_TO_ACCESS_KEYSTORE</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+              <action name="Delete commented ssl key password section" id="12774" customizedId="" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" actionElevationType="elevated" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                      <void property="files">
+                        <array class="java.io.File" length="1">
+                          <void index="0">
+                            <object class="java.io.File">
+                              <string>${installer:MINGLE_CONFIG_DIR}/mingle.properties</string>
+                            </object>
+                          </void>
+                        </array>
+                      </void>
+                      <void property="searchValue">
+                        <string># -Dmingle.ssl.keyPassword=KEY_PASSPHRASE</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+              <action name="Delete commented site url comment section" id="12775" customizedId="" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" actionElevationType="elevated" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                      <void property="files">
+                        <array class="java.io.File" length="1">
+                          <void index="0">
+                            <object class="java.io.File">
+                              <string>${installer:MINGLE_CONFIG_DIR}/mingle.properties</string>
+                            </object>
+                          </void>
+                        </array>
+                      </void>
+                      <void property="searchValue">
+                        <string># The cannonical url where this mingle server is located. If the server is behind an apache proxy, use the url of the proxy.</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+              <action name="Delete commented site url section" id="12776" customizedId="" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" actionElevationType="elevated" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                      <void property="files">
+                        <array class="java.io.File" length="1">
+                          <void index="0">
+                            <object class="java.io.File">
+                              <string>${installer:MINGLE_CONFIG_DIR}/mingle.properties</string>
+                            </object>
+                          </void>
+                        </array>
+                      </void>
+                      <void property="searchValue">
+                        <string># -Dmingle.siteURL=http://mingle.yourcompany.com:8080/ALTERNATE_APP_CONTEXT_PATH</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+              <action name="Delete commented ssl comment section" id="12777" customizedId="" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" actionElevationType="elevated" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                      <void property="files">
+                        <array class="java.io.File" length="1">
+                          <void index="0">
+                            <object class="java.io.File">
+                              <string>${installer:MINGLE_CONFIG_DIR}/mingle.properties</string>
+                            </object>
+                          </void>
+                        </array>
+                      </void>
+                      <void property="searchValue">
+                        <string># For https access, uncomment and configure the following ssl parameters.</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+              <action name="Save port" id="11777" customizedId="" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" actionElevationType="elevated" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                      <void property="escapeForPropertyFile">
+                        <boolean>true</boolean>
+                      </void>
+                      <void property="files">
+                        <array class="java.io.File" length="1">
+                          <void index="0">
+                            <object class="java.io.File">
+                              <string>${installer:MINGLE_CONFIG_DIR}/mingle.properties</string>
+                            </object>
+                          </void>
+                        </array>
+                      </void>
+                      <void property="replaceValue">
+                        <string>${installer:MINGLE_PORT}</string>
+                      </void>
+                      <void property="searchValue">
+                        <string>MINGLE_PORT</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+              <action name="Save swap directory" id="12432" customizedId="" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" actionElevationType="elevated" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                      <void property="files">
+                        <array class="java.io.File" length="1">
+                          <void index="0">
+                            <object class="java.io.File">
+                              <string>${installer:MINGLE_CONFIG_DIR}/mingle.properties</string>
+                            </object>
+                          </void>
+                        </array>
+                      </void>
+                      <void property="replaceValue">
+                        <string>${installer:MINGLE_SWAP_DIR}</string>
+                      </void>
+                      <void property="searchValue">
+                        <string>MINGLE_SWAP_DIR</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+              <action name="" id="7" customizedId="" beanClass="com.install4j.runtime.beans.actions.desktop.CreateProgramGroupAction" enabled="true" commentSet="false" comment="" actionElevationType="elevated" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.desktop.CreateProgramGroupAction">
+                      <void property="uninstallerMenuName">
+                        <string>${i18n:UninstallerMenuEntry(${compiler:sys.fullName})}</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition>!context.getBooleanVariable("sys.programGroupDisabled")</condition>
+              </action>
+              <action name="" id="8" customizedId="" beanClass="com.install4j.runtime.beans.actions.desktop.RegisterAddRemoveAction" enabled="true" commentSet="false" comment="" actionElevationType="elevated" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.desktop.RegisterAddRemoveAction">
+                      <void property="itemName">
+                        <string>${compiler:sys.fullName} ${compiler:sys.version}</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+              <action name="" id="11779" customizedId="" beanClass="com.install4j.runtime.beans.actions.services.InstallServiceAction" enabled="true" commentSet="false" comment="" actionElevationType="elevated" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.services.InstallServiceAction">
+                      <void property="launcherId">
+                        <string>11764</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+              <action name="" id="11809" customizedId="" beanClass="com.install4j.runtime.beans.actions.services.StartServiceAction" enabled="true" commentSet="false" comment="" actionElevationType="elevated" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.services.StartServiceAction">
+                      <void property="launcherId">
+                        <string>11764</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition>!context.isUnattended() &amp;&amp; !context.isConsole()</condition>
+              </action>
+            </actions>
+            <formComponents />
+          </screen>
+          <screen name="" id="9" customizedId="" beanClass="com.install4j.runtime.beans.screens.FinishedScreen" enabled="true" commentSet="false" comment="" actionElevationType="inherit" rollbackBarrier="true" backButton="2" finishScreen="true" wizardIndexChangeType="unchanged" wizardIndexKey="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.screens.FinishedScreen" />
+              </java>
+            </serializedBean>
+            <condition />
+            <validation />
+            <preActivation />
+            <postActivation>final int MAX_CONNECT_TIME = 1000 * 60 * 2;
+
+// Reconnect each 0.1 second
+final int INTERVAL_TIME = 100;
+
+final javax.swing.JLabel spinner =  (javax.swing.JLabel) formEnvironment.getFormComponentById("12175").getConfigurationObject();
+final javax.swing.JLabel waitMsg =  (javax.swing.JLabel) formEnvironment.getFormComponentById("12211").getConfigurationObject();
+final javax.swing.JLabel messageLabel =  (javax.swing.JLabel) formEnvironment.getFormComponentById("12212").getConfigurationObject();
+final javax.swing.JLabel mingleUrl =  (javax.swing.JLabel) formEnvironment.getFormComponentById("12172").getConfigurationObject();
+final javax.swing.JTextArea successMsg =  (javax.swing.JTextArea) formEnvironment.getFormComponentById("12213").getConfigurationObject();
+final String port = context.getVariable("MINGLE_PORT").toString();
+
+messageLabel.setVisible(false);
+successMsg.setVisible(false);
+mingleUrl.setVisible(false);
+
+Thread thread = new Thread (){
+
+	public void run() {
+	    boolean connected = false;
+	    long startTime = System.currentTimeMillis();
+	    while (!connected) {
+		    try {
+     			Thread.sleep(INTERVAL_TIME);
+     		} catch (InterruptedException e) {
+     			System.err.println(e.getMessage());
+     		}
+
+		    try {
+		        long currentTime = System.currentTimeMillis();
+		        if(currentTime - startTime &gt;= MAX_CONNECT_TIME){
+		            messageLabel.setText("Server is starting. Open your browser to http://localhost:" + port + " to see the server startup status");
+		            messageLabel.setIcon(null);
+		            break;
+		        }
+			    java.net.URL url = new java.net.URL("http://localhost:" + port + "/bootstrap_status");
+			    java.net.URLConnection conn = url.openConnection();
+			    conn.getContent();
+
+			    connected = true;
+			    successMsg.setVisible(true);
+                mingleUrl.setVisible(true);
+		    } catch (IOException e) {
+			    System.err.println(e.getMessage());
+		    }
+	    }
+	    messageLabel.setVisible(true);
+		spinner.setVisible(false);
+		waitMsg.setVisible(false);
+	}
+};
+
+thread.start();
+</postActivation>
+            <actions />
+            <formComponents>
+              <formComponent name="" id="11812" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.MultilineLabelComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.MultilineLabelComponent">
+                      <void property="labelText">
+                        <string>You have successfully configured the first part of Mingle installation.</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+              <formComponent name="" id="12175" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.LabelComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.LabelComponent">
+                      <void property="iconTextGap">
+                        <int>8</int>
+                      </void>
+                      <void property="labelIconFile">
+                        <object class="com.install4j.api.beans.ExternalFile">
+                          <string>../public/images/spinner.gif</string>
+                        </object>
+                      </void>
+                      <void property="labelText">
+                        <string>We are starting the Mingle server. </string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+              <formComponent name="" id="12211" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.LabelComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="26" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.LabelComponent">
+                      <void property="labelText">
+                        <string>It may take a couple of minutes.</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+              <formComponent name="" id="12212" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.LabelComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.LabelComponent">
+                      <void property="labelIconFile">
+                        <object class="com.install4j.api.beans.ExternalFile">
+                          <string>../public/images/success_icon_small.png</string>
+                        </object>
+                      </void>
+                      <void property="labelText">
+                        <string>The Mingle server started successfully.</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+              <formComponent name="" id="12213" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.MultilineLabelComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.MultilineLabelComponent">
+                      <void property="labelText">
+                        <string>Please click on the link below to configure the Mingle server.</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+              <formComponent name="" id="12172" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.HyperlinkLabelComponent" enabled="true" commentSet="false" comment="" insetTop="8" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.HyperlinkLabelComponent">
+                      <void property="hyperlinkText">
+                        <string>http://localhost:${installer:MINGLE_PORT}/</string>
+                      </void>
+                      <void property="url">
+                        <string>http://localhost:${installer:MINGLE_PORT}/</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+            </formComponents>
+          </screen>
+        </screens>
+      </application>
+      <application name="" id="uninstaller" customizedId="" beanClass="com.install4j.runtime.beans.applications.UninstallerApplication" enabled="true" commentSet="false" comment="" actionElevationType="none" fileset="" customIcnsFile="" customIcoFile="" macEntitlementsFile="" automaticLauncherIntegration="false" launchMode="startupFirstWindow" launchInNewProcess="false" launchSchedule="updateSchedule" allLaunchers="true">
+        <serializedBean>
+          <java class="java.beans.XMLDecoder">
+            <object class="com.install4j.runtime.beans.applications.UninstallerApplication">
+              <void property="customIconImageFiles">
+                <void method="add">
+                  <object class="com.install4j.api.beans.ExternalFile">
+                    <string>./images/mingle32.png</string>
+                  </object>
+                </void>
+              </void>
+              <void property="frameSizeClientArea">
+                <boolean>false</boolean>
+              </void>
+              <void property="resizable">
+                <boolean>false</boolean>
+              </void>
+              <void property="useCustomIcon">
+                <boolean>true</boolean>
+              </void>
+            </object>
+          </java>
+        </serializedBean>
+        <launcherIds />
+        <variables />
+        <startup>
+          <screen name="" id="16" customizedId="" beanClass="com.install4j.runtime.beans.screens.StartupScreen" enabled="true" commentSet="false" comment="" actionElevationType="inherit" rollbackBarrier="false" backButton="2" finishScreen="false" wizardIndexChangeType="unchanged" wizardIndexKey="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.screens.StartupScreen" />
+              </java>
+            </serializedBean>
+            <condition />
+            <validation />
+            <preActivation />
+            <postActivation />
+            <actions>
+              <link name="" id="12780" customizedId="" beanClass="" enabled="true" targetId="12778" mergedProjectId="" />
+            </actions>
+            <formComponents />
+          </screen>
+        </startup>
+        <screens>
+          <screen name="" id="10" customizedId="" beanClass="com.install4j.runtime.beans.screens.UninstallWelcomeScreen" enabled="true" commentSet="false" comment="" actionElevationType="inherit" rollbackBarrier="false" backButton="2" finishScreen="false" wizardIndexChangeType="unchanged" wizardIndexKey="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.screens.UninstallWelcomeScreen" />
+              </java>
+            </serializedBean>
+            <condition />
+            <validation />
+            <preActivation />
+            <postActivation />
+            <actions />
+            <formComponents />
+          </screen>
+          <screen name="" id="11" customizedId="" beanClass="com.install4j.runtime.beans.screens.UninstallationScreen" enabled="true" commentSet="false" comment="" actionElevationType="inherit" rollbackBarrier="false" backButton="2" finishScreen="false" wizardIndexChangeType="unchanged" wizardIndexKey="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.screens.UninstallationScreen" />
+              </java>
+            </serializedBean>
+            <condition />
+            <validation />
+            <preActivation />
+            <postActivation />
+            <actions>
+              <action name="" id="11815" customizedId="" beanClass="com.install4j.runtime.beans.actions.services.StopServiceAction" enabled="true" commentSet="false" comment="" actionElevationType="elevated" rollbackBarrier="false" multiExec="false" failureStrategy="3" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.services.StopServiceAction">
+                      <void property="launcherId">
+                        <string>11764</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+              <action name="" id="12365" customizedId="" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="true" commentSet="false" comment="" actionElevationType="elevated" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
+                      <void property="files">
+                        <array class="java.io.File" length="1">
+                          <void index="0">
+                            <object class="java.io.File">
+                              <string>tmp/cache/renderable</string>
+                            </object>
+                          </void>
+                        </array>
+                      </void>
+                      <void property="recursive">
+                        <boolean>true</boolean>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+              <action name="" id="12" customizedId="" beanClass="com.install4j.runtime.beans.actions.UninstallFilesAction" enabled="true" commentSet="false" comment="" actionElevationType="elevated" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.UninstallFilesAction" />
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+            </actions>
+            <formComponents />
+          </screen>
+          <screen name="" id="14" customizedId="" beanClass="com.install4j.runtime.beans.screens.UninstallFailureScreen" enabled="true" commentSet="false" comment="" actionElevationType="inherit" rollbackBarrier="false" backButton="2" finishScreen="true" wizardIndexChangeType="unchanged" wizardIndexKey="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.screens.UninstallFailureScreen" />
+              </java>
+            </serializedBean>
+            <condition />
+            <validation />
+            <preActivation />
+            <postActivation />
+            <actions />
+            <formComponents />
+          </screen>
+          <screen name="" id="13" customizedId="" beanClass="com.install4j.runtime.beans.screens.UninstallSuccessScreen" enabled="true" commentSet="false" comment="" actionElevationType="inherit" rollbackBarrier="false" backButton="2" finishScreen="true" wizardIndexChangeType="unchanged" wizardIndexKey="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.screens.UninstallSuccessScreen" />
+              </java>
+            </serializedBean>
+            <condition />
+            <validation />
+            <preActivation />
+            <postActivation />
+            <actions />
+            <formComponents />
+          </screen>
+        </screens>
+      </application>
+    </applications>
+  </installerGui>
+  <mediaSets>
+    <windows name="Windows" id="60" customizedId="" mediaFileName="" installDir="${compiler:sys.fullName}" overridePrincipalLanguage="false" jreBitType="64" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="windows-amd64-1.8.0_73" manualJREEntry="false" bundleType="1" jreURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" customInstallBaseDir="" contentFilesType="1" downloadURL="" verifyIntegrity="true">
+      <excludedLaunchers />
+      <excludedBeans />
+      <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
+      <exclude>
+        <entry location="INSTALL" fileType="regular" />
+      </exclude>
+      <variables>
+        <variable name="PLATFORM" value="windows" description="" category="" />
+      </variables>
+      <autoUpdate useMinUpdatableVersion="false" minUpdatableVersion="" useMaxUpdatableVersion="false" maxUpdatableVersion="">
+        <commentFiles />
+        <customAttributes />
+      </autoUpdate>
+      <excludedComponents />
+      <includedDownloadableComponents />
+    </windows>
+    <unixArchive name="Unix Archive" id="12017" customizedId="" mediaFileName="" installDir="mingle_${compiler:VERSION}" overridePrincipalLanguage="false" jreBitType="all" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="" manualJREEntry="false">
+      <excludedLaunchers />
+      <excludedBeans />
+      <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
+      <exclude />
+      <variables />
+      <autoUpdate useMinUpdatableVersion="false" minUpdatableVersion="" useMaxUpdatableVersion="false" maxUpdatableVersion="">
+        <commentFiles />
+        <customAttributes />
+      </autoUpdate>
+    </unixArchive>
+  </mediaSets>
+  <buildIds buildAll="false">
+    <mediaSet refId="60" />
+    <mediaSet refId="12017" />
+  </buildIds>
+  <buildOptions verbose="true" faster="false" disableSigning="false" debug="false" />
+</install4j>
+

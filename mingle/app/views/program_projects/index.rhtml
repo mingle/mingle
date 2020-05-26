@@ -1,0 +1,70 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% authorized_to_remove_program_project = authorized?({controller: :program_projects, action: :destroy}) %>
+<%- select_tab :program_project -%>
+<% if authorized?({controller: :program_projects, action: :create}) %>
+	<% content_tag(:div, class: 'add_project_to_program clear_float') do %>
+		<h3>Add a project</h3>
+		<%- if Project.all_available.any? %>
+			<%- if @program.assignable_projects.any? -%>
+				<% form_for(:new_program_project, :html => {:id => 'add_project_to_program_form'}) do |f| %>
+					<div class='form_item'>
+						<%= f.label :project, 'Projects: ' %>
+						<%= f.collection_select(:id, @program.assignable_projects, :identifier, :name) %>
+					</div>
+					<%= f.submit 'Add', :class => 'primary' %>
+					<%= clear_float %>
+				<% end -%>
+			<%- else -%>
+				<p>You have already added all projects available for this plan.</p>
+			<%- end -%>
+		<%- else -%>
+			<p>There are currently no projects available.</p>
+		<%- end -%>
+	<% end %>
+<% end %>
+
+<div id='program_projects_container'>
+  <h3>Projects included in your program</h3>
+
+  <div class="projects">
+    <table class='list_table' id='project_mappings'>
+      <thead>
+        <tr>
+          <th>Project</th>
+          <th>'Done' Status <i class="fa fa-question-circle program-projects-tooltip" title='Define what "done" means in your projects so that Mingle can report on the completeness of work across all projects.'></i></th>
+          <th>Accepts Dependencies <i class="fa fa-question-circle program-projects-tooltip" title='Checking “Accepts Dependencies” will allow projects within this program to be able to select this project by name when raising a dependency.'></i></th>
+	        <%= content_tag(:th) if authorized_to_remove_program_project %>
+        </tr>
+      </thead>
+      <tbody>
+        <% @program.projects.smart_sort_by(&:name).each do |project| %>
+          <tr id="project_<%= project.identifier %>" class='done_mapping_row'>
+            <td><%= new_window_link_to_project(project.name, project.identifier) %></td>
+            <td><%= define_done_message(@plan, project) %></td>
+            <td class='accepts-dependencies-checkbox' data-src='<%= update_accepts_dependencies_program_program_project_path(@plan.program, project.identifier) %>'>
+              <%= check_box_tag 'accepts_dependencies', 'true', @program.program_project(project).accepts_dependencies, disabled: !authorized?({controller: :program_projects, action: :update_accepts_dependencies}) %>
+            </td>
+	          <% if authorized_to_remove_program_project %>
+		          <td><%= link_to('Remove', confirm_delete_program_program_project_path(@plan.program, project.identifier)) %></td>
+	          <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

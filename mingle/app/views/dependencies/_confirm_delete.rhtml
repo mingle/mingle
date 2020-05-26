@@ -1,0 +1,44 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="confirm-delete-dependency">
+  <%
+    lightbox = Lightbox.with_close_link_and_close_button(self, "Cancel", "", :class => "remove-button popup-close")
+    lightbox.header "Delete dependency"
+    lightbox.body do
+  -%>
+
+    <%= render :partial => "shared/irrecoverable_warning" -%>
+
+    <% info_box do -%>
+      <p>
+        We recommend that you review the following things that will be affected by deleting dependency
+        <strong><%= @dependency.number_and_name -%>:</strong>
+      </p>
+
+      <ul>
+        <li>Dependency will be removed from the Dependencies Tab</li>
+        <li>Dependency will be removed from the Program Dependencies Board</li>
+        <li>Dependency will be removed from all linked cards</li>
+      </ul>
+    <% end -%>
+
+  <% end -%>
+
+  <% lightbox.complete_action do -%>
+    <%= link_to "Continue to Delete", {:controller => "dependencies", :action => "delete", :number => @dependency.number}, :class => "link_as_button delete primary", :accessing => "dependencies:delete", :"data-method" => :post, :"data-remote" => true %>
+  <% end -%>
+</div>

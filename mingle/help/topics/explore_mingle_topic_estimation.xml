@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Estimation">
+
+    <p>Estimation is the process by which the team determines the relative sizes of the story cards. This is helpful in planning how much work to take on in an iteration or sprint. Since developers are the ones who ultimately write the code that implements the stories, they are the ones who assign estimates. However, estimation sessions are still collaborative and can involve members from the entire team: product owners, analysts, QA, project managers and, at times, even stakeholders. There are many effective techniques to facilitate a productive and efficient estimation session, such as planning poker.</p>
+
+    <p>Mingle allows your team to quickly update each card in real time during your estimation session.</p>
+
+    <screenshot alttext="Estimation with the Grid View" src="resources/images/explore_mingle_estimation.png" />
+
+    <section title="Instructions">
+        <bullets>
+            <item>Set up a <cref topic="grid_view">grid view</cref> that contains only the cards you would like to estimate.</item>
+            <item>"<cref topic="grid_view#group_cards">Group by</cref>" your estimate property (e.g. Story Points). This will create a column for all possible values.</item>
+            <item>Drill into each card as they are discussed.</item>
+            <item>Once the team estimates a card, move the card to the appropriate column.</item>
+        </bullets>
+    </section>
+
+    <section title="Tip">
+        <bullets>
+            <item>Include a few completed cards in each column as a reference to help the team understand the level of effort for each estimate value. This helps answer the common question, "What's a '2' again?".</item>
+        </bullets>
+    </section>
+
+	<section title="Also see...">
+        <bullets>
+	<item><cref topic="explore_mingle">Explore Mingle</cref></item>
+        </bullets>
+    </section>
+
+
+</topic>

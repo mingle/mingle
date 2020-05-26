@@ -1,0 +1,67 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% view_params = defined?(@view_params) ? @view_params : {} %>
+<% view_params.delete(:expands) %>
+
+<% form_remote_tag({
+  :url => view_params.merge({:action => @parent_card ? 'tree_cards_quick_add' : 'tree_cards_quick_add_to_root', :tab => @tab_name, :from_card_show => @from_card_show, :tree_style => params[:tree_style] }),
+  :before => "#{show_spinner('tree_quick_add_spinner')};#{"TreeView.expandParentNodeIfNecessary(#{@parent_card.number});$('expands').value=TreeView.expandedNodesString();" if @parent_card && !@from_card_show};", 
+  :after => "Form.disable(this);",
+  :complete => hide_spinner('tree_quick_add_spinner') + enable_links,
+  :html => {:id => 'tree_cards_quick_add_form'}}) do %>
+  
+  
+  <% lightbox = Lightbox.with_close_link_and_close_button(self, 'Cancel', 'window.handleCloseAddChildrenPopup() ', :tabindex => 3, :id => "tree_cards_quick_add_cancel_button", :class => 'popup-close')
+     lightbox.header "Add New Cards" %>
+     <div class="card_type">
+       <span class="inline_action_label">Card type:</span> 
+       <%= link_to_function @card_types.first.name, nil, :id => 'card_type_select_link'%>
+       <%= hidden_field_tag 'card_type', @card_types.first.id %>
+     </div>
+  <% lightbox.body do %>
+    <%= hidden_field_tag 'expands'%>
+    <%= hidden_field_tag 'tree', @tree_config.id %>
+    <%= hidden_field_tag 'parent_number', @parent_card && @parent_card.number %>
+    <%= hidden_view_params_tags nil, view_params %>
+
+    <% 5.times do |time| %>
+      <div class="input-row"> 
+        <%= text_field_tag 'card_names[]', nil, :class => 'card-name-input', :tabindex => 1 %><% if time == 4 %><%= link_to_function '', nil, { :class => 'add-button add_link'} %><% end %><%= link_to_function image_tag('icon-remove-medium.gif', :title => 'Delete this line'), nil, { :class => 'remove-button delete_link'} %>
+      </div>
+    <% end %>
+  <% end 
+     lightbox.complete_action do -%>
+       <%= submit_tag 'Save', :tabindex => 2, :id => "tree_cards_quick_add_save_button", :class => "primary" %>
+       <%= spinner :id => 'tree_quick_add_spinner' %>
+    <% end -%>
+<% end %>
+
+<%= javascript_with_rescue <<-JAVASCRIPT
+  new AppendableForm('tree_cards_quick_add_form', 'card-name-input', 'input-row');
+  
+  var cardTypesDroplist = new DropList(#{card_types_droplist_options(@card_types, 'card_type_select_link', 'card_tree_quick_add_card_type')});
+  var handleCloseAddChildrenPopup = function(event) {
+    cardTypesDroplist.controller.hideDropdown();
+    var treeCardsQuickAdd = $('tree_cards_quick_add');
+    treeCardsQuickAdd.hide();
+    treeCardsQuickAdd.update();
+    #{enable_links}
+  }.bind(this);
+  window.handleCloseAddChildrenPopup = handleCloseAddChildrenPopup;
+JAVASCRIPT
+-%>
+

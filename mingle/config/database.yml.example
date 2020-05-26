@@ -1,0 +1,13 @@
+<%=
+  ruby_platform = (RUBY_PLATFORM =~ /java/ ? :jruby_pg : :cruby_pg)
+  target = ENV["DB"] || ruby_platform
+  f = File.join(MINGLE_CONFIG_DIR, "../test/config/database.yml.#{target}")
+  if Rails.env =='test'
+     root = File.expand_path(defined?(Rails) ? Rails.root.to_s : '.')
+    f = File.join(root, "test", "config", "database.yml.#{target}")
+  end
+  puts "load database.yml from #{f}"
+  template = ERB.new(File.read(f))
+  user = ENV["USER"]
+  template.result(binding)
+%>

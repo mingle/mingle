@@ -1,0 +1,50 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<% selected_slack_channel_id = selected_slack_channel && selected_slack_channel.id %>
+<% if !@team_mapped %>
+    <% form_tag({:action => 'save_channel'}, {id: 'slack_channel_form', method: :post}) do %>
+        <h2>Choose a channel</h2>
+        <div>
+          <p>This project can be linked to a channel on
+            <a href="<%= @team_info[:url] %>" class="slack-team"><%= @team_info[:name] %></a></p>
+          <p>We've found all open channels on your team</p>
+          <% prompt = team_mapped ? '' : 'Select Channel' %>
+          <%= select_tag('selected_slack_channel_id',
+                         grouped_options_for_select(formatted_channels(@slack_channels),
+                                                    selected_slack_channel_id,
+                                                    prompt).html_safe,
+                         onchange: "Slack.channelUpdateHandler('#slack_channel_form', 'map_channels')",
+                         disabled: read_only_mode) %>
+          <span class="notes">(This channel will receive your @team notifications. You will be able to run the Mingle + Slack commands.)</span>
+          <%= hidden_field_tag('is_private') %>
+        </div>
+        <% if requires_private_channel_authorization?(team_mapped, selected_slack_channel, @user_integration) %>
+            <%= render :partial => 'private_mapping_authorization', :locals => {:user_integration => @user_integration} %>
+        <% end %>
+        <div class="actions">
+          <%= render partial: 'slack_terms_and_conditions', locals: {form_id: 'slack_channel_form', terms: channel_mapping_terms,
+                                                                     submit_text: 'Save', submit_class: 'ok',
+                                                                     disable_submit: !selected_slack_channel_id, eula_context: 'map_channels'} %>
+          <%= content_tag(:button, 'Cancel', type: :reset, class: 'cancel', onclick: 'Slack.resetMapChannelForm()') %>
+        </div>
+    <% end %>
+<% else %>
+    <%= render :partial => 'link_more_channel', :locals => {team_mapped: @team_mapped, read_only_mode: read_only_mode, selected_slack_channel: selected_slack_channel} %>
+    <% if need_authorization_to_see_private_channel?(@user_integration) %>
+        <%= render :partial => 'private_mapping_authorization', :locals => {:user_integration => @user_integration} %>
+    <% end %>
+<% end %>

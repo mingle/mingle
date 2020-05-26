@@ -1,0 +1,60 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<h1>Setting up Mingle: Step 3 - Configure the URL</h1>
+
+<% info_box do %>
+  <p>Configure the URL that users of Mingle will use to access this Mingle instance. This URL will be used by Mingle in all outbound communications with Mingle users and external systems, such as email notifications and atom feeds.</p>
+<% end %>
+
+<div class="current-configure-url">
+  <%= render :partial => 'steps' %>
+</div>
+
+<% form_tag({ :action => :do_configure_site_url }, { :class => 'install_form' }) do  %>
+  <p>
+    <label for="site_url">Site URL:<span class='required'>*</span> <span class="notes">(The URL that users of Mingle will use to access your Mingle instance.)</span></label>
+    <% if @site_url_errors.any? %>
+      <% content_tag :div, :class => 'field_error' do %>
+        <%= @site_url_errors.join(', ') %>
+      <% end %>
+      <div class="fieldWithErrors">
+    <% end %>
+    <%= text_field_tag 'site_url', @site_url, :size => 80 %>
+    <% if @site_url_errors.any? %>
+      </div>
+    <% end %>
+  </p>
+
+  <p>
+    <label for="secure_site_url">Secure site URL: <span class="notes">(Secure site URL must be a secure (https) URL.)</span></label>
+    <% if @secure_site_url_errors.any? %>
+      <% content_tag :div, :class => 'field_error' do %>
+        <%= @secure_site_url_errors.join(', ') %>
+      <% end %>
+      <div class="fieldWithErrors">
+    <% end %>
+    <%= text_field_tag 'secure_site_url', @secure_site_url, :size => 80   %>
+    <% if @secure_site_url_errors.any? %>
+      </div>
+    <% end %>
+  </p>
+  
+  <% action_bar :class => "action-bar setup-pages" do %>
+    <%= submit_tag 'Continue', :class => 'primary' %>
+    <%= render_help_link 'URL settings', :class => 'page-help-at-action-bar' %>
+  <% end %>
+<% end %>

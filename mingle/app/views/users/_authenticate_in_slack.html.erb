@@ -1,0 +1,41 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id="slack_integration">
+  <div class='content'>
+    <% if @slack_user_signed_in %>
+        <div>
+          <p>You are all set! You have signed in as <span class="slack-user"><%= @user_info[:name] %></span> on Slack team: <a href="<%= @slack_team_info[:url] %>" class="slack-team"><%= @slack_team_info[:name] %></a></p>
+          <p style="margin-top: 8px">You can now use all the <a href="<%= link_to_help('/features_slack.html') %>" class='slack-help-link'>Mingle + Slack features</a> from the Slack channels that your projects are linked with.</p>
+        </div>
+      <%= render :partial => 'users/slack_murmur_notification_subscription' %>
+        <div class="remove-slack-integration">
+          <h2>Remove Integration</h2>
+          <p class="help-text" style="margin-bottom: 8px">To delink your Mingle profile from Slack, click on the button below. Your Mingle user account will be delinked from Slack.</p>
+          <%= check_box_tag 'remove_user_integration', nil, false, :onclick => "Slack.removeIntegrationChecked('user')" %> <label for="remove_user_integration" class="inline">This action is not recoverable.</label>
+          <%= button_to('Remove Integration', {:controller => 'integrations', :action => 'remove_user_from_slack'}, {:id => 'remove_user_integration_submit', :disabled => true, :method => 'delete', :class=> 'remove_integration_form'}) %>
+        </div>
+    <% else %>
+        <p>This instance of Mingle has been linked with your organization's Slack team: <a href="<%= @slack_team_info[:url] %>" class="slack-team"><%= @slack_team_info[:name] %></a></p>
+        <p style="margin-top: 8px">To use all the <a href="<%= link_to_help('/features_slack.html') %>" class='slack-help-link'>Mingle + Slack features</a>, link your Slack account with Mingle.</p>
+      <% form_tag({controller: :integrations, action: :add_user_to_slack}, {id: 'slack_user_auth_form', method: :post }) do %>
+        <%= render partial: 'slack/slack_terms_and_conditions', locals: {form_id: 'slack_user_auth_form', terms: slack_user_auth_terms,
+                                                                   submit_text: 'Link Slack Account', submit_class: 'ok',
+                                                                   eula_context: 'slack_user_auth' } %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

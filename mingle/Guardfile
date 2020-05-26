@@ -1,0 +1,10 @@
+# A sample Guardfile
+# More info at https://github.com/guard/guard#readme
+
+guard :shell do
+  watch(/^(app|lib|test)\/.*\.rb$/) do |_|
+    start = Time.now
+    `ctags -f TAGS -e -R --languages=ruby --exclude='.#*' app lib test`
+    "Regenerating project tags using #{Time.now - start}s."
+  end
+end

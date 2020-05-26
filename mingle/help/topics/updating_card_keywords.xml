@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Updating card keywords">
+	<p>Card keywords are words, numbers or symbols that Mingle uses to create automatic links in cards and pages. 
+		When you're editing a card or page and you add any of these keywords, Mingle will automatically convert them to links when you save your changes.</p>
+	
+	<example>Your project has a card keyword definition of: <markup>#</markup> You're editing the description for a card and want to create a link to <strong>card number 123</strong>. 
+		Type the following in the description to create a hyperlink to card 123:
+		<markup>#123</markup>
+		</example>
+	
+	<p>Most card keywords would have been created during initial project setup, but you may want to update card keywords if you find team members are using terms to describe cards that are not being converted to links. 
+		This may happen if you change a card property, e.g. if you change a card from Type = Defect to Type = Bug, you may want to add a new card keyword called 'bug'.</p>
+    <section title="Updating card keywords" file="create_card_keywords" />
+	<section title="Checking that card keywords pick up card numbers in existing commit messages" file="testing_card_keyword_source_control_integration" collapsed="true" />
+</topic>
+
+

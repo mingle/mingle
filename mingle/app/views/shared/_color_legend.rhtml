@@ -1,0 +1,64 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id='color-legend-container'>
+  <% if @view.color_by %>
+    <%-
+      color_by_colors = if @view.color_by.downcase == "type"
+        @project.card_type_colors
+      else
+        @view.color_by_property_definition.enumeration_values.inject({}) do |colors, val|
+          colors[val.name] = (val.color || "transparent")
+          colors
+        end
+      end
+
+    -%>
+  <style type="text/css">
+    .card-inner-wrapper { border-left-width: 6px solid transparent; }
+
+    <% color_by_colors.each do |value, color| %>
+      <%= raw ".card-inner-wrapper[color_for=\"#{uri_encode_for_js(value)}\"] { border-left: 6px solid #{color}; }" %>
+    <% end %>
+  </style>
+
+    <% collapsible 'Color legend', true, {:visibility_preference => :color_legend_visible} do -%>
+      <% cache_to_except_xhr(Keys::ColorLegend.new, @project, @view.color_by) do -%>
+        <h4><%= @view.color_by_property_definition.name %></h4>
+
+        <table class="reset-table" id="color-legend">
+          <% @view.workspace.color_values.each do |value| -%>
+            <tr data-color-for="<%= value.value %>">
+              <td id=<%= "color-legend-type-#{h value.value}" %>><%=h value.value %></td>
+              <td>
+                <%= render :partial => "shared/color_panel",
+                    :locals => {:color_provider => value,
+                                :form_options => {:url => {
+                                                           :controller => 'cards',
+                                                           :action => 'update_property_color',
+                                                           :id => value,
+                                                           :color_provider_type => value.class.name
+                                                          }
+                                                  }
+                               } %>
+              </td>
+            </tr>
+          <% end -%>
+        </table>
+      <% end -%>
+    <% end -%>
+  <% end %>
+</div>

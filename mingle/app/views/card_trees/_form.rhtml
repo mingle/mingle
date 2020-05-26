@@ -1,0 +1,38 @@
+<!--[form:card_tree]-->
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%= hidden_field_tag 'from_url', params[:from_url] %>
+<% if defined?(@submit_update_permanently) -%>
+  <%= hidden_field_tag 'update_permanently', true %>
+<% end -%>
+<p><label for="tree_name">Name:</label>
+<%= text_field 'tree', 'name'  %></p>
+
+<p><label for="tree_description">Description:</label>
+<%= text_field 'tree', 'description'  %></p>
+<div id='tree_config_view'>
+  <label for="tree_config_view">Configuration:</label>
+</div>
+
+<%= 
+  javascript_with_rescue %{
+    treeConfigView = new TreeConfigView('tree_config_view', #{type_droplist_options.to_json});
+    PropertyNameSuggestion.setup(#{existing_property_names}); 
+    #{init_tree_configuration_nodes(@tree, 'treeConfigView')}
+  }
+%>
+<!--[eoform:card_tree]-->

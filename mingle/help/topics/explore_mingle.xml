@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE chapter SYSTEM "mingle_help.dtd">
+<topic title="Explore Mingle">
+  <section title="Setting up a New Project">
+    <screenshot src="resources/images/explore_mingle/icon_whiteboard_50.png" />
+    <bullets>
+      <item><cref topic="quick_project_setup#create_a_new_project_from_template">Which template should I use?</cref></item>
+      <item><cref topic="explore_mingle_topic_whats_a_card">What's a card?</cref></item>
+      <item><cref topic="explore_mingle_topic_workflow">Will Mingle understand my workflow?</cref></item>
+      <item><cref topic="quick_project_setup#add_mingle_users_and_project_team_members">How do I set up my team?</cref></item>
+    </bullets>
+  </section>
+  
+  <section title="Workflow">
+    <screenshot src="resources/images/explore_mingle/icon_plane_50.png" />
+    <bullets>
+      <item><cref topic="explore_mingle_topic_workflow#explore_mingle_workflow_recommendation">Workflow Recommendation</cref></item>
+      <item><cref topic="card_types">Stories, Defects and Tasks</cref></item>
+      <item><cref topic="explore_mingle_topic_story_wall">Story Wall</cref></item>
+      <item><cref topic="tip_subscribe_to_feeds">Workflow Notifications</cref></item>
+    </bullets>
+  </section>
+  
+  <section title="Team Processes">
+    <screenshot src="resources/images/explore_mingle/icon_notebook_50.png" />
+    <bullets>
+      <item><cref topic="explore_mingle_topic_daily_standup">Daily Standup</cref></item>
+      <item><cref topic="explore_mingle_topic_retrospective">Team Retrospective</cref></item>
+      <item><cref topic="murmurs">What's Murmurs?</cref></item>
+    </bullets> 
+  </section>
+  
+  <section title="Requirements">
+    <screenshot src="resources/images/explore_mingle/icon_index_card_50.png" />
+    <bullets>
+      <item><cref topic="explore_mingle_topic_feature_breakdown">Feature Breakdown</cref></item>
+      <item><cref topic="explore_mingle_topic_story_list">Story List</cref></item>
+      <item><cref topic="card_rankings">Story Ranking</cref></item>
+    </bullets>
+  </section>
+  
+  <section title="Planning">
+    <screenshot src="resources/images/explore_mingle/icon_calendar_50.png" />
+    <bullets>
+      <item><cref topic="explore_mingle_topic_planning_release">Releases, Sprints and Iterations</cref></item>
+      <item><cref topic="explore_mingle_topic_estimation">Estimation and Planning Poker</cref></item>
+    </bullets>
+  </section>
+  
+  <section title="Tracking">
+    <screenshot src="resources/images/explore_mingle/icon_checklist_50.png" />
+    <bullets>
+      <item><cref topic="viewing_cards">Stories, Defects and Tasks</cref></item>
+      <item><cref topic="explore_mingle_topic_tracking_release">Releases, Sprints and Iterations</cref></item>
+    </bullets>
+  </section>
+  
+  <section title="Reporting">
+    <screenshot src="resources/images/explore_mingle/icon_report_50.png" />
+    <bullets>
+      <item><cref topic="tip_metrics_on_cards">Need a burn-up or burn-down chart?</cref></item>
+      <item><cref topic="macro_and_mql_guide">Need a customized report?</cref></item>
+    </bullets>
+  </section>
+
+</topic>

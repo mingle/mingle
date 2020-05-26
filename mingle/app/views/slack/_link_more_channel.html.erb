@@ -1,0 +1,33 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div class='map-multiple-channel'>
+  <div id="add-remove-channels-header">
+    <h2 >Add/remove channels</h2>
+    <p>This section will allow you to link multiple Slack channels.</p>
+  </div>
+  <div id="add-remove-channels-content">
+    <% private_channels, public_channels = partition_non_primary_channels(@slack_channels, Project.current) %>
+    <div>
+      <h4> Select Channel </h4>
+      <%= render :partial => 'channels_list', :locals => {:public_channels => public_channels, :private_channels => private_channels, :readonly => false }%>
+    </div>
+    <div>
+      <input type="button" value="SAVE" id="save-channels" onclick="MultipleMappings.update('.slack-channel-container input')">
+      <input type="button" disabled value="CANCEL" id="reset-selection" onclick="MultipleMappings.resetChannelsList('.slack-channel-container input')">
+    </div>
+  </div>
+</div>

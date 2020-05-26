@@ -1,0 +1,61 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div id='add_card_popup' class="card-popup-lightbox"  %>
+  <% lightbox = Lightbox.with_close_link_and_close_button(self, 'Cancel', nil, :onclick => 'MagicCard.instance && MagicCard.instance.revert()', :id => "cancel_add_card", :class => 'remove-button popup-close')
+     lightbox.body(nil, nil, :"data-color" => @card.color(params['from_url']['color_by'])) do %>
+    <% form_remote_tag(:html => {:id => 'add_card_form', :class => 'inline-edit-form'},
+          :url => {:controller => 'quick_add_cards', :action => 'create_by_quick_add', :from_url => params[:from_url]},
+          :success => "MagicCard.instance && MagicCard.instance.revert();"
+          ) do -%>
+        <%= lightbox_close_button(:onclick => 'MagicCard.instance && MagicCard.instance.revert()') %>
+
+        <%- if quick_add_card.use_filters? && quick_add_card.tree_selected? -%>
+          <%= hidden_field_tag :tree_config_id, quick_add_card.tree_config_id -%>
+        <%- end -%>
+
+        <%= render :partial => "cards/card_type_selector", :locals => { :card => @card } %>
+        <fieldset class="card-title form_item input-panel">
+          <h1>
+          <span class="card-number">#<%= @project.next_likely_number %></span>
+          <%= text_field_tag 'card[name]', params[:card] && params[:card][:name], :class => "quick-add-popup-name card-name-input-field", :onkeydown => "MingleUI.cmd.saveOnKeyHandler(event)" %>
+          </h1>
+        </fieldset>
+
+        <div class="tags-container" name="tags-container">
+          <%= render :partial => "tags/tags_editor", :locals => {:tag_names => @card.tags.map(&:name), :project => @project, :tag_field_name  => 'tagged_with', :auto_submit => false, :sortable => true } %>
+        </div>
+
+        <div id="card-description">
+          <%= ckeditor_text_area_tag @card, 'card[description]', @card.formatted_content_editor(self), :class => "edit-mode-only ckeditor-inline-editable", 'data-image-upload-url' => project_attachments_path(@project.identifier, :attachable => { :type => "card", :id => @card.id }, :authenticity_token => form_authenticity_token) %>
+        </div>
+
+        <%= render :partial => "cards/add_card_properties", :locals => { :card => @card, :quick_add_card => quick_add_card } %>
+
+        <% lightbox.complete_action do -%>
+          <%= button_to_function 'Add', 'MingleUI.EasyCharts.ActionTracker.postCreateEvents(); return false', {:class => 'save-content primary link_as_button save-button', :id=> 'quick_add_button'} %>
+        <%- end -%>
+      <% end %>
+
+    <%- end -%>
+
+    <%= javascript_with_rescue <<-JAVASCRIPT
+      Form.focus('card_name');
+      var editor = $j(InputingContexts.top().findElement(".lightbox_content"));
+      editor.enableCardEditor();
+    JAVASCRIPT
+    -%>
+</div>

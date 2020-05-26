@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="What's new in Release 13.2">
+	<p>Please review the <cref topic="upgrading_from_previous_versions">upgrade instructions</cref> before moving to Mingle 13.2.</p>
+	<section title="WYSIWYG Editor">
+	    <p>13.2 marks a big release for the Mingle team with the introduction of our new <cref topic="using_the_editing_toolbar">WYSIWYG editor</cref>, which has been highly requested on our community and from our users across the globe. We designed this capability to help software teams articulate stories quickly and easily, using the following principles:</p>
+      <bullets>
+        <bullets>
+            <item>Support collaborative story articulation</item>
+            <item>Invisible part of story articulation process</item>
+            <item>Provide just enough formatting to support emphasis and clarity</item>
+            <item>Ongoing changes over finished documentation</item>
+        </bullets>    
+      </bullets>
+    <note>
+      <bullets>
+        <item>None of our old wiki markup is required or supported; what you see is what you get. (For example, if you type "h1." -- our old markup for the Mingle-style heading -- you will see "h1." when you save. Now to get the Mingle-style heading, just select it from the <cref topic="markup_paragraph_format">format drop-down menu</cref> in the editing toolbar.)</item>
+        <item>We have maintained our unique <cref topic="markup_linking">linking</cref> and <cref topic="macro_and_mql_guide">reporting</cref> capabilities. Read more about <cref topic="formatting_help_component">creating and formatting content</cref> with our new editor.</item>
+        <item>To modify content in "Edit" mode, just right click with your mouse. (This becomes particularly handy for editing links, tables, charts, graphs and other macros.)</item>  
+      </bullets>
+    </note>  
+	</section>
+	<section title="Update to supported browsers">
+		<p>We have added official support for <strong>IE9</strong> in Mingle 13.2. This update coincides with our <exref url="http://support.thoughtworks.com/entries/23376687-End-of-Life-for-Internet-Explorer-7-">deprecation of support for IE7</exref>. Read more about other supported browsers in <cref topic="system_requirements">system requirements</cref>.</p>
+	</section>
+	<section title="API enhancements">
+		<p>Building upon the <cref topic="mingle_api_objective">objective API</cref> we released in <cref topic="whats_new_in_release_13_1">Mingle 13.1</cref>, we've added a new <strong>static and unique numeric id</strong> parameter to objectives so you can always identify the objective even if its other parameters change.</p>
+	</section>	
+	<section title="Bug Fixes">
+	    <p>The following bugs have been fixed with 13.2:</p>
+		     <bullets>
+		          <item>Rails security fix: Mingle uses Rails as its web application framework. This release of Mingle includes a fix for a security vulnerability found in the Rails framework. For more information on this vulnerability see: <exref url="https://groups.google.com/forum/?fromgroups=#!topic/rubyonrails-security/zAAU7vGTPvI">CVE-2013-1857</exref>.</item>
+		       		<item>Backlog objectives with value statements &gt; 255 characters cannot be planned</item>
+		       		<item>Oracle gives "value too large for column" error for backlog_objective PUT request</item>
+		       		<item>Links to Mingle support are broken on startup error pages</item>
+		       		<item>Card export to excel blocks card transition in other project</item>
+		       		<item>Aggregate properties are incorrect for anonymous users</item>
+		       		<item>Mingle logo forces anonymous users to authenticate when on Plus license</item>            
+		     </bullets>   
+	</section>
+</topic>
+
+
+

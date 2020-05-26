@@ -1,0 +1,339 @@
+= Mingle Development
+:toc:
+:sectanchors:
+:sectlinks:
+
+Mingle is a JRuby Rails 2.3.18 app, running within a Tomcat 8 container. Being that we are on an ancient Rails version, JRuby runs at the Ruby 1.8 compatibility level, meaning we're sticking with the JRuby 1.7 branch for the foreseeable future, until we move to a more modern Rails (*whenever that is, anyway*).
+
+== Development machine requirements
+
+Below instructions were tested on macOS Mojave(10.14.6), and no guarantees in other distributions.
+
+== Hard Requirements
+
+* Software is designed to work with the following dependent software with *specific versions only*
+    ** JDK 8 (Oracle or OpenJDK)
+    ** PostgreSQL 9.x (any errors while installing postgres, please refer to file `postgresql.adoc`
+    ** Git
+    ** PhantomJS 2.x+
+
+    ** Download highcharts-2.2.3 and place it in public/javascripts. Due to the nature of highcharts licensing requirements, we require you to download and build the artifact from the source yourself. For more information on how to download and build highcharts-2.2.3, refer to documentation `highcharts.adoc`.
++
+[source,bash]
+----
+
+public/javascripts/Highcharts-2.2.3
+└── js
+    ├── adapters
+    │   ├── mootools-adapter.js
+    │   └── prototype-adapter.js
+    ├── highcharts.js
+    ├── modules
+    │   ├── canvas-tools.js
+    │   └── exporting.js
+    └── themes
+        ├── dark-blue.js
+        ├── dark-green.js
+        ├── gray.js
+        ├── grid.js
+        └── skies.js
+
+4 directories, 10 files
+----
+
+    ** Due to possible licensing conflicts, the Oracle Database 11g driver is not bundled with this source code. Download ojdbc6.jar and place it in vendor/java. After doing this, the filesystem should look like this:
++
+[source,bash]
+----
+
+vendor/java/
+...
+├── mina-core-1.1.7.jar
+├── nekohtml-1.9.13.jar
+├── ojdbc6.jar
+├── poi-4.0.1.jar
+├── poi-excelant-4.0.1.jar
+...
+----
++
+More details about ojdbc6.jar:
++
+- Repository-Id field in META-INF/MANIFEST.MF in the jar file: JAVAVM_11.2.0.2.0_LINUX_100812.1
+- Specification-Vendor field in META-INF/MANIFEST.MF in the jar file: Sun Microsystems Inc.
+- SHA 256 sum: a6e151e3c30efbfb3d86ad729dd2f9136a093815baebcfe81e6d0b26893180b2
+- File size: 2152051 bytes
+- Possible location to get this from: https://www.oracle.com/database/technologies/jdbcdriver-ucp-downloads.html
+- The file might be downloaded as `ojdbc6-11.2.0.2.0.jar`, but should be placed on the filesystem as `ojdbc6.jar`.
+
+== Licenses
+
+Mingle uses several libraries in its product development. Some libraries are open source under various open source software licenses.
+And some libraries are commercial and requires developers/maintainers of the software to acquire license.
+
+== Required commercial licenses for generating distributables/installers
+
+* Highcharts
+* VMWare - License is used to generate vmware image
+* SVNKit - License is used to show commit history, and changesets from svn
+
+== Highly Recommended
+
+Bash::
+
+  All scripts are written for Bash, as that's what's in Production, that's what our build agents use, and that's what most Linux distros expect, including Amazon Linux. If you use ZSH, *most* things may work, though none are tested in ZSH. Some dev setup scripts are known to **not work** in the related ** mingle-saas** codebase. YMMV.
+
+Homebrew::
+
+  For all of your software installations
+
+memcached::
+
+  * mainly for development-mode (Webrick)
+  * not needed when running Mingle in Tomcat-mode; Mingle starts an internal jmemcached (Java-based memcached server)
+
+rbenv::
+
+  `rbenv` plays nicely with build agents, whereas `RVM` is a real nightmare to get right on build agents. This will be installed via setup script in the next section. Our build agents run this script every build, and it's recommended that your dev environment be set up the same way for confidence. It's certainly possible to use RVM, or something else, but these instructions won't cover those scenarios in any great detail.
+
+IntelliJ IDEA::
+
+  There will be times when you need to write Java
+
+Your favorite Ruby-capable editor or IDE::
+
+  e.g. Sublime Text 3, Atom, vim, emacs, RubyMine
+
+Familiarity with Oracle::
+
+  We support both PostgreSQL and Oracle 11g (12 probably works, but we've not tested it).
+
+== Setting Up Your Environment
+
+Again, if you use RVM, *_these instructions are not for you_*. There will be a section below describing the general flow for manually setting up without the script.
+
+. Ensure your system has JDK 8 installed.
+  * jEnv users: Haven't done any real testing wtih **jEnv**; I tried it once, but I vaguely remember that there may have been a small issue, but I can't remember now. May be irrelevant now.
+
+. Ensure PostgreSQL 9.x is installed:
++
+[source,bash]
+----
+# install postgres if not installed
+which postgres &> /dev/null || (brew update; brew install postgresql@9.6)
+# ensure postgres is 9.x if it was already installed
+postgres --version | grep -F ' 9.' &> /dev/null || (brew update; brew upgrade postgresql@9.6)
+----
+
+. Ensure PhantomJS 2.x is installed:
++
+[source,bash]
+----
+# install phantomjs if not installed in $PATH
+which phantomjs &> /dev/null || (brew update; brew install phantomjs)
+# if phantomjs was already installed, ensure it is updated to 2.x
+test $(phantomjs --version | grep -oE '^([0-9]+)') -ge 2 || (brew update; brew upgrade phantomjs)
+----
+
+. Clone the Mingle repo: `git clone https://github.com/mingle/mingle.git`
+
+. Run `script/build` being within <cloned-directory>/mingle directory
+  * This will install `rbenv`, `ruby-build`, `rbenv-update`, `rbenv-gemset`, and `rbenv-vars`
+  * Installs the correct JRuby, Bundler, and runs `bundle install` to pull all the gems into the mingle gemset.
+  * **This probably won't work if you installed `rbenv` via Homebrew. Sorry. May add Homebrew detection later as a bonus, but highest priority for this script is to ensure this works on CentOS (build agents), and BSD (Mac OS X) with the fewest dependencies/prerequisites as possible.**
+
+== Help! I'm an RVM user or I've already set up rbenv in a non-standard location (e.g. via Homebrew)
+
+Essentially, you need support for gemsets, automatic environment variable setting, and of course managing ruby versions.
+
+=== RVM
+
+* Last I checked, RVM has all of that built-in. RVM should be able to install the version enforced by `.ruby-version`, create a gemset of the same name in `.ruby-gemset`, and automatically load environment variables from `.ruby-env` (which is a symlink to `.rbenv-vars`).
+* I don't use RVM anymore, so I haven't verified these instructions. All I know is that you can't use both `rbenv` and `RVM` and expect the world to be a happy place.
+
+=== rbenv installed outside of $HOME/.rbenv:
+* Oh aren't we daring? Basically, you'll need to install the following plugins manually into your `$RBENV_HOME/plugins` directory:
+  ** ruby-build (https://github.com/sstephenson/ruby-build.git)
+  ** rbenv-update (https://github.com/rkh/rbenv-update.git)
+  ** rbenv-gemset (https://github.com/jf/rbenv-gemset.git)
+  ** rbenv-vars (https://github.com/sstephenson/rbenv-vars.git)
+* Then finally:
++
+[source,bash]
+----
+rbenv update
+rbenv install $(cat .ruby-version)
+gem install bundler
+bundle install
+rbenv rehash
+----
+
+== Create Your PostgreSQL DBs
+
+. `createdb mingle_development`
+. `createdb mingle_test`
+. `cp config/database.yml.example config/database.yml` (use dynamic database.yml template)
+  ** This database.yml file that is used for development doesn't contain password for the database user, configure the database to trust and accept connections from a <database-user>. By default the database user is pulled from the current environment variable. You can create a new database user and provide as USER environment variable in case if you don't want to use the existing user from environment variable.
+  ** This file will render templates for different databases located in `test/config/database.yml.*`
+  ** Switching between different database config files happens through setting the `DB` environment variable, e.g. `DB=oracle11g script/server`
+  ** To run the server in development mode `RAILS_ENV=development USER=<database-user> script/server`
+. `RAILS_ENV=test FAST_PREPARE=true USER=<database-user> rake db:quick` - this migrates and prepares test fixtures
+  ** This is basically a shortcut for running the tasks:
+    *** `db:migrate`
+    *** `db:test:prepare LP=first_project,simple_program`
+      **** The `LP=xxxx` flag loads 2 frequently used project/program fixtures, rather than all of the fixtures, which is good for the impatient :).
+  ** If `rbenv` reports that `rake` can't be activated (or something along those lines), it probably means you've installed another version of `rake` globally (i.e. not in a gemset)
+  ** In that case, either run `script/build rake db:quick` or `bundle exec rake db:quick` to ensure the correct `rake` version is invoked
+. Alternatively, you can run `RAILS_ENV=test FAST_PREPARE=true USER=<database-user> rake db:migrate db:test:prepare`. This will load the full set of fixtures, which takes a bit longer (especially so when running against Oracle)
+
+== Generating assets
+
+`rake web_xml assets` - to build javascript assets and files
+
+== Starting Mingle
+
+There are two ways to start Mingle: development-mode (Webrick), and somewhat-closer-to-production-mode (Tomcat).
+
+=== Development mode
+
+Run `script/server`: Starts Mingle on port 3000, as well as a memcached server in another thread
+
+Pros::
+  * Hot-asset-rebuilding via Sprockets whenever JS or CSS files are updated
+  * ERB template changes are reflected immediately, without bouncing Rails
+  * Starts faster (not fast, just faster) than Tomcat
+  * Can use ruby debugger (`ruby --debug script/server` and set a breakpoint with the `debugger` expression in your code)
+
+Cons::
+  * Background jobs don't run (but you can manually trigger individual jobs using http://localhost:3000/under_the_hood)
+  * Model and controller code changes require bounce to take effect
+  * Fake messaging via PStore
+  * No ElasticSearch service. Need to download and start ElasticSearch in a separate process.
+
+=== Tomcat mode
+
+Run `script/tomcat`: Starts Mingle within an embedded Tomcat container. Port is set in `config/mingle.properties` and defaults to 8080.
+
+Pros::
+  * Closer to production (especially on-site installers)
+  * Runs integrated jmemcached, and ElasticSearch, ActiveMQ broker
+  * Real JMS messaging, persisted over reboots
+  * Has diagnostic servlets to show information about the instance (/status, /background_status, /bootstrap_status)
+
+Cons::
+  * Startup time is longer than development mode. Not quite "get a coffee" longer, but it's still irritating.
+  * No hot-asset-rebuilding, so if you are working on a lot of JS and styling, this is not the best approach
+  * ERB template changes (in fact, all changes) require bouncing tomcat
+  * Less verbose log output by default (e.g. does not show SQL statements in flight). You can turn on a transient flag to enable verbose logging while the server is running (http://localhost:8080/under_the_hood), but it might put out too much. There's no in-between.
+  * Hard (impossible?) to use ruby debugger
+
+== To view the re-write of the program management profolio
+. To start the built-in tomcat server with dual app(Rails2, and Rails5) mode with new user experience in program feature
+    `BUILD_ROOT_WAR=false BUILD_RAILS_5_WAR=true ENCRYPTED_WAR=false USER=mingle RAILS_ENV=production script/dual_server.sh start`
+. And to stop the server
+    `BUILD_ROOT_WAR=false BUILD_RAILS_5_WAR=true ENCRYPTED_WAR=false USER=mingle RAILS_ENV=production script/dual_server.sh stop`
+
+== Running Tests
+
+=== Units and Functionals
+
+Invoke ruby, passing path to test as first argument. Specific test names can be used as arguments with `-n` to run targeted tests. Multiple `-n` arguments are supported:
+
+[source,bash]
+----
+# runs all tests in suite
+ruby test/unit/color_test.rb
+
+# runs exactly the 2 named tests
+ruby test/unit/color_test.rb -n /test_valid_checks_hex_format/ -n /test_random_gives_random_css_rgb_value/
+
+# runs tests in more than 1 suite when requiring addition suites with `-r` (supports multiple `-r` arguments, and
+# can use in conjunction with `-n` arguments)
+ruby -r test/functional/tabs_controller_test.rb test/unit/color_test.rb
+----
+
+NOTE: Rails standard `rake test:units` and `rake test:functionals` work, but these take a **LONG** time because there are so many tests, so we generally don't do this.
+
+If you still want to run unit tests locally on a clean database
+
+. drop and recreate the database
+. migrate the data to the latest schema
+. run all tests
+
+[source,bash]
+----
+## these instructions are for postgresql
+$> dropdb mingle_test; createdb mingle_test
+
+## for unit tests
+$> RAILS_ENV=test FAST_PREPARE=true rake db:migrate test:units --trace
+
+## for functional tests
+$> RAILS_ENV=test FAST_PREPARE=true rake db:migrate test:functionals --trace
+----
+
+=== Acceptances (Selenium RC)
+
+  * Runs with Google Chrome by default
+  * Need to run selenium proxy server in a separate process/shell
+    ** `rake selenium:proxy`
+  * Then, invoke ruby with path to test file as first argument (just as with units/functionals)
+  * Note that running these tests will alter your `mingle.properties` file such that Tomcat will bind to port `4001`. This configuration persists even after the tests complete (sorry about that), so subsequent Tomcat instances will listen on `4001` unless changed back to the original value. Or you can just stick with `4001`.
+
+=== Webdriver ("Cupcake") Tests - SaaS acceptances
+
+  * Need to clone the `mingle-test` repo. More to come here.
+
+== DB Structure Dumps (SaaS)
+
+Talk about schema pools here.
+
+== Product documentation
+
+run the command `rake installers:help` to generate documentation
+
+== Building Installers
+
+. download install4j 5.1.15, install to "/Applications/install4j-5" (note the hyphen)
+. get license file from install4j
+
+== Gauge Planner Acceptance tests
+
+=== Installation
+. ~ $ brew install gauge
+. ~ $ gauge --install java
+
+=== Commands to execute the tests as rake task
+. To execute single spec , Runs with Google Chrome by default with the end point APP_ENDPOINT = http://localhost:8080 ( change the BROWSER/APP_ENDPOINT value in test/gauge/plannerTests/env/default/default.properties to run the tests in other browser)
+
+        rake gauge:test[SpecName.spec]
+
+. To execute all specs
+
+        rake gauge:test
+
+=== Commands to execute the tests as Gradle task
+. Bring app the app then modify the app endpoint on test/gauge/plannerTests/env/default/default.properties
+
+. Go to the tests folder test/gauge/plannerTests
+
+        ~ $ gradle gauge -PspecsDir=specs/SpecName.spec
+
+== About licensed software
+. VMWare license:
+    * License is required for creating installers and distributing the software
+    * VMWare license is used for generating vmware machine images with mingle installed on it
+    * copy "spinfinity.so" to vendor/vmware/spinfinity.so
+. SVNKit license:
+    * License is required for creating installers and distributing the software
+    * SVNKit is used to intergate mingle with SVN so that mingle can show list of commits against respective cards
+    * For more information on license (https://svnkit.com/licensing.html)
+. Highcharts-2.2.3
+    * License is required for creating installers and distributing the software
+
+== Product license
+
+For both `License key`, and `Licensed to` input the value `Open source` and submit the form by clicking on `Finish` or `Register`.
+
+== Support
+
+Support e-mails used in the source code aren't active anymore for any support help or troubleshooting needs from ThoughtWorks. E-mails sent to support@thoughtworks.com related to mingle shall be ignored.

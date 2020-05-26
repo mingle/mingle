@@ -1,0 +1,404 @@
+==
+<style>
+table.api{width:740px;border: 1px solid #ccc;}
+td.label_col{width:60px;}
+</style>
+==
+
+Action APIs perform actions on the browser. 
+
+Since Sahi V2, Sahi executes Sahi scripts inside a Rhino Javascript engine in the proxy. 
+Actions which need to be performed on the browser are dispatched to the browser by the proxy.
+
+The remarkable thing about these Browser Action APIs, is that the parameter expressions 
+passed to these APIs execute on the browser and not on the proxy. 
+
+Eg.
+_click(document.form1.checkbox1) will work since document.form1.checkbox1 is evaluated on the browser. 
+
+
+h2. Mouse actions
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_click(element)* </td></tr>
+<tr><td> Notes </td><td> Clicks the element. "Details":_click </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_rightClick(element)* </td></tr>
+<tr><td> Notes </td><td> Right clicks on the element. "Details":_rightClick </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_doubleClick(element)* </td></tr>
+<tr><td> Notes </td><td> Double clicks on the element. "Details":_doubleClick </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_mouseOver(element)* </td></tr>
+<tr><td> Notes </td><td> Simulates a mouse over on the element. "Details":_mouseOver </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_dragDrop(elementToDrag, elementToDropOn)* </td></tr>
+<tr><td> Notes </td><td> Drags elementToDrag and drops on elementToDropOn. "Details":_dragDrop </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_dragDropXY(elementToDrag, x, y[, isRelative])* </td></tr>
+<tr><td> Notes </td><td> Drags elementToDrag and drops it on the given x, y coordinates. 
+<br> If isRelative is true, drags x,y pixels relative to current position.
+<br> If isRelative is false, drags to x,y coordinate on browser.
+</td></tr>
+</table>
+
+h2. Focus action
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_focus(element)* </td></tr>
+<tr><td> Notes </td><td> Brings focus to the given element </td></tr>
+</table>
+
+
+
+h2. Key actions
+
+In the below APIs, combo can be any of "CTRL", "ALT" or "META" 
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_keyPress(element, charCode, combo)* </td></tr>
+<tr><td> Notes </td><td> Simulates a keypress event for key with given charCode on the element </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_keyDown(element, charCode, combo)* </td></tr>
+<tr><td> Notes </td><td> Simulates a keydown event for key with given charCode on the element  </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_keyUp(element, charCode, combo)* </td></tr>
+<tr><td> Notes </td><td> Simulates a keyup event for key with given charCode on the element  </td></tr>
+</table>
+
+
+h2. Data input actions
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_setValue(element, text)* </td></tr>
+<tr><td> Notes </td><td> Focuses on the element, types in the text and then removes focus from element.
+<br>element can be a textarea or a textbox. "Details":_setValue </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_setSelected(element, text, isMultiple)* </td></tr>
+<tr><td> Notes </td><td> Selects the option with text in select element.<br>
+element can only be a select box.<br>
+isMultiple is used to select multiple values in a multi select box.<br>
+"Details":_setSelected
+</td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_setFile(element, filePath)* </td></tr>
+<tr><td> Notes </td><td> Prepares the form to set file at filePath. "Details":_setFile </td></tr>
+</table>
+
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_rteWrite(iframe, text)* </td></tr>
+<tr><td> Notes </td><td>Writes text into a rich text editor based on content-editable iframe</td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_type(element, text)* </td></tr>
+<tr><td> Notes </td><td> Types the text into the element. Different from _setValue.<br> 
+_type does not bring or remove focus from element. Rarely used.</td></tr>
+</table>
+
+h2. Assertions
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_assertEqual(expected, actual, message)* </td></tr>
+<tr><td> Notes </td>
+<td> Asserts that expected and actual are equal, else logs the message. "Details":_assertequal
+</td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_assertNotEqual(expected, actual, message)* </td></tr>
+<tr><td> Notes </td>
+<td> Asserts that expected and actual are NOT equal, else logs the message. "Details":_assertnotequal
+</td></tr>
+</table>
+
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_assertNotNull(object, message)* </td></tr>
+<tr><td> Notes </td>
+<td> Asserts that the object is NOT null, else logs the message. "Details":_assertnotnull
+</td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_assertNull(object, message)* </td></tr>
+<tr><td> Notes </td>
+<td> Asserts that the object is null, else logs the message. "Details":_assertnull
+</td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_assertTrue(condition, message)* </td></tr>
+<tr><td> Notes </td>
+<td> Asserts that the condition is true, else logs the message. "Details":_asserttrue
+</td></tr>
+</table>
+
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_assert(condition, message)* </td></tr>
+<tr><td> Notes </td><td> Same as _assertTrue </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_assertNotTrue(condition, message)* </td></tr>
+<tr><td> Notes </td>
+<td> Asserts that the condition is NOT true, else logs the message. "Details":_assertnottrue
+</td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_assertFalse(condition, message)* </td></tr>
+<tr><td> Notes </td>
+<td> Asserts that the condition is false, else logs the message. "Details":_assertfalse
+</td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_assertExists(object, message)* </td></tr>
+<tr><td> Notes </td>
+<td> Asserts that the object is not null, else logs the message. 
+</td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_assertNotExists(object, message)* </td></tr>
+<tr><td> Notes </td>
+<td> Asserts that the object does not exist (is null), else logs the message.
+</td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_assertContainsText(expectedText, object, message)* </td></tr>
+<tr><td> Notes </td>
+<td> Asserts that the object contains the expectedText, else logs the message. "Details":_assertContainsText
+</td></tr>
+</table>
+
+h2. Generic actions
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_simulateEvent(element, event)* </td></tr>
+<tr><td> Notes </td><td> Used to simulate an event on element. Buggy (as of 21 May 2009). Will be modified. <br>
+</td></tr>
+</table>
+
+
+h2. Utility actions
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_navigateTo(url, forceReload)* </td></tr>
+<tr><td> Notes </td><td> Navigates to the given url.<br>
+If the url is same as what is loaded on the browser, the page will be refreshed only if forceReload is true<br>
+"Details":_navigateTo
+</td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_log(message, logLevel)* </td></tr>
+<tr><td> Notes </td><td> Logs message into the playback logs.<br> 
+logLevel can be "info", "success", "error", "failure" and "custom1" through "custom5"<br>
+"Details":_log
+</td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_wait(timeInMilliseconds, condition)* </td></tr>
+<tr><td> Notes </td><td> Waits for timeInMilliseconds ms or till the condition is satisfied on the browser,<br>
+which ever is sooner. "Details":_wait </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_call(browserFunction())* </td></tr>
+<tr><td> Notes </td><td> Invokes the browserFunction on the browser, instead of in the Rhino engine. "Details":_call </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_eval(string)* </td></tr>
+<tr><td> Notes </td><td> Evals the string on the browser, instead of in the Rhino engine. "Details":_eval </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_execute(command[, isSynchronous])* </td></tr>
+<tr><td> Notes </td><td> Executes any server side command that needs to be invoked via the command line or shell.<br>
+Useful for invoking other programs.<br>
+If isSynchronous is true, the function will wait till the command finishes. "Details":_execute 
+</td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_callServer()* </td></tr>
+<tr><td> Notes </td><td> Deprecated.<br> 
+Calls server side code which cannnot be executed by javascript on the browser. "Details":_callServer <br>
+With Sahi V2, these actions can directly be performed by calling java classes 
+from javascript through Rhino. "Details":invoking-java-in-rhino
+</td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_resetSavedRandom(key)* </td></tr>
+<tr><td> Notes </td><td> Resets the random number associated with key, to another random number. "Details":_resetSavedRandom <br>
+Deprecated. From Sahi V2, random numbers can be generated using "_random":_random and stored as simple variables.
+</td></tr>
+<tr><td> Related </td><td> "_savedRandom":_savedRandom , "_random":_random </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_setGlobal(key, value)* </td></tr>
+<tr><td> Notes </td><td> Stores the value in key for retreival.<br> 
+The value persists across tests in a suite, if suite.global_variables is true in sahi.properties.<br> 
+Eg. _setGlobal("userid1", _textbox("user").value);
+</td></tr>
+<tr><td> Related </td><td> "_getGlobal":_getGlobal </td></tr> 
+</table>
+
+h2. Actions to mock out particular URLs 
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_addMock(pattern[, clazz_method])* </td></tr>
+<tr><td> Notes </td><td> Forces the proxy to process certain patterns of urls differently.<br>
+If clazz_method is not specified, sends back a simple HTML blank page.<br>
+"Details":_addMock </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_mockImage(pattern[, clazz_method])* </td></tr>
+<tr><td> Notes </td><td> Similar to _addMock, but by default sends back an image.</td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_removeMock(pattern)* </td></tr>
+<tr><td> Notes </td><td> Removes the mock behavior added via _addMock or _mockImage for that pattern.  </td></tr>
+</table>
+
+h2. Actions to set expectations for javascript confirms and prompts
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_expectConfirm(message, boolean)* </td></tr>
+<tr><td> Notes </td><td> Sets an expectation such that when a javascript confirm with given message appears,<br>
+based on the boolean value, OK or Cancel will be processed. "Details":_expectConfirm </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_expectPrompt(message, text)* </td></tr>
+<tr><td> Notes </td><td> Sets an expectation such that when a javascript prompt with given message appears,<br>
+the given text is populated. "Details":_expectPrompt </td></tr>
+</table>
+
+h2. Actions used for debugging
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_highlight(element)* </td></tr>
+<tr><td> Notes </td><td> Highlights an element with a red border. Used for debugging purposes. </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_alert(message)* </td></tr>
+<tr><td> Notes </td><td> Brings up a javascript alert with given message. Use only while debugging </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_prompt(message)* </td></tr>
+<tr><td> Notes </td><td> Brings up a javascript prompt with given message. Use only while debugging </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_confirm(message)* </td></tr>
+<tr><td> Notes </td><td> Brings up a javascript confirm with given message. Use only while debugging </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_debug(message)* </td></tr>
+<tr><td> Notes </td><td> Prints the message on to the console for debugging purposes. </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_debugToErr(message)* </td></tr>
+<tr><td> Notes </td><td> Prints the message on to the error stream for debugging purposes. </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_debugToFile(message, filePath)* </td></tr>
+<tr><td> Notes </td><td> Prints the message into a file for debugging purposes. </td></tr>
+</table>
+
+
+h2. Toggle KeepAlive Actions
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_enableKeepAlive()* </td></tr>
+<tr><td> Notes </td><td> "Details":_enableKeepAlive </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_disableKeepAlive()* </td></tr>
+<tr><td> Notes </td><td> "Details":_disableKeepAlive </td></tr>
+</table>
+
+
+h2. Cookie related actions
+
+Also look at _cookie
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_createCookie(name, value, days)* </td></tr>
+<tr><td> Notes </td><td> Creates a cookie with name and value which will expire in given days.<br>
+"Details":_createCookie
+</td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_deleteCookie(name)* </td></tr>
+<tr><td> Notes </td><td> Deletes cookie with given name.<br>"Details":_deleteCookie </td></tr>
+</table>
+
+h2. Print related actions
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_clearPrintCalled()* </td></tr>
+<tr><td> Notes </td><td> xx </td></tr>
+</table>
+
+
+h2. Download related actions
+
+Sahi handles file downlaods by silently downloading files into sahi/temp/download folder.
+The last downloaded file can be manipulated by the following APIs.
+Note that a _wait() statement may be required before _saveDownloadedAs in case the file is big and takes a lot of time to downlaod.
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_saveDownloadedAs(filePath)* </td></tr>
+<tr><td> Notes </td><td> Saves the file which was downloaded into sahi/temp/folder into the given filePath </td></tr>
+</table>
+
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_clearLastDownloadedFileName()* </td></tr>
+<tr><td> Notes </td><td> Clears the _lastDownloadedFileName (so that new files downloaded with the same fileName can be asserted)</td></tr>
+<tr><td> Related </td><td> _lastDownloadedFileName </td></tr>
+</table>
+
+<!--
+<table class="api">
+<tr><td class="label_col"> API </td><td> *_popup()* </td></tr>
+<tr><td> Notes </td><td>  </td></tr>
+</table>
+-->

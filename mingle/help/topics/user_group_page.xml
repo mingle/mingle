@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="User group page">
+  <section title="What you can do on this page">
+    <p>The user group page displays all team members that belong to the user group. Additionally, Mingle administrators and project administrators can:</p>
+    <bullets>
+      <item>Edit the user group name.</item>
+      <item>Add team members to the user group.</item>
+      <item>Remove team members from the user group.</item>
+    </bullets>
+    <screenshot alttext="User groups page" src="resources/images/user_group_page.png" />
+    <subsection title="Edit the user group name" collapsed="true">
+      <note>Only Mingle administrators and project administrators can edit the user group name.</note>
+      <p>To edit the user group name:</p>
+      <steps>
+        <item>
+          <p>Click the "edit" link next to the user group name.</p>
+          <screenshot alttext="Edit user group name" src="resources/images/edit_user_group_name.png" />
+        </item>
+        <item>
+          <p>Change the user group name name and click "Save".</p>
+          <screenshot alttext="Edit user group name" src="resources/images/editing_user_group_name.png" />
+        </item>
+        <item>
+          <p>The user group name will now be changed.</p>
+          <screenshot alttext="Edit user group name" src="resources/images/edited_user_group_name.png" />
+        </item>
+      </steps>
+    </subsection>
+    <subsection title="Add team members to the user group" collapsed="true">
+      <note>Only Mingle administrators and project administrators can add team members to the user group.</note>
+      <p>To add team members to the user group:</p>
+      <steps>
+        <item>
+          <p>Select the "Add group member" button. This will open a new page to add team members to the user group.</p>
+          <screenshot alttext="Add team member to group button" src="resources/images/add_team_member_to_user_group_button.png" />
+        </item>
+        <item>
+          <p>Click on "Add to group" to add a team member to the user group.</p>
+          <screenshot alttext="Add team member to group" src="resources/images/add_team_member_to_user_group.png" />
+          <note>
+            <p>Existing user group members will be shown, but you will not be able to add them to the user group again.</p>
+            <p>You can search for team members in the list.</p>
+            <screenshot alttext="Add team member to user group" src="resources/images/search_for_team_members_to_add_to_user_group.png" />
+          </note>
+        </item>
+        <item>
+          <p>Click "Back to group" to return to the user group page.</p>
+          <screenshot alttext="Add team member to user group" src="resources/images/back_to_user_group_button.png" />
+        </item>
+      </steps>
+      <note>You can also <cref topic="managing_project_team_members#manage_user_groups">add team members to user groups from the team list page</cref>.</note>
+    </subsection>
+    <subsection title="Remove team members from the user group" collapsed="true">
+      <note>Only Mingle administrators and project administrators can remove team members from the user group.</note>
+      <p>To remove team members from the user group:</p>
+      <steps>
+        <item>
+          <p>Select the team members you want to remove from the user group.</p>
+          <screenshot alttext="Select user group member to remove" src="resources/images/select_user_group_member_to_remove.png" />
+        </item>
+        <item>
+          <p>Select the "Remove" button to remove the selected team members from the user group.</p>
+          <screenshot alttext="Select user group member to remove" src="resources/images/remove_team_member_from_user_group.png" />
+        </item>
+      </steps>
+      <note>You can also <cref topic="managing_project_team_members#manage_user_groups">remove team members from user groups from the team list page</cref>.</note>
+    </subsection>
+  </section>
+  <section title="Also see...">
+    <bullets>
+      <item><cref topic="user_groups_page">See a list of all user groups in the project</cref></item>
+      <item><cref topic="managing_project_team_members#manage_user_groups">Add and remove team members to user groups from the team list page</cref></item>
+    </bullets>
+  </section>
+</topic>

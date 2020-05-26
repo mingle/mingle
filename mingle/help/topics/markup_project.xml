@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE subsection SYSTEM "mingle_help.dtd">
+<topic title="Project macro and Project as a chart option level">
+	<subsection title="Use Project macro to get project identifier" collapsed="true">
+		<p>The user can display the identifier of the current project by:</p>
+		    <list>
+		      <item>clicking on this icon in the editing toolbar:</item>
+		          <icon alttext="Average query toolbar icon" src="resources/images/toolbar_project_macro_icon.png" />
+		      <item>writing the following markup in the macro window, which you can open by clicking the orange Mingle icon in the editing toolbar:
+			          <markup>project</markup>
+			    </item>
+		    </list>
+		<note>Please note that starting from 13.2.2, the project macro is also no longer supported as part of the URL. See <exref url="http://support.thoughtworks.com/entries/23699073-Macros-in-URL-Not-Supported-from-13-2">related Knowledge Base article</exref>.</note>
+	</subsection>
+	<subsection title="Use Project as a chart level option to create charts using another project's data" collapsed="true">
+		<markup_reference title="The markup below shows how to create a pie chart using data from another project by using the project identifier, for example great_bank, as the value for project chart level option. This will allow users to access another project's data when creating charts on the current project.">
+			<note> See <cref topic="cross_project_reporting">cross project reporting</cref> for more information on using another project's data when creating charts on the current project.</note>
+			<markup>
+  pie-chart
+    data: SELECT 'Feature', Count(*) WHERE Type = Story and 'Story Status' = Accepted
+    project: great_bank
+			</markup>
+			<preview>
+				<screenshot alttext="Preview" src="resources/images/cross_project_chart.png" />
+			</preview>
+		</markup_reference>
+	</subsection>
+</topic>

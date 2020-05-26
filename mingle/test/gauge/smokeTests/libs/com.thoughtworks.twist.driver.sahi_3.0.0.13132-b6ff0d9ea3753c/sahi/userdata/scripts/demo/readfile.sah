@@ -1,0 +1,12 @@
+var $userDirPath = _userDataDir();
+var $fileContents = _readFile($userDirPath + "/scripts/demo/includes/values.txt");
+var $SEPARATOR = ","; // or "\t" for tab
+var $data = new Array();
+var $lines = $fileContents.replace(/\r/g, '').split("\n");
+for (var $i=0; $i<$lines.length; $i++)
+{
+    $data[$i] = $lines[$i].split($SEPARATOR);
+    $row = $data[$i];
+	_click(_link($row[0]));
+	_click(_link("Back"));
+}

@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Modifying or deleting card properties">
+	<section title="Modify a card property">
+		<subsection collapsed="true" title="Navigate to the Card properties page">
+			<steps>
+				<item><cref topic="signing_in_and_out_of_mingle">Sign in</cref> to Mingle as a project administrator and open the project you want to change (if you're not already working in the project).</item>
+				<item>
+					<p>Click the <tab>Project admin</tab> tab.</p>
+					<screenshot alttext="Project admin tab" src="resources/images/project_admin_tab.png"/>
+					<p>Mingle displays the <strong>Project settings</strong> page.</p>
+					<note>if you are logged in as a project team member, Mingle displays the  <strong>Team</strong> page.</note>
+					<screenshot alttext="Project admin menu - Properties link" src="resources/images/card_properties_link.png"/>
+				</item>
+				<item>
+					<p>Click the <link>Card properties</link> link.</p>
+					<p>Mingle	displays the <strong>Card properties</strong> page with all properties setup for this project.</p>
+				</item>
+			</steps>
+		</subsection>
+		<screenshot alttext="Card properties page - edit property" src="resources/images/card_properties_page.png"/>
+		<subsection title="What you can change in the Card properties page...">
+			<bullets>
+				<item>
+					<p><strong>Show / Hide</strong> - properties can be hidden if they
+    are not required for data entry - for example calculated values used in
+    reporting. Hidden card properties are conditional displayed in the card view (to show them check the Show hidden properties checkbox). Most users can only set the value by declaring a <cref topic="card_defaults">default
+    value</cref>, or via a <cref topic="card_transitions">transition</cref>,
+    or calculated if it's a formula property. Mingle and project admins can update hidden properties via the card view page. </p>
+					<p>You can also hide a
+    property instead of deleting it, which will retain historical data about
+    changes to that property.</p>
+				</item>
+				<item><strong>Lock / Unlock</strong> - any Managed List property can be
+    locked, this restricts the set of allowed values to only those predefined
+    by the Project Administrator, team members will not be able to dynamically
+    add new values.</item>
+				<item><strong><cref topic="transition_only_properties">Transition
+    only?</cref></strong> - indicates that the property can only have its
+    value set via a transition, it will not be directly editable.</item>
+			</bullets>
+		</subsection>
+		<subsection title="Editing the details of a card property..." id="edit">
+			<p>Click the
+<link>Edit</link> link next to the card property you wish to modify.</p>
+			<p>Mingle displays the <strong>Edit property definition</strong> page.</p>
+			<p>The things you can edit depend on the type of property you chose</p>
+			<screenshot alttext="Edit card property definition page" src="resources/images/edit_card_property_definition.png"/>
+			<note>You can't change the <cref topic="card_property_types">property
+type</cref> here. If you've accidentally created the property with the
+incorrect type - you will need to delete it and recreate a new property with
+the same name.</note>
+			<p>You can always change the <strong>name and
+description</strong> of a property, however do consider whether you should be
+renaming an existing property or creating a new one.</p>
+			<bullets title="Effects of renaming a property">
+				<item>The name will be changed in any card types using the property</item>
+				<item>Any MQL which referenced the original property name will display an
+    error, this may affect charts and tables</item>
+				<item>Any Formula property which referenced the original property name
+    will be updated to reference the new name</item>
+				<item>Any Favorite which used the original property name in a filter
+    condition will be changed to use the new name</item>
+				<item>Any Transition which used the original property name in its 'has' or
+    'set' clause will be changed to use the new name</item>
+				<item>Any Aggregate properties which referenced the original property name
+    will be updated to reference the new name</item>
+			</bullets>
+			<p>For <strong>Managed list</strong> properties - you can <cref topic="maintain_card_property_values">change the list of allowed values</cref>
+by clicking on the <link>Edit values</link></p>
+			<screenshot alttext="Edit card property page - edit values link" src="resources/images/edit_card_property_values_link.png"/>
+			<p>For <strong><cref topic="formula_properties">Formula properties</cref></strong> - you can change the formula definition and select whether or not to <cref topic="formula_property_examples#replace_not_set">replace numeric (not set) values with zero</cref> when calculating the result of the formula.</p>
+			<screenshot alttext="Edit card property page - edit formula" src="resources/images/edit_card_property_formula.png"/>
+		</subsection>
+		<note><strong><cref topic="aggregate_properties">Aggregate
+properties</cref></strong> and <strong><cref topic="relationship_properties">relationship properties</cref></strong> are
+separately defined as part of a card tree, see <cref topic="modifying_or_deleting_aggregate_properties">Modifying or deleting
+aggregate properties</cref> and <cref topic="modifying_an_existing_card_tree">Modifying card trees</cref> for
+details.</note>
+	</section>
+	<section title="Delete a card property" id="delete">
+		<subsection collapsed="true" title="Navigate to the Card properties page">
+			<steps>
+				<item><cref topic="signing_in_and_out_of_mingle">Sign in</cref> to Mingle
+    as a project administrator and open the project you want to change (if
+    you're not already working in the project).</item>
+				<item>
+					<p>Click the <tab>Project admin</tab> tab.</p>
+					<screenshot alttext="Project admin tab" src="resources/images/project_admin_tab.png"/>
+					<p>Mingle
+    displays the <strong>Project settings</strong> page.</p>
+					<note>if you are
+    logged in as a project team member, Mingle displays the
+    <strong>Team</strong> page.</note>
+					<screenshot alttext="Project admin menu - Properties link" src="resources/images/card_properties_link.png"/>
+				</item>
+				<item>
+					<p>Click the <link>Card properties</link> link.</p>
+					<p>Mingle
+    displays the <strong>Card properties</strong> page with all properties set
+    up for this project.</p>
+				</item>
+			</steps>
+		</subsection>
+		<screenshot alttext="Card properties page" src="resources/images/card_properties_page.png"/>
+		<subsection title="Delete the property...">
+			<p>Click the <link>Delete</link> link next to
+the card property you wish to delete.</p>
+			<bullets title="Deletion is not possible if:">
+				<item>The property is referenced by a formula property.</item>
+			</bullets>
+			<p>Mingle will display the Delete property confirmation page</p>
+			<screenshot alttext="Delete property confirmation page" src="resources/images/delete_card_property_confirmation.png"/>
+			<p>Click on the <link>Continue to delete</link> to permanently delete the
+property</p>
+			<warning>Deletion of a card property is an unrecoverable action
+(short of restoring from a database backup). You should consider the
+consequences of deleting a property, and if you are in any doubt it may be
+safer to use the <cref topic="card_properties">hide property</cref> feature
+instead of deleting.</warning>
+		</subsection>
+	</section>
+	<section title="The effects of deleting a property...">
+		<subsection title="Cards using the property">
+			<bullets>
+				<item>The property will be removed from any cards which were using it, and
+    the values will be deleted.</item>
+			</bullets>
+		</subsection>
+		<subsection title="History view">
+			<bullets>
+				<item>The property will be removed from all cards and values for that
+    property will no longer be displayed in history.</item>
+				<item>Any card versions which contained only changes to this property will
+    no longer appear in history</item>
+			</bullets>
+		</subsection>
+		<subsection title="Card transitions">
+			<bullets>
+				<item>Any <cref topic="card_transitions">card transitions</cref> which
+    reference the property as a 'has' value or which assign a value to the
+    property will be deleted</item>
+			</bullets>
+		</subsection>
+		<subsection title="Favorites and tabs">
+			<bullets>
+				<item><cref topic="favorites_and_tabs_page">Favorites</cref> that include the deleted
+    property as a display column or in a <cref topic="filter_list_by_component">filter condition</cref> will be
+    deleted</item>
+				<item>Any <cref topic="favorites_and_tabs_page">tabs</cref> based on those favorites will
+    also be deleted</item>
+			</bullets>
+		</subsection>
+		<subsection title="Pages">
+			<bullets>
+				<item><cref topic="working_with_pages">Mingle pages</cref> and <cref topic="creating_charts_and_tables_in_pages">tables/charts</cref> that
+    reference the deleted property will no longer work. The MQL syntax will not be changed, so you will need to manually alter any affected pages to remove references to the deleted property.</item>
+			</bullets>
+			<hint>
+				<p>A fast way to find all of the pages which use the
+card property in MQL is to use the <cref topic="mingle_search">Mingle
+search</cref>.</p>
+				<p>Simply type in the name of the card property e.g. "some
+property" and hit the <button>Search</button></p>
+				<p>Mingle will show all
+pages referencing the card property - you can then open each of these pages
+for editing and make the appropriate changes.</p>
+				<p>Note that if your
+property name is a common word or phrase - you may get some additional pages
+that contain that word outside of MQL statements.</p>
+			</hint>
+		</subsection>
+		<subsection title="Aggregate properties">
+			<bullets>
+				<item><cref topic="aggregate_properties">Aggregate properties</cref> which
+    operate on the deleted property will also be deleted.</item>
+				<item>Consequently - any pages, Favorites, Tabs or Feeds which
+    reference the aggregate property will also be affected.</item>
+			</bullets>
+		</subsection>
+		<subsection title="Formula properties">
+			<bullets>
+				<item>It's not possible to delete a component property (referenced in the
+    formula definition) of a <cref topic="formula_properties">Formula
+    property</cref>. The property has to be removed from the formula
+    definition before it can be deleted.</item>
+			</bullets>
+		</subsection>
+		<subsection title="Externally stored bookmarks">
+			<bullets>
+				<item>Externally stored URLs will become invalid if they included the
+    original property name. This may affect browser bookmarks that users have
+    made to quickly navigate to specific card views.</item>
+			</bullets>
+		</subsection>
+		<subsection title="Subscribed atom feeds">
+			<bullets>
+				<item>Previously subscribed atom feeds that use the deleted property will
+    no longer provide new data</item>
+			</bullets>
+		</subsection>
+	</section>
+</topic>

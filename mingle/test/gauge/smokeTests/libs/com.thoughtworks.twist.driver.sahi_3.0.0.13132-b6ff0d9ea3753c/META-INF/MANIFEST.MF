@@ -1,0 +1,24 @@
+Manifest-Version: 1.0
+Export-Package: com.thoughtworks.twist.driver.sahi,com.thoughtworks.tw
+ ist.driver.sahi.browsersettings,com.thoughtworks.twist.driver.sahi.br
+ owsersettings.linux,com.thoughtworks.twist.driver.sahi.browsersetting
+ s.mac,com.thoughtworks.twist.driver.sahi.browsersettings.win32
+Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: .,sahi/lib/sahi.jar
+Bundle-Name: Sahi
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Require-Bundle: org.eclipse.core.runtime,com.thoughtworks.twist.eclips
+ e.ui,com.thoughtworks.twist.core,com.thoughtworks.twist.driver.core,o
+ rg.eclipse.core.resources,org.eclipse.jdt.core,org.eclipse.swt,org.ec
+ lipse.ui,org.eclipse.jdt.ui,com.thoughtworks.twist.language.core;bund
+ le-version="2.4.0",com.thoughtworks.twist.eclipse.configurationEditor
+ ,org.eclipse.ui.views,com.springsource.org.apache.commons.collections
+ ;bundle-version="3.2.1"
+Bundle-Vendor: ThoughtWorks Studios
+Bundle-Version: 3.0.0.13132-b6ff0d9ea3753c
+Bundle-ManifestVersion: 2
+Bundle-Activator: com.thoughtworks.twist.driver.sahi.Activator
+Bundle-SymbolicName: com.thoughtworks.twist.driver.sahi;singleton:=tru
+ e
+Import-Package: junit.framework
+

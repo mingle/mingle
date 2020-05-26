@@ -1,0 +1,65 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%
+  data_opts = {
+    :"data-url" => create_lane_url(@view, self)
+  }
+
+  props.each do |axis, property|
+    val = options_for_lane_droplist(property).map do |pair|
+      {:label => pair.first, :value => pair.last}
+    end
+
+    data_opts[:"data-#{axis}-values"] = val.to_json
+    data_opts[:"data-#{axis}-property-id"] = property.is_predefined ? nil : property.id
+    data_opts[:"data-#{axis}-inline-create"] = property.support_inline_creating?
+  end
+%>
+
+<% content_tag(:div, {:class => "add-dimension-drop-down"}.merge(data_opts)) do %>
+  <a><i class="fa fa-plus-circle"></i></a>
+  <div class="content" grid-axis="<%= props.size < 2 ? props.keys.first : "" %>">
+
+  <% if props.size == 2 -%>
+    <ul class="choices">
+      <li class="ui-menu-item"><a class="ui-corner-all" dimension="lane">Add Column</a></li>
+      <li class="ui-menu-item"><a class="ui-corner-all" dimension="row">Add Row</a></li>
+    </ul>
+  <% end -%>
+
+    <form class="create">
+      <label>
+        <strong>Create a new value</strong>
+        <input type="text" name="laneName" value=""/>
+      </label>
+    </form>
+
+    <form class="filter-values">
+      <fieldset>
+        <input type="text" name="filter" placeholder="Find a value" />
+      </fieldset>
+      <% if User.current.privilege_level(Project.current) >= UserAccess::PrivilegeLevel::FULL_TEAM_MEMBER -%>
+      <a class="new-property"><i class="fa fa-plus-circle"></i> New value&hellip;</a>
+      <% end -%>
+    </form>
+  </div>
+<% end %>
+
+<%= javascript_with_rescue <<-JAVASCRIPT
+  $j(".add-dimension-drop-down").gridAxisDropDown();
+JAVASCRIPT
+-%>

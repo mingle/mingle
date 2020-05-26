@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE section SYSTEM "mingle_help.dtd">
+<topic title="Mingle Macro Builder">
+<section title="Introduction">
+	<p>Using the Macro Builder simplifies the creation of charts and tables in Mingle and helps to prevent macro syntax errors. This can be especially helpful when you create rather complex macros. The Macro Builder also allows you to get quick feedback by providing the ability to preview your charts.</p>
+	<screenshot src="resources/images/macro_builder_icons.png"/>
+	<bullets title="The Macro Builder is available to all of following macros...">
+		<item>Project variable</item>
+		<item>Average</item>
+		<item>Value query</item>
+		<item>Table query</item>
+		<item>View</item>
+		<item>Pivot table</item>
+		<item>Stack Bar chart</item>
+		<item>Data Series chart</item>
+		<item>Daily History chart</item>
+		<item>Ratio bar chart</item>
+		<item>Pie chart</item>
+	</bullets>
+	<hint>The Macro Builder is only available to <strong>create</strong> new charts and tables, not to edit existing ones. <strong>To edit your existing macro, cmd/ctrl + right click</strong> on your macro. This will open a text box with your macro markup, which you can modify by hand.</hint>
+</section>
+
+<section title="How to use the Macro Builder">
+	<steps>
+		<item>Click on the icon for the macro you want to create from the editing tool bar. (This example shows how to build a table query.) The Macro Builder will open with the default parameters for the selected macro.
+			<hint>Please note that not all default parameters are required, but you will likely get a better result if you include them. You can differentiate the required parameters because they have an asterisk (*) next to the parameter label.</hint>
+			<p><screenshot alttext="Editing toolbar" src="resources/images/macro_builder_table_example1.png"></screenshot></p>
+		</item>
+		<item>Enter the MQL for the parameter. You can add extra parameters that are available for each macro by clicking on the '+' icon.
+			<hint>For the <cref topic="markup_stack_bar_chart">Stack Bar chart</cref> and the <cref topic="markup_data_series_chart">Data Series chart</cref> macros, you can add/remove the 'Series level options'. Thus if you add an additional series to the chart, the default parameters for that series will be available.</hint>
+			<p><screenshot src="resources/images/macro_builder_table_example2.png"></screenshot></p>
+		</item>
+		<item>Click on the 'Preview' button to check if you are getting the macro you are looking for. If there are any errors when previewing, an error message will be displayed in the preview section.
+			<p><screenshot src="resources/images/macro_builder_table_example3.png"></screenshot></p>
+		</item>
+		<item>If you are happy with the macro that you see in the preview, click on the 'Insert' button. This will insert the complete macro into your card or page. To edit your macro once it has been inserted inline, simply press cmd/ctrl + right click.
+			<p><screenshot src="resources/images/macro_builder_table_example4.png"></screenshot></p>
+			<p>This will open a text box in which you can modify your macro markup by hand.</p>
+			<p><screenshot src="resources/images/macro_textbox_edit.png"></screenshot></p>
+		</item>
+	</steps>
+</section>
+<section title="Also see...">
+		<bullets>
+			<item><cref topic="macro_reference">Full reference of chart, table, and dashboard macros</cref></item>
+			<item><cref topic="mql_reference">MQL Syntax</cref></item>
+			<item><cref topic="mingle_tips_and_tricks">Mingle tips and tricks</cref></item>
+		</bullets>
+</section>
+</topic>

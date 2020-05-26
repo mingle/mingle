@@ -1,0 +1,51 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<div class='dependencies-export-import'>
+  <%= render :partial => 'shared/top_level_header_pills', :locals => { :selected_tab => 'admin' } %>
+  <%= render :partial => 'import_errors' %>
+  <%= render(:partial => error_views[0]) if defined? error_views %>
+  <table>
+    <thead>
+      <tr>
+        <th>
+          <h1>Export Dependencies</h1>
+        </th>
+        <% if authorized?(action: :import_preview) %>
+          <th>
+            <h1>Import Dependencies
+              <span class="cloud-upload-progress fa-stack" unselectable="on">
+              <i class="fa fa-cloud fa-stack-2x"></i>
+              <i class="fa fa-stack-1x percent" style="color: white; text-align: center"></i>
+              <i class="fa fa-stack-1x fa-arrow-up"></i>
+              </span>
+            </h1>
+          </th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <% if authorized?(ation: :create)%>
+          <%= render :partial => 'dependencies_export' %>
+        <% end %>
+        <% if authorized?(action: :import_preview) %>
+          <%= render :partial => 'dependencies_import' %>
+        <% end %>
+      </tr>
+    </tbody>
+  </table>
+</div>

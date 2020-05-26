@@ -1,0 +1,174 @@
+<!--Ant Integration-->
+<h3>Sahi</h3>
+
+<h3>Description</h3>
+
+<p>Runs a suite of sahi files. This opens multiple browser windows
+, executes sahi scripts, and logs the results. The build can be
+made to fail based on a failureproperty.</p>
+
+<h3>Parameters</h3>
+
+<table border="1" cellpadding="2" cellspacing="0">
+<tr>
+<td><b>Attribute</b></td>
+<td><b>Description</b></td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>suite</td>
+<td>path to suite file</td>
+<td></td>
+</tr>
+
+<tr>
+<td>browser</td>
+<td>Path to browser executable</td>
+<td></td>
+</tr>
+
+<tr>
+<td>baseurl</td>
+<td>url relative to which all urls to be tested will be
+resolved</td>
+<td></td>
+</tr>
+
+<tr>
+<td>sahihost</td>
+<td>IP or hostname of server where sahi is running</td>
+<td></td>
+</tr>
+
+<tr>
+<td>sahiport</td>
+<td>port where sahi is running</td>
+<td></td>
+</tr>
+
+<tr>
+<td>failureproperty</td>
+<td>Name of property which will be set to false in case build
+fails.</td>
+<td></td>
+</tr>
+
+<tr>
+<td>haltonfailure</td>
+<td>Takes "true" or "false". Specifies if build should stop
+executing other tests if one test fails.</td>
+<td></td>
+</tr>
+
+<tr>
+<td>threads</td>
+<td>Number of simultaneous browser instances where sahi tests will
+be run. Do not use this property if using firefox.</td>
+<td>optional</td>
+</tr>
+
+<tr>
+<td>logdir</td>
+<td>Directory to output this suite's results. If absent, uses the default playback logs dir.</td>
+<td>optional</td>
+</tr>
+</table>
+
+<br>
+<br>
+ 
+
+<h3>Example</h3>
+
+build xml for running the sample web server bundled with sahi.<br>
+<br>
+The demo could be run by running "ant -f demo.xml sahitests" from
+the sahi base folder. 
+
+<pre style=
+"background-color:lightgreen;border:20px solid lightgreen;width:1000px">
+
+&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+&lt;project name="demo" default="sahitests"&gt;
+    &lt;taskdef name="sahi" classname="net.sf.sahi.ant.RunSahiTask" classpath="lib/ant-sahi.jar"/&gt;
+
+    &lt;target name="sahitests" description="start the server and run sahi tests"&gt;
+        &lt;parallel&gt;
+            &lt;sequential&gt;
+                &lt;waitfor maxwait="3" maxwaitunit="minute" checkevery="100"&gt;
+                    &lt;http url="http://localhost:10000/demo/index.htm"/&gt;
+                &lt;/waitfor&gt;
+</pre>
+
+<pre style="font-weight:bold;border:0px solid lightgreen;">
+                &lt;antcall target="proxyon"/&gt;
+</pre>
+
+<pre style="font-weight:bold;border:0px solid lightgreen;">
+                &lt;sahi suite="../scripts/demo.suite"
+                    browser="C:\\Program Files\\Internet Explorer\\iexplore.exe"
+                    baseurl="http://localhost:10000/demo/"
+                    sahihost="localhost"
+                    sahiport="9999"
+                    failureproperty="sahi.failed"
+                    haltonfailure="false"
+                    threads="2"
+                    logdir="D:\demo\logs"
+                    /&gt;
+</pre>
+
+<pre style="font-weight:bold;border:0px solid lightgreen;">
+                &lt;antcall target="proxyoff"/&gt;
+</pre>
+
+<pre>
+                &lt;antcall target="stop-web"/&gt;
+                &lt;antcall target="failsahi"/&gt;
+            &lt;/sequential&gt;
+            &lt;antcall target="start-web"/&gt;
+        &lt;/parallel&gt;
+    &lt;/target&gt;
+
+    &lt;target name="failsahi" if="sahi.failed"&gt;
+        &lt;fail message="Sahi tests failed!"/&gt;
+    &lt;/target&gt;
+
+    &lt;target name="start-web" description="starts web"&gt;
+        &lt;java classname="net.sf.sahi.WebServer" fork="true" dir="bin" &gt;
+            &lt;classpath location="lib/sahi.jar"/&gt;
+        &lt;/java&gt;
+    &lt;/target&gt;
+
+    &lt;target name="stop-web" description="stop web server"&gt;
+        &lt;get dest="stopserver.htm" src="http://localhost:10000/dyn/stopserver" ignoreerrors="true" /&gt;
+        &lt;delete file="stopserver.htm"/&gt;
+    &lt;/target&gt;
+
+
+    &lt;target name="sahireport" description="show report"&gt;
+        &lt;exec command="C:\\Program Files\\Internet Explorer\\iexplore.exe file:///C:/my/sahi/logs/playback/"/&gt;
+    &lt;/target&gt;
+
+    &lt;target name="start" description="starts proxy"&gt;
+        &lt;java classname="net.sf.sahi.Proxy" fork="true" dir="bin"&gt;
+            &lt;classpath location="lib/sahi.jar"/&gt;
+        &lt;/java&gt;
+    &lt;/target&gt;
+
+    &lt;target name="proxyon"&gt;
+        &lt;exec executable="tools/toggle_IE_proxy.exe"&gt;
+            &lt;arg value="enable"/&gt;
+        &lt;/exec&gt;
+    &lt;/target&gt;
+    
+    &lt;target name="proxyoff"&gt;
+        &lt;exec executable="tools/toggle_IE_proxy.exe"&gt;
+            &lt;arg value="disable"/&gt;
+        &lt;/exec&gt;
+    &lt;/target&gt;
+
+&lt;/project&gt;
+
+</pre>
+

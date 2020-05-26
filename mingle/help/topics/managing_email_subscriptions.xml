@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE subsection SYSTEM "mingle_help.dtd">
+<subsection title="Managing email subscriptions" id="manage_email_subscriptions">
+<p>Users can manage their email subscriptions via their profile page. If you are a <cref topic="user_roles#mingle_administrator">Mingle administrator</cref>, with access to users' profile pages, you will also be able to view and manage other users' subscriptions.</p>
+
+<steps title="To view and to unsubscribe to email subscriptions:">
+  <item>go to your <cref topic="managing_your_user_profile">profile page</cref> or the <cref topic="managing_your_user_profile">profile page</cref> of another user</item>
+  <item>click <link>Subscription</link> tab</item>
+    <item>on this <link>Subscription</link> tab you will be able to see what subscriptions you have (or if you are a Mingle admin viewing another user's profile you will be able to see what subscriptions that user has)</item>
+  <item>using the unsubscribe link you can unsubscribe to any subscriptions you no longer require</item>
+</steps>
+
+<screenshot alttext="Managing subscriptions" src="resources/images/managing_subscriptions.png" />
+
+</subsection>
+

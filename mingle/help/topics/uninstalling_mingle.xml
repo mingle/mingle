@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Uninstalling Mingle">
+	
+	<section title="How to uninstall Mingle from Windows" collapsed="true">
+		<steps>
+			<item><p>Double-click the Mingle uninstaller file and follow the prompts to uninstall Mingle. Click 'Next' to continue.</p>
+				<screenshot alttext="Uninstall Mingle" src="resources/images/uninstall_begin.png" />
+			</item>	
+			<item><p>Mingle will remove relevant Mingle files <strong>except</strong> the following:</p>
+				  <bullets>
+					<item>The data directory and database</item>
+					<item>The activemq-data directory</item>
+					<item>The tmp directory - contains cache, project import/export information</item>
+					<item>The log directory - contains all mingle log files</item>
+					<item>The public directory - contains any custom plugin files (if there are any)</item>
+				  </bullets>
+				<screenshot alttext="Uninstall Mingle" src="resources/images/uninstall_progress.png" />
+			</item>
+			<item><p>Mingle is successfully uninstalled.</p>  
+				<screenshot alttext="Uninstall Mingle" src="resources/images/uninstall_complete.png" />
+			</item>
+		</steps>
+
+	</section>
+
+  <section title="How to uninstall Mingle from Linux/Unix/Mac OSX" collapsed="true">
+    <steps>
+      <item><p>Stop Mingle server. From the Mingle installation directory, type:</p>
+        <markup>./MingleServer stop</markup>
+      </item>
+      <item>Remove any data that may be associated with the Mingle instance.</item>
+    </steps>
+  </section>
+
+	<section title="Also see...">
+		<bullets>
+			<item><cref topic="mingle_onsite">Mingle onsite</cref></item>
+		</bullets>
+	</section>
+</topic>
+

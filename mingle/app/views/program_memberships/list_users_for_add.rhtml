@@ -1,0 +1,48 @@
+<%# 
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-%>
+<%- content_for :selected_tab, :team -%>
+
+<%= render :partial => 'shared/pagination_info', :locals => {:models => @users, :model_name => 'user'} %>
+<%= link_to 'Back', { :action => 'index' }, :class => 'action_icon back_link' %>
+<div class='table_actions clear_float'>
+  <%= render :partial => 'users/search', :locals => { :search_controller_name => 'program_memberships', :search_action_name => 'list_users_for_add' } %>
+</div>
+
+<table class="list_table highlightable_table">
+  <thead>
+    <tr>
+      <th>Display name</th>
+      <th>Sign-in name</th>
+      <th>Email</th>
+      <th>Version control user name</th>
+      <th>&nbsp;</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @users.empty? -%>
+      <tr>
+        <td class="results_notice" colspan="5">
+          There are currently no users to list.
+        </td>
+      </tr>
+    <%- else -%>
+      <%= render :partial => 'user_for_add', :collection => @users, :as => :user %>
+    <%- end -%>
+  </tbody>
+</table>
+
+<%= render :partial => 'shared/pagination_info', :locals => {:models => @users, :model_name => 'user'} %>

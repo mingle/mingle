@@ -1,0 +1,242 @@
+#  Copyright 2020 ThoughtWorks, Inc.
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Affero General Public License as
+#  published by the Free Software Foundation, either version 3 of the
+#  License, or (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Affero General Public License for more details.
+#
+#  You should have received a copy of the GNU Affero General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+
+require 'rexml/document'
+require 'rubygems'
+require 'fileutils'
+require 'tempfile'
+require 'date'
+require 'uri'
+
+require File.join(File.dirname(__FILE__), 'builder', 'element_handler')
+require File.join(File.dirname(__FILE__), 'builder', 'html_renderer')
+require File.join(File.dirname(__FILE__), 'builder', 'topic_handler')
+require File.join(File.dirname(__FILE__), 'builder', 'toc_handler')
+require File.join(File.dirname(__FILE__), 'builder', 'topic_maker')
+require File.join(File.dirname(__FILE__), 'lib', 'topic_references')
+require File.join(File.dirname(__FILE__), '..','config', 'initializers', 'document.rb')
+
+BUILD_DIR = File.join(File.dirname(__FILE__), 'build')
+TOPICS_DIR = File.join(File.dirname(__FILE__), 'topics')
+TEMP_DIR = File.join(BUILD_DIR, 'temp')
+
+MINGLE_HELP_BASE_URL = 'https://www.thoughtworks.com/mingle/docs/'
+SUBSTITUTIONS = {
+  :tw_studios_mingle_support_url => THOUGHTWORKS_STUDIOS_SUPPORT_URL,
+  :tw_mingle_help_base_url => MINGLE_HELP_BASE_URL,
+  :tips_and_tricks => TIPS_AND_TRICKS
+}
+
+def topic_files
+  Dir["#{TOPICS_DIR}/*.xml"]
+end
+
+def fragment_files
+  Dir["#{TOPICS_DIR}/fragments/*.xml"]
+end
+
+def all_xml_files
+  topic_files + fragment_files + [File.join(File.dirname(__FILE__), 'mingle_help_index.xml')]
+end
+
+def substitute_constants(source_file, destination_path)
+  File.open(File.join(destination_path, File.basename(source_file)), 'w') do |subst|
+    File.open(source_file).each do |line|
+      SUBSTITUTIONS.each{|k, v| line.gsub!(/@#{k}@/, v)}
+      line.gsub!(/\t/, '  ')
+      subst << line
+    end
+  end
+end
+
+task :deploy do
+  dest_dir = File.join(File.dirname(__FILE__), '..', 'public', 'help')
+  FileUtils.mkdir_p dest_dir
+  FileUtils.cp_r File.join(File.dirname(__FILE__), 'build/.'), dest_dir
+end
+
+task :check_env do
+  URI.parse(ENV['MINGLE_HELP_SEARCH_URL'] || "not set")
+  page_size = ENV['SEARCH_RESULTS_PAGE_SIZE']
+  raise "Invalid SEARCH_RESULTS_PAGE_SIZE=#{page_size || 'not set'}" unless page_size =~ /\A\d+\z/
+end
+
+task :build_with_deployment => [:site, :deploy]
+
+desc 'build the help documents with support for custom site search'
+task :custom_search_enabled_help => %w(search:enable check_env site search:sitemap_xml:build)
+task :with_custom_search => ['custom_search_enabled_help']
+
+task :default => [:site, :show_no_search_message]
+task :test => ['test:dead_links']
+
+task :show_no_search_message do
+  puts <<-EOS unless @online_help_enabled
+  =======================================================
+  = You are building help without Search enabled =
+  =======================================================
+  EOS
+end
+
+task :clean do
+  rm_rf BUILD_DIR unless ENV["T"]
+end
+
+task :resources do
+  rm_rf(File.join(BUILD_DIR, 'resources'))
+  mkdir_p(File.join(BUILD_DIR, 'resources'))
+  cp_r(File.join(File.dirname(__FILE__), 'resources'), BUILD_DIR)
+end
+
+task :create_folders do
+  mkdir_p File.join(BUILD_DIR, 'temp/topics')
+  mkdir_p File.join(TEMP_DIR, 'topics', 'fragments')
+end
+
+task :topics => [:create_folders] do
+  topic_files.each do |source_file|
+    topics_path = File.join(TEMP_DIR, 'topics')
+    substitute_constants(source_file, topics_path)
+  end
+end
+
+task :fragments => [:create_folders] do
+  fragment_files.each do |source_file|
+    fragments_path = File.join(TEMP_DIR, 'topics', 'fragments')
+    substitute_constants(source_file, fragments_path)
+  end
+end
+
+task :generate_html => [:topics, :fragments] do
+  puts 'Generating html'
+
+  target_dir = File.join(BUILD_DIR)
+  mkdir_p target_dir
+
+  glob_pattern = if ENV["T"]
+    "#{ENV["T"]}.xml"
+  else
+    "*.xml"
+  end
+
+  Dir["#{TEMP_DIR}/topics/#{glob_pattern}"].each do |source_file|
+    puts "processing #{source_file}"
+    $stdout.flush
+    TopicMaker.new(source_file, File.join(File.dirname(__FILE__), 'mingle_help_index.xml'), target_dir, @online_help_enabled).run
+  end
+
+  rm_rf(TEMP_DIR)
+
+  if File.exist?(File.join(BUILD_DIR, 'welcome_to_mingle.html'))
+    cp(File.join(BUILD_DIR, 'welcome_to_mingle.html'), File.join(BUILD_DIR, 'index.html'))
+  end
+end
+
+task :site => [:clean, :resources, :generate_html]
+
+namespace :search do
+
+  namespace :sitemap_xml do
+
+    desc "Generate sitemap.xml using html help files in BUILD_DIR."
+    task :build => [:generate_url_list_file, :generate_config_xml_file, :generate_sitemap_xml]
+
+    task :prepare do
+      @url_list_file = nil
+      @config_xml_file = nil
+      @sitemap_xml_path = File.join(BUILD_DIR, 'sitemap.xml')
+    end
+
+    task :generate_url_list_file => [:prepare] do
+      begin
+        @url_list_file = Tempfile.new(['urllist', '.txt'])
+        Dir.chdir(BUILD_DIR) do
+          Dir['**/*.html'].each do |html_file|
+            url        = File.join(MINGLE_HELP_BASE_URL, html_file)
+            lastmod    = DateTime.now.new_offset(0).to_s
+            changefreq = 'monthly'
+            @url_list_file << "#{url} lastmod=#{lastmod} changefreq=#{changefreq}\n"
+          end
+        end
+        @url_list_file.flush
+      ensure
+        @url_list_file.close if @url_list_file
+        puts "INFO: Generated a url_list.txt temp file at '#{@url_list_file.path}'."
+      end
+    end
+
+    task :generate_config_xml_file => [:prepare] do
+      begin
+        content = <<-XML
+<?xml version="1.0" encoding="UTF-8"?>
+<site base_url="#{MINGLE_HELP_BASE_URL}"
+      store_into="#{@sitemap_xml_path}"
+      verbose="3">
+  <urllist  path="#{@url_list_file.path}" encoding="UTF-8" />
+</site>
+        XML
+        @config_xml_file = Tempfile.new(['config', '.xml'])
+        @config_xml_file << content
+        @config_xml_file.flush
+      ensure
+        @config_xml_file.close if @config_xml_file
+        puts "INFO: Generated a config.xml temp file that uses the above url_list.txt at '#{@config_xml_file.path}'."
+      end
+    end
+
+    task :generate_sitemap_xml => [:prepare] do
+      puts "INFO: Generating sitemap.xml..."
+      sitemap_gen_py = File.join(File.dirname(__FILE__), 'sitemap_gen-1.5', 'sitemap_gen.py')
+      # The --testing switch prevents the script from making a call out to google.com.
+      system("python", sitemap_gen_py, "--config=#{@config_xml_file.path}", "--testing") || raise('ERROR: sitemap generation failed.')
+      puts "INFO: Success. Generated sitemap.xml using the config.xml above at location: '#{@sitemap_xml_path}'."
+    end
+  end
+
+  desc "Enables Custom Search for downstream rake task help doc generation to include mingle_search.js, for example."
+  task :enable do
+    @online_help_enabled = true
+  end
+end
+
+namespace :test do
+  task :dead_links do
+    dead_links = Topic::References.new(all_xml_files).all.select { |reference| !reference.target.file_exists? }
+    if dead_links.any?
+      dead_links.each { |reference| puts "#{reference.source} contains dead link: #{reference.target}" }
+      puts "Found #{dead_links.size} dead links."
+    end
+  end
+
+  task :unused do
+    references = Topic::References.new(all_xml_files)
+    if references.unused_topics.any?
+      puts "The following help topics are unused:"
+      references.unused_topics.each { |topic| puts topic }
+    end
+  end
+end
+
+task :references_to, [:topic] do |t, args|
+  # Usage: rake references_to[your_topic_name]
+  target_topic = args.topic
+  references_to_topic = Topic::References.new(all_xml_files).all.select { |reference| reference.target.topic == target_topic }
+  if references_to_topic.any?
+    puts "References to #{target_topic}:"
+    references_to_topic.each { |reference| puts "#{reference.source}" }
+  else
+    puts "No references to '#{target_topic}' found in Mingle or in help topics."
+  end
+end

@@ -1,0 +1,456 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>JavaScript unit test file</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-2.2.0.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/jquery/jquery-ui-1.10.4.custom.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/jquery_conflict_handler.js" type="text/javascript"></script>
+
+  <script src="../../app/assets/javascripts/thirdparty/prototype.js" type="text/javascript"></script>
+  <script src="test_assets/prototype_test_helper.js" type="text/javascript" charset="utf-8"></script>
+
+  <script src="test_assets/unittest.js" type="text/javascript"></script>
+  <script src="test_assets/unittest_ext.js" type="text/javascript"></script>
+
+
+  <script src="../../app/assets/javascripts/thirdparty/effects.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/controls.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/builder.js" type="text/javascript"></script>
+  <script src="../../app/assets/javascripts/thirdparty/dragdrop.js" type="text/javascript"></script>
+
+  <script src="../../public/javascripts/application.js" type="text/javascript"></script>
+
+  <link rel="stylesheet" href="test_assets/unittest.css" type="text/css" />
+</head>
+<body>
+  <div id="content" >
+    <div id="header">
+      <h1>JavaScript unit test file</h1>
+      <p>
+        This file tests <strong>Filters</strong> class in <strong>filter.js</strong>.
+      </p>
+    </div>
+    <!-- Log output -->
+    <div id="testlog"> </div>
+
+    <div style ='border:solid 1px' id='sandbox'>
+      <h3> sandbox: </h3>
+
+      <div id="notice">
+        Notice
+      </div>
+
+      <select id="card-types-filter">
+        <option value="" selected="selected">All</option>
+        <option value="1">Release</option>
+        <option value="2">Story</option>
+        <option value="3">Iteration</option>
+      </select>
+      <select id="property-definitions-of-card-type-filter"></select>
+
+      <div id="no-transition-message" style="display:none">No transitions message.</div>
+
+      <div id="all-transitions">
+        <div class="transition-container" id="transition-1">Story Transition With Prop Def Story Status (any -> 3)</div>
+        <div class="transition-container" id="transition-2">Release Transition</div>
+        <div class="transition-container" id="transition-3">Any Transition</div>
+        <div class="transition-container" id="transition-4">Story Transition With Prop Def Priority</div>
+        <div class="transition-container" id="transition-5">Story Transition With Prop Def Story Status (1 -> 2)</div>
+        <div class="transition-container" id="transition-6">Story Transition With Prop Def Story Status (any -> 1)</div>
+        <div class="transition-container" id="transition-7">Story Transition With Prop Def Story any text ("c" -> "d")</div>
+        <div class="transition-container" id="transition-8">Story Transition With Prop Def Story any text ("a" -> "b")</div>
+        <div class="transition-container" id="transition-9">Story Transition With Prop Def Story any text ("a" -> "c")</div>
+        <div class="transition-container" id="transition-10">b name</div>
+        <div class="transition-container" id="transition-11">a name</div>
+      </div>
+
+      <div id="back-ground-color-notice">background color notice</div>
+    </div>
+  </div>
+
+
+  <script type="text/javascript">
+    // <![CDATA[
+
+    CARD_TYPES = {
+      RELEASE   : '1',
+      STORY     : '2',
+      ITERATION : '3'
+    };
+
+    PROPERTY_DEFINITIONS = {
+      STORY_STATUS : '100',
+      VERSION      : '101',
+      PRIORITY     : '102',
+      ANY_TEXT     : '103',
+      STATUS       : '104',
+      START_DATE   : '105'
+    };
+
+    CARD_TYPE_TO_PROPERTY_DEFINITIONS = {
+      ''  : [["All properties", ""]],
+      '1' : [["All properties", ""], ["Start Date", PROPERTY_DEFINITIONS.START_DATE]],
+      '2' : [["All properties", ""], ["Priority", PROPERTY_DEFINITIONS.PRIORITY], ["Story Status", PROPERTY_DEFINITIONS.STORY_STATUS], ["any text", PROPERTY_DEFINITIONS.ANY_TEXT]],
+      '3' : [["All properties", ""]]
+    };
+
+    TRANSITION_MAPPINGS = [
+      {"property_definitions": [{ id: PROPERTY_DEFINITIONS.STORY_STATUS, name: "Story Status", from: 9999 , to: 3}], "card_type_id" : CARD_TYPES.STORY,   "card_type": "Story",   "transition_id": 1, "transition_name": "Transition Uno"},
+      {"property_definitions": [{ id: PROPERTY_DEFINITIONS.VERSION,      name: "Version", from: 1, to: 2}],          "card_type_id" : CARD_TYPES.RELEASE, "card_type": "Release", "transition_id": 2},
+      {"property_definitions": [{ id: PROPERTY_DEFINITIONS.PRIORITY,     name: "Version", from: 1, to: 2}],      "card_type_id" : CARD_TYPES.RELEASE,   "card_type": "Release",   "transition_id": 3, "transition_name": '<p>I am weird transition</p>'},
+      {"property_definitions": [{ id: PROPERTY_DEFINITIONS.PRIORITY,     name: "Priority", from: 9999, to: 1}],      "card_type_id" : CARD_TYPES.STORY,   "card_type": "Story",   "transition_id": 4, "transition_name": 'I am transition'},
+      {"property_definitions": [{ id: PROPERTY_DEFINITIONS.STORY_STATUS, name: "Story Status", from: 1 , to: 2}],    "card_type_id" : CARD_TYPES.STORY,   "card_type": "Story",   "transition_id": 5},
+      {"property_definitions": [{ id: PROPERTY_DEFINITIONS.STORY_STATUS, name: "Story Status", from: 9999 , to: 1}], "card_type_id" : CARD_TYPES.STORY,   "card_type": "Story",   "transition_id": 6},
+      {"property_definitions": [{ id: PROPERTY_DEFINITIONS.ANY_TEXT,     name: "any text", from: "c" , to: "d"}],    "card_type_id" : CARD_TYPES.STORY,   "card_type": "Story",   "transition_id": 7},
+      {"property_definitions": [{ id: PROPERTY_DEFINITIONS.ANY_TEXT,     name: "any text", from: "a" , to: "c"}],    "card_type_id" : CARD_TYPES.STORY,   "card_type": "Story",   "transition_id": 9},
+      {"property_definitions": [{ id: PROPERTY_DEFINITIONS.ANY_TEXT,     name: "any text", from: "a" , to: "b"}],    "card_type_id" : CARD_TYPES.STORY,   "card_type": "Story",   "transition_id": 8},
+      {"property_definitions": [{ id: PROPERTY_DEFINITIONS.STATUS,       name: "status", from: "a" , to: "b"}],      "card_type_id" : CARD_TYPES.STORY,   "card_type": "Story",   "transition_id": 10, "transition_name": 'b name'},
+      {"property_definitions": [{ id: PROPERTY_DEFINITIONS.STATUS,       name: "status", from: "a" , to: "b"}],      "card_type_id" : CARD_TYPES.STORY,   "card_type": "Story",   "transition_id": 11, "transition_name": 'a name'},
+    ];
+
+    new Test.Unit.Runner({
+
+      setup: function() {
+        this.transitionFilterManager = new TransitionsFiltersManager(CARD_TYPE_TO_PROPERTY_DEFINITIONS, TRANSITION_MAPPINGS, {}, {});
+        this.cardTypeSelect = $('card-types-filter');
+        this.propertyDefinitionSelect = $('property-definitions-of-card-type-filter');
+
+        Object.extend(this, {
+          changeCardType : function(cardType) {
+            $('card-types-filter').value = cardType;
+            Event.trigger('card-types-filter', 'change');
+          },
+          changePropDef : function(propDef) {
+            $('property-definitions-of-card-type-filter').value = propDef;
+            Event.trigger('property-definitions-of-card-type-filter', 'change');
+          }
+        });
+        this.replaceSpecialTextValue = this.transitionFilterManager.transitionsFilter.replaceSpecialTextValue;
+        this.completeTransitionPropDefValues =  this.transitionFilterManager.transitionsFilter.completeTransitionPropDefValues.bind(this.transitionFilterManager.transitionsFilter);
+        this.splitSort = this.transitionFilterManager.transitionsFilter.splitSort.bind(this.transitionFilterManager.transitionsFilter);
+      },
+
+      teardown: function(){
+        this.transitionFilterManager._showTransitionElementInOrder(this.transitionFilterManager.allTransitionsContainer, this.transitionFilterManager.originalTransitionsOrder);
+      },
+
+      testShouldShowPropertyDefinitionDropDownListOfSelectedCardType: function() { with(this) {
+        changeCardType(CARD_TYPES.STORY);
+        assertEqual('', $('property-definitions-of-card-type-filter').value);
+        assertEqual(4, $('property-definitions-of-card-type-filter').options.length);
+
+        changeCardType(CARD_TYPES.RELEASE);
+        assertEqual('', $('property-definitions-of-card-type-filter').value);
+        assertEqual(2, $('property-definitions-of-card-type-filter').options.length);
+      }},
+
+      testShouldDisablePropertyDefinitionDropDownListWhenAllCardTypeSelected: function(){ with(this) {
+        changeCardType('');
+
+        assert($('property-definitions-of-card-type-filter').disabled);
+      }},
+
+      testShouldShowAllTranistionsWhenAllCardTypesSelectedIncludingTypeAny: function(){ with(this) {
+        changeCardType('');
+
+        assert($('transition-1').visible());
+        assert($('transition-2').visible());
+        assert($('transition-3').visible());
+        assert($('transition-4').visible());
+      }},
+
+      testShouldShowOnlyTranistionsWithSelectedCardTypes: function(){ with(this) {
+         changeCardType(CARD_TYPES.STORY);
+
+         assert($('transition-1').visible());
+         assert(!$('transition-2').visible());
+         assert(!$('transition-3').visible());
+         assert($('transition-4').visible());
+       }},
+
+       testShouldOnlyShowTransitionWhichMathesPropDefWhenPropDefIsSelected: function(){ with(this){
+         changeCardType(CARD_TYPES.STORY);
+         changePropDef(PROPERTY_DEFINITIONS.PRIORITY);
+
+         assert(!$('transition-1').visible());
+         assert(!$('transition-2').visible());
+         assert(!$('transition-3').visible());
+         assert($('transition-4').visible());
+       }},
+
+       testShouldSetPropertyDefinitionToAllWhenCardTypeChanged: function(){ with(this){
+         changeCardType(CARD_TYPES.STORY);
+         changePropDef(PROPERTY_DEFINITIONS.PRIORITY);
+         changeCardType(CARD_TYPES.RELEASE);
+
+         assertEqual('', $('property-definitions-of-card-type-filter').value);
+       }},
+
+       testShouldShowNoTransitionMessageWhenNoTransitionsMeetSelectedCriteria: function(){ with(this){
+         changeCardType(CARD_TYPES.ITERATION);
+         assert($('no-transition-message').visible());
+         assert(!$('back-ground-color-notice').visible());
+
+         changeCardType(CARD_TYPES.STORY);
+         assert(!$('no-transition-message').visible());
+         assert($('back-ground-color-notice').visible());
+       }},
+
+       testShouldNotShowNoTransitionMessageWhenSelectAllAndMessagePreviouslyDisplayed: function(){ with(this){
+         changeCardType(CARD_TYPES.ITERATION);
+          assert($('no-transition-message').visible());
+          assert(!$('back-ground-color-notice').visible());
+
+          changeCardType('');
+          assert(!$('no-transition-message').visible());
+          assert($('back-ground-color-notice').visible());
+       }},
+
+       testShouldReturnOrderedTransitionIdListByPrerequisiteNumericValue: function(){ with(this){
+         var matchedTransitions = transitionFilterManager.transitionsFilter.findAll(CARD_TYPES.STORY, PROPERTY_DEFINITIONS.STORY_STATUS);
+
+         assertEqual(5, matchedTransitions.first().transition_id);
+       }},
+
+       testShouldReturnOrderedTransitionIdListByNumericSetsValueWhenPrerequisiteValueIsSame: function(){ with(this){
+         var matchedTransitions = transitionFilterManager.transitionsFilter.findAll(CARD_TYPES.STORY, PROPERTY_DEFINITIONS.STORY_STATUS);
+
+         assertEqual(6, matchedTransitions[1].transition_id);
+         assertEqual(1, matchedTransitions[2].transition_id);
+
+         assertEqual(5, matchedTransitions[0].transition_id);
+        }},
+
+        // text
+      testShouldReturnOrderedTransitionIdListByPrerequisiteTextValue: function(){ with(this){
+        var matchedTransitions = transitionFilterManager.transitionsFilter.findAll(CARD_TYPES.STORY, PROPERTY_DEFINITIONS.ANY_TEXT);
+
+        assertEqual(7, matchedTransitions.last().transition_id);
+      }},
+
+      testShouldReturnOrderedTransitionIdListByTextSetsValueWhenPrerequisiteValueIsSame: function(){ with(this){
+        var matchedTransitions = transitionFilterManager.transitionsFilter.findAll(CARD_TYPES.STORY, PROPERTY_DEFINITIONS.ANY_TEXT);
+
+        assertEqual(9, matchedTransitions[1].transition_id);
+        assertEqual(7, matchedTransitions[2].transition_id);
+
+        assertEqual(8, matchedTransitions[0].transition_id);
+      }},
+
+      testOrderByFromValueFirst: function(){ with(this){
+        var fromArray = [{from: '(plv)', to: 1}, {from: '(abc)', to: 1}, {from: '(any)', to: 1}, {from: '(not set)', to: 1}, {from: 10, to: 1}, {from: 1, to: 1}];
+        var expectedOrder = ['(not set)', 1, 10, '(abc)', '(plv)', '(any)'];
+        var acctualOrder = splitSort(fromArray).collect(function(trans){return trans.from;});
+
+        var isInCorrectOrder = true;
+        expectedOrder.each(function(from, index){
+          if(index != acctualOrder.indexOf(from)){
+            isInCorrectOrder = false;
+          };
+        });
+        assert(isInCorrectOrder);
+      }},
+
+      testOrderByToValueWhenFromValueIsSame: function(){ with(this){
+        var array = [{from: 1, to: '(plv)'}, {from: 1, to: '(abc)'}, {from: 1, to: '(no change)'}, {from: 1, to: '(not set)'}, {from: 1, to: 10}, {from: 1, to: 1}];
+        var expectedOrder = ['(not set)', 1, 10, '(abc)', '(plv)', '(no change)'];
+        var acctualOrder = splitSort(array).collect(function(trans){return trans.to;});
+
+        var isInCorrectOrder = true;
+        expectedOrder.each(function(to, index){
+          if(index != acctualOrder.indexOf(to)){
+            isInCorrectOrder = false;
+          };
+        });
+        assert(isInCorrectOrder);
+      }},
+
+      testSpecialNotSetValueShouldBeSmallest: function(){ with(this){
+        assert(replaceSpecialTextValue("(not set)") < '1');
+        assert(replaceSpecialTextValue("(not set)") < '!');
+      }},
+
+      testProjectVariableShouldBeBiggerThanNormalTextValue: function(){ with(this){
+        var plv = replaceSpecialTextValue("(some plv)");
+        assert('zzzzzz' < plv);
+      }},
+
+      testSetValueShouldBeBetweenProjectVariableAndAny: function() { with(this){
+        var plv = replaceSpecialTextValue("(plv)");
+        var set = replaceSpecialTextValue("(set)");
+        var any = replaceSpecialTextValue("(any)");
+        assert(plv < set);
+        assert(set < any);
+      }},
+
+      testSpecialUserInputValueShouldBeBiggerThanProjectVariable: function(){ with(this){
+        var user_input_optinal = replaceSpecialTextValue("(user input - optional)");
+        var user_input_required = replaceSpecialTextValue("(user input - required)");
+        var plv = replaceSpecialTextValue("(some plv)");
+        assert(plv < user_input_required);
+        assert(user_input_required < user_input_optinal);
+      }},
+
+      testSpecialTodayValueShouldBeLessThanProjectVariableButBiggerThanAnyDateValue: function(){ with(this){
+        var date = '03 Jun 1982';
+        var today = replaceSpecialTextValue("(today)");
+        var plv = replaceSpecialTextValue("(a)");
+
+        assert(today < plv);
+        assert(date < today);
+      }},
+
+      testSpecialAnyValueShouldBeBiggerThanSpecialUserInputValue: function(){ with(this){
+        assert(replaceSpecialTextValue("(any)") > replaceSpecialTextValue("(user input - optional)"));
+      }},
+
+      testShouldSetSpecialAnyValueToPrerequisitePropertyWhenKeyOfFromIsAbsent: function(){ with(this){
+        assertEqual('(any)', completeTransitionPropDefValues({name: 'some property', to: 'c'}).from);
+
+        assertEqual('(any)', completeTransitionPropDefValues({name: 'some property', to: 1}).from);
+      }},
+
+      testShouldSetSpecialNoChangeToSetsPropertyWhenKeyOfToIsAbsent: function(){ with(this){
+        assertEqual('(no change)', completeTransitionPropDefValues({name: 'some property', from: 'c'}).to);
+
+        assertEqual('(no change)', completeTransitionPropDefValues({name: 'some property', from: 1}).to);
+      }},
+
+      testShouldShowTransitionsInOrder: function(){ with(this){
+        var transitionsInOrder = [{transition_id: 3}, {transition_id: 1}, {transition_id: 2}];
+        this.transitionFilterManager._showTransitionsInOrder(transitionsInOrder);
+
+        transitionElementsInPage = $$('.transition-container');
+
+        assert(transitionElementsInPage.indexOf($('transition-3')) < transitionElementsInPage.indexOf($('transition-1')));
+        assert(transitionElementsInPage.indexOf($('transition-1')) < transitionElementsInPage.indexOf($('transition-2')));
+      }},
+
+      testShouldResetOrderBackToOriginalOrderWhenAllTypeIsSelected: function(){ with(this){
+        var transitionsInOrder = [{transition_id: 3}, {transition_id: 1}, {transition_id: 2}];
+        this.transitionFilterManager._showTransitionsInOrder(transitionsInOrder);
+        this.transitionFilterManager._showTransitionElementInOrder(this.transitionFilterManager.allTransitionsContainer, this.transitionFilterManager.originalTransitionsOrder);
+
+        transitionElementsInPage = $$('.transition-container');
+
+        assert(transitionElementsInPage.indexOf($('transition-1')) < transitionElementsInPage.indexOf($('transition-2')));
+        assert(transitionElementsInPage.indexOf($('transition-2')) < transitionElementsInPage.indexOf($('transition-3')));
+        assert(transitionElementsInPage.indexOf($('transition-3')) < transitionElementsInPage.indexOf($('transition-4')));
+      }},
+
+      testShouldOrderedByTransitionNameWhenFromValueAndToValueIsSame: function(){ with(this){
+        var matchedTransitions = transitionFilterManager.transitionsFilter.findAll(CARD_TYPES.STORY, PROPERTY_DEFINITIONS.STATUS);
+        assertEqual(11, matchedTransitions.first().transition_id);
+      }},
+
+      testShouldAutoPopulateCardTypeAndPropertySelectionAndFiltersResultsWhenInitializedWithThem: function() { with(this) {
+        var manager = new TransitionsFiltersManager(CARD_TYPE_TO_PROPERTY_DEFINITIONS, TRANSITION_MAPPINGS, {
+          card_type_id           : CARD_TYPES.STORY,
+          property_definition_id : PROPERTY_DEFINITIONS.PRIORITY});
+
+        assertEqual(CARD_TYPES.STORY, $F(this.cardTypeSelect));
+        assertEqual(PROPERTY_DEFINITIONS.PRIORITY, $F(this.propertyDefinitionSelect));
+        assert(!$('transition-1').visible());
+        assert(!$('transition-2').visible());
+        assert(!$('transition-3').visible());
+        assert($('transition-4').visible());
+      }},
+
+      testInitiallyPreselectedCardTypeAndPropertyWillNotBePreselectedAgainAfterChangingCardType: function() { with(this) {
+        var manager = new TransitionsFiltersManager(CARD_TYPE_TO_PROPERTY_DEFINITIONS, TRANSITION_MAPPINGS, {
+          card_type_id           : CARD_TYPES.STORY,
+          property_definition_id : PROPERTY_DEFINITIONS.PRIORITY});
+
+        this.changeCardType(CARD_TYPES.RELEASE);
+        assertEqual('', this.propertyDefinitionSelect.value);
+
+        this.changeCardType(CARD_TYPES.STORY);
+        assertEqual('', this.propertyDefinitionSelect.value);
+      }},
+
+      testGetNameByTransitionIdShouldBeAbleToGetTransitionNameBasedOnTransitionId: function() { with(this) {
+        var transitionsFilter = new TransitionsFilter(TRANSITION_MAPPINGS);
+        assertEqual('b name', transitionsFilter.getNameByTransitionId(10));
+      }},
+
+      testShowCorrectFlashNoticeWhenNewlyCreatedTransitionIsInFilteredList: function() { with(this) {
+        var manager = new TransitionsFiltersManager(CARD_TYPE_TO_PROPERTY_DEFINITIONS, TRANSITION_MAPPINGS, {
+          card_type_id           : CARD_TYPES.STORY,
+          property_definition_id : PROPERTY_DEFINITIONS.PRIORITY },
+          { createdTransitionId : 4, updatedTransitionId : null });
+        assertEqual('Transition <b>I am transition</b> was successfully created.', $('notice').innerHTML);
+      }},
+
+      testShowCorrectFlashNoticeWhenNewlyCreatedShouldHTMLEscapeTransitionName: function() { with(this) {
+        var manager = new TransitionsFiltersManager(CARD_TYPE_TO_PROPERTY_DEFINITIONS, TRANSITION_MAPPINGS, {
+          card_type_id           : CARD_TYPES.STORY,
+          property_definition_id : PROPERTY_DEFINITIONS.PRIORITY },
+          { createdTransitionId : 3, updatedTransitionId : null });
+        assertEqual('Transition <b>&lt;p&gt;I am weird transition&lt;/p&gt;</b> was successfully created, but is not shown because it does not match the current filter.', $('notice').innerHTML);
+      }},
+
+      testShowCorrectFlashNoticeWhenUpdatedTransitionIsInFilteredList: function() { with(this) {
+        var manager = new TransitionsFiltersManager(CARD_TYPE_TO_PROPERTY_DEFINITIONS, TRANSITION_MAPPINGS, {
+          card_type_id           : CARD_TYPES.STORY,
+          property_definition_id : PROPERTY_DEFINITIONS.PRIORITY },
+          { updatedTransitionId : 4, createdTransitionId : null });
+        assertEqual('Transition <b>I am transition</b> was successfully updated.', $('notice').innerHTML);
+      }},
+
+      testShowCorrectFlashNoticeWhenNewlyCreatedTransitionIsNotInFilteredList: function() { with(this) {
+        var manager = new TransitionsFiltersManager(CARD_TYPE_TO_PROPERTY_DEFINITIONS, TRANSITION_MAPPINGS, {
+          card_type_id           : CARD_TYPES.STORY,
+          property_definition_id : PROPERTY_DEFINITIONS.PRIORITY },
+          { createdTransitionId : 1, updatedTransitionId : null });
+        assertEqual('Transition <b>Transition Uno</b> was successfully created, but is not shown because it does not match the current filter.', $('notice').innerHTML);
+      }},
+
+      testShowCorrectFlashNoticeWhenUpdatedTransitionIsNotInFilteredList: function() { with(this) {
+        var manager = new TransitionsFiltersManager(CARD_TYPE_TO_PROPERTY_DEFINITIONS, TRANSITION_MAPPINGS, {
+          card_type_id           : CARD_TYPES.STORY,
+          property_definition_id : PROPERTY_DEFINITIONS.PRIORITY },
+          { updatedTransitionId : 1, createdTransitionId : null });
+        assertEqual('Transition <b>Transition Uno</b> was successfully updated, but is not shown because it does not match the current filter.', $('notice').innerHTML);
+      }},
+
+      testDoNotAlterFlashNoticeWhenUpdatedTransitionAndCreatedTransitionAreNotProvided: function() { with(this) {
+        var originalNotice = $('notice').innerHTML;
+        var manager = new TransitionsFiltersManager(CARD_TYPE_TO_PROPERTY_DEFINITIONS, TRANSITION_MAPPINGS, {
+          card_type_id           : CARD_TYPES.STORY,
+          property_definition_id : PROPERTY_DEFINITIONS.PRIORITY },
+          { updatedTransitionId : null, createdTransitionId : null });
+        assertEqual(originalNotice, $('notice').innerHTML);
+      }},
+
+      testNavigateToUrlPerformsNestedToQueryString: function() { with(this) {
+        this.changeCardType(CARD_TYPES.STORY);
+        this.changePropDef(PROPERTY_DEFINITIONS.PRIORITY);
+        assertEqual("baseUrl?filter[card_type_id]=#{cardTypeId}&filter[property_definition_id]=#{propertyDefinitionId}".interpolate({
+            cardTypeId : CARD_TYPES.STORY,
+            propertyDefinitionId : PROPERTY_DEFINITIONS.PRIORITY
+          }), Transition._assembleNavigateToUrl('baseUrl'));
+      }}
+
+    }, { testLog: "testlog", test : '' }).run;
+  // ]]>
+  </script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2020 ThoughtWorks, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+-->
+<!DOCTYPE topic SYSTEM "mingle_help.dtd">
+<topic title="Subscription component (Watch this?)">
+	<section title="What you can do on this page">
+		<p>The subscription (Watch this?) component lets you subscribe to Mingle to view project changes as they happen. 
+			Mingle provides feeds or emails based on the Filter history you have selected (i.e. the criteria that determines what Mingle is currently displaying on the History tab).</p>
+		<bullets>
+			<item><cref topic="subscribing_via_email">Subscribing via email</cref></item>
+			<item><cref topic="subscribing_via_feeds">Subscribing via feeds</cref></item>
+		</bullets>
+	</section>
+	<section title="Also see...">
+		<bullets>
+			<item><cref topic="viewing_project_changes">Viewing project changes (History tab)</cref></item>
+			<item><cref topic="managing_email_subscriptions">Managing email subscriptions</cref></item>
+			<item><cref topic="tip_subscribe_to_feeds">Subscribe to history feeds</cref></item>
+		</bullets>
+	</section>
+</topic>
